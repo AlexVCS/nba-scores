@@ -10,9 +10,9 @@
    <p align="center">
     Bienvenue! 
     <br />
-    <a href="https://mango-grammerjam-project3.netlify.app/">View Project</a>
-    ·
-    <a href="https://github.com/grammerjam/tm-main/issues/new">Report Bug</a>
+    <!-- <a href="https://mango-grammerjam-project3.netlify.app/">View Project</a> -->
+    <!-- · -->
+    <a href="https://github.com/AlexVCS/nba-scores/issues/new">Report Bug</a>
   </p>
 </div>
 
