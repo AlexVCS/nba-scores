@@ -24,7 +24,9 @@ Find the scores of your favorite NBA team!
 
 [![NextJS]][Next-url][![Tailwindcss]][Tailwind-url][![TypeScript]][Typescript-url]
 
-NBA scores API: https://api-sports.io/documentation/nba/v2
+NBA scores API: 
+https://sportsdata.io/nba-api OR
+https://api-sports.io/documentation/nba/v2
 
 Design: https://www.figma.com/file/AQL6ywEUiKkconAcaX5upM/NBA-Website-(Community)?node-id=0:1&mode=dev
 
