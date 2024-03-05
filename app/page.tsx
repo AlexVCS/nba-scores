@@ -29,6 +29,7 @@ function Home() {
       const options = {
         method: "GET",
         headers: {
+          live: "all",
           "X-RapidAPI-Key": process.env.NEXT_PUBLIC_XRapidAPIKey,
           "X-RapidAPI-Host": process.env.NEXT_PUBLIC_XRapidAPIHost,
         },
@@ -57,9 +58,27 @@ function Home() {
     // day = day < 10 ? `0${day}` : day;
     
     // const newDateString = `${year}-${month}-${day}`;
-    const date = moment().format(event.target.value);
-    console.log("here is the date", date);
-    setSelectedDate(date);
+    console.log('this is the event value', event.target.value)
+    const utcDate = new Date(event.target.value);
+    let properDate = new Date(utcDate.getTime() + utcDate.getTimezoneOffset() * 60000);
+    properDate.setHours(
+      utcDate.getHours(),
+      utcDate.getMinutes(),
+      utcDate.getSeconds(),
+      utcDate.getMilliseconds()
+    );
+
+    console.log('this is the proper date', properDate) 
+    const date = moment(properDate);
+
+    const formattedDate = date.format("YYYY-MM-DD");
+    console.log("here is the date", formattedDate);
+    setSelectedDate(formattedDate);
+    // const utcDate = moment.utc(event.target.value);
+    // const localDate = utcDate.local();
+    // const formattedDate = localDate.format("YYYY-MM-DD");
+    // console.log("Here is the local date:", localDate);
+    // setSelectedDate(formattedDate);
   };
 
   return (

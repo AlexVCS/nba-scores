@@ -1,17 +1,11 @@
 [![alex-linkedin-shield]][alex-linkedin-url]
 
 <div align="center">
-<!-- <a href="https://github.com/grammerjam/tm-main/tree/main/project3AB"> -->
-    <!-- <img src="./screenshots/project3AB.png" style="height:350px" /> -->
-  <!-- </a> -->
-
   <h3 align="center">NBA Scores</h3>
 
    <p align="center">
     Bienvenue! 
     <br />
-    <!-- <a href="https://mango-grammerjam-project3.netlify.app/">View Project</a> -->
-    <!-- · -->
     <a href="https://github.com/AlexVCS/nba-scores/issues/new">Report Bug</a>
   </p>
 </div>
@@ -25,11 +19,18 @@ Find the scores of your favorite NBA team!
 [![NextJS]][Next-url][![Tailwindcss]][Tailwind-url][![TypeScript]][Typescript-url]
 <!-- [![NPM]][NPM-url] -->
 
-NBA scores API: 
-https://sportsdata.io/nba-api OR
+NBA scores API:
 https://api-sports.io/documentation/nba/v2
 
 Design: https://www.figma.com/file/AQL6ywEUiKkconAcaX5upM/NBA-Website-(Community)?node-id=0:1&mode=dev
+
+### Local Setup
+
+To run this locally on your machine, copy the contents of `.env.example`.
+
+Then create your own `.env.local` file, add in what you copied, and signup for the [API](https://rapidapi.com/api-sports/api/api-nba/).
+
+Add your API keys by finding and copying them in the Rapid API docs.
 
 ## Contact
 

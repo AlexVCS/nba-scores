@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
+  env: {
+    TZ: "America/New_York",
+  },
   images: {
     remotePatterns: [
       {
