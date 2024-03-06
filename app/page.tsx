@@ -21,15 +21,21 @@ interface Game {
 
 function Home() {
   const [gameData, setGameData] = useState<Game[]>([]);
-  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [datePickerValue, setDatePickerValue] = useState('')
 
   useEffect(() => {
     async function fetchData() {
-      const url = `https://api-nba-v1.p.rapidapi.com/games?date=${selectedDate}`;
+      console.log("calling API with", selectedDate);
+      const date = moment(selectedDate)
+        .add(1, "days")
+        .add(5, "hours")
+        .format("YYYY-MM-DD");
+
+      const url = `https://api-nba-v1.p.rapidapi.com/games?date=${date}`;
       const options = {
         method: "GET",
         headers: {
-          live: "all",
           "X-RapidAPI-Key": process.env.NEXT_PUBLIC_XRapidAPIKey,
           "X-RapidAPI-Host": process.env.NEXT_PUBLIC_XRapidAPIHost,
         },
@@ -46,34 +52,18 @@ function Home() {
   }, [selectedDate]);
 
   const handleDateChange = (event) => {
-    // let dateEntered = new Date(event.target.value);
-    // dateEntered.setMinutes(
-    //   dateEntered.getMinutes() + dateEntered.getTimezoneOffset()
-    // );
-    // const year = dateEntered.getFullYear();
-    // let month = dateEntered.getMonth() + 1;
-    // let day = dateEntered.getDate();
-
-    // month = month < 10 ? `0${month}` : month;
-    // day = day < 10 ? `0${day}` : day;
-    
-    // const newDateString = `${year}-${month}-${day}`;
-    console.log('this is the event value', event.target.value)
+    console.log("this is the event value", typeof event.target.value);
     const utcDate = new Date(event.target.value);
-    let properDate = new Date(utcDate.getTime() + utcDate.getTimezoneOffset() * 60000);
-    properDate.setHours(
-      utcDate.getHours(),
-      utcDate.getMinutes(),
-      utcDate.getSeconds(),
-      utcDate.getMilliseconds()
-    );
+    // the api returns results a day behind, this adds a day to the selected date to compensate
+    // console.log(date)
+    setSelectedDate(utcDate);
+    setDatePickerValue(event.target.value)
+    // const formattedDate = utcDate.format("YYYY-MM-DD");
+    // const properDate = utcDate.setUTCHours(8)
 
-    console.log('this is the proper date', properDate) 
-    const date = moment(properDate);
-
-    const formattedDate = date.format("YYYY-MM-DD");
-    console.log("here is the date", formattedDate);
-    setSelectedDate(formattedDate);
+    // console.log('this is the proper date', properDate)
+    // const dateWTime= `${event.target.value}T13:00:00`;
+    // console.log("here is the date", formattedDate);
     // const utcDate = moment.utc(event.target.value);
     // const localDate = utcDate.local();
     // const formattedDate = localDate.format("YYYY-MM-DD");
@@ -86,11 +76,10 @@ function Home() {
       <h1>NBA Scores</h1>
       <h1>Current Date Selected</h1>
       <h1>Pick the day you want games from</h1>
-      <DatePicker value={selectedDate} onChange={handleDateChange} />
-      <p>
-        Selected Date:{" "}
-        {selectedDate ? selectedDate.toLocaleString() : "No date selected"}
-      </p>
+      <DatePicker
+        value={datePickerValue}
+        onChange={handleDateChange}
+      />
       {gameData?.map((game) => {
         return (
           <div className="mb-2 flex justify-center space-between" key={game.id}>
