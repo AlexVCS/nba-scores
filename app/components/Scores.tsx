@@ -28,7 +28,11 @@ interface Game {
   };
 }
 
-const Scores = ({showScores}) => {
+interface Scores {
+  showScores: boolean;
+}
+
+const Scores = ({showScores}: Scores) => {
   const [gameData, setGameData] = useState<Game[]>([]);
 
   useEffect(() => {
