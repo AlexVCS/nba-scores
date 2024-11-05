@@ -1,24 +1,28 @@
-"use client"
+"use client";
 
-import DatePicker from "@/app/components/DatePicker";
 import Scores from "@/app/components/Scores";
-import { useState } from "react";
+import {useState} from "react";
+import {Label} from "@/components/ui/label";
+import {Switch} from "@/components/ui/switch";
 
 function Home() {
-  const [datePickerValue, setDatePickerValue] = useState("");
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  // const [datePickerValue, setDatePickerValue] = useState("");
+  const [showScores, setShowScores] = useState(false);
 
   return (
-    <div>
+    <div className="text-center flex flex-col">
       <h1>NBA Scores</h1>
-      <h1>Current Date Selected</h1>
-      <h1>Pick the day you want games from</h1>
-      <DatePicker
-        setSelectedDate={setSelectedDate}
-        datePickerValue={datePickerValue}
-        setDatePickerValue={setDatePickerValue}
-      />
-      <Scores selectedDate={selectedDate} />
+      <div>
+        <Switch
+          className="mr-2 data-[state=unchecked]:bg-[#E47041] data-[state=checked]:bg-[#E47041]"
+          id="show-scores"
+          onCheckedChange={() => setShowScores(!showScores)}
+        />
+        <Label htmlFor="show-scores">
+          {showScores ? "Hide Scores" : "Show Scores"}
+        </Label>
+      </div>
+      <Scores showScores={showScores} />
     </div>
   );
 }
