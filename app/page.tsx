@@ -9,12 +9,12 @@ function Home() {
   // const [datePickerValue, setDatePickerValue] = useState("");
   const [showScores, setShowScores] = useState(false);
 
-  const date = new Date().toDateString();
+  const date = new Date();
 
   return (
     <div className="text-center flex flex-col">
       <h1>NBA Scores</h1>
-      <div>Today is {date.toString()}</div>
+      <div>Today is {date.toDateString().toString()}</div>
       <div>
         <Switch
           className="mr-2 data-[state=unchecked]:bg-[#E47041] data-[state=checked]:bg-[#E47041]"
@@ -25,7 +25,7 @@ function Home() {
           {showScores ? "Hide Scores" : "Show Scores"}
         </Label>
       </div>
-      <Scores showScores={showScores} />
+      <Scores date={date} showScores={showScores} />
     </div>
   );
 }
