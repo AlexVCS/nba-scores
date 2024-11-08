@@ -73,7 +73,7 @@ const Scores = ({showScores, date}: Scores) => {
   }, []);
 
   function noImage(event: React.SyntheticEvent<HTMLImageElement, Event>) {
-    event.currentTarget.src = "https://placehold.co/48x48?text=Not+found";
+    event.currentTarget.src = "https://placehold.co/48x48?text=No+logo";
   }
 
   return (
