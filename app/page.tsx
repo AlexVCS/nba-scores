@@ -9,9 +9,12 @@ function Home() {
   // const [datePickerValue, setDatePickerValue] = useState("");
   const [showScores, setShowScores] = useState(false);
 
+  const date = new Date().toDateString();
+
   return (
     <div className="text-center flex flex-col">
       <h1>NBA Scores</h1>
+      <div>Today is {date.toString()}</div>
       <div>
         <Switch
           className="mr-2 data-[state=unchecked]:bg-[#E47041] data-[state=checked]:bg-[#E47041]"
