@@ -1,9 +1,8 @@
 "use client";
 
 // import Image from "next/image";
-import {useState, useEffect} from "react";
+import {Fragment, useState, useEffect} from "react";
 import {Separator} from "@/components/ui/separator";
-import {error} from "console";
 
 // import moment from "moment";
 
@@ -80,8 +79,8 @@ const Scores = ({showScores, date}: Scores) => {
     <div>
       {gameData?.map((game) => {
         return (
-          <>
-            <div className="flex flex-row justify-evenly mt-2" key={game.id}>
+          <Fragment key={game.id}>
+            <div className="flex flex-row justify-evenly mt-2">
               <div>
                 <img
                   src={game.teams.home.logo}
@@ -108,7 +107,7 @@ const Scores = ({showScores, date}: Scores) => {
               </div>
             </div>
             <Separator className="h-1 bg-slate-950 w-full last:hidden" />
-          </>
+          </Fragment>
         );
       })}
     </div>

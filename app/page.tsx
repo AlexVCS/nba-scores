@@ -4,6 +4,8 @@ import Scores from "@/app/components/Scores";
 import {useState} from "react";
 import {Label} from "@/components/ui/label";
 import {Switch} from "@/components/ui/switch";
+import DatePicker from "./components/DatePicker";
+
 
 function Home() {
   // const [datePickerValue, setDatePickerValue] = useState("");
@@ -25,6 +27,7 @@ function Home() {
           {showScores ? "Hide Scores" : "Show Scores"}
         </Label>
       </div>
+      <DatePicker />
       <Scores date={date} showScores={showScores} />
     </div>
   );
