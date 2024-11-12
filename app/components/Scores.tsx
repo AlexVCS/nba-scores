@@ -3,6 +3,8 @@
 // import Image from "next/image";
 import {Fragment, useState, useEffect} from "react";
 import {Separator} from "@/components/ui/separator";
+import DatePicker from "@/app/components/DatePicker";
+import {format} from "date-fns";
 
 // import moment from "moment";
 
@@ -29,12 +31,14 @@ interface Game {
 }
 
 interface Scores {
-  date: Date;
+  todaysDate: Date;
   showScores: boolean;
+  dateSelected: Date;
 }
 
-const Scores = ({showScores, date}: Scores) => {
+const Scores = ({showScores, todaysDate, dateSelected}: Scores) => {
   const [gameData, setGameData] = useState<Game[]>([]);
+  const [formattedDate, setFormattedDate] = useState<Date | String>('');
 
   useEffect(() => {
     async function fetchData() {
@@ -44,13 +48,23 @@ const Scores = ({showScores, date}: Scores) => {
       // .add(5, "hours")
       // .format("YYYY-MM-DD");
       try {
-        const dd = String(date.getDate()).padStart(2, "0");
-        const mm = String(date.getMonth() + 1).padStart(2, "0");
-        const yyyy = date.getFullYear();
+        let url: string;
+        console.log(dateSelected)
+        if (dateSelected != null) {
+          setFormattedDate(format(
+            dateSelected,
+            "YYYY-MM-DD"
+          ))
+          url = `https://api-nba-v1.p.rapidapi.com/games?date=${formattedDate}`;
+        } else {
+          const dd = String(todaysDate.getDate()).padStart(2, "0");
+          const mm = String(todaysDate.getMonth() + 1).padStart(2, "0");
+          const yyyy = todaysDate.getFullYear();
+          const today = `${yyyy}-${mm}-${dd}`;
+          setFormattedDate(today)
 
-        const formattedDate = `${yyyy}-${mm}-${dd}`;
-
-        const url = `https://api-nba-v1.p.rapidapi.com/games?date=${formattedDate}`;
+          url = `https://api-nba-v1.p.rapidapi.com/games?date=${formattedDate}`;
+        }
         const options = {
           method: "GET",
           headers: {
@@ -69,7 +83,7 @@ const Scores = ({showScores, date}: Scores) => {
     }
 
     fetchData();
-  }, []);
+  });
 
   function noImage(event: React.SyntheticEvent<HTMLImageElement, Event>) {
     event.currentTarget.src = "https://placehold.co/48x48?text=No+logo";
@@ -77,6 +91,7 @@ const Scores = ({showScores, date}: Scores) => {
 
   return (
     <div>
+      <DatePicker dateSelectedProp={dateSelected} />
       {gameData?.map((game) => {
         return (
           <Fragment key={game.id}>

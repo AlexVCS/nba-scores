@@ -8,8 +8,12 @@ import {Button} from "@/components/ui/button";
 import {Calendar} from "@/components/ui/calendar";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 
-function DatePicker() {
-  const [date, setDate] = useState<Date>();
+interface DatePickerProps {
+  dateSelectedProp?: Date;
+}
+
+function DatePicker({ dateSelectedProp }: DatePickerProps) {
+  const [dateSelected, setDateSelected] = useState<Date>();
   const [calendarOpen, setCalendarOpen] = useState(false);
 
   return (
@@ -19,20 +23,24 @@ function DatePicker() {
           variant={"outline"}
           className={cn(
             "w-[280px] justify-start text-left font-normal",
-            !date && "text-muted-foreground"
+            !dateSelected && "text-muted-foreground"
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, "PPP") : <span>Pick a date</span>}
+          {dateSelected ? (
+            format(dateSelected, "PPP")
+          ) : (
+            <span>Pick a date</span>
+          )}
         </Button>
       </PopoverTrigger>
       {/* {date && <div>{date.toLocaleDateString()}</div>} */}
       <PopoverContent className="w-auto p-0">
         <Calendar
           mode="single"
-          selected={date}
+          selected={dateSelected}
           onSelect={(date) => {
-            setDate(date);
+            setDateSelected(date);
             setCalendarOpen(false);
           }}
           initialFocus
