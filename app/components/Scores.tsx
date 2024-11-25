@@ -33,14 +33,15 @@ interface Game {
 interface Scores {
   todaysDate: Date;
   showScores: boolean;
-  dateSelected: Date;
+  dateSelected: Date | undefined;
 }
 
 const Scores = ({showScores, todaysDate, dateSelected}: Scores) => {
   const [gameData, setGameData] = useState<Game[]>([]);
-  const [formattedDate, setFormattedDate] = useState<Date | String>('');
+  const [formattedDate, setFormattedDate] = useState<Date | String>("");
 
   useEffect(() => {
+
     async function fetchData() {
       // const date = moment(selectedDate)
       // the api returns results a day behind, this adds a day to the selected date to compensate
@@ -48,23 +49,17 @@ const Scores = ({showScores, todaysDate, dateSelected}: Scores) => {
       // .add(5, "hours")
       // .format("YYYY-MM-DD");
       try {
-        let url: string;
-        console.log(dateSelected)
-        if (dateSelected != null) {
-          setFormattedDate(format(
-            dateSelected,
-            "YYYY-MM-DD"
-          ))
-          url = `https://api-nba-v1.p.rapidapi.com/games?date=${formattedDate}`;
-        } else {
-          const dd = String(todaysDate.getDate()).padStart(2, "0");
-          const mm = String(todaysDate.getMonth() + 1).padStart(2, "0");
-          const yyyy = todaysDate.getFullYear();
-          const today = `${yyyy}-${mm}-${dd}`;
-          setFormattedDate(today)
+        const dd = String(todaysDate.getDate()).padStart(2, "0");
+        const mm = String(todaysDate.getMonth() + 1).padStart(2, "0");
+        const yyyy = todaysDate.getFullYear();
 
-          url = `https://api-nba-v1.p.rapidapi.com/games?date=${formattedDate}`;
-        }
+        const formattedDate = `${yyyy}-${mm}-${dd}`;
+
+        const url = `https://api-nba-v1.p.rapidapi.com/games?date=${
+          dateSelected
+            ? `${format(dateSelected, "yyyy-MM-dd")}`
+            : `${formattedDate}`
+        }`;
         const options = {
           method: "GET",
           headers: {
@@ -91,7 +86,6 @@ const Scores = ({showScores, todaysDate, dateSelected}: Scores) => {
 
   return (
     <div>
-      <DatePicker dateSelectedProp={dateSelected} />
       {gameData?.map((game) => {
         return (
           <Fragment key={game.id}>

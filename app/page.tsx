@@ -5,13 +5,18 @@ import {useState} from "react";
 import {Label} from "@/components/ui/label";
 import {Switch} from "@/components/ui/switch";
 import DatePicker from "./components/DatePicker";
+import { format } from "date-fns";
+
 
 
 function Home() {
   // const [datePickerValue, setDatePickerValue] = useState("");
   const [showScores, setShowScores] = useState(false);
+  const [dateSelected, setDateSelected] = useState<Date>();
 
   const todaysDate = new Date();
+
+  console.log(dateSelected && format(dateSelected, 'yyyy-MM-dd'))
 
   return (
     <div className="text-center flex flex-col">
@@ -27,8 +32,12 @@ function Home() {
           {showScores ? "Hide Scores" : "Show Scores"}
         </Label>
       </div>
-      
-      <Scores todaysDate={todaysDate} showScores={showScores} />
+      <DatePicker dateSelected={dateSelected} setDateSelected={setDateSelected} />
+      <Scores
+        todaysDate={todaysDate}
+        showScores={showScores}
+        dateSelected={dateSelected}
+      />
     </div>
   );
 }

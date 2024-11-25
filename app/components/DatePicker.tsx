@@ -1,6 +1,6 @@
 "use client";
 
-import {useState} from "react";
+import {Dispatch, SetStateAction, useState} from "react";
 import {format} from "date-fns";
 import {Calendar as CalendarIcon} from "lucide-react";
 import {cn} from "@/lib/utils";
@@ -9,11 +9,11 @@ import {Calendar} from "@/components/ui/calendar";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 
 interface DatePickerProps {
-  dateSelectedProp?: Date;
+  dateSelected?: Date;
+  setDateSelected: Dispatch<SetStateAction<Date | undefined>>;
 }
 
-function DatePicker({ dateSelectedProp }: DatePickerProps) {
-  const [dateSelected, setDateSelected] = useState<Date>();
+function DatePicker({dateSelected, setDateSelected}: DatePickerProps) {
   const [calendarOpen, setCalendarOpen] = useState(false);
 
   return (
@@ -34,7 +34,6 @@ function DatePicker({ dateSelectedProp }: DatePickerProps) {
           )}
         </Button>
       </PopoverTrigger>
-      {/* {date && <div>{date.toLocaleDateString()}</div>} */}
       <PopoverContent className="w-auto p-0">
         <Calendar
           mode="single"
