@@ -1,9 +1,10 @@
 "use client";
 
 // import Image from "next/image";
-import {useState, useEffect} from "react";
+import {Fragment, useState, useEffect} from "react";
 import {Separator} from "@/components/ui/separator";
-import {error} from "console";
+import DatePicker from "@/app/components/DatePicker";
+import {format} from "date-fns";
 
 // import moment from "moment";
 
@@ -30,12 +31,16 @@ interface Game {
 }
 
 interface Scores {
-  date: Date;
+  todaysDate: Date;
   showScores: boolean;
+  dateSelected: Date | undefined;
 }
 
-const Scores = ({showScores, date}: Scores) => {
+const Scores = ({showScores, todaysDate, dateSelected}: Scores) => {
   const [gameData, setGameData] = useState<Game[]>([]);
+  const [formattedDate, setFormattedDate] = useState<Date | String>("");
+
+  const devModeGameData: Game[] = require("../../exampleResponse.json");
 
   useEffect(() => {
     async function fetchData() {
@@ -45,13 +50,17 @@ const Scores = ({showScores, date}: Scores) => {
       // .add(5, "hours")
       // .format("YYYY-MM-DD");
       try {
-        const dd = String(date.getDate()).padStart(2, "0");
-        const mm = String(date.getMonth() + 1).padStart(2, "0");
-        const yyyy = date.getFullYear();
+        const dd = String(todaysDate.getDate()).padStart(2, "0");
+        const mm = String(todaysDate.getMonth() + 1).padStart(2, "0");
+        const yyyy = todaysDate.getFullYear();
 
         const formattedDate = `${yyyy}-${mm}-${dd}`;
 
-        const url = `https://api-nba-v1.p.rapidapi.com/games?date=${formattedDate}`;
+        const url = `https://api-nba-v1.p.rapidapi.com/games?date=${
+          dateSelected === undefined
+            ? `${formattedDate}`
+            : `${format(dateSelected, "yyyy-MM-dd")}`
+        }`;
         const options = {
           method: "GET",
           headers: {
@@ -60,6 +69,7 @@ const Scores = ({showScores, date}: Scores) => {
           },
         };
         const res = await fetch(url, options);
+        console.log(res);
         const jsonRes = await res.json();
         setGameData(jsonRes.response);
       } catch (error) {
@@ -70,7 +80,7 @@ const Scores = ({showScores, date}: Scores) => {
     }
 
     fetchData();
-  }, []);
+  }, [dateSelected]);
 
   function noImage(event: React.SyntheticEvent<HTMLImageElement, Event>) {
     event.currentTarget.src = "https://placehold.co/48x48?text=No+logo";
@@ -78,10 +88,11 @@ const Scores = ({showScores, date}: Scores) => {
 
   return (
     <div>
+      {/* to test by calling the API use gameData as what you map through, otherwise use devModeGameData */}
       {gameData?.map((game) => {
         return (
-          <>
-            <div className="flex flex-row justify-evenly mt-2" key={game.id}>
+          <Fragment key={game.id}>
+            <div className="flex flex-row justify-evenly mt-2">
               <div>
                 <img
                   src={game.teams.home.logo}
@@ -108,7 +119,7 @@ const Scores = ({showScores, date}: Scores) => {
               </div>
             </div>
             <Separator className="h-1 bg-slate-950 w-full last:hidden" />
-          </>
+          </Fragment>
         );
       })}
     </div>
