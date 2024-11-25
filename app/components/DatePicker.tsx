@@ -18,11 +18,11 @@ function DatePicker({dateSelected, setDateSelected}: DatePickerProps) {
 
   return (
     <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
-      <PopoverTrigger className="flex content-center" asChild>
+      <PopoverTrigger asChild>
         <Button
           variant={"outline"}
           className={cn(
-            "w-[280px] justify-start text-left font-normal",
+            "w-[280px] justify-start items-center text-left font-normal",
             !dateSelected && "text-muted-foreground"
           )}
         >

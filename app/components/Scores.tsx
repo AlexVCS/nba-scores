@@ -40,8 +40,9 @@ const Scores = ({showScores, todaysDate, dateSelected}: Scores) => {
   const [gameData, setGameData] = useState<Game[]>([]);
   const [formattedDate, setFormattedDate] = useState<Date | String>("");
 
-  useEffect(() => {
+  const devModeGameData: Game[] = require("../../exampleResponse.json");
 
+  useEffect(() => {
     async function fetchData() {
       // const date = moment(selectedDate)
       // the api returns results a day behind, this adds a day to the selected date to compensate
@@ -56,9 +57,9 @@ const Scores = ({showScores, todaysDate, dateSelected}: Scores) => {
         const formattedDate = `${yyyy}-${mm}-${dd}`;
 
         const url = `https://api-nba-v1.p.rapidapi.com/games?date=${
-          dateSelected
-            ? `${format(dateSelected, "yyyy-MM-dd")}`
-            : `${formattedDate}`
+          dateSelected === undefined
+            ? `${formattedDate}`
+            : `${format(dateSelected, "yyyy-MM-dd")}`
         }`;
         const options = {
           method: "GET",
@@ -68,6 +69,7 @@ const Scores = ({showScores, todaysDate, dateSelected}: Scores) => {
           },
         };
         const res = await fetch(url, options);
+        console.log(res);
         const jsonRes = await res.json();
         setGameData(jsonRes.response);
       } catch (error) {
@@ -78,7 +80,7 @@ const Scores = ({showScores, todaysDate, dateSelected}: Scores) => {
     }
 
     fetchData();
-  });
+  }, [dateSelected]);
 
   function noImage(event: React.SyntheticEvent<HTMLImageElement, Event>) {
     event.currentTarget.src = "https://placehold.co/48x48?text=No+logo";
@@ -86,6 +88,7 @@ const Scores = ({showScores, todaysDate, dateSelected}: Scores) => {
 
   return (
     <div>
+      {/* to test by calling the API use gameData as what you map through, otherwise use devModeGameData */}
       {gameData?.map((game) => {
         return (
           <Fragment key={game.id}>

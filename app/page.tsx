@@ -5,9 +5,6 @@ import {useState} from "react";
 import {Label} from "@/components/ui/label";
 import {Switch} from "@/components/ui/switch";
 import DatePicker from "./components/DatePicker";
-import { format } from "date-fns";
-
-
 
 function Home() {
   // const [datePickerValue, setDatePickerValue] = useState("");
@@ -16,11 +13,11 @@ function Home() {
 
   const todaysDate = new Date();
 
-  console.log(dateSelected && format(dateSelected, 'yyyy-MM-dd'))
+  // console.log(dateSelected && format(dateSelected, 'yyyy-MM-dd'))
 
   return (
-    <div className="text-center flex flex-col">
-      <h1>NBA Scores</h1>
+    <div className="text-center flex flex-col gap-2">
+      <h1 className="mt-2">NBA Scores</h1>
       <div>Today is {todaysDate.toDateString().toString()}</div>
       <div>
         <Switch
@@ -32,7 +29,12 @@ function Home() {
           {showScores ? "Hide Scores" : "Show Scores"}
         </Label>
       </div>
-      <DatePicker dateSelected={dateSelected} setDateSelected={setDateSelected} />
+      <div>
+        <DatePicker
+          dateSelected={dateSelected}
+          setDateSelected={setDateSelected}
+        />
+      </div>
       <Scores
         todaysDate={todaysDate}
         showScores={showScores}
