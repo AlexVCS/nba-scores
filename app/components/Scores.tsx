@@ -79,7 +79,7 @@ const Scores = ({showScores, todaysDate, dateSelected}: Scores) => {
       }
     }
 
-    fetchData();
+    // fetchData();
   }, [dateSelected]);
 
   function noImage(event: React.SyntheticEvent<HTMLImageElement, Event>) {
@@ -92,7 +92,7 @@ const Scores = ({showScores, todaysDate, dateSelected}: Scores) => {
         <h1>No 🏀 games on {format(dateSelected, "PPP")}</h1>
       )}
       {/* to test by calling the API use gameData as what you map through, otherwise use devModeGameData */}
-      {gameData?.map((game) => {
+      {devModeGameData?.map((game) => {
         return (
           <Fragment key={game.id}>
             <div className="flex flex-row justify-evenly mt-2">
