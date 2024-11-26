@@ -17,6 +17,7 @@ Find the scores of your favorite NBA team!
 ### Built With
 
 [![NextJS]][Next-url][![Tailwindcss]][Tailwind-url][![TypeScript]][Typescript-url]
+
 <!-- [![NPM]][NPM-url] -->
 
 NBA scores API:
@@ -32,9 +33,33 @@ Then create your own `.env.local` file, add in what you copied, and signup for t
 
 Add your API keys by finding and copying them in the Rapid API docs.
 
+### Mimic an API Response
+
+If you'd like to see what the scores UI looks like without signing up for the API, or test the view in dev mode, here's how:
+
+In `app/components/Scores.tsx`, comment out the last line of the useEffect function where fetchData is called:
+
+```ts
+  useEffect(() => {
+    async function fetchData() {
+  // useEffect redacted for brevity
+  // fetchData();
+  }, [dateSelected]);
+```
+
+Then scroll down or use the find function to get to where you find `gameData?.map`. Change `gameData` to `devModeGameData`, like so:
+
+```ts
+ {devModeGameData?.map((game) => {
+        return // inner map function logic)
+})}
+```
+
+After you make these changes and run the app with `npm run dev`, you'll be using `exampleResponse.json` as your data instead of making a call to the API.
+
 ## Contact
 
-Alex Curtis-Slep - [GitHub](https://github.com/AlexVCS) / [Twitter](https://twitter.com/alexcurtisslep) / alexcurtisslep@gmail.com
+Alex Curtis-Slep - [GitHub](https://github.com/AlexVCS) / [Bluesky](https://bsky.app/profile/alexcurtisslep.bsky.social) / alexcurtisslep@gmail.com
 
 [alex-linkedin-shield]: https://img.shields.io/badge/-Alex's_LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [alex-linkedin-url]: https://www.linkedin.com/in/alexcurtisslep/
