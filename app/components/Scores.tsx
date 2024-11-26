@@ -89,6 +89,9 @@ const Scores = ({showScores, todaysDate, dateSelected}: Scores) => {
   return (
     <div>
       {/* to test by calling the API use gameData as what you map through, otherwise use devModeGameData */}
+      {dateSelected && gameData.length === 0 && (
+        <h1>No 🏀 games on {format(dateSelected, "PPP")}</h1>
+      )}
       {gameData?.map((game) => {
         return (
           <Fragment key={game.id}>
