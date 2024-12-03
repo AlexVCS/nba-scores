@@ -105,7 +105,9 @@ const Scores = ({showScores, todaysDate, dateSelected}: Scores) => {
                 />
                 <p className="mt-2">{game.teams.home.code}</p>
                 <h2 className="mb-2">
-                  {showScores ? `${game.scores.home.points}` : "-"}
+                  {showScores && game.scores.home.points !== null
+                    ? `${game.scores.home.points}`
+                    : "-"}
                 </h2>
               </div>
               <div>
@@ -117,7 +119,9 @@ const Scores = ({showScores, todaysDate, dateSelected}: Scores) => {
                 />
                 <p className="mt-2">{game.teams.visitors.code}</p>
                 <h2 className="mb-2">
-                  {showScores ? `${game.scores.visitors.points}` : "-"}
+                  {showScores && game.scores.visitors.points !== null
+                    ? `${game.scores.visitors.points}`
+                    : "-"}
                 </h2>
               </div>
             </div>
