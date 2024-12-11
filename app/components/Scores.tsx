@@ -38,25 +38,14 @@ const Scores = ({showScores, dateSelected}: Scores) => {
   const [gameData, setGameData] = useState<Game[]>([]);
   const [formattedDate, setFormattedDate] = useState<Date | String>("");
 
-  const devModeGameData: Game[] = require("../../exampleResponse.json");
+  const devModeResponse = require("../../exampleResponse.json");
+  const devModeData: Game[] = devModeResponse.response
 
   useEffect(() => {
     async function fetchData() {
       try {
-        // const dd = String(todaysDate.getDate()).padStart(2, "0");
-        // const mm = String(todaysDate.getMonth() + 1).padStart(2, "0");
-        // const yyyy = todaysDate.getFullYear();
-
-        // const formattedDate = `${yyyy}-${mm}-${dd}`;
-
-        // const timeOffset = new Date().getTimezoneOffset() * 60 * 1000;
-        // const userDateInMilliseconds = new Date().getTime();
         const todaysDate = new Date();
         console.log(todaysDate.getFullYear());
-
-        // console.log("timeOffset is ", timeOffset);
-        // console.log("userDateInMilliseconds is ", userDateInMilliseconds);
-        // console.log(finalDate.toISOString());
 
         const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
@@ -69,7 +58,7 @@ const Scores = ({showScores, dateSelected}: Scores) => {
         const options = {
           method: "GET",
           headers: {
-            "X-RapidAPI-Key": process.env.NEXT_PUBLIC_XRapidAPIKey || "",
+            "X-RapidAPI-Key": process.env.NEXT_XRapidAPIKey || "",
             "X-RapidAPI-Host": process.env.NEXT_PUBLIC_XRapidAPIHost || "",
           },
         };
@@ -95,7 +84,7 @@ const Scores = ({showScores, dateSelected}: Scores) => {
       {dateSelected && gameData.length === 0 && (
         <h1>No 🏀 games on {format(dateSelected, "PPP")}</h1>
       )}
-      {/* to test by calling the API use gameData as what you map through, otherwise use devModeGameData */}
+      {/* to test by calling the API use gameData as what you map through, otherwise use devModeData */}
       {gameData?.map((game) => {
         return (
           <Fragment key={game.id}>
