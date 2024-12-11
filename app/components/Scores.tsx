@@ -6,37 +6,35 @@ import {Separator} from "@/components/ui/separator";
 import DatePicker from "@/app/components/DatePicker";
 import {format} from "date-fns";
 
-// import moment from "moment";
 
 interface Game {
   id: string;
   teams: {
     home: {
-      code: string;
+      name: string;
       logo: string;
     };
-    visitors: {
-      code: string;
+    away: {
+      name: string;
       logo: string;
     };
   };
   scores: {
     home: {
-      points: number;
+      total: number;
     };
-    visitors: {
-      points: number;
+    away: {
+      total: number;
     };
   };
 }
 
 interface Scores {
-  todaysDate: Date;
   showScores: boolean;
   dateSelected: Date | undefined;
 }
 
-const Scores = ({showScores, todaysDate, dateSelected}: Scores) => {
+const Scores = ({showScores, dateSelected}: Scores) => {
   const [gameData, setGameData] = useState<Game[]>([]);
   const [formattedDate, setFormattedDate] = useState<Date | String>("");
 
@@ -44,23 +42,30 @@ const Scores = ({showScores, todaysDate, dateSelected}: Scores) => {
 
   useEffect(() => {
     async function fetchData() {
-      // const date = moment(selectedDate)
-      // the api returns results a day behind, this adds a day to the selected date to compensate
-      // .add(1, "days")
-      // .add(5, "hours")
-      // .format("YYYY-MM-DD");
       try {
-        const dd = String(todaysDate.getDate()).padStart(2, "0");
-        const mm = String(todaysDate.getMonth() + 1).padStart(2, "0");
-        const yyyy = todaysDate.getFullYear();
+        // const dd = String(todaysDate.getDate()).padStart(2, "0");
+        // const mm = String(todaysDate.getMonth() + 1).padStart(2, "0");
+        // const yyyy = todaysDate.getFullYear();
 
-        const formattedDate = `${yyyy}-${mm}-${dd}`;
+        // const formattedDate = `${yyyy}-${mm}-${dd}`;
 
-        const url = `https://api-nba-v1.p.rapidapi.com/games?date=${
+        // const timeOffset = new Date().getTimezoneOffset() * 60 * 1000;
+        // const userDateInMilliseconds = new Date().getTime();
+        const todaysDate = new Date();
+        console.log(todaysDate.getFullYear());
+
+        // console.log("timeOffset is ", timeOffset);
+        // console.log("userDateInMilliseconds is ", userDateInMilliseconds);
+        // console.log(finalDate.toISOString());
+
+        const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+        const url = `https://api-basketball.p.rapidapi.com/games?date=${
           dateSelected === undefined
-            ? `${formattedDate}`
+            ? `${format(todaysDate, "yyyy-MM-dd")}`
             : `${format(dateSelected, "yyyy-MM-dd")}`
-        }`;
+        }&timezone=${userTimezone}&league=12&season=2024-2025`;
+
         const options = {
           method: "GET",
           headers: {
@@ -69,7 +74,6 @@ const Scores = ({showScores, todaysDate, dateSelected}: Scores) => {
           },
         };
         const res = await fetch(url, options);
-        console.log(res);
         const jsonRes = await res.json();
         setGameData(jsonRes.response);
       } catch (error) {
@@ -103,24 +107,24 @@ const Scores = ({showScores, todaysDate, dateSelected}: Scores) => {
                   className="object-contain w-12 h-12"
                   alt={`${game.teams.home.code} logo`}
                 />
-                <p className="mt-2">{game.teams.home.code}</p>
+                <p className="mt-2">{game.teams.home.name}</p>
                 <h2 className="mb-2">
-                  {showScores && game.scores.home.points !== null
-                    ? `${game.scores.home.points}`
+                  {showScores && game.scores.home.total !== null
+                    ? `${game.scores.home.total}`
                     : "-"}
                 </h2>
               </div>
               <div>
                 <img
-                  src={game.teams.visitors.logo}
+                  src={game.teams.away.logo}
                   onError={noImage}
                   className="object-contain w-12 h-12"
-                  alt={`${game.teams.visitors.code} logo`}
+                  alt={`${game.teams.away.code} logo`}
                 />
-                <p className="mt-2">{game.teams.visitors.code}</p>
+                <p className="mt-2">{game.teams.away.name}</p>
                 <h2 className="mb-2">
-                  {showScores && game.scores.visitors.points !== null
-                    ? `${game.scores.visitors.points}`
+                  {showScores && game.scores.away.total !== null
+                    ? `${game.scores.away.total}`
                     : "-"}
                 </h2>
               </div>
