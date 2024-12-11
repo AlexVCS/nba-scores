@@ -11,14 +11,15 @@ function Home() {
   const [showScores, setShowScores] = useState(false);
   const [dateSelected, setDateSelected] = useState<Date>();
 
-  const todaysDate = new Date();
+  const todaysDate = new Date().toDateString();
+  // console.log(todaysDate);
 
   // console.log(dateSelected && format(dateSelected, 'yyyy-MM-dd'))
 
   return (
     <div className="text-center flex flex-col gap-2">
       <h1 className="mt-2">NBA Scores</h1>
-      <div>Today is {todaysDate.toDateString().toString()}</div>
+      <div>Today is {todaysDate}</div>
       <div>
         <Switch
           className="mr-2 data-[state=unchecked]:bg-[#E47041] data-[state=checked]:bg-[#E47041]"
@@ -36,7 +37,6 @@ function Home() {
         />
       </div>
       <Scores
-        todaysDate={todaysDate}
         showScores={showScores}
         dateSelected={dateSelected}
       />

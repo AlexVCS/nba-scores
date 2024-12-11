@@ -47,10 +47,10 @@ In `app/components/Scores.tsx`, comment out the last line of the useEffect funct
   }, [dateSelected]);
 ```
 
-Then scroll down or use the find function to get to where you find `gameData?.map`. Change `gameData` to `devModeGameData`, like so:
+Then scroll down or use the find function to get to where you find `gameData?.map`. Change `gameData` to `devModeData`, like so:
 
 ```ts
- {devModeGameData?.map((game) => {
+ {devModeData?.map((game) => {
         return // inner map function logic)
 })}
 ```
