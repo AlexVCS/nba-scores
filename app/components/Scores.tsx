@@ -94,7 +94,7 @@ const Scores = ({showScores, dateSelected}: Scores) => {
                   src={game.teams.home.logo}
                   onError={noImage}
                   className="object-contain w-12 h-12"
-                  alt={`${game.teams.home.code} logo`}
+                  alt={`${game.teams.home.name} logo`}
                 />
                 <p className="mt-2">{game.teams.home.name}</p>
                 <h2 className="mb-2">
@@ -108,7 +108,7 @@ const Scores = ({showScores, dateSelected}: Scores) => {
                   src={game.teams.away.logo}
                   onError={noImage}
                   className="object-contain w-12 h-12"
-                  alt={`${game.teams.away.code} logo`}
+                  alt={`${game.teams.away.name} logo`}
                 />
                 <p className="mt-2">{game.teams.away.name}</p>
                 <h2 className="mb-2">
