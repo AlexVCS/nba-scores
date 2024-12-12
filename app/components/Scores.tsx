@@ -1,75 +1,59 @@
 "use client";
 
-// import Image from "next/image";
 import {Fragment, useState, useEffect} from "react";
 import {Separator} from "@/components/ui/separator";
-import DatePicker from "@/app/components/DatePicker";
 import {format} from "date-fns";
-
-// import moment from "moment";
 
 interface Game {
   id: string;
   teams: {
     home: {
-      code: string;
+      name: string;
       logo: string;
     };
-    visitors: {
-      code: string;
+    away: {
+      name: string;
       logo: string;
     };
   };
   scores: {
     home: {
-      points: number;
+      total: number;
     };
-    visitors: {
-      points: number;
+    away: {
+      total: number;
     };
   };
 }
 
 interface Scores {
-  todaysDate: Date;
   showScores: boolean;
   dateSelected: Date | undefined;
 }
 
-const Scores = ({showScores, todaysDate, dateSelected}: Scores) => {
+const Scores = ({showScores, dateSelected}: Scores) => {
   const [gameData, setGameData] = useState<Game[]>([]);
   const [formattedDate, setFormattedDate] = useState<Date | String>("");
 
-  const devModeGameData: Game[] = require("../../exampleResponse.json");
+  const devModeResponse = require("../../exampleResponse.json");
+  const devModeData: Game[] = devModeResponse.response;
 
   useEffect(() => {
     async function fetchData() {
-      // const date = moment(selectedDate)
-      // the api returns results a day behind, this adds a day to the selected date to compensate
-      // .add(1, "days")
-      // .add(5, "hours")
-      // .format("YYYY-MM-DD");
       try {
-        const dd = String(todaysDate.getDate()).padStart(2, "0");
-        const mm = String(todaysDate.getMonth() + 1).padStart(2, "0");
-        const yyyy = todaysDate.getFullYear();
+        const todaysDate = new Date();
+        const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-        const formattedDate = `${yyyy}-${mm}-${dd}`;
-
-        const url = `https://api-nba-v1.p.rapidapi.com/games?date=${
+        const url = `/api/games?date=${
           dateSelected === undefined
-            ? `${formattedDate}`
+            ? `${format(todaysDate, "yyyy-MM-dd")}`
             : `${format(dateSelected, "yyyy-MM-dd")}`
-        }`;
+        }&timezone=${userTimezone}&league=12&season=2024-2025`;
+
         const options = {
           method: "GET",
-          headers: {
-            "X-RapidAPI-Key": process.env.NEXT_PUBLIC_XRapidAPIKey || "",
-            "X-RapidAPI-Host": process.env.NEXT_PUBLIC_XRapidAPIHost || "",
-          },
         };
         const res = await fetch(url, options);
-        console.log(res);
         const jsonRes = await res.json();
         setGameData(jsonRes.response);
       } catch (error) {
@@ -88,39 +72,39 @@ const Scores = ({showScores, todaysDate, dateSelected}: Scores) => {
 
   return (
     <div>
-      {dateSelected && gameData.length === 0 && (
+      {dateSelected && gameData?.length === 0 && (
         <h1>No 🏀 games on {format(dateSelected, "PPP")}</h1>
       )}
-      {/* to test by calling the API use gameData as what you map through, otherwise use devModeGameData */}
+      {/* to test by calling the API use gameData as what you map through, otherwise use devModeData */}
       {gameData?.map((game) => {
         return (
           <Fragment key={game.id}>
             <div className="flex flex-row justify-evenly mt-2">
-              <div>
+              <div className="flex flex-col items-center">
                 <img
                   src={game.teams.home.logo}
                   onError={noImage}
                   className="object-contain w-12 h-12"
-                  alt={`${game.teams.home.code} logo`}
+                  alt={`${game.teams.home.name} logo`}
                 />
-                <p className="mt-2">{game.teams.home.code}</p>
+                <p className="mt-2">{game.teams.home.name}</p>
                 <h2 className="mb-2">
-                  {showScores && game.scores.home.points !== null
-                    ? `${game.scores.home.points}`
+                  {showScores && game.scores.home.total !== null
+                    ? `${game.scores.home.total}`
                     : "-"}
                 </h2>
               </div>
-              <div>
+              <div className="flex flex-col items-center">
                 <img
-                  src={game.teams.visitors.logo}
+                  src={game.teams.away.logo}
                   onError={noImage}
                   className="object-contain w-12 h-12"
-                  alt={`${game.teams.visitors.code} logo`}
+                  alt={`${game.teams.away.name} logo`}
                 />
-                <p className="mt-2">{game.teams.visitors.code}</p>
+                <p className="mt-2">{game.teams.away.name}</p>
                 <h2 className="mb-2">
-                  {showScores && game.scores.visitors.points !== null
-                    ? `${game.scores.visitors.points}`
+                  {showScores && game.scores.away.total !== null
+                    ? `${game.scores.away.total}`
                     : "-"}
                 </h2>
               </div>
