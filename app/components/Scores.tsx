@@ -1,11 +1,8 @@
 "use client";
 
-// import Image from "next/image";
 import {Fragment, useState, useEffect} from "react";
 import {Separator} from "@/components/ui/separator";
-import DatePicker from "@/app/components/DatePicker";
 import {format} from "date-fns";
-
 
 interface Game {
   id: string;
@@ -39,17 +36,15 @@ const Scores = ({showScores, dateSelected}: Scores) => {
   const [formattedDate, setFormattedDate] = useState<Date | String>("");
 
   const devModeResponse = require("../../exampleResponse.json");
-  const devModeData: Game[] = devModeResponse.response
+  const devModeData: Game[] = devModeResponse.response;
 
   useEffect(() => {
     async function fetchData() {
       try {
         const todaysDate = new Date();
-        console.log(todaysDate.getFullYear());
-
         const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-        const url = `https://api-basketball.p.rapidapi.com/games?date=${
+        const url = `/api/games?date=${
           dateSelected === undefined
             ? `${format(todaysDate, "yyyy-MM-dd")}`
             : `${format(dateSelected, "yyyy-MM-dd")}`
@@ -57,10 +52,6 @@ const Scores = ({showScores, dateSelected}: Scores) => {
 
         const options = {
           method: "GET",
-          headers: {
-            "X-RapidAPI-Key": process.env.NEXT_XRapidAPIKey || "",
-            "X-RapidAPI-Host": process.env.NEXT_PUBLIC_XRapidAPIHost || "",
-          },
         };
         const res = await fetch(url, options);
         const jsonRes = await res.json();
@@ -81,7 +72,7 @@ const Scores = ({showScores, dateSelected}: Scores) => {
 
   return (
     <div>
-      {dateSelected && gameData.length === 0 && (
+      {dateSelected && gameData?.length === 0 && (
         <h1>No 🏀 games on {format(dateSelected, "PPP")}</h1>
       )}
       {/* to test by calling the API use gameData as what you map through, otherwise use devModeData */}
@@ -89,7 +80,7 @@ const Scores = ({showScores, dateSelected}: Scores) => {
         return (
           <Fragment key={game.id}>
             <div className="flex flex-row justify-evenly mt-2">
-              <div>
+              <div className="flex flex-col items-center">
                 <img
                   src={game.teams.home.logo}
                   onError={noImage}
@@ -103,7 +94,7 @@ const Scores = ({showScores, dateSelected}: Scores) => {
                     : "-"}
                 </h2>
               </div>
-              <div>
+              <div className="flex flex-col items-center">
                 <img
                   src={game.teams.away.logo}
                   onError={noImage}
