@@ -1,8 +1,9 @@
 "use client";
 
-import {Fragment, useState, useEffect} from "react";
+import {Fragment} from "react";
 import {Separator} from "@/components/ui/separator";
 import {format} from "date-fns";
+import useSWR from "swr";
 
 interface Game {
   id: string;
@@ -32,39 +33,23 @@ interface Scores {
 }
 
 const Scores = ({showScores, dateSelected}: Scores) => {
-  const [gameData, setGameData] = useState<Game[]>([]);
-  const [formattedDate, setFormattedDate] = useState<Date | String>("");
-
   const devModeResponse = require("../../exampleResponse.json");
-  const devModeData: Game[] = devModeResponse.response;
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const todaysDate = new Date();
-        const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-        const url = `/api/games?date=${
+  const devModeGames: Game[] = devModeResponse.response;
+  
+  const todaysDate = new Date();
+  const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  
+  const fetcher = (url: string) => fetch(url).then((res) => res.json());
+  const {data, error, isLoading} = useSWR(
+    `/api/games?date=${
           dateSelected === undefined
             ? `${format(todaysDate, "yyyy-MM-dd")}`
             : `${format(dateSelected, "yyyy-MM-dd")}`
-        }&timezone=${userTimezone}&league=12&season=2024-2025`;
+        }&timezone=${userTimezone}&league=12&season=2024-2025`,
+    fetcher
+  );
 
-        const options = {
-          method: "GET",
-        };
-        const res = await fetch(url, options);
-        const jsonRes = await res.json();
-        setGameData(jsonRes.response);
-      } catch (error) {
-        if (error) {
-          throw new Error("Unable to get scores", error);
-        }
-      }
-    }
-
-    fetchData();
-  }, [dateSelected]);
+  const games: Game[] = data?.response
 
   function noImage(event: React.SyntheticEvent<HTMLImageElement, Event>) {
     event.currentTarget.src = "https://placehold.co/48x48?text=No+logo";
@@ -72,11 +57,12 @@ const Scores = ({showScores, dateSelected}: Scores) => {
 
   return (
     <div>
-      {dateSelected && gameData?.length === 0 && (
+      {dateSelected && games?.length === 0 && (
         <h1>No 🏀 games on {format(dateSelected, "PPP")}</h1>
       )}
-      {/* to test by calling the API use gameData as what you map through, otherwise use devModeData */}
-      {gameData?.map((game) => {
+      {isLoading && <div>Scores are loading!</div>}
+      {/* to test by calling the API use games as what you map through, otherwise use devModeGames */}
+      {games?.map((game) => {
         return (
           <Fragment key={game.id}>
             <div className="flex flex-row justify-evenly mt-2">
