@@ -33,7 +33,7 @@ Then create your own `.env.local` file, add in what you copied, and signup for t
 
 Add your API keys by finding and copying them in the Rapid API docs.
 
-### Mimic an API Response
+<!-- ### Mimic an API Response
 
 If you'd like to see what the scores UI looks like without signing up for the API, or test the view in dev mode, here's how:
 
@@ -55,7 +55,7 @@ Then scroll down or use the find function to get to where you find `gameData?.ma
 })}
 ```
 
-After you make these changes and run the app with `npm run dev`, you'll be using `exampleResponse.json` as your data instead of making a call to the API.
+After you make these changes and run the app with `npm run dev`, you'll be using `exampleResponse.json` as your data instead of making a call to the API. -->
 
 ## Contact
 
