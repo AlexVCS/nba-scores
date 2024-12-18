@@ -27,35 +27,25 @@ Design: https://www.figma.com/file/AQL6ywEUiKkconAcaX5upM/NBA-Website-(Community
 
 ### Local Setup
 
-To run this locally on your machine, copy the contents of `.env.example`.
+To run this locally on your machine, install the dependencies with your package manager of choice. I'm using NPM, which means I run `npm i`.
+
+To use the API to grab data for the app, copy the contents of `.env.example`.
 
 Then create your own `.env.local` file, add in what you copied, and signup for the [API](https://rapidapi.com/api-sports/api/api-nba/).
 
 Add your API keys by finding and copying them in the Rapid API docs.
 
-<!-- ### Mimic an API Response
+Run the app by running `npm run dev` in your terminal. Then open the app at 
 
-If you'd like to see what the scores UI looks like without signing up for the API, or test the view in dev mode, here's how:
+### Mock an API Response
 
-In `app/components/Scores.tsx`, comment out the last line of the useEffect function where fetchData is called:
+If you'd like to see what the scores UI looks like without signing up for the API, or test the view in dev mode, run this in your terminal:
 
-```ts
-  useEffect(() => {
-    async function fetchData() {
-  // useEffect redacted for brevity
-  // fetchData();
-  }, [dateSelected]);
-```
+`npm run mock-api`
 
-Then scroll down or use the find function to get to where you find `gameData?.map`. Change `gameData` to `devModeData`, like so:
+This runs a file at the root called `MockApiResponse.mjs` that edits `app/components/Scores.tsx` to no longer call the API and use `exampleResponse.json` as your data.
 
-```ts
- {devModeData?.map((game) => {
-        return // inner map function logic)
-})}
-```
-
-After you make these changes and run the app with `npm run dev`, you'll be using `exampleResponse.json` as your data instead of making a call to the API. -->
+To undo these changes, make sure you have `app/components/Scores.tsx` open before you run `npm run mock-api`. Then in `app/components/Scores.tsx` you can undo the changes the script makes.
 
 ## Contact
 

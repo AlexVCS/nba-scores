@@ -57,11 +57,12 @@ const Scores = ({showScores, dateSelected}: Scores) => {
 
   return (
     <div>
-      {dateSelected && games?.length === 0 && (
+      {!isLoading && dateSelected && games?.length === 0 && (
         <h1>No 🏀 games on {format(dateSelected, "PPP")}</h1>
       )}
       {isLoading && <div>Scores are loading!</div>}
-      {/* to test by calling the API use games as what you map through, otherwise use devModeGames */}
+      {/* to test by calling the API use games as what you map through, otherwise run this in your terminal:
+          npm run mock-api */}
       {games?.map((game) => {
         return (
           <Fragment key={game.id}>
