@@ -23,7 +23,7 @@
 
 Find the scores of your favorite NBA team!
 
-### Built With
+## Built With
 
 [![NextJS]][Next-url][![Tailwindcss]][Tailwind-url][![TypeScript]][Typescript-url]
 
@@ -38,13 +38,23 @@ Design: https://www.figma.com/file/AQL6ywEUiKkconAcaX5upM/NBA-Website-(Community
 
 </div>
 
-### Local Project Setup
+## Local Project Setup
 
-Git, Node.js, and NPM (or your package manager of choice) are required to run this project locally. To install the dependencies run this in your terminal `npm i`.
+Git, Node.js, and NPM (or your package manager of choice) are required to run this project locally. 
 
-To use the API to grab data for the app, copy the contents of `.env.example`.
+### Clone the repo
 
-Then create your own `.env.local` file, add in what you copied, and signup for the [API](https://rapidapi.com/api-sports/api/api-basketball/pricing).
+Copy this and run it in your terminal:
+
+```bash
+git clone https://github.com/AlexVCS/nba-scores.git
+cd nba-scores
+npm i
+```
+
+To use the API to grab data for the app, run `touch .env.local` in your terminal and copy the contents of `.env.example`.
+
+Then in your `.env.local` file, add in what you copied, and signup for the [API](https://rapidapi.com/api-sports/api/api-basketball/pricing).
 
 Add your API keys by finding and copying them from [Rapid API](https://docs.rapidapi.com/docs/keys-and-key-rotation).
 
@@ -64,7 +74,9 @@ If you'd like to see what the scores UI looks like without signing up for the AP
 
 This runs a file at the root called `MockApiResponse.mjs` that edits `app/components/Scores.tsx` to no longer call the API and use `exampleResponse.json` as your data.
 
-To undo these changes, make sure you have `app/components/Scores.tsx` open before you run `npm run mock-api`. Then in `app/components/Scores.tsx` you can undo the changes the script makes.
+To undo these changes, run this command in your terminal:
+
+`npm run call-api`
 
 <div align='right'>
 
