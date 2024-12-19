@@ -1,8 +1,14 @@
 import {promises as fs} from "fs";
+import {existsSync} from "fs"
 import path from "path";
 
 export default async function getStaticProps() {
   const filePath = path.join(process.cwd(), "app/components/Scores.tsx");
+  const backupExists = existsSync(`${filePath}.bak`)
+  if(backupExists) {
+    throw new Error("Backup exists already")
+  }
+  await fs.copyFile(filePath, `${filePath}.bak`)
   let content = await fs.readFile(filePath, "utf8");
 
   function modifyFileContent(content) {

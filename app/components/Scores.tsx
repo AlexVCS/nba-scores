@@ -35,21 +35,21 @@ interface Scores {
 const Scores = ({showScores, dateSelected}: Scores) => {
   const devModeResponse = require("../../exampleResponse.json");
   const devModeGames: Game[] = devModeResponse.response;
-  
+
   const todaysDate = new Date();
   const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  
+
   const fetcher = (url: string) => fetch(url).then((res) => res.json());
   const {data, error, isLoading} = useSWR(
     `/api/games?date=${
-          dateSelected === undefined
-            ? `${format(todaysDate, "yyyy-MM-dd")}`
-            : `${format(dateSelected, "yyyy-MM-dd")}`
-        }&timezone=${userTimezone}&league=12&season=2024-2025`,
+      dateSelected === undefined
+        ? `${format(todaysDate, "yyyy-MM-dd")}`
+        : `${format(dateSelected, "yyyy-MM-dd")}`
+    }&timezone=${userTimezone}&league=12&season=2024-2025`,
     fetcher
   );
 
-  const games: Game[] = data?.response
+  const games: Game[] = data?.response;
 
   function noImage(event: React.SyntheticEvent<HTMLImageElement, Event>) {
     event.currentTarget.src = "https://placehold.co/48x48?text=No+logo";
@@ -63,47 +63,47 @@ const Scores = ({showScores, dateSelected}: Scores) => {
       {isLoading && <div>Scores are loading!</div>}
       {/* to test by calling the API use games as what you map through, otherwise run this in your terminal:
           npm run mock-api */}
-      {games?.map((game) => {
-        return (
-          <Fragment key={game.id}>
-            <div className="flex flex-row justify-evenly mt-2">
-              <div className="flex flex-col items-center">
-                <div>
+      <div className="flex flex-col">
+        {games?.map((game) => {
+          return (
+            <div key={game.id} className="grid grid-cols-2 mb-6 items-center">
+              <div>
+                <div className="h-14 w-1/2 mx-auto content-center">
                   <img
                     src={game.teams.home.logo}
                     onError={noImage}
-                    className="block max-w-12 h-12"
+                    className="inline max-w-full max-h-14"
                     alt={`${game.teams.home.name} logo`}
                   />
                 </div>
-                <p className="mt-2">{game.teams.home.name.split(" ").pop()}</p>
-                <h2 className="mb-2">
+                <p className="mt-5">{game.teams.home.name.split(" ").pop()}</p>
+                <h2 className="mt-4">
                   {showScores && game.scores.home.total !== null
                     ? `${game.scores.home.total}`
                     : "-"}
                 </h2>
               </div>
-              <div className="flex flex-col items-center">
-                <div>
+
+              <div>
+                <div className="h-14 w-1/2 mx-auto content-center">
                   <img
                     src={game.teams.away.logo}
                     onError={noImage}
-                    className="block max-w-12 h-12"
+                    className="inline max-w-full max-h-14"
                     alt={`${game.teams.away.name} logo`}
                   />
                 </div>
-                <p className="mt-2">{game.teams.away.name.split(" ").pop()}</p>
-                <h2 className="mb-2">
+                <p className="mt-5">{game.teams.away.name.split(" ").pop()}</p>
+                <h2 className="mt-4">
                   {showScores && game.scores.away.total !== null
                     ? `${game.scores.away.total}`
                     : "-"}
                 </h2>
               </div>
             </div>
-            <Separator className="h-1 bg-slate-950 w-full last:hidden" />
-          </Fragment>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 };
