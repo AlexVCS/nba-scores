@@ -57,23 +57,26 @@ const Scores = ({showScores, dateSelected}: Scores) => {
 
   return (
     <div>
-      {dateSelected && games?.length === 0 && (
+      {!isLoading && dateSelected && games?.length === 0 && (
         <h1>No 🏀 games on {format(dateSelected, "PPP")}</h1>
       )}
       {isLoading && <div>Scores are loading!</div>}
-      {/* to test by calling the API use games as what you map through, otherwise use devModeGames */}
+      {/* to test by calling the API use games as what you map through, otherwise run this in your terminal:
+          npm run mock-api */}
       {games?.map((game) => {
         return (
           <Fragment key={game.id}>
             <div className="flex flex-row justify-evenly mt-2">
               <div className="flex flex-col items-center">
-                <img
-                  src={game.teams.home.logo}
-                  onError={noImage}
-                  className="object-contain w-12 h-12"
-                  alt={`${game.teams.home.name} logo`}
-                />
-                <p className="mt-2">{game.teams.home.name}</p>
+                <div>
+                  <img
+                    src={game.teams.home.logo}
+                    onError={noImage}
+                    className="block max-w-12 h-12"
+                    alt={`${game.teams.home.name} logo`}
+                  />
+                </div>
+                <p className="mt-2">{game.teams.home.name.split(" ").pop()}</p>
                 <h2 className="mb-2">
                   {showScores && game.scores.home.total !== null
                     ? `${game.scores.home.total}`
@@ -81,13 +84,15 @@ const Scores = ({showScores, dateSelected}: Scores) => {
                 </h2>
               </div>
               <div className="flex flex-col items-center">
-                <img
-                  src={game.teams.away.logo}
-                  onError={noImage}
-                  className="object-contain w-12 h-12"
-                  alt={`${game.teams.away.name} logo`}
-                />
-                <p className="mt-2">{game.teams.away.name}</p>
+                <div>
+                  <img
+                    src={game.teams.away.logo}
+                    onError={noImage}
+                    className="block max-w-12 h-12"
+                    alt={`${game.teams.away.name} logo`}
+                  />
+                </div>
+                <p className="mt-2">{game.teams.away.name.split(" ").pop()}</p>
                 <h2 className="mb-2">
                   {showScores && game.scores.away.total !== null
                     ? `${game.scores.away.total}`
