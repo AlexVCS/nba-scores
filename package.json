@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "mock-api": "npx ts-node MockApiResponse.mjs"
+    "mock-api": "npx ts-node MockApiResponse.mjs",
+    "call-api": "npx ts-node CallApi.mjs"
   },
   "dependencies": {
     "@heroicons/react": "^2.1.1",

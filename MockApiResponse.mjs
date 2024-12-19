@@ -35,5 +35,4 @@ export default async function getStaticProps() {
   console.log("Modified app/components/Scores.tsx successfully.");
 }
 
-// Run the function immediately
 getStaticProps();
