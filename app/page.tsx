@@ -28,12 +28,10 @@ function Home() {
           </Label>
         </div>
       )}
-      <div>
-        <DatePicker
-          dateSelected={dateSelected}
-          setDateSelected={setDateSelected}
-        />
-      </div>
+      <DatePicker
+        dateSelected={dateSelected}
+        setDateSelected={setDateSelected}
+      />
       <Scores showScores={showScores} dateSelected={dateSelected} />
     </div>
   );
