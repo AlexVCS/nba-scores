@@ -1,5 +1,4 @@
-"use client";
-
+/* eslint-disable @next/next/no-img-element */
 import {format} from "date-fns";
 import useSWR from "swr";
 
@@ -54,7 +53,7 @@ const Scores = ({showScores, dateSelected}: Scores) => {
   }
 
   return (
-    <div>
+    <>
       {dateSelected && games?.length === 0 && (
         <h1>No 🏀 games on {format(dateSelected, "PPP")}</h1>
       )}
@@ -100,7 +99,7 @@ const Scores = ({showScores, dateSelected}: Scores) => {
           );
         })}
       </div>
-    </div>
+    </>
   );
 };
 
