@@ -7,11 +7,11 @@ export default async function getStaticProps() {
   const backupExists = existsSync(`${filePath}.bak`);
   if (!backupExists) throw new Error("API is already being called")
   if (backupExists) {
+    await fs.copyFile(`${filePath}.bak`, `${filePath}`);
     unlink(`${filePath}.bak`, (err) => {
       if (err) throw err;
       console.log("app/components/Scores.tsx.bak was deleted");
     });
-    await fs.copyFile(`${filePath}.bak`, `${filePath}`);
   }
 }
 

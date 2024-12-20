@@ -22,7 +22,10 @@ export default async function getStaticProps() {
       "{/* {isLoading && <div>Scores are loading!</div>} */}"
     );
 
-    content = content.replace(/games(?!:)(?!\s)((?!\?date))/gm, "devModeGames");
+    content = content.replace(
+      /games(?!:)(?!\s)((?!\?date))/gm,
+      "devModeGames"
+    );
 
     return content;
   }

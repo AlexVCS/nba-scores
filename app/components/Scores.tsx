@@ -50,7 +50,7 @@ const Scores = ({showScores, dateSelected}: Scores) => {
   const games: Game[] = data?.response;
 
   function noImage(event: React.SyntheticEvent<HTMLImageElement, Event>) {
-    event.currentTarget.src = "https://placehold.co/48x48?text=No+logo";
+    event.currentTarget.src = "https://placehold.co/56x56?text=No+logo";
   }
 
   return (
