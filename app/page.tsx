@@ -5,6 +5,7 @@ import {useState} from "react";
 import {Label} from "@/components/ui/label";
 import {Switch} from "@/components/ui/switch";
 import DatePicker from "./components/DatePicker";
+import ThemeSwitch from './components/ThemeSwitch';
 
 function Home() {
   const [showScores, setShowScores] = useState(false);
@@ -15,6 +16,9 @@ function Home() {
   return (
     <div className="text-center flex flex-col gap-2">
       <h1 className="mt-2">NBA Scores</h1>
+      <div className="self-center">
+        <ThemeSwitch />
+      </div>
       <div>Today is {todaysDate.toDateString()}</div>
       {dateSelected && dateSelected < todaysDate && (
         <div>

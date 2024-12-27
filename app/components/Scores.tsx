@@ -57,13 +57,13 @@ const Scores = ({showScores, dateSelected}: Scores) => {
       {dateSelected && games?.length === 0 && (
         <h1>No 🏀 games on {format(dateSelected, "PPP")}</h1>
       )}
-      {isLoading && <div>Scores are loading!</div>}
+      {isLoading && <div>Games are loading!</div>}
       <div className="flex flex-col">
         {games?.map((game) => {
           return (
             <div key={game.id} className="grid grid-cols-2 mb-6 items-center">
               <div>
-                <div className="h-14 w-1/2 mx-auto content-center">
+                <div className="h-16 w-1/2 mx-auto content-center dark:bg-primary rounded pl-2 pr-2">
                   <img
                     src={game.teams.home.logo}
                     onError={noImage}
@@ -80,7 +80,7 @@ const Scores = ({showScores, dateSelected}: Scores) => {
               </div>
 
               <div>
-                <div className="h-14 w-1/2 mx-auto content-center">
+                <div className="h-16 w-1/2 mx-auto content-center dark:bg-primary rounded pl-2 pr-2">
                   <img
                     src={game.teams.away.logo}
                     onError={noImage}
