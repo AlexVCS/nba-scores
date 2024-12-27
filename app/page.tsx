@@ -16,8 +16,10 @@ function Home() {
   return (
     <div className="text-center flex flex-col gap-2">
       <h1 className="mt-2">NBA Scores</h1>
+      <div className="self-center">
+        <ThemeSwitch />
+      </div>
       <div>Today is {todaysDate.toDateString()}</div>
-      <ThemeSwitch />
       {dateSelected && dateSelected < todaysDate && (
         <div>
           <Switch
