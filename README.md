@@ -30,7 +30,7 @@ Find the scores of your favorite NBA team!
 NBA scores API:
 https://api-sports.io/documentation/basketball/v1
 
-Design: https://www.figma.com/file/AQL6ywEUiKkconAcaX5upM/NBA-Website-(Community)?node-id=0:1&mode=dev
+Design: https://www.figma.com/design/AQL6ywEUiKkconAcaX5upM/NBA-Website-(Community)?node-id=0-1&p=f&t=5BTVqqpQWaIF9b4f-0
 
 <div align='right'>
 
