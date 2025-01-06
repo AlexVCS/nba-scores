@@ -1,6 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import {format} from "date-fns";
 import useSWR from "swr";
+import {NextRequest } from "next/server";
+
 
 interface Game {
   id: string;
@@ -24,24 +26,22 @@ interface Game {
   };
 }
 
-interface Scores {
-  showScores: boolean;
-  dateSelected: Date | undefined;
-}
 
-const Scores = ({showScores, dateSelected}: Scores) => {
+const Scores = () => {
   const devModeResponse = require("../../exampleResponse.json");
   const devModeGames: Game[] = devModeResponse.response;
 
   const todaysDate = new Date();
   const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
+  
+
   const fetcher = (url: string) => fetch(url).then((res) => res.json());
   const {data, error, isLoading} = useSWR(
     `/api/games?date=${
-      dateSelected === undefined
+      selectedDate === undefined
         ? `${format(todaysDate, "yyyy-MM-dd")}`
-        : `${format(dateSelected, "yyyy-MM-dd")}`
+        : `${format(selectedDate, "yyyy-MM-dd")}`
     }&timezone=${userTimezone}&league=12&season=2024-2025`,
     fetcher
   );
@@ -52,10 +52,12 @@ const Scores = ({showScores, dateSelected}: Scores) => {
     event.currentTarget.src = "https://placehold.co/56x56?text=No+logo";
   }
 
+  
+
   return (
     <>
-      {dateSelected && games?.length === 0 && (
-        <h1>No 🏀 games on {format(dateSelected, "PPP")}</h1>
+      {selectedDate && games?.length === 0 && (
+        <h1>No 🏀 games on {format(selectedDate, "PPP")}</h1>
       )}
       {isLoading && <div>Games are loading!</div>}
       <div className="flex flex-col">
@@ -73,7 +75,7 @@ const Scores = ({showScores, dateSelected}: Scores) => {
                 </div>
                 <p className="mt-5">{game.teams.home.name.split(" ").pop()}</p>
                 <h2 className="mt-4">
-                  {showScores && game.scores.home.total !== null
+                  {selectedScores && game.scores.home.total !== null
                     ? `${game.scores.home.total}`
                     : "-"}
                 </h2>
@@ -90,7 +92,7 @@ const Scores = ({showScores, dateSelected}: Scores) => {
                 </div>
                 <p className="mt-5">{game.teams.away.name.split(" ").pop()}</p>
                 <h2 className="mt-4">
-                  {showScores && game.scores.away.total !== null
+                  {selectedScores && game.scores.away.total !== null
                     ? `${game.scores.away.total}`
                     : "-"}
                 </h2>

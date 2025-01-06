@@ -1,20 +1,25 @@
 "use client";
 
-import {Dispatch, SetStateAction, useState} from "react";
+import {useState} from "react";
 import {format} from "date-fns";
 import {Calendar as CalendarIcon} from "lucide-react";
 import {cn} from "@/lib/utils";
 import {Button} from "@/components/ui/button";
 import {Calendar} from "@/components/ui/calendar";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
+import {useRouter} from "next/navigation";
 
-interface DatePickerProps {
-  dateSelected?: Date;
-  setDateSelected: Dispatch<SetStateAction<Date | undefined>>;
-}
 
-function DatePicker({dateSelected, setDateSelected}: DatePickerProps) {
+function DatePicker() {
   const [calendarOpen, setCalendarOpen] = useState(false);
+  const [dateSelected, setDateSelected] = useState<Date | null>(null);
+  const router = useRouter();
+
+
+  if(dateSelected) {
+    const formattedDate = format(dateSelected, "PPP")
+    router.push(`?${formattedDate}`);
+  }
 
   return (
     <div className="mb-4">
