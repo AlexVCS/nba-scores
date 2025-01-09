@@ -1,24 +1,44 @@
 "use client";
 
-import {useState} from "react";
+import {useCallback, useState} from "react";
 import {format} from "date-fns";
 import {Calendar as CalendarIcon} from "lucide-react";
 import {cn} from "@/lib/utils";
 import {Button} from "@/components/ui/button";
 import {Calendar} from "@/components/ui/calendar";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
-import {useRouter} from "next/navigation";
-
+import {usePathname, useRouter, useSearchParams} from "next/navigation";
 
 function DatePicker() {
   const [calendarOpen, setCalendarOpen] = useState(false);
-  const [dateSelected, setDateSelected] = useState<Date | null>(null);
+  const [dateSelected, setDateSelected] = useState<Date>();
+
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
   const router = useRouter();
 
+  // const createQueryString = useCallback(
+  //   (dateSelected: string | number | Date) => {
+  //     const params = new URLSearchParams(searchParams.toString());
 
-  if(dateSelected) {
-    const formattedDate = format(dateSelected, "PPP")
-    router.push(`?${formattedDate}`);
+  //     const formattedDate = format(dateSelected, "yyyy-MM-dd");
+  //     params.set("selectedDate", formattedDate);
+  //     return params.toString();
+  //   },
+  //   [searchParams]
+  // )
+
+  function handleSelectedDate(dateSelected: Date | undefined) {
+    // const params = new URLSearchParams(searchParams)
+
+    const params = new URLSearchParams(Array.from(searchParams.entries()));
+    if (dateSelected) {
+      const formattedDate = format(dateSelected, "yyyy-MM-dd");
+      params.set("selectedDate", formattedDate);
+    } else {
+      params.set("", "");
+    }
+    router.replace(`${pathname}?${params.toString()}`);
   }
 
   return (
@@ -45,6 +65,10 @@ function DatePicker() {
             mode="single"
             selected={dateSelected}
             onSelect={(date) => {
+              // router.push(
+              //   pathname + "?" + createQueryString('dateSelected')
+              // );
+              handleSelectedDate(date)
               setDateSelected(date);
               setCalendarOpen(false);
             }}
