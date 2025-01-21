@@ -16,14 +16,21 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(data)
   }
 
+  // export const API_URL = {
+  //   base: 'https://proxy.boxscores.site/?apiUrl=stats.nba.com',
+  //   details: 'https://data.nba.com/',
+  // }
 
-  const url = `https://api-basketball.p.rapidapi.com/games?date=${date}&timezone=${timezone}&league=${league}&season=${season}`;
+
+  const url = `https://proxy.boxscores.site/?apiUrl=stats.nba.com/stats/scoreboardv3&GameDate=${date}&LeagueID=00`
+  
+  // `https://api-basketball.p.rapidapi.com/games?date=${date}&timezone=${timezone}&league=${league}&season=${season}`;
   const options = {
     method: "GET",
-    headers: {
-      "X-RapidAPI-Key": process.env.XRapidAPIKey || "",
-      "X-RapidAPI-Host": process.env.XRapidAPIHost || "",
-    },
+    // headers: {
+    //   "X-RapidAPI-Key": process.env.XRapidAPIKey || "",
+    //   "X-RapidAPI-Host": process.env.XRapidAPIHost || "",
+    // },
   };
   const res = await fetch(url, options);
   const jsonRes = await res.json();

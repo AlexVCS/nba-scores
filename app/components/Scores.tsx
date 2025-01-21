@@ -1,7 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 import {format} from "date-fns";
-import useSWR from "swr";
-import {NextRequest} from "next/server";
 import {headers} from "next/headers";
 import getURL from "@/lib/utils/getURL";
 
@@ -29,29 +27,41 @@ interface Game {
 
 const Scores = async ({
   selectedDate,
-  url,
+  renderScores,
+  userTimezone,
 }: {
   selectedDate: string;
-  url: string;
+  renderScores: string;
+  userTimezone: string;
 }) => {
   const devModeResponse = require("../../exampleResponse.json");
   const devModeGames: Game[] = devModeResponse.response;
 
   const todaysDate = new Date();
-  const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const headerList = headers();
   const pathname = headerList.get("x-current-path");
+  const todaysFormattedDate = format(todaysDate, "yyyy-MM-dd");
+  const selectedFormattedDate =
+    selectedDate && format(selectedDate, "yyyy-MM-dd");
+
+  // with trpc you could have one api route for games that are finished or haven't happened yet, and another for live games
+  // use trpc the same way you would swr to cache inactive games for an hour or more, then
+  //
 
   // console.log("this is the url", getURL());
 
   // const fetcher = (url: string) => fetch(url).then((res) => res.json());
-  console.log('selected', selectedDate)
+  // console.log('selected', selectedDate)
   const data = await fetch(
-    getURL(`/api/games?date=${!selectedDate ? `${format(todaysDate, "yyyy-MM-dd")}` : `${format(selectedDate, "yyyy-MM-dd")}`}&timezone=${userTimezone}&league=12&season=2024-2025`)
+    getURL(
+      `/api/games?date=${
+        !selectedDate ? `${todaysFormattedDate}` : `${selectedFormattedDate}`
+      }&timezone=${userTimezone}&league=12&season=2024-2025`
+    )
   );
   const res = await data.json();
-  console.log(res);
-  const games: Game[] = res?.response;
+  // console.log(res?.scoreboard.games);
+  // const games: Game[] = res?.response;
 
   // const {data, error, isLoading} = useSWR(
   //   `/api/games?date=${selectedDate}
@@ -78,6 +88,7 @@ const Scores = async ({
       )}
       {isLoading && <div>Games are loading!</div>} */}
       <div className="flex flex-col">
+      {/*
         {games?.map((game) => {
           return (
             <div key={game.id} className="grid grid-cols-2 mb-6 items-center">
@@ -91,11 +102,15 @@ const Scores = async ({
                   />
                 </div>
                 <p className="mt-5">{game.teams.home.name.split(" ").pop()}</p>
-                {/* <h2 className="mt-4">
-                  {selectedScores && game.scores.home.total !== null
-                    ? `${game.scores.home.total}`
-                    : "-"}
-                </h2> */}
+                <h2 className="mt-4">
+                  {
+                    (renderScores =
+                      "true" && game.scores.home.total !== null
+                        ? `${game.scores.home.total}`
+                        : "-")
+                  }
+                  {game.scores.home.total}
+                </h2>
               </div>
 
               <div>
@@ -108,15 +123,20 @@ const Scores = async ({
                   />
                 </div>
                 <p className="mt-5">{game.teams.away.name.split(" ").pop()}</p>
-                {/* <h2 className="mt-4">
-                  {selectedScores && game.scores.away.total !== null
-                    ? `${game.scores.away.total}`
-                    : "-"}
-                </h2> */}
+                <h2 className="mt-4">
+                  {
+                    (renderScores =
+                      "true" && game.scores.away.total !== null
+                        ? `${game.scores.away.total}`
+                        : "-")
+                  }
+                  {game.scores.home.total}
+                </h2>
               </div>
             </div>
           );
         })}
+        */}
       </div>
     </>
   );

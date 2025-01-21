@@ -1,31 +1,41 @@
 import Scores from "@/app/components/Scores";
 import DatePicker from "./components/DatePicker";
-import ThemeSwitch from './components/ThemeSwitch';
+import ThemeSwitch from "./components/ThemeSwitch";
 import ShowScores from "./components/ShowScores";
-import { Url } from "url";
 
 function Home({
-  searchParams, params
+  searchParams,
+  params,
 }: {
   searchParams?: {
     selectedDate: string;
-  },
+    renderScores: string;
+  };
   params?: {
-    slug: string
-  }
+    slug: string;
+  };
 }) {
-  const selectedDate = searchParams?.selectedDate || '';
-  const url = params?.slug
-
+  const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const selectedDate = searchParams?.selectedDate || "";
+  const renderScores = searchParams?.renderScores || "";
+  
   return (
     <div className="text-center flex flex-col gap-2">
       <h1 className="mt-2">NBA Scores</h1>
       <div className="self-center">
         <ThemeSwitch />
       </div>
-     <ShowScores />
-      <DatePicker/>
-      <Scores selectedDate={selectedDate} url={url} />
+      <ShowScores
+        userTimezone={userTimezone}
+        selectedDate={selectedDate}
+        renderScores={renderScores}
+      />
+      <DatePicker />
+      <Scores
+        userTimezone={userTimezone}
+        renderScores={renderScores}
+        selectedDate={selectedDate}
+      />
     </div>
   );
 }
