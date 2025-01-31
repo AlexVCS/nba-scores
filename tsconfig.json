@@ -7,6 +7,12 @@
     "strict": true,
     "lib": ["ES2020", "DOM"],
     "esModuleInterop": true,
+    "jsx": "preserve",
     "skipLibCheck": true
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
   }
 }
