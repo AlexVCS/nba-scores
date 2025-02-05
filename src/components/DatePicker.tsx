@@ -2,37 +2,9 @@ import {useState} from "react";
 import {format} from "date-fns";
 import {DayPicker} from "react-day-picker";
 
-function DatePicker() {
+function DatePicker({setSearchParams}: SetURLSearchParams) {
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [dateSelected, setDateSelected] = useState<Date>();
-
-  // const searchParams = useSearchParams();
-  // const pathname = usePathname();
-  // const router = useRouter();
-
-  // const createQueryString = useCallback(
-  //   (dateSelected: string | number | Date) => {
-  //     const params = new URLSearchParams(searchParams.toString());
-
-  //     const formattedDate = format(dateSelected, "yyyy-MM-dd");
-  //     params.set("selectedDate", formattedDate);
-  //     return params.toString();
-  //   },
-  //   [searchParams]
-  // )
-
-  function handleSelectedDate(dateSelected: Date | undefined) {
-    // const params = new URLSearchParams(searchParams)
-
-    const params = new URLSearchParams(Array.from(searchParams.entries()));
-    if (dateSelected) {
-      const formattedDate = format(dateSelected, "yyyy-MM-dd");
-      params.set("selectedDate", formattedDate);
-    } else {
-      params.set("", "");
-    }
-    router.replace(`${pathname}?${params.toString()}`);
-  }
 
   return (
     // <div className="mb-4">
@@ -72,10 +44,17 @@ function DatePicker() {
     // </div>
 
     <DayPicker
+      showOutsideDays
       mode="single"
       selected={dateSelected}
       onSelect={(date) => {
-        setDateSelected(date);
+        date && setSearchParams({date: format(date, "yyyy-MM-dd")});
+
+        // setSearchParams(date => {
+        //   date.set("date", date.toString());
+        //   console.log(searchParams)
+        //   return searchParams
+        // });
         setCalendarOpen(false);
       }}
       footer={

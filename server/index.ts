@@ -9,7 +9,11 @@ const formattedDate = format(todaysDate, "yyyy-MM-dd")
 // console.log(formattedDate)
 // const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-const url = `https://proxy.boxscores.site/?apiUrl=stats.nba.com/stats/scoreboardv3&GameDate=${formattedDate}&LeagueID=00`
+// Parameters, Returns, Examples, Pseudo code
+
+// selectedDate from frontend
+// want to pass that to backend from a query parameter
+
 
 
 export const whitelist = ["http://localhost:5173"]
@@ -21,6 +25,11 @@ app.use(cors({
 
 app.get('/', async (req, res) => {
   try {
+    // const { date } = req.query;
+    console.log(req.params)
+    // const dateParam = req.params as string;
+    // console.log(dateParam)
+    const url = `https://proxy.boxscores.site/?apiUrl=stats.nba.com/stats/scoreboardv3&GameDate=${formattedDate}&LeagueID=00`
     const response = await fetch(url)
     // console.log(await response.json())
     const formatResponse = await response.json()

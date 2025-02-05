@@ -1,5 +1,7 @@
-import {useQuery} from "@tanstack/react-query";
+import {useQuery, useInfiniteQuery} from "@tanstack/react-query";
+import {format} from "date-fns";
 // import {getResults} from "../../server/src"
+
 
 interface GameData {
   games: {
@@ -22,52 +24,48 @@ interface GameData {
   };
 }
 
-const Scores = () => {
-  // const [gameData, setGameData] = useState<GameData["games"]>([]);
+const Scores = ({searchParams}: URLSearchParams) => {
 
-  // const getScores = async () => {
-  //   try {
-  //     const response = await fetch("http://localhost:3000/");
-  //     // console.log(response)
-  //     const result = await response.json();
-  //     // console.log(result)
-  //     // setGameData(result);
-  //   } catch (error) {
-  //     console.error(`This call didn't work, this is the ${error}`);
-  //   }
-  // };
+  const todaysDate = new Date();
+  const formattedDate = format(todaysDate, "yyyy-MM-dd")
 
-  // const endpoint = "http://localhost:3000/";
+  const url = `http://localhost:3000/`;
+  // console.log(url)
+
+  const getScores = async () => {
+    try {
+      const response = await fetch(url);
+      return response.json();
+    } catch (error) {
+      console.error(`This call didn't work, this is the ${error}`);
+    }
+  };
 
   const {
     isLoading,
     data: games,
     error,
   } = useQuery({
-    queryKey: ["games"],
-    queryFn: async () => {
-      const {games} = await fetch("http://localhost:3000/");
-      const result = await games.json();
-      return result
-    },
+    queryKey: ["games", searchParams],
+    queryFn: () => getScores(searchParams),
   });
 
   if (isLoading) return <h1>Loading...</h1>;
   if (error) return <h1>{JSON.stringify(error)}</h1>;
 
-  {
-    console.log(games);
-  }
   return (
     <>
-      {/* {games?.map((game) => {
+      {games?.map((game: GameData['games']) => {
         return (
-          <>
-            <div>{game?.homeTeam.score}</div>
-            <div>{game.awayTeam.score}</div>
-          </>
+            <div key={game.gameId} className="flex justify-center">
+              {game.homeTeam.teamTricode}
+              {game.homeTeam.score}
+           
+              {game.awayTeam.teamTricode}
+              {game.awayTeam.score}
+            </div>
         );
-      })} */}
+      })}
     </>
   );
 };
