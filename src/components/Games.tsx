@@ -1,7 +1,8 @@
 import {useQuery, useInfiniteQuery} from "@tanstack/react-query";
 import {format} from "date-fns";
-// import {getResults} from "../../server/src"
+import { useState } from "react";
 import GameCard from "./GameCard";
+import Boxscore from "./Boxscore";
 
 interface GameData {
   games: {
@@ -30,6 +31,7 @@ interface Props {
 }
 
 const Games: React.FC<Props> = ({searchParams}) => {
+  const [boxscore, setBoxscore] = useState([])
   const getScores = async () => {
     try {
       const dateParam = searchParams.get("date");
@@ -58,7 +60,8 @@ const Games: React.FC<Props> = ({searchParams}) => {
 
   return (
     <>
-      <GameCard games={games} />
+      <GameCard games={games} setBoxscore={setBoxscore} />
+      <Boxscore boxscore={boxscore} />
     </>
   );
 };

@@ -25,8 +25,6 @@ import {useDateFormatter} from 'react-aria'
 
 const NewDatePicker = () => {
   const [dateSelected, setDateSelected] = useState<DateValue | null>(null);
-  let formatter = useDateFormatter({ dateStyle: 'short' });
-
 
   return (
     <DatePicker className="group flex flex-col gap-1 w-[200px]">
@@ -47,7 +45,6 @@ const NewDatePicker = () => {
       <MyPopover>
         <Dialog className="p-6 text-gray-600">
           <Calendar value={dateSelected} onChange={setDateSelected}>
-            Date selected is {dateSelected?.toString()}
             <header className="flex items-center gap-1 pb-4 px-1 font-serif w-full">
               <Heading className="flex-1 font-semibold text-2xl ml-2" />
               <RoundButton slot="previous">
@@ -69,7 +66,6 @@ const NewDatePicker = () => {
                 {(date) => (
                   <CalendarCell
                     date={date}
-                    
                     className="w-9 h-9 outline-none cursor-default rounded-full flex items-center justify-center outside-month:text-gray-300 hover:bg-gray-100 pressed:bg-gray-200 selected:bg-violet-700 selected:text-white focus-visible:ring ring-violet-600/70 ring-offset-2"
                   />
                 )}

@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { Request, Response } from 'express';
 import { format } from "date-fns";
 import cors from 'cors'
 const app = express()
@@ -14,13 +14,6 @@ app.use(cors({
   origin: "http://localhost:5173",
 }));
 
-// async function getScores(date: Date, formattedDate: string) {
-//   const url = `https://proxy.boxscores.site/?apiUrl=stats.nba.com/stats/scoreboardv3&GameDate=${date ? date : formattedDate}&LeagueID=00`
-//   const response = await fetch(url)
-//   const formatResponse = await response.json()
-//   return formatResponse.scoreboard.games
-// }
-
 app.get('/', async function getResults(req, res) {
   try {
     const { date } = req.query
@@ -34,16 +27,20 @@ app.get('/', async function getResults(req, res) {
   }
 })
 
-app.get('/boxscore', async (req, res) => {
+app.get('/boxscore', async function getBoxscore(req, res) {
   try {
-    const { date, gameId } = req.query
-    let year = date ? date.toString().slice(0, 4) : formattedDate.slice(0, 4)
-    console.log(req.query)
-    // year && this.getResults(),
-
-    const url = `https://data.nba.com//data/10s/v2015/json/mobile_teams/nba/${year}/scores/gamedetail/${gameId}_gamedetail.json`
-  } catch (err) {
-    res.status(500).send(`Could not grab boxscore ${err}`)
+    const { gameId } = req.query;
+    console.log('this is the gameId', gameId)
+    // console.log('this is the year', year)
+    // const url = `https://data.nba.com/data/10s/v2015/json/mobile_teams/nba/${year}/scores/gamedetail/${gameId}_gamedetail.json`;
+    const response = await fetch(`https://cdn.nba.com/static/json/liveData/boxscore/boxscore_${gameId}.json`);
+    // console.log(await response.json())
+    const boxscoreData = await response.json();
+    console.log(boxscoreData)
+    res.send(boxscoreData.game);
+  } catch (error) {
+    console.error(`Could not grab boxscore ${error}`);
+    res.status(500).send(`Could not grab boxscore ${error}`);
   }
 })
 

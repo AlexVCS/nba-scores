@@ -3,7 +3,6 @@ import {Switch} from "@adobe/react-spectrum";
 import {useState} from "react";
 import {useQuery} from "@tanstack/react-query";
 
-
 interface GameData {
   games: {
     gameId: string;
@@ -26,33 +25,40 @@ interface GameData {
   }[];
 }
 
-  const getBoxScores = async (game) => {
-    try {
-      //  const gameYear = gameCode.slice(0,4)
-      // const gameId = searchParams.get("id");
-      const url = `http://localhost:3000/boxscore`;
-      const response = await fetch(url);
-      return response.json();
-    } catch (error) {
-      console.error(`This call didn't work, this is the ${error}`);
-    }
-  };
-
-
-  // const {
-  //   isLoading,
-  //   data: boxscore,
-  //   error,
-  // } = useQuery({
-  //   queryKey: ["boxscore"],
-  //   queryFn: () => getBoxScores(game),
-  // });
-
 type NBAIconsType = typeof NBAIcons;
 type TeamCodeType = keyof NBAIconsType;
 
-const GameCard: React.FC<GameData> = ({games}) => {
+const GameCard: React.FC<GameData & {setBoxscore: any}> = ({
+  games,
+  setBoxscore,
+}) => {
   const [showScores, setShowScores] = useState(false);
+
+  const getBoxScores = async (gameId: string, year: string) => {
+    try {
+      const url = `http://localhost:3000/boxscore?gameId=${gameId}&year=${year}`;
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const boxscore = response.json();
+      setBoxscore(boxscore);
+    } catch (error) {
+      console.error(`Error fetching boxscore: ${error}`);
+      throw error;
+    }
+  };
+  const {
+    isLoading,
+    data: boxscore,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["boxscore"],
+    queryFn: () => getBoxScores(games[0].gameId, games[0].gameCode.slice(0, 4)),
+    enabled: false,
+  });
+
   return (
     <div>
       <div className="flex justify-center">
@@ -66,7 +72,15 @@ const GameCard: React.FC<GameData> = ({games}) => {
         const AwayTeamLogo =
           NBAIcons[game.awayTeam.teamTricode as TeamCodeType];
 
-          //  console.log(game.gameId)
+        const handleBoxScoreClick = async () => {
+          try {
+            await getBoxScores(game.gameId, game.gameCode.slice(0, 4));
+            // refetch(); // Manually trigger the query
+          } catch (err) {
+            console.error("Failed to fetch box score:", err);
+          }
+        };
+
         return (
           <section key={game.gameId} className="flex justify-center">
             <article className="grid grid-cols-3 w-[336px] h-[178px] justify-items-center content-center items-start">
@@ -86,19 +100,16 @@ const GameCard: React.FC<GameData> = ({games}) => {
               <div className="text-lg text-center place-self-center">
                 {game.gameStatusText}
                 <div className="text-sm mt-1">
-                  <a
-                    onClick={() =>
-                      getBoxScores(game.gameId, game.gameCode.slice(0, 4))
-                    }
-                    href={
-                      "/game=" +
-                      game.gameId +
-                      "&year=" +
-                      game.gameCode.slice(0, 4)
-                    }
-                  >
-                    Box score
-                  </a>
+                  {game.gameStatusText.includes("ET") ? (
+                    ""
+                  ) : (
+                    <a
+                      href={`/game=${game.gameId}`}
+                      onClick={handleBoxScoreClick}
+                    >
+                      Box score
+                    </a>
+                  )}
                 </div>
               </div>
 
