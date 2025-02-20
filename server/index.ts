@@ -21,7 +21,7 @@ app.get('/', async function getResults(req, res) {
     const response = await fetch(url)
     const formatResponse = await response.json()
     const results = formatResponse.scoreboard.games
-    res.send(results)
+    res.send({games: results})
   } catch (error) {
     res.status(500).send(`Could not grab data ${error}`)
   }

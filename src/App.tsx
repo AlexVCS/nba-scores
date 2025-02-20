@@ -1,25 +1,19 @@
-import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
-import Header from "./components/Header";
-import Games from "./components/Games";
+import Games from "./routes/games/Games";
 import React from "react";
 import DatePicker from "./components/DatePicker";
-import {useSearchParams} from "react-router";
 import NewDatePicker from "./components/NewDatePicker";
+import PageLayout from "./PageLayout";
 
 function App() {
-  const queryClient = new QueryClient();
-  const [searchParams, setSearchParams] = useSearchParams({date: ""});
-  type SetURLSearchParams = ReturnType<typeof useSearchParams>[1];
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <Header />
+    <PageLayout>
       <NewDatePicker />
-      <DatePicker setSearchParams={setSearchParams} />
-      <Games searchParams={searchParams} />
+      <DatePicker />
+      <Games />
       <ReactQueryDevtools />
-    </QueryClientProvider>
+    </PageLayout>
   );
 }
 
