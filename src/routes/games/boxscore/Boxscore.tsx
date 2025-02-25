@@ -25,7 +25,6 @@ const Boxscore = () => {
   const {isLoading, data, error} = useQuery({
     queryKey: ["boxscore", gameId],
     queryFn: () => getBoxScores(gameId),
-    // enabled: false
   });
 
   if (isLoading) return <h1>Loading...</h1>;
@@ -39,6 +38,7 @@ const Boxscore = () => {
       </div>
       {homeTeam.players.map((player) => {
         const nameLinkFormat = formatPlayerNameLink(player)
+
         return (
           <>
             <div>

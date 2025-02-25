@@ -27,8 +27,6 @@ Find the scores and stats of your favorite NBA team!
 
 [![React.JS]][React-url][![Tailwindcss]][Tailwind-url][![Express.js]][Express-url][![TypeScript]][Typescript-url]
 
-If you'd like to know more about the endpoints the data is coming from please look at those parts of the code or ask me!
-
 Design: https://www.figma.com/design/AQL6ywEUiKkconAcaX5upM/NBA-Website-(Community)?node-id=0-1&p=f&t=5BTVqqpQWaIF9b4f-0
 
 <div align='right'>
@@ -91,8 +89,6 @@ Alex Curtis-Slep - [GitHub](https://github.com/AlexVCS) / [Bluesky](https://bsky
 [alex-linkedin-url]: https://www.linkedin.com/in/alexcurtisslep/
 [Express-url]: https://expressjs.com/
 [Express.js]: https://img.shields.io/badge/Express-black?style=for-the-badge&logo=express&logoColor=white
-[NextJS]: https://img.shields.io/badge/Express.js-black?style=for-the-badge&logo=express.js&logoColor=white
-[Next-url]: https://nextjs.org/
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
 [React-url]: https://reactjs.org/
 [Tailwindcss]: https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white

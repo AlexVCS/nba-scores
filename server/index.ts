@@ -36,7 +36,7 @@ app.get('/boxscore', async function getBoxscore(req, res) {
     const response = await fetch(`https://cdn.nba.com/static/json/liveData/boxscore/boxscore_${gameId}.json`);
     // console.log(await response.json())
     const boxscoreData = await response.json();
-    console.log(boxscoreData)
+    console.log(boxscoreData.game.homeTeam.players)
     res.send(boxscoreData.game);
   } catch (error) {
     console.error(`Could not grab boxscore ${error}`);
