@@ -19,62 +19,75 @@ import type {ButtonProps, DateValue, PopoverProps} from "react-aria-components";
 import ChevronUpDownIcon from "@spectrum-icons/workflow/ChevronUpDown";
 import ChevronLeftIcon from "@spectrum-icons/workflow/ChevronLeft";
 import ChevronRightIcon from "@spectrum-icons/workflow/ChevronRight";
-import { useState } from "react";
-import {useDateFormatter} from 'react-aria'
-
+import {useState} from "react";
+import {useDateFormatter} from "react-aria";
+import {format} from "date-fns";
+import {useSearchParams} from "react-router";
 
 const NewDatePicker = () => {
-  const [dateSelected, setDateSelected] = useState<DateValue | null>(null);
+  const [dateSelected, setDateSelected] = useState<CalendarDate | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams({date: ""});
+
+  let formatter = useDateFormatter();
+
+  const handleDateChange = (date: DateValue | null) => {
+    setDateSelected(date);
+    if (date) {
+      setSearchParams(formatter.format(date));
+    }
+  };
 
   return (
-    <DatePicker className="group flex flex-col gap-1 w-[200px]">
-      <Label className="text-white cursor-default">Date</Label>
-      <Group className="flex rounded-lg bg-white/90 focus-within:bg-white group-open:bg-white transition pl-3 shadow-md text-gray-700 focus-visible:ring-2 ring-black">
-        <DateInput className="flex flex-1 py-2">
-          {(segment) => (
-            <DateSegment
-              segment={segment}
-              className="px-0.5 tabular-nums outline-none rounded-sm focus:bg-violet-700 focus:text-white caret-transparent placeholder-shown:italic"
-            />
-          )}
-        </DateInput>
-        <Button className="outline-none px-3 flex items-center text-gray-700 transition border-0 border-solid border-l border-l-purple-200 bg-transparent rounded-r-lg pressed:bg-purple-100 focus-visible:ring-2 ring-black">
-          <ChevronUpDownIcon size="XS" />
-        </Button>
-      </Group>
-      <MyPopover>
-        <Dialog className="p-6 text-gray-600">
-          <Calendar value={dateSelected} onChange={setDateSelected}>
-            <header className="flex items-center gap-1 pb-4 px-1 font-serif w-full">
-              <Heading className="flex-1 font-semibold text-2xl ml-2" />
-              <RoundButton slot="previous">
-                <ChevronLeftIcon />
-              </RoundButton>
-              <RoundButton slot="next">
-                <ChevronRightIcon />
-              </RoundButton>
-            </header>
-            <CalendarGrid className="border-spacing-1 border-separate">
-              <CalendarGridHeader>
-                {(day) => (
-                  <CalendarHeaderCell className="text-xs text-gray-500 font-semibold">
-                    {day}
-                  </CalendarHeaderCell>
-                )}
-              </CalendarGridHeader>
-              <CalendarGridBody>
-                {(date) => (
-                  <CalendarCell
-                    date={date}
-                    className="w-9 h-9 outline-none cursor-default rounded-full flex items-center justify-center outside-month:text-gray-300 hover:bg-gray-100 pressed:bg-gray-200 selected:bg-violet-700 selected:text-white focus-visible:ring ring-violet-600/70 ring-offset-2"
-                  />
-                )}
-              </CalendarGridBody>
-            </CalendarGrid>
-          </Calendar>
-        </Dialog>
-      </MyPopover>
-    </DatePicker>
+    <div className="flex justify-center mt-2">
+      <DatePicker className="group flex flex-col gap-1 w-[200px]">
+        <Label className="text-white cursor-default">Date</Label>
+        <Group className="flex rounded-lg bg-white/90 focus-within:bg-white group-open:bg-white transition pl-3 shadow-md text-gray-700 focus-visible:ring-2 ring-black">
+          <DateInput className="flex flex-1 py-2">
+            {(segment) => (
+              <DateSegment
+                segment={segment}
+                className="px-0.5 tabular-nums outline-none rounded-sm focus:bg-violet-700 focus:text-white caret-transparent placeholder-shown:italic"
+              />
+            )}
+          </DateInput>
+          <Button className="outline-none px-3 flex items-center text-gray-700 transition border-0 border-solid border-l border-l-purple-200 bg-transparent rounded-r-lg pressed:bg-purple-100 focus-visible:ring-2 ring-black">
+            <ChevronUpDownIcon size="XS" />
+          </Button>
+        </Group>
+        <MyPopover>
+          <Dialog className="p-6 text-gray-600">
+            <Calendar value={dateSelected} onChange={handleDateChange}>
+              <header className="flex items-center gap-1 pb-4 px-1 font-serif w-full">
+                <Heading className="flex-1 font-semibold text-2xl ml-2" />
+                <RoundButton slot="previous">
+                  <ChevronLeftIcon />
+                </RoundButton>
+                <RoundButton slot="next">
+                  <ChevronRightIcon />
+                </RoundButton>
+              </header>
+              <CalendarGrid className="border-spacing-1 border-separate">
+                <CalendarGridHeader>
+                  {(day) => (
+                    <CalendarHeaderCell className="text-xs text-gray-500 font-semibold">
+                      {day}
+                    </CalendarHeaderCell>
+                  )}
+                </CalendarGridHeader>
+                <CalendarGridBody>
+                  {(date) => (
+                    <CalendarCell
+                      date={date}
+                      className="w-9 h-9 outline-none cursor-default rounded-full flex items-center justify-center outside-month:text-gray-300 hover:bg-gray-100 pressed:bg-gray-200 selected:bg-violet-700 selected:text-white focus-visible:ring ring-violet-600/70 ring-offset-2"
+                    />
+                  )}
+                </CalendarGridBody>
+              </CalendarGrid>
+            </Calendar>
+          </Dialog>
+        </MyPopover>
+      </DatePicker>
+    </div>
   );
 };
 
