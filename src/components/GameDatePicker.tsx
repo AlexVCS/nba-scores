@@ -20,26 +20,31 @@ import ChevronUpDownIcon from "@spectrum-icons/workflow/ChevronUpDown";
 import ChevronLeftIcon from "@spectrum-icons/workflow/ChevronLeft";
 import ChevronRightIcon from "@spectrum-icons/workflow/ChevronRight";
 import {useState} from "react";
-import {useDateFormatter} from "react-aria";
 import {format} from "date-fns";
 import {useSearchParams} from "react-router";
 
-const NewDatePicker = () => {
-  const [dateSelected, setDateSelected] = useState<CalendarDate | null>(null);
+const GameDatePicker = () => {
+  const [dateSelected, setDateSelected] = useState<DateValue | null>(null);
   const [searchParams, setSearchParams] = useSearchParams({date: ""});
-
-  let formatter = useDateFormatter();
 
   const handleDateChange = (date: DateValue | null) => {
     setDateSelected(date);
     if (date) {
-      setSearchParams(formatter.format(date));
+      const jsDate = new Date(date.toString());
+      const timezoneOffset = jsDate.getTimezoneOffset() * 60000;
+      const localDate = new Date(jsDate.getTime() + timezoneOffset);
+    
+      setSearchParams({date: format(localDate, "yyyy-MM-dd")});
     }
   };
 
   return (
-    <div className="flex justify-center mt-2">
-      <DatePicker className="group flex flex-col gap-1 w-[200px]">
+    <div className="flex justify-center mt-2 mb-4">
+      <DatePicker
+        value={dateSelected}
+        onChange={handleDateChange}
+        className="group flex flex-col gap-1 w-[200px]"
+      >
         <Label className="text-white cursor-default">Date</Label>
         <Group className="flex rounded-lg bg-white/90 focus-within:bg-white group-open:bg-white transition pl-3 shadow-md text-gray-700 focus-visible:ring-2 ring-black">
           <DateInput className="flex flex-1 py-2">
@@ -121,4 +126,4 @@ function MyPopover(props: PopoverProps) {
   );
 }
 
-export default NewDatePicker;
+export default GameDatePicker;

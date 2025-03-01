@@ -53,19 +53,23 @@ const Games = () => {
   const {games} = data;
   return (
     <>
-      <div>
-        <div className="flex flex-wrap justify-center place-content-baseline">
-          <Switch
-            justifySelf="center"
-            isSelected={showScores}
-            onChange={setShowScores}
-          >
+      {dateParam !== "" && (
+        <div className="flex justify-center items-center">
+          <Switch isSelected={showScores} onChange={setShowScores}>
             {showScores ? "Hide Scores" : "Show Scores"}
           </Switch>
         </div>
-      </div>
-      {games.map((gamedata) => {
-        return <GameCard key={gamedata.gameId} showScores={showScores} game={gamedata} />;
+      )}
+      {games.length === 0 ? <div className="flex justify-center text-lg">No games today</div>
+      :
+      games.map((gamedata) => {
+        return (
+          <GameCard
+            key={gamedata.gameId}
+            showScores={showScores}
+            game={gamedata}
+          />
+        );
       })}
     </>
   );
