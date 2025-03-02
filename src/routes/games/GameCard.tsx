@@ -1,8 +1,6 @@
 import * as NBAIcons from "react-nba-logos";
-
-import {useQuery} from "@tanstack/react-query";
+import { placeholderTeamLogo } from "@/helpers/helpers";
 import {Link} from "react-router-dom";
-import {useSearchParams} from "react-router";
 
 interface GameCardProps {
   showScores: boolean;
@@ -35,11 +33,11 @@ const GameCard: React.FC<GameCardProps> = ({game, showScores}) => {
   const AwayTeamLogo = NBAIcons[game.awayTeam.teamTricode as TeamCodeType];
 
   return (
-    <section key={game.gameId} className="flex justify-center">
-      <article className="grid grid-cols-3 w-[336px] h-[178px] justify-items-center content-center items-start">
+    <div className="flex justify-center lg:justify-start">
+      <article className="grid grid-cols-3 w-[336px] h-[178px] justify-items-center content-center lg:items-start">
         <div className="text-center">
           <figure className="place-self-center">
-            {HomeTeamLogo && <HomeTeamLogo size={48} />}
+            {HomeTeamLogo ? <HomeTeamLogo size={48} /> : placeholderTeamLogo}
           </figure>
           <figcaption className="sr-only">
             {game.homeTeam.teamName} logo
@@ -56,16 +54,14 @@ const GameCard: React.FC<GameCardProps> = ({game, showScores}) => {
             {game.gameStatusText.includes("ET") ? (
               ""
             ) : (
-              <Link to={`/games/${game.gameId}/boxscore`}>
-                Box score
-              </Link>
+              <Link to={`/games/${game.gameId}/boxscore`}>Box score</Link>
             )}
           </div>
         </div>
 
         <div className="text-center">
           <figure className="place-self-center">
-            {AwayTeamLogo && <AwayTeamLogo size={48} />}
+            {AwayTeamLogo ? <AwayTeamLogo size={48} /> : placeholderTeamLogo}
           </figure>
           <figcaption className="sr-only">
             {game.awayTeam.teamName} logo
@@ -76,7 +72,7 @@ const GameCard: React.FC<GameCardProps> = ({game, showScores}) => {
           {showScores && <div>{game.awayTeam.score}</div>}
         </div>
       </article>
-    </section>
+    </div>
   );
 };
 
