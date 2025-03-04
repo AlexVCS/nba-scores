@@ -2,6 +2,58 @@ import { formatPlayerNameLink } from "@/helpers/helpers";
 import {useQuery} from "@tanstack/react-query";
 import {useParams} from "react-router";
 
+export interface Player {
+  status: string;
+  order: number;
+  personId: number;
+  jerseyNum: string;
+  position: string;
+  starter: string;
+  oncourt: string;
+  played: string;
+  statistics: PlayerStatistics;
+  name: string;
+  nameI: string;
+  firstName: string;
+  familyName: string;
+}
+interface PlayerStatistics {
+  assists: number;
+  blocks: number;
+  blocksReceived: number;
+  fieldGoalsAttempted: number;
+  fieldGoalsMade: number;
+  fieldGoalsPercentage: number;
+  foulsOffensive: number;
+  foulsDrawn: number;
+  foulsPersonal: number;
+  foulsTechnical: number;
+  freeThrowsAttempted: number;
+  freeThrowsMade: number;
+  freeThrowsPercentage: number;
+  minus: number;
+  minutes: string;
+  minutesCalculated: string;
+  plus: number;
+  plusMinusPoints: number;
+  points: number;
+  pointsFastBreak: number;
+  pointsInThePaint: number;
+  pointsSecondChance: number;
+  reboundsDefensive: number;
+  reboundsOffensive: number;
+  reboundsTotal: number;
+  steals: number;
+  threePointersAttempted: number;
+  threePointersMade: number;
+  threePointersPercentage: number;
+  turnovers: number;
+  twoPointersAttempted: number;
+  twoPointersMade: number;
+  twoPointersPercentage: number;
+}
+
+
 const getBoxScores = async (gameId: string) => {
   try {
     const url = `http://localhost:3000/boxscore?gameId=${gameId}`;
@@ -36,8 +88,8 @@ const Boxscore = () => {
       <div className="text-center">
         {homeTeam.teamName} {homeTeam.score}
       </div>
-      {homeTeam.players.map((player) => {
-        const nameLinkFormat = formatPlayerNameLink(player)
+      {homeTeam.players.map((player: Player) => {
+        const nameLinkFormat = formatPlayerNameLink(player);
 
         return (
           <>
@@ -56,7 +108,7 @@ const Boxscore = () => {
       <div className="text-center">
         {awayTeam.teamName} {awayTeam.score}
       </div>
-      {awayTeam.players.map((player) => {
+      {awayTeam.players.map((player: Player) => {
         const nameLinkFormat = formatPlayerNameLink(player);
         return (
           <>

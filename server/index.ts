@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import { format } from "date-fns";
 import cors from 'cors'
 const app = express()

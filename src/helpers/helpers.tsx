@@ -1,4 +1,6 @@
-export const formatPlayerNameLink = (player) => {
+import { Player } from "@/routes/games/boxscore/Boxscore";
+
+export const formatPlayerNameLink = (player: Player) => {
  return `${player.personId}/${player.name
    .toLowerCase()
    .replace(/\.|'/g, "")
