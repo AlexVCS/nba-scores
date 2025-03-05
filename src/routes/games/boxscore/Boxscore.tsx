@@ -56,7 +56,9 @@ interface PlayerStatistics {
 
 const getBoxScores = async (gameId: string) => {
   try {
-    const url = `http://localhost:3000/boxscore?gameId=${gameId}`;
+    const url =
+      `http://localhost:3000/boxscore?gameId=${gameId}` ||
+      `https://nba-scores-22nf.onrender.com/boxscore?gameId=${gameId}`;
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);

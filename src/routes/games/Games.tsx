@@ -32,7 +32,9 @@ const Games = () => {
 
   const getScores = async (dateParam: string): Promise<{games: GameData[]}> => {
     try {
-      const url = `http://localhost:3000/?date=${dateParam}`;
+      const url =
+        `http://localhost:3000/?date=${dateParam}` ||
+        `https://nba-scores-22nf.onrender.com/?date=${dateParam}`;
       const response = await fetch(url);
       return response.json();
     } catch (error) {
