@@ -56,13 +56,7 @@ interface PlayerStatistics {
 
 const getBoxScores = async (gameId: string) => {
   try {
-    const baseUrl =
-      process.env.NODE_ENV === "development"
-        ? process.env.VITE_API_URL_DEV
-        : process.env.VITE_API_URL_PROD;
-
-    // Construct the full URL
-    const url = `${baseUrl}/boxscore?gameId=${gameId}`;
+    const url = `${import.meta.env.BASE_URL}/boxscore?gameId=${gameId}`;
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
