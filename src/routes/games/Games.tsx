@@ -32,12 +32,7 @@ const Games = () => {
 
   const getScores = async (dateParam: string): Promise<{games: GameData[]}> => {
     try {
-      const baseUrl =
-        process.env.NODE_ENV === "development"
-          ? process.env.VITE_API_URL_DEV
-          : process.env.VITE_API_URL_PROD;
-
-      const url = `${baseUrl}/?date=${dateParam}`;
+      const url = `${import.meta.env.BASE_URL}/?date=${dateParam}`;
       const response = await fetch(url);
       return response.json();
     } catch (error) {
