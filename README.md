@@ -16,19 +16,16 @@
 [Built With](#built-with) |
 [Local Project Setup](#local-project-setup) |
 [Clone the repo](#clone-the-repo) |
-[Mock an API Response](#mock-an-api-Response) |
+<!-- [Mock an API Response](#mock-an-api-Response) | -->
 [Contact](#contact)
 
 ## About
 
-Find the scores of your favorite NBA team!
+Find the scores and stats of your favorite NBA team!
 
 ## Built With
 
-[![NextJS]][Next-url][![Tailwindcss]][Tailwind-url][![TypeScript]][Typescript-url]
-
-NBA scores API:
-https://api-sports.io/documentation/basketball/v1
+[![React.JS]][React-url][![Tailwindcss]][Tailwind-url][![Express.js]][Express-url][![TypeScript]][Typescript-url]
 
 Design: https://www.figma.com/design/AQL6ywEUiKkconAcaX5upM/NBA-Website-(Community)?node-id=0-1&p=f&t=5BTVqqpQWaIF9b4f-0
 
@@ -40,7 +37,7 @@ Design: https://www.figma.com/design/AQL6ywEUiKkconAcaX5upM/NBA-Website-(Communi
 
 ## Local Project Setup
 
-Git, Node.js, and NPM (or your package manager of choice) are required to run this project locally. 
+Git, Node.js, and PNPM (or your package manager of choice) are required to run this project locally. 
 
 ### Clone the repo
 
@@ -49,16 +46,10 @@ Copy this and run it in your terminal:
 ```bash
 git clone https://github.com/AlexVCS/nba-scores.git
 cd nba-scores
-npm i
+pnpm i
 ```
 
-To use the API to grab data for the app, run `touch .env.local` in your terminal and copy the contents of `.env.example`.
-
-Then in your `.env.local` file, add in what you copied, and signup for the [API](https://rapidapi.com/api-sports/api/api-basketball/pricing).
-
-Add your API keys by finding and copying them from [Rapid API](https://docs.rapidapi.com/docs/keys-and-key-rotation).
-
-Run the app by running `npm run dev` in your terminal. Then open the app at `http://localhost:3000`
+Run the app by running `pnpm run dev` in one terminal and `pnpm run serve` in another terminal. Then open the UI of the app at `http://localhost:5173`
 
 <div align='right'>
 
@@ -66,7 +57,7 @@ Run the app by running `npm run dev` in your terminal. Then open the app at `htt
 
 </div>
 
-### Mock an API Response
+<!-- ### Mock an API Response
 
 If you'd like to see what the scores UI looks like without signing up for the API, or test the view in dev mode, run this in your terminal:
 
@@ -76,7 +67,7 @@ This runs a file at the root called `MockApiResponse.mjs` that edits `app/compon
 
 To undo these changes, run this command in your terminal:
 
-`npm run call-api`
+`npm run call-api` -->
 
 <div align='right'>
 
@@ -96,11 +87,11 @@ Alex Curtis-Slep - [GitHub](https://github.com/AlexVCS) / [Bluesky](https://bsky
 
 [alex-linkedin-shield]: https://img.shields.io/badge/-Alex's_LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [alex-linkedin-url]: https://www.linkedin.com/in/alexcurtisslep/
+[Express-url]: https://expressjs.com/
+[Express.js]: https://img.shields.io/badge/Express-black?style=for-the-badge&logo=express&logoColor=white
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
 [React-url]: https://reactjs.org/
 [Tailwindcss]: https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white
 [Tailwind-url]: https://tailwindcss.com/
-[NextJS]: https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white
-[Next-url]: https://nextjs.org/
 [Typescript]: https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white
 [Typescript-url]: https://www.typescriptlang.org/
