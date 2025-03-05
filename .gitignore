@@ -23,7 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
-
+.env
 
 .nx/cache
 .nx/workspace-data

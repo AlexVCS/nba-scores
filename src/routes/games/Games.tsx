@@ -32,9 +32,12 @@ const Games = () => {
 
   const getScores = async (dateParam: string): Promise<{games: GameData[]}> => {
     try {
-      const url =
-        `http://localhost:3000/?date=${dateParam}` ||
-        `https://nba-scores-22nf.onrender.com/?date=${dateParam}`;
+      const baseUrl =
+        process.env.NODE_ENV === "development"
+          ? process.env.VITE_API_URL_DEV
+          : process.env.VITE_API_URL_PROD;
+
+      const url = `${baseUrl}/?date=${dateParam}`;
       const response = await fetch(url);
       return response.json();
     } catch (error) {
