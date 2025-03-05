@@ -4,15 +4,16 @@ import cors from 'cors'
 const app = express()
 const port = process.env.PORT || 3000
 
+
 const todaysDate = new Date();
 const formattedDate = format(todaysDate, "yyyy-MM-dd")
+
 
 export const whitelist = ["http://localhost:5173", "https://nbascorez.netlify.app/"]
 
 
 app.use(cors({
-  origin: ["http://localhost:5173", "https://nbascorez.netlify.app/"],
-}));
+  origin: ["http://localhost:5173", "https://nbascorez.netlify.app/"]}));
 
 app.get('/', async function getResults(req, res) {
   try {
