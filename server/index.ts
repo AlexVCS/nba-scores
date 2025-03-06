@@ -9,20 +9,21 @@ const todaysDate = new Date();
 const formattedDate = format(todaysDate, "yyyy-MM-dd")
 
 
-export const whitelist = ["http://localhost:5173", "https://nbascorez.netlify.app/"]
+export const whitelist = ["http://localhost:5173", "https://nba-scorez.onrender.com"]
 
 
 app.use(cors({
-  origin: ["http://localhost:5173", "https://nbascorez.netlify.app/"]}));
+  origin: ["http://localhost:5173", "https://nba-scorez.onrender.com"]
+}));
 
 app.get('/', async function getResults(req, res) {
   try {
     const { date } = req.query
-    const url = `https://proxy.boxscores.site/?apiUrl=stats.nba.com/stats/scoreboardv3&GameDate=${date ? date : formattedDate}&LeagueID=00`
+    const url = `https://proxy.boxscores.site/?apiUrl=stats.nba.com/stats/scoreboardv3&GameDate=${!date ? formattedDate : date}&LeagueID=00`
     const response = await fetch(url)
     const formatResponse = await response.json()
     const results = formatResponse.scoreboard.games
-    res.send({games: results})
+    res.send({ games: results })
   } catch (error) {
     res.status(500).send(`Could not grab data ${error}`)
   }
