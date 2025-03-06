@@ -1,4 +1,4 @@
-import { Player } from "@/routes/games/boxscore/Boxscore";
+import { Player } from "@/routes/games/boxscore/Boxscore.jsx";
 
 export const formatPlayerNameLink = (player: Player) => {
  return `${player.personId}/${player.name
