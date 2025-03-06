@@ -1,7 +1,7 @@
 import {useQuery} from "@tanstack/react-query";
 import {useState} from "react";
-import GameCard from "./GameCard";
-import Boxscore from "./boxscore/Boxscore";
+import GameCard from "./GameCard.jsx";
+import Boxscore from "./boxscore/Boxscore.jsx";
 import {Switch} from "@adobe/react-spectrum";
 import {useSearchParams} from "react-router";
 
@@ -32,7 +32,12 @@ const Games = () => {
 
   const getScores = async (dateParam: string): Promise<{games: GameData[]}> => {
     try {
-      const url = `${import.meta.env.BASE_URL}/?date=${dateParam}`;
+      const baseUrl =
+        import.meta.env.NODE_ENV === "development"
+          ? import.meta.env.VITE_API_URL_DEV
+          : import.meta.env.VITE_API_URL_PROD;
+
+      const url = `${baseUrl}/?date=${dateParam}`;
       const response = await fetch(url);
       return response.json();
     } catch (error) {

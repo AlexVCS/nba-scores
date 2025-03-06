@@ -1,4 +1,4 @@
-import { formatPlayerNameLink } from "@/helpers/helpers";
+import { formatPlayerNameLink } from "@/helpers/helpers.jsx";
 import {useQuery} from "@tanstack/react-query";
 import {useParams} from "react-router";
 
@@ -56,7 +56,12 @@ interface PlayerStatistics {
 
 const getBoxScores = async (gameId: string) => {
   try {
-    const url = `${import.meta.env.BASE_URL}/boxscore?gameId=${gameId}`;
+    const baseUrl =
+      import.meta.env.NODE_ENV === "development"
+        ? import.meta.env.VITE_API_URL_DEV
+        : import.meta.env.VITE_API_URL_PROD;
+
+    const url = `${baseUrl}/boxscore?gameId=${gameId}`;
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
