@@ -32,13 +32,20 @@ app.get('/', async function getResults(req, res) {
 app.get('/boxscore', async function getBoxscore(req, res) {
   try {
     const { gameId } = req.query;
-    console.log('this is the gameId', gameId)
-    // console.log('this is the year', year)
-    // const url = `https://data.nba.com/data/10s/v2015/json/mobile_teams/nba/${year}/scores/gamedetail/${gameId}_gamedetail.json`;
     const response = await fetch(`https://cdn.nba.com/static/json/liveData/boxscore/boxscore_${gameId}.json`);
-    // console.log(await response.json())
     const boxscoreData = await response.json();
-    console.log(boxscoreData.game.homeTeam.players)
+    res.send(boxscoreData.game);
+  } catch (error) {
+    console.error(`Could not grab boxscore ${error}`);
+    res.status(500).send(`Could not grab boxscore ${error}`);
+  }
+})
+
+app.get('/games/:gameId/boxscore', async function getBoxscoreDataWithoutLink(req, res) {
+  try {
+    const { gameId } = req.params;
+    const response = await fetch(`https://cdn.nba.com/static/json/liveData/boxscore/boxscore_${gameId}.json`);
+    const boxscoreData = await response.json();
     res.send(boxscoreData.game);
   } catch (error) {
     console.error(`Could not grab boxscore ${error}`);
