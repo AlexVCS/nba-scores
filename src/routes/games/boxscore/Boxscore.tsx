@@ -1,6 +1,7 @@
-import { formatPlayerNameLink } from "@/helpers/helpers.jsx";
+import {formatPlayerNameLink, formatMinutesPlayed} from "@/helpers/helpers.jsx";
 import {useQuery} from "@tanstack/react-query";
 import {useParams} from "react-router";
+// import GameCard from "../GameCard";
 
 export interface Player {
   status: string;
@@ -56,11 +57,9 @@ interface PlayerStatistics {
 
 const getBoxScores = async (gameId: string) => {
   try {
-    const baseUrl =
-      import.meta.env.NODE_ENV === "development"
-        ? import.meta.env.VITE_API_URL_DEV
-        : import.meta.env.VITE_API_URL_PROD;
-
+    const baseUrl = import.meta.env.DEV
+      ? import.meta.env.VITE_API_URL_DEV
+      : import.meta.env.VITE_API_URL_PROD;
     const url = `${baseUrl}/boxscore?gameId=${gameId}`;
     const response = await fetch(url);
     if (!response.ok) {
@@ -78,7 +77,6 @@ const getBoxScores = async (gameId: string) => {
 const Boxscore = () => {
   const params = useParams();
   const gameId = params.gameId ?? "";
-  console.log({gameId});
   const {isLoading, data, error} = useQuery({
     queryKey: ["boxscore", gameId],
     queryFn: () => getBoxScores(gameId),
@@ -90,45 +88,95 @@ const Boxscore = () => {
   const {homeTeam, awayTeam} = data;
   return (
     <div>
-      <div className="text-center">
-        {homeTeam.teamName} {homeTeam.score}
-      </div>
-      {homeTeam.players.map((player: Player) => {
-        const nameLinkFormat = formatPlayerNameLink(player);
+      {/* <GameCard showScores={showScores} game={gamedata} /> */}
+      <div className="pb-4">
+        <h1 className="text-lg font-bold">{homeTeam.teamName}</h1>
+        <table className="table-fixed">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>PTS</th>
+              <th>REB</th>
+              <th>AST</th>
+              <th>+/-</th>
+              <th>MIN</th>
+            </tr>
+          </thead>
+          {homeTeam.players.map((player: Player) => {
+            const nameLinkFormat = formatPlayerNameLink(player);
 
-        return (
-          <>
-            <div>
-              <a
-                href={`http://www.nba.com/player/${nameLinkFormat}`}
-                target="_blank"
-              >
-                {player.name}
-              </a>{" "}
-              PTS {player.statistics.points}
-            </div>
-          </>
-        );
-      })}
-      <div className="text-center">
-        {awayTeam.teamName} {awayTeam.score}
+            return (
+              <>
+                <tbody>
+                  <tr>
+                    <td className="pr-2">
+                      {" "}
+                      <a
+                        href={`http://www.nba.com/player/${nameLinkFormat}`}
+                        target="_blank"
+                        className="text-[#0268d6]"
+                      >
+                        {player.name}
+                      </a>
+                    </td>
+                    <td>{player.statistics.points}</td>
+                    <td>{player.statistics.reboundsTotal}</td>
+                    <td>{player.statistics.assists}</td>
+                    <td>{player.statistics.plusMinusPoints}</td>
+                    <td>
+                      {formatMinutesPlayed(player.statistics.minutesCalculated)}
+                    </td>
+                  </tr>
+                </tbody>
+              </>
+            );
+          })}
+        </table>
       </div>
-      {awayTeam.players.map((player: Player) => {
-        const nameLinkFormat = formatPlayerNameLink(player);
-        return (
-          <>
-            <div>
-              <a
-                href={`http://www.nba.com/player/${nameLinkFormat}`}
-                target="_blank"
-              >
-                {player.name}
-              </a>{" "}
-              PTS {player.statistics.points}
-            </div>
-          </>
-        );
-      })}
+
+      <div>
+        <h1 className="text-lg font-bold">{awayTeam.teamName}</h1>
+        <table className="table-fixed">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>PTS</th>
+              <th>REB</th>
+              <th>AST</th>
+              <th>+/-</th>
+              <th>MIN</th>
+            </tr>
+          </thead>
+          {awayTeam.players.map((player: Player) => {
+            const nameLinkFormat = formatPlayerNameLink(player);
+            return (
+              <>
+                <tbody>
+                  <tr>
+                    <td className="pr-2">
+                      {" "}
+                      <a
+                        href={`http://www.nba.com/player/${nameLinkFormat}`}
+                        target="_blank"
+                        className="text-[#0268d6]"
+                      >
+                        {player.name}
+                      </a>
+                    </td>
+                    <td>{player.statistics.points}</td>
+                    <td>{player.statistics.reboundsTotal}</td>
+                    <td>{player.statistics.assists}</td>
+                    <td>{player.statistics.plusMinusPoints}</td>
+                    <td>
+                      {formatMinutesPlayed(player.statistics.minutesCalculated)}
+                    </td>
+                  </tr>
+                </tbody>
+              </>
+            );
+          })}
+        </table>
+      </div>
     </div>
   );
 };
