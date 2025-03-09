@@ -25,7 +25,7 @@ import {useSearchParams} from "react-router";
 
 const GameDatePicker = () => {
   const [dateSelected, setDateSelected] = useState<DateValue | null>(null);
-  const [searchParams, setSearchParams] = useSearchParams({date: ""});
+  const [, setSearchParams] = useSearchParams({date: ""});
 
   const handleDateChange = (date: DateValue | null) => {
     setDateSelected(date);
