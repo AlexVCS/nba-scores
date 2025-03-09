@@ -25,7 +25,7 @@ type GameData = {
 };
 
 const Games = () => {
-  const [searchParams, setSearchParams] = useSearchParams({date: ""});
+  const [searchParams] = useSearchParams({date: ""});
   const dateParam: string = searchParams.get("date") ?? "";
   const [showScores, setShowScores] = useState(false);
 
@@ -46,7 +46,6 @@ const Games = () => {
   const {isLoading, data, error} = useQuery({
     queryKey: ["games", dateParam],
     queryFn: () => getScores(dateParam),
-    // enabled: () => boxscore.length > 1 && false,
   });
 
   if (isLoading) return <h1>Loading...</h1>;
@@ -55,7 +54,7 @@ const Games = () => {
   const {games} = data;
   return (
     <>
-      {dateParam !== "" && (
+      {games.some(game => game.gameStatus !== 1) && (
         <div className="flex justify-center items-center">
           <Switch isSelected={showScores} onChange={setShowScores}>
             {showScores ? "Hide Scores" : "Show Scores"}

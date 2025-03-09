@@ -28,9 +28,11 @@ interface GameCardProps {
 type NBAIconsType = typeof NBAIcons;
 type TeamCodeType = keyof NBAIconsType;
 
+
 const GameCard: React.FC<GameCardProps> = ({game, showScores}) => {
   const HomeTeamLogo = NBAIcons[game.homeTeam.teamTricode as TeamCodeType];
   const AwayTeamLogo = NBAIcons[game.awayTeam.teamTricode as TeamCodeType];
+  const gameInProgress = game.gameStatus !== 1
 
   return (
     <div className="flex justify-center lg:justify-start">
@@ -45,7 +47,7 @@ const GameCard: React.FC<GameCardProps> = ({game, showScores}) => {
           <div className="self-center text-sm mt-1">
             {game.homeTeam.teamName}
           </div>
-          {showScores && <div>{game.homeTeam.score}</div>}
+          {showScores && gameInProgress && <div>{game.homeTeam.score}</div>}
         </div>
 
         <div className="text-lg text-center place-self-center">
@@ -69,7 +71,7 @@ const GameCard: React.FC<GameCardProps> = ({game, showScores}) => {
           <div className="self-center text-sm mt-1">
             {game.awayTeam.teamName}
           </div>
-          {showScores && <div>{game.awayTeam.score}</div>}
+          {showScores && gameInProgress && <div>{game.awayTeam.score}</div>}
         </div>
       </article>
     </div>
