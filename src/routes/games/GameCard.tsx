@@ -29,10 +29,11 @@ type NBAIconsType = typeof NBAIcons;
 type TeamCodeType = keyof NBAIconsType;
 
 
-const GameCard: React.FC<GameCardProps> = ({game, showScores}) => {
+function GameCard({game, showScores = false}: GameCardProps) {
   const HomeTeamLogo = NBAIcons[game.homeTeam.teamTricode as TeamCodeType];
   const AwayTeamLogo = NBAIcons[game.awayTeam.teamTricode as TeamCodeType];
-  const gameInProgress = game.gameStatus !== 1
+  const gameHasStarted = game.gameStatus !== 1;
+  const watchGameLink = `https://www.nba.com/game/${game.awayTeam.teamTricode}-vs-${game.homeTeam.teamTricode}-${game.gameId}?watch`;
 
   return (
     <div className="flex justify-center lg:justify-start">
@@ -47,16 +48,21 @@ const GameCard: React.FC<GameCardProps> = ({game, showScores}) => {
           <div className="self-center text-sm mt-1">
             {game.homeTeam.teamName}
           </div>
-          {showScores && gameInProgress && <div>{game.homeTeam.score}</div>}
+          {showScores && gameHasStarted && <div>{game.homeTeam.score}</div>}
         </div>
 
-        <div className="text-lg text-center place-self-center">
+        <div className="text-base text-center place-self-center">
           {game.gameStatusText}
-          <div className="text-sm mt-1">
-            {game.gameStatusText.includes("ET") ? (
+          <div className="text-xs mt-2">
+            {game.gameStatusText.includes(":") ? (
               ""
             ) : (
-              <Link to={`/games/${game.gameId}/boxscore`}>Box score</Link>
+              <div className="flex flex-col gap-1">
+                <Link to={`/games/${game.gameId}/boxscore`}>Box score</Link>
+                <Link to={`${watchGameLink}`} target="_blank">
+                  Watch
+                </Link>
+              </div>
             )}
           </div>
         </div>
@@ -71,7 +77,7 @@ const GameCard: React.FC<GameCardProps> = ({game, showScores}) => {
           <div className="self-center text-sm mt-1">
             {game.awayTeam.teamName}
           </div>
-          {showScores && gameInProgress && <div>{game.awayTeam.score}</div>}
+          {showScores && gameHasStarted && <div>{game.awayTeam.score}</div>}
         </div>
       </article>
     </div>
