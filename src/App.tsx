@@ -1,4 +1,4 @@
-import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
+// import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
 import Games from "./routes/games/Games.jsx";
 import React from "react";
 import GameDatePicker from "./components/GameDatePicker.jsx";
@@ -10,7 +10,7 @@ function App() {
     <PageLayout>
       <GameDatePicker />
       <Games />
-      <ReactQueryDevtools />
+      {/* <ReactQueryDevtools /> */}
     </PageLayout>
   );
 }

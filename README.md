@@ -13,6 +13,7 @@
 ## Table of Contents
 
 [About](#about) |
+[Screenshots](#screenshots) |
 [Built With](#built-with) |
 [Local Project Setup](#local-project-setup) |
 [Clone the repo](#clone-the-repo) |
@@ -21,7 +22,15 @@
 
 ## About
 
-Find the scores and stats of your favorite NBA team!
+Find the scores and stats of your favorite NBA team! Boxscores are only available for games from the 2019/20 season, and after.
+
+## Screenshots
+
+Scores App UI                           |         Boxscore UI
+:--------------------------------------:|:-------------------------:
+![NBA Scores App UI](./public/images/scores_app_ui.png)  |  ![Boxscore UI](./public/images/boxscore_ui.png)
+
+
 
 ## Built With
 
@@ -69,11 +78,11 @@ To undo these changes, run this command in your terminal:
 
 `npm run call-api` -->
 
-<div align='right'>
+<!-- <div align='right'>
 
 [Back to Top](#top)
 
-</div>
+</div> -->
 
 ## Contact
 
