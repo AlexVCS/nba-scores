@@ -5,6 +5,7 @@ import {useParams} from "react-router";
 
 export interface Player {
   status: string;
+  notPlayingReason: string;
   order: number;
   personId: number;
   jerseyNum: string;
@@ -54,7 +55,6 @@ interface PlayerStatistics {
   twoPointersPercentage: number;
 }
 
-
 const getBoxScores = async (gameId: string) => {
   try {
     const baseUrl = import.meta.env.DEV
@@ -102,39 +102,53 @@ const Boxscore = () => {
               <th>MIN</th>
             </tr>
           </thead>
-          {homeTeam.players.map((player: Player) => {
-            const nameLinkFormat = formatPlayerNameLink(player);
+          {homeTeam.players
+            .filter((player: Player) => player.status === "ACTIVE")
+            .map((player: Player) => {
+              const nameLinkFormat = formatPlayerNameLink(player);
 
-            return (
-              <>
-                <tbody>
-                  <tr>
-                    <td className="pr-2">
-                      {" "}
-                      <a
-                        href={`http://www.nba.com/player/${nameLinkFormat}`}
-                        target="_blank"
-                        className="text-[#0268d6]"
-                      >
-                        {player.name}
-                      </a>
-                    </td>
-                    <td>{player.statistics.points}</td>
-                    <td>{player.statistics.reboundsTotal}</td>
-                    <td>{player.statistics.assists}</td>
-                    <td>{player.statistics.plusMinusPoints}</td>
-                    <td>
-                      {formatMinutesPlayed(player.statistics.minutesCalculated)}
-                    </td>
-                  </tr>
-                </tbody>
-              </>
-            );
-          })}
+              return (
+                <>
+                  <tbody>
+                    <tr>
+                      <td className="pr-2">
+                        {" "}
+                        <a
+                          href={`http://www.nba.com/player/${nameLinkFormat}`}
+                          target="_blank"
+                          className="text-[#0268d6]"
+                        >
+                          {player.name}
+                        </a>
+                      </td>
+                      {player.statistics.minutesCalculated !== "PT00M" ? (
+                        <>
+                          <td>{player.statistics.points}</td>
+                          <td>{player.statistics.reboundsTotal}</td>
+                          <td>{player.statistics.assists}</td>
+                          <td>{player.statistics.plusMinusPoints}</td>
+                          <td>
+                            {formatMinutesPlayed(
+                              player.statistics.minutesCalculated
+                            )}
+                          </td>
+                        </>
+                      ) : (
+                        <td colSpan={20}>
+                          {player.notPlayingReason
+                            ? "DND - Injury/Illness"
+                            : "DNP - Coach's Decision"}
+                        </td>
+                      )}
+                    </tr>
+                  </tbody>
+                </>
+              );
+            })}
         </table>
       </div>
 
-      <div>
+      <div className="mb-4">
         <h1 className="text-lg font-bold">{awayTeam.teamName}</h1>
         <table className="table-fixed">
           <thead>
@@ -147,36 +161,69 @@ const Boxscore = () => {
               <th>MIN</th>
             </tr>
           </thead>
-          {awayTeam.players.map((player: Player) => {
-            const nameLinkFormat = formatPlayerNameLink(player);
-            return (
-              <>
-                <tbody>
-                  <tr>
-                    <td className="pr-2">
-                      {" "}
-                      <a
-                        href={`http://www.nba.com/player/${nameLinkFormat}`}
-                        target="_blank"
-                        className="text-[#0268d6]"
-                      >
-                        {player.name}
-                      </a>
-                    </td>
-                    <td>{player.statistics.points}</td>
-                    <td>{player.statistics.reboundsTotal}</td>
-                    <td>{player.statistics.assists}</td>
-                    <td>{player.statistics.plusMinusPoints}</td>
-                    <td>
-                      {formatMinutesPlayed(player.statistics.minutesCalculated)}
-                    </td>
-                  </tr>
-                </tbody>
-              </>
-            );
-          })}
+          {awayTeam.players
+            .filter((player: Player) => player.status === "ACTIVE")
+            .map((player: Player) => {
+              const nameLinkFormat = formatPlayerNameLink(player);
+              return (
+                <>
+                  <tbody>
+                    <tr>
+                      <td className="pr-2">
+                        {" "}
+                        <a
+                          href={`http://www.nba.com/player/${nameLinkFormat}`}
+                          target="_blank"
+                          className="text-[#0268d6]"
+                        >
+                          {player.name}
+                        </a>
+                      </td>
+                      {player.statistics.minutesCalculated !== "PT00M" ? (
+                        <>
+                          <td>{player.statistics.points}</td>
+                          <td>{player.statistics.reboundsTotal}</td>
+                          <td>{player.statistics.assists}</td>
+                          <td>{player.statistics.plusMinusPoints}</td>
+                          <td>
+                            {formatMinutesPlayed(
+                              player.statistics.minutesCalculated
+                            )}
+                          </td>
+                        </>
+                      ) : (
+                        <td colSpan={20}>
+                          {player.notPlayingReason
+                            ? "DND - Injury/Illness"
+                            : "DNP - Coach's Decision"}
+                        </td>
+                      )}
+                    </tr>
+                  </tbody>
+                </>
+              );
+            })}
         </table>
       </div>
+      <section>
+        <div>
+          <h1 className="uppercase">Inactive Players</h1>
+          <p>
+            {homeTeam.teamTricode}:{" "}
+            {homeTeam.players
+              .filter((player: Player) => player.status === "INACTIVE")
+              .map((player: Player) => player.name)
+              .join(", ")}
+          </p>
+          <p>
+            {awayTeam.teamTricode}:{" "}
+            {awayTeam.players
+              .filter((player: Player) => player.status === "INACTIVE")
+              .map((player: Player) => player.name)
+              .join(", ")}{" "}
+          </p>
+        </div>
+      </section>
     </div>
   );
 };
