@@ -30,8 +30,6 @@ Scores App UI                           |         Boxscore UI
 :--------------------------------------:|:-------------------------:
 ![NBA Scores App UI](./public/images/scores_app_ui.png)  |  ![Boxscore UI](./public/images/boxscore_ui.png)
 
-
-
 ## Built With
 
 [![React.JS]][React-url][![Tailwindcss]][Tailwind-url][![Express.js]][Express-url][![TypeScript]][Typescript-url]
