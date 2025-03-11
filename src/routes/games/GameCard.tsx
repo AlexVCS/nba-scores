@@ -7,6 +7,7 @@ interface GameCardProps {
   game: {
     gameId: string;
     gameCode: string;
+    gameTimeUTC: string;
     gameStatus: number;
     gameStatusText: string;
     ifNecessary: boolean;
@@ -34,6 +35,8 @@ function GameCard({game, showScores = false}: GameCardProps) {
   const AwayTeamLogo = NBAIcons[game.awayTeam.teamTricode as TeamCodeType];
   const gameHasStarted = game.gameStatus !== 1;
   const watchGameLink = `https://www.nba.com/game/${game.awayTeam.teamTricode}-vs-${game.homeTeam.teamTricode}-${game.gameId}?watch`;
+  const endOf1819Season = new Date("2019-06-15T00:00:00Z");
+  const gameDateUtc = new Date(game.gameTimeUTC)
 
   return (
     <div className="flex justify-center lg:justify-start">
@@ -58,7 +61,9 @@ function GameCard({game, showScores = false}: GameCardProps) {
               ""
             ) : (
               <div className="flex flex-col gap-1">
-                <Link to={`/games/${game.gameId}/boxscore`}>Box score</Link>
+                {gameDateUtc >= endOf1819Season && (
+                  <Link to={`/games/${game.gameId}/boxscore`}>Box score</Link>
+                )}
                 <Link to={`${watchGameLink}`} target="_blank">
                   Watch
                 </Link>
