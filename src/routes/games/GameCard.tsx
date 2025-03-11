@@ -28,7 +28,6 @@ interface GameCardProps {
 type NBAIconsType = typeof NBAIcons;
 type TeamCodeType = keyof NBAIconsType;
 
-
 function GameCard({game, showScores = false}: GameCardProps) {
   const HomeTeamLogo = NBAIcons[game.homeTeam.teamTricode as TeamCodeType];
   const AwayTeamLogo = NBAIcons[game.awayTeam.teamTricode as TeamCodeType];
