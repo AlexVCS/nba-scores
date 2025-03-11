@@ -8,6 +8,7 @@ type GameData = {
   gameId: string;
   gameCode: string;
   gameStatus: number;
+  gameTimeUTC: string;
   gameStatusText: string;
   ifNecessary: boolean;
   seriesGameNumber: string;
