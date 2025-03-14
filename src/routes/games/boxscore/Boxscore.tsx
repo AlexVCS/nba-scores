@@ -94,24 +94,24 @@ const Boxscore = () => {
         <table className="table-fixed">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>PTS</th>
-              <th>REB</th>
-              <th>AST</th>
-              <th>+/-</th>
-              <th>MIN</th>
+              <th className="pr-6">Name</th>
+              <th className="pr-6">PTS</th>
+              <th className="pr-6">REB</th>
+              <th className="pr-6">AST</th>
+              <th className="pr-6">+/-</th>
+              <th className="pr-6">MIN</th>
             </tr>
           </thead>
           {homeTeam.players
             .filter((player: Player) => player.status === "ACTIVE")
             .map((player: Player) => {
               const nameLinkFormat = formatPlayerNameLink(player);
-
+              
               return (
                 <>
                   <tbody>
                     <tr>
-                      <td className="pr-2">
+                      <td className="pr-2 border-t pt-2">
                         {" "}
                         <a
                           href={`http://www.nba.com/player/${nameLinkFormat}`}
@@ -123,18 +123,26 @@ const Boxscore = () => {
                       </td>
                       {player.statistics.minutesCalculated !== "PT00M" ? (
                         <>
-                          <td>{player.statistics.points}</td>
-                          <td>{player.statistics.reboundsTotal}</td>
-                          <td>{player.statistics.assists}</td>
-                          <td>{player.statistics.plusMinusPoints}</td>
-                          <td>
+                          <td className="border-t pt-2">
+                            {player.statistics.points}
+                          </td>
+                          <td className="border-t pt-2">
+                            {player.statistics.reboundsTotal}
+                          </td>
+                          <td className="border-t pt-2">
+                            {player.statistics.assists}
+                          </td>
+                          <td className="border-t pt-2">
+                            {player.statistics.plusMinusPoints}
+                          </td>
+                          <td className="border-t pt-2">
                             {formatMinutesPlayed(
                               player.statistics.minutesCalculated
                             )}
                           </td>
                         </>
                       ) : (
-                        <td colSpan={20}>
+                        <td className="border-t pt-2" colSpan={20}>
                           {player.notPlayingReason
                             ? "DND - Injury/Illness"
                             : "DNP - Coach's Decision"}
@@ -153,12 +161,12 @@ const Boxscore = () => {
         <table className="table-fixed">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>PTS</th>
-              <th>REB</th>
-              <th>AST</th>
-              <th>+/-</th>
-              <th>MIN</th>
+              <th className="pr-6">Name</th>
+              <th className="pr-6">PTS</th>
+              <th className="pr-6">REB</th>
+              <th className="pr-6">AST</th>
+              <th className="pr-6">+/-</th>
+              <th className="pr-6">MIN</th>
             </tr>
           </thead>
           {awayTeam.players
@@ -169,7 +177,7 @@ const Boxscore = () => {
                 <>
                   <tbody>
                     <tr>
-                      <td className="pr-2">
+                      <td className="pr-2 border-t pt-2">
                         {" "}
                         <a
                           href={`http://www.nba.com/player/${nameLinkFormat}`}
@@ -181,18 +189,26 @@ const Boxscore = () => {
                       </td>
                       {player.statistics.minutesCalculated !== "PT00M" ? (
                         <>
-                          <td>{player.statistics.points}</td>
-                          <td>{player.statistics.reboundsTotal}</td>
-                          <td>{player.statistics.assists}</td>
-                          <td>{player.statistics.plusMinusPoints}</td>
-                          <td>
+                          <td className="border-t pt-2">
+                            {player.statistics.points}
+                          </td>
+                          <td className="border-t pt-2">
+                            {player.statistics.reboundsTotal}
+                          </td>
+                          <td className="border-t pt-2">
+                            {player.statistics.assists}
+                          </td>
+                          <td className="border-t pt-2">
+                            {player.statistics.plusMinusPoints}
+                          </td>
+                          <td className="border-t pt-2">
                             {formatMinutesPlayed(
                               player.statistics.minutesCalculated
                             )}
                           </td>
                         </>
                       ) : (
-                        <td colSpan={20}>
+                        <td className="border-t pt-2" colSpan={20}>
                           {player.notPlayingReason
                             ? "DND - Injury/Illness"
                             : "DNP - Coach's Decision"}
