@@ -1,5 +1,5 @@
 import * as NBAIcons from "react-nba-logos";
-import { placeholderTeamLogo } from "@/helpers/helpers";
+import {placeholderTeamLogo} from "@/helpers/helpers";
 import {Link} from "react-router-dom";
 
 interface GameCardProps {
@@ -35,7 +35,7 @@ function GameCard({game, showScores = false}: GameCardProps) {
   const gameHasStarted = game.gameStatus !== 1;
   const watchGameLink = `https://www.nba.com/game/${game.awayTeam.teamTricode}-vs-${game.homeTeam.teamTricode}-${game.gameId}?watch`;
   const endOf1819Season = new Date("2019-06-15T00:00:00Z");
-  const gameDateUtc = new Date(game.gameTimeUTC)
+  const gameDateUtc = new Date(game.gameTimeUTC);
 
   return (
     <div className="flex justify-center lg:justify-start">
@@ -48,9 +48,32 @@ function GameCard({game, showScores = false}: GameCardProps) {
             {game.homeTeam.teamName} logo
           </figcaption>
           <div className="self-center text-sm mt-1">
-            {game.homeTeam.teamName}
+            <div className="bg-gray-900 border-2 border-gray-700 rounded w-full p-2">
+              <div
+                className="font-mono text-xl md:text-2xl text-amber-500 text-center font-bold tracking-wider"
+                style={{
+                  textShadow: "0 0 5px rgba(245, 158, 11, 0.7)",
+                  fontFamily: "'Digital-7', monospace",
+                }}
+              >
+                <span className="md:hidden">{game.homeTeam.teamTricode}</span>
+                <span className="hidden md:block">
+                  {game.homeTeam.teamName}
+                </span>
+              </div>
+
+              {showScores && gameHasStarted && (
+                <div className="mt-3 border-t-2 border-gray-700 pt-3">
+                  <div
+                    className="font-mono text-xl md:text-2xl text-amber-500 text-center tabular-nums font-bold"
+                    style={{textShadow: "0 0 10px rgba(245, 158, 11, 0.7)"}}
+                  >
+                    {game.homeTeam.score}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
-          {showScores && gameHasStarted && <div>{game.homeTeam.score}</div>}
         </div>
 
         <div className="text-base text-center place-self-center">
@@ -79,13 +102,36 @@ function GameCard({game, showScores = false}: GameCardProps) {
             {game.awayTeam.teamName} logo
           </figcaption>
           <div className="self-center text-sm mt-1">
-            {game.awayTeam.teamName}
+            <div className="bg-gray-900 border-2 border-gray-700 rounded w-full p-2">
+              <div
+                className="font-mono text-xl md:text-2xl text-amber-500 text-center font-bold tracking-wider"
+                style={{
+                  textShadow: "0 0 5px rgba(245, 158, 11, 0.7)",
+                  fontFamily: "'Digital-7', monospace",
+                }}
+              >
+                <span className="md:hidden">{game.awayTeam.teamTricode}</span>
+                <span className="hidden md:block">
+                  {game.awayTeam.teamName}
+                </span>
+              </div>
+
+              {showScores && gameHasStarted && (
+                <div className="mt-3 border-t-2 border-gray-700 pt-3">
+                  <div
+                    className="font-mono text-xl md:text-2xl text-amber-500 text-center tabular-nums font-bold"
+                    style={{textShadow: "0 0 10px rgba(245, 158, 11, 0.7)"}}
+                  >
+                    {game.awayTeam.score}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
-          {showScores && gameHasStarted && <div>{game.awayTeam.score}</div>}
         </div>
       </article>
     </div>
   );
-};
+}
 
 export default GameCard;
