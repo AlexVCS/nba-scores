@@ -91,7 +91,7 @@ const Boxscore = () => {
       {/* <GameCard showScores={showScores} game={gamedata} /> */}
       <div className="pb-4">
         <h1 className="text-lg font-bold">{homeTeam.teamName}</h1>
-        <table className="table-fixed">
+        <table className="table-auto">
           <thead>
             <tr>
               <th className="pr-6">Name</th>
@@ -158,7 +158,7 @@ const Boxscore = () => {
 
       <div className="mb-4">
         <h1 className="text-lg font-bold">{awayTeam.teamName}</h1>
-        <table className="table-fixed">
+        <table className="table-auto">
           <thead>
             <tr>
               <th className="pr-6">Name</th>
