@@ -51,15 +51,9 @@ function GameCard({game, showScores = false}: GameCardProps) {
             <div className="bg-gray-900 border-2 border-gray-700 rounded w-full p-2">
               <div
                 className="font-mono text-xl md:text-2xl text-amber-500 text-center font-bold tracking-wider"
-                style={{
-                  textShadow: "0 0 5px rgba(245, 158, 11, 0.7)",
-                  fontFamily: "'Digital-7', monospace",
-                }}
+                style={{textShadow: "0 0 5px rgba(245, 158, 11, 0.7)"}}
               >
-                <span className="md:hidden">{game.homeTeam.teamTricode}</span>
-                <span className="hidden md:block">
-                  {game.homeTeam.teamName}
-                </span>
+                <span>{game.homeTeam.teamTricode}</span>
               </div>
 
               {showScores && gameHasStarted && (
@@ -106,14 +100,9 @@ function GameCard({game, showScores = false}: GameCardProps) {
               <div
                 className="font-mono text-xl md:text-2xl text-amber-500 text-center font-bold tracking-wider"
                 style={{
-                  textShadow: "0 0 5px rgba(245, 158, 11, 0.7)",
-                  fontFamily: "'Digital-7', monospace",
-                }}
+                  textShadow: "0 0 5px rgba(245, 158, 11, 0.7)"}}
               >
-                <span className="md:hidden">{game.awayTeam.teamTricode}</span>
-                <span className="hidden md:block">
-                  {game.awayTeam.teamName}
-                </span>
+                <span>{game.awayTeam.teamTricode}</span>
               </div>
 
               {showScores && gameHasStarted && (
