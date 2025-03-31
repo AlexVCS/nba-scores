@@ -1,7 +1,7 @@
 [![alex-linkedin-shield]][alex-linkedin-url]
 
 <div align="center">
-  <h3 align="center">NBA Scores</h3>
+  <img src="./public/images/app_logo.png" style="height:100px" />
 
    <p align="center">
     Bienvenue! 
