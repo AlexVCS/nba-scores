@@ -3282,8 +3282,8 @@ app.use(
 );
 app.get("/", /* @__PURE__ */ __name(async function getResults(c) {
   try {
-    const date = c.req.query("date") || formattedDate;
-    const url = `https://proxy.boxscores.site/?apiUrl=stats.nba.com/stats/scoreboardv3&GameDate=${date}&LeagueID=00`;
+    const date = c.req.query("date");
+    const url = `https://proxy.boxscores.site/?apiUrl=stats.nba.com/stats/scoreboardv3&GameDate=${!date ? formattedDate : date}&LeagueID=00`;
     const response = await fetch(url);
     const formatResponse = await response.json();
     const results = formatResponse.scoreboard.games;
