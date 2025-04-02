@@ -99,8 +99,7 @@ function GameCard({game, showScores = false}: GameCardProps) {
             <div className="bg-gray-900 border-2 border-gray-700 rounded w-full p-2">
               <div
                 className="font-mono text-xl md:text-2xl text-amber-500 text-center font-bold tracking-wider"
-                style={{
-                  textShadow: "0 0 5px rgba(245, 158, 11, 0.7)"}}
+                style={{textShadow: "0 0 5px rgba(245, 158, 11, 0.7)"}}
               >
                 <span>{game.awayTeam.teamTricode}</span>
               </div>

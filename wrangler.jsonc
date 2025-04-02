@@ -1,0 +1,5 @@
+{
+  "name": "nba-scores-backend",
+  "compatibility_date": "2025-04-02",
+  "main": "server/index.ts"
+}
