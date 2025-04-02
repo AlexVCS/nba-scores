@@ -3282,6 +3282,7 @@ app.use(
 );
 app.get("/", /* @__PURE__ */ __name(async function getResults(c) {
   try {
+
     const date = c.req.query("date") || formattedDate;
     const url = `https://proxy.boxscores.site/?apiUrl=stats.nba.com/stats/scoreboardv3&GameDate=${date}&LeagueID=00`;
     const response = await fetch(url);
