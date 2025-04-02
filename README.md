@@ -2,7 +2,6 @@
 
 <div align="center">
   <img src="./public/images/app_logo.png" style="height:100px" />
-
    <p align="center">
     Bienvenue! 
     <br />
