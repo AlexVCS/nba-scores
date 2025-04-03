@@ -3,8 +3,7 @@ import { format } from "date-fns";
 import { cors } from 'hono/cors'
 const app = new Hono()
 
-const todaysDate = new Date();
-const formattedDate = format(todaysDate, "yyyy-MM-dd")
+
 
 app.use('/*',
   cors({
@@ -14,6 +13,8 @@ app.use('/*',
 
 app.get('/', async function getResults(c) {
   try {
+    const todaysDate = new Date();
+    const formattedDate = format(todaysDate, "yyyy-MM-dd")
     const date = c.req.query('date')
     const url = `https://proxy.boxscores.site/?apiUrl=stats.nba.com/stats/scoreboardv3&GameDate=${!date ? formattedDate : date}&LeagueID=00`
     const response = await fetch(url)
