@@ -1,6 +1,7 @@
 import {formatPlayerNameLink, formatMinutesPlayed} from "@/helpers/helpers.jsx";
 import {useQuery} from "@tanstack/react-query";
 import {useParams} from "react-router";
+import { Fragment } from "react";
 // import GameCard from "../GameCard";
 
 export interface Player {
@@ -66,7 +67,6 @@ const getBoxScores = async (gameId: string) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     const result = await response.json();
-    console.log(result);
     return result;
   } catch (error) {
     console.error(`Error fetching boxscore: ${error}`);
@@ -108,7 +108,7 @@ const Boxscore = () => {
               const nameLinkFormat = formatPlayerNameLink(player);
               
               return (
-                <>
+                <Fragment key={player.personId}>
                   <tbody>
                     <tr>
                       <td className="pr-2 border-t pt-2">
@@ -150,7 +150,7 @@ const Boxscore = () => {
                       )}
                     </tr>
                   </tbody>
-                </>
+                </Fragment>
               );
             })}
         </table>
@@ -174,7 +174,7 @@ const Boxscore = () => {
             .map((player: Player) => {
               const nameLinkFormat = formatPlayerNameLink(player);
               return (
-                <>
+                <Fragment key={player.personId}>
                   <tbody>
                     <tr>
                       <td className="pr-2 border-t pt-2">
@@ -216,7 +216,7 @@ const Boxscore = () => {
                       )}
                     </tr>
                   </tbody>
-                </>
+                </Fragment>
               );
             })}
         </table>
