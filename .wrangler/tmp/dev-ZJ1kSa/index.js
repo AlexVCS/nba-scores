@@ -3272,8 +3272,6 @@ var cors = /* @__PURE__ */ __name((options) => {
 
 // server/index.ts
 var app = new Hono2();
-var todaysDate = /* @__PURE__ */ new Date();
-var formattedDate = format(todaysDate, "yyyy-MM-dd");
 app.use(
   "/*",
   cors({
@@ -3282,6 +3280,8 @@ app.use(
 );
 app.get("/", /* @__PURE__ */ __name(async function getResults(c) {
   try {
+    const todaysDate = /* @__PURE__ */ new Date();
+    const formattedDate = format(todaysDate, "yyyy-MM-dd");
     const date = c.req.query("date");
     const url = `https://proxy.boxscores.site/?apiUrl=stats.nba.com/stats/scoreboardv3&GameDate=${!date ? formattedDate : date}&LeagueID=00`;
     const response = await fetch(url);
