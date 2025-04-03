@@ -31,7 +31,7 @@ Scores App UI                           |         Boxscore UI
 
 ## Built With
 
-[![React.JS]][React-url][![Tailwindcss]][Tailwind-url][![Express.js]][Express-url][![TypeScript]][Typescript-url]
+[![React.JS]][React-url][![Tailwindcss]][Tailwind-url][![Hono]][Hono-url][![TypeScript]][Typescript-url]
 
 Design: https://www.figma.com/design/AQL6ywEUiKkconAcaX5upM/NBA-Website-(Community)?node-id=0-1&p=f&t=5BTVqqpQWaIF9b4f-0
 
@@ -93,8 +93,8 @@ Alex Curtis-Slep - [GitHub](https://github.com/AlexVCS) / [Bluesky](https://bsky
 
 [alex-linkedin-shield]: https://img.shields.io/badge/-Alex's_LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [alex-linkedin-url]: https://www.linkedin.com/in/alexcurtisslep/
-[Express-url]: https://expressjs.com/
-[Express.js]: https://img.shields.io/badge/Express-black?style=for-the-badge&logo=express&logoColor=white
+[Hono]: https://img.shields.io/badge/Hono-black?style=for-the-badge&logo=hono
+[Hono-url]: https://hono.dev/
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
 [React-url]: https://reactjs.org/
 [Tailwindcss]: https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white
