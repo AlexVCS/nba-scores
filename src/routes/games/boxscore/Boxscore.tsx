@@ -57,21 +57,21 @@ interface PlayerStatistics {
 }
 
 const getBoxScores = async (gameId: string) => {
-  try {
-    const baseUrl = import.meta.env.DEV
-      ? import.meta.env.VITE_API_URL_DEV
-      : import.meta.env.VITE_API_URL_PROD;
-    const url = `${baseUrl}/boxscore?gameId=${gameId}`;
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    const result = await response.json();
-    return result;
-  } catch (error) {
-    console.error(`Error fetching boxscore: ${error}`);
-    throw error;
-  }
+   try {
+     const baseUrl = import.meta.env.DEV
+       ? import.meta.env.VITE_API_URL_DEV
+       : import.meta.env.VITE_API_URL_PROD;
+     const url = `${baseUrl}/games/${gameId}/boxscore`;
+     const response = await fetch(url);
+     if (!response.ok) {
+       throw new Error(`HTTP error! Status: ${response.status}`);
+     }
+     const result = await response.json();
+     return result;
+   } catch (error) {
+     console.error(`Error fetching boxscore: ${error}`);
+     throw error;
+   }
 };
 
 const Boxscore = () => {

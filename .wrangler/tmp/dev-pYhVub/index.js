@@ -3293,9 +3293,9 @@ app.get("/", /* @__PURE__ */ __name(async function getResults(c) {
     return c.body(`Could not grab data ${error}`);
   }
 }, "getResults"));
-app.get("/boxscore", /* @__PURE__ */ __name(async function getBoxscore(c) {
+app.get("/games/:gameId/boxscore", /* @__PURE__ */ __name(async function getBoxscore(c) {
   try {
-    const gameId = c.req.query("gameId");
+    const gameId = c.req.param("gameId");
     const response = await fetch(`https://cdn.nba.com/static/json/liveData/boxscore/boxscore_${gameId}.json`);
     const boxscoreData = await response.json();
     return c.json(boxscoreData.game);
@@ -3348,7 +3348,7 @@ var jsonError = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx)
 }, "jsonError");
 var middleware_miniflare3_json_error_default = jsonError;
 
-// .wrangler/tmp/bundle-tKHa2T/middleware-insertion-facade.js
+// .wrangler/tmp/bundle-Br4DlF/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default,
   middleware_miniflare3_json_error_default
@@ -3380,7 +3380,7 @@ function __facade_invoke__(request, env, ctx, dispatch, finalMiddleware) {
 }
 __name(__facade_invoke__, "__facade_invoke__");
 
-// .wrangler/tmp/bundle-tKHa2T/middleware-loader.entry.ts
+// .wrangler/tmp/bundle-Br4DlF/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class ___Facade_ScheduledController__ {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;

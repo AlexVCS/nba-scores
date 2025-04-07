@@ -27,9 +27,9 @@ app.get('/', async function getResults(c) {
   }
 })
 
-app.get('/boxscore', async function getBoxscore(c) {
+app.get('/games/:gameId/boxscore', async function getBoxscore(c) {
   try {
-    const gameId = c.req.query('gameId');
+    const gameId = c.req.param('gameId');
     const response = await fetch(`https://cdn.nba.com/static/json/liveData/boxscore/boxscore_${gameId}.json`);
     const boxscoreData = await response.json();
     return c.json(boxscoreData.game);
