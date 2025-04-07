@@ -3293,9 +3293,10 @@ app.get("/", /* @__PURE__ */ __name(async function getResults(c) {
     return c.body(`Could not grab data ${error}`);
   }
 }, "getResults"));
-app.get("/games/:gameId/boxscore", /* @__PURE__ */ __name(async function getBoxscore(c) {
+
+app.get("/boxscore", /* @__PURE__ */ __name(async function getBoxscore(c) {
   try {
-    const gameId = c.req.param("gameId");
+    const gameId = c.req.query("gameId");
     const response = await fetch(`https://cdn.nba.com/static/json/liveData/boxscore/boxscore_${gameId}.json`);
     const boxscoreData = await response.json();
     return c.json(boxscoreData.game);
