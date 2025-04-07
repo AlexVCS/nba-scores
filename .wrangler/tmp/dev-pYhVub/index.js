@@ -3293,6 +3293,7 @@ app.get("/", /* @__PURE__ */ __name(async function getResults(c) {
     return c.body(`Could not grab data ${error}`);
   }
 }, "getResults"));
+
 app.get("/boxscore", /* @__PURE__ */ __name(async function getBoxscore(c) {
   try {
     const gameId = c.req.query("gameId");
