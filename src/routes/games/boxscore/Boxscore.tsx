@@ -1,8 +1,9 @@
 import {formatPlayerNameLink, formatMinutesPlayed} from "@/helpers/helpers.jsx";
 import {useQuery} from "@tanstack/react-query";
 import {useParams} from "react-router";
-import { Fragment } from "react";
+import {Fragment} from "react";
 // import GameCard from "../GameCard";
+import OvertimeHead from "@/components/Overtime";
 
 export interface Player {
   status: string;
@@ -57,21 +58,34 @@ interface PlayerStatistics {
 }
 
 const getBoxScores = async (gameId: string) => {
-   try {
-     const baseUrl = import.meta.env.DEV
-       ? import.meta.env.VITE_API_URL_DEV
-       : import.meta.env.VITE_API_URL_PROD;
-     const url = `${baseUrl}/games/${gameId}/boxscore`;
-     const response = await fetch(url);
-     if (!response.ok) {
-       throw new Error(`HTTP error! Status: ${response.status}`);
-     }
-     const result = await response.json();
-     return result;
-   } catch (error) {
-     console.error(`Error fetching boxscore: ${error}`);
-     throw error;
-   }
+  try {
+    const baseUrl = import.meta.env.DEV
+      ? import.meta.env.VITE_API_URL_DEV
+      : import.meta.env.VITE_API_URL_PROD;
+    const url = `${baseUrl}/games/${gameId}/boxscore`;
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error(`Error fetching boxscore: ${error}`);
+    throw error;
+  }
+};
+
+const getPlayerHeadshots = async (personId: string) => {
+  try {
+    const baseUrl = import.meta.env.DEV
+      ? import.meta.env.VITE_API_URL_DEV
+      : import.meta.env.VITE_API_URL_PROD;
+    const url = `${baseUrl}/headshots/${personId}`;
+    return url;
+  } catch (error) {
+    console.error(`Error fetching headshot: ${error}`);
+    throw error;
+  }
 };
 
 const Boxscore = () => {
@@ -85,12 +99,47 @@ const Boxscore = () => {
   if (isLoading) return <h1>Loading...</h1>;
   if (error) return <h1>{JSON.stringify(error)}</h1>;
   if (!data) return <h1>Didn't receive a boxscore</h1>;
-  const {homeTeam, awayTeam} = data;
+  const {game} = data;
+
   return (
     <div>
       {/* <GameCard showScores={showScores} game={gamedata} /> */}
+      <table className="w-full text-center text-white">
+        <thead>
+          <tr>
+            <th className="text-left pl-3 pr-8"></th>{" "}
+            {/* Team column - left aligned with more space */}
+            <th className="px-2">1</th>
+            <th className="px-2">2</th>
+            <th className="px-2">3</th>
+            <th className="px-2">4</th>
+            <OvertimeHead period={game.period} />
+            <th className="px-2">T</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td className="text-left pl-3 pr-8">{game.homeTeam.teamTricode}</td>
+            {game.homeTeam.periods.map((period) => (
+              <td className="px-2" key={period.period}>
+                {period.score}
+              </td>
+            ))}
+            <td className="px-2">{game.homeTeam.score}</td>
+          </tr>
+          <tr>
+            <td className="text-left pl-3 pr-8">{game.awayTeam.teamTricode}</td>
+            {game.awayTeam.periods.map((period) => (
+              <td className="px-2" key={period.period}>
+                {period.score}
+              </td>
+            ))}
+            <td className="px-2">{game.awayTeam.score}</td>
+          </tr>
+        </tbody>
+      </table>
       <div className="pb-4">
-        <h1 className="text-lg font-bold">{homeTeam.teamName}</h1>
+        <h1 className="text-lg font-bold">{game.homeTeam.teamName}</h1>
         <table className="table-auto">
           <thead>
             <tr>
@@ -102,11 +151,11 @@ const Boxscore = () => {
               <th className="pr-6">MIN</th>
             </tr>
           </thead>
-          {homeTeam.players
+          {game.homeTeam.players
             .filter((player: Player) => player.status === "ACTIVE")
             .map((player: Player) => {
               const nameLinkFormat = formatPlayerNameLink(player);
-              
+
               return (
                 <Fragment key={player.personId}>
                   <tbody>
@@ -118,6 +167,23 @@ const Boxscore = () => {
                           target="_blank"
                           className="text-[#0268d6]"
                         >
+                          <figure>
+                            <img
+                              src={`${
+                                import.meta.env.DEV
+                                  ? import.meta.env.VITE_API_URL_DEV
+                                  : import.meta.env.VITE_API_URL_PROD
+                              }/headshots/${player.personId}`}
+                              alt={`${player.name} headshot`}
+                              width="52"
+                              height="38"
+                              onError={(e) => {
+                                // Fallback image if headshot fails to load
+                                e.currentTarget.src =
+                                  "/placeholder-headshot.png";
+                              }}
+                            />
+                          </figure>
                           {player.name}
                         </a>
                       </td>
@@ -157,7 +223,7 @@ const Boxscore = () => {
       </div>
 
       <div className="mb-4">
-        <h1 className="text-lg font-bold">{awayTeam.teamName}</h1>
+        <h1 className="text-lg font-bold">{game.awayTeam.teamName}</h1>
         <table className="table-auto">
           <thead>
             <tr>
@@ -169,7 +235,7 @@ const Boxscore = () => {
               <th className="pr-6">MIN</th>
             </tr>
           </thead>
-          {awayTeam.players
+          {game.awayTeam.players
             .filter((player: Player) => player.status === "ACTIVE")
             .map((player: Player) => {
               const nameLinkFormat = formatPlayerNameLink(player);
@@ -184,6 +250,23 @@ const Boxscore = () => {
                           target="_blank"
                           className="text-[#0268d6]"
                         >
+                          <figure>
+                            <img
+                              src={`${
+                                import.meta.env.DEV
+                                  ? import.meta.env.VITE_API_URL_DEV
+                                  : import.meta.env.VITE_API_URL_PROD
+                              }/headshots/${player.personId}`}
+                              alt={`${player.name} headshot`}
+                              width="52"
+                              height="38"
+                              onError={(e) => {
+                                // Fallback image if headshot fails to load
+                                e.currentTarget.src =
+                                  "/placeholder-headshot.png";
+                              }}
+                            />
+                          </figure>
                           {player.name}
                         </a>
                       </td>
@@ -225,15 +308,15 @@ const Boxscore = () => {
         <div>
           <h1 className="uppercase">Inactive Players</h1>
           <p>
-            {homeTeam.teamTricode}:{" "}
-            {homeTeam.players
+            {game.homeTeam.teamTricode}:{" "}
+            {game.homeTeam.players
               .filter((player: Player) => player.status === "INACTIVE")
               .map((player: Player) => player.name)
               .join(", ")}
           </p>
           <p>
-            {awayTeam.teamTricode}:{" "}
-            {awayTeam.players
+            {game.awayTeam.teamTricode}:{" "}
+            {game.awayTeam.players
               .filter((player: Player) => player.status === "INACTIVE")
               .map((player: Player) => player.name)
               .join(", ")}{" "}

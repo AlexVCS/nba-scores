@@ -77,7 +77,7 @@ function GameCard({game, showScores = false}: GameCardProps) {
               ""
             ) : (
               <div className="flex flex-col gap-1">
-                {gameDateUtc >= endOf1819Season && (
+                {showScores && gameDateUtc >= endOf1819Season && (
                   <Link to={`/games/${game.gameId}/boxscore`}>Box score</Link>
                 )}
                 <Link to={`${watchGameLink}`} target="_blank">
