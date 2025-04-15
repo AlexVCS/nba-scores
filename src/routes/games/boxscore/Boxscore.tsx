@@ -1,9 +1,14 @@
-import {formatPlayerNameLink, formatMinutesPlayed} from "@/helpers/helpers.jsx";
 import {useQuery} from "@tanstack/react-query";
 import {useParams} from "react-router";
 import {Fragment} from "react";
+import {
+  formatMinutesPlayed,
+  firstNameInitial,
+  formatPlayerNameLink,
+} from "@/helpers/helpers.jsx";
 // import GameCard from "../GameCard";
-import OvertimeHead from "@/components/Overtime";
+import PlayerHeadshot from "@/components/PlayerHeadshot";
+import GameSummary from "@/components/GameSummary";
 
 export interface Player {
   status: string;
@@ -75,19 +80,6 @@ const getBoxScores = async (gameId: string) => {
   }
 };
 
-const getPlayerHeadshots = async (personId: string) => {
-  try {
-    const baseUrl = import.meta.env.DEV
-      ? import.meta.env.VITE_API_URL_DEV
-      : import.meta.env.VITE_API_URL_PROD;
-    const url = `${baseUrl}/headshots/${personId}`;
-    return url;
-  } catch (error) {
-    console.error(`Error fetching headshot: ${error}`);
-    throw error;
-  }
-};
-
 const Boxscore = () => {
   const params = useParams();
   const gameId = params.gameId ?? "";
@@ -103,47 +95,15 @@ const Boxscore = () => {
 
   return (
     <div>
-      {/* <GameCard showScores={showScores} game={gamedata} /> */}
-      <table className="w-full text-center text-white">
-        <thead>
-          <tr>
-            <th className="text-left pl-3 pr-8"></th>{" "}
-            {/* Team column - left aligned with more space */}
-            <th className="px-2">1</th>
-            <th className="px-2">2</th>
-            <th className="px-2">3</th>
-            <th className="px-2">4</th>
-            <OvertimeHead period={game.period} />
-            <th className="px-2">T</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td className="text-left pl-3 pr-8">{game.homeTeam.teamTricode}</td>
-            {game.homeTeam.periods.map((period) => (
-              <td className="px-2" key={period.period}>
-                {period.score}
-              </td>
-            ))}
-            <td className="px-2">{game.homeTeam.score}</td>
-          </tr>
-          <tr>
-            <td className="text-left pl-3 pr-8">{game.awayTeam.teamTricode}</td>
-            {game.awayTeam.periods.map((period) => (
-              <td className="px-2" key={period.period}>
-                {period.score}
-              </td>
-            ))}
-            <td className="px-2">{game.awayTeam.score}</td>
-          </tr>
-        </tbody>
-      </table>
+      <GameSummary game={game} />
       <div className="pb-4">
-        <h1 className="text-lg font-bold">{game.homeTeam.teamName}</h1>
+        <h1 className="text-md md:text-lg font-bold">
+          {game.homeTeam.teamName}
+        </h1>
         <table className="table-auto">
           <thead>
             <tr>
-              <th className="pr-6">Name</th>
+              <th className="pr-6">Player</th>
               <th className="pr-6">PTS</th>
               <th className="pr-6">REB</th>
               <th className="pr-6">AST</th>
@@ -161,30 +121,16 @@ const Boxscore = () => {
                   <tbody>
                     <tr>
                       <td className="pr-2 border-t pt-2">
-                        {" "}
                         <a
                           href={`http://www.nba.com/player/${nameLinkFormat}`}
                           target="_blank"
                           className="text-[#0268d6]"
                         >
-                          <figure>
-                            <img
-                              src={`${
-                                import.meta.env.DEV
-                                  ? import.meta.env.VITE_API_URL_DEV
-                                  : import.meta.env.VITE_API_URL_PROD
-                              }/headshots/${player.personId}`}
-                              alt={`${player.name} headshot`}
-                              width="52"
-                              height="38"
-                              onError={(e) => {
-                                // Fallback image if headshot fails to load
-                                e.currentTarget.src =
-                                  "/placeholder-headshot.png";
-                              }}
-                            />
-                          </figure>
-                          {player.name}
+                          <PlayerHeadshot player={player} />
+                          <span className="block md:hidden">
+                            {firstNameInitial(player.name)}
+                          </span>
+                          <span className="hidden md:block">{player.name}</span>
                         </a>
                       </td>
                       {player.statistics.minutesCalculated !== "PT00M" ? (
@@ -223,11 +169,13 @@ const Boxscore = () => {
       </div>
 
       <div className="mb-4">
-        <h1 className="text-lg font-bold">{game.awayTeam.teamName}</h1>
+        <h1 className="text-md md:text-lg font-bold">
+          {game.awayTeam.teamName}
+        </h1>
         <table className="table-auto">
           <thead>
             <tr>
-              <th className="pr-6">Name</th>
+              <th className="pr-6">Player</th>
               <th className="pr-6">PTS</th>
               <th className="pr-6">REB</th>
               <th className="pr-6">AST</th>
@@ -244,30 +192,16 @@ const Boxscore = () => {
                   <tbody>
                     <tr>
                       <td className="pr-2 border-t pt-2">
-                        {" "}
                         <a
                           href={`http://www.nba.com/player/${nameLinkFormat}`}
                           target="_blank"
                           className="text-[#0268d6]"
                         >
-                          <figure>
-                            <img
-                              src={`${
-                                import.meta.env.DEV
-                                  ? import.meta.env.VITE_API_URL_DEV
-                                  : import.meta.env.VITE_API_URL_PROD
-                              }/headshots/${player.personId}`}
-                              alt={`${player.name} headshot`}
-                              width="52"
-                              height="38"
-                              onError={(e) => {
-                                // Fallback image if headshot fails to load
-                                e.currentTarget.src =
-                                  "/placeholder-headshot.png";
-                              }}
-                            />
-                          </figure>
-                          {player.name}
+                          <PlayerHeadshot player={player} />
+                          <span className="block md:hidden">
+                            {firstNameInitial(player.name)}
+                          </span>
+                          <span className="hidden md:block">{player.name}</span>
                         </a>
                       </td>
                       {player.statistics.minutesCalculated !== "PT00M" ? (
@@ -304,7 +238,7 @@ const Boxscore = () => {
             })}
         </table>
       </div>
-      <section>
+      <section className="p-2">
         <div>
           <h1 className="uppercase">Inactive Players</h1>
           <p>
