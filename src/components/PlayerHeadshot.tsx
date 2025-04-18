@@ -1,5 +1,5 @@
 import {placeholderPlayerHeadshot} from "@/helpers/helpers.jsx";
-import {Player} from "@/routes/games/boxscore/Boxscore.jsx";
+import { Player } from "@/helpers/helpers.jsx";
 
 interface PlayerHeadShotProps {
   player: Player
