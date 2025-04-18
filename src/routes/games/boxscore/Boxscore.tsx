@@ -49,6 +49,7 @@ const Boxscore = () => {
         <h1 className="text-lg font-bold p-4 text-center">
           {game.homeTeam.teamName}
         </h1>
+
         <table className="table-auto ml-2 mr-2">
           <thead>
             <tr className="text-xs">

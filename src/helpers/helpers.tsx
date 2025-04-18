@@ -1,3 +1,4 @@
+
 export interface Player {
   status: string;
   notPlayingReason: string;
@@ -14,7 +15,6 @@ export interface Player {
   firstName: string;
   familyName: string;
 }
-
 export interface PlayerStatistics {
   assists: number;
   blocks: number;
