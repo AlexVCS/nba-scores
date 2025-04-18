@@ -1,4 +1,21 @@
-import { Player } from "@/routes/games/boxscore/Boxscore.jsx";
+// import { Player } from "@/routes/games/boxscore/Boxscore.jsx";
+
+export interface Player {
+  status: string;
+  notPlayingReason: string;
+  order: number;
+  personId: number;
+  jerseyNum: string;
+  position: string;
+  starter: string;
+  oncourt: string;
+  played: string;
+  statistics: PlayerStatistics;
+  name: string;
+  nameI: string;
+  firstName: string;
+  familyName: string;
+}
 
 export const formatPlayerNameLink = (player: Player) => {
  return `${player.personId}/${player.name
@@ -27,3 +44,4 @@ export const firstNameInitial = (playerName: string): string => {
   }
   return playerName;
 };
+

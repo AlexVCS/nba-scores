@@ -1,5 +1,6 @@
 import OvertimeHead from "@/components/Overtime";
 import TeamLogos from "./TeamLogos";
+import {ArrowIconRight, ArrowIconLeft} from "./ArrowIcon";
 
 interface GameProps {
   game: {
@@ -16,6 +17,7 @@ interface GameProps {
       score: string;
     };
     period: number;
+    gameStatusText: string;
   };
 }
 
@@ -23,32 +25,26 @@ const GameSummary: React.FC<GameProps> = ({game}) => {
   return (
     <div className="grid grid-cols-3 items-center gap-4 p-4 rounded-lg">
       {/* Home Team (Left) */}
-      <div className="flex flex-col md:items-center">
-        <h2 className="text-xl font-bold">{game.homeTeam.teamName}</h2>
+      <div className="flex flex-col items-center">
         <TeamLogos teamTricode={game.homeTeam.teamTricode} size={48} />
-        <h2 className="text-2xl md:text-3xl font-bold mt-2 ">
-          {game.homeTeam.score}
+        <h2 className="text-xl font-bold hidden md:block">
+          {game.homeTeam.teamName}
         </h2>
+        <h2 className="text-xl font-bold block md:hidden">
+          {game.homeTeam.teamTricode}
+        </h2>
+        <div className="flex items-center justify-center relative">
+          <h2 className="text-2xl md:text-3xl font-bold mt-2 ">
+            {game.homeTeam.score}
+          </h2>
+          {game.homeTeam.score > game.awayTeam.score && <ArrowIconRight />}
+        </div>
       </div>
 
       {/* Score Table (Center) */}
       <div className="flex justify-center items-center">
-        {game.homeTeam.score > game.awayTeam.score && (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="7"
-            height="12"
-            viewBox="0 0 7 12"
-            role="presentation"
-          >
-            <path
-              fill="currentColor"
-              fill-rule="nonzero"
-              d="M.5 6l6 5.5V.5z"
-            ></path>
-          </svg>
-        )}
-        <table className="w-full max-w-55">
+        <p>{game.gameStatusText}</p>
+        <table className="w-full hidden md:table md:max-w-55">
           <thead>
             <tr>
               <th className="text-left pl-3 pr-8"></th>{" "}
@@ -88,10 +84,20 @@ const GameSummary: React.FC<GameProps> = ({game}) => {
       </div>
 
       {/* Away Team (Right) */}
-      <div className="flex flex-col md:items-center">
-        <h2 className="text-xl font-bold">{game.awayTeam.teamName}</h2>
+      <div className="flex flex-col items-center">
         <TeamLogos teamTricode={game.awayTeam.teamTricode} size={48} />
-        <h2 className="text-2xl lg:text-3xl font-bold mt-2">{game.awayTeam.score}</h2>
+        <h2 className="text-xl font-bold hidden md:block">
+          {game.awayTeam.teamName}
+        </h2>
+        <h2 className="text-xl font-bold block md:hidden">
+          {game.awayTeam.teamTricode}
+        </h2>
+        <div className="flex items-center justify-center relative">
+          <h2 className="text-2xl md:text-3xl font-bold mt-2 ">
+            {game.awayTeam.score}
+          </h2>
+          {game.awayTeam.score > game.homeTeam.score && <ArrowIconLeft />}
+        </div>
       </div>
     </div>
   );

@@ -5,62 +5,11 @@ import {
   formatMinutesPlayed,
   firstNameInitial,
   formatPlayerNameLink,
+  Player
 } from "@/helpers/helpers.jsx";
 // import GameCard from "../GameCard";
 import PlayerHeadshot from "@/components/PlayerHeadshot";
 import GameSummary from "@/components/GameSummary";
-
-export interface Player {
-  status: string;
-  notPlayingReason: string;
-  order: number;
-  personId: number;
-  jerseyNum: string;
-  position: string;
-  starter: string;
-  oncourt: string;
-  played: string;
-  statistics: PlayerStatistics;
-  name: string;
-  nameI: string;
-  firstName: string;
-  familyName: string;
-}
-interface PlayerStatistics {
-  assists: number;
-  blocks: number;
-  blocksReceived: number;
-  fieldGoalsAttempted: number;
-  fieldGoalsMade: number;
-  fieldGoalsPercentage: number;
-  foulsOffensive: number;
-  foulsDrawn: number;
-  foulsPersonal: number;
-  foulsTechnical: number;
-  freeThrowsAttempted: number;
-  freeThrowsMade: number;
-  freeThrowsPercentage: number;
-  minus: number;
-  minutes: string;
-  minutesCalculated: string;
-  plus: number;
-  plusMinusPoints: number;
-  points: number;
-  pointsFastBreak: number;
-  pointsInThePaint: number;
-  pointsSecondChance: number;
-  reboundsDefensive: number;
-  reboundsOffensive: number;
-  reboundsTotal: number;
-  steals: number;
-  threePointersAttempted: number;
-  threePointersMade: number;
-  threePointersPercentage: number;
-  turnovers: number;
-  twoPointersAttempted: number;
-  twoPointersMade: number;
-  twoPointersPercentage: number;
-}
 
 const getBoxScores = async (gameId: string) => {
   try {
@@ -97,18 +46,16 @@ const Boxscore = () => {
     <div>
       <GameSummary game={game} />
       <div className="pb-4">
-        <h1 className="text-md md:text-lg font-bold">
-          {game.homeTeam.teamName}
-        </h1>
-        <table className="table-auto">
+        <h1 className="text-lg font-bold p-4">{game.homeTeam.teamName}</h1>
+        <table className="table-auto ml-2 mr-2">
           <thead>
-            <tr>
-              <th className="pr-6">Player</th>
+            <tr className="text-xs">
+              <th className="pr-6">PLAYER</th>
               <th className="pr-6">PTS</th>
               <th className="pr-6">REB</th>
               <th className="pr-6">AST</th>
-              <th className="pr-6">+/-</th>
-              <th className="pr-6">MIN</th>
+              <th className="pr-6 hidden md:table">+/-</th>
+              <th className="pr-6 hidden md:table">MIN</th>
             </tr>
           </thead>
           {game.homeTeam.players
@@ -120,7 +67,7 @@ const Boxscore = () => {
                 <Fragment key={player.personId}>
                   <tbody>
                     <tr>
-                      <td className="pr-2 border-t pt-2">
+                      <td className="pr-2 border-t pt-2 whitespace-nowrap">
                         <a
                           href={`http://www.nba.com/player/${nameLinkFormat}`}
                           target="_blank"
@@ -144,10 +91,10 @@ const Boxscore = () => {
                           <td className="border-t pt-2">
                             {player.statistics.assists}
                           </td>
-                          <td className="border-t pt-2">
+                          <td className="border-t pt-2 hidden md:table">
                             {player.statistics.plusMinusPoints}
                           </td>
-                          <td className="border-t pt-2">
+                          <td className="border-t pt-2 hidden md:table">
                             {formatMinutesPlayed(
                               player.statistics.minutesCalculated
                             )}
@@ -169,18 +116,16 @@ const Boxscore = () => {
       </div>
 
       <div className="mb-4">
-        <h1 className="text-md md:text-lg font-bold">
-          {game.awayTeam.teamName}
-        </h1>
+        <h1 className="text-lg font-bold p-4">{game.awayTeam.teamName}</h1>
         <table className="table-auto">
           <thead>
-            <tr>
-              <th className="pr-6">Player</th>
+            <tr className="text-xs">
+              <th className="pr-6">PLAYER</th>
               <th className="pr-6">PTS</th>
               <th className="pr-6">REB</th>
               <th className="pr-6">AST</th>
-              <th className="pr-6">+/-</th>
-              <th className="pr-6">MIN</th>
+              <th className="pr-6 hidden md:table">+/-</th>
+              <th className="pr-6 hidden md:table">MIN</th>
             </tr>
           </thead>
           {game.awayTeam.players
@@ -191,7 +136,7 @@ const Boxscore = () => {
                 <Fragment key={player.personId}>
                   <tbody>
                     <tr>
-                      <td className="pr-2 border-t pt-2">
+                      <td className="pr-2 border-t pt-2 whitespace-nowrap">
                         <a
                           href={`http://www.nba.com/player/${nameLinkFormat}`}
                           target="_blank"
@@ -215,10 +160,10 @@ const Boxscore = () => {
                           <td className="border-t pt-2">
                             {player.statistics.assists}
                           </td>
-                          <td className="border-t pt-2">
+                          <td className="border-t pt-2 hidden md:table">
                             {player.statistics.plusMinusPoints}
                           </td>
-                          <td className="border-t pt-2">
+                          <td className="border-t pt-2 hidden md:table">
                             {formatMinutesPlayed(
                               player.statistics.minutesCalculated
                             )}
