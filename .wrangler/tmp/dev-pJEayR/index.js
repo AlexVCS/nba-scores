@@ -3298,13 +3298,25 @@ app.get("/games/:gameId/boxscore", /* @__PURE__ */ __name(async function getBoxs
     const gameId = c.req.param("gameId");
     const response = await fetch(`https://cdn.nba.com/static/json/liveData/boxscore/boxscore_${gameId}.json`);
     const boxscoreData = await response.json();
-    return c.json(boxscoreData.game);
+    return c.json(boxscoreData);
   } catch (error) {
-    console.error(`Could not grab boxscore ${error}`);
     c.status(500);
     return c.body(`Could not grab boxscore ${error}`);
   }
 }, "getBoxscore"));
+app.get("/headshots/:personId", /* @__PURE__ */ __name(async function getHeadShot(c) {
+  try {
+    const personId = c.req.param("personId");
+    const response = await fetch(`https://cdn.nba.com/headshots/nba/latest/260x190/${personId}.png`);
+    const imageBlob = await response.blob();
+    return new Response(imageBlob, {
+      headers: { "Content-Type": "image/png" }
+    });
+  } catch (error) {
+    c.status(500);
+    return c.body(`Could not grab headshot ${error}`);
+  }
+}, "getHeadShot"));
 var server_default = app;
 
 // node_modules/.pnpm/wrangler@4.7.0/node_modules/wrangler/templates/middleware/middleware-ensure-req-body-drained.ts
@@ -3348,7 +3360,7 @@ var jsonError = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx)
 }, "jsonError");
 var middleware_miniflare3_json_error_default = jsonError;
 
-// .wrangler/tmp/bundle-Br4DlF/middleware-insertion-facade.js
+// .wrangler/tmp/bundle-t7CRbc/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default,
   middleware_miniflare3_json_error_default
@@ -3380,7 +3392,7 @@ function __facade_invoke__(request, env, ctx, dispatch, finalMiddleware) {
 }
 __name(__facade_invoke__, "__facade_invoke__");
 
-// .wrangler/tmp/bundle-Br4DlF/middleware-loader.entry.ts
+// .wrangler/tmp/bundle-t7CRbc/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class ___Facade_ScheduledController__ {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;

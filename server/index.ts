@@ -32,11 +32,24 @@ app.get('/games/:gameId/boxscore', async function getBoxscore(c) {
     const gameId = c.req.param('gameId');
     const response = await fetch(`https://cdn.nba.com/static/json/liveData/boxscore/boxscore_${gameId}.json`);
     const boxscoreData = await response.json();
-    return c.json(boxscoreData.game);
+    return c.json(boxscoreData);
   } catch (error) {
-    console.error(`Could not grab boxscore ${error}`);
     c.status(500)
     return c.body(`Could not grab boxscore ${error}`);
+  }
+})
+
+app.get('/headshots/:personId', async function getHeadShot(c) {
+  try {
+    const personId = c.req.param('personId')
+    const response = await fetch(`https://cdn.nba.com/headshots/nba/latest/260x190/${personId}.png`)
+    const imageBlob = await response.blob()
+    return new Response(imageBlob, {
+      headers: { 'Content-Type': 'image/png' }
+    })
+  } catch (error) {
+    c.status(500)
+    return c.body(`Could not grab headshot ${error}`);
   }
 })
 

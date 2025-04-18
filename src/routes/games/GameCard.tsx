@@ -1,6 +1,5 @@
-import * as NBAIcons from "react-nba-logos";
-import {placeholderTeamLogo} from "@/helpers/helpers";
 import {Link} from "react-router-dom";
+import TeamLogos from "@/components/TeamLogos";
 
 interface GameCardProps {
   showScores: boolean;
@@ -26,12 +25,7 @@ interface GameCardProps {
   };
 }
 
-type NBAIconsType = typeof NBAIcons;
-type TeamCodeType = keyof NBAIconsType;
-
 function GameCard({game, showScores = false}: GameCardProps) {
-  const HomeTeamLogo = NBAIcons[game.homeTeam.teamTricode as TeamCodeType];
-  const AwayTeamLogo = NBAIcons[game.awayTeam.teamTricode as TeamCodeType];
   const gameHasStarted = game.gameStatus !== 1;
   const watchGameLink = `https://www.nba.com/game/${game.awayTeam.teamTricode}-vs-${game.homeTeam.teamTricode}-${game.gameId}?watch`;
   const endOf1819Season = new Date("2019-06-15T00:00:00Z");
@@ -39,14 +33,13 @@ function GameCard({game, showScores = false}: GameCardProps) {
 
   return (
     <div className="flex justify-center lg:justify-start">
-      <article className="grid grid-cols-3 w-[336px] h-[178px] justify-items-center content-center lg:items-start">
-        <div className="text-center">
-          <figure className="place-self-center">
-            {HomeTeamLogo ? <HomeTeamLogo size={48} /> : placeholderTeamLogo}
-          </figure>
-          <figcaption className="sr-only">
-            {game.homeTeam.teamName} logo
-          </figcaption>
+      <article className="grid grid-cols-3 w-[336px] h-[178px] justify-items-center content-center ">
+        <div className="justify-items-center text-center">
+          <TeamLogos
+            teamName={game.homeTeam.teamName}
+            teamTricode={game.homeTeam.teamTricode}
+            size={48}
+          />
           <div className="self-center text-sm mt-1">
             <div className="bg-gray-900 border-2 border-gray-700 rounded w-full p-2">
               <div
@@ -77,7 +70,7 @@ function GameCard({game, showScores = false}: GameCardProps) {
               ""
             ) : (
               <div className="flex flex-col gap-1">
-                {gameDateUtc >= endOf1819Season && (
+                {showScores && gameDateUtc >= endOf1819Season && (
                   <Link to={`/games/${game.gameId}/boxscore`}>Box score</Link>
                 )}
                 <Link to={`${watchGameLink}`} target="_blank">
@@ -88,13 +81,12 @@ function GameCard({game, showScores = false}: GameCardProps) {
           </div>
         </div>
 
-        <div className="text-center">
-          <figure className="place-self-center">
-            {AwayTeamLogo ? <AwayTeamLogo size={48} /> : placeholderTeamLogo}
-          </figure>
-          <figcaption className="sr-only">
-            {game.awayTeam.teamName} logo
-          </figcaption>
+        <div className="justify-items-center text-center">
+          <TeamLogos
+            teamName={game.awayTeam.teamName}
+            teamTricode={game.awayTeam.teamTricode}
+            size={48}
+          />
           <div className="self-center text-sm mt-1">
             <div className="bg-gray-900 border-2 border-gray-700 rounded w-full p-2">
               <div
