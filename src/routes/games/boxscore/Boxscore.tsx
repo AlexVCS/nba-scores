@@ -46,7 +46,10 @@ const Boxscore = () => {
     <div>
       <GameSummary game={game} />
       <div className="pb-4">
-        <h1 className="text-lg font-bold p-4">{game.homeTeam.teamName}</h1>
+        <h1 className="text-lg font-bold p-4 text-center">
+          {game.homeTeam.teamName}
+        </h1>
+
         <table className="table-auto ml-2 mr-2">
           <thead>
             <tr className="text-xs">
@@ -65,7 +68,7 @@ const Boxscore = () => {
 
               return (
                 <Fragment key={player.personId}>
-                  <tbody>
+                  <tbody className="text-sm">
                     <tr>
                       <td className="pr-2 border-t pt-2 whitespace-nowrap">
                         <a
@@ -101,7 +104,10 @@ const Boxscore = () => {
                           </td>
                         </>
                       ) : (
-                        <td className="border-t pt-2" colSpan={20}>
+                        <td
+                          className="border-t pt-2 whitespace-nowrap"
+                          colSpan={20}
+                        >
                           {player.notPlayingReason
                             ? "DND - Injury/Illness"
                             : "DNP - Coach's Decision"}
@@ -116,8 +122,10 @@ const Boxscore = () => {
       </div>
 
       <div className="mb-4">
-        <h1 className="text-lg font-bold p-4">{game.awayTeam.teamName}</h1>
-        <table className="table-auto">
+        <h1 className="text-lg font-bold p-4 text-center">
+          {game.awayTeam.teamName}
+        </h1>
+        <table className="table-auto ml-2 mr-2">
           <thead>
             <tr className="text-xs">
               <th className="pr-6">PLAYER</th>
@@ -134,7 +142,7 @@ const Boxscore = () => {
               const nameLinkFormat = formatPlayerNameLink(player);
               return (
                 <Fragment key={player.personId}>
-                  <tbody>
+                  <tbody className="text-sm">
                     <tr>
                       <td className="pr-2 border-t pt-2 whitespace-nowrap">
                         <a
@@ -170,7 +178,10 @@ const Boxscore = () => {
                           </td>
                         </>
                       ) : (
-                        <td className="border-t pt-2" colSpan={20}>
+                        <td
+                          className="border-t pt-2 whitespace-nowrap"
+                          colSpan={20}
+                        >
                           {player.notPlayingReason
                             ? "DND - Injury/Illness"
                             : "DNP - Coach's Decision"}
@@ -183,9 +194,11 @@ const Boxscore = () => {
             })}
         </table>
       </div>
-      <section className="p-2">
+      <section className="p-2 text-sm">
         <div>
-          <h1 className="uppercase">Inactive Players</h1>
+          <div className="border-solid border-b border-[#ebe9e7] mb-2">
+            <h1 className="uppercase text-lg">Inactive Players</h1>
+          </div>
           <p>
             {game.homeTeam.teamTricode}:{" "}
             {game.homeTeam.players
