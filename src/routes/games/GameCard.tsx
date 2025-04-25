@@ -9,6 +9,8 @@ interface GameCardProps {
     gameTimeUTC: string;
     gameStatus: number;
     gameStatusText: string;
+    gameLabel: string;
+    gameSubLabel: string;
     ifNecessary: boolean;
     seriesGameNumber: string;
     seriesText: string;
@@ -79,6 +81,11 @@ function GameCard({game, showScores = false}: GameCardProps) {
               </div>
             )}
           </div>
+          {game.gameLabel.length > 0 && (
+            <div className="text-xs mt-2">
+              {game.gameLabel}: {game.gameSubLabel}
+            </div>
+          )}
         </div>
 
         <div className="justify-items-center text-center">

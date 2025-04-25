@@ -42,45 +42,51 @@ const GameSummary: React.FC<GameProps> = ({game}) => {
       </div>
 
       {/* Score Table (Center) */}
-      <div className="flex justify-center items-center">
-        <p>{game.gameStatusText}</p>
-        <table className="w-full hidden md:table md:max-w-55">
-          <thead>
-            <tr>
-              <th className="text-left pl-3 pr-8"></th>{" "}
-              <th className="px-2">1</th>
-              <th className="px-2">2</th>
-              <th className="px-2">3</th>
-              <th className="px-2">4</th>
-              <OvertimeHead period={game.period} />
-              <th className="px-2">T</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="text-left pl-3 pr-1">
-                {game.homeTeam.teamTricode}
-              </td>
-              {game.homeTeam.periods.map((period) => (
-                <td className="px-2" key={period.period}>
-                  {period.score}
+      <div className="flex flex-col justify-center items-center">
+        {/* Mobile game status */}
+        <p className="md:hidden">{game.gameStatusText}</p>
+
+        {/* Tablet and above layout */}
+        <div className="hidden md:flex md:flex-col md:items-center md:w-full">
+          <p className="mb-4 text-center">{game.gameStatusText}</p>
+          <table className="w-full max-w-55">
+            <thead>
+              <tr>
+                <th className="text-left pl-3 pr-8"></th>
+                <th className="px-2">1</th>
+                <th className="px-2">2</th>
+                <th className="px-2">3</th>
+                <th className="px-2">4</th>
+                <OvertimeHead period={game.period} />
+                <th className="px-2">T</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="text-left pl-3 pr-1">
+                  {game.homeTeam.teamTricode}
                 </td>
-              ))}
-              <td className="px-2 font-bold">{game.homeTeam.score}</td>
-            </tr>
-            <tr>
-              <td className="text-left pl-3 pr-1">
-                {game.awayTeam.teamTricode}
-              </td>
-              {game.awayTeam.periods.map((period) => (
-                <td className="px-2" key={period.period}>
-                  {period.score}
+                {game.homeTeam.periods.map((period) => (
+                  <td className="px-2" key={period.period}>
+                    {period.score}
+                  </td>
+                ))}
+                <td className="px-2 font-bold">{game.homeTeam.score}</td>
+              </tr>
+              <tr>
+                <td className="text-left pl-3 pr-1">
+                  {game.awayTeam.teamTricode}
                 </td>
-              ))}
-              <td className="px-2 font-bold">{game.awayTeam.score}</td>
-            </tr>
-          </tbody>
-        </table>
+                {game.awayTeam.periods.map((period) => (
+                  <td className="px-2" key={period.period}>
+                    {period.score}
+                  </td>
+                ))}
+                <td className="px-2 font-bold">{game.awayTeam.score}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Away Team (Right) */}
