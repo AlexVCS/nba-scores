@@ -15,7 +15,7 @@ const PlayerHeadshot: React.FC<PlayerHeadShotProps> = ({player}) => {
             ? import.meta.env.VITE_API_URL_DEV
             : import.meta.env.VITE_API_URL_PROD
         }/headshots/${player.personId}`}
-        className="hidden md:block"
+        className="hidden md:block md:place-self-center"
         alt={`${player.name} headshot`}
         width="52"
         height="38"
