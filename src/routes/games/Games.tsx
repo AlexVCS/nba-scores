@@ -33,7 +33,7 @@ const Games = () => {
   const dateParam: string = searchParams.get("date") ?? "";
   const [showScores, setShowScores] = useState(() => {
     const item = getItem("showScores");
-    return item === "false" ? false : true;
+    return item === "true" ? true : false;
   });
   
   useEffect(() => {
