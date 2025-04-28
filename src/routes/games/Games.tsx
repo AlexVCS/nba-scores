@@ -1,9 +1,9 @@
 import {useQuery} from "@tanstack/react-query";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import GameCard from "./GameCard.jsx";
 import {Switch} from "@adobe/react-spectrum";
 import {useSearchParams} from "react-router";
-// import {getItem} from "@/helpers/helpers.jsx";
+import {setItem, getItem} from "@/helpers/helpers.jsx";
 
 type GameData = {
   gameId: string;
@@ -27,29 +27,18 @@ type GameData = {
     score: number;
   };
 };
-// const abortControl = new AbortController();
 
 const Games = () => {
   const [searchParams] = useSearchParams({date: ""});
   const dateParam: string = searchParams.get("date") ?? "";
-  const [showScores, setShowScores] = useState(false);
-  // const [showScores, setShowScores] = useState<boolean>(() => {
-  //   const item = getItem("showScores");
-  //   return item === "true" ? true : false;
-  // });
-  // useEffect(() => {
-  //   console.log('starting the func')
-  //   window.addEventListener(
-  //     "storage",
-  //     (e) => {
-  //       console.log(`Key Changed: ${e.key}`);
-  //       console.log(`New Value: ${e.newValue}`);
-  //     },
-  //     {signal: abortControl.signal}
-  //   );
-  //   // setItem("showScores", showScores);
-  //   return abortControl.abort()
-  // }, []);
+  const [showScores, setShowScores] = useState(() => {
+    const item = getItem("showScores");
+    return item === "false" ? false : true;
+  });
+  
+  useEffect(() => {
+    setItem("showScores", showScores);
+  }, [showScores]);
 
   const getScores = async (dateParam: string): Promise<{games: GameData[]}> => {
     try {
