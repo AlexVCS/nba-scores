@@ -35,14 +35,14 @@ function GameCard({game, showScores = false}: GameCardProps) {
 
   return (
     <div className="flex justify-center lg:justify-start">
-      <article className="grid grid-cols-3 w-[336px] h-[178px] justify-items-center content-center ">
-        <div className="justify-items-center text-center">
+      <article className="grid grid-cols-3 w-[336px] h-[178px] justify-items-center items-center">
+        <div className="flex flex-col items-center text-center">
           <TeamLogos
             teamName={game.homeTeam.teamName}
             teamTricode={game.homeTeam.teamTricode}
             size={48}
           />
-          <div className="self-center text-sm mt-1">
+          <div className="text-sm mt-1 w-full">
             <div className="bg-gray-900 border-2 border-gray-700 rounded w-full p-2">
               <div
                 className="font-mono text-xl md:text-2xl text-amber-500 text-center font-bold tracking-wider"
@@ -50,7 +50,6 @@ function GameCard({game, showScores = false}: GameCardProps) {
               >
                 <span>{game.homeTeam.teamTricode}</span>
               </div>
-
               {showScores && gameHasStarted && (
                 <div className="mt-3 border-t-2 border-gray-700 pt-3">
                   <div
@@ -88,13 +87,13 @@ function GameCard({game, showScores = false}: GameCardProps) {
           )}
         </div>
 
-        <div className="justify-items-center text-center">
+        <div className="flex flex-col items-center text-center">
           <TeamLogos
             teamName={game.awayTeam.teamName}
             teamTricode={game.awayTeam.teamTricode}
             size={48}
           />
-          <div className="self-center text-sm mt-1">
+          <div className="text-sm mt-1 w-full">
             <div className="bg-gray-900 border-2 border-gray-700 rounded w-full p-2">
               <div
                 className="font-mono text-xl md:text-2xl text-amber-500 text-center font-bold tracking-wider"
@@ -102,7 +101,6 @@ function GameCard({game, showScores = false}: GameCardProps) {
               >
                 <span>{game.awayTeam.teamTricode}</span>
               </div>
-
               {showScores && gameHasStarted && (
                 <div className="mt-3 border-t-2 border-gray-700 pt-3">
                   <div
