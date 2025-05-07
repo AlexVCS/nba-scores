@@ -17,8 +17,6 @@ import {
 } from "react-aria-components";
 import type {ButtonProps, DateValue, PopoverProps} from "react-aria-components";
 import ChevronUpDownIcon from "@spectrum-icons/workflow/ChevronUpDown";
-import ChevronLeftIcon from "@spectrum-icons/workflow/ChevronLeft";
-import ChevronRightIcon from "@spectrum-icons/workflow/ChevronRight";
 import {useState} from "react";
 import {format} from "date-fns";
 import {useSearchParams} from "react-router";
@@ -65,10 +63,10 @@ const GameDatePicker = () => {
               <header className="flex items-center gap-1 pb-4 px-1 font-serif w-full">
                 <Heading className="flex-1 font-semibold text-2xl ml-2" />
                 <RoundButton slot="previous">
-                  <ChevronLeftIcon />
+                  <span className="block text-lg font-bold">&larr;</span>
                 </RoundButton>
                 <RoundButton slot="next">
-                  <ChevronRightIcon />
+                  <span className="block text-lg font-bold">&rarr;</span>
                 </RoundButton>
               </header>
               <CalendarGrid className="border-spacing-1 border-separate">
