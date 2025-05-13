@@ -4,6 +4,7 @@ import GameCard from "./GameCard.jsx";
 import {Switch} from "@adobe/react-spectrum";
 import {useSearchParams} from "react-router";
 import {setItem, getItem} from "@/helpers/helpers.jsx";
+// import ToggleTheme from "@/components/ToggleTheme.jsx";
 
 type GameData = {
   gameId: string;
@@ -35,7 +36,7 @@ const Games = () => {
     const item = getItem("showScores");
     return item === undefined ? false : item;
   });
-  
+
   useEffect(() => {
     setItem("showScores", showScores);
   }, [showScores]);

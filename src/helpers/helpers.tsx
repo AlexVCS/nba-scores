@@ -96,3 +96,11 @@ export function getItem(key: string) {
   }
 }
 
+// export function toggleTheme(darkMode) {
+//   const htmlElement = document.querySelector("html")
+//   if(darkMode) {
+//     htmlElement?.classList.add("dark");
+//   }
+//   htmlElement?.classList.remove("dark");
+// }
+
