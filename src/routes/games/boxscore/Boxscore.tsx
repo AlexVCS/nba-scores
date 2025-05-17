@@ -10,6 +10,7 @@ import {
 // import GameCard from "../GameCard";
 import PlayerHeadshot from "@/components/PlayerHeadshot";
 import GameSummary from "@/components/GameSummary";
+import DarkModeToggle from "@/components/DarkModeToggle";
 
 const getBoxScores = async (gameId: string) => {
   try {
@@ -43,7 +44,8 @@ const Boxscore = () => {
   const {game} = data;
 
   return (
-    <div>
+    <div className="bg-white text-black dark:bg-black dark:text-white">
+      <DarkModeToggle />
       <GameSummary game={game} />
       <div className="pb-4">
         <h1 className="text-lg font-bold p-4 text-center md:text-start">

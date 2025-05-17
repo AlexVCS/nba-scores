@@ -69,7 +69,9 @@ const Games = () => {
       {games.some((game) => game.gameStatus !== 1) && (
         <div className="flex justify-center items-center">
           <Switch isSelected={showScores} onChange={setShowScores}>
-            {showScores ? "Hide Scores" : "Show Scores"}
+            <div className="text-black dark:text-white">
+              {showScores ? "Hide Scores" : "Show Scores"}
+            </div>
           </Switch>
         </div>
       )}
