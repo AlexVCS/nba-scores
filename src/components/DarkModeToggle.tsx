@@ -1,7 +1,12 @@
 import React, {useState, useEffect} from "react";
+import {setItem, getItem} from "@/helpers/helpers.jsx";
+
 
 function DarkModeToggle() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const item = getItem("isDarkMode");
+    return item === undefined ? false : item;
+  });
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
@@ -13,6 +18,8 @@ function DarkModeToggle() {
     } else {
       document.body.classList.remove("dark");
     }
+
+    setItem("isDarkMode", isDarkMode);
   }, [isDarkMode]);
 
   return (
