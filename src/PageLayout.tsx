@@ -1,7 +1,7 @@
 import {ReactNode} from "react";
 
 const PageLayout: React.FC<{children: ReactNode}> = ({children}) => {
-  return <div>{children}</div>;
+  return <div className="h-full">{children}</div>;
 };
 
 export default PageLayout;

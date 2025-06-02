@@ -90,7 +90,7 @@ const DarkModeToggle = () => {
                 exit="exit"
                 className="absolute flex items-center justify-center"
               >
-                <Moon className="h-5 w-5" />
+                <Moon className="h-5 w-5" color="#000" fill="grey" />
               </motion.div>
             ) : (
               <motion.div
@@ -102,7 +102,7 @@ const DarkModeToggle = () => {
                 exit="exit"
                 className="absolute flex items-center justify-center"
               >
-                <Sun className="h-5 w-5" />
+                <Sun className="h-5 w-5" color="#ffa500" />
               </motion.div>
             )}
           </AnimatePresence>

@@ -10,8 +10,8 @@ import Header from "./components/Header.jsx";
 function App() {
   return (
     <div className="bg-slate-50 dark:bg-neutral-950">
-      <Header />
       <DarkModeToggle />
+      <Header />
       <GameDatePicker />
       <Games />
       {/* <ReactQueryDevtools /> */}
