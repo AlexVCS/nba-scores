@@ -4,7 +4,6 @@ import GameCard from "./GameCard.jsx";
 import {Switch} from "@adobe/react-spectrum";
 import {useSearchParams} from "react-router";
 import {setItem, getItem} from "@/helpers/helpers.jsx";
-// import ToggleTheme from "@/components/ToggleTheme.jsx";
 
 type GameData = {
   gameId: string;
@@ -69,7 +68,7 @@ const Games = () => {
       {games.some((game) => game.gameStatus !== 1) && (
         <div className="flex justify-center items-center">
           <Switch isSelected={showScores} onChange={setShowScores}>
-            <div className="text-black dark:text-white">
+            <div>
               {showScores ? "Hide Scores" : "Show Scores"}
             </div>
           </Switch>

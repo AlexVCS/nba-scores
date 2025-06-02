@@ -2,17 +2,19 @@
 import Games from "./routes/games/Games.jsx";
 import React from "react";
 import GameDatePicker from "./components/GameDatePicker.jsx";
-import PageLayout from "./PageLayout.jsx";
+// import PageLayout from "./PageLayout.jsx";
 import DarkModeToggle from "./components/DarkModeToggle.jsx";
+import { ThemeProvider } from "./providers/ThemeProvider.jsx";
 
 function App() {
   return (
-    <PageLayout>
+    <ThemeProvider>
       <DarkModeToggle />
       <GameDatePicker />
       <Games />
+      
       {/* <ReactQueryDevtools /> */}
-    </PageLayout>
+    </ThemeProvider>
   );
 }
 

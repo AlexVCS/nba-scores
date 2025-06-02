@@ -45,7 +45,7 @@ const GameDatePicker = () => {
         onChange={handleDateChange}
         className="group flex flex-col gap-1 w-[200px]"
       >
-        <Label className="text-black dark:text-white cursor-default">
+        <Label className="cursor-default">
           Date
         </Label>
         <Group className="flex rounded-lg bg-white/90 focus-within:bg-white group-open:bg-white transition pl-3 shadow-md text-gray-700 focus-visible:ring-2 ring-black">

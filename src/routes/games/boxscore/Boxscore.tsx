@@ -44,7 +44,7 @@ const Boxscore = () => {
   const {game} = data;
 
   return (
-    <div className="bg-white text-black dark:bg-black dark:text-white">
+    <div >
       <DarkModeToggle />
       <GameSummary game={game} />
       <div className="pb-4">
