@@ -23,8 +23,7 @@ interface GameProps {
 
 const GameSummary: React.FC<GameProps> = ({game}) => {
   return (
-    <div className="grid grid-cols-3 items-center gap-4 p-4 rounded-lg">
-      {/* Home Team (Left) */}
+    <div className="grid grid-cols-3 items-center gap-4 p-4 rounded-lg dark:text-slate-50 text-neutral-950">
       <div className="flex flex-col items-center">
         <TeamLogos teamTricode={game.homeTeam.teamTricode} size={48} />
         <h2 className="text-xl font-bold hidden md:block">
@@ -41,12 +40,8 @@ const GameSummary: React.FC<GameProps> = ({game}) => {
         </div>
       </div>
 
-      {/* Score Table (Center) */}
       <div className="flex flex-col justify-center items-center">
-        {/* Mobile game status */}
         <p className="md:hidden">{game.gameStatusText}</p>
-
-        {/* Tablet and above layout */}
         <div className="hidden md:flex md:flex-col md:items-center md:w-full">
           <p className="mb-4 text-center">{game.gameStatusText}</p>
           <table className="w-full max-w-55">
@@ -89,7 +84,6 @@ const GameSummary: React.FC<GameProps> = ({game}) => {
         </div>
       </div>
 
-      {/* Away Team (Right) */}
       <div className="flex flex-col items-center">
         <TeamLogos teamTricode={game.awayTeam.teamTricode} size={48} />
         <h2 className="text-xl font-bold hidden md:block">

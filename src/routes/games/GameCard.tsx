@@ -64,7 +64,7 @@ function GameCard({game, showScores = false}: GameCardProps) {
           </div>
         </div>
 
-        <div className="text-base text-center place-self-center">
+        <div className="text-base text-center place-self-center dark:text-slate-50 text-neutral-950">
           {game.gameStatusText}
           <div className="text-xs mt-2">
             {game.gameStatusText.includes(":") ? (

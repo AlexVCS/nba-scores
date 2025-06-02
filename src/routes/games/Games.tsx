@@ -35,7 +35,7 @@ const Games = () => {
     const item = getItem("showScores");
     return item === undefined ? false : item;
   });
-  
+
   useEffect(() => {
     setItem("showScores", showScores);
   }, [showScores]);
@@ -68,7 +68,9 @@ const Games = () => {
       {games.some((game) => game.gameStatus !== 1) && (
         <div className="flex justify-center items-center">
           <Switch isSelected={showScores} onChange={setShowScores}>
-            {showScores ? "Hide Scores" : "Show Scores"}
+            <div className="dark:text-slate-50 text-neutral-950">
+              {showScores ? "Hide Scores" : "Show Scores"}
+            </div>
           </Switch>
         </div>
       )}

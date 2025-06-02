@@ -10,6 +10,7 @@ import {
 // import GameCard from "../GameCard";
 import PlayerHeadshot from "@/components/PlayerHeadshot";
 import GameSummary from "@/components/GameSummary";
+import DarkModeToggle from "@/components/DarkModeToggle";
 
 const getBoxScores = async (gameId: string) => {
   try {
@@ -43,14 +44,15 @@ const Boxscore = () => {
   const {game} = data;
 
   return (
-    <div>
+    <div className="bg-slate-50 dark:bg-neutral-950">
+      <DarkModeToggle />
       <GameSummary game={game} />
       <div className="pb-4">
-        <h1 className="text-lg font-bold p-4 text-center md:text-start">
+        <h1 className="text-lg font-bold p-4 text-center md:text-start dark:text-slate-50 text-neutral-950">
           {game.homeTeam.teamName}
         </h1>
 
-        <table className="table-auto ml-2 mr-2 overflow-scroll">
+        <table className="table-auto ml-2 mr-2 overflow-scroll dark:text-slate-50 text-neutral-950">
           <thead>
             <tr className="text-xs">
               <th className="pr-[6px]">PLAYER</th>
@@ -196,10 +198,10 @@ const Boxscore = () => {
       </div>
 
       <div className="mb-4">
-        <h1 className="text-lg font-bold p-4 text-center md:text-start">
+        <h1 className="text-lg font-bold p-4 text-center md:text-start dark:text-slate-50 text-neutral-950">
           {game.awayTeam.teamName}
         </h1>
-        <table className="table-auto ml-2 mr-2">
+        <table className="table-auto ml-2 mr-2 dark:text-slate-50 text-neutral-950">
           <thead>
             <tr className="text-xs">
               <th className="pr-[6px]">PLAYER</th>
@@ -342,7 +344,7 @@ const Boxscore = () => {
             })}
         </table>
       </div>
-      <section className="p-2 text-sm">
+      <section className="p-2 text-sm dark:text-slate-50 text-neutral-950">
         <div>
           <div className="border-solid border-b border-[#ebe9e7] mb-2">
             <h1 className="uppercase text-lg">Inactive Players</h1>
