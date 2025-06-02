@@ -4,17 +4,18 @@ import React from "react";
 import GameDatePicker from "./components/GameDatePicker.jsx";
 // import PageLayout from "./PageLayout.jsx";
 import DarkModeToggle from "./components/DarkModeToggle.jsx";
-import { ThemeProvider } from "./providers/ThemeProvider.jsx";
+// import Boxscore from "./routes/games/boxscore/Boxscore.jsx";
+import Header from "./components/Header.jsx";
 
 function App() {
   return (
-    <ThemeProvider>
+    <div className="bg-slate-50 dark:bg-neutral-950">
+      <Header />
       <DarkModeToggle />
       <GameDatePicker />
       <Games />
-      
       {/* <ReactQueryDevtools /> */}
-    </ThemeProvider>
+    </div>
   );
 }
 

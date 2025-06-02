@@ -73,7 +73,7 @@ const DarkModeToggle = () => {
           onClick={toggleTheme}
           aria-label={themeButtonLabel}
           title={themeButtonLabel}
-          className="relative overflow-hidden flex items-center justify-center text-primary w-8 h-8 sm:w-9 sm:h-9 transition-colors-only hover:text-accent" // CAMBIADO a transition-colors-only
+          className="relative overflow-hidden flex items-center justify-center text-primary w-8 h-8 sm:w-9 sm:h-9 transition-colors-only hover:text-accent"
         >
           <AnimatePresence
             mode="wait"
@@ -112,4 +112,4 @@ const DarkModeToggle = () => {
   );
 };
 
-export default DarkModeToggle
+export default DarkModeToggle;

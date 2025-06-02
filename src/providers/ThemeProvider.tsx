@@ -14,10 +14,7 @@ export function ThemeProvider({children}: ThemeProviderProps) {
       if (storedTheme) {
         initialTheme = storedTheme;
       } else {
-        if (
-          window.matchMedia &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches
-        ) {
+        if (window.matchMedia?.("(prefers-color-scheme: dark)")?.matches) {
           initialTheme = "dark";
         }
       }
