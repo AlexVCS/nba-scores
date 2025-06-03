@@ -27,8 +27,11 @@ type GameData = {
     score: number;
   };
 };
+interface GamesProps {
+  setGamesToday: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-const Games = () => {
+const Games = ({setGamesToday}: GamesProps) => {
   const [searchParams] = useSearchParams({date: ""});
   const dateParam: string = searchParams.get("date") ?? "";
   const [showScores, setShowScores] = useState(() => {
@@ -58,6 +61,26 @@ const Games = () => {
     queryKey: ["games", dateParam],
     queryFn: () => getScores(dateParam),
   });
+
+  useEffect(() => {
+    if (data && dateParam) {
+      const hasGames = data.games.length > 0;
+
+      // Update the calendar unavailable dates
+      setDatesWithNoGames((prev) => {
+        const newSet = new Set(prev);
+        if (hasGames) {
+          newSet.delete(dateParam);
+        } else {
+          newSet.add(dateParam);
+        }
+        return newSet;
+      });
+
+      // Update gamesToday state
+      setGamesToday(hasGames);
+    }
+  }, [data, dateParam, setDatesWithNoGames, setGamesToday]);
 
   if (isLoading) return <h1>Loading...</h1>;
   if (error) return <h1>{JSON.stringify(error)}</h1>;
