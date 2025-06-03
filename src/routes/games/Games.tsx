@@ -78,7 +78,13 @@ const Games = () => {
         <div className="flex justify-center text-lg">No games today</div>
       ) : (
         <section className="px-4 py-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div
+            className={`grid gap-8 max-w-4xl mx-auto ${
+              games.length === 1
+                ? "grid-cols-1 place-items-center"
+                : "grid-cols-1 lg:grid-cols-2"
+            }`}
+          >
             {games.map((gamedata) => (
               <GameCard
                 key={gamedata.gameId}
