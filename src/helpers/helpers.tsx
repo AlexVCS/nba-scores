@@ -2,7 +2,7 @@ export type Team = {
   teamName: string;
   teamTricode: string;
   players: Player[];
-  score: number; // Assuming score is part of Team type based on Games.tsx
+  score: number;
 };
 
 export type PlayerStatus = {
