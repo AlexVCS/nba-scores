@@ -75,7 +75,9 @@ const Games = () => {
         </div>
       )}
       {games.length === 0 ? (
-        <div className="flex justify-center text-lg">No games today</div>
+        <div className="flex justify-center text-lg dark:text-slate-50 text-neutral-950">
+          No games today
+        </div>
       ) : (
         <section className="px-4 py-6">
           <div

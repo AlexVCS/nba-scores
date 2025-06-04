@@ -1,3 +1,17 @@
+export type Team = {
+  teamName: string;
+  teamTricode: string;
+  players: Player[];
+  score: number;
+};
+
+export type PlayerStatus = {
+  personId: string;
+  name: string;
+  status: "ACTIVE" | "INACTIVE";
+  notPlayingReason?: string;
+  statistics: PlayerStatistics;
+};
 
 export interface Player {
   status: string;
@@ -52,17 +66,27 @@ export interface PlayerStatistics {
 }
 
 export const formatPlayerNameLink = (player: Player) => {
- return `${player.personId}/${player.name
-   .toLowerCase()
-   .replace(/\.|'/g, "")
-   .split(" ")
-   .filter((letter: string) => letter !== ".")
-   .join("-")}`;
-}
+  return `${player.personId}/${player.name
+    .toLowerCase()
+    .replace(/\.|'/g, "")
+    .split(" ")
+    .filter((letter: string) => letter !== ".")
+    .join("-")}`;
+};
 
-export const placeholderTeamLogo = <img src="https://placehold.co/48x48?text=No+logo" alt="Placeholder team logo" />
+export const placeholderTeamLogo = (
+  <img
+    src="https://placehold.co/48x48?text=No+logo"
+    alt="Placeholder team logo"
+  />
+);
 
-export const placeholderPlayerHeadshot = <img src="https://placehold.co/48x48?text=No+headshot" alt="Placeholder player headshot" />
+export const placeholderPlayerHeadshot = (
+  <img
+    src="https://placehold.co/48x48?text=No+headshot"
+    alt="Placeholder player headshot"
+  />
+);
 
 export function formatMinutesPlayed(minutesString: string) {
   const minutes = parseInt(minutesString.match(/(\d+)M/)?.[1] || "0");
@@ -81,18 +105,18 @@ export const firstNameInitial = (playerName: string): string => {
 
 export function setItem(key: string, value: unknown) {
   try {
-    window.localStorage.setItem(key, JSON.stringify(value))
+    window.localStorage.setItem(key, JSON.stringify(value));
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 }
 
 export function getItem(key: string) {
   try {
-    const item = window.localStorage.getItem(key)
-    return item ? JSON.parse(item) : undefined
+    const item = window.localStorage.getItem(key);
+    return item ? JSON.parse(item) : undefined;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 }
 
