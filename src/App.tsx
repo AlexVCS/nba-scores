@@ -6,14 +6,20 @@ import DarkModeToggle from "./components/DarkModeToggle.jsx";
 import Header from "./components/Header.jsx";
 
 function App() {
-  const [gamesToday, setGamesToday] = useState<boolean>(false)
+  const [datesWithNoGames, setDatesWithNoGames] = useState<Set<string>>(
+    new Set()
+  );
+  const [gamesToday, setGamesToday] = useState<boolean>(false);
 
   return (
     <div className="bg-slate-50 dark:bg-neutral-950">
       <DarkModeToggle />
       <Header />
-      <GameDatePicker  />
-      <Games setGamesToday={setGamesToday} />
+      <GameDatePicker unavailableRanges={datesWithNoGames} />
+      <Games
+        setGamesToday={setGamesToday}
+        setDatesWithNoGames={setDatesWithNoGames}
+      />
       {/* <ReactQueryDevtools /> */}
     </div>
   );

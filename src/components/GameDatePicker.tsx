@@ -20,10 +20,16 @@ import ChevronUpDownIcon from "@spectrum-icons/workflow/ChevronUpDown";
 import {useState} from "react";
 import {format} from "date-fns";
 import {useSearchParams} from "react-router";
+import { useLocale } from "react-aria-components";
 
-const GameDatePicker = () => {
+interface GameDatePickerProps {
+  unavailableRanges: [DateValue, DateValue][];
+}
+
+const GameDatePicker = ({unavailableRanges}: GameDatePickerProps) => {
   const [dateSelected, setDateSelected] = useState<DateValue | null>(null);
   const [, setSearchParams] = useSearchParams({date: ""});
+  let { locale } = useLocale()
 
   const handleDateChange = (date: DateValue | null) => {
     setDateSelected(date);
@@ -31,11 +37,20 @@ const GameDatePicker = () => {
       const jsDate = new Date(date.toString());
       const timezoneOffset = jsDate.getTimezoneOffset() * 60000;
       const localDate = new Date(jsDate.getTime() + timezoneOffset);
-    
+
       setSearchParams({date: format(localDate, "yyyy-MM-dd")});
     }
   };
 
+  // Function to determine if a date should be unavailable using ranges
+  // const isDateUnavailable = (date: DateValue) => {
+  //   return unavailableRanges.some(
+  //     (interval) =>
+  //       date.compare(interval[0]) >= 0 && date.compare(interval[1]) <= 0
+  //   );
+  // };
+
+  console.log(unavailableRanges)
   return (
     <div className="flex justify-center mt-2 mb-4">
       <DatePicker
@@ -61,7 +76,11 @@ const GameDatePicker = () => {
         </Group>
         <MyPopover>
           <Dialog className="p-6 text-gray-600">
-            <Calendar value={dateSelected} onChange={handleDateChange}>
+            <Calendar
+              value={dateSelected}
+              onChange={handleDateChange}
+              // isDateUnavailable={isDateUnavailable}
+            >
               <header className="flex items-center gap-1 pb-4 px-1 font-serif w-full">
                 <Heading className="flex-1 font-semibold text-2xl ml-2" />
                 <RoundButton slot="previous">
@@ -83,7 +102,7 @@ const GameDatePicker = () => {
                   {(date) => (
                     <CalendarCell
                       date={date}
-                      className="w-9 h-9 outline-none cursor-default rounded-full flex items-center justify-center outside-month:text-gray-300 hover:bg-gray-100 pressed:bg-gray-200 selected:bg-violet-700 selected:text-white focus-visible:ring ring-violet-600/70 ring-offset-2"
+                      className="w-9 h-9 outline-none cursor-default rounded-full flex items-center justify-center outside-month:text-gray-300 hover:bg-gray-100 pressed:bg-gray-200 selected:bg-violet-700 selected:text-white focus-visible:ring ring-violet-600/70 ring-offset-2 unavailable:text-red-300 unavailable:cursor-not-allowed unavailable:line-through"
                     />
                   )}
                 </CalendarGridBody>
