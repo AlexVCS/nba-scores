@@ -1,0 +1,6 @@
+fastapi
+uvicorn[standard]
+nba_api
+requests
+numpy
+pandas
