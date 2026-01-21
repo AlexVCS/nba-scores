@@ -45,8 +45,17 @@ const Games = () => {
       const baseUrl = import.meta.env.DEV
         ? import.meta.env.VITE_API_URL_DEV
         : import.meta.env.VITE_API_URL_PROD;
-      const url = `${baseUrl}/?date=${dateParam}`;
+      
+      const url = dateParam 
+        ? `${baseUrl}/?date=${dateParam}` 
+        : `${baseUrl}/`;
+
       const response = await fetch(url);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
       return response.json();
     } catch (error) {
       console.error(`This call didn't work, this is the ${error}`);
