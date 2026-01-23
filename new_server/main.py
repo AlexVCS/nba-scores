@@ -12,6 +12,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/test")
+def test_route():
+    return {
+        "version": "2.0-testing-routes", 
+        "status": "alive",
+        "message": "If you see this, the new code is deployed"
+    }
+
 @app.get("/")
 def get_v3_scoreboard(
     date: str = Query(
