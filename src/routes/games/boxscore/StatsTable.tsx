@@ -1,20 +1,35 @@
 import PlayerHeadshot from "@/components/PlayerHeadshot";
-import { firstNameInitial, formatMinutesPlayed, formatPlayerNameLink, Player } from "@/helpers/helpers";
+import {
+  firstNameInitial,
+  formatMinutesPlayed,
+  formatPlayerNameLink,
+  Player,
+} from "@/helpers/helpers";
 
 interface StatsTableProps {
   player: Player;
 }
 
-const StatsTable = ({player}: StatsTableProps) => {
-  const nameLinkFormat = formatPlayerNameLink(player);
+const StatsTable = ({ player }: StatsTableProps) => {
+  const fullName = `${player.firstName} ${player.familyName}`;
+  const nameLinkFormat = formatPlayerNameLink({
+    ...player,
+    nameI: fullName,
+  });
 
   const renderStat = (value: number | string) => (
     <td className="border-t pt-2">{value}</td>
   );
 
   const renderHiddenStat = (value: number | string, breakpoint: string) => (
-    <td className={`border-t pt-2 hidden ${breakpoint}:table-cell`}>{value}</td>
+    <td
+      className={`border-t pt-2 hidden ${breakpoint}:table-cell`}
+    >
+      {value}
+    </td>
   );
+
+  const didPlay = player.statistics.minutes !== "";
 
   return (
     <>
@@ -28,14 +43,14 @@ const StatsTable = ({player}: StatsTableProps) => {
             >
               <PlayerHeadshot player={player} />
               <span className="block md:hidden">
-                {firstNameInitial(player.name)}
+                {firstNameInitial(fullName)}
               </span>
               <span className="hidden md:block md:place-self-center">
-                {player.name}
+                {fullName}
               </span>
             </a>
           </td>
-          {player.statistics.minutesCalculated !== "PT00M" ? (
+          {didPlay ? (
             <>
               {renderStat(player.statistics.points)}
               {renderStat(player.statistics.reboundsTotal)}
@@ -45,29 +60,42 @@ const StatsTable = ({player}: StatsTableProps) => {
               {renderStat(player.statistics.turnovers)}
               {renderStat(player.statistics.steals)}
               {renderStat(player.statistics.foulsPersonal)}
-              {renderHiddenStat(player.statistics.plusMinusPoints, "md")}
               {renderHiddenStat(
-                formatMinutesPlayed(player.statistics.minutesCalculated),
+                player.statistics.plusMinusPoints,
+                "md"
+              )}
+              {renderHiddenStat(
+                formatMinutesPlayed(player.statistics.minutes),
                 "md"
               )}
               {renderHiddenStat(player.statistics.fieldGoalsMade, "md")}
               {renderHiddenStat(player.statistics.fieldGoalsAttempted, "md")}
               {renderHiddenStat(
                 parseFloat(
-                  (player.statistics.fieldGoalsPercentage * 100).toFixed(1)
+                  (
+                    player.statistics.fieldGoalsPercentage * 100
+                  ).toFixed(1)
                 ),
                 "md"
               )}
               {renderHiddenStat(player.statistics.threePointersMade, "md")}
-              {renderHiddenStat(player.statistics.threePointersAttempted, "md")}
+              {renderHiddenStat(
+                player.statistics.threePointersAttempted,
+                "md"
+              )}
               {renderHiddenStat(
                 parseFloat(
-                  (player.statistics.threePointersPercentage * 100).toFixed(1)
+                  (
+                    player.statistics.threePointersPercentage * 100
+                  ).toFixed(1)
                 ),
                 "md"
               )}
               {renderHiddenStat(player.statistics.freeThrowsMade, "md")}
-              {renderHiddenStat(player.statistics.freeThrowsAttempted, "md")}
+              {renderHiddenStat(
+                player.statistics.freeThrowsAttempted,
+                "md"
+              )}
               {renderHiddenStat(
                 parseFloat(
                   (player.statistics.freeThrowsPercentage * 100).toFixed(1)
@@ -77,10 +105,11 @@ const StatsTable = ({player}: StatsTableProps) => {
               {renderHiddenStat(player.statistics.blocks, "lg")}
             </>
           ) : (
-            <td className="border-t pt-2 whitespace-nowrap" colSpan={20}>
-              {player.notPlayingReason
-                ? "DND - Injury/Illness"
-                : "DNP - Coach's Decision"}
+            <td
+              className="border-t pt-2 whitespace-nowrap"
+              colSpan={20}
+            >
+              {player.comment || "DNP - Coach's Decision"}
             </td>
           )}
         </tr>

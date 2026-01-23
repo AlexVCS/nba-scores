@@ -3,6 +3,7 @@ import TeamLogos from "@/components/TeamLogos";
 
 interface GameCardProps {
   showScores: boolean;
+  // dateParam: string;
   game: {
     gameId: string;
     gameCode: string;

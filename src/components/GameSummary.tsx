@@ -22,6 +22,8 @@ interface GameProps {
 }
 
 const GameSummary: React.FC<GameProps> = ({game}) => {
+// console.log("Home Team Data:", JSON.stringify(game.homeTeam, null, 2));
+
   return (
     <div className="grid grid-cols-3 items-center gap-4 p-4 rounded-lg dark:text-slate-50 text-neutral-950">
       <div className="flex flex-col items-center">
@@ -72,11 +74,11 @@ const GameSummary: React.FC<GameProps> = ({game}) => {
                 <td className="text-left pl-3 pr-1">
                   {game.awayTeam.teamTricode}
                 </td>
-                {game.awayTeam.periods.map((period) => (
+                {/* {game.awayTeam.periods.map((period) => (
                   <td className="px-2" key={period.period}>
                     {period.score}
                   </td>
-                ))}
+                ))} */}
                 <td className="px-2 font-bold">{game.awayTeam.score}</td>
               </tr>
             </tbody>
