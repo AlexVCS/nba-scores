@@ -16,37 +16,34 @@ const Boxscore = () => {
     queryFn: () => getBoxScores(gameId),
   });
 
-  // Logic Change: Pass the date to the service so getScores 
-  // fetches the list containing your gameId.
   const gamesQuery = useQuery({
-    queryKey: ["games", date], 
-    queryFn: () => getScores(date), // Logic: Fetch the list for that day
-    enabled: !!gameId, // Enable based on ID, not existence of date string
+    queryKey: ["games"],
+    queryFn: () => getScores(),
   });
 
   if (boxscoreQuery.isLoading || gamesQuery.isLoading) {
     return <h1>Loading...</h1>;
   }
 
-  // Logic Check: Find the game in the list by ID
-  const specificGame = gamesQuery.data?.games?.find(
+  if (boxscoreQuery.isError || !boxscoreQuery.data) {
+    return <h1>Error loading boxscore data</h1>;
+  }
+
+  const specificGame = gamesQuery.data?.games.find(
     (g: any) => g.gameId === gameId
   );
+
+  console.log("gameId from URL:", gameId);
+console.log("date from URL:", date);
+console.log("gamesQuery.data:", gamesQuery.data);
+console.log("specificGame:", specificGame);
 
   const { game } = boxscoreQuery.data;
 
   return (
     <div className="bg-slate-50 dark:bg-neutral-950">
       <DarkModeToggle />
-      {/* 
-        Logic Check: Ensure specificGame exists, 
-        otherwise GameSummary will receive undefined 
-      */}
-      {specificGame ? (
-        <GameSummary game={specificGame} />
-      ) : (
-        <p>Game details not found in scoreboard data.</p>
-      )}
+      <GameSummary game={specificGame} />
       <PlayerTable team={game.homeTeam} />
       <PlayerTable team={game.awayTeam} />
       <InactivePlayers game={game} />
