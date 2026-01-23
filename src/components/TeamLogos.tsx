@@ -3,7 +3,7 @@ import { placeholderTeamLogo } from "@/helpers/helpers";
 interface TeamLogoProps {
   teamName?: string;
   teamTricode: string;
-  teamId: number | string;
+  teamId: number;
   size: number;
 }
 

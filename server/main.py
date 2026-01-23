@@ -11,15 +11,6 @@ app.add_middleware(
     allow_methods=["GET"],
     allow_headers=["*"],
 )
-
-@app.get("/test")
-def test_route():
-    return {
-        "version": "2.0-testing-routes", 
-        "status": "alive",
-        "message": "If you see this, the new code is deployed"
-    }
-
 @app.get("/")
 def get_v3_scoreboard(
     date: str = Query(
@@ -50,7 +41,6 @@ def get_v3_scoreboard(
 @app.get("/games/{game_id}/boxscore")
 def get_game_boxscore(game_id: str):
     try:
-        # Get player stats
         box = boxscoretraditionalv3.BoxScoreTraditionalV3(
             game_id=game_id,
             range_type=0,
