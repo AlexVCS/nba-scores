@@ -1,45 +1,52 @@
-import {useQuery} from "@tanstack/react-query";
-import {useParams} from "react-router";
+import { useQuery } from "@tanstack/react-query";
+import { useParams, useSearchParams } from "react-router";
 import GameSummary from "@/components/GameSummary";
 import DarkModeToggle from "@/components/DarkModeToggle";
 import PlayerTable from "./PlayerTable";
 import InactivePlayers from "./InactivePlayers";
-
-const getBoxScores = async (gameId: string) => {
-  try {
-    const baseUrl = import.meta.env.DEV
-      ? import.meta.env.VITE_API_URL_DEV
-      : import.meta.env.VITE_API_URL_PROD;
-    const url = `${baseUrl}/games/${gameId}/boxscore`;
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    const result = await response.json();
-    return result;
-  } catch (error) {
-    console.error(`Error fetching boxscore: ${error}`);
-    throw error;
-  }
-};
+import { getScores, getBoxScores } from "@/services/nbaService";
 
 const Boxscore = () => {
-  const params = useParams();
-  const gameId = params.gameId ?? "";
-  const {isLoading, data, error} = useQuery({
+  const { gameId = "" } = useParams();
+  const [searchParams] = useSearchParams();
+  const date = searchParams.get("date") ?? "";
+
+  const boxscoreQuery = useQuery({
     queryKey: ["boxscore", gameId],
     queryFn: () => getBoxScores(gameId),
   });
 
-  if (isLoading) return <h1>Loading...</h1>;
-  if (error) return <h1>{JSON.stringify(error)}</h1>;
-  if (!data) return <h1>Didn't receive a boxscore</h1>;
-  const {game} = data;
+  // Logic Change: Pass the date to the service so getScores 
+  // fetches the list containing your gameId.
+  const gamesQuery = useQuery({
+    queryKey: ["games", date], 
+    queryFn: () => getScores(date), // Logic: Fetch the list for that day
+    enabled: !!gameId, // Enable based on ID, not existence of date string
+  });
+
+  if (boxscoreQuery.isLoading || gamesQuery.isLoading) {
+    return <h1>Loading...</h1>;
+  }
+
+  // Logic Check: Find the game in the list by ID
+  const specificGame = gamesQuery.data?.games?.find(
+    (g: any) => g.gameId === gameId
+  );
+
+  const { game } = boxscoreQuery.data;
 
   return (
     <div className="bg-slate-50 dark:bg-neutral-950">
       <DarkModeToggle />
-      <GameSummary game={game} />
+      {/* 
+        Logic Check: Ensure specificGame exists, 
+        otherwise GameSummary will receive undefined 
+      */}
+      {specificGame ? (
+        <GameSummary game={specificGame} />
+      ) : (
+        <p>Game details not found in scoreboard data.</p>
+      )}
       <PlayerTable team={game.homeTeam} />
       <PlayerTable team={game.awayTeam} />
       <InactivePlayers game={game} />

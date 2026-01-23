@@ -38,7 +38,7 @@ const PlayerTable = ({team}: PlayerTableProps) => {
           </tr>
         </thead>
         {team.players
-          .filter((player: Player) => player.status === "ACTIVE")
+          .filter((player: Player) => player.comment === "")
           .map((player: Player) => (
             <StatsTable key={player.personId} player={player} />
           ))}

@@ -14,20 +14,36 @@ export type PlayerStatus = {
 };
 
 export interface Player {
-  status: string;
-  notPlayingReason: string;
-  order: number;
   personId: number;
-  jerseyNum: string;
-  position: string;
-  starter: string;
-  oncourt: string;
-  played: string;
-  statistics: PlayerStatistics;
-  name: string;
-  nameI: string;
   firstName: string;
   familyName: string;
+  nameI: string;
+  playerSlug: string;
+  position: string;
+  comment: string;
+  jerseyNum: string;
+  statistics: {
+    minutes: string;
+    fieldGoalsMade: number;
+    fieldGoalsAttempted: number;
+    fieldGoalsPercentage: number;
+    threePointersMade: number;
+    threePointersAttempted: number;
+    threePointersPercentage: number;
+    freeThrowsMade: number;
+    freeThrowsAttempted: number;
+    freeThrowsPercentage: number;
+    reboundsOffensive: number;
+    reboundsDefensive: number;
+    reboundsTotal: number;
+    assists: number;
+    steals: number;
+    blocks: number;
+    turnovers: number;
+    foulsPersonal: number;
+    points: number;
+    plusMinusPoints: number;
+  };
 }
 export interface PlayerStatistics {
   assists: number;
@@ -66,7 +82,7 @@ export interface PlayerStatistics {
 }
 
 export const formatPlayerNameLink = (player: Player) => {
-  return `${player.personId}/${player.name
+  return `${player.personId}/${player.nameI
     .toLowerCase()
     .replace(/\.|'/g, "")
     .split(" ")
@@ -81,12 +97,7 @@ export const placeholderTeamLogo = (
   />
 );
 
-export const placeholderPlayerHeadshot = (
-  <img
-    src="https://placehold.co/48x48?text=No+headshot"
-    alt="Placeholder player headshot"
-  />
-);
+export const placeholderPlayerHeadshot = "https://placehold.co/48x48?text=No+headshot";
 
 export function formatMinutesPlayed(minutesString: string) {
   const minutes = parseInt(minutesString.match(/(\d+)M/)?.[1] || "0");
