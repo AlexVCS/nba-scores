@@ -30,6 +30,7 @@ dist-ssr
 .nx/workspace-data
 
 venv/
-.venv/
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
