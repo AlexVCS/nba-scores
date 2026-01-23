@@ -1,23 +1,38 @@
-import * as NBAIcons from "react-nba-logos";
-import {placeholderTeamLogo} from "@/helpers/helpers";
+import { placeholderTeamLogo } from "@/helpers/helpers";
 
 interface TeamLogoProps {
   teamName?: string;
   teamTricode: string;
+  teamId: number | string;
   size: number;
 }
 
-type NBAIconsType = typeof NBAIcons;
-type TeamCodeType = keyof NBAIconsType;
+const TeamLogos = ({ teamName, teamTricode, teamId, size }: TeamLogoProps) => {
+  const logoUrl = `https://cdn.nba.com/logos/nba/${teamId}/global/L/logo.svg`;
+  console.log(logoUrl)
 
-const TeamLogos = ({teamName, teamTricode, size}: TeamLogoProps) => {
-  const TeamLogo = NBAIcons[teamTricode as TeamCodeType];
   return (
     <>
-      <figure className="place-self-center">
-        {TeamLogo ? <TeamLogo size={size} /> : placeholderTeamLogo}
+      <figure className="place-self-center flex items-center justify-center">
+        {teamId ? (
+          <img
+            src={logoUrl}
+            alt={`${teamName || teamTricode} logo`}
+            width={size}
+            height={size}
+            style={{ objectFit: 'contain' }}
+            onError={(e) => {
+              e.currentTarget.src = `${placeholderTeamLogo}`;
+              e.currentTarget.onerror = null;
+            }}
+          />
+        ) : (
+          <div style={{ width: size, height: size }}>
+            {placeholderTeamLogo}
+          </div>
+        )}
       </figure>
-      <figcaption className="sr-only">{teamName} logo</figcaption>
+      <figcaption className="sr-only">{teamName || teamTricode} logo</figcaption>
     </>
   );
 };
