@@ -1,6 +1,6 @@
-import OvertimeHead from "@/components/Overtime";
-import TeamLogos from "./TeamLogos";
-import {ArrowIconRight, ArrowIconLeft} from "./ArrowIcon";
+// import OvertimeHead from "@/components/Overtime";
+// import TeamLogos from "./TeamLogos";
+// import {ArrowIconRight, ArrowIconLeft} from "./ArrowIcon";
 
 interface GameProps {
   game: {
@@ -21,7 +21,7 @@ interface GameProps {
   };
 }
 
-const GameSummary: React.FC<GameProps> = ({game}) => {
+const GameSummary: React.FC<GameProps> = () => {
 // console.log("Home Team Data:", JSON.stringify(game.homeTeam, null, 2));
 
   return (
