@@ -40,8 +40,8 @@ console.log("date from URL:", date);
 
   console.log("gameId from URL:", gameId);
 console.log("date from URL:", date);
-console.log("gamesQuery.data:", gamesQuery.data);
-console.log("specificGame:", specificGame);
+// console.log("gamesQuery.data:", gamesQuery.data);
+// console.log("specificGame:", specificGame);
 
   const { game } = boxscoreQuery.data;
 
