@@ -27,25 +27,25 @@ const GameSummary: React.FC<GameProps> = ({game}) => {
   return (
     <div className="grid grid-cols-3 items-center gap-4 p-4 rounded-lg dark:text-slate-50 text-neutral-950">
       <div className="flex flex-col items-center">
-        <TeamLogos teamTricode={game.homeTeam.teamTricode} size={48} />
+        {/* <TeamLogos teamTricode={game.homeTeam.teamTricode} size={48} /> */}
         <h2 className="text-xl font-bold hidden md:block">
-          {game.homeTeam.teamName}
+          {/* {game.homeTeam.teamName} */}
         </h2>
         <h2 className="text-xl font-bold block md:hidden">
-          {game.homeTeam.teamTricode}
+          {/* {game.homeTeam.teamTricode} */}
         </h2>
         <div className="flex items-center justify-center relative">
           <h2 className="text-2xl md:text-3xl font-bold mt-2 ">
-            {game.homeTeam.score}
+            {/* {game.homeTeam.score} */}
           </h2>
-          {game.homeTeam.score > game.awayTeam.score && <ArrowIconRight />}
+          {/* {game.homeTeam.score > game.awayTeam.score && <ArrowIconRight />} */}
         </div>
       </div>
 
       <div className="flex flex-col justify-center items-center">
-        <p className="md:hidden">{game.gameStatusText}</p>
+        {/* <p className="md:hidden">{game.gameStatusText}</p> */}
         <div className="hidden md:flex md:flex-col md:items-center md:w-full">
-          <p className="mb-4 text-center">{game.gameStatusText}</p>
+          {/* <p className="mb-4 text-center">{game.gameStatusText}</p> */}
           <table className="w-full max-w-55">
             <thead>
               <tr>
@@ -54,32 +54,32 @@ const GameSummary: React.FC<GameProps> = ({game}) => {
                 <th className="px-2">2</th>
                 <th className="px-2">3</th>
                 <th className="px-2">4</th>
-                <OvertimeHead period={game.period} />
+                {/* <OvertimeHead period={game.period} /> */}
                 <th className="px-2">T</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td className="text-left pl-3 pr-1">
-                  {game.homeTeam.teamTricode}
+                  {/* {game.homeTeam.teamTricode} */}
                 </td>
-                {game.homeTeam.periods.map((period) => (
+                {/* {game.homeTeam.periods.map((period) => (
                   <td className="px-2" key={period.period}>
                     {period.score}
                   </td>
-                ))}
-                <td className="px-2 font-bold">{game.homeTeam.score}</td>
+                ))} */}
+                {/* <td className="px-2 font-bold">{game.homeTeam.score}</td> */}
               </tr>
               <tr>
                 <td className="text-left pl-3 pr-1">
-                  {game.awayTeam.teamTricode}
+                  {/* {game.awayTeam.teamTricode} */}
                 </td>
                 {/* {game.awayTeam.periods.map((period) => (
                   <td className="px-2" key={period.period}>
                     {period.score}
                   </td>
                 ))} */}
-                <td className="px-2 font-bold">{game.awayTeam.score}</td>
+                {/* <td className="px-2 font-bold">{game.awayTeam.score}</td> */}
               </tr>
             </tbody>
           </table>
@@ -87,18 +87,18 @@ const GameSummary: React.FC<GameProps> = ({game}) => {
       </div>
 
       <div className="flex flex-col items-center">
-        <TeamLogos teamTricode={game.awayTeam.teamTricode} size={48} />
+        {/* <TeamLogos teamTricode={game.awayTeam.teamTricode} size={48} /> */}
         <h2 className="text-xl font-bold hidden md:block">
-          {game.awayTeam.teamName}
+          {/* {game.awayTeam.teamName} */}
         </h2>
         <h2 className="text-xl font-bold block md:hidden">
-          {game.awayTeam.teamTricode}
+          {/* {game.awayTeam.teamTricode} */}
         </h2>
         <div className="flex items-center justify-center relative">
           <h2 className="text-2xl md:text-3xl font-bold mt-2 ">
-            {game.awayTeam.score}
+            {/* {game.awayTeam.score} */}
           </h2>
-          {game.awayTeam.score > game.homeTeam.score && <ArrowIconLeft />}
+          {/* {game.awayTeam.score > game.homeTeam.score && <ArrowIconLeft />} */}
         </div>
       </div>
     </div>
