@@ -19,11 +19,13 @@ interface GameCardProps {
       teamName: string;
       teamTricode: string;
       score: number;
+      teamId: number;
     };
     awayTeam: {
       teamName: string;
       teamTricode: string;
       score: number;
+      teamId: number;
     };
   };
 }
@@ -41,6 +43,7 @@ function GameCard({game, showScores = false}: GameCardProps) {
           <TeamLogos
             teamName={game.homeTeam.teamName}
             teamTricode={game.homeTeam.teamTricode}
+            teamId={game.homeTeam.teamId}
             size={48}
           />
           <div className="text-sm mt-1 w-full">
@@ -92,6 +95,7 @@ function GameCard({game, showScores = false}: GameCardProps) {
           <TeamLogos
             teamName={game.awayTeam.teamName}
             teamTricode={game.awayTeam.teamTricode}
+            teamId={game.awayTeam.teamId}
             size={48}
           />
           <div className="text-sm mt-1 w-full">

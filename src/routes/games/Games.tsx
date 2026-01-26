@@ -19,11 +19,13 @@ type GameData = {
   homeTeam: {
     teamName: string;
     teamTricode: string;
+    teamId: number;
     score: number;
   };
   awayTeam: {
     teamName: string;
     teamTricode: string;
+    teamId: number;
     score: number;
   };
 };
