@@ -25,90 +25,124 @@ interface GameProps {
 
 const GameSummary: React.FC<GameProps> = ({ game }) => {
   return (
-    <div className="grid grid-cols-3 items-center gap-4 p-4 rounded-lg dark:text-slate-50 text-neutral-950">
-      <div className="flex flex-col items-center">
+    <div className="flex flex-col md:grid md:grid-cols-3 items-center gap-3 md:gap-4 p-4 rounded-lg dark:text-slate-50 text-neutral-950">
+      {/* Mobile: Compact score row */}
+      <div className="flex md:hidden w-full justify-center items-center gap-8">
+        {/* Home team - mobile */}
+        <div className="flex flex-col items-center">
+          <TeamLogos
+            teamName={game.homeTeam.teamName}
+            teamId={game.homeTeam.teamId}
+            size={48}
+          />
+          <h2 className="text-lg font-bold">
+            {game.homeTeam.teamTricode}
+          </h2>
+          <div className="flex items-center justify-center relative">
+            <h2 className="text-2xl font-bold">
+              {game.homeTeam.score}
+            </h2>
+            {Number(game.homeTeam.score) > Number(game.awayTeam.score) && <ArrowIconRight />}
+          </div>
+        </div>
+
+        {/* Away team - mobile */}
+        <div className="flex flex-col items-center">
+          <TeamLogos
+            teamName={game.awayTeam.teamName}
+            teamId={game.awayTeam.teamId}
+            size={48}
+          />
+          <h2 className="text-lg font-bold">
+            {game.awayTeam.teamTricode}
+          </h2>
+          <div className="flex items-center justify-center relative">
+            <h2 className="text-2xl font-bold">
+              {game.awayTeam.score}
+            </h2>
+            {Number(game.awayTeam.score) > Number(game.homeTeam.score) && <ArrowIconLeft />}
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop: Home team column */}
+      <div className="hidden md:flex flex-col items-center">
         <TeamLogos
           teamName={game.homeTeam.teamName}
           teamId={game.homeTeam.teamId}
           size={48}
         />
-        <h2 className="text-xl font-bold hidden md:block">
+        <h2 className="text-xl font-bold">
           {game.homeTeam.teamName}
         </h2>
-        <h2 className="text-xl font-bold block md:hidden">
-          {game.homeTeam.teamTricode}
-        </h2>
         <div className="flex items-center justify-center relative">
-          <h2 className="text-2xl md:text-3xl font-bold mt-2 ">
+          <h2 className="text-3xl font-bold mt-2">
             {game.homeTeam.score}
           </h2>
           {Number(game.homeTeam.score) > Number(game.awayTeam.score) && <ArrowIconRight />}
         </div>
       </div>
 
-      <div className="flex flex-col justify-center items-center">
-        <p className="md:hidden">{game.gameStatusText}</p>
-        <div className="hidden md:flex md:flex-col md:items-center md:w-full">
-          <p className="mb-4 text-center">{game.gameStatusText}</p>
-          <table className="w-full max-w-55">
+      {/* Quarter-by-quarter table */}
+      <div className="w-full md:flex md:flex-col md:justify-center md:items-center px-4 md:px-0">
+        <div className="flex flex-col items-center w-full">
+          <table className="w-full text-sm md:text-base md:max-w-55">
             <thead>
               <tr>
-                <th className="text-left pl-3 pr-8"></th>
-                <th className="px-2">1</th>
-                <th className="px-2">2</th>
-                <th className="px-2">3</th>
-                <th className="px-2">4</th>
+                <th className="text-left pl-1.5 md:pl-3 pr-2 md:pr-8"></th>
+                <th className="px-1 md:px-2 text-center">1</th>
+                <th className="px-1 md:px-2 text-center">2</th>
+                <th className="px-1 md:px-2 text-center">3</th>
+                <th className="px-1 md:px-2 text-center">4</th>
                 {/* Overtime headers - render for periods > 4 */}
                 {game.homeTeam.periods.slice(4).map((p) => (
-                  <th className="px-2" key={`ot-header-${p.period}`}>
+                  <th className="px-1 md:px-2 text-center" key={`ot-header-${p.period}`}>
                     OT{p.period - 4}
                   </th>
                 ))}
-                <th className="px-2">T</th>
+                <th className="px-1 md:px-2 text-center">T</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td className="text-left pl-3 pr-1">
+                <td className="text-left pl-1.5 md:pl-3 pr-1">
                   {game.homeTeam.teamTricode}
                 </td>
                 {game.homeTeam.periods.map((period) => (
-                  <td className="px-2" key={period.period}>
+                  <td className="px-1 md:px-2 text-center" key={period.period}>
                     {period.score}
                   </td>
                 ))}
-                <td className="px-2 font-bold">{game.homeTeam.score}</td>
+                <td className="px-1 md:px-2 text-center font-bold">{game.homeTeam.score}</td>
               </tr>
               <tr>
-                <td className="text-left pl-3 pr-1">
+                <td className="text-left pl-1.5 md:pl-3 pr-1">
                   {game.awayTeam.teamTricode}
                 </td>
                 {game.awayTeam.periods.map((period) => (
-                  <td className="px-2" key={period.period}>
+                  <td className="px-1 md:px-2 text-center" key={period.period}>
                     {period.score}
                   </td>
                 ))}
-                <td className="px-2 font-bold">{game.awayTeam.score}</td>
+                <td className="px-1 md:px-2 text-center font-bold">{game.awayTeam.score}</td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      <div className="flex flex-col items-center">
+      {/* Desktop: Away team column */}
+      <div className="hidden md:flex flex-col items-center">
         <TeamLogos
           teamName={game.awayTeam.teamName}
           teamId={game.awayTeam.teamId}
           size={48}
         />
-        <h2 className="text-xl font-bold hidden md:block">
+        <h2 className="text-xl font-bold">
           {game.awayTeam.teamName}
         </h2>
-        <h2 className="text-xl font-bold block md:hidden">
-          {game.awayTeam.teamTricode}
-        </h2>
         <div className="flex items-center justify-center relative">
-          <h2 className="text-2xl md:text-3xl font-bold mt-2 ">
+          <h2 className="text-3xl font-bold mt-2">
             {game.awayTeam.score}
           </h2>
           {Number(game.awayTeam.score) > Number(game.homeTeam.score) && <ArrowIconLeft />}

@@ -6,7 +6,7 @@ const ArrowIconRight = () => {
       height="12"
       viewBox="0 0 7 12"
       role="presentation"
-      className="absolute -right-3 top-1/2 transform -translate-y-1/3 mt-1"
+      className="absolute -right-3 top-1/2 transform -translate-y-1/2"
     >
       <path fill="currentColor" fillRule="nonzero" d="M.5 6l6 5.5V.5z"></path>
     </svg>
@@ -21,7 +21,7 @@ const ArrowIconLeft = () => {
       height="12"
       viewBox="0 0 7 12"
       role="presentation"
-      className="absolute -left-3 top-1/2 transform -translate-y-1/3 mt-1 rotate-180"
+      className="absolute -left-3 top-1/2 transform -translate-y-1/2 rotate-180"
     >
       <path fill="currentColor" fillRule="nonzero" d="M.5 6l6 5.5V.5z"></path>
     </svg>
