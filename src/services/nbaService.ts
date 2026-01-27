@@ -17,3 +17,10 @@ export const getBoxScores = async (gameId: string) => {
   if (!response.ok) throw new Error("Boxscore fetch failed");
   return response.json();
 };
+
+export const getGameSummary = async (gameId: string) => {
+  const url = `${getBaseUrl()}/gamesummary/${gameId}`;
+  const response = await fetch(url);
+  if (!response.ok) throw new Error("Game summary fetch failed");
+  return response.json();
+};

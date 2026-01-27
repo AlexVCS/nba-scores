@@ -2,14 +2,12 @@ import { placeholderTeamLogo } from "@/helpers/helpers";
 
 interface TeamLogoProps {
   teamName?: string;
-  teamTricode: string;
   teamId: number;
   size: number;
 }
 
-const TeamLogos = ({ teamName, teamTricode, teamId, size }: TeamLogoProps) => {
+const TeamLogos = ({ teamName, teamId, size }: TeamLogoProps) => {
   const logoUrl = `https://cdn.nba.com/logos/nba/${teamId}/global/L/logo.svg`;
-  console.log(logoUrl)
 
   return (
     <>
@@ -17,7 +15,7 @@ const TeamLogos = ({ teamName, teamTricode, teamId, size }: TeamLogoProps) => {
         {teamId ? (
           <img
             src={logoUrl}
-            alt={`${teamName || teamTricode} logo`}
+            alt={`${teamName} logo`}
             width={size}
             height={size}
             style={{ objectFit: 'contain' }}
@@ -32,7 +30,7 @@ const TeamLogos = ({ teamName, teamTricode, teamId, size }: TeamLogoProps) => {
           </div>
         )}
       </figure>
-      <figcaption className="sr-only">{teamName || teamTricode} logo</figcaption>
+      <figcaption className="sr-only">{teamName} logo</figcaption>
     </>
   );
 };

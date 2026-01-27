@@ -42,7 +42,6 @@ function GameCard({game, showScores = false}: GameCardProps) {
         <div className="flex flex-col items-center text-center">
           <TeamLogos
             teamName={game.homeTeam.teamName}
-            teamTricode={game.homeTeam.teamTricode}
             teamId={game.homeTeam.teamId}
             size={48}
           />
@@ -94,7 +93,6 @@ function GameCard({game, showScores = false}: GameCardProps) {
         <div className="flex flex-col items-center text-center">
           <TeamLogos
             teamName={game.awayTeam.teamName}
-            teamTricode={game.awayTeam.teamTricode}
             teamId={game.awayTeam.teamId}
             size={48}
           />
