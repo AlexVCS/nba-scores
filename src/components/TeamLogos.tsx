@@ -1,4 +1,4 @@
-import { placeholderTeamLogo } from "@/helpers/helpers";
+import { placeholderTeamLogoUrl } from "@/helpers/helpers";
 
 interface TeamLogoProps {
   teamName?: string;
@@ -11,7 +11,7 @@ const TeamLogos = ({ teamName, teamId, size }: TeamLogoProps) => {
 
   return (
     <>
-      <figure className="place-self-center flex items-center justify-center">
+      <figure className="place-self-center flex items-center justify-center mb-2">
         {teamId ? (
           <img
             src={logoUrl}
@@ -20,14 +20,18 @@ const TeamLogos = ({ teamName, teamId, size }: TeamLogoProps) => {
             height={size}
             style={{ objectFit: 'contain' }}
             onError={(e) => {
-              e.currentTarget.src = `${placeholderTeamLogo}`;
+              e.currentTarget.src = placeholderTeamLogoUrl;
               e.currentTarget.onerror = null;
             }}
           />
         ) : (
-          <div style={{ width: size, height: size }}>
-            {placeholderTeamLogo}
-          </div>
+          <img
+            src={placeholderTeamLogoUrl}
+            alt="Placeholder team logo"
+            width={size}
+            height={size}
+            style={{ objectFit: 'contain' }}
+          />
         )}
       </figure>
       <figcaption className="sr-only">{teamName} logo</figcaption>
