@@ -90,12 +90,7 @@ export const formatPlayerNameLink = (player: Player) => {
     .join("-")}`;
 };
 
-export const placeholderTeamLogo = (
-  <img
-    src="https://placehold.co/48x48?text=No+logo"
-    alt="Placeholder team logo"
-  />
-);
+export const placeholderTeamLogoUrl = "https://cdn.nba.com/logos/nba/fallback.svg";
 
 export const placeholderPlayerHeadshot = "https://placehold.co/48x48?text=No+headshot";
 
