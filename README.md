@@ -55,7 +55,15 @@ cd nba-scores
 pnpm i
 ```
 
-Run the app by running `pnpm run dev` in one terminal and `pnpm run serve` in another terminal. Then open the UI of the app at `http://localhost:5173`
+Run the frontend by running `pnpm run dev` in one terminal.
+
+To run the backend, open a terminal and run this:
+
+```bash
+cd server
+source venv/bin/activate
+uvicorn main:app --reload
+```
 
 <div align='right'>
 

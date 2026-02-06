@@ -3,10 +3,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from nba_api.stats.endpoints import (
     boxscoresummaryv2,
     boxscoretraditionalv3,
+    ScheduleLeagueV2,
     scoreboardv2,
     scoreboardv3,
 )
 from datetime import datetime
+from utils.season import get_nba_season
+from services.nba_schedule import get_game_days_in_month
+from models.schemas import GameDaysResponse
 
 app = FastAPI()
 
@@ -245,6 +249,73 @@ def debug_linescore(game_date: str):
         "columns": list(linescore_df.columns),
         "first_row": linescore_df.iloc[0].to_dict() if not linescore_df.empty else None,
     }
+
+
+@app.get("/schedule")
+def debug_schedule(
+    season: str = Query(..., alias="Season"),
+    league_id: str = Query("00", alias="LeagueID"),
+):
+    """Debug endpoint - shows all game dates for a season"""
+    try:
+        schedule = ScheduleLeagueV2(
+            season=season,
+            league_id=league_id,
+        )
+
+        frames = schedule.get_data_frames()
+        df = frames[0]
+
+        date_col = None
+        for candidate in ["gameDate", "gameDateTimeEst", "gameDateEst"]:
+            if candidate in df.columns:
+                date_col = candidate
+                break
+
+        if date_col is None:
+            raise ValueError(
+                f"Could not find date column. Columns: {df.columns.tolist()}"
+            )
+
+        dates = {
+            str(raw)[:10]
+            for raw in df[date_col].dropna().unique()
+        }
+
+        return {
+            "season": season,
+            "league_id": league_id,
+            "total_game_days": len(dates),
+            "game_dates": sorted(dates),
+        }
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to fetch schedule for {season}: {str(e)}",
+        )
+    
+@app.get("/api/game-days", response_model=GameDaysResponse)
+def game_days(
+    year: int = Query(..., ge=2000, le=2100, description="Calendar year"),
+    month: int = Query(..., ge=1, le=12, description="Month (1-12)"),
+):
+    season = get_nba_season(year, month)
+    try:
+        days = get_game_days_in_month(year, month)
+    except Exception as e:
+        raise HTTPException(
+            status_code=502,
+            detail=f"Failed to fetch schedule from NBA API: {e}",
+        )
+
+    return GameDaysResponse(
+        year=year,
+        month=month,
+        season=season,
+        game_days=days,
+        total=len(days),
+    )
 
 
 if __name__ == "__main__":
