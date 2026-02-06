@@ -1,0 +1,655 @@
+/* Design 2: Minimalist Brutalism - Raw, stripped-down, anti-design */
+
+/* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+.brutal-container {
+  font-family: 'IBM Plex Sans', sans-serif;
+  min-height: 100vh;
+  position: relative;
+}
+
+.brutal-container.light {
+  background: #f5f5f5;
+  color: #0a0a0a;
+}
+
+.brutal-container.dark {
+  background: #0a0a0a;
+  color: #f5f5f5;
+}
+
+/* Grid lines background */
+.brutal-container::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.brutal-container.light::before {
+  background-image: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.brutal-container.dark::before {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Header */
+.brutal-header {
+  padding: 2rem 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+}
+
+.brutal-logo {
+  max-width: 200px;
+  height: auto;
+}
+
+.brutal-nav {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* Back Link */
+.brutal-back-link {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 0.75rem 1.25rem;
+  border: 2px solid;
+  transition: all 0.15s ease;
+}
+
+.brutal-container.dark .brutal-back-link {
+  color: #f5f5f5;
+  border-color: #f5f5f5;
+}
+
+.brutal-container.dark .brutal-back-link:hover {
+  background: #f5f5f5;
+  color: #0a0a0a;
+}
+
+.brutal-container.light .brutal-back-link {
+  color: #0a0a0a;
+  border-color: #0a0a0a;
+}
+
+.brutal-container.light .brutal-back-link:hover {
+  background: #0a0a0a;
+  color: #f5f5f5;
+}
+
+/* Accent color - deep burgundy */
+.brutal-accent {
+  color: #7f1d1d;
+}
+
+.brutal-container.dark .brutal-accent {
+  color: #fca5a5;
+}
+
+/* Date Picker */
+.brutal-date-section {
+  padding: 0 1.5rem;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.brutal-date-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.brutal-container.dark .brutal-date-label {
+  color: #737373;
+}
+
+.brutal-container.light .brutal-date-label {
+  color: #525252;
+}
+
+/* Toggle */
+.brutal-toggle {
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  z-index: 1;
+}
+
+.brutal-toggle-text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Games Grid */
+.brutal-games-section {
+  padding: 0 1.5rem 3rem;
+  position: relative;
+  z-index: 1;
+}
+
+.brutal-section-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid;
+}
+
+.brutal-container.dark .brutal-section-title {
+  border-color: #262626;
+  color: #737373;
+}
+
+.brutal-container.light .brutal-section-title {
+  border-color: #e5e5e5;
+  color: #525252;
+}
+
+.brutal-games-grid {
+  display: grid;
+  gap: 0;
+}
+
+@media (min-width: 768px) {
+  .brutal-games-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .brutal-games-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Game Card */
+.brutal-game-card {
+  padding: 2rem 1.5rem;
+  border: 2px solid;
+  margin: -1px;
+  position: relative;
+  animation: brutal-slide-in 0.4s ease-out backwards;
+}
+
+.brutal-game-card:nth-child(1) { animation-delay: 0.05s; }
+.brutal-game-card:nth-child(2) { animation-delay: 0.1s; }
+.brutal-game-card:nth-child(3) { animation-delay: 0.15s; }
+.brutal-game-card:nth-child(4) { animation-delay: 0.2s; }
+.brutal-game-card:nth-child(5) { animation-delay: 0.25s; }
+.brutal-game-card:nth-child(6) { animation-delay: 0.3s; }
+
+@keyframes brutal-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.brutal-container.dark .brutal-game-card {
+  border-color: #262626;
+  background: #0a0a0a;
+}
+
+.brutal-container.light .brutal-game-card {
+  border-color: #d4d4d4;
+  background: #f5f5f5;
+}
+
+.brutal-game-card:hover {
+  z-index: 2;
+}
+
+.brutal-container.dark .brutal-game-card:hover {
+  border-color: #fca5a5;
+}
+
+.brutal-container.light .brutal-game-card:hover {
+  border-color: #7f1d1d;
+}
+
+/* Teams Layout */
+.brutal-matchup {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.brutal-team-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.brutal-team-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.brutal-team-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.brutal-team-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.brutal-team-tricode {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  margin-top: 0.125rem;
+}
+
+.brutal-container.dark .brutal-team-tricode {
+  color: #525252;
+}
+
+.brutal-container.light .brutal-team-tricode {
+  color: #a3a3a3;
+}
+
+.brutal-score {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.brutal-score.winner {
+  color: #7f1d1d;
+}
+
+.brutal-container.dark .brutal-score.winner {
+  color: #fca5a5;
+}
+
+/* Divider */
+.brutal-vs {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 0.5rem 0;
+}
+
+.brutal-container.dark .brutal-vs {
+  color: #404040;
+}
+
+.brutal-container.light .brutal-vs {
+  color: #a3a3a3;
+}
+
+/* Status */
+.brutal-status {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brutal-container.dark .brutal-status {
+  border-color: #262626;
+}
+
+.brutal-container.light .brutal-status {
+  border-color: #e5e5e5;
+}
+
+.brutal-status-text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+.brutal-status-live {
+  color: #16a34a !important;
+  font-weight: 600;
+}
+
+.brutal-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.brutal-link {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s ease;
+}
+
+.brutal-container.dark .brutal-link {
+  color: #f5f5f5;
+}
+
+.brutal-container.light .brutal-link {
+  color: #0a0a0a;
+}
+
+.brutal-link:hover {
+  border-bottom-color: currentColor;
+}
+
+/* Game Label */
+.brutal-game-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 1rem;
+}
+
+.brutal-container.dark .brutal-game-label {
+  color: #525252;
+}
+
+.brutal-container.light .brutal-game-label {
+  color: #737373;
+}
+
+/* No Games */
+.brutal-no-games {
+  padding: 4rem 2rem;
+  text-align: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.brutal-container.dark .brutal-no-games {
+  color: #525252;
+}
+
+.brutal-container.light .brutal-no-games {
+  color: #737373;
+}
+
+/* Loading */
+.brutal-loading {
+  padding: 4rem 2rem;
+  text-align: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* ==================== BOXSCORE STYLES ==================== */
+
+.brutal-boxscore-container {
+  padding: 0 1.5rem 3rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* Game Summary */
+.brutal-game-summary {
+  margin-bottom: 3rem;
+  padding: 2rem 0;
+  border-bottom: 2px solid;
+}
+
+.brutal-container.dark .brutal-game-summary {
+  border-color: #262626;
+}
+
+.brutal-container.light .brutal-game-summary {
+  border-color: #d4d4d4;
+}
+
+.brutal-summary-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .brutal-summary-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+.brutal-summary-team {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.brutal-summary-team:last-child {
+  text-align: right;
+  align-items: flex-end;
+}
+
+@media (max-width: 768px) {
+  .brutal-summary-team,
+  .brutal-summary-team:last-child {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+  }
+}
+
+.brutal-summary-team-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.brutal-summary-logo {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+}
+
+.brutal-summary-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.brutal-summary-score {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 3.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.brutal-summary-score.winner {
+  color: #7f1d1d;
+}
+
+.brutal-container.dark .brutal-summary-score.winner {
+  color: #fca5a5;
+}
+
+/* Quarter Table */
+.brutal-quarter-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.brutal-quarter-table {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.8125rem;
+  border-collapse: collapse;
+}
+
+.brutal-quarter-table th,
+.brutal-quarter-table td {
+  padding: 0.5rem 0.75rem;
+  text-align: center;
+  border: 1px solid;
+}
+
+.brutal-container.dark .brutal-quarter-table th,
+.brutal-container.dark .brutal-quarter-table td {
+  border-color: #262626;
+}
+
+.brutal-container.light .brutal-quarter-table th,
+.brutal-container.light .brutal-quarter-table td {
+  border-color: #d4d4d4;
+}
+
+.brutal-quarter-table th {
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+
+.brutal-container.dark .brutal-quarter-table th {
+  background: #171717;
+}
+
+.brutal-container.light .brutal-quarter-table th {
+  background: #e5e5e5;
+}
+
+.brutal-quarter-table td.total {
+  font-weight: 700;
+}
+
+/* Player Table */
+.brutal-player-section {
+  margin-bottom: 2rem;
+}
+
+.brutal-player-header {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid;
+}
+
+.brutal-container.dark .brutal-player-header {
+  border-color: #262626;
+}
+
+.brutal-container.light .brutal-player-header {
+  border-color: #d4d4d4;
+}
+
+.brutal-player-table {
+  width: 100%;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  border-collapse: collapse;
+}
+
+.brutal-player-table th,
+.brutal-player-table td {
+  padding: 0.625rem 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid;
+}
+
+.brutal-container.dark .brutal-player-table th,
+.brutal-container.dark .brutal-player-table td {
+  border-color: #1f1f1f;
+}
+
+.brutal-container.light .brutal-player-table th,
+.brutal-container.light .brutal-player-table td {
+  border-color: #e5e5e5;
+}
+
+.brutal-player-table th {
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 0.625rem;
+}
+
+.brutal-container.dark .brutal-player-table th {
+  color: #525252;
+}
+
+.brutal-container.light .brutal-player-table th {
+  color: #737373;
+}
+
+.brutal-player-table tr:hover td {
+  background: rgba(127, 29, 29, 0.05);
+}
+
+.brutal-container.dark .brutal-player-table tr:hover td {
+  background: rgba(252, 165, 165, 0.05);
+}
+
+.brutal-stat-highlight {
+  font-weight: 700;
+  color: #7f1d1d;
+}
+
+.brutal-container.dark .brutal-stat-highlight {
+  color: #fca5a5;
+}
