@@ -55,7 +55,7 @@ cd nba-scores
 pnpm i
 ```
 
-Run the frontend by running `pnpm run dev` in one terminal.
+Run the frontend by running `pnpm dev` in one terminal.
 
 To run the backend, open a terminal and run this:
 

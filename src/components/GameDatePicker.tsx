@@ -16,14 +16,22 @@ import {
   Popover,
 } from "react-aria-components";
 import type {ButtonProps, DateValue, PopoverProps} from "react-aria-components";
+import type {CalendarDate} from "@internationalized/date";
 import ChevronUpDownIcon from "@spectrum-icons/workflow/ChevronUpDown";
-import {useState} from "react";
+import {useState, useCallback} from "react";
 import {format} from "date-fns";
 import {useSearchParams} from "react-router";
+import {today, getLocalTimeZone} from "@internationalized/date";
+import {useGameDays} from "@/hooks/useGameDays";
 
 const GameDatePicker = () => {
   const [dateSelected, setDateSelected] = useState<DateValue | null>(null);
   const [, setSearchParams] = useSearchParams({date: ""});
+  
+  const now = today(getLocalTimeZone());
+  const [focusedDate, setFocusedDate] = useState<CalendarDate>(now);
+  
+  const {gameDays, isLoading} = useGameDays(focusedDate.year, focusedDate.month);
 
   const handleDateChange = (date: DateValue | null) => {
     setDateSelected(date);
@@ -35,6 +43,16 @@ const GameDatePicker = () => {
       setSearchParams({date: format(localDate, "yyyy-MM-dd")});
     }
   };
+
+  const handleFocusChange = (date: CalendarDate) => {
+    setFocusedDate(date);
+  };
+
+  const isDateUnavailable = useCallback((date: DateValue): boolean => {
+    if (isLoading) return false;
+    const dateStr = date.toString();
+    return !gameDays.has(dateStr);
+  }, [gameDays, isLoading]);
 
   return (
     <div className="flex justify-center mt-2 mb-4">
@@ -61,7 +79,13 @@ const GameDatePicker = () => {
         </Group>
         <MyPopover>
           <Dialog className="p-6 text-gray-600">
-            <Calendar value={dateSelected} onChange={handleDateChange}>
+            <Calendar
+              value={dateSelected}
+              onChange={handleDateChange}
+              focusedValue={focusedDate}
+              onFocusChange={handleFocusChange}
+              isDateUnavailable={isDateUnavailable}
+            >
               <header className="flex items-center gap-1 pb-4 px-1 font-serif w-full">
                 <Heading className="flex-1 font-semibold text-2xl ml-2" />
                 <RoundButton slot="previous">
@@ -83,7 +107,7 @@ const GameDatePicker = () => {
                   {(date) => (
                     <CalendarCell
                       date={date}
-                      className="w-9 h-9 outline-none cursor-default rounded-full flex items-center justify-center outside-month:text-gray-300 hover:bg-gray-100 pressed:bg-gray-200 selected:bg-violet-700 selected:text-white focus-visible:ring ring-violet-600/70 ring-offset-2"
+                      className="w-9 h-9 outline-none cursor-default rounded-full flex items-center justify-center outside-month:text-gray-300 hover:bg-gray-100 pressed:bg-gray-200 selected:bg-violet-700 selected:text-white focus-visible:ring ring-violet-600/70 ring-offset-2 [&[data-unavailable]]:text-gray-300 [&[data-unavailable]]:line-through [&[data-unavailable]]:cursor-not-allowed"
                     />
                   )}
                 </CalendarGridBody>

@@ -24,3 +24,18 @@ export const getGameSummary = async (gameId: string) => {
   if (!response.ok) throw new Error("Game summary fetch failed");
   return response.json();
 };
+
+export interface GameDaysResponse {
+  year: number;
+  month: number;
+  season: string;
+  game_days: string[];
+  total: number;
+}
+
+export const getGameDays = async (year: number, month: number): Promise<GameDaysResponse> => {
+  const url = `${getBaseUrl()}/api/game-days?year=${year}&month=${month}`;
+  const response = await fetch(url);
+  if (!response.ok) throw new Error("Game days fetch failed");
+  return response.json();
+};
