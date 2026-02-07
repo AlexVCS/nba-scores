@@ -16,8 +16,9 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["GET"],
+    allow_origins=["https://nba-scorez.onrender.com"],
+    allow_credentials=True,
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
@@ -25,19 +26,16 @@ app.add_middleware(
 @app.get("/")
 def get_v3_scoreboard(
     date: str = Query(
-        default=None, description="Format: YYYY-MM-DD", regex=r"^\d{4}-\d{2}-\d{2}$"
+        default=None,
+        description="Format: YYYY-MM-DD",
+        regex=r"^\d{4}-\d{2}-\d{2}$",
     ),
 ):
     try:
-        # If no date is provided, use today's date
         target_date = date if date else datetime.now().strftime("%Y-%m-%d")
-
         board = scoreboardv3.ScoreboardV3(game_date=target_date, league_id="00")
-
         full_data = board.get_dict()
-
         return full_data["scoreboard"]
-
     except Exception as e:
         raise HTTPException(
             status_code=500, detail=f"Failed to fetch ScoreboardV3: {str(e)}"
@@ -55,9 +53,7 @@ def get_game_boxscore(game_id: str):
             start_range=0,
             end_range=0,
         )
-
         data = box.get_dict()
-
         return {"game": data["boxScoreTraditional"]}
     except Exception as e:
         print(f"Error fetching boxscore for {game_id}: {e}")
@@ -71,29 +67,25 @@ def get_game_summary(game_id: str):
     try:
         summary = boxscoresummaryv2.BoxScoreSummaryV2(game_id=game_id)
         game_summary_df = summary.game_summary.get_data_frame()
-
         if game_summary_df.empty:
             raise HTTPException(status_code=404, detail="Game not found")
-
         game_meta = game_summary_df.iloc[0]
         home_team_id = game_meta["HOME_TEAM_ID"]
         visitor_team_id = game_meta["VISITOR_TEAM_ID"]
         live_period = game_meta["LIVE_PERIOD"]
         game_status_id = game_meta["GAME_STATUS_ID"]
-
         raw_date = game_meta["GAME_DATE_EST"]
         game_date = str(raw_date)[:10]
-
         game_linescore = None
-        linescore_source = None
-
         try:
             sb = scoreboardv2.ScoreboardV2(game_date=game_date)
             linescore_df = sb.line_score.get_data_frame()
             if not linescore_df.empty:
                 filtered = linescore_df[linescore_df["GAME_ID"] == game_id]
                 if not filtered.empty:
-                    test_row = filtered[filtered["TEAM_ID"] == home_team_id].iloc[0]
+                    test_row = filtered[filtered["TEAM_ID"] == home_team_id].iloc[
+                        0
+                    ]
                     has_data = (
                         test_row.get("PTS_QTR1") is not None
                         and str(test_row.get("PTS_QTR1")) != "nan"
@@ -101,23 +93,13 @@ def get_game_summary(game_id: str):
                     )
                     if has_data:
                         game_linescore = filtered
-                        linescore_source = "ScoreboardV2"
-                    else:
-                        print(
-                            f"ScoreboardV2 has None values for {game_id}, will try fallback"
-                        )
         except Exception as e:
             print(f"ScoreboardV2 failed for {game_id}: {e}")
-
         if game_linescore is None or game_linescore.empty:
             fallback_linescore = summary.line_score.get_data_frame()
             if not fallback_linescore.empty:
                 game_linescore = fallback_linescore
-                linescore_source = "BoxScoreSummaryV2"
-                print(f"Using BoxScoreSummaryV2 fallback for {game_id}")
-
         if game_linescore is None or game_linescore.empty:
-            print(f"No line score data available for {game_id}")
             return {
                 "homeTeam": {
                     "teamId": int(home_team_id),
@@ -178,7 +160,9 @@ def get_game_summary(game_id: str):
         def get_game_status(status_id, period):
             if status_id == 3:
                 if period > 4:
-                    return f"Final/OT{period - 4}" if period > 5 else "Final/OT"
+                    return (
+                        f"Final/OT{period - 4}" if period > 5 else "Final/OT"
+                    )
                 return "Final"
             elif status_id == 2:
                 if period > 4:
@@ -187,14 +171,22 @@ def get_game_summary(game_id: str):
             else:
                 return "Scheduled"
 
-        home_row = game_linescore[game_linescore["TEAM_ID"] == home_team_id].iloc[0]
-        away_row = game_linescore[game_linescore["TEAM_ID"] == visitor_team_id].iloc[0]
-
+        home_row = game_linescore[game_linescore["TEAM_ID"] == home_team_id].iloc[
+            0
+        ]
+        away_row = game_linescore[
+            game_linescore["TEAM_ID"] == visitor_team_id
+        ].iloc[0]
         home_pts = home_row.get("PTS", 0)
         away_pts = away_row.get("PTS", 0)
 
         def safe_score(pts):
-            if pts is None or str(pts) == "nan" or str(pts) == "None" or str(pts) == "":
+            if (
+                pts is None
+                or str(pts) == "nan"
+                or str(pts) == "None"
+                or str(pts) == ""
+            ):
                 return "0"
             try:
                 return str(int(float(pts)))
@@ -241,13 +233,13 @@ def get_game_summary(game_id: str):
 
 @app.get("/debug/linescore/{game_date}")
 def debug_linescore(game_date: str):
-    """Debug endpoint - shows what columns ScoreboardV2 returns"""
     sb = scoreboardv2.ScoreboardV2(game_date=game_date)
     linescore_df = sb.line_score.get_data_frame()
-
     return {
         "columns": list(linescore_df.columns),
-        "first_row": linescore_df.iloc[0].to_dict() if not linescore_df.empty else None,
+        "first_row": linescore_df.iloc[0].to_dict()
+        if not linescore_df.empty
+        else None,
     }
 
 
@@ -256,45 +248,33 @@ def debug_schedule(
     season: str = Query(..., alias="Season"),
     league_id: str = Query("00", alias="LeagueID"),
 ):
-    """Debug endpoint - shows all game dates for a season"""
     try:
-        schedule = ScheduleLeagueV2(
-            season=season,
-            league_id=league_id,
-        )
-
+        schedule = ScheduleLeagueV2(season=season, league_id=league_id)
         frames = schedule.get_data_frames()
         df = frames[0]
-
         date_col = None
         for candidate in ["gameDate", "gameDateTimeEst", "gameDateEst"]:
             if candidate in df.columns:
                 date_col = candidate
                 break
-
         if date_col is None:
             raise ValueError(
                 f"Could not find date column. Columns: {df.columns.tolist()}"
             )
-
-        dates = {
-            str(raw)[:10]
-            for raw in df[date_col].dropna().unique()
-        }
-
+        dates = {str(raw)[:10] for raw in df[date_col].dropna().unique()}
         return {
             "season": season,
             "league_id": league_id,
             "total_game_days": len(dates),
             "game_dates": sorted(dates),
         }
-
     except Exception as e:
         raise HTTPException(
             status_code=500,
             detail=f"Failed to fetch schedule for {season}: {str(e)}",
         )
-    
+
+
 @app.get("/api/game-days", response_model=GameDaysResponse)
 def game_days(
     year: int = Query(..., ge=2000, le=2100, description="Calendar year"),
@@ -308,7 +288,6 @@ def game_days(
             status_code=502,
             detail=f"Failed to fetch schedule from NBA API: {e}",
         )
-
     return GameDaysResponse(
         year=year,
         month=month,
