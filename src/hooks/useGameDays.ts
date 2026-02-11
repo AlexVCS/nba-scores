@@ -1,3 +1,4 @@
+import {useMemo} from "react";
 import {useQuery} from "@tanstack/react-query";
 import {getGameDays} from "@/services/nbaService";
 
@@ -10,7 +11,10 @@ export function useGameDays(year: number, month: number) {
     enabled: year > 0 && month > 0,
   });
 
-  const gameDays = new Set(query.data?.game_days ?? []);
+  const gameDays = useMemo(
+    () => new Set(query.data?.game_days ?? []),
+    [query.data?.game_days]
+  );
 
   return {
     gameDays,
