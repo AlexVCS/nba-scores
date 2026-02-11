@@ -11,7 +11,7 @@ const TeamLogos = ({ teamName, teamId, size }: TeamLogoProps) => {
 
   return (
     <>
-      <figure className="place-self-center flex items-center justify-center mb-2">
+      <figure className="place-self-center flex items-center justify-center mb-2 p-2 dark:bg-white">
         {teamId ? (
           <img
             src={logoUrl}

@@ -26,9 +26,7 @@ interface GameProps {
 const GameSummary: React.FC<GameProps> = ({ game }) => {
   return (
     <div className="flex flex-col md:grid md:grid-cols-3 items-center gap-3 md:gap-4 p-4 rounded-lg dark:text-slate-50 text-neutral-950">
-      {/* Mobile: Compact score row */}
       <div className="flex md:hidden w-full justify-center items-center gap-8">
-        {/* Home team - mobile */}
         <div className="flex flex-col items-center">
           <TeamLogos
             teamName={game.homeTeam.teamName}
@@ -46,14 +44,13 @@ const GameSummary: React.FC<GameProps> = ({ game }) => {
           </div>
         </div>
 
-        {/* Away team - mobile */}
         <div className="flex flex-col items-center">
           <TeamLogos
             teamName={game.awayTeam.teamName}
             teamId={game.awayTeam.teamId}
             size={48}
           />
-          <h2 className="text-lg font-bold">
+          <h2 className="text-lg  font-bold">
             {game.awayTeam.teamTricode}
           </h2>
           <div className="flex items-center justify-center relative">
@@ -65,7 +62,6 @@ const GameSummary: React.FC<GameProps> = ({ game }) => {
         </div>
       </div>
 
-      {/* Desktop: Home team column */}
       <div className="hidden md:flex flex-col items-center">
         <TeamLogos
           teamName={game.homeTeam.teamName}
@@ -83,7 +79,6 @@ const GameSummary: React.FC<GameProps> = ({ game }) => {
         </div>
       </div>
 
-      {/* Quarter-by-quarter table */}
       <div className="w-full md:flex md:flex-col md:justify-center md:items-center px-4 md:px-0">
         <div className="flex flex-col items-center w-full">
           <table className="w-full text-sm md:text-base md:max-w-55">
@@ -94,7 +89,6 @@ const GameSummary: React.FC<GameProps> = ({ game }) => {
                 <th className="px-1 md:px-2 text-center">2</th>
                 <th className="px-1 md:px-2 text-center">3</th>
                 <th className="px-1 md:px-2 text-center">4</th>
-                {/* Overtime headers - render for periods > 4 */}
                 {game.homeTeam.periods.slice(4).map((p) => (
                   <th className="px-1 md:px-2 text-center" key={`ot-header-${p.period}`}>
                     OT{p.period - 4}
@@ -131,7 +125,6 @@ const GameSummary: React.FC<GameProps> = ({ game }) => {
         </div>
       </div>
 
-      {/* Desktop: Away team column */}
       <div className="hidden md:flex flex-col items-center">
         <TeamLogos
           teamName={game.awayTeam.teamName}
