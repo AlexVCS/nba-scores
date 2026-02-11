@@ -36,10 +36,11 @@ const GameDatePicker = () => {
   const handleDateChange = (date: DateValue | null) => {
     setDateSelected(date);
     if (date) {
+      setFocusedDate(date as CalendarDate);
+
       const jsDate = new Date(date.toString());
       const timezoneOffset = jsDate.getTimezoneOffset() * 60000;
       const localDate = new Date(jsDate.getTime() + timezoneOffset);
-    
       setSearchParams({date: format(localDate, "yyyy-MM-dd")});
     }
   };
