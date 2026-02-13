@@ -109,7 +109,7 @@ def get_game_days_in_month(year: int, month: int) -> list[str]:
     Return a sorted list of dates (YYYY-MM-DD) that have ≥1 NBA game
     in the given year/month.
     """
-    from utils.season import get_nba_season
+    from ..utils.season import get_nba_season
 
     season = get_nba_season(year, month)
     all_dates = get_season_game_dates(season)
