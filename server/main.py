@@ -28,7 +28,7 @@ def get_v3_scoreboard(
     date: str = Query(
         default=None,
         description="Format: YYYY-MM-DD",
-        regex=r"^\d{4}-\d{2}-\d{2}$",
+        pattern=r"^\d{4}-\d{2}-\d{2}$",
     ),
 ):
     try:
