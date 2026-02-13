@@ -60,9 +60,8 @@ Run the frontend by running `pnpm dev` in one terminal.
 To run the backend, open a terminal and run this:
 
 ```bash
-cd server
-source venv/bin/activate
-uvicorn main:app --reload
+source server/venv/bin/activate
+uvicorn server.main:app --reload
 ```
 
 <div align='right'>

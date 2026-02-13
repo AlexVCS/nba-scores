@@ -1,7 +1,3 @@
-import sys
-from pathlib import Path
-sys.path.insert(0, str(Path(__file__).parent.parent))
-
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from nba_api.stats.endpoints import (
@@ -12,9 +8,9 @@ from nba_api.stats.endpoints import (
     scoreboardv3,
 )
 from datetime import datetime
-from server.utils.season import get_nba_season
-from server.services.nba_schedule import get_game_days_in_month
-from server.models.schemas import GameDaysResponse
+from .utils.season import get_nba_season
+from .services.nba_schedule import get_game_days_in_month
+from .models.schemas import GameDaysResponse
 
 app = FastAPI()
 
