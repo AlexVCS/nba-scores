@@ -1,0 +1,8 @@
+**/__pycache__
+**/*.pyc
+.ruff_cache
+node_modules
+dist
+venv
+.env
+.beads
