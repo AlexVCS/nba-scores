@@ -4,6 +4,8 @@ from datetime import date, datetime
 from collections import defaultdict
 
 from nba_api.stats.endpoints import ScheduleLeagueV2, LeagueGameLog
+from ..utils.season import get_nba_season
+
 
 logger = logging.getLogger(__name__)
 
@@ -109,7 +111,6 @@ def get_game_days_in_month(year: int, month: int) -> list[str]:
     Return a sorted list of dates (YYYY-MM-DD) that have ≥1 NBA game
     in the given year/month.
     """
-    from ..utils.season import get_nba_season
 
     season = get_nba_season(year, month)
     all_dates = get_season_game_dates(season)

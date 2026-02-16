@@ -284,6 +284,9 @@ def game_days(
     try:
         days = get_game_days_in_month(year, month)
     except Exception as e:
+        print(f"ERROR in game_days: {type(e).__name__}: {e}")
+        import traceback
+        traceback.print_exc()
         raise HTTPException(
             status_code=502,
             detail=f"Failed to fetch schedule from NBA API: {e}",
@@ -295,7 +298,6 @@ def game_days(
         game_days=days,
         total=len(days),
     )
-
 
 if __name__ == "__main__":
     import uvicorn
