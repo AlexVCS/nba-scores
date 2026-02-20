@@ -1,6 +1,6 @@
 fastapi
 uvicorn[standard]
-nba_api==1.11.3
+nba_api
 requests
 numpy
 pandas
