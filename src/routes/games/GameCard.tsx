@@ -51,7 +51,7 @@ function GameCard({game, showScores = false}: GameCardProps) {
                 className="font-mono text-xl md:text-2xl text-amber-500 text-center font-bold tracking-wider"
                 style={{textShadow: "0 0 5px rgba(245, 158, 11, 0.7)"}}
               >
-                <span>{game.homeTeam.teamTricode}</span>
+                <span>{game.homeTeam.teamId > 0 ? game.homeTeam.teamTricode : "TBD"}</span>
               </div>
               {showScores && gameHasStarted && (
                 <div className="mt-3 border-t-2 border-gray-700 pt-3">
@@ -102,7 +102,7 @@ function GameCard({game, showScores = false}: GameCardProps) {
                 className="font-mono text-xl md:text-2xl text-amber-500 text-center font-bold tracking-wider"
                 style={{textShadow: "0 0 5px rgba(245, 158, 11, 0.7)"}}
               >
-                <span>{game.awayTeam.teamTricode}</span>
+                <span>{game.awayTeam.teamId > 0 ? game.awayTeam.teamTricode : "TBD"}</span>
               </div>
               {showScores && gameHasStarted && (
                 <div className="mt-3 border-t-2 border-gray-700 pt-3">
