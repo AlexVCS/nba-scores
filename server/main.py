@@ -3,7 +3,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from nba_api.stats.endpoints import (
     boxscoresummaryv2,
     boxscoretraditionalv3,
-    PlayoffPicture,
     ScheduleLeagueV2,
     scoreboardv2,
     scoreboardv3,
@@ -12,6 +11,10 @@ from datetime import datetime
 from .utils.season import get_nba_season
 from .services.nba_schedule import get_game_days_in_month
 from .models.schemas import GameDaysResponse
+from .services.playoffs import (
+    get_normalized_playoff_games,
+    fetch_playoff_team_games_df,
+)
 
 app = FastAPI()
 
@@ -299,66 +302,21 @@ def game_days(
         game_days=days,
         total=len(days),
     )
-    
+
+@app.get("/playoffs/raw")
+def raw_playoff_games(season: str = "2023-24"):
+    df = fetch_playoff_team_games_df(season)
+
+    return {
+        "season": season,
+        "teamGameRowCount": len(df),
+        "games": df.to_dict(orient="records"),
+    }
+
+
 @app.get("/playoffs")
-def get_playoff_bracket(
-    league_id: str = Query("00", alias="LeagueID"),
-    season_id: str = Query(..., alias="SeasonID"),
-):
-    try:
-        playoff_picture = PlayoffPicture(
-            league_id=league_id,
-            season_id=season_id,
-        )
-
-        frames = playoff_picture.get_data_frames()
-
-        if len(frames) < 6:
-            raise HTTPException(
-                status_code=502,
-                detail=f"Unexpected PlayoffPicture response for SeasonID {season_id}",
-            )
-
-        east_playoff_picture = frames[0]
-        east_remaining_games = frames[1]
-        east_standings = frames[2]
-        west_playoff_picture = frames[3]
-        west_remaining_games = frames[4]
-        west_standings = frames[5]
-
-        return {
-            "season_id": season_id,
-            "league_id": league_id,
-            "east": {
-                "playoff_picture": east_playoff_picture.to_dict(
-                    orient="records"
-                ),
-                "remaining_games": east_remaining_games.to_dict(
-                    orient="records"
-                ),
-                "standings": east_standings.to_dict(orient="records"),
-            },
-            "west": {
-                "playoff_picture": west_playoff_picture.to_dict(
-                    orient="records"
-                ),
-                "remaining_games": west_remaining_games.to_dict(
-                    orient="records"
-                ),
-                "standings": west_standings.to_dict(orient="records"),
-            },
-        }
-
-    except HTTPException:
-        raise
-    except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=(
-                f"Failed to fetch playoff picture for "
-                f"{season_id}: {str(e)}"
-            ),
-        )
+def playoff_games(season: str = "2023-24"):
+    return get_normalized_playoff_games(season)
 
 if __name__ == "__main__":
     import uvicorn

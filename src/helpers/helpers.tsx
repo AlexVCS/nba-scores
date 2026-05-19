@@ -13,6 +13,21 @@ export type PlayerStatus = {
   statistics: PlayerStatistics;
 };
 
+export type PlayoffBracketResponse = {
+  season_id: string;
+  league_id: string;
+  east: {
+    playoff_picture: Record<string, unknown>[];
+    remaining_games: Record<string, unknown>[];
+    standings: Record<string, unknown>[];
+  };
+  west: {
+    playoff_picture: Record<string, unknown>[];
+    remaining_games: Record<string, unknown>[];
+    standings: Record<string, unknown>[];
+  };
+};
+
 export interface Player {
   personId: number;
   firstName: string;

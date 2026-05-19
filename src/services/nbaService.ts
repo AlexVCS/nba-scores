@@ -1,3 +1,5 @@
+import type { PlayoffBracketResponse } from "@/helpers/helpers";
+
 const getBaseUrl = () => import.meta.env.DEV
   ? import.meta.env.VITE_API_URL_DEV
   : import.meta.env.VITE_API_URL_PROD;
@@ -37,5 +39,12 @@ export const getGameDays = async (year: number, month: number): Promise<GameDays
   const url = `${getBaseUrl()}/api/game-days?year=${year}&month=${month}`;
   const response = await fetch(url);
   if (!response.ok) throw new Error("Game days fetch failed");
+  return response.json();
+};
+
+export const getPlayoffPicture = async (seasonId: string): Promise<PlayoffBracketResponse> => {
+  const url = `${getBaseUrl()}/playoffs?SeasonID=${seasonId}`;
+  const response = await fetch(url);
+  if (!response.ok) throw new Error("Playoff picture fetch failed");
   return response.json();
 };
