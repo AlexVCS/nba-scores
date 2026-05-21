@@ -25,11 +25,11 @@ function Playoffs() {
         <div className="mt-8">
           <PlayoffBracket
             conferenceName="Eastern Conference"
-            playoffPicture={data.east.playoff_picture}
+            playoffPicture={data.series}
           />
           <PlayoffBracket
             conferenceName="Western Conference"
-            playoffPicture={data.west.playoff_picture}
+            playoffPicture={data.series}
           />
         </div>
       )}

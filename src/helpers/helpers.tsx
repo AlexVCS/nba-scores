@@ -13,19 +13,48 @@ export type PlayerStatus = {
   statistics: PlayerStatistics;
 };
 
+export type GameTeam = {
+  id: number;
+  tricode: string;
+  name: string;
+  score: number;
+};
+
+export type TeamsInSeries = {
+  id: number;
+  tricode: string;
+  name: string;
+};
+
+export type SeriesGame = {
+  gameId: string;
+  date: string;
+  round: number;
+  roundName: string;
+  homeTeam: GameTeam;
+  awayTeam: GameTeam;
+  winnerTeamId: number | null;
+  winnerTeamTricode: string | null;
+};
+
+export type SeriesData = {
+  seriesKey: string;
+  round: number;
+  roundName: string;
+  teams: TeamsInSeries[];
+  wins: Record<string, number>;
+  winnerTeamId: number | null;
+  winnerTeamTricode: string | null;
+  gameCount: number;
+  games: SeriesGame[];
+};
+
 export type PlayoffBracketResponse = {
-  season_id: string;
-  league_id: string;
-  east: {
-    playoff_picture: Record<string, unknown>[];
-    remaining_games: Record<string, unknown>[];
-    standings: Record<string, unknown>[];
-  };
-  west: {
-    playoff_picture: Record<string, unknown>[];
-    remaining_games: Record<string, unknown>[];
-    standings: Record<string, unknown>[];
-  };
+  season: string;
+  teamGameRowCount: number;
+  gameCount: number;
+  seriesCount: number;
+  series: SeriesData[];
 };
 
 export interface Player {

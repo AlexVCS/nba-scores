@@ -14,6 +14,8 @@ from .models.schemas import GameDaysResponse
 from .services.playoffs import (
     get_normalized_playoff_games,
     fetch_playoff_team_games_df,
+    get_playoff_games_and_series,
+    get_playoff_series,
 )
 
 app = FastAPI()
@@ -317,6 +319,16 @@ def raw_playoff_games(season: str = "2023-24"):
 @app.get("/playoffs")
 def playoff_games(season: str = "2023-24"):
     return get_normalized_playoff_games(season)
+
+@app.get("/playoffs/series")
+def playoff_series(season: str = "2023-24"):
+    return get_playoff_series(season)
+
+
+@app.get("/playoffs/full")
+def playoff_games_and_series(season: str = "2023-24"):
+    return get_playoff_games_and_series(season)
+
 
 if __name__ == "__main__":
     import uvicorn
