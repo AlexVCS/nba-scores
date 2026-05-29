@@ -13,6 +13,50 @@ export type PlayerStatus = {
   statistics: PlayerStatistics;
 };
 
+export type GameTeam = {
+  id: number;
+  tricode: string;
+  name: string;
+  score: number;
+};
+
+export type TeamsInSeries = {
+  id: number;
+  tricode: string;
+  name: string;
+};
+
+export type SeriesGame = {
+  gameId: string;
+  date: string;
+  round: number;
+  roundName: string;
+  homeTeam: GameTeam;
+  awayTeam: GameTeam;
+  winnerTeamId: number | null;
+  winnerTeamTricode: string | null;
+};
+
+export type SeriesData = {
+  seriesKey: string;
+  round: number;
+  roundName: string;
+  teams: TeamsInSeries[];
+  wins: Record<string, number>;
+  winnerTeamId: number | null;
+  winnerTeamTricode: string | null;
+  gameCount: number;
+  games: SeriesGame[];
+};
+
+export type PlayoffBracketResponse = {
+  season: string;
+  teamGameRowCount: number;
+  gameCount: number;
+  seriesCount: number;
+  series: SeriesData[];
+};
+
 export interface Player {
   personId: number;
   firstName: string;
@@ -160,3 +204,19 @@ export const COLORS: Record<string, Record<string, string>> = {
 
 export const COLOR_MODE_KEY = "color-mode";
 export const INITIAL_COLOR_MODE_CSS_PROP = "--initial-color-mode";
+
+/**
+ * Returns the default playoff season in "YYYY-YY" format.
+ * If current date >= April 15, returns current season.
+ * If current date < April 15, returns previous season (off-season behavior).
+ */
+export const getDefaultPlayoffSeason = (date: Date = new Date()): string => {
+  const year = date.getFullYear();
+  const playoff_start_month = 3; // April (0-indexed)
+  const playoff_start_day = 15;
+
+  const playoffStartDate = new Date(year, playoff_start_month, playoff_start_day);
+  const seasonEndYear = date >= playoffStartDate ? year : year - 1;
+
+  return `${seasonEndYear - 1}-${String(seasonEndYear).slice(-2)}`;
+};

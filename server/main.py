@@ -11,6 +11,12 @@ from datetime import datetime
 from .utils.season import get_nba_season
 from .services.nba_schedule import get_game_days_in_month
 from .models.schemas import GameDaysResponse
+from .services.playoffs import (
+    get_normalized_playoff_games,
+    fetch_playoff_team_games_df,
+    get_playoff_games_and_series,
+    get_playoff_series,
+)
 
 app = FastAPI()
 
@@ -298,6 +304,31 @@ def game_days(
         game_days=days,
         total=len(days),
     )
+
+@app.get("/playoffs/raw")
+def raw_playoff_games(season: str = "2023-24"):
+    df = fetch_playoff_team_games_df(season)
+
+    return {
+        "season": season,
+        "teamGameRowCount": len(df),
+        "games": df.to_dict(orient="records"),
+    }
+
+
+@app.get("/playoffs")
+def playoff_games(season: str = "2023-24"):
+    return get_normalized_playoff_games(season)
+
+@app.get("/playoffs/series")
+def playoff_series(season: str = "2023-24"):
+    return get_playoff_series(season)
+
+
+@app.get("/playoffs/full")
+def playoff_games_and_series(season: str = "2023-24"):
+    return get_playoff_games_and_series(season)
+
 
 if __name__ == "__main__":
     import uvicorn
