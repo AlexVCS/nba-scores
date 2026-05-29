@@ -206,6 +206,17 @@ export const COLOR_MODE_KEY = "color-mode";
 export const INITIAL_COLOR_MODE_CSS_PROP = "--initial-color-mode";
 
 /**
+ * Generates a watch link for an NBA game on NBA.com
+ * @param awayTeamTricode - Away team's 3-letter code (e.g., "LAL")
+ * @param homeTeamTricode - Home team's 3-letter code (e.g., "MIA")
+ * @param gameId - Unique game identifier
+ * @returns Full URL to NBA.com watch page
+ */
+export const generateWatchLink = (awayTeamTricode: string, homeTeamTricode: string, gameId: string): string => {
+  return `https://www.nba.com/game/${awayTeamTricode}-vs-${homeTeamTricode}-${gameId}?watch`;
+};
+
+/**
  * Returns the default playoff season in "YYYY-YY" format.
  * If current date >= April 15, returns current season.
  * If current date < April 15, returns previous season (off-season behavior).
