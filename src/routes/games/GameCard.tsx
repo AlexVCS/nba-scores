@@ -1,5 +1,6 @@
 import {Link} from "react-router-dom";
 import TeamLogos from "@/components/TeamLogos";
+import {generateWatchLink} from "@/helpers/helpers";
 
 interface GameCardProps {
   showScores: boolean;
@@ -32,7 +33,7 @@ interface GameCardProps {
 
 function GameCard({game, showScores = false}: GameCardProps) {
   const gameHasStarted = game.gameStatus !== 1;
-  const watchGameLink = `https://www.nba.com/game/${game.awayTeam.teamTricode}-vs-${game.homeTeam.teamTricode}-${game.gameId}?watch`;
+  const watchGameLink = generateWatchLink(game.awayTeam.teamTricode, game.homeTeam.teamTricode, game.gameId);
   const endOf1819Season = new Date("2019-06-15T00:00:00Z");
   const gameDateUtc = new Date(game.gameTimeUTC);
 

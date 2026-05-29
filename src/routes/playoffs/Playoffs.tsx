@@ -36,12 +36,8 @@ function Playoffs() {
       {data && (
         <div className="mt-8">
           <PlayoffBracket
-            conferenceName="Eastern Conference"
             playoffPicture={data.series}
-          />
-          <PlayoffBracket
-            conferenceName="Western Conference"
-            playoffPicture={data.series}
+            season={data.season}
           />
         </div>
       )}
