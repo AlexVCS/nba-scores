@@ -42,8 +42,8 @@ export const getGameDays = async (year: number, month: number): Promise<GameDays
   return response.json();
 };
 
-export const getPlayoffPicture = async (seasonId: string): Promise<PlayoffBracketResponse> => {
-  const url = `${getBaseUrl()}/playoffs/series?SeasonID=${seasonId}`;
+export const getPlayoffPicture = async (season: string): Promise<PlayoffBracketResponse> => {
+  const url = `${getBaseUrl()}/playoffs/series?season=${season}`;
   const response = await fetch(url);
   if (!response.ok) throw new Error("Playoff picture fetch failed");
   return response.json();

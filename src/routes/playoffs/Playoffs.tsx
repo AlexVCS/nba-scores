@@ -1,13 +1,25 @@
 import { useSearchParams } from "react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import PlayoffYearPicker from "@/components/PlayoffYearPicker";
 import { usePlayoffData } from "@/hooks/usePlayoffData";
 import PlayoffBracket from "@/components/PlayoffBracket";
+import { getDefaultPlayoffSeason } from "@/helpers/helpers";
 
 function Playoffs() {
-   const [searchParams] = useSearchParams();
-  const seasonId = searchParams.get("seasonId");
-  const { data, isLoading, error } = usePlayoffData(seasonId);
+  const [searchParams] = useSearchParams();
+  const seasonParam = searchParams.get("season");
+  const [season, setSeason] = useState<string | null>(seasonParam);
+
+  // Auto-load default season if no season param is present
+  useEffect(() => {
+    if (!seasonParam) {
+      setSeason(getDefaultPlayoffSeason());
+    } else {
+      setSeason(seasonParam);
+    }
+  }, [seasonParam]);
+
+  const { data, isLoading, error } = usePlayoffData(season);
 
   useEffect(() => {
     if (data) {
