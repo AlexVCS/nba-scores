@@ -1,4 +1,4 @@
-FROM docker.io/library/python:3.12-slim
+FROM registry.access.redhat.com/ubi9/python-312
 ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 COPY server/requirements.txt .
