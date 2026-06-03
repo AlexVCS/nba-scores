@@ -14,7 +14,7 @@ function BracketSeriesNode({ data }: BracketSeriesNodeProps) {
 
   return (
     <Link
-      to={`/playoffs/series/${seriesKey}`}
+      to={`/playoffs/series/${seriesKey}?season=${encodeURIComponent(data.season)}`}
       className="block border-2 border-gray-400 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-800 hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-lg transition-all duration-200"
       style={{ width: '210px' }}
     >
@@ -24,7 +24,7 @@ function BracketSeriesNode({ data }: BracketSeriesNodeProps) {
           <div className="bg-white rounded p-1 flex-shrink-0">
             <TeamLogos teamName={team1.tricode} teamId={team1.id} size={32} />
           </div>
-          <span className="text-base font-semibold truncate text-gray-700 dark:text-slate-200">
+          <span className={`text-base truncate ${isRevealed && team1IsWinner ? 'font-bold text-gray-900 dark:text-white' : 'font-semibold text-gray-700 dark:text-slate-200'}`}>
             {team1.tricode}
           </span>
         </div>
@@ -41,7 +41,7 @@ function BracketSeriesNode({ data }: BracketSeriesNodeProps) {
           <div className="bg-white rounded p-1 flex-shrink-0">
             <TeamLogos teamName={team2.tricode} teamId={team2.id} size={32} />
           </div>
-          <span className="text-base font-semibold truncate text-gray-700 dark:text-slate-200">
+          <span className={`text-base truncate ${isRevealed && team2IsWinner ? 'font-bold text-gray-900 dark:text-white' : 'font-semibold text-gray-700 dark:text-slate-200'}`}>
             {team2.tricode}
           </span>
         </div>

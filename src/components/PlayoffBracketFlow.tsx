@@ -17,7 +17,6 @@ interface PlayoffBracketFlowProps {
 function PlayoffBracketFlow({ playoffPicture, season }: PlayoffBracketFlowProps) {
   // Reuse spoiler mode pattern from PlayoffBracket.tsx
   const [revealedRounds, setRevealedRounds] = useState<Set<number>>(new Set());
-  const [unlockedRounds, setUnlockedRounds] = useState<Set<number>>(new Set());
 
   // Get unique rounds and sort them
   const rounds = useMemo(
@@ -27,16 +26,14 @@ function PlayoffBracketFlow({ playoffPicture, season }: PlayoffBracketFlowProps)
 
   const revealRound = (round: number) => {
     setRevealedRounds(prev => new Set([...prev, round]));
-    const nextRound = rounds[rounds.indexOf(round) + 1];
-    if (nextRound !== undefined) {
-      setUnlockedRounds(prev => new Set([...prev, nextRound]));
-    }
   };
 
   const hideRound = (round: number) => {
     setRevealedRounds(prev => {
       const next = new Set(prev);
-      next.delete(round);
+      for (const r of next) {
+        if (r >= round) next.delete(r);
+      }
       return next;
     });
   };

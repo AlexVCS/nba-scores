@@ -40,26 +40,14 @@ export const WESTERN_CONFERENCE_TEAMS = [
   1610612759, // San Antonio Spurs
 ];
 
-// Historical teams (relocated/renamed franchises)
-export const HISTORICAL_EASTERN_TEAMS = [
-  1610612766, // Charlotte Bobcats (now Hornets)
-  1610612752, // New Jersey Nets (now Brooklyn Nets)
-];
-
-export const HISTORICAL_WESTERN_TEAMS = [
-  1610612760, // Seattle SuperSonics (now Oklahoma City Thunder)
-  1610612740, // New Orleans/Oklahoma City Hornets (now Pelicans)
-  1610612763, // Vancouver Grizzlies (now Memphis Grizzlies)
-];
-
 /**
  * Determines which conference a team belongs to based on their team ID
  */
 export function getTeamConference(teamId: number): 'East' | 'West' | null {
-  if (EASTERN_CONFERENCE_TEAMS.includes(teamId) || HISTORICAL_EASTERN_TEAMS.includes(teamId)) {
+  if (EASTERN_CONFERENCE_TEAMS.includes(teamId)) {
     return 'East';
   }
-  if (WESTERN_CONFERENCE_TEAMS.includes(teamId) || HISTORICAL_WESTERN_TEAMS.includes(teamId)) {
+  if (WESTERN_CONFERENCE_TEAMS.includes(teamId)) {
     return 'West';
   }
   return null;
