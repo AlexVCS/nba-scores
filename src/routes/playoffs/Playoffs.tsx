@@ -2,7 +2,7 @@ import { useSearchParams } from "react-router";
 import { useEffect, useState } from "react";
 import PlayoffYearPicker from "@/components/PlayoffYearPicker";
 import { usePlayoffData } from "@/hooks/usePlayoffData";
-import PlayoffBracket from "@/components/PlayoffBracket";
+import PlayoffBracketFlow from "@/components/PlayoffBracketFlow";
 import { getDefaultPlayoffSeason } from "@/helpers/helpers";
 
 function Playoffs() {
@@ -10,7 +10,6 @@ function Playoffs() {
   const seasonParam = searchParams.get("season");
   const [season, setSeason] = useState<string | null>(seasonParam);
 
-  // Auto-load default season if no season param is present
   useEffect(() => {
     if (!seasonParam) {
       setSeason(getDefaultPlayoffSeason());
@@ -35,7 +34,7 @@ function Playoffs() {
       {error && <p>Error: {String(error)}</p>}
       {data && (
         <div className="mt-8">
-          <PlayoffBracket
+          <PlayoffBracketFlow
             playoffPicture={data.series}
             season={data.season}
           />
