@@ -1,3 +1,4 @@
+import { Handle, Position } from '@xyflow/react';
 import { Link } from 'react-router-dom';
 import TeamLogos from './TeamLogos';
 import type { BracketNodeData } from '@/utils/bracketTransformer';
@@ -6,52 +7,79 @@ interface BracketSeriesNodeProps {
   data: BracketNodeData;
 }
 
+const HANDLE_STYLE = { background: 'transparent', border: 'none', width: 1, height: 1 };
+
 function BracketSeriesNode({ data }: BracketSeriesNodeProps) {
-  const { team1, team2, team1Wins, team2Wins, winnerTeamId, isRevealed, seriesKey } = data;
+  const { team1, team2, team1Wins, team2Wins, winnerTeamId, isRevealed, seriesKey, sizing, conference } = data;
 
   const team1IsWinner = winnerTeamId === team1.id;
   const team2IsWinner = winnerTeamId === team2.id;
 
-  return (
-    <Link
-      to={`/playoffs/series/${seriesKey}?season=${encodeURIComponent(data.season)}`}
-      className="block border-2 border-gray-400 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-800 hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-lg transition-all duration-200"
-      style={{ width: '210px' }}
-    >
-      {/* Team 1 */}
-      <div className="flex items-center justify-between gap-2 p-3 border-b-2 border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-slate-900">
-        <div className="flex items-center gap-2 min-w-0">
-          <div className="bg-white rounded p-1 flex-shrink-0">
-            <TeamLogos teamName={team1.tricode} teamId={team1.id} size={32} />
-          </div>
-          <span className={`text-base truncate ${isRevealed && team1IsWinner ? 'font-bold text-gray-900 dark:text-white' : 'font-semibold text-gray-700 dark:text-slate-200'}`}>
-            {team1.tricode}
-          </span>
-        </div>
-        {isRevealed && (
-          <span className="text-lg font-bold tabular-nums text-gray-700 dark:text-slate-200">
-            {team1Wins}
-          </span>
-        )}
-      </div>
+  const renderRow = (team: typeof team1, wins: number, isWinner: boolean, isTopRow: boolean) => {
+    const showWinner = isRevealed && isWinner;
+    const cornerClass = isTopRow ? 'rounded-t-md' : 'rounded-b-md';
 
-      {/* Team 2 */}
-      <div className="flex items-center justify-between gap-2 p-3 bg-gray-50 dark:bg-slate-900">
-        <div className="flex items-center gap-2 min-w-0">
-          <div className="bg-white rounded p-1 flex-shrink-0">
-            <TeamLogos teamName={team2.tricode} teamId={team2.id} size={32} />
+    return (
+      <div
+        className={`flex items-center justify-between ${sizing.rowGapClass} ${sizing.rowPadClass} bg-gray-900 ${cornerClass} ${isTopRow ? 'border-b-2 border-gray-700' : ''}`}
+      >
+        <div className={`flex items-center ${sizing.rowGapClass} min-w-0`}>
+          <div className={`bg-white rounded ${sizing.logoPadClass} flex-shrink-0`}>
+            <TeamLogos teamName={team.tricode} teamId={team.id} size={sizing.logoSize} />
           </div>
-          <span className={`text-base truncate ${isRevealed && team2IsWinner ? 'font-bold text-gray-900 dark:text-white' : 'font-semibold text-gray-700 dark:text-slate-200'}`}>
-            {team2.tricode}
+          <span
+            className={`font-mono ${sizing.tricodeClass} truncate tracking-wider text-amber-500 ${showWinner ? 'font-bold' : 'font-semibold'}`}
+            style={{ textShadow: '0 0 5px rgba(245, 158, 11, 0.7)' }}
+          >
+            {team.tricode}
           </span>
         </div>
-        {isRevealed && (
-          <span className="text-lg font-bold tabular-nums text-gray-700 dark:text-slate-200">
-            {team2Wins}
-          </span>
-        )}
+        <div className={`flex items-center ${sizing.rowGapClass} flex-shrink-0`}>
+          {isRevealed && (
+            <span
+              className={`font-mono ${sizing.scoreClass} font-bold tabular-nums text-amber-500`}
+              style={{ textShadow: '0 0 10px rgba(245, 158, 11, 0.7)' }}
+            >
+              {wins}
+            </span>
+          )}
+        </div>
       </div>
-    </Link>
+    );
+  };
+
+  return (
+    <div style={{ width: `${sizing.nodeWidth}px`, position: 'relative' }}>
+      {/* Source handles: exit from the winner row's outer edge toward the next round */}
+      {conference === 'West' && (
+        <>
+          <Handle type="source" position={Position.Right} id="src-top" style={{ ...HANDLE_STYLE, top: '25%' }} />
+          <Handle type="source" position={Position.Right} id="src-bot" style={{ ...HANDLE_STYLE, top: '75%' }} />
+          <Handle type="target" position={Position.Left} id="tgt" style={{ ...HANDLE_STYLE, top: '50%' }} />
+        </>
+      )}
+      {conference === 'East' && (
+        <>
+          <Handle type="source" position={Position.Left} id="src-top" style={{ ...HANDLE_STYLE, top: '25%' }} />
+          <Handle type="source" position={Position.Left} id="src-bot" style={{ ...HANDLE_STYLE, top: '75%' }} />
+          <Handle type="target" position={Position.Right} id="tgt" style={{ ...HANDLE_STYLE, top: '50%' }} />
+        </>
+      )}
+      {conference === 'Finals' && (
+        <>
+          <Handle type="target" position={Position.Left} id="tgt-left" style={{ ...HANDLE_STYLE, top: '50%' }} />
+          <Handle type="target" position={Position.Right} id="tgt-right" style={{ ...HANDLE_STYLE, top: '50%' }} />
+        </>
+      )}
+
+      <Link
+        to={`/playoffs/series/${seriesKey}?season=${encodeURIComponent(data.season)}`}
+        className="block border-2 border-gray-700 rounded-lg bg-gray-900 overflow-hidden hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-lg transition-all duration-200"
+      >
+        {renderRow(team1, team1Wins, team1IsWinner, true)}
+        {renderRow(team2, team2Wins, team2IsWinner, false)}
+      </Link>
+    </div>
   );
 }
 

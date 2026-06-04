@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import PlayoffYearPicker from "@/components/PlayoffYearPicker";
 import { usePlayoffData } from "@/hooks/usePlayoffData";
 import PlayoffBracketFlow from "@/components/PlayoffBracketFlow";
+import DarkModeToggle from "@/components/DarkModeToggle";
 import { getDefaultPlayoffSeason } from "@/helpers/helpers";
 
 function Playoffs() {
@@ -27,19 +28,21 @@ function Playoffs() {
   }, [data]);
 
   return (
-    <div className="p-4">
-      <h1 className="text-3xl font-bold mb-6 dark:text-slate-50">Playoffs</h1>
-      <PlayoffYearPicker />
-      {isLoading && <p>Loading...</p>}
-      {error && <p>Error: {String(error)}</p>}
-      {data && (
-        <div className="mt-8">
-          <PlayoffBracketFlow
-            playoffPicture={data.series}
-            season={data.season}
-          />
-        </div>
-      )}
+    <div className="bg-slate-50 dark:bg-neutral-950">
+      <DarkModeToggle />
+      <div className="p-4">
+        <PlayoffYearPicker />
+        {isLoading && <p>Loading...</p>}
+        {error && <p>Error: {String(error)}</p>}
+        {data && (
+          <div className="mt-8">
+            <PlayoffBracketFlow
+              playoffPicture={data.series}
+              season={data.season}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

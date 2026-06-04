@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import { Switch } from '@adobe/react-spectrum';
 import { usePlayoffData } from '@/hooks/usePlayoffData';
 import { generateWatchLink } from '@/helpers/helpers';
 import TeamLogos from '@/components/TeamLogos';
+import DarkModeToggle from '@/components/DarkModeToggle';
 
 function SeriesDetail() {
   const { seriesKey } = useParams<{ seriesKey: string }>();
@@ -41,9 +43,11 @@ function SeriesDetail() {
   const seasonYear = parseInt(data.season.split('-')[0]);
 
   return (
-    <div className="p-4 max-w-4xl mx-auto">
-      {/* Back button */}
-      <Link
+    <div>
+      <DarkModeToggle />
+      <div className="p-4 max-w-4xl mx-auto">
+        {/* Back button */}
+        <Link
         to={`/playoffs${season ? `?season=${season}` : ''}`}
         className="inline-flex items-center gap-2 text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 mb-4"
       >
@@ -57,19 +61,21 @@ function SeriesDetail() {
         <p className="text-gray-600 dark:text-gray-400">{data.season} Playoffs</p>
       </div>
 
-      {/* Reveal button */}
+      {/* Reveal toggle */}
       <div className="flex justify-center mb-6">
-        <button
-          onClick={() => setIsRevealed(!isRevealed)}
-          className="text-sm text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 border border-blue-500 dark:border-blue-400 rounded px-4 py-2 transition-colors"
+        <Switch
+          isSelected={isRevealed}
+          onChange={setIsRevealed}
         >
-          {isRevealed ? 'Hide Results' : 'Reveal Results'}
-        </button>
+          <span className="dark:text-slate-50 text-neutral-950">
+            {isRevealed ? 'Hide Results' : 'Show Results'}
+          </span>
+        </Switch>
       </div>
 
       {/* Series summary */}
       <div className="border border-gray-300 dark:border-gray-700 rounded p-6 bg-white dark:bg-slate-900 mb-6">
-        <div className={`space-y-4 ${isRevealed ? "mb-6 pb-6 border-b border-gray-200 dark:border-gray-700" : ""}`}>
+        <div className={`space-y-4 ${series.games.length > 0 ? "mb-6 pb-6 border-b border-gray-200 dark:border-gray-700" : ""}`}>
           <div className={`flex justify-between items-center ${isRevealed && team1.id === series.winnerTeamId ? "font-bold" : ""}`}>
             <div className="flex items-center gap-3">
               <TeamLogos teamName={team1.tricode} teamId={team1.id} size={48} />
@@ -86,38 +92,39 @@ function SeriesDetail() {
           </div>
         </div>
 
-        {/* Games */}
-        {isRevealed && (
+        {/* Games - dates and watch links always visible; scores revealed on demand */}
+        {series.games.length > 0 && (
           <div className="space-y-3">
             <h2 className="text-lg font-semibold dark:text-slate-50 mb-3">Games</h2>
-            {series.games.map((game) => {
+            {series.games.map((game, index) => {
               const shouldShowWatch = seasonYear >= 2012;
               const watchLink = generateWatchLink(game.awayTeam.tricode, game.homeTeam.tricode, game.gameId);
+              const gameDate = new Date(game.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
               return (
                 <div
                   key={game.gameId}
-                  className="text-sm dark:text-slate-300 flex justify-between items-center gap-3 p-3 border border-gray-200 dark:border-gray-700 rounded bg-gray-50 dark:bg-slate-800"
+                  className="text-sm dark:text-slate-300 flex items-center gap-3 p-3 border border-gray-200 dark:border-gray-700 rounded bg-gray-50 dark:bg-slate-800"
                 >
-                  <span className="font-medium">{new Date(game.date).toLocaleDateString()}</span>
-                  <span className="text-xs text-gray-500 dark:text-gray-400 flex-1 text-center">
-                    {game.homeTeam.tricode} vs {game.awayTeam.tricode}
-                  </span>
-                  <span className="flex items-center gap-3">
-                    <span className="font-semibold">
-                      {game.homeTeam.tricode} {game.homeTeam.score} - {game.awayTeam.score} {game.awayTeam.tricode}
+                  <span className="font-medium text-gray-500 dark:text-gray-400 shrink-0">Game {index + 1}</span>
+                  <span className="font-medium shrink-0">{gameDate}</span>
+                  {isRevealed ? (
+                    <span className="flex-1 text-center font-semibold">
+                      {game.homeTeam.tricode} {game.homeTeam.score} – {game.awayTeam.score} {game.awayTeam.tricode}
                     </span>
-                    {shouldShowWatch && (
-                      <a
-                        href={watchLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 text-xs"
-                      >
-                        Watch
-                      </a>
-                    )}
-                  </span>
+                  ) : (
+                    <span className="flex-1" />
+                  )}
+                  {shouldShowWatch && (
+                    <a
+                      href={watchLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 text-xs shrink-0"
+                    >
+                      Watch
+                    </a>
+                  )}
                 </div>
               );
             })}
@@ -130,6 +137,7 @@ function SeriesDetail() {
             Winner: {series.winnerTeamTricode}
           </div>
         )}
+      </div>
       </div>
     </div>
   );

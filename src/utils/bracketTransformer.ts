@@ -1,6 +1,7 @@
 import type { Node, Edge } from '@xyflow/react';
 import type { SeriesData, TeamsInSeries, SeriesGame } from '@/helpers/helpers';
 import { getTeamConference } from '@/constants/nbaTeams';
+import type { BracketSizing } from '@/utils/bracketSizing';
 
 export type BracketNodeData = {
   seriesKey: string;
@@ -15,6 +16,7 @@ export type BracketNodeData = {
   games: SeriesGame[];
   season: string;
   isRevealed: boolean;
+  sizing: BracketSizing;
 };
 
 type ConferenceGroups = {
@@ -60,48 +62,40 @@ function groupSeriesByConference(series: SeriesData[]): ConferenceGroups {
 }
 
 /**
- * Calculates the x,y position for a node in the bracket layout
- *
- * Layout:
- * - West: Round 1 at x=0, Round 2 at x=270, Conf Finals at x=540
- * - Finals: x=810 (center)
- * - East: Conf Finals at x=1080, Round 2 at x=1350, Round 1 at x=1620
+ * Calculates the x,y position for a node in the bracket layout.
+ * West progresses left→right; East progresses right→left; Finals sits between.
  */
 function getNodePosition(
   conference: 'East' | 'West' | 'Finals',
   round: number,
-  indexInRound: number
+  indexInRound: number,
+  hSpacing: number,
+  vSpacing: number
 ): { x: number; y: number } {
-  const VERTICAL_SPACING = 200;
-  const HORIZONTAL_SPACING = 270;
-
   // Calculate Y position
   let y: number;
 
   if (conference === 'Finals') {
-    // Finals should be at the same vertical level as Conference Finals (round 3)
-    const confFinalsMultiplier = Math.pow(2, 3 - 1); // Round 3
-    y = (0 * VERTICAL_SPACING * confFinalsMultiplier) +
-        (VERTICAL_SPACING * (confFinalsMultiplier - 1) / 2);
+    // Finals sits at the same vertical level as Conference Finals (round 3)
+    const confFinalsMultiplier = Math.pow(2, 3 - 1);
+    y = (vSpacing * (confFinalsMultiplier - 1)) / 2;
   } else {
-    // Each subsequent round has fewer series, so we space them further apart vertically
-    // and center them relative to the previous round
+    // Each subsequent round has fewer series; space them out and center vs previous round
     const roundMultiplier = Math.pow(2, round - 1);
-    y = (indexInRound * VERTICAL_SPACING * roundMultiplier) +
-        (VERTICAL_SPACING * (roundMultiplier - 1) / 2);
+    y = (indexInRound * vSpacing * roundMultiplier) +
+        (vSpacing * (roundMultiplier - 1) / 2);
   }
 
   // Calculate X position based on conference and round
   let x: number;
+  const eastRightEdge = hSpacing * 6;
 
   if (conference === 'Finals') {
-    x = 810; // Center - midpoint between West Conf Finals (540) and East Conf Finals (1080)
+    x = hSpacing * 3; // midpoint between West Conf Finals (2*hSpacing) and East Conf Finals (4*hSpacing)
   } else if (conference === 'West') {
-    // West progresses left to right (0, 270, 540)
-    x = (round - 1) * HORIZONTAL_SPACING;
+    x = (round - 1) * hSpacing;
   } else { // East
-    // East progresses right to left (1620, 1350, 1080)
-    x = 1620 - ((round - 1) * HORIZONTAL_SPACING);
+    x = eastRightEdge - ((round - 1) * hSpacing);
   }
 
   return { x, y };
@@ -155,16 +149,19 @@ function createBracketEdges(
           const targetNode = nextRoundNodes[targetNodeIndex];
 
           if (targetNode) {
+            const winnerIsTeam1 = sourceNode.data.winnerTeamId === sourceNode.data.team1.id;
             edges.push({
               id: `e-${sourceNode.id}-${targetNode.id}`,
               source: sourceNode.id,
+              sourceHandle: winnerIsTeam1 ? 'src-top' : 'src-bot',
               target: targetNode.id,
+              targetHandle: 'tgt',
               animated: false,
               style: {
-                stroke: '#374151',
-                strokeWidth: 4,
+                stroke: '#f59e0b',
+                strokeWidth: 2,
               },
-              type: 'smoothstep',
+              type: 'bracketEdge',
             });
           }
         }
@@ -178,30 +175,30 @@ function createBracketEdges(
   const finals = nodesByConference.Finals[4]?.[0];
 
   if (eastConfFinals && finals && eastConfFinals.data.winnerTeamId && revealedRounds.has(3)) {
+    const winnerIsTeam1 = eastConfFinals.data.winnerTeamId === eastConfFinals.data.team1.id;
     edges.push({
       id: `e-${eastConfFinals.id}-${finals.id}`,
       source: eastConfFinals.id,
+      sourceHandle: winnerIsTeam1 ? 'src-top' : 'src-bot',
       target: finals.id,
+      targetHandle: 'tgt-right',
       animated: false,
-      style: {
-        stroke: '#374151',
-        strokeWidth: 4,
-      },
-      type: 'smoothstep',
+      style: { stroke: '#f59e0b', strokeWidth: 2 },
+      type: 'bracketEdge',
     });
   }
 
   if (westConfFinals && finals && westConfFinals.data.winnerTeamId && revealedRounds.has(3)) {
+    const winnerIsTeam1 = westConfFinals.data.winnerTeamId === westConfFinals.data.team1.id;
     edges.push({
       id: `e-${westConfFinals.id}-${finals.id}`,
       source: westConfFinals.id,
+      sourceHandle: winnerIsTeam1 ? 'src-top' : 'src-bot',
       target: finals.id,
+      targetHandle: 'tgt-left',
       animated: false,
-      style: {
-        stroke: '#374151',
-        strokeWidth: 4,
-      },
-      type: 'smoothstep',
+      style: { stroke: '#f59e0b', strokeWidth: 2 },
+      type: 'bracketEdge',
     });
   }
 
@@ -233,11 +230,13 @@ function shouldShowRound(round: number, revealedRounds: Set<number>): boolean {
 export function transformToBracketData(
   playoffSeries: SeriesData[],
   revealedRounds: Set<number>,
-  season: string
-): { nodes: Node<BracketNodeData>[]; edges: Edge[] } {
+  season: string,
+  sizing: BracketSizing
+): { nodes: Node[]; edges: Edge[] } {
   const { east, west, finals } = groupSeriesByConference(playoffSeries);
+  const { hSpacing, vSpacing } = sizing;
 
-  const nodes: Node<BracketNodeData>[] = [];
+  const nodes: Node[] = [];
 
   // Process East conference series
   const eastByRound: Record<number, SeriesData[]> = {};
@@ -248,12 +247,11 @@ export function transformToBracketData(
 
   Object.entries(eastByRound).forEach(([round, seriesList]) => {
     const roundNum = parseInt(round);
-    // Only create nodes for rounds that should be visible
     if (!shouldShowRound(roundNum, revealedRounds)) return;
 
     seriesList.forEach((series, index) => {
       const [team1, team2] = series.teams;
-      const position = getNodePosition('East', roundNum, index);
+      const position = getNodePosition('East', roundNum, index, hSpacing, vSpacing);
 
       nodes.push({
         id: series.seriesKey,
@@ -272,6 +270,7 @@ export function transformToBracketData(
           games: series.games,
           season,
           isRevealed: revealedRounds.has(series.round),
+          sizing,
         },
       });
     });
@@ -286,12 +285,11 @@ export function transformToBracketData(
 
   Object.entries(westByRound).forEach(([round, seriesList]) => {
     const roundNum = parseInt(round);
-    // Only create nodes for rounds that should be visible
     if (!shouldShowRound(roundNum, revealedRounds)) return;
 
     seriesList.forEach((series, index) => {
       const [team1, team2] = series.teams;
-      const position = getNodePosition('West', roundNum, index);
+      const position = getNodePosition('West', roundNum, index, hSpacing, vSpacing);
 
       nodes.push({
         id: series.seriesKey,
@@ -310,17 +308,17 @@ export function transformToBracketData(
           games: series.games,
           season,
           isRevealed: revealedRounds.has(series.round),
+          sizing,
         },
       });
     });
   });
 
-  // Process NBA Finals
-  // Finals is round 4, only show if round 3 is revealed
+  // Process NBA Finals (round 4) — visible once round 3 is revealed
   if (shouldShowRound(4, revealedRounds)) {
     finals.forEach(series => {
       const [team1, team2] = series.teams;
-      const position = getNodePosition('Finals', 4, 0);
+      const position = getNodePosition('Finals', 4, 0, hSpacing, vSpacing);
 
       nodes.push({
         id: series.seriesKey,
@@ -339,12 +337,34 @@ export function transformToBracketData(
           games: series.games,
           season,
           isRevealed: revealedRounds.has(series.round),
+          sizing,
         },
       });
     });
   }
 
-  const edges = createBracketEdges(nodes, revealedRounds);
+  // Conference header labels centered over each conference's R1 column
+  const r1CenterX = sizing.nodeWidth / 2;
+  nodes.push({
+    id: 'label-west',
+    type: 'labelNode',
+    position: { x: r1CenterX, y: -50 },
+    data: { label: 'Western Conference' },
+    selectable: false,
+    draggable: false,
+  });
+
+  nodes.push({
+    id: 'label-east',
+    type: 'labelNode',
+    position: { x: hSpacing * 6 + r1CenterX, y: -50 },
+    data: { label: 'Eastern Conference' },
+    selectable: false,
+    draggable: false,
+  });
+
+  const seriesNodes = nodes.filter(n => n.type === 'seriesNode') as Node<BracketNodeData>[];
+  const edges = createBracketEdges(seriesNodes, revealedRounds);
 
   return { nodes, edges };
 }
