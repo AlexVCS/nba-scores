@@ -80,31 +80,8 @@ def get_game_summary(game_id: str):
         visitor_team_id = game_meta["VISITOR_TEAM_ID"]
         live_period = game_meta["LIVE_PERIOD"]
         game_status_id = game_meta["GAME_STATUS_ID"]
-        raw_date = game_meta["GAME_DATE_EST"]
-        game_date = str(raw_date)[:10]
-        game_linescore = None
-        try:
-            sb = scoreboardv2.ScoreboardV2(game_date=game_date)
-            linescore_df = sb.line_score.get_data_frame()
-            if not linescore_df.empty:
-                filtered = linescore_df[linescore_df["GAME_ID"] == game_id]
-                if not filtered.empty:
-                    test_row = filtered[filtered["TEAM_ID"] == home_team_id].iloc[
-                        0
-                    ]
-                    has_data = (
-                        test_row.get("PTS_QTR1") is not None
-                        and str(test_row.get("PTS_QTR1")) != "nan"
-                        and str(test_row.get("PTS_QTR1")) != "None"
-                    )
-                    if has_data:
-                        game_linescore = filtered
-        except Exception as e:
-            print(f"ScoreboardV2 failed for {game_id}: {e}")
-        if game_linescore is None or game_linescore.empty:
-            fallback_linescore = summary.line_score.get_data_frame()
-            if not fallback_linescore.empty:
-                game_linescore = fallback_linescore
+        fallback_linescore = summary.line_score.get_data_frame()
+        game_linescore = fallback_linescore if not fallback_linescore.empty else None
         if game_linescore is None or game_linescore.empty:
             return {
                 "homeTeam": {
@@ -177,12 +154,29 @@ def get_game_summary(game_id: str):
             else:
                 return "Scheduled"
 
-        home_row = game_linescore[game_linescore["TEAM_ID"] == home_team_id].iloc[
-            0
-        ]
-        away_row = game_linescore[
-            game_linescore["TEAM_ID"] == visitor_team_id
-        ].iloc[0]
+        home_filtered = game_linescore[game_linescore["TEAM_ID"] == home_team_id]
+        away_filtered = game_linescore[game_linescore["TEAM_ID"] == visitor_team_id]
+        if home_filtered.empty or away_filtered.empty:
+            return {
+                "homeTeam": {
+                    "teamId": int(home_team_id),
+                    "teamTricode": "",
+                    "teamName": "",
+                    "score": "0",
+                    "periods": [],
+                },
+                "awayTeam": {
+                    "teamId": int(visitor_team_id),
+                    "teamTricode": "",
+                    "teamName": "",
+                    "score": "0",
+                    "periods": [],
+                },
+                "gameStatusText": "Scheduled",
+                "period": 0,
+            }
+        home_row = home_filtered.iloc[0]
+        away_row = away_filtered.iloc[0]
         home_pts = home_row.get("PTS", 0)
         away_pts = away_row.get("PTS", 0)
 
