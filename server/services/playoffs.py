@@ -1,18 +1,19 @@
 import json
-import os
 from collections import defaultdict
+from pathlib import Path
 
 from nba_api.stats.endpoints import leaguegamefinder
 
-_CONFERENCES_JSON = os.path.join(
-    os.path.dirname(__file__), "..", "..", "src", "constants", "nbaConferences.json"
+_CONFERENCES_JSON = (
+    Path(__file__).resolve().parent.parent / "constants" / "nbaConferences.json"
 )
 
 with open(_CONFERENCES_JSON) as _f:
-    _conferences = json.load(_f)
+    CONFERENCES = json.load(_f)
 
-EAST_TEAM_IDS: frozenset[int] = frozenset(_conferences["east"])
-WEST_TEAM_IDS: frozenset[int] = frozenset(_conferences["west"])
+
+EAST_TEAM_IDS: frozenset[int] = frozenset(CONFERENCES["east"])
+WEST_TEAM_IDS: frozenset[int] = frozenset(CONFERENCES["west"])
 
 
 def fetch_playoff_team_games_df(season: str):

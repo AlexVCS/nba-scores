@@ -1,10 +1,13 @@
 import json
-import os
+from pathlib import Path
 
 import pytest
 
-_CONFERENCES_JSON = os.path.join(
-    os.path.dirname(__file__), "..", "..", "src", "constants", "nbaConferences.json"
+_CONFERENCES_JSON = (
+    Path(__file__).resolve().parents[1]
+    / "server"
+    / "constants"
+    / "nbaConferences.json"
 )
 
 
