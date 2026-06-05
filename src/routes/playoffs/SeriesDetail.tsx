@@ -49,21 +49,17 @@ function SeriesDetail() {
     <div className="bg-slate-50 dark:bg-neutral-950 min-h-screen">
       <DarkModeToggle />
       <div className="p-4 max-w-4xl mx-auto">
-        {/* Back button — hidden on mobile (shown as fixed footer instead) */}
+      <div className="mb-6 text-center">
+        <h1 className="text-xl sm:text-3xl font-bold mb-2 text-neutral-950 dark:text-slate-50">{series.roundName}</h1>
+        <p className="text-lg sm:text-xl mb-2 font-bold text-neutral-950 dark:text-slate-50">{data.season} Playoffs</p>
         <Link
         to={`/playoffs${season ? `?season=${season}` : ''}`}
         className="hidden sm:inline-flex items-center gap-2 text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 mb-4"
       >
-        Back to Bracket
+        Bracket
       </Link>
-
-      {/* Series header */}
-      <div className="mb-6 text-center">
-        <h1 className="text-xl sm:text-3xl font-bold mb-2 text-neutral-950 dark:text-slate-50">{series.roundName}</h1>
-        <p className="text-lg sm:text-xl font-bold text-neutral-950 dark:text-slate-50">{data.season} Playoffs</p>
       </div>
 
-      {/* Reveal toggle */}
       <div className="flex justify-center mb-6">
         <Switch
           isSelected={isRevealed}
@@ -75,9 +71,7 @@ function SeriesDetail() {
         </Switch>
       </div>
 
-      {/* Series summary banner + games — contained in one card */}
       <div className="rounded overflow-hidden mb-6">
-        {/* Gradient header */}
         <div
           className="p-6 text-white"
           style={{ background: `linear-gradient(to right, ${team1Color} 0%, ${team2Color} 100%)` }}
@@ -102,7 +96,6 @@ function SeriesDetail() {
           </div>
         </div>
 
-        {/* Games — dates and watch links always visible; scores revealed on demand */}
         {series.games.length > 0 && (
           <div className="px-4 py-3 bg-white dark:bg-neutral-900">
             <h2 className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-3">Games</h2>
@@ -119,7 +112,6 @@ function SeriesDetail() {
                     key={game.gameId}
                     className="relative text-sm text-gray-700 dark:text-slate-300 flex items-center gap-3 py-3"
                   >
-                    {/* Mobile: whole row links to box score */}
                     {isRevealed && (
                       <Link to={`/games/${game.gameId}/boxscore`} className="absolute inset-0 sm:hidden" aria-label="Box score" />
                     )}
@@ -159,17 +151,15 @@ function SeriesDetail() {
           </div>
         )}
       </div>
-      {/* Extra bottom padding on mobile so content clears the fixed footer */}
       <div className="h-16 sm:hidden" />
     </div>
 
-    {/* Fixed bottom back button — mobile only */}
     <div className="fixed bottom-0 left-0 right-0 z-10 flex justify-center pb-4 pt-3 bg-slate-50/90 dark:bg-neutral-950/90 backdrop-blur-sm sm:hidden">
       <Link
         to={`/playoffs${season ? `?season=${season}` : ''}`}
         className="inline-flex items-center gap-2 text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300"
       >
-        Back to Bracket
+        Bracket
       </Link>
     </div>
     </div>
