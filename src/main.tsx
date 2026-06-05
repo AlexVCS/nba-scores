@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App";
 import Boxscore from "./routes/games/boxscore/Boxscore";
 import Playoffs from "./routes/playoffs/Playoffs";
+import SeriesDetail from "./routes/playoffs/SeriesDetail";
 import {BrowserRouter, Routes, Route} from "react-router";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {Provider, defaultTheme} from "@adobe/react-spectrum";
@@ -20,6 +21,7 @@ createRoot(document.getElementById("root")!).render(
             <Routes>
               <Route path="/" element={<App />} />
               <Route path="/playoffs" element={<Playoffs />} />
+              <Route path="/playoffs/series/:seriesKey" element={<SeriesDetail />} />
               <Route path="games/:gameId/boxscore" element={<Boxscore />} />
             </Routes>
           </BrowserRouter>

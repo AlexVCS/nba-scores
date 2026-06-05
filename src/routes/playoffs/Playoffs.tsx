@@ -1,8 +1,10 @@
-import { useSearchParams } from "react-router";
+import { useSearchParams, Link } from "react-router";
 import { useEffect, useState } from "react";
 import PlayoffYearPicker from "@/components/PlayoffYearPicker";
 import { usePlayoffData } from "@/hooks/usePlayoffData";
-import PlayoffBracket from "@/components/PlayoffBracket";
+import PlayoffBracketFlow from "@/components/PlayoffBracketFlow";
+import DarkModeToggle from "@/components/DarkModeToggle";
+import Header from "@/components/Header";
 import { getDefaultPlayoffSeason } from "@/helpers/helpers";
 
 function Playoffs() {
@@ -10,7 +12,6 @@ function Playoffs() {
   const seasonParam = searchParams.get("season");
   const [season, setSeason] = useState<string | null>(seasonParam);
 
-  // Auto-load default season if no season param is present
   useEffect(() => {
     if (!seasonParam) {
       setSeason(getDefaultPlayoffSeason());
@@ -21,26 +22,31 @@ function Playoffs() {
 
   const { data, isLoading, error } = usePlayoffData(season);
 
-  useEffect(() => {
-    if (data) {
-      console.log("Playoff Picture Data:", data);
-    }
-  }, [data]);
-
   return (
-    <div className="p-4">
-      <h1 className="text-3xl font-bold mb-6 dark:text-slate-50">Playoffs</h1>
-      <PlayoffYearPicker />
-      {isLoading && <p>Loading...</p>}
-      {error && <p>Error: {String(error)}</p>}
-      {data && (
-        <div className="mt-8">
-          <PlayoffBracket
-            playoffPicture={data.series}
-            season={data.season}
-          />
-        </div>
-      )}
+    <div className="bg-slate-50 dark:bg-neutral-950">
+      <div className="flex justify-between items-center px-4 py-2">
+        <DarkModeToggle />
+        <Link
+          to="/"
+          className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-semibold"
+        >
+          Scorez!
+        </Link>
+      </div>
+      <Header variant="playoffs" />
+      <div className="p-4">
+        <PlayoffYearPicker />
+        {isLoading && <p>Loading...</p>}
+        {error && <p>Error: {String(error)}</p>}
+        {data && (
+          <div className="mt-8">
+            <PlayoffBracketFlow
+              playoffPicture={data.series}
+              season={data.season}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

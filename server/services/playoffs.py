@@ -1,6 +1,18 @@
+import json
+import os
 from collections import defaultdict
 
 from nba_api.stats.endpoints import leaguegamefinder
+
+_CONFERENCES_JSON = os.path.join(
+    os.path.dirname(__file__), "..", "..", "src", "constants", "nbaConferences.json"
+)
+
+with open(_CONFERENCES_JSON) as _f:
+    _conferences = json.load(_f)
+
+EAST_TEAM_IDS: frozenset[int] = frozenset(_conferences["east"])
+WEST_TEAM_IDS: frozenset[int] = frozenset(_conferences["west"])
 
 
 def fetch_playoff_team_games_df(season: str):
@@ -73,6 +85,28 @@ def infer_round_from_game_id(game_id: str):
         return round_code
 
     return None
+
+
+def infer_bracket_position_from_game_id(game_id: str):
+    """
+    Extract series bracket position from modern NBA playoff GAME_ID.
+
+    Modern game IDs encode the series number within the round at position [8].
+    This number reflects bracket order (e.g. 1v8 top, 4v5, 3v6, 2v7 bottom).
+    Both conferences use separate numbering within the same round, so sorting
+    by this value within each conference gives the correct bracket order.
+
+    Returns None if the game ID is not a modern format (old sequential IDs
+    like 0040000001 do not encode series position and should not use this).
+    """
+    # Only extract position for modern game IDs where round is encoded
+    if infer_round_from_game_id(game_id) is None:
+        return None
+
+    try:
+        return int(game_id[8])
+    except (TypeError, ValueError, IndexError):
+        return None
 
 
 def can_use_game_id_round_code(games):
@@ -340,6 +374,131 @@ def get_series_key(game):
     return f"R{game['round']}-{team_ids[0]}-{team_ids[1]}"
 
 
+def _get_series_conference(series):
+    """Determine which conference a series belongs to from team IDs."""
+    for team in series.get("teams", []):
+        tid = team.get("id")
+        if tid in EAST_TEAM_IDS:
+            return "East"
+        if tid in WEST_TEAM_IDS:
+            return "West"
+    return "Finals"
+
+
+def _game_id_sort_key(series, use_game_id_position):
+    """
+    Primary sort key for a series: bracket-position digit from game ID when
+    available, otherwise earliest game date (string sort is fine here).
+    """
+    if use_game_id_position and series.get("games"):
+        pos = infer_bracket_position_from_game_id(series["games"][0]["gameId"])
+        if pos is not None:
+            return (0, pos, "")
+    earliest = (
+        min(g["date"] for g in series["games"]) if series.get("games") else ""
+    )
+    return (1, 0, earliest + series.get("seriesKey", ""))
+
+
+def _sort_series(series_list, use_game_id_position):
+    return sorted(
+        series_list,
+        key=lambda s: _game_id_sort_key(s, use_game_id_position),
+    )
+
+
+def sort_by_bracket_progression(playoff_series, use_game_id_position):
+    """
+    Return playoff_series sorted so that within each conference/round, series
+    that feed into the same next-round match are placed adjacent (correct
+    visual bracket pairing).
+
+    Algorithm (per conference, highest round down to round 1):
+    - Highest round: sort by game_id bracket-position digit (or date).
+    - Lower rounds: bucket each series by which next-round series its winner
+      advanced into, order buckets by that next-round series' position, sort
+      within each bucket by game_id bracket-position digit.
+    - Unresolved series (no winner yet) are sorted by game_id and appended.
+    """
+    # Group by conference and round
+    conf_round = defaultdict(lambda: defaultdict(list))
+    for s in playoff_series:
+        conf = "Finals" if s["round"] == 4 else _get_series_conference(s)
+        conf_round[conf][s["round"]].append(s)
+
+    # series_key -> set of participant team IDs; used to detect which next-round
+    # series a winner advanced into (team membership is stable before a winner exists).
+    series_team_ids = {
+        s["seriesKey"]: {t["id"] for t in s["teams"]}
+        for s in playoff_series
+    }
+
+    # conf -> {series_key -> visual position within its round}; consumed by
+    # _sort_key to establish final bracket order across all conferences.
+    conf_positions = {}
+
+    for conf in ("West", "East", "Finals"):
+        rounds_desc = sorted(conf_round[conf].keys(), reverse=True)
+        if not rounds_desc:
+            continue
+
+        round_pos = {}  # series_key → position within round for THIS conference
+
+        for round_num in rounds_desc:
+            round_series = conf_round[conf][round_num]
+
+            if round_num == rounds_desc[0]:
+                # Top round: no parent series exists, so position comes solely from
+                # the game_id bracket-position digit or earliest game date.
+                ordered = _sort_series(round_series, use_game_id_position)
+            else:
+                # Group current-round series by which next-round series contains
+                # their winner, then order those groups by the next-round position.
+                next_round_series = conf_round[conf].get(round_num + 1, [])
+                # bucket_key = the parent next-round series' position; keeps the two
+                # feeder series visually adjacent beneath their parent in the bracket.
+                buckets = defaultdict(list)
+                # Series with no winner yet (or winner not matched in any next-round
+                # series) are collected here and appended last.
+                unassigned = []
+
+                for s in round_series:
+                    winner_id = s.get("winnerTeamId")
+                    placed = False
+                    if winner_id:
+                        # Walk next-round series to find which one the winner joined.
+                        for ns in next_round_series:
+                            if winner_id in series_team_ids.get(ns["seriesKey"], set()):
+                                # 999 is a sentinel: parent not yet positioned → sort bucket last.
+                                bucket_key = round_pos.get(ns["seriesKey"], 999)
+                                buckets[bucket_key].append(s)
+                                placed = True
+                                break
+                    if not placed:
+                        unassigned.append(s)
+
+                ordered = []
+                for bk in sorted(buckets.keys()):
+                    ordered.extend(_sort_series(buckets[bk], use_game_id_position))
+                # Unassigned series trail positioned buckets; sorted so their relative
+                # order is still deterministic rather than arbitrary.
+                ordered.extend(_sort_series(unassigned, use_game_id_position))
+
+            for i, s in enumerate(ordered):
+                # Record position so the next (lower) round can use it as a bucket
+                # key to keep bracket alignment consistent across rounds.
+                round_pos[s["seriesKey"]] = i
+
+        conf_positions[conf] = round_pos
+
+    def _sort_key(s):
+        conf = "Finals" if s["round"] == 4 else _get_series_conference(s)
+        pos = conf_positions.get(conf, {}).get(s["seriesKey"], 999)
+        return (s["round"], pos)
+
+    return sorted(playoff_series, key=_sort_key)
+
+
 def derive_playoff_series(games):
     series_map = defaultdict(
         lambda: {
@@ -390,6 +549,11 @@ def derive_playoff_series(games):
             team = series["teams"][winner_team_id]
             winner_team_tricode = team["tricode"]
 
+        sorted_games = sorted(
+            series["games"],
+            key=lambda game: (game["date"], game["gameId"]),
+        )
+
         playoff_series.append(
             {
                 "seriesKey": series_key,
@@ -399,22 +563,13 @@ def derive_playoff_series(games):
                 "wins": wins,
                 "winnerTeamId": winner_team_id,
                 "winnerTeamTricode": winner_team_tricode,
-                "gameCount": len(series["games"]),
-                "games": sorted(
-                    series["games"],
-                    key=lambda game: (game["date"], game["gameId"]),
-                ),
+                "gameCount": len(sorted_games),
+                "games": sorted_games,
             }
         )
 
-    return sorted(
-        playoff_series,
-        key=lambda series: (
-            series["round"],
-            min(game["date"] for game in series["games"]),
-            series["seriesKey"],
-        ),
-    )
+    use_game_id_position = can_use_game_id_round_code(games)
+    return sort_by_bracket_progression(playoff_series, use_game_id_position)
 
 
 def get_normalized_playoff_games(season: str):

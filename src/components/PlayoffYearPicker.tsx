@@ -30,8 +30,8 @@ const getDefaultPlayoffEndYear = (date = new Date()) => {
 const default_playoff_end_year = getDefaultPlayoffEndYear();
 
 const season_years = Array.from(
-  { length: current_year - 2000 + 1 },
-  (_, i) => 2001 + i,
+  { length: current_year - 1983 },
+  (_, i) => 1984 + i,
 ).reverse();
 
 const formatSeason = (year: number) =>
@@ -136,7 +136,7 @@ const PlayoffYearPicker = () => {
             className="flex flex-1 py-2 text-left bg-transparent outline-none"
           />
 
-          <Button className="px-3 flex items-center text-gray-700 border-0 border-solid border-l border-l-purple-200 rounded-r-lg pressed:bg-purple-100 outline-none">
+          <Button className="px-3 flex items-center text-gray-700 rounded-r-lg pressed:bg-purple-100 outline-none">
             <ChevronUpDownIcon size="XS" />
           </Button>
         </div>
