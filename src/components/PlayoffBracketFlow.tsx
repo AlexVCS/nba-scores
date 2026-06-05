@@ -7,6 +7,7 @@ import '@xyflow/react/dist/style.css';
 import type { SeriesData } from '@/helpers/helpers';
 import { transformToBracketData } from '@/utils/bracketTransformer';
 import type { BracketNodeData } from '@/utils/bracketTransformer';
+import { seasonToYear } from '@/utils/seriesSlug';
 import { bracketSizing } from '@/utils/bracketSizing';
 import { useViewportSize } from '@/hooks/useViewportSize';
 import type { ViewportSize } from '@/hooks/useViewportSize';
@@ -139,7 +140,7 @@ function PlayoffBracketFlowInner({ playoffPicture, season }: PlayoffBracketFlowP
   const handleNodeClick = useCallback((_event: React.MouseEvent, node: Node) => {
     if (node.type !== 'seriesNode') return;
     const data = node.data as BracketNodeData;
-    navigate(`/playoffs/series/${data.seriesKey}?season=${encodeURIComponent(data.season)}`);
+    navigate(`/playoffs/${seasonToYear(data.season)}/${data.seriesSlug}`);
   }, [navigate]);
 
   const { nodes, edges } = useMemo(

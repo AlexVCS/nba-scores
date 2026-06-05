@@ -6,6 +6,14 @@ import PlayerTable from "./PlayerTable";
 // import InactivePlayers from "./InactivePlayers";
 import { getBoxScores, getGameSummary } from "@/services/nbaService";
 
+interface BoxscoreTeam {
+  teamId: number;
+  teamTricode: string;
+  teamCity: string;
+  teamName: string;
+  statistics?: { points: number };
+}
+
 const Boxscore = () => {
   const { gameId = "" } = useParams();
 
@@ -19,7 +27,7 @@ const Boxscore = () => {
     queryFn: () => getGameSummary(gameId),
   });
 
-  if (boxscoreQuery.isLoading || gameSummaryQuery.isLoading) {
+  if (boxscoreQuery.isLoading) {
     return <h1>Loading...</h1>;
   }
 
@@ -29,10 +37,25 @@ const Boxscore = () => {
 
   const { game } = boxscoreQuery.data;
 
+  const buildTeamFromBoxscore = (team: BoxscoreTeam) => ({
+    teamId: team.teamId ?? 0,
+    teamTricode: team.teamTricode ?? "",
+    teamName: `${team.teamCity ?? ""} ${team.teamName ?? ""}`.trim(),
+    score: String(team.statistics?.points ?? ""),
+    periods: [] as Array<{ period: number; score: string }>,
+  });
+
+  const summaryData = gameSummaryQuery.data ?? (!gameSummaryQuery.isLoading ? {
+    homeTeam: buildTeamFromBoxscore(game.homeTeam),
+    awayTeam: buildTeamFromBoxscore(game.awayTeam),
+    period: 0,
+    gameStatusText: game.gameStatusText ?? "Unknown",
+  } : null);
+
   return (
     <div className="bg-slate-50 dark:bg-neutral-950">
       <DarkModeToggle />
-      {gameSummaryQuery.data && <GameSummary game={gameSummaryQuery.data} />}
+      {summaryData && <GameSummary game={summaryData} />}
       <PlayerTable team={game.homeTeam} />
       <PlayerTable team={game.awayTeam} />
       {/* <InactivePlayers game={game} /> */}

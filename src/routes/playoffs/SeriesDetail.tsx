@@ -1,16 +1,28 @@
 import { useState } from 'react';
-import { useParams, useSearchParams, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { Switch } from '@adobe/react-spectrum';
 import { usePlayoffData } from '@/hooks/usePlayoffData';
 import { generateWatchLink } from '@/helpers/helpers';
 import TeamLogos from '@/components/TeamLogos';
 import DarkModeToggle from '@/components/DarkModeToggle';
 import { TEAM_COLORS } from '@/constants/teamColors';
+import { yearToSeason, findSeriesBySlug } from '@/utils/seriesSlug';
 
 function SeriesDetail() {
-  const { seriesKey } = useParams<{ seriesKey: string }>();
-  const [searchParams] = useSearchParams();
-  const season = searchParams.get('season');
+  const { year, seriesSlug } = useParams<{ year: string; seriesSlug: string }>();
+
+  if (!year || !/^\d{4}$/.test(year)) {
+    return (
+      <div className="p-4">
+        <p className="dark:text-slate-50">Invalid season year.</p>
+        <Link to="/playoffs" className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300">
+          Back to Playoffs
+        </Link>
+      </div>
+    );
+  }
+
+  const season = yearToSeason(year);
   const [isRevealed, setIsRevealed] = useState(false);
 
   const { data, isLoading, error } = usePlayoffData(season);
@@ -19,8 +31,7 @@ function SeriesDetail() {
   if (error) return <p className="p-4 dark:text-slate-50">Error: {String(error)}</p>;
   if (!data) return <p className="p-4 dark:text-slate-50">No data available</p>;
 
-  // Find the series
-  const series = data.series.find(s => s.seriesKey === seriesKey);
+  const series = findSeriesBySlug(seriesSlug ?? '', data.series);
 
   if (!series) {
     return (

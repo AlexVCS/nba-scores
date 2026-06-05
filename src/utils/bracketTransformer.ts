@@ -2,9 +2,11 @@ import type { Node, Edge } from '@xyflow/react';
 import type { SeriesData, TeamsInSeries, SeriesGame } from '@/helpers/helpers';
 import { getTeamConference } from '@/constants/nbaTeams';
 import type { BracketSizing } from '@/utils/bracketSizing';
+import { buildSeriesSlug } from '@/utils/seriesSlug';
 
 export type BracketNodeData = {
   seriesKey: string;
+  seriesSlug: string;
   round: number;
   roundName: string;
   team1: TeamsInSeries;
@@ -261,6 +263,7 @@ export function transformToBracketData(
         position,
         data: {
           seriesKey: series.seriesKey,
+          seriesSlug: buildSeriesSlug(series, playoffSeries),
           round: series.round,
           roundName: series.roundName,
           team1,
@@ -299,6 +302,7 @@ export function transformToBracketData(
         position,
         data: {
           seriesKey: series.seriesKey,
+          seriesSlug: buildSeriesSlug(series, playoffSeries),
           round: series.round,
           roundName: series.roundName,
           team1,
@@ -328,6 +332,7 @@ export function transformToBracketData(
         position,
         data: {
           seriesKey: series.seriesKey,
+          seriesSlug: buildSeriesSlug(series, playoffSeries),
           round: series.round,
           roundName: series.roundName,
           team1,
