@@ -6,6 +6,14 @@ import PlayerTable from "./PlayerTable";
 // import InactivePlayers from "./InactivePlayers";
 import { getBoxScores, getGameSummary } from "@/services/nbaService";
 
+interface BoxscoreTeam {
+  teamId: number;
+  teamTricode: string;
+  teamCity: string;
+  teamName: string;
+  statistics?: { points: number };
+}
+
 const Boxscore = () => {
   const { gameId = "" } = useParams();
 
@@ -29,7 +37,7 @@ const Boxscore = () => {
 
   const { game } = boxscoreQuery.data;
 
-  const buildTeamFromBoxscore = (team: any) => ({
+  const buildTeamFromBoxscore = (team: BoxscoreTeam) => ({
     teamId: team.teamId ?? 0,
     teamTricode: team.teamTricode ?? "",
     teamName: `${team.teamCity ?? ""} ${team.teamName ?? ""}`.trim(),
@@ -41,7 +49,7 @@ const Boxscore = () => {
     homeTeam: buildTeamFromBoxscore(game.homeTeam),
     awayTeam: buildTeamFromBoxscore(game.awayTeam),
     period: 0,
-    gameStatusText: "",
+    gameStatusText: game.gameStatusText ?? "Unknown",
   } : null);
 
   return (

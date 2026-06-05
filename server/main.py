@@ -82,17 +82,17 @@ def get_game_summary(game_id: str):
         game_status_id = game_meta["GAME_STATUS_ID"]
         fallback_linescore = summary.line_score.get_data_frame()
         game_linescore = fallback_linescore if not fallback_linescore.empty else None
-        if game_linescore is None or game_linescore.empty:
+        def make_scheduled_response(home_id, away_id):
             return {
                 "homeTeam": {
-                    "teamId": int(home_team_id),
+                    "teamId": int(home_id),
                     "teamTricode": "",
                     "teamName": "",
                     "score": "0",
                     "periods": [],
                 },
                 "awayTeam": {
-                    "teamId": int(visitor_team_id),
+                    "teamId": int(away_id),
                     "teamTricode": "",
                     "teamName": "",
                     "score": "0",
@@ -101,6 +101,9 @@ def get_game_summary(game_id: str):
                 "gameStatusText": "Scheduled",
                 "period": 0,
             }
+
+        if game_linescore is None or game_linescore.empty:
+            return make_scheduled_response(home_team_id, visitor_team_id)
 
         def build_periods(row):
             periods = []
@@ -157,24 +160,7 @@ def get_game_summary(game_id: str):
         home_filtered = game_linescore[game_linescore["TEAM_ID"] == home_team_id]
         away_filtered = game_linescore[game_linescore["TEAM_ID"] == visitor_team_id]
         if home_filtered.empty or away_filtered.empty:
-            return {
-                "homeTeam": {
-                    "teamId": int(home_team_id),
-                    "teamTricode": "",
-                    "teamName": "",
-                    "score": "0",
-                    "periods": [],
-                },
-                "awayTeam": {
-                    "teamId": int(visitor_team_id),
-                    "teamTricode": "",
-                    "teamName": "",
-                    "score": "0",
-                    "periods": [],
-                },
-                "gameStatusText": "Scheduled",
-                "period": 0,
-            }
+            return make_scheduled_response(home_team_id, visitor_team_id)
         home_row = home_filtered.iloc[0]
         away_row = away_filtered.iloc[0]
         home_pts = home_row.get("PTS", 0)
