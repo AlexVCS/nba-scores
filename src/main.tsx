@@ -21,7 +21,7 @@ createRoot(document.getElementById("root")!).render(
             <Routes>
               <Route path="/" element={<App />} />
               <Route path="/playoffs" element={<Playoffs />} />
-              <Route path="/playoffs/series/:seriesKey" element={<SeriesDetail />} />
+              <Route path="/playoffs/:year/:seriesSlug" element={<SeriesDetail />} />
               <Route path="games/:gameId/boxscore" element={<Boxscore />} />
             </Routes>
           </BrowserRouter>
