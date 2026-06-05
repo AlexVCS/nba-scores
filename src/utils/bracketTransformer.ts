@@ -87,8 +87,10 @@ function getNodePosition(
   }
 
   // Calculate X position based on conference and round
+  // 6 = 3 conference rounds × 2 (mirrored East/West layout)
+  const TOTAL_HORIZONTAL_UNITS = 6;
   let x: number;
-  const eastRightEdge = hSpacing * 6;
+  const eastRightEdge = hSpacing * TOTAL_HORIZONTAL_UNITS;
 
   if (conference === 'Finals') {
     x = hSpacing * 3; // midpoint between West Conf Finals (2*hSpacing) and East Conf Finals (4*hSpacing)
@@ -343,25 +345,26 @@ export function transformToBracketData(
     });
   }
 
-  // Conference header labels centered over each conference's R1 column
-  const r1CenterX = sizing.nodeWidth / 2;
-  nodes.push({
-    id: 'label-west',
-    type: 'labelNode',
-    position: { x: r1CenterX, y: -50 },
-    data: { label: 'Western Conference' },
-    selectable: false,
-    draggable: false,
-  });
-
-  nodes.push({
-    id: 'label-east',
-    type: 'labelNode',
-    position: { x: hSpacing * 6 + r1CenterX, y: -50 },
-    data: { label: 'Eastern Conference' },
-    selectable: false,
-    draggable: false,
-  });
+  // Conference label nodes, centered above round 1 columns
+  const { nodeWidth } = sizing;
+  nodes.push(
+    {
+      id: 'conf-label-west',
+      type: 'conferenceLabel',
+      position: { x: nodeWidth / 2, y: -40 },
+      data: { label: 'Western Conference' },
+      selectable: false,
+      draggable: false,
+    },
+    {
+      id: 'conf-label-east',
+      type: 'conferenceLabel',
+      position: { x: hSpacing * 6 + nodeWidth / 2, y: -40 },
+      data: { label: 'Eastern Conference' },
+      selectable: false,
+      draggable: false,
+    }
+  );
 
   const seriesNodes = nodes.filter(n => n.type === 'seriesNode') as Node<BracketNodeData>[];
   const edges = createBracketEdges(seriesNodes, revealedRounds);

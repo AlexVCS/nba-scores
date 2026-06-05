@@ -24,7 +24,7 @@ export const bracketSizing: Record<ViewportSize, BracketSizing> = {
     rowPadClass: 'px-1 py-0.5',
     rowGapClass: 'gap-1',
     logoPadClass: 'p-0',
-    canvasHeight: '200px',
+    canvasHeight: '40vw',
   },
   md: {
     nodeWidth: 150,
@@ -36,7 +36,7 @@ export const bracketSizing: Record<ViewportSize, BracketSizing> = {
     rowPadClass: 'px-2 py-1',
     rowGapClass: 'gap-2',
     logoPadClass: 'p-0.5',
-    canvasHeight: '380px',
+    canvasHeight: '40vw',
   },
   lg: {
     nodeWidth: 250,

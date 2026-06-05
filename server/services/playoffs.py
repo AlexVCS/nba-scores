@@ -1,43 +1,18 @@
+import json
+import os
 from collections import defaultdict
 
 from nba_api.stats.endpoints import leaguegamefinder
 
-# Team IDs mirror src/constants/nbaTeams.ts so conference detection is consistent.
-EAST_TEAM_IDS = {
-    1610612738,  # Boston Celtics
-    1610612751,  # Brooklyn Nets
-    1610612752,  # New York Knicks
-    1610612755,  # Philadelphia 76ers
-    1610612761,  # Toronto Raptors
-    1610612741,  # Chicago Bulls
-    1610612739,  # Cleveland Cavaliers
-    1610612765,  # Detroit Pistons
-    1610612754,  # Indiana Pacers
-    1610612749,  # Milwaukee Bucks
-    1610612737,  # Atlanta Hawks
-    1610612766,  # Charlotte Hornets
-    1610612748,  # Miami Heat
-    1610612753,  # Orlando Magic
-    1610612764,  # Washington Wizards
-}
+_CONFERENCES_JSON = os.path.join(
+    os.path.dirname(__file__), "..", "..", "src", "constants", "nbaConferences.json"
+)
 
-WEST_TEAM_IDS = {
-    1610612743,  # Denver Nuggets
-    1610612750,  # Minnesota Timberwolves
-    1610612760,  # Oklahoma City Thunder
-    1610612757,  # Portland Trail Blazers
-    1610612762,  # Utah Jazz
-    1610612744,  # Golden State Warriors
-    1610612746,  # LA Clippers
-    1610612747,  # Los Angeles Lakers
-    1610612756,  # Phoenix Suns
-    1610612758,  # Sacramento Kings
-    1610612742,  # Dallas Mavericks
-    1610612745,  # Houston Rockets
-    1610612763,  # Memphis Grizzlies
-    1610612740,  # New Orleans Pelicans
-    1610612759,  # San Antonio Spurs
-}
+with open(_CONFERENCES_JSON) as _f:
+    _conferences = json.load(_f)
+
+EAST_TEAM_IDS: frozenset[int] = frozenset(_conferences["east"])
+WEST_TEAM_IDS: frozenset[int] = frozenset(_conferences["west"])
 
 
 def fetch_playoff_team_games_df(season: str):
@@ -451,14 +426,16 @@ def sort_by_bracket_progression(playoff_series, use_game_id_position):
         conf = "Finals" if s["round"] == 4 else _get_series_conference(s)
         conf_round[conf][s["round"]].append(s)
 
-    # series_key -> set of participant team IDs
+    # series_key -> set of participant team IDs; used to detect which next-round
+    # series a winner advanced into (team membership is stable before a winner exists).
     series_team_ids = {
         s["seriesKey"]: {t["id"] for t in s["teams"]}
         for s in playoff_series
     }
 
-    # series_key -> visual position within its round (computed below)
-    conf_positions = {}  # (conf, round, series_key) → position
+    # conf -> {series_key -> visual position within its round}; consumed by
+    # _sort_key to establish final bracket order across all conferences.
+    conf_positions = {}
 
     for conf in ("West", "East", "Finals"):
         rounds_desc = sorted(conf_round[conf].keys(), reverse=True)
@@ -471,21 +448,28 @@ def sort_by_bracket_progression(playoff_series, use_game_id_position):
             round_series = conf_round[conf][round_num]
 
             if round_num == rounds_desc[0]:
-                # Top round: sort only by game_id / date
+                # Top round: no parent series exists, so position comes solely from
+                # the game_id bracket-position digit or earliest game date.
                 ordered = _sort_series(round_series, use_game_id_position)
             else:
                 # Group current-round series by which next-round series contains
                 # their winner, then order those groups by the next-round position.
                 next_round_series = conf_round[conf].get(round_num + 1, [])
+                # bucket_key = the parent next-round series' position; keeps the two
+                # feeder series visually adjacent beneath their parent in the bracket.
                 buckets = defaultdict(list)
+                # Series with no winner yet (or winner not matched in any next-round
+                # series) are collected here and appended last.
                 unassigned = []
 
                 for s in round_series:
                     winner_id = s.get("winnerTeamId")
                     placed = False
                     if winner_id:
+                        # Walk next-round series to find which one the winner joined.
                         for ns in next_round_series:
                             if winner_id in series_team_ids.get(ns["seriesKey"], set()):
+                                # 999 is a sentinel: parent not yet positioned → sort bucket last.
                                 bucket_key = round_pos.get(ns["seriesKey"], 999)
                                 buckets[bucket_key].append(s)
                                 placed = True
@@ -496,9 +480,13 @@ def sort_by_bracket_progression(playoff_series, use_game_id_position):
                 ordered = []
                 for bk in sorted(buckets.keys()):
                     ordered.extend(_sort_series(buckets[bk], use_game_id_position))
+                # Unassigned series trail positioned buckets; sorted so their relative
+                # order is still deterministic rather than arbitrary.
                 ordered.extend(_sort_series(unassigned, use_game_id_position))
 
             for i, s in enumerate(ordered):
+                # Record position so the next (lower) round can use it as a bucket
+                # key to keep bracket alignment consistent across rounds.
                 round_pos[s["seriesKey"]] = i
 
         conf_positions[conf] = round_pos

@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ReactFlow, Controls, useReactFlow } from '@xyflow/react';
+import { ReactFlow, ReactFlowProvider, useReactFlow, useNodes } from '@xyflow/react';
 import type { Node, EdgeTypes } from '@xyflow/react';
 import { Switch } from '@adobe/react-spectrum';
 import '@xyflow/react/dist/style.css';
@@ -13,19 +13,84 @@ import type { ViewportSize } from '@/hooks/useViewportSize';
 import BracketSeriesNode from './BracketSeriesNode';
 import BracketEdge from './BracketEdge';
 
-function FitOnResize({ viewportSize }: { viewportSize: ViewportSize }) {
+interface FitOnResizeProps {
+  viewportSize: ViewportSize;
+}
+
+function FitOnResize({ viewportSize }: FitOnResizeProps) {
   const { fitView } = useReactFlow();
+  const nodes = useNodes();
   useEffect(() => {
-    fitView({ padding: 0.05, includeHiddenNodes: false });
-  }, [viewportSize, fitView]);
+    const timer = setTimeout(() => {
+      fitView({ padding: 0.05, includeHiddenNodes: false });
+    }, 150);
+    return () => clearTimeout(timer);
+  }, [viewportSize, nodes.length, fitView]);
   return null;
 }
 
-function ConferenceLabelNode({ data }: { data: { label: string } }) {
+const btnStyle: React.CSSProperties = {
+  width: 26,
+  height: 26,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  background: 'none',
+  border: 'none',
+  color: '#fff',
+  cursor: 'pointer',
+  borderRadius: 4,
+  padding: 0,
+};
+
+function BracketControls() {
+  const { zoomIn, zoomOut, fitView } = useReactFlow();
+  return (
+    <div className="flex justify-end mb-3">
+      <div
+        style={{
+          background: '#1a1a1a',
+          borderRadius: 8,
+          boxShadow: '0 2px 8px rgba(0,0,0,0.5)',
+          padding: 4,
+          display: 'flex',
+          gap: 2,
+        }}
+      >
+        <button style={btnStyle} onClick={() => zoomIn()} title="Zoom in" aria-label="Zoom in">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="14" height="14" fill="currentColor">
+            <path d="M32 18.133H18.133V32h-4.266V18.133H0v-4.266h13.867V0h4.266v13.867H32z" />
+          </svg>
+        </button>
+        <button style={btnStyle} onClick={() => zoomOut()} title="Zoom out" aria-label="Zoom out">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 5" width="14" height="5" fill="currentColor">
+            <path d="M0 0h32v4.2H0z" />
+          </svg>
+        </button>
+        <button
+          style={btnStyle}
+          onClick={() => fitView({ padding: 0.05, includeHiddenNodes: false })}
+          title="Fit view"
+          aria-label="Fit view"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 30" width="14" height="14" fill="currentColor">
+            <path d="M3.692 4.63c0-.53.4-.938.939-.938h5.215V0H4.708C2.13 0 0 2.054 0 4.63v5.216h3.692V4.63zM27.354 0h-5.2v3.692h5.17c.53 0 .984.4.984.939v5.215H32V4.631A4.624 4.624 0 0027.354 0zm.954 24.83c0 .532-.4.94-.939.94h-5.215V29.5h5.215c2.577 0 4.631-2.054 4.631-4.63v-5.216h-3.692v5.176zm-23.677.94a.938.938 0 01-.939-.94v-5.215H0v5.215c0 2.577 2.054 4.631 4.631 4.631h5.215V25.77H4.631z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  );
+}
+
+type ConferenceLabelData = {
+  label: string;
+};
+
+function ConferenceLabelNode({ data }: { data: ConferenceLabelData }) {
   return (
     <div
-      style={{ transform: 'translateX(-50%)' }}
-      className="text-2xl font-bold tracking-wide text-neutral-900 dark:text-neutral-100 select-none pointer-events-none whitespace-nowrap"
+      className="text-xl font-bold tracking-wide dark:text-slate-50 text-neutral-950 select-none"
+      style={{ pointerEvents: 'none', whiteSpace: 'nowrap', transform: 'translateX(-50%)' }}
     >
       {data.label}
     </div>
@@ -34,7 +99,7 @@ function ConferenceLabelNode({ data }: { data: { label: string } }) {
 
 const nodeTypes = {
   seriesNode: BracketSeriesNode,
-  labelNode: ConferenceLabelNode,
+  conferenceLabel: ConferenceLabelNode,
 };
 
 const edgeTypes: EdgeTypes = {
@@ -46,13 +111,12 @@ interface PlayoffBracketFlowProps {
   season: string;
 }
 
-function PlayoffBracketFlow({ playoffPicture, season }: PlayoffBracketFlowProps) {
+function PlayoffBracketFlowInner({ playoffPicture, season }: PlayoffBracketFlowProps) {
   const navigate = useNavigate();
   const viewportSize = useViewportSize();
   const sizing = bracketSizing[viewportSize];
   const [revealedRounds, setRevealedRounds] = useState<Set<number>>(new Set());
 
-  // Get unique rounds and sort them
   const rounds = useMemo(
     () => [...new Set(playoffPicture.map(s => s.round))].sort((a, b) => a - b),
     [playoffPicture]
@@ -83,12 +147,11 @@ function PlayoffBracketFlow({ playoffPicture, season }: PlayoffBracketFlowProps)
     [playoffPicture, revealedRounds, season, sizing]
   );
 
-  // Determine which rounds should show reveal buttons
   const canRevealRound = (round: number): boolean => {
-    if (round === 1) return true; // Round 1 can always be revealed
-    if (round === 2) return revealedRounds.has(1); // Round 2 can be revealed if Round 1 is revealed
-    if (round === 3) return revealedRounds.has(2); // Round 3 can be revealed if Round 2 is revealed
-    if (round === 4) return revealedRounds.has(3); // Finals can be revealed if Round 3 is revealed
+    if (round === 1) return true;
+    if (round === 2) return revealedRounds.has(1);
+    if (round === 3) return revealedRounds.has(2);
+    if (round === 4) return revealedRounds.has(3);
     return false;
   };
 
@@ -117,6 +180,9 @@ function PlayoffBracketFlow({ playoffPicture, season }: PlayoffBracketFlowProps)
         })}
       </div>
 
+      {/* Zoom controls in their own row, fully separated from bracket content */}
+      <BracketControls />
+
       {/* Bracket visualization */}
       <div className="w-full" style={{ height: sizing.canvasHeight }}>
         <ReactFlow
@@ -138,22 +204,17 @@ function PlayoffBracketFlow({ playoffPicture, season }: PlayoffBracketFlowProps)
           onNodeClick={handleNodeClick}
         >
           <FitOnResize viewportSize={viewportSize} />
-          <Controls
-            showInteractive={false}
-            orientation="horizontal"
-            position="top-right"
-            style={{
-              background: '#1a1a1a',
-              border: 'none',
-              borderRadius: '8px',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.5)',
-              padding: '4px',
-              margin: '12px',
-            }}
-          />
         </ReactFlow>
       </div>
     </>
+  );
+}
+
+function PlayoffBracketFlow(props: PlayoffBracketFlowProps) {
+  return (
+    <ReactFlowProvider>
+      <PlayoffBracketFlowInner {...props} />
+    </ReactFlowProvider>
   );
 }
 

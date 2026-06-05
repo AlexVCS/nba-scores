@@ -4,6 +4,7 @@ import PlayoffYearPicker from "@/components/PlayoffYearPicker";
 import { usePlayoffData } from "@/hooks/usePlayoffData";
 import PlayoffBracketFlow from "@/components/PlayoffBracketFlow";
 import DarkModeToggle from "@/components/DarkModeToggle";
+import Header from "@/components/Header";
 import { getDefaultPlayoffSeason } from "@/helpers/helpers";
 
 function Playoffs() {
@@ -21,15 +22,10 @@ function Playoffs() {
 
   const { data, isLoading, error } = usePlayoffData(season);
 
-  useEffect(() => {
-    if (data) {
-      console.log("Playoff Picture Data:", data);
-    }
-  }, [data]);
-
   return (
     <div className="bg-slate-50 dark:bg-neutral-950">
       <DarkModeToggle />
+      <Header variant="playoffs" />
       <div className="p-4">
         <PlayoffYearPicker />
         {isLoading && <p>Loading...</p>}
