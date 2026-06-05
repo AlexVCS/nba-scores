@@ -15,7 +15,6 @@ with open(_CONFERENCES_JSON) as _f:
 EAST_TEAM_IDS: frozenset[int] = frozenset(CONFERENCES["east"])
 WEST_TEAM_IDS: frozenset[int] = frozenset(CONFERENCES["west"])
 
-
 def fetch_playoff_team_games_df(season: str):
     games = leaguegamefinder.LeagueGameFinder(
         season_nullable=season,
