@@ -30,7 +30,7 @@ type ConferenceGroups = {
 /**
  * Groups playoff series by conference (East, West, Finals)
  */
-function groupSeriesByConference(series: SeriesData[]): ConferenceGroups {
+export function groupSeriesByConference(series: SeriesData[]): ConferenceGroups {
   const east: SeriesData[] = [];
   const west: SeriesData[] = [];
   const finals: SeriesData[] = [];
