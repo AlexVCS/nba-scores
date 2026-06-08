@@ -2,7 +2,10 @@ import json
 from collections import defaultdict
 from pathlib import Path
 
+from fastapi import HTTPException
 from nba_api.stats.endpoints import leaguegamefinder
+from requests.exceptions import ConnectionError as RequestsConnectionError
+from requests.exceptions import ReadTimeout
 
 _CONFERENCES_JSON = (
     Path(__file__).resolve().parent.parent / "constants" / "nbaConferences.json"
@@ -15,14 +18,25 @@ with open(_CONFERENCES_JSON) as _f:
 EAST_TEAM_IDS: frozenset[int] = frozenset(CONFERENCES["east"])
 WEST_TEAM_IDS: frozenset[int] = frozenset(CONFERENCES["west"])
 
-def fetch_playoff_team_games_df(season: str):
-    games = leaguegamefinder.LeagueGameFinder(
-        season_nullable=season,
-        season_type_nullable="Playoffs",
-        league_id_nullable="00",
-    )
+_df_cache: dict = {}
 
-    return games.get_data_frames()[0]
+
+def fetch_playoff_team_games_df(season: str):
+    if season in _df_cache:
+        return _df_cache[season]
+
+    try:
+        games = leaguegamefinder.LeagueGameFinder(
+            season_nullable=season,
+            season_type_nullable="Playoffs",
+            league_id_nullable="00",
+        )
+    except (ReadTimeout, RequestsConnectionError) as e:
+        raise HTTPException(status_code=503, detail=f"NBA Stats API unavailable: {e}")
+
+    df = games.get_data_frames()[0]
+    _df_cache[season] = df
+    return df
 
 
 def get_round_name(round_number: int):

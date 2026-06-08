@@ -10,7 +10,7 @@ const Header = ({ variant = "default" }: HeaderProps) => {
       <header className="flex flex-col justify-center items-center pt-4 gap-2">
         {isPlayoffs ? (
           <img
-            className="w-xs"
+            className="w-48 sm:w-xs"
             src="/images/playoffz.png"
             alt="NBA Playoffz Logo"
           />

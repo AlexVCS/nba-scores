@@ -26,7 +26,7 @@ function BracketSeriesNode({ data }: BracketSeriesNodeProps) {
       >
         <div className={`flex items-center ${sizing.rowGapClass} min-w-0`}>
           <div className={`bg-white rounded ${sizing.logoPadClass} flex-shrink-0`}>
-            <TeamLogos teamName={team.tricode} teamId={team.id} size={sizing.logoSize} />
+            <TeamLogos teamName={team.tricode} teamId={team.id} size={sizing.logoSize} tricode={team.tricode} />
           </div>
           <span
             className={`font-mono ${sizing.tricodeClass} truncate tracking-wider text-amber-500 ${showWinner ? 'font-bold' : 'font-semibold'}`}

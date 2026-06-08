@@ -36,7 +36,7 @@ function Playoffs() {
       <Header variant="playoffs" />
       <div className="p-4">
         <PlayoffYearPicker />
-        {isLoading && <p>Loading...</p>}
+        {isLoading && <p className="text-slate-700 dark:text-slate-300">Loading...</p>}
         {error && <p>Error: {String(error)}</p>}
         {data && (
           <div className="mt-8">
