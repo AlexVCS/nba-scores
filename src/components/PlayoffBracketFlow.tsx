@@ -13,6 +13,7 @@ import { useViewportSize } from '@/hooks/useViewportSize';
 import type { ViewportSize } from '@/hooks/useViewportSize';
 import BracketSeriesNode from './BracketSeriesNode';
 import BracketEdge from './BracketEdge';
+import MobileBracket from './MobileBracket';
 
 interface FitOnResizeProps {
   viewportSize: ViewportSize;
@@ -156,6 +157,19 @@ function PlayoffBracketFlowInner({ playoffPicture, season }: PlayoffBracketFlowP
     return false;
   };
 
+  if (viewportSize === 'sm') {
+    return (
+      <MobileBracket
+        playoffPicture={playoffPicture}
+        season={season}
+        revealedRounds={revealedRounds}
+        revealRound={revealRound}
+        hideRound={hideRound}
+        canRevealRound={canRevealRound}
+      />
+    );
+  }
+
   return (
     <>
       {/* Per-round reveal controls */}
@@ -172,6 +186,7 @@ function PlayoffBracketFlowInner({ playoffPicture, season }: PlayoffBracketFlowP
               key={round}
               isSelected={isRevealed}
               onChange={(selected) => selected ? revealRound(round) : hideRound(round)}
+              UNSAFE_className="origin-left scale-75 sm:scale-100"
             >
               <div className="dark:text-slate-50 text-neutral-950">
                 {isRevealed ? `Hide ${roundName}` : `Show ${roundName}`}

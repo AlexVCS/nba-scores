@@ -231,3 +231,14 @@ export const getDefaultPlayoffSeason = (date: Date = new Date()): string => {
 
   return `${seasonEndYear - 1}-${String(seasonEndYear).slice(-2)}`;
 };
+
+/**
+ * Formats a "YYYY-MM-DD" (or "YYYY-MM-DDTHH:mm:ss") date string as a calendar date,
+ * e.g. "Apr 25, 1996". Parses the year/month/day directly instead of going through
+ * `new Date(string)`, which interprets bare date strings as UTC and can shift the
+ * displayed date back a day in timezones behind UTC.
+ */
+export const formatGameDate = (dateString: string): string => {
+  const [year, month, day] = dateString.slice(0, 10).split('-').map(Number);
+  return new Date(year, month - 1, day).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+};

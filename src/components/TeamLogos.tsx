@@ -1,13 +1,16 @@
 import { placeholderTeamLogoUrl } from "@/helpers/helpers";
+import { HISTORICAL_TEAM_LOGOS } from "@/constants/historicalTeamLogos";
 
 interface TeamLogoProps {
   teamName?: string;
   teamId: number;
   size: number;
+  tricode?: string;
 }
 
-const TeamLogos = ({ teamName, teamId, size }: TeamLogoProps) => {
-  const logoUrl = `https://cdn.nba.com/logos/nba/${teamId}/global/L/logo.svg`;
+const TeamLogos = ({ teamName, teamId, size, tricode }: TeamLogoProps) => {
+  const logoUrl = (tricode && HISTORICAL_TEAM_LOGOS[tricode])
+    ?? `https://cdn.nba.com/logos/nba/${teamId}/global/L/logo.svg`;
 
   return (
     <>

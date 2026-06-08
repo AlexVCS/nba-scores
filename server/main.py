@@ -302,7 +302,12 @@ def playoff_games(season: str = "2023-24"):
 
 @app.get("/playoffs/series")
 def playoff_series(season: str = "2023-24"):
-    return get_playoff_series(season)
+    try:
+        return get_playoff_series(season)
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.get("/playoffs/full")

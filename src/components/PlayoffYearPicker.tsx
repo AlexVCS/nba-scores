@@ -118,14 +118,14 @@ const PlayoffYearPicker = () => {
           id: String(year),
           label: formatSeason(year),
         }))}
-        className="group flex flex-col gap-1 w-[200px]"
+        className="group flex flex-col gap-1 w-[160px] sm:w-[200px]"
         menuTrigger="focus"
       >
-        <Label className="cursor-default dark:text-slate-50 text-neutral-950">
+        <Label className="cursor-default dark:text-slate-50 text-neutral-950 text-sm sm:text-base">
           Playoff Season
         </Label>
 
-        <div className="flex rounded-lg bg-white/90 focus-within:bg-white group-open:bg-white transition pl-3 shadow-md text-gray-700 focus-visible:ring-2 ring-black outline-none">
+        <div className="flex rounded-lg bg-white/90 focus-within:bg-white group-open:bg-white transition pl-3 shadow-md text-gray-700 text-sm sm:text-base focus-visible:ring-2 ring-black outline-none">
           <Input
             onBlur={handleCommitInput}
             onKeyDown={(event) => {
@@ -133,10 +133,10 @@ const PlayoffYearPicker = () => {
                 handleCommitInput();
               }
             }}
-            className="flex flex-1 py-2 text-left bg-transparent outline-none"
+            className="flex flex-1 min-w-0 py-1.5 sm:py-2 text-left bg-transparent outline-none"
           />
 
-          <Button className="px-3 flex items-center text-gray-700 rounded-r-lg pressed:bg-purple-100 outline-none">
+          <Button className="px-2 sm:px-3 flex items-center text-gray-700 rounded-r-lg pressed:bg-purple-100 outline-none">
             <ChevronUpDownIcon size="XS" />
           </Button>
         </div>

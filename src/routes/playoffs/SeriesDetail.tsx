@@ -1,8 +1,7 @@
-import { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { Switch } from '@adobe/react-spectrum';
 import { usePlayoffData } from '@/hooks/usePlayoffData';
-import { generateWatchLink } from '@/helpers/helpers';
+import { generateWatchLink, formatGameDate } from '@/helpers/helpers';
 import TeamLogos from '@/components/TeamLogos';
 import DarkModeToggle from '@/components/DarkModeToggle';
 import { TEAM_COLORS } from '@/constants/teamColors';
@@ -23,7 +22,16 @@ function SeriesDetail() {
   }
 
   const season = yearToSeason(year);
-  const [isRevealed, setIsRevealed] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const isRevealed = searchParams.get('revealed') === 'true';
+  const setIsRevealed = (value: boolean) => {
+    setSearchParams(prev => {
+      const next = new URLSearchParams(prev);
+      if (value) next.set('revealed', 'true');
+      else next.delete('revealed');
+      return next;
+    }, { replace: true });
+  };
 
   const { data, isLoading, error } = usePlayoffData(season);
 
@@ -89,7 +97,7 @@ function SeriesDetail() {
         >
           <div className="flex items-center justify-between">
             <div className={`flex flex-col items-center gap-2 ${isRevealed && team1.id === series.winnerTeamId ? "font-bold" : ""}`}>
-              <TeamLogos teamName={team1.tricode} teamId={team1.id} size={64} />
+              <TeamLogos teamName={team1.tricode} teamId={team1.id} size={64} tricode={team1.tricode} />
               <span className="text-lg">{team1.tricode}</span>
             </div>
             <div className="text-center">
@@ -101,7 +109,7 @@ function SeriesDetail() {
               )}
             </div>
             <div className={`flex flex-col items-center gap-2 ${isRevealed && team2.id === series.winnerTeamId ? "font-bold" : ""}`}>
-              <TeamLogos teamName={team2.tricode} teamId={team2.id} size={64} />
+              <TeamLogos teamName={team2.tricode} teamId={team2.id} size={64} tricode={team2.tricode} />
               <span className="text-lg">{team2.tricode}</span>
             </div>
           </div>
@@ -114,7 +122,7 @@ function SeriesDetail() {
               {series.games.map((game, index) => {
                 const shouldShowWatch = seasonYear >= 2012;
                 const watchLink = generateWatchLink(game.awayTeam.tricode, game.homeTeam.tricode, game.gameId);
-                const gameDate = new Date(game.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                const gameDate = formatGameDate(game.date);
                 const homeWon = isRevealed && game.homeTeam.score > game.awayTeam.score;
                 const awayWon = isRevealed && game.awayTeam.score > game.homeTeam.score;
 
@@ -148,12 +156,24 @@ function SeriesDetail() {
                       </a>
                     )}
                     {isRevealed && (
-                      <Link
-                        to={`/games/${game.gameId}/boxscore`}
-                        className="hidden sm:inline text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 shrink-0"
-                      >
-                        Box score
-                      </Link>
+                      <>
+                        <svg
+                          className="sm:hidden shrink-0 text-gray-400 dark:text-gray-500"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 16 16"
+                          fill="none"
+                          aria-hidden="true"
+                        >
+                          <path d="M6 3l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                        <Link
+                          to={`/games/${game.gameId}/boxscore`}
+                          className="hidden sm:inline text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 shrink-0"
+                        >
+                          Box score
+                        </Link>
+                      </>
                     )}
                   </div>
                 );
