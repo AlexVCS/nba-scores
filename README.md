@@ -75,9 +75,7 @@ Navigate to the [Playoffs](https://nba-scorez.onrender.com/playoffs) page to exp
 
 ## Built With
 
-[![React.JS]][React-url][![Tailwindcss]][Tailwind-url][![Hono]][Hono-url][![TypeScript]][Typescript-url]
-
-Design: https://www.figma.com/design/AQL6ywEUiKkconAcaX5upM/NBA-Website-(Community)?node-id=0-1&p=f&t=5BTVqqpQWaIF9b4f-0
+[![React.JS]][React-url][![Tailwindcss]][Tailwind-url][![TypeScript]][Typescript-url][![FastAPI]][FastAPI-url]
 
 <div align='right'>
 
@@ -133,13 +131,13 @@ Alex Curtis-Slep - [GitHub](https://github.com/AlexVCS) / [Bluesky](https://bsky
 
 [alex-linkedin-shield]: https://img.shields.io/badge/-Alex's_LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [alex-linkedin-url]: https://www.linkedin.com/in/alexcurtisslep/
-[Hono]: https://img.shields.io/badge/Hono-black?style=for-the-badge&logo=hono
-[Hono-url]: https://hono.dev/
+[FastAPI]: https://img.shields.io/badge/FastAPI-009485.svg?style=for-the-badge&logo=fastapi&logoColor=white
+[FastAPI-url]: https://fastapi.tiangolo.com/
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
 [React-url]: https://reactjs.org/
+[ReactFlow]: https://img.shields.io/badge/React_Flow-black?style=for-the-badge&logo=react
+[ReactFlow-url]: https://reactflow.dev/
 [Tailwindcss]: https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white
 [Tailwind-url]: https://tailwindcss.com/
 [Typescript]: https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white
 [Typescript-url]: https://www.typescriptlang.org/
-[ReactFlow]: https://img.shields.io/badge/React_Flow-black?style=for-the-badge&logo=react
-[ReactFlow-url]: https://reactflow.dev/
