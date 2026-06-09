@@ -1,7 +1,7 @@
 [![alex-linkedin-shield]][alex-linkedin-url]
 
 <div align="center">
-  <img src="./public/images/app_logo.png" style="height:100px" />
+  <img src="./public/images/dark-mode-logo.webp" style="height:200px" />
    <p align="center">
     Bienvenue! 
     <br />
@@ -13,21 +13,65 @@
 
 [About](#about) |
 [Screenshots](#screenshots) |
+[Playoffs](#playoffs) |
 [Built With](#built-with) |
 [Local Project Setup](#local-project-setup) |
+[AI Agents](#ai-agents) |
 [Clone the repo](#clone-the-repo) |
-<!-- [Mock an API Response](#mock-an-api-Response) | -->
 [Contact](#contact)
 
 ## About
 
-Find the scores and stats of your favorite NBA team! Boxscores are only available for games from the 2019/20 season, and after.
+Find the scores and stats of your favorite NBA team! Boxscores are only available for games from the 2019/20 season, and after. Explore NBA playoff brackets going back to the 1983/84 season, with round-by-round reveal controls and detailed series views.
 
 ## Screenshots
 
-Scores App UI                           |         Boxscore UI
-:--------------------------------------:|:-------------------------:
-![NBA Scores App UI](./public/images/scores_app_ui.png)  |  ![Boxscore UI](./public/images/boxscore_ui.png)
+<table>
+  <tr>
+    <th>Scorez App</th>
+    <th>Boxscore</th>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="./public/images/scores-app-ui.PNG" alt="NBA Scorez App" width="300">
+    </td>
+    <td align="center">
+      <img src="./public/images/boxscore-ui.PNG" alt="Boxscore" width="300">
+    </td>
+  </tr>
+  <tr>
+    <th>Playoffz</th>
+    <th>Series Detail</th>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="./public/images/playoffz-screenshot.PNG" alt="Playoffz" width="300">
+    </td>
+    <td align="center">
+      <img
+        src="./public/images/series-detail-screenshot.PNG"
+        alt="Series Details"
+        width="300"
+      >
+    </td>
+  </tr>
+</table>
+
+## Playoffs
+
+Navigate to the [Playoffs](https://nba-scorez.onrender.com/playoffs) page to explore interactive bracket visualizations for NBA playoff seasons going back to 1983/84.
+
+- Select any season with the year picker
+- Toggle results round by round to avoid spoilers
+- Click any series to see a game-by-game breakdown with scores, dates, and links to box scores
+- Watch links are available for seasons from 2012/13 onward
+- On desktop, the bracket is rendered with [React Flow](https://reactflow.dev/)
+
+<div align='right'>
+
+[Back to Top](#top)
+
+</div>
 
 ## Built With
 
@@ -41,9 +85,22 @@ Design: https://www.figma.com/design/AQL6ywEUiKkconAcaX5upM/NBA-Website-(Communi
 
 </div>
 
+
+</div>
+
 ## Local Project Setup
 
-Git, Node.js, and PNPM (or your package manager of choice) are required to run this project locally. 
+Git, Node.js, Python, and PNPM (or your package manager of choice) are required to run this project locally. 
+
+## AI Agents
+
+AI coding agents from [OpenAI](https://openai.com) and [Anthropic](https://anthropic.com) assisted in writing code throughout this project.
+
+<div align='right'>
+
+[Back to Top](#top)
+
+</div>
 
 ### Clone the repo
 
@@ -63,30 +120,6 @@ To run the backend, open a terminal and run this:
 source server/venv/bin/activate
 uvicorn server.main:app --reload
 ```
-
-<div align='right'>
-
-[Back to Top](#top)
-
-</div>
-
-<!-- ### Mock an API Response
-
-If you'd like to see what the scores UI looks like without signing up for the API, or test the view in dev mode, run this in your terminal:
-
-`npm run mock-api`
-
-This runs a file at the root called `MockApiResponse.mjs` that edits `app/components/Scores.tsx` to no longer call the API and use `exampleResponse.json` as your data.
-
-To undo these changes, run this command in your terminal:
-
-`npm run call-api` -->
-
-<!-- <div align='right'>
-
-[Back to Top](#top)
-
-</div> -->
 
 ## Contact
 
@@ -108,3 +141,5 @@ Alex Curtis-Slep - [GitHub](https://github.com/AlexVCS) / [Bluesky](https://bsky
 [Tailwind-url]: https://tailwindcss.com/
 [Typescript]: https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white
 [Typescript-url]: https://www.typescriptlang.org/
+[ReactFlow]: https://img.shields.io/badge/React_Flow-black?style=for-the-badge&logo=react
+[ReactFlow-url]: https://reactflow.dev/
