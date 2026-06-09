@@ -176,7 +176,7 @@ function MobileBracket({
   };
 
   return (
-    <div>
+    <div className="pb-8">
       <div ref={sentinelRef} className="h-0" />
       <div className={`flex border-b-2 border-gray-700 mb-5 sticky top-0 z-10 transition-colors duration-150 ${isStuck ? 'bg-gray-900' : ''}`}>
         {TABS.filter(({ key }) => key !== 'Finals' || showFinalsTab).map(({ key, label }) => (
