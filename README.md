@@ -28,8 +28,8 @@ Find the scores and stats of your favorite NBA team! Boxscores are only availabl
 
 <table>
   <tr>
-    <th align="center">Scorez App</th>
-    <th align="center">Boxscore</th>
+    <th>Scorez App</th>
+    <th>Boxscore</th>
   </tr>
   <tr>
     <td align="center">
@@ -40,15 +40,19 @@ Find the scores and stats of your favorite NBA team! Boxscores are only availabl
     </td>
   </tr>
   <tr>
-    <th align="center">Playoffz</th>
-    <th align="center">Series Detail</th>
+    <th>Playoffz</th>
+    <th>Series Detail</th>
   </tr>
   <tr>
     <td align="center">
       <img src="./public/images/playoffz-screenshot.PNG" alt="Playoffz" width="300">
     </td>
     <td align="center">
-      <img src="./public/images/series-detail-screenshot.PNG" alt="Series Details" width="300">
+      <img
+        src="./public/images/series-detail-screenshot.PNG"
+        alt="Series Details"
+        width="300"
+      >
     </td>
   </tr>
 </table>
