@@ -189,7 +189,7 @@ function PlayoffBracketFlowInner({ playoffPicture, season }: PlayoffBracketFlowP
               UNSAFE_className="origin-left scale-75 sm:scale-100"
             >
               <div className="dark:text-slate-50 text-neutral-950">
-                {isRevealed ? `Hide ${roundName}` : `Show ${roundName}`}
+                {isRevealed ? `Hide ${roundName}` : `Show ${roundName} Results`}
               </div>
             </Switch>
           );
