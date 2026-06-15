@@ -3,7 +3,7 @@ from collections import defaultdict
 from pathlib import Path
 
 from fastapi import HTTPException
-from nba_api.stats.endpoints import leaguegamefinder
+from nba_api.stats.endpoints import boxscoresummaryv2, leaguegamefinder
 from requests.exceptions import ConnectionError as RequestsConnectionError
 from requests.exceptions import ReadTimeout
 
@@ -19,6 +19,9 @@ EAST_TEAM_IDS: frozenset[int] = frozenset(CONFERENCES["east"])
 WEST_TEAM_IDS: frozenset[int] = frozenset(CONFERENCES["west"])
 
 _df_cache: dict = {}
+
+# game_id -> {team_id: points}, cached so each corrupt game is only fetched once.
+_linescore_cache: dict = {}
 
 
 def fetch_playoff_team_games_df(season: str):
@@ -402,6 +405,85 @@ def normalize_playoff_games(df):
     )
 
 
+def game_scores_disagree_with_winner(game):
+    """
+    True when a game's displayed scores contradict its (WL-derived) winner.
+
+    LeagueGameFinder occasionally returns a corrupt PTS value. Once the winner is
+    taken from the WL flag, such a game has the winner showing fewer points than
+    the loser, e.g. game 0048300051 lists Phoenix as the winner with 111 but Utah
+    with 113. That mismatch is the signal to repair the score.
+    """
+    winner_id = game.get("winnerTeamId")
+    home = game["homeTeam"]
+    away = game["awayTeam"]
+
+    if winner_id == home["id"]:
+        return home["score"] <= away["score"]
+    if winner_id == away["id"]:
+        return away["score"] <= home["score"]
+
+    return False
+
+
+def fetch_corrected_team_scores(game_id):
+    """
+    Fetch authoritative per-team final scores from boxscoresummaryv2.
+
+    Returns ``{team_id: points}`` or ``None`` when the data is unavailable. Used
+    only to repair the rare games whose LeagueGameFinder PTS disagrees with WL;
+    boxscoresummaryv2 carries the correct linescore (verified against
+    Basketball-Reference for the 1984 Suns/Jazz game).
+    """
+    if game_id in _linescore_cache:
+        return _linescore_cache[game_id]
+
+    try:
+        line_score = boxscoresummaryv2.BoxScoreSummaryV2(
+            game_id=game_id
+        ).line_score.get_data_frame()
+    except (ReadTimeout, RequestsConnectionError):
+        return None
+
+    scores = {}
+    for _, row in line_score.iterrows():
+        try:
+            scores[int(row["TEAM_ID"])] = int(row["PTS"])
+        except (TypeError, ValueError):
+            continue
+
+    if not scores:
+        return None
+
+    _linescore_cache[game_id] = scores
+    return scores
+
+
+def correct_game_scores(games):
+    """
+    Repair displayed scores for games whose PTS disagrees with the WL winner.
+
+    Mutates and returns ``games``. The WL-derived ``winnerTeamId`` is left intact;
+    only the points are overwritten with the real linescore. Games whose scores
+    already agree with the winner are untouched, so in a normal season this makes
+    zero extra API calls.
+    """
+    for game in games:
+        if not game_scores_disagree_with_winner(game):
+            continue
+
+        corrected = fetch_corrected_team_scores(game["gameId"])
+        if not corrected:
+            continue
+
+        for side in ("homeTeam", "awayTeam"):
+            team = game[side]
+            if team["id"] in corrected:
+                team["score"] = corrected[team["id"]]
+
+    return games
+
+
 def get_series_key(game):
     team_ids = sorted(
         [
@@ -614,6 +696,7 @@ def derive_playoff_series(games):
 def get_normalized_playoff_games(season: str):
     df = fetch_playoff_team_games_df(season)
     games = normalize_playoff_games(df)
+    games = correct_game_scores(games)
     games = apply_rounds_to_games(games)
 
     return {
@@ -627,6 +710,7 @@ def get_normalized_playoff_games(season: str):
 def get_playoff_series(season: str):
     df = fetch_playoff_team_games_df(season)
     games = normalize_playoff_games(df)
+    games = correct_game_scores(games)
     games = apply_rounds_to_games(games)
     playoff_series = derive_playoff_series(games)
 
@@ -642,6 +726,7 @@ def get_playoff_series(season: str):
 def get_playoff_games_and_series(season: str):
     df = fetch_playoff_team_games_df(season)
     games = normalize_playoff_games(df)
+    games = correct_game_scores(games)
     games = apply_rounds_to_games(games)
     playoff_series = derive_playoff_series(games)
 
