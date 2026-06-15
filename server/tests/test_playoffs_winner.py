@@ -10,6 +10,7 @@ from server.services import playoffs
 
 
 def _team_row(game_id, date, matchup, abbr, team_id, wl, pts):
+    """Build a single LeagueGameFinder-style team row for a game."""
     return {
         "GAME_ID": game_id,
         "GAME_DATE": date,
@@ -32,6 +33,7 @@ def test_determine_winner_trusts_wl_over_pts():
 
 
 def test_determine_winner_falls_back_to_score_when_wl_missing():
+    """When the WL flag is absent, the higher score should win."""
     home = {"WL": None, "id": 1}
     away = {"WL": None, "id": 2}
 
