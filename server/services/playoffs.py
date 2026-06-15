@@ -1,11 +1,15 @@
 import json
+import time
 from collections import defaultdict
+from datetime import datetime
 from pathlib import Path
 
 from fastapi import HTTPException
 from nba_api.stats.endpoints import leaguegamefinder
 from requests.exceptions import ConnectionError as RequestsConnectionError
 from requests.exceptions import ReadTimeout
+
+from server.utils.season import get_nba_season
 
 _CONFERENCES_JSON = (
     Path(__file__).resolve().parent.parent / "constants" / "nbaConferences.json"
@@ -18,12 +22,31 @@ with open(_CONFERENCES_JSON) as _f:
 EAST_TEAM_IDS: frozenset[int] = frozenset(CONFERENCES["east"])
 WEST_TEAM_IDS: frozenset[int] = frozenset(CONFERENCES["west"])
 
+# season -> (fetched_at_monotonic, df)
 _df_cache: dict = {}
+
+# Past seasons are immutable and may be cached indefinitely. The current
+# (in-progress) season changes as new playoff games are played, so it is only
+# cached for a short window to avoid serving a stale game count in production.
+_CURRENT_SEASON_TTL_SECONDS = 300
+
+
+def get_current_season() -> str:
+    now = datetime.now()
+    return get_nba_season(now.year, now.month)
 
 
 def fetch_playoff_team_games_df(season: str):
-    if season in _df_cache:
-        return _df_cache[season]
+    cached = _df_cache.get(season)
+
+    if cached is not None:
+        fetched_at, df = cached
+        is_current_season = season == get_current_season()
+
+        # Past seasons never expire; the current season expires after the TTL so
+        # newly played games are picked up.
+        if not is_current_season or (time.monotonic() - fetched_at) < _CURRENT_SEASON_TTL_SECONDS:
+            return df
 
     try:
         games = leaguegamefinder.LeagueGameFinder(
@@ -35,7 +58,7 @@ def fetch_playoff_team_games_df(season: str):
         raise HTTPException(status_code=503, detail=f"NBA Stats API unavailable: {e}")
 
     df = games.get_data_frames()[0]
-    _df_cache[season] = df
+    _df_cache[season] = (time.monotonic(), df)
     return df
 
 

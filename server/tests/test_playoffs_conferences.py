@@ -5,7 +5,6 @@ import pytest
 
 _CONFERENCES_JSON = (
     Path(__file__).resolve().parents[1]
-    / "server"
     / "constants"
     / "nbaConferences.json"
 )
