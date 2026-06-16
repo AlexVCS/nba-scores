@@ -9,19 +9,8 @@ import { yearToSeason, findSeriesBySlug } from '@/utils/seriesSlug';
 
 function SeriesDetail() {
   const { year, seriesSlug } = useParams<{ year: string; seriesSlug: string }>();
-
-  if (!year || !/^\d{4}$/.test(year)) {
-    return (
-      <div className="p-4">
-        <p className="dark:text-slate-50">Invalid season year.</p>
-        <Link to="/playoffs" className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300">
-          Back to Playoffs
-        </Link>
-      </div>
-    );
-  }
-
-  const season = yearToSeason(year);
+  const isValidYear = !!year && /^\d{4}$/.test(year);
+  const season = isValidYear ? yearToSeason(year) : null;
   const [searchParams, setSearchParams] = useSearchParams();
   const isRevealed = searchParams.get('revealed') === 'true';
   const setIsRevealed = (value: boolean) => {
@@ -32,8 +21,18 @@ function SeriesDetail() {
       return next;
     }, { replace: true });
   };
-
   const { data, isLoading, error } = usePlayoffData(season);
+
+  if (!isValidYear) {
+    return (
+      <div className="p-4">
+        <p className="dark:text-slate-50">Invalid season year.</p>
+        <Link to="/playoffs" className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300">
+          Back to Playoffs
+        </Link>
+      </div>
+    );
+  }
 
   if (isLoading) return <p className="p-4 dark:text-slate-50">Loading...</p>;
   if (error) return <p className="p-4 dark:text-slate-50">Error: {String(error)}</p>;

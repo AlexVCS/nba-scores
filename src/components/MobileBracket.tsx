@@ -50,7 +50,7 @@ function RoundSection({
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [isRevealed]);
+  }, [isRevealed, canScrollForMore]);
 
   return (
     <div>
