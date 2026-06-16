@@ -1,4 +1,4 @@
-"""Tests for repairing playoff scores when LeagueGameFinder PTS is corrupt.
+"""Tests for defensive playoff score repair.
 
 These tests are offline: the boxscoresummaryv2 client is monkeypatched, so no
 real API calls are made.
@@ -22,7 +22,7 @@ def _game(winner_id, home_id, home_score, away_id, away_score, game_id="00483000
 
 
 def test_disagreement_detected_when_winner_has_fewer_points():
-    """The corrupt 1984 game: Phoenix wins but shows fewer points than Utah."""
+    """A source inconsistency can show the winner with fewer points."""
     game = _game(PHX, home_id=PHX, home_score=111, away_id=UTA, away_score=113)
     assert playoffs.game_scores_disagree_with_winner(game) is True
 
@@ -55,7 +55,7 @@ def test_correct_game_scores_repairs_only_mismatched_game(monkeypatch):
 
     # Only the mismatched game triggered a fetch.
     assert calls == ["0048300051"]
-    # Utah's corrupt 113 is repaired to the real 110; winner is untouched.
+    # The bad source score is repaired to the real line score; winner is untouched.
     assert bad["awayTeam"]["score"] == 110
     assert bad["homeTeam"]["score"] == 111
     assert bad["winnerTeamId"] == PHX

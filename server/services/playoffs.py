@@ -1,11 +1,14 @@
 import json
 from collections import defaultdict
+from datetime import date
 from pathlib import Path
 
 from fastapi import HTTPException
-from nba_api.stats.endpoints import boxscoresummaryv2, leaguegamefinder
+from nba_api.stats.endpoints import LeagueGameLog, boxscoresummaryv2, leaguegamefinder
 from requests.exceptions import ConnectionError as RequestsConnectionError
 from requests.exceptions import ReadTimeout
+
+from ..utils.season import get_nba_season
 
 _CONFERENCES_JSON = (
     Path(__file__).resolve().parent.parent / "constants" / "nbaConferences.json"
@@ -20,25 +23,49 @@ WEST_TEAM_IDS: frozenset[int] = frozenset(CONFERENCES["west"])
 
 _df_cache: dict = {}
 
-# game_id -> {team_id: points}, cached so each corrupt game is only fetched once.
+# game_id -> {team_id: points}, cached so each defensive repair is only fetched once.
 _linescore_cache: dict = {}
 
 
-def fetch_playoff_team_games_df(season: str):
-    if season in _df_cache:
-        return _df_cache[season]
+def should_use_active_playoff_source(season: str, today: date | None = None) -> bool:
+    today = today or date.today()
+    current_season = get_nba_season(today.year, today.month)
+
+    return season == current_season and today.month in {4, 5, 6}
+
+
+def get_playoff_data_source(season: str, today: date | None = None) -> str:
+    if should_use_active_playoff_source(season, today):
+        return "league_game_finder"
+
+    return "league_game_log"
+
+
+def fetch_playoff_team_games_df(season: str, today: date | None = None):
+    source = get_playoff_data_source(season, today)
+    cache_key = (season, source)
+
+    if cache_key in _df_cache:
+        return _df_cache[cache_key]
 
     try:
-        games = leaguegamefinder.LeagueGameFinder(
-            season_nullable=season,
-            season_type_nullable="Playoffs",
-            league_id_nullable="00",
-        )
+        if source == "league_game_finder":
+            games = leaguegamefinder.LeagueGameFinder(
+                season_nullable=season,
+                season_type_nullable="Playoffs",
+                league_id_nullable="00",
+            )
+        else:
+            games = LeagueGameLog(
+                season=season,
+                season_type_all_star="Playoffs",
+                league_id="00",
+            )
     except (ReadTimeout, RequestsConnectionError) as e:
         raise HTTPException(status_code=503, detail=f"NBA Stats API unavailable: {e}")
 
     df = games.get_data_frames()[0]
-    _df_cache[season] = df
+    _df_cache[cache_key] = df
     return df
 
 
@@ -333,14 +360,10 @@ def determine_winner(home_team, away_team, home_score, away_score):
     Determine the winning team for a game.
 
     The NBA Stats API exposes both a ``WL`` (win/loss) flag and ``PTS`` for each
-    team. ``WL`` is the authoritative result, while ``PTS`` is occasionally wrong
-    in historical data. For example, game 0048300051 (1984-05-06, Suns vs. Jazz)
-    reports Utah with the higher score (113) yet flagged as the loss, and Phoenix
-    with fewer points (111) flagged as the win. Trusting ``PTS`` there flipped a
-    Phoenix win into a Utah win and made the 4-2 series render as a 3-3 tie.
-
-    We therefore prefer ``WL`` and only fall back to comparing scores when the
-    flag is missing (it can be null for some very old or in-progress games).
+    team. ``WL`` is the authoritative result, while score rows can occasionally
+    be inconsistent depending on the NBA Stats source. We therefore prefer
+    ``WL`` and only fall back to comparing scores when the flag is missing (it
+    can be null for some very old or in-progress games).
     """
     home_wl = home_team.get("WL")
     away_wl = away_team.get("WL")
@@ -409,10 +432,10 @@ def game_scores_disagree_with_winner(game):
     """
     True when a game's displayed scores contradict its (WL-derived) winner.
 
-    LeagueGameFinder occasionally returns a corrupt PTS value. Once the winner is
-    taken from the WL flag, such a game has the winner showing fewer points than
-    the loser, e.g. game 0048300051 lists Phoenix as the winner with 111 but Utah
-    with 113. That mismatch is the signal to repair the score.
+    LeagueGameLog is the normal historical/completed source and should already
+    have correct final scores. This defensive check protects the active playoff
+    window source, or any future source inconsistency, where a score row may
+    contradict the WL flag.
     """
     winner_id = game.get("winnerTeamId")
     home = game["homeTeam"]
@@ -431,9 +454,9 @@ def fetch_corrected_team_scores(game_id):
     Fetch authoritative per-team final scores from boxscoresummaryv2.
 
     Returns ``{team_id: points}`` or ``None`` when the data is unavailable. Used
-    only to repair the rare games whose LeagueGameFinder PTS disagrees with WL;
-    boxscoresummaryv2 carries the correct linescore (verified against
-    Basketball-Reference for the 1984 Suns/Jazz game).
+    only as a temporary defensive repair when the selected source's PTS values
+    disagree with WL. Historical/completed playoff data normally comes from
+    LeagueGameLog and should not need this correction.
     """
     if game_id in _linescore_cache:
         return _linescore_cache[game_id]
@@ -465,8 +488,8 @@ def correct_game_scores(games):
 
     Mutates and returns ``games``. The WL-derived ``winnerTeamId`` is left intact;
     only the points are overwritten with the real linescore. Games whose scores
-    already agree with the winner are untouched, so in a normal season this makes
-    zero extra API calls.
+    already agree with the winner are untouched, so the normal LeagueGameLog path
+    makes zero extra API calls.
     """
     for game in games:
         if not game_scores_disagree_with_winner(game):
