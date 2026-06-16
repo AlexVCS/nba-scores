@@ -58,6 +58,11 @@ function MobileSeriesCard({ series, allSeries, season, isRevealed }: MobileSerie
       to={`/playoffs/${seasonToYear(season)}/${seriesSlug}`}
       className="block border-2 border-gray-700 rounded-lg overflow-hidden hover:border-blue-400 dark:hover:border-blue-400 transition-colors duration-200"
     >
+      {series.targetWins && (
+        <div className="px-3 py-1 bg-gray-800 text-[10px] uppercase tracking-widest text-gray-400">
+          Best of {series.targetWins * 2 - 1}
+        </div>
+      )}
       {renderRow(team1, team1Wins, team1IsWinner, true)}
       {renderRow(team2, team2Wins, team2IsWinner, false)}
     </Link>

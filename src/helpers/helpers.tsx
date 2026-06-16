@@ -26,6 +26,55 @@ export type TeamsInSeries = {
   name: string;
 };
 
+export type PlayoffFormatEra =
+  | "baa-runners-up-bracket"
+  | "two-division-eight-team"
+  | "three-division-transitional"
+  | "1951-two-division-eight-team"
+  | "1952-two-division-eight-team"
+  | "1953-two-division-eight-team"
+  | "six-team-round-robin"
+  | "six-team-bye"
+  | "eight-team-division"
+  | "eight-team-conference"
+  | "ten-team-bye"
+  | "twelve-team-bye"
+  | "sixteen-team-best-of-five-first-round"
+  | "sixteen-team-best-of-seven"
+  | "modern-play-in-era"
+  | "unknown";
+
+export type BracketGroupKind = "conference" | "division" | "league" | "finals" | "runners-up" | "round-robin";
+
+export interface PlayoffFormat {
+  era: PlayoffFormatEra;
+  playoffYear: number;
+  finalsRound: number | null;
+  bracketType: "single-elimination" | "multi-division" | "round-robin-plus-finals" | "hybrid";
+  supportsExactBracket: boolean;
+  notes: string[];
+}
+
+export interface BracketGroup {
+  id: string;
+  label: string;
+  kind: BracketGroupKind;
+  sortOrder: number;
+}
+
+export interface RoundDefinition {
+  round: number;
+  label: string;
+  sortOrder: number;
+  defaultRevealed: boolean;
+}
+
+export interface BracketEdge {
+  sourceSeriesKey: string;
+  targetSeriesKey: string;
+  winnerTeamId: number | null;
+}
+
 export type SeriesGame = {
   gameId: string;
   date: string;
@@ -41,6 +90,13 @@ export type SeriesData = {
   seriesKey: string;
   round: number;
   roundName: string;
+  bracketGroupId?: string;
+  bracketGroupLabel?: string;
+  bracketGroupKind?: BracketGroupKind;
+  bracketOrder?: number;
+  targetWins?: number | null;
+  isFinals?: boolean;
+  isByePlaceholder?: boolean;
   teams: TeamsInSeries[];
   wins: Record<string, number>;
   winnerTeamId: number | null;
@@ -54,6 +110,10 @@ export type PlayoffBracketResponse = {
   teamGameRowCount: number;
   gameCount: number;
   seriesCount: number;
+  format?: PlayoffFormat;
+  groups?: BracketGroup[];
+  rounds?: RoundDefinition[];
+  edges?: BracketEdge[];
   series: SeriesData[];
 };
 

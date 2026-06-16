@@ -7,6 +7,13 @@ const ROUND_SLUGS: Record<number, string> = {
   3: 'final',
 };
 
+function slugify(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
 function getSeriesConference(series: SeriesData): 'east' | 'west' {
   const conf = getTeamConference(series.teams[0].id) ?? getTeamConference(series.teams[1].id);
   if (!conf) {
@@ -28,7 +35,22 @@ export function yearToSeason(year: string): string {
 }
 
 export function buildSeriesSlug(series: SeriesData, allSeries: SeriesData[]): string {
-  if (series.round === 4) return 'the-finals';
+  if (series.isFinals || series.round === 4) return 'the-finals';
+
+  if (series.bracketGroupId) {
+    const roundSlug = ROUND_SLUGS[series.round] ?? `round-${series.round}`;
+    const sameGroup = allSeries.filter(s =>
+      s.round === series.round && s.bracketGroupId === series.bracketGroupId
+    );
+    const fallbackOrder = sameGroup.findIndex(s => s.seriesKey === series.seriesKey);
+    if (fallbackOrder === -1) {
+      throw new Error(
+        `buildSeriesSlug: data-contract violation, series not found in allSeries matching round and bracketGroupId (seriesKey=${series.seriesKey}, round=${series.round}, bracketGroupId=${series.bracketGroupId})`
+      );
+    }
+    const order = (series.bracketOrder ?? fallbackOrder) + 1;
+    return `${slugify(series.bracketGroupId)}-${roundSlug}-${order}`;
+  }
 
   const conf = getSeriesConference(series);
   const roundSlug = ROUND_SLUGS[series.round];
@@ -54,7 +76,13 @@ export function buildSeriesSlug(series: SeriesData, allSeries: SeriesData[]): st
 export function buildSlugMap(allSeries: SeriesData[]): Map<string, SeriesData> {
   const groups = new Map<string, SeriesData[]>();
   for (const s of allSeries) {
-    if (s.round === 4) continue;
+    if (s.isFinals || s.round === 4) continue;
+    if (s.bracketGroupId) {
+      const key = `${s.round}-${s.bracketGroupId}`;
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key)!.push(s);
+      continue;
+    }
     const conf = getSeriesConference(s);
     const key = `${s.round}-${conf}`;
     if (!groups.has(key)) groups.set(key, []);
@@ -63,10 +91,27 @@ export function buildSlugMap(allSeries: SeriesData[]): Map<string, SeriesData> {
 
   const map = new Map<string, SeriesData>();
   for (const s of allSeries) {
-    if (s.round === 4) {
+    if (s.isFinals || s.round === 4) {
       map.set('the-finals', s);
+      map.set('finals', s);
       continue;
     }
+
+    if (s.bracketGroupId) {
+      const roundSlug = ROUND_SLUGS[s.round] ?? `round-${s.round}`;
+      const sameGroup = groups.get(`${s.round}-${s.bracketGroupId}`) ?? [];
+      const fallbackOrder = sameGroup.findIndex(s2 => s2.seriesKey === s.seriesKey);
+      if (fallbackOrder === -1) {
+        throw new Error(
+          `buildSlugMap: data-contract violation, series not found in allSeries matching round and bracketGroupId (seriesKey=${s.seriesKey}, round=${s.round}, bracketGroupId=${s.bracketGroupId})`
+        );
+      }
+      const matchupNum = (s.bracketOrder ?? fallbackOrder) + 1;
+      map.set(`${slugify(s.bracketGroupId)}-${roundSlug}-${matchupNum}`, s);
+      map.set(`series-${slugify(s.seriesKey)}`, s);
+      continue;
+    }
+
     const conf = getSeriesConference(s);
     const roundSlug = ROUND_SLUGS[s.round];
     if (s.round === 3) {

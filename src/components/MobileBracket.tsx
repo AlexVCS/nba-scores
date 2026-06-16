@@ -1,24 +1,15 @@
-import { useState, useEffect, useRef } from 'react';
-import type { SeriesData } from '@/helpers/helpers';
-import { groupSeriesByConference } from '@/utils/bracketTransformer';
+import { useState, useEffect, useMemo, useRef } from 'react';
+import type { BracketGroup } from '@/helpers/helpers';
+import type { PlayoffBracketModel, RenderSeries } from '@/utils/playoffBracketModel';
 import MobileSeriesCard from './MobileSeriesCard';
 
-type ConferenceTab = 'West' | 'East' | 'Finals';
-
 interface MobileBracketProps {
-  playoffPicture: SeriesData[];
-  season: string;
+  model: PlayoffBracketModel;
   revealedRounds: Set<number>;
   revealRound: (round: number) => void;
   hideRound: (round: number) => void;
   canRevealRound: (round: number) => boolean;
 }
-
-const TABS: { key: ConferenceTab; label: string }[] = [
-  { key: 'West', label: 'Western' },
-  { key: 'East', label: 'Eastern' },
-  { key: 'Finals', label: 'Finals' },
-];
 
 function RoundSection({
   roundName,
@@ -30,8 +21,8 @@ function RoundSection({
 }: {
   round: number;
   roundName: string;
-  series: SeriesData[];
-  allSeries: SeriesData[];
+  series: RenderSeries[];
+  allSeries: RenderSeries[];
   season: string;
   isRevealed: boolean;
   onToggle: () => void;
@@ -78,7 +69,6 @@ function RoundSection({
       </div>
       {showScrollHint && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-2 rounded-full bg-gray-800 border border-gray-600 shadow-lg z-50 pointer-events-none">
-          <span className="animate-bounce text-base leading-none">🏀</span>
           <span className="text-xs text-gray-200 whitespace-nowrap">scroll for more</span>
         </div>
       )}
@@ -87,24 +77,25 @@ function RoundSection({
 }
 
 function MobileBracket({
-  playoffPicture,
-  season,
+  model,
   revealedRounds,
   revealRound,
   hideRound,
   canRevealRound,
 }: MobileBracketProps) {
-  const [activeTab, setActiveTab] = useState<ConferenceTab>('West');
+  const visibleGroups = useMemo(
+    () => model.groups.filter(group => model.series.some(series => series.bracketGroupId === group.id)),
+    [model.groups, model.series]
+  );
+  const [activeGroupId, setActiveGroupId] = useState(visibleGroups[0]?.id ?? '');
   const [isStuck, setIsStuck] = useState(false);
   const sentinelRef = useRef<HTMLDivElement>(null);
-  const { east, west, finals } = groupSeriesByConference(playoffPicture);
-  const showFinalsTab = canRevealRound(4);
 
   useEffect(() => {
-    if (!showFinalsTab && activeTab === 'Finals') {
-      setActiveTab('West');
+    if (!visibleGroups.some(group => group.id === activeGroupId)) {
+      setActiveGroupId(visibleGroups[0]?.id ?? '');
     }
-  }, [showFinalsTab, activeTab]);
+  }, [activeGroupId, visibleGroups]);
 
   useEffect(() => {
     const sentinel = sentinelRef.current;
@@ -117,26 +108,37 @@ function MobileBracket({
     return () => observer.disconnect();
   }, []);
 
-  const renderConference = (confSeries: SeriesData[]) => {
-    const rounds = [...new Set(confSeries.map(s => s.round))].sort((a, b) => a - b);
-    const visibleRounds = rounds.filter(r => canRevealRound(r));
+  const renderGroup = (group: BracketGroup) => {
+    const groupSeries = model.series.filter(series => series.bracketGroupId === group.id);
+    const visibleRounds = model.rounds.filter(round =>
+      canRevealRound(round.round) && groupSeries.some(series => series.round === round.round)
+    );
+
+    if (visibleRounds.length === 0) {
+      return (
+        <p className="text-sm text-gray-400 text-center py-6">
+          Reveal earlier results to unlock this round.
+        </p>
+      );
+    }
 
     return (
       <div className="flex flex-col gap-6">
         {visibleRounds.map(round => {
-          const roundSeries = confSeries.filter(s => s.round === round);
-          const roundName = roundSeries[0]?.roundName ?? `Round ${round}`;
+          const roundSeries = groupSeries
+            .filter(series => series.round === round.round)
+            .sort((a, b) => a.bracketOrder - b.bracketOrder);
           return (
             <RoundSection
-              key={round}
-              round={round}
-              roundName={roundName}
+              key={round.round}
+              round={round.round}
+              roundName={round.label}
               series={roundSeries}
-              allSeries={playoffPicture}
-              season={season}
-              isRevealed={revealedRounds.has(round)}
+              allSeries={model.series}
+              season={model.season}
+              isRevealed={revealedRounds.has(round.round)}
               onToggle={() =>
-                revealedRounds.has(round) ? hideRound(round) : revealRound(round)
+                revealedRounds.has(round.round) ? hideRound(round.round) : revealRound(round.round)
               }
             />
           );
@@ -145,58 +147,28 @@ function MobileBracket({
     );
   };
 
-  const renderFinals = () => {
-    if (!canRevealRound(4)) {
-      return (
-        <p className="text-sm text-gray-400 text-center py-6">
-          Reveal Conference Finals results to unlock the NBA Finals
-        </p>
-      );
-    }
-    if (finals.length === 0) {
-      return (
-        <p className="text-sm text-gray-400 text-center py-6">
-          NBA Finals matchup not yet set
-        </p>
-      );
-    }
-    const roundName = finals[0].roundName;
-    const isRevealed = revealedRounds.has(4);
-    return (
-      <RoundSection
-        round={4}
-        roundName={roundName}
-        series={finals}
-        allSeries={playoffPicture}
-        season={season}
-        isRevealed={isRevealed}
-        onToggle={() => (isRevealed ? hideRound(4) : revealRound(4))}
-      />
-    );
-  };
+  const activeGroup = visibleGroups.find(group => group.id === activeGroupId) ?? visibleGroups[0];
 
   return (
     <div className="pb-8">
       <div ref={sentinelRef} className="h-0" />
-      <div className={`flex border-b-2 border-gray-700 mb-5 sticky top-0 z-10 transition-colors duration-150 ${isStuck ? 'bg-gray-900' : ''}`}>
-        {TABS.filter(({ key }) => key !== 'Finals' || showFinalsTab).map(({ key, label }) => (
+      <div className={`flex overflow-x-auto border-b-2 border-gray-700 mb-5 sticky top-0 z-10 transition-colors duration-150 ${isStuck ? 'bg-gray-900' : ''}`}>
+        {visibleGroups.map(group => (
           <button
-            key={key}
-            onClick={() => setActiveTab(key)}
-            className={`flex-1 py-2 text-sm font-semibold transition-colors duration-150 ${
-              activeTab === key
+            key={group.id}
+            onClick={() => setActiveGroupId(group.id)}
+            className={`min-w-fit flex-1 px-3 py-2 text-sm font-semibold transition-colors duration-150 ${
+              activeGroup?.id === group.id
                 ? 'text-amber-500 border-b-2 border-amber-500 -mb-0.5'
                 : 'text-gray-400 hover:text-gray-200'
             }`}
           >
-            {label}
+            {group.kind === 'finals' ? 'Finals' : group.label.replace(' Conference', '').replace(' Division', '')}
           </button>
         ))}
       </div>
 
-      {activeTab === 'West' && renderConference(west)}
-      {activeTab === 'East' && renderConference(east)}
-      {activeTab === 'Finals' && renderFinals()}
+      {activeGroup && renderGroup(activeGroup)}
     </div>
   );
 }
