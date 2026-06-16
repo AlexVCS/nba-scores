@@ -1,11 +1,15 @@
 import json
+import time
 from collections import defaultdict
+from datetime import datetime
 from pathlib import Path
 
 from fastapi import HTTPException
 from nba_api.stats.endpoints import leaguegamefinder
 from requests.exceptions import ConnectionError as RequestsConnectionError
 from requests.exceptions import ReadTimeout
+
+from server.utils.season import get_nba_season
 
 _CONFERENCES_JSON = (
     Path(__file__).resolve().parent.parent / "constants" / "nbaConferences.json"
@@ -18,12 +22,31 @@ with open(_CONFERENCES_JSON) as _f:
 EAST_TEAM_IDS: frozenset[int] = frozenset(CONFERENCES["east"])
 WEST_TEAM_IDS: frozenset[int] = frozenset(CONFERENCES["west"])
 
+# season -> (fetched_at_monotonic, df)
 _df_cache: dict = {}
+
+# Past seasons are immutable and may be cached indefinitely. The current
+# (in-progress) season changes as new playoff games are played, so it is only
+# cached for a short window to avoid serving a stale game count in production.
+_CURRENT_SEASON_TTL_SECONDS = 300
+
+
+def get_current_season() -> str:
+    now = datetime.now()
+    return get_nba_season(now.year, now.month)
 
 
 def fetch_playoff_team_games_df(season: str):
-    if season in _df_cache:
-        return _df_cache[season]
+    cached = _df_cache.get(season)
+
+    if cached is not None:
+        fetched_at, df = cached
+        is_current_season = season == get_current_season()
+
+        # Past seasons never expire; the current season expires after the TTL so
+        # newly played games are picked up.
+        if not is_current_season or (time.monotonic() - fetched_at) < _CURRENT_SEASON_TTL_SECONDS:
+            return df
 
     try:
         games = leaguegamefinder.LeagueGameFinder(
@@ -35,7 +58,7 @@ def fetch_playoff_team_games_df(season: str):
         raise HTTPException(status_code=503, detail=f"NBA Stats API unavailable: {e}")
 
     df = games.get_data_frames()[0]
-    _df_cache[season] = df
+    _df_cache[season] = (time.monotonic(), df)
     return df
 
 
@@ -325,6 +348,31 @@ def apply_rounds_to_games(games):
     )
 
 
+def determine_winner(home_team, away_team, home_score, away_score):
+    """
+    Determine the winning team for a game.
+
+    The NBA Stats API exposes both a ``WL`` (win/loss) flag and ``PTS`` for each
+    team. ``WL`` is the authoritative result, while ``PTS`` is occasionally wrong
+    in historical data. For example, game 0048300051 (1984-05-06, Suns vs. Jazz)
+    reports Utah with the higher score (113) yet flagged as the loss, and Phoenix
+    with fewer points (111) flagged as the win. Trusting ``PTS`` there flipped a
+    Phoenix win into a Utah win and made the 4-2 series render as a 3-3 tie.
+
+    We therefore prefer ``WL`` and only fall back to comparing scores when the
+    flag is missing (it can be null for some very old or in-progress games).
+    """
+    home_wl = home_team.get("WL")
+    away_wl = away_team.get("WL")
+
+    if home_wl == "W" or away_wl == "L":
+        return home_team
+    if away_wl == "W" or home_wl == "L":
+        return away_team
+
+    return home_team if home_score > away_score else away_team
+
+
 def normalize_playoff_games(df):
     normalized_games = []
 
@@ -346,7 +394,7 @@ def normalize_playoff_games(df):
         home_score = int(home_team["PTS"])
         away_score = int(away_team["PTS"])
 
-        winner_team = home_team if home_score > away_score else away_team
+        winner_team = determine_winner(home_team, away_team, home_score, away_score)
 
         normalized_games.append(
             {
