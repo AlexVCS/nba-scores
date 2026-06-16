@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import type { BracketGroup } from '@/helpers/helpers';
 import type { PlayoffBracketModel, RenderSeries } from '@/utils/playoffBracketModel';
 import MobileSeriesCard from './MobileSeriesCard';
@@ -83,7 +83,10 @@ function MobileBracket({
   hideRound,
   canRevealRound,
 }: MobileBracketProps) {
-  const visibleGroups = model.groups.filter(group => model.series.some(series => series.bracketGroupId === group.id));
+  const visibleGroups = useMemo(
+    () => model.groups.filter(group => model.series.some(series => series.bracketGroupId === group.id)),
+    [model.groups, model.series]
+  );
   const [activeGroupId, setActiveGroupId] = useState(visibleGroups[0]?.id ?? '');
   const [isStuck, setIsStuck] = useState(false);
   const sentinelRef = useRef<HTMLDivElement>(null);

@@ -157,6 +157,7 @@ export function buildPlayoffBracketModel(response: PlayoffBracketResponse): Play
 export function canRevealRound(round: number, rounds: RoundDefinition[], revealedRounds: Set<number>): boolean {
   const sortedRounds = [...rounds].sort((a, b) => a.sortOrder - b.sortOrder);
   const index = sortedRounds.findIndex(item => item.round === round);
-  if (index <= 0) return true;
+  if (index === -1) return false;
+  if (index === 0) return true;
   return sortedRounds.slice(0, index).every(item => revealedRounds.has(item.round));
 }

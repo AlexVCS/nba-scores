@@ -39,9 +39,16 @@ export function buildSeriesSlug(series: SeriesData, allSeries: SeriesData[]): st
 
   if (series.bracketGroupId) {
     const roundSlug = ROUND_SLUGS[series.round] ?? `round-${series.round}`;
-    const order = (series.bracketOrder ?? allSeries.filter(s =>
+    const sameGroup = allSeries.filter(s =>
       s.round === series.round && s.bracketGroupId === series.bracketGroupId
-    ).findIndex(s => s.seriesKey === series.seriesKey)) + 1;
+    );
+    const fallbackOrder = sameGroup.findIndex(s => s.seriesKey === series.seriesKey);
+    if (fallbackOrder === -1) {
+      throw new Error(
+        `buildSeriesSlug: data-contract violation, series not found in allSeries matching round and bracketGroupId (seriesKey=${series.seriesKey}, round=${series.round}, bracketGroupId=${series.bracketGroupId})`
+      );
+    }
+    const order = (series.bracketOrder ?? fallbackOrder) + 1;
     return `${slugify(series.bracketGroupId)}-${roundSlug}-${order}`;
   }
 
@@ -93,7 +100,13 @@ export function buildSlugMap(allSeries: SeriesData[]): Map<string, SeriesData> {
     if (s.bracketGroupId) {
       const roundSlug = ROUND_SLUGS[s.round] ?? `round-${s.round}`;
       const sameGroup = groups.get(`${s.round}-${s.bracketGroupId}`) ?? [];
-      const matchupNum = (s.bracketOrder ?? sameGroup.findIndex(s2 => s2.seriesKey === s.seriesKey)) + 1;
+      const fallbackOrder = sameGroup.findIndex(s2 => s2.seriesKey === s.seriesKey);
+      if (fallbackOrder === -1) {
+        throw new Error(
+          `buildSlugMap: data-contract violation, series not found in allSeries matching round and bracketGroupId (seriesKey=${s.seriesKey}, round=${s.round}, bracketGroupId=${s.bracketGroupId})`
+        );
+      }
+      const matchupNum = (s.bracketOrder ?? fallbackOrder) + 1;
       map.set(`${slugify(s.bracketGroupId)}-${roundSlug}-${matchupNum}`, s);
       map.set(`series-${slugify(s.seriesKey)}`, s);
       continue;

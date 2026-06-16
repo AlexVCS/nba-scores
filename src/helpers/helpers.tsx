@@ -30,6 +30,9 @@ export type PlayoffFormatEra =
   | "baa-runners-up-bracket"
   | "two-division-eight-team"
   | "three-division-transitional"
+  | "1951-two-division-eight-team"
+  | "1952-two-division-eight-team"
+  | "1953-two-division-eight-team"
   | "six-team-round-robin"
   | "six-team-bye"
   | "eight-team-division"
@@ -43,34 +46,34 @@ export type PlayoffFormatEra =
 
 export type BracketGroupKind = "conference" | "division" | "league" | "finals" | "runners-up" | "round-robin";
 
-export type PlayoffFormat = {
+export interface PlayoffFormat {
   era: PlayoffFormatEra;
   playoffYear: number;
   finalsRound: number | null;
   bracketType: "single-elimination" | "multi-division" | "round-robin-plus-finals" | "hybrid";
   supportsExactBracket: boolean;
   notes: string[];
-};
+}
 
-export type BracketGroup = {
+export interface BracketGroup {
   id: string;
   label: string;
   kind: BracketGroupKind;
   sortOrder: number;
-};
+}
 
-export type RoundDefinition = {
+export interface RoundDefinition {
   round: number;
   label: string;
   sortOrder: number;
   defaultRevealed: boolean;
-};
+}
 
-export type BracketEdge = {
+export interface BracketEdge {
   sourceSeriesKey: string;
   targetSeriesKey: string;
   winnerTeamId: number | null;
-};
+}
 
 export type SeriesGame = {
   gameId: string;

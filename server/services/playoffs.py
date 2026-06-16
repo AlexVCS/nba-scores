@@ -31,7 +31,23 @@ _linescore_cache: dict = {}
 
 def get_playoff_end_year(season: str) -> int:
     """Return the calendar year that contains the playoffs for a season."""
-    return int(season.split("-")[0]) + 1
+    if not isinstance(season, str):
+        raise ValueError("Season must be a string in YYYY-YY format")
+
+    parts = season.split("-")
+    if len(parts) != 2 or not all(parts):
+        raise ValueError(f"Invalid season format: {season!r}. Expected YYYY-YY")
+
+    start_year, end_year_suffix = parts
+    if (
+        len(start_year) != 4
+        or len(end_year_suffix) != 2
+        or not start_year.isdigit()
+        or not end_year_suffix.isdigit()
+    ):
+        raise ValueError(f"Invalid season format: {season!r}. Expected YYYY-YY")
+
+    return int(start_year) + 1
 
 
 def get_playoff_format(season: str, finals_round: int | None = None):
@@ -47,6 +63,27 @@ def get_playoff_format(season: str, finals_round: int | None = None):
         bracket_type = "multi-division"
         exact = False
         notes = ["Three-division transitional format; exact source bracket can be ambiguous."]
+    elif playoff_year == 1951:
+        era = "1951-two-division-eight-team"
+        bracket_type = "multi-division"
+        exact = True
+        notes = [
+            "Two-division eight-team format with two-win first round targets and three-win division finals targets."
+        ]
+    elif playoff_year == 1952:
+        era = "1952-two-division-eight-team"
+        bracket_type = "multi-division"
+        exact = True
+        notes = [
+            "Two-division eight-team format with two-win first round targets and three-win division finals targets."
+        ]
+    elif playoff_year == 1953:
+        era = "1953-two-division-eight-team"
+        bracket_type = "multi-division"
+        exact = True
+        notes = [
+            "Two-division eight-team format with two-win first round targets and three-win division finals targets."
+        ]
     elif playoff_year == 1954:
         era = "six-team-round-robin"
         bracket_type = "round-robin-plus-finals"

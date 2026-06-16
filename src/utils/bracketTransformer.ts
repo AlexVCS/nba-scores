@@ -45,6 +45,12 @@ function isModernTwoConferenceModel(model: PlayoffBracketModel): boolean {
   return groupIds.has('west-conference') && groupIds.has('east-conference') && groupIds.has('finals');
 }
 
+function getFinalsRound(model: PlayoffBracketModel): number {
+  if (model.format.finalsRound !== null) return model.format.finalsRound;
+  if (model.rounds.length === 0) return 1;
+  return Math.max(...model.rounds.map(item => item.round));
+}
+
 function getModernPosition(
   series: RenderSeries,
   model: PlayoffBracketModel,
@@ -54,7 +60,7 @@ function getModernPosition(
   const round = series.round;
   const order = series.bracketOrder;
   const lane = series.bracketGroupId.startsWith('east') ? 'right' : series.bracketGroupId.startsWith('west') ? 'left' : 'center';
-  const finalsRound = model.format.finalsRound ?? Math.max(...model.rounds.map(item => item.round));
+  const finalsRound = getFinalsRound(model);
   const maxConferenceRound = Math.max(1, finalsRound - 1);
   const rightEdge = hSpacing * maxConferenceRound * 2;
 
@@ -203,7 +209,7 @@ function createGroupLabels(
 ): Node[] {
   const { hSpacing, nodeWidth, vSpacing } = sizing;
   if (modernLayout) {
-    const finalsRound = model.format.finalsRound ?? Math.max(...model.rounds.map(item => item.round));
+    const finalsRound = getFinalsRound(model);
     const maxConferenceRound = Math.max(1, finalsRound - 1);
     return [
       {
