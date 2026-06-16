@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 
 const current_year = new Date().getFullYear();
+const first_playoff_end_year = 1951;
 const playoff_start_month = 3; // April (0-indexed)
 const playoff_start_day = 15;
 
@@ -30,8 +31,8 @@ const getDefaultPlayoffEndYear = (date = new Date()) => {
 const default_playoff_end_year = getDefaultPlayoffEndYear();
 
 const season_years = Array.from(
-  { length: current_year - 1983 },
-  (_, i) => 1984 + i,
+  { length: current_year - first_playoff_end_year + 1 },
+  (_, i) => first_playoff_end_year + i,
 ).reverse();
 
 const formatSeason = (year: number) =>

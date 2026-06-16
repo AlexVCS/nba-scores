@@ -172,26 +172,19 @@ For full workflow details: `bd prime`
 
 ## Landing the Plane (Session Completion)
 
-**When ending a work session**, you MUST complete ALL steps below. Work is NOT complete until `git push` succeeds.
+When ending a work session, complete the applicable local handoff steps below. Do not push to remote unless the user explicitly asks for it.
 
-**MANDATORY WORKFLOW:**
+**Recommended workflow:**
 
 1. **File issues for remaining work** - Create issues for anything that needs follow-up
 2. **Run quality gates** (if code changed) - Tests, linters, builds
 3. **Update issue status** - Close finished work, update in-progress items
-4. **PUSH TO REMOTE** - This is MANDATORY:
-   ```bash
-   git pull --rebase
-   bd sync
-   git push
-   git status  # MUST show "up to date with origin"
-   ```
-5. **Clean up** - Clear stashes, prune remote branches
-6. **Verify** - All changes committed AND pushed
-7. **Hand off** - Provide context for next session
+4. **Sync issue metadata when appropriate** - Run `bd sync` if issue state changed
+5. **Verify local state** - Run `git status` and summarize changed files
+6. **Clean up** - Clear unnecessary stashes or temporary files
+7. **Hand off** - Provide context for next session, including tests run and anything not committed
 
-**CRITICAL RULES:**
-- Work is NOT complete until `git push` succeeds
-- NEVER stop before pushing - that leaves work stranded locally
-- NEVER say "ready to push when you are" - YOU must push
-- If push fails, resolve and retry until it succeeds
+**Rules:**
+- Do not run `git push` unless the user explicitly asks
+- Do not say work was pushed unless `git push` was actually run and succeeded
+- If changes are left local, clearly state that in the handoff

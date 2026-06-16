@@ -41,8 +41,7 @@ function Playoffs() {
         {data && (
           <div className="mt-8">
             <PlayoffBracketFlow
-              playoffPicture={data.series}
-              season={data.season}
+              playoffPicture={data}
             />
           </div>
         )}

@@ -4,9 +4,10 @@ import { ReactFlow, ReactFlowProvider, useReactFlow, useNodes } from '@xyflow/re
 import type { Node, EdgeTypes } from '@xyflow/react';
 import { Switch } from '@adobe/react-spectrum';
 import '@xyflow/react/dist/style.css';
-import type { SeriesData } from '@/helpers/helpers';
+import type { PlayoffBracketResponse } from '@/helpers/helpers';
 import { transformToBracketData } from '@/utils/bracketTransformer';
 import type { BracketNodeData } from '@/utils/bracketTransformer';
+import { buildPlayoffBracketModel, canRevealRound as canRevealRoundFromModel } from '@/utils/playoffBracketModel';
 import { seasonToYear } from '@/utils/seriesSlug';
 import { bracketSizing } from '@/utils/bracketSizing';
 import { useViewportSize } from '@/hooks/useViewportSize';
@@ -109,19 +110,20 @@ const edgeTypes: EdgeTypes = {
 };
 
 interface PlayoffBracketFlowProps {
-  playoffPicture: SeriesData[];
-  season: string;
+  playoffPicture: PlayoffBracketResponse;
 }
 
-function PlayoffBracketFlowInner({ playoffPicture, season }: PlayoffBracketFlowProps) {
+function PlayoffBracketFlowInner({ playoffPicture }: PlayoffBracketFlowProps) {
   const navigate = useNavigate();
   const viewportSize = useViewportSize();
   const sizing = bracketSizing[viewportSize];
   const [revealedRounds, setRevealedRounds] = useState<Set<number>>(new Set());
+  const model = useMemo(() => buildPlayoffBracketModel(playoffPicture), [playoffPicture]);
+  const season = model.season;
 
   const rounds = useMemo(
-    () => [...new Set(playoffPicture.map(s => s.round))].sort((a, b) => a - b),
-    [playoffPicture]
+    () => model.rounds,
+    [model.rounds]
   );
 
   const revealRound = (round: number) => {
@@ -145,23 +147,18 @@ function PlayoffBracketFlowInner({ playoffPicture, season }: PlayoffBracketFlowP
   }, [navigate]);
 
   const { nodes, edges } = useMemo(
-    () => transformToBracketData(playoffPicture, revealedRounds, season, sizing),
-    [playoffPicture, revealedRounds, season, sizing]
+    () => transformToBracketData(model, revealedRounds, season, sizing),
+    [model, revealedRounds, season, sizing]
   );
 
   const canRevealRound = (round: number): boolean => {
-    if (round === 1) return true;
-    if (round === 2) return revealedRounds.has(1);
-    if (round === 3) return revealedRounds.has(2);
-    if (round === 4) return revealedRounds.has(3);
-    return false;
+    return canRevealRoundFromModel(round, model.rounds, revealedRounds);
   };
 
   if (viewportSize === 'sm') {
     return (
       <MobileBracket
-        playoffPicture={playoffPicture}
-        season={season}
+        model={model}
         revealedRounds={revealedRounds}
         revealRound={revealRound}
         hideRound={hideRound}
@@ -174,10 +171,11 @@ function PlayoffBracketFlowInner({ playoffPicture, season }: PlayoffBracketFlowP
     <>
       {/* Per-round reveal controls */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-row lg:flex-wrap lg:justify-center gap-x-8 gap-y-3 mb-6 mx-auto w-fit lg:w-auto justify-items-start">
-        {rounds.map(round => {
+        {rounds.map(roundDef => {
+          const round = roundDef.round;
           const isRevealed = revealedRounds.has(round);
           const canReveal = canRevealRound(round);
-          const roundName = playoffPicture.find(s => s.round === round)?.roundName || `Round ${round}`;
+          const roundName = roundDef.label;
 
           if (!canReveal) return null;
 
