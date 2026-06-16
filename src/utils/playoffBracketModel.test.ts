@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import type { PlayoffBracketResponse, SeriesData } from '@/helpers/helpers';
 import { buildPlayoffBracketModel, canRevealRound } from './playoffBracketModel';
+import { buildSeriesSlug, findSeriesBySlug } from './seriesSlug';
 
 const bos = { id: 1610612738, tricode: 'BOS', name: 'Celtics' };
 const nyk = { id: 1610612752, tricode: 'NYK', name: 'Knicks' };
 const lal = { id: 1610612747, tricode: 'LAL', name: 'Lakers' };
+const ftw = { id: 1610612765, tricode: 'FTW', name: 'Ft. Wayne Zollner Pistons' };
 
 function series(seriesKey: string, round: number, teams = [bos, nyk]): SeriesData {
   return {
@@ -49,6 +51,25 @@ describe('buildPlayoffBracketModel', () => {
     expect(model.series[1].isFinals).toBe(true);
     expect(model.series[1].roundName).toBe('NBA Finals');
     expect(model.groups.some(group => group.id === 'finals')).toBe(true);
+  });
+
+  it('uses fallback metadata consistently for legacy detail slugs', () => {
+    const response: PlayoffBracketResponse = {
+      season: '1956-57',
+      teamGameRowCount: 4,
+      gameCount: 2,
+      seriesCount: 2,
+      series: [
+        series('R2-mnl-ftw', 2, [lal, ftw]),
+        series('R4-bos-lal', 4, [bos, lal]),
+      ],
+    };
+
+    const model = buildPlayoffBracketModel(response);
+    const slug = buildSeriesSlug(model.series[0], model.series);
+
+    expect(slug).toBe('west-conference-semifinal-1');
+    expect(findSeriesBySlug(slug, model.series)?.seriesKey).toBe('R2-mnl-ftw');
   });
 
   it('uses provided rounds for reveal sequencing', () => {

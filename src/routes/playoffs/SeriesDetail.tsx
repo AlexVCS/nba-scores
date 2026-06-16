@@ -1,10 +1,12 @@
 import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { Switch } from '@adobe/react-spectrum';
+import { useMemo } from 'react';
 import { usePlayoffData } from '@/hooks/usePlayoffData';
 import { generateWatchLink, formatGameDate } from '@/helpers/helpers';
 import TeamLogos from '@/components/TeamLogos';
 import DarkModeToggle from '@/components/DarkModeToggle';
 import { TEAM_COLORS } from '@/constants/teamColors';
+import { buildPlayoffBracketModel } from '@/utils/playoffBracketModel';
 import { yearToSeason, findSeriesBySlug } from '@/utils/seriesSlug';
 
 function SeriesDetail() {
@@ -22,6 +24,7 @@ function SeriesDetail() {
     }, { replace: true });
   };
   const { data, isLoading, error } = usePlayoffData(season);
+  const model = useMemo(() => data ? buildPlayoffBracketModel(data) : null, [data]);
 
   if (!isValidYear) {
     return (
@@ -38,7 +41,7 @@ function SeriesDetail() {
   if (error) return <p className="p-4 dark:text-slate-50">Error: {String(error)}</p>;
   if (!data) return <p className="p-4 dark:text-slate-50">No data available</p>;
 
-  const series = findSeriesBySlug(seriesSlug ?? '', data.series);
+  const series = model ? findSeriesBySlug(seriesSlug ?? '', model.series) : undefined;
 
   if (!series) {
     return (
@@ -58,7 +61,7 @@ function SeriesDetail() {
   const team1Wins = series.wins[team1.id] || 0;
   const team2Wins = series.wins[team2.id] || 0;
   const isComplete = series.winnerTeamId !== null;
-  const seasonYear = parseInt(data.season.split('-')[0]);
+  const seasonYear = parseInt((model?.season ?? data.season).split('-')[0]);
 
   const team1Color = TEAM_COLORS[team1.id] ?? '#1D428A';
   const team2Color = TEAM_COLORS[team2.id] ?? '#1D428A';
