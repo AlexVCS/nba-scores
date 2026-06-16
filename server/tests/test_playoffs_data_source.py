@@ -1,6 +1,9 @@
 from datetime import date
 
 import pandas as pd
+import pytest
+from fastapi import HTTPException
+from requests.exceptions import ReadTimeout
 
 from server.services import playoffs
 
@@ -87,6 +90,26 @@ def test_fetch_uses_league_game_finder_for_current_playoff_window(monkeypatch):
             "league_id_nullable": "00",
         }
     ]
+
+
+def test_fetch_maps_data_frame_timeout_to_service_unavailable(monkeypatch):
+    monkeypatch.setattr(playoffs, "_df_cache", {})
+
+    class FakeLeagueGameLog:
+        def __init__(self, **kwargs):
+            pass
+
+        def get_data_frames(self):
+            raise ReadTimeout("boom")
+
+    monkeypatch.setattr(playoffs, "LeagueGameLog", FakeLeagueGameLog)
+
+    with pytest.raises(HTTPException) as exc:
+        playoffs.fetch_playoff_team_games_df("1983-84", date(2026, 6, 16))
+
+    assert exc.value.status_code == 503
+    assert "NBA Stats API unavailable" in exc.value.detail
+    assert isinstance(exc.value.__cause__, ReadTimeout)
 
 
 def test_fetch_cache_is_source_aware(monkeypatch):

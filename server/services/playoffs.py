@@ -63,10 +63,13 @@ def fetch_playoff_team_games_df(season: str, today: date | None = None):
                 season_type_all_star="Playoffs",
                 league_id="00",
             )
+        df = games.get_data_frames()[0]
     except (ReadTimeout, RequestsConnectionError) as e:
-        raise HTTPException(status_code=503, detail=f"NBA Stats API unavailable: {e}")
+        raise HTTPException(
+            status_code=503,
+            detail=f"NBA Stats API unavailable: {e}",
+        ) from e
 
-    df = games.get_data_frames()[0]
     _df_cache[cache_key] = df
     return df
 
