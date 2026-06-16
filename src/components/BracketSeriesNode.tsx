@@ -11,7 +11,7 @@ interface BracketSeriesNodeProps {
 const HANDLE_STYLE = { background: 'transparent', border: 'none', width: 1, height: 1 };
 
 function BracketSeriesNode({ data }: BracketSeriesNodeProps) {
-  const { team1, team2, team1Wins, team2Wins, winnerTeamId, isRevealed, sizing, conference, seriesSlug, season } = data;
+  const { team1, team2, team1Wins, team2Wins, winnerTeamId, isRevealed, sizing, seriesSlug, season, targetWins } = data;
 
   const team1IsWinner = winnerTeamId === team1.id;
   const team2IsWinner = winnerTeamId === team2.id;
@@ -52,30 +52,15 @@ function BracketSeriesNode({ data }: BracketSeriesNodeProps) {
   return (
     <div style={{ width: `${sizing.nodeWidth}px`, position: 'relative' }}>
       {/* Source handles: exit from the winner row's outer edge toward the next round */}
-      {conference === 'West' && (
-        <>
-          <Handle type="source" position={Position.Right} id="src-top" style={{ ...HANDLE_STYLE, top: '25%' }} />
-          <Handle type="source" position={Position.Right} id="src-bot" style={{ ...HANDLE_STYLE, top: '75%' }} />
-          <Handle type="target" position={Position.Left} id="tgt" style={{ ...HANDLE_STYLE, top: '50%' }} />
-        </>
-      )}
-      {conference === 'East' && (
-        <>
-          <Handle type="source" position={Position.Left} id="src-top" style={{ ...HANDLE_STYLE, top: '25%' }} />
-          <Handle type="source" position={Position.Left} id="src-bot" style={{ ...HANDLE_STYLE, top: '75%' }} />
-          <Handle type="target" position={Position.Right} id="tgt" style={{ ...HANDLE_STYLE, top: '50%' }} />
-        </>
-      )}
-      {conference === 'Finals' && (
-        <>
-          <Handle type="target" position={Position.Left} id="tgt-left" style={{ ...HANDLE_STYLE, top: '50%' }} />
-          <Handle type="target" position={Position.Right} id="tgt-right" style={{ ...HANDLE_STYLE, top: '50%' }} />
-        </>
-      )}
+      <Handle type="source" position={Position.Right} id="src-right" style={{ ...HANDLE_STYLE, top: '50%' }} />
+      <Handle type="source" position={Position.Left} id="src-left" style={{ ...HANDLE_STYLE, top: '50%' }} />
+      <Handle type="target" position={Position.Left} id="tgt-left" style={{ ...HANDLE_STYLE, top: '50%' }} />
+      <Handle type="target" position={Position.Right} id="tgt-right" style={{ ...HANDLE_STYLE, top: '50%' }} />
 
       <Link
         to={`/playoffs/${seasonToYear(season)}/${seriesSlug}`}
         className="block border-2 border-gray-700 rounded-lg bg-gray-900 overflow-hidden hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-lg transition-all duration-200"
+        title={targetWins ? `Best of ${targetWins * 2 - 1}` : undefined}
       >
         {renderRow(team1, team1Wins, team1IsWinner, true)}
         {renderRow(team2, team2Wins, team2IsWinner, false)}
