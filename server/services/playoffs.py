@@ -1,4 +1,5 @@
 import json
+import time
 from collections import defaultdict
 from datetime import date
 from pathlib import Path
@@ -8,7 +9,7 @@ from nba_api.stats.endpoints import LeagueGameLog, boxscoresummaryv2, leaguegame
 from requests.exceptions import ConnectionError as RequestsConnectionError
 from requests.exceptions import ReadTimeout
 
-from ..utils.season import get_nba_season
+from server.utils.season import get_nba_season
 
 _CONFERENCES_JSON = (
     Path(__file__).resolve().parent.parent / "constants" / "nbaConferences.json"
@@ -21,6 +22,7 @@ with open(_CONFERENCES_JSON) as _f:
 EAST_TEAM_IDS: frozenset[int] = frozenset(CONFERENCES["east"])
 WEST_TEAM_IDS: frozenset[int] = frozenset(CONFERENCES["west"])
 
+# season -> (fetched_at_monotonic, df)
 _df_cache: dict = {}
 
 # game_id -> {team_id: points}, cached so each defensive repair is only fetched once.
