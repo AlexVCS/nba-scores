@@ -1,7 +1,7 @@
 import json
 import time
 from collections import defaultdict
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 from fastapi import HTTPException
@@ -22,8 +22,9 @@ with open(_CONFERENCES_JSON) as _f:
 EAST_TEAM_IDS: frozenset[int] = frozenset(CONFERENCES["east"])
 WEST_TEAM_IDS: frozenset[int] = frozenset(CONFERENCES["west"])
 
-# season -> (fetched_at_monotonic, df)
+# (season, source) -> (fetched_at_monotonic, df)
 _df_cache: dict = {}
+_CURRENT_SEASON_TTL_SECONDS = 5 * 60
 
 # game_id -> {team_id: points}, cached so each defensive repair is only fetched once.
 _linescore_cache: dict = {}
@@ -165,9 +166,14 @@ def get_target_wins(playoff_year: int, round_number: int, is_finals: bool):
     return 4
 
 
-def should_use_active_playoff_source(season: str, today: date | None = None) -> bool:
+def get_current_season(today: date | None = None) -> str:
     today = today or date.today()
-    current_season = get_nba_season(today.year, today.month)
+    return get_nba_season(today.year, today.month)
+
+
+def should_use_active_playoff_source(season: str, today: date | None = None) -> bool:
+    current_season = get_current_season(today) if today else get_current_season()
+    today = today or date.today()
 
     return season == current_season and today.month in {4, 5, 6}
 
@@ -184,7 +190,14 @@ def fetch_playoff_team_games_df(season: str, today: date | None = None):
     cache_key = (season, source)
 
     if cache_key in _df_cache:
-        return _df_cache[cache_key]
+        fetched_at, cached_df = _df_cache[cache_key]
+        current_season = get_current_season(today) if today else get_current_season()
+        if season != current_season:
+            return cached_df
+
+        age = time.monotonic() - fetched_at
+        if age < _CURRENT_SEASON_TTL_SECONDS:
+            return cached_df
 
     try:
         if source == "league_game_finder":
@@ -206,7 +219,7 @@ def fetch_playoff_team_games_df(season: str, today: date | None = None):
             detail=f"NBA Stats API unavailable: {e}",
         ) from e
 
-    _df_cache[cache_key] = df
+    _df_cache[cache_key] = (time.monotonic(), df)
     return df
 
 
@@ -466,7 +479,7 @@ def infer_bracket_position_from_game_id(game_id: str):
     Returns None if the game ID is not a modern format (old sequential IDs
     like 0040000001 do not encode series position and should not use this).
     """
-    # Only extract position for modern game IDs where round is encoded
+    # Only extract position for game IDs where round is encoded.
     if infer_round_from_game_id(game_id) is None:
         return None
 
@@ -966,6 +979,201 @@ def sort_by_bracket_progression(playoff_series, use_game_id_position):
     return sorted(playoff_series, key=_sort_key)
 
 
+def get_game_team_id_pair(game):
+    return tuple(
+        sorted(
+            [
+                game["homeTeam"]["id"],
+                game["awayTeam"]["id"],
+            ]
+        )
+    )
+
+
+def get_series_team_id_pair(series):
+    return tuple(sorted(team["id"] for team in series.get("teams", [])))
+
+
+def series_wins_for_games(games):
+    wins = defaultdict(int)
+
+    for game in games:
+        winner_id = game.get("winnerTeamId")
+        if winner_id is not None:
+            wins[winner_id] += 1
+
+    return dict(wins)
+
+
+def get_series_target_wins_for_round(season, round_number, is_finals):
+    playoff_year = get_playoff_end_year(season)
+    return get_target_wins(playoff_year, round_number, is_finals)
+
+
+def _date_from_iso(date_value):
+    return date.fromisoformat(date_value)
+
+
+def _series_start_date(series):
+    return get_series_dates(series)[0]
+
+
+def is_valid_orphan_merge(season, orphan_series, target_series, all_series):
+    if get_series_team_id_pair(orphan_series) != get_series_team_id_pair(target_series):
+        return False
+
+    if orphan_series["gameCount"] != 1:
+        return False
+
+    if target_series["gameCount"] < 1:
+        return False
+
+    if target_series["round"] <= orphan_series["round"]:
+        return False
+
+    if target_series["round"] - orphan_series["round"] > 2:
+        return False
+
+    orphan_games = orphan_series.get("games", [])
+    target_games = target_series.get("games", [])
+    if len(orphan_games) != 1 or not target_games:
+        return False
+
+    orphan_game = orphan_games[0]
+    team_pair = set(get_series_team_id_pair(target_series))
+    if orphan_game.get("winnerTeamId") not in team_pair:
+        return False
+
+    target_start, target_end = get_series_dates(target_series)
+    if not target_start or not target_end:
+        return False
+
+    orphan_date = _date_from_iso(orphan_game["date"])
+    start_date = _date_from_iso(target_start)
+    end_date = _date_from_iso(target_end)
+    tolerance = timedelta(days=3)
+
+    if orphan_date < start_date - tolerance or orphan_date > end_date + tolerance:
+        return False
+
+    initial_finals_round = get_finals_round(all_series)
+    is_target_finals = (
+        initial_finals_round is not None
+        and target_series["round"] == initial_finals_round
+    )
+    target_wins = get_series_target_wins_for_round(
+        season,
+        target_series["round"],
+        is_target_finals,
+    )
+
+    if target_wins is None:
+        return False
+
+    merged_games = orphan_games + target_games
+    merged_count = len(merged_games)
+    if merged_count > (2 * target_wins - 1):
+        return False
+
+    merged_wins = series_wins_for_games(merged_games)
+    if not merged_wins or max(merged_wins.values()) != target_wins:
+        return False
+
+    win_values = list(merged_wins.values())
+    if len(win_values) == 2 and win_values[0] == win_values[1]:
+        return False
+
+    return True
+
+
+def _orphan_target_sort_key(orphan_series, target_series):
+    orphan_start = _date_from_iso(_series_start_date(orphan_series))
+    target_start = _date_from_iso(_series_start_date(target_series))
+    date_distance = abs((target_start - orphan_start).days)
+
+    return (
+        target_series["round"],
+        date_distance,
+        target_series["seriesKey"],
+    )
+
+
+def find_orphan_series_merges(season, playoff_series):
+    by_team_pair = defaultdict(list)
+
+    for series in playoff_series:
+        by_team_pair[get_series_team_id_pair(series)].append(series)
+
+    orphan_round_updates = {}
+
+    for same_pair_series in by_team_pair.values():
+        if len(same_pair_series) < 2:
+            continue
+
+        ordered_series = sorted(
+            same_pair_series,
+            key=lambda series: (
+                series["round"],
+                _series_start_date(series),
+                series["seriesKey"],
+            ),
+        )
+
+        for orphan_series in ordered_series:
+            if orphan_series["gameCount"] != 1:
+                continue
+
+            valid_targets = [
+                target_series
+                for target_series in ordered_series
+                if is_valid_orphan_merge(
+                    season,
+                    orphan_series,
+                    target_series,
+                    playoff_series,
+                )
+            ]
+
+            if not valid_targets:
+                continue
+
+            target_series = min(
+                valid_targets,
+                key=lambda series: _orphan_target_sort_key(orphan_series, series),
+            )
+            orphan_round_updates[orphan_series["seriesKey"]] = target_series["round"]
+
+    return orphan_round_updates
+
+
+def reconcile_duplicate_matchup_rounds(season, games):
+    playoff_series = derive_playoff_series(games)
+    orphan_round_updates = find_orphan_series_merges(season, playoff_series)
+
+    if not orphan_round_updates:
+        return games
+
+    reconciled_games = []
+
+    for game in games:
+        series_key = get_series_key(game)
+
+        if series_key not in orphan_round_updates:
+            reconciled_games.append(game)
+            continue
+
+        round_num = orphan_round_updates[series_key]
+        game_copy = game.copy()
+        game_copy["round"] = round_num
+        game_copy["roundName"] = get_round_name(round_num)
+        reconciled_games.append(game_copy)
+
+    return sorted(
+        reconciled_games,
+        key=lambda game: (game["date"], game["gameId"]),
+    )
+
+
 def derive_playoff_series(games):
     series_map = defaultdict(
         lambda: {
@@ -1044,6 +1252,7 @@ def get_normalized_playoff_games(season: str):
     games = normalize_playoff_games(df)
     games = correct_game_scores(games)
     games = apply_rounds_to_games(games)
+    games = reconcile_duplicate_matchup_rounds(season, games)
 
     return {
         "season": season,
@@ -1058,6 +1267,7 @@ def get_playoff_series(season: str):
     games = normalize_playoff_games(df)
     games = correct_game_scores(games)
     games = apply_rounds_to_games(games)
+    games = reconcile_duplicate_matchup_rounds(season, games)
     playoff_series = derive_playoff_series(games)
     bracket = enrich_playoff_bracket_response(season, playoff_series)
 
@@ -1079,6 +1289,7 @@ def get_playoff_games_and_series(season: str):
     games = normalize_playoff_games(df)
     games = correct_game_scores(games)
     games = apply_rounds_to_games(games)
+    games = reconcile_duplicate_matchup_rounds(season, games)
     playoff_series = derive_playoff_series(games)
     bracket = enrich_playoff_bracket_response(season, playoff_series)
 

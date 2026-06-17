@@ -15,14 +15,19 @@ from server.services import playoffs
 def _patch_finder(monkeypatch):
     calls = {"n": 0}
 
-    class _FakeFinder:
+    class _FakePlayoffClient:
         def __init__(self, *a, **k):
             calls["n"] += 1
 
         def get_data_frames(self):
             return [pd.DataFrame()]
 
-    monkeypatch.setattr(playoffs.leaguegamefinder, "LeagueGameFinder", _FakeFinder)
+    monkeypatch.setattr(
+        playoffs.leaguegamefinder,
+        "LeagueGameFinder",
+        _FakePlayoffClient,
+    )
+    monkeypatch.setattr(playoffs, "LeagueGameLog", _FakePlayoffClient)
     monkeypatch.setattr(playoffs, "_df_cache", {})
     return calls
 
