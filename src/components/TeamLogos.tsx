@@ -9,7 +9,10 @@ interface TeamLogoProps {
 }
 
 const TeamLogos = ({ teamName, teamId, size, tricode }: TeamLogoProps) => {
-  const logoUrl = (tricode && HISTORICAL_TEAM_LOGOS[tricode])
+  const historicalLogoUrl = tricode
+    ? HISTORICAL_TEAM_LOGOS[tricode.toUpperCase()]
+    : undefined;
+  const logoUrl = historicalLogoUrl
     ?? `https://cdn.nba.com/logos/nba/${teamId}/global/L/logo.svg`;
 
   return (
