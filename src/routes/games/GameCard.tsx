@@ -45,6 +45,7 @@ function GameCard({game, showScores = false}: GameCardProps) {
             teamName={game.homeTeam.teamName}
             teamId={game.homeTeam.teamId}
             size={48}
+            tricode={game.homeTeam.teamTricode}
           />
           <div className="text-sm mt-1 w-full">
             <div className="bg-gray-900 border-2 border-gray-700 rounded w-full p-2">
@@ -96,6 +97,7 @@ function GameCard({game, showScores = false}: GameCardProps) {
             teamName={game.awayTeam.teamName}
             teamId={game.awayTeam.teamId}
             size={48}
+            tricode={game.awayTeam.teamTricode}
           />
           <div className="text-sm mt-1 w-full">
             <div className="bg-gray-900 border-2 border-gray-700 rounded w-full p-2">

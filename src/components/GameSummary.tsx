@@ -32,6 +32,7 @@ const GameSummary: React.FC<GameProps> = ({ game }) => {
             teamName={game.homeTeam.teamName}
             teamId={game.homeTeam.teamId}
             size={48}
+            tricode={game.homeTeam.teamTricode}
           />
           <h2 className="text-lg font-bold">
             {game.homeTeam.teamTricode}
@@ -49,6 +50,7 @@ const GameSummary: React.FC<GameProps> = ({ game }) => {
             teamName={game.awayTeam.teamName}
             teamId={game.awayTeam.teamId}
             size={48}
+            tricode={game.awayTeam.teamTricode}
           />
           <h2 className="text-lg  font-bold">
             {game.awayTeam.teamTricode}
@@ -67,6 +69,7 @@ const GameSummary: React.FC<GameProps> = ({ game }) => {
           teamName={game.homeTeam.teamName}
           teamId={game.homeTeam.teamId}
           size={48}
+          tricode={game.homeTeam.teamTricode}
         />
         <h2 className="text-xl font-bold">
           {game.homeTeam.teamName}
@@ -130,6 +133,7 @@ const GameSummary: React.FC<GameProps> = ({ game }) => {
           teamName={game.awayTeam.teamName}
           teamId={game.awayTeam.teamId}
           size={48}
+          tricode={game.awayTeam.teamTricode}
         />
         <h2 className="text-xl font-bold">
           {game.awayTeam.teamName}
