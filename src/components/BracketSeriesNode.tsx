@@ -25,7 +25,7 @@ function BracketSeriesNode({ data }: BracketSeriesNodeProps) {
         className={`flex items-center justify-between ${sizing.rowGapClass} ${sizing.rowPadClass} bg-gray-900 ${cornerClass} ${isTopRow ? 'border-b-2 border-gray-700' : ''}`}
       >
         <div className={`flex items-center ${sizing.rowGapClass} min-w-0`}>
-          <div className={`bg-white rounded ${sizing.logoPadClass} flex-shrink-0`}>
+          <div className={`flex-shrink-0 ${sizing.logoPadClass}`}>
             <TeamLogos teamName={team.tricode} teamId={team.id} size={sizing.logoSize} tricode={team.tricode} />
           </div>
           <span

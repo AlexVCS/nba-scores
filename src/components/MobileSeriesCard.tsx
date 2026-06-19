@@ -30,7 +30,7 @@ function MobileSeriesCard({ series, allSeries, season, isRevealed }: MobileSerie
       }`}
     >
       <div className="flex items-center gap-2 min-w-0">
-        <div className="bg-white rounded p-0.5 flex-shrink-0">
+        <div className="p-0.5 flex-shrink-0">
           <TeamLogos teamName={team.tricode} teamId={team.id} size={28} tricode={team.tricode} />
         </div>
         <span
