@@ -1,0 +1,2 @@
+export const PLAYOFF_PREVIEW_SEASON = "2023-24";
+export const SCOREZ_PREVIEW_DATE = "2025-02-23";

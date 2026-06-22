@@ -11,7 +11,10 @@ interface BracketSeriesNodeProps {
 const HANDLE_STYLE = { background: 'transparent', border: 'none', width: 1, height: 1 };
 
 function BracketSeriesNode({ data }: BracketSeriesNodeProps) {
-  const { team1, team2, team1Wins, team2Wins, winnerTeamId, isRevealed, sizing, seriesSlug, season, targetWins } = data;
+  const { team1, team2, team1Wins, team2Wins, winnerTeamId, isRevealed, sizing, seriesSlug, season, targetWins, seriesRouteBase } = data;
+  const seriesPath = seriesRouteBase === 'design'
+    ? `/designs/playoffz/${seasonToYear(season)}/${seriesSlug}`
+    : `/playoffs/${seasonToYear(season)}/${seriesSlug}`;
 
   const team1IsWinner = winnerTeamId === team1.id;
   const team2IsWinner = winnerTeamId === team2.id;
@@ -58,7 +61,7 @@ function BracketSeriesNode({ data }: BracketSeriesNodeProps) {
       <Handle type="target" position={Position.Right} id="tgt-right" style={{ ...HANDLE_STYLE, top: '50%' }} />
 
       <Link
-        to={`/playoffs/${seasonToYear(season)}/${seriesSlug}`}
+        to={seriesPath}
         className="block border-2 border-gray-700 rounded-lg bg-gray-900 overflow-hidden hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-lg transition-all duration-200"
         title={targetWins ? `Best of ${targetWins * 2 - 1}` : undefined}
       >

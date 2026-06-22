@@ -111,9 +111,10 @@ const edgeTypes: EdgeTypes = {
 
 interface PlayoffBracketFlowProps {
   playoffPicture: PlayoffBracketResponse;
+  seriesRouteBase?: 'production' | 'design';
 }
 
-function PlayoffBracketFlowInner({ playoffPicture }: PlayoffBracketFlowProps) {
+function PlayoffBracketFlowInner({ playoffPicture, seriesRouteBase = 'production' }: PlayoffBracketFlowProps) {
   const navigate = useNavigate();
   const viewportSize = useViewportSize();
   const sizing = bracketSizing[viewportSize];
@@ -143,12 +144,15 @@ function PlayoffBracketFlowInner({ playoffPicture }: PlayoffBracketFlowProps) {
   const handleNodeClick = useCallback((_event: React.MouseEvent, node: Node) => {
     if (node.type !== 'seriesNode') return;
     const data = node.data as BracketNodeData;
-    navigate(`/playoffs/${seasonToYear(data.season)}/${data.seriesSlug}`);
-  }, [navigate]);
+    const path = seriesRouteBase === 'design'
+      ? `/designs/playoffz/${seasonToYear(data.season)}/${data.seriesSlug}`
+      : `/playoffs/${seasonToYear(data.season)}/${data.seriesSlug}`;
+    navigate(path);
+  }, [navigate, seriesRouteBase]);
 
   const { nodes, edges } = useMemo(
-    () => transformToBracketData(model, revealedRounds, season, sizing),
-    [model, revealedRounds, season, sizing]
+    () => transformToBracketData(model, revealedRounds, season, sizing, seriesRouteBase),
+    [model, revealedRounds, season, sizing, seriesRouteBase]
   );
 
   const canRevealRound = (round: number): boolean => {
@@ -163,6 +167,7 @@ function PlayoffBracketFlowInner({ playoffPicture }: PlayoffBracketFlowProps) {
         revealRound={revealRound}
         hideRound={hideRound}
         canRevealRound={canRevealRound}
+        seriesRouteBase={seriesRouteBase}
       />
     );
   }

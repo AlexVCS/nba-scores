@@ -9,6 +9,7 @@ interface MobileBracketProps {
   revealRound: (round: number) => void;
   hideRound: (round: number) => void;
   canRevealRound: (round: number) => boolean;
+  seriesRouteBase?: 'production' | 'design';
 }
 
 function RoundSection({
@@ -18,6 +19,7 @@ function RoundSection({
   season,
   isRevealed,
   onToggle,
+  seriesRouteBase = 'production',
 }: {
   round: number;
   roundName: string;
@@ -26,6 +28,7 @@ function RoundSection({
   season: string;
   isRevealed: boolean;
   onToggle: () => void;
+  seriesRouteBase?: 'production' | 'design';
 }) {
   const canScrollForMore = series.length > 1;
   const [showScrollHint, setShowScrollHint] = useState(false);
@@ -64,6 +67,7 @@ function RoundSection({
             allSeries={allSeries}
             season={season}
             isRevealed={isRevealed}
+            seriesRouteBase={seriesRouteBase}
           />
         ))}
       </div>
@@ -82,6 +86,7 @@ function MobileBracket({
   revealRound,
   hideRound,
   canRevealRound,
+  seriesRouteBase = 'production',
 }: MobileBracketProps) {
   const visibleGroups = useMemo(
     () => model.groups.filter(group => model.series.some(series => series.bracketGroupId === group.id)),
@@ -140,6 +145,7 @@ function MobileBracket({
               onToggle={() =>
                 revealedRounds.has(round.round) ? hideRound(round.round) : revealRound(round.round)
               }
+              seriesRouteBase={seriesRouteBase}
             />
           );
         })}

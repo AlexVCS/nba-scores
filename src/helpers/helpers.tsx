@@ -199,8 +199,15 @@ export const placeholderTeamLogoUrl = "https://cdn.nba.com/logos/nba/fallback.sv
 export const placeholderPlayerHeadshot = "https://placehold.co/48x48?text=No+headshot";
 
 export function formatMinutesPlayed(minutesString: string) {
-  const minutes = parseInt(minutesString.match(/(\d+)M/)?.[1] || "0");
-  return minutes < 10 ? minutes.toString() : minutes.toString();
+  if (!minutesString) return "";
+
+  const clockMinutes = minutesString.match(/^(\d+):\d+$/)?.[1];
+  if (clockMinutes) return clockMinutes;
+
+  const durationMinutes = minutesString.match(/(\d+)M/)?.[1];
+  if (durationMinutes) return durationMinutes;
+
+  return "0";
 }
 
 export const firstNameInitial = (playerName: string): string => {

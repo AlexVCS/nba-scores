@@ -25,6 +25,7 @@ export type BracketNodeData = {
   sizing: BracketSizing;
   targetWins: number | null;
   isFinals: boolean;
+  seriesRouteBase: 'production' | 'design';
 };
 
 function groupBy<T>(items: T[], getKey: (item: T) => string): Record<string, T[]> {
@@ -127,6 +128,7 @@ function buildNode(
   season: string,
   sizing: BracketSizing,
   modernLayout: boolean,
+  seriesRouteBase: 'production' | 'design',
 ): Node<BracketNodeData> | null {
   if (!shouldShowSeries(series, model, revealedRounds)) return null;
   const [team1, team2] = series.teams;
@@ -158,6 +160,7 @@ function buildNode(
       sizing,
       targetWins: series.targetWins,
       isFinals: series.isFinals,
+      seriesRouteBase,
     },
   };
 }
@@ -255,10 +258,11 @@ export function transformToBracketData(
   revealedRounds: Set<number>,
   season: string,
   sizing: BracketSizing,
+  seriesRouteBase: 'production' | 'design' = 'production',
 ): { nodes: Node[]; edges: Edge[] } {
   const modernLayout = isModernTwoConferenceModel(model);
   const seriesNodes = model.series
-    .map(series => buildNode(series, model, revealedRounds, season, sizing, modernLayout))
+    .map(series => buildNode(series, model, revealedRounds, season, sizing, modernLayout, seriesRouteBase))
     .filter((node): node is Node<BracketNodeData> => node !== null);
   const labelNodes = createGroupLabels(model, sizing, modernLayout);
   const edges = createBracketEdges(seriesNodes, model, revealedRounds);
