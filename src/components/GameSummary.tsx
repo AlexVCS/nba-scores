@@ -1,33 +1,10 @@
 // import OvertimeHead from "@/components/Overtime";
+import type { GameSummaryData, PeriodScore } from "@/helpers/helpers";
 import TeamLogos from "./TeamLogos";
 import {ArrowIconRight, ArrowIconLeft} from "./ArrowIcon";
 
-interface PeriodScore {
-  period: number;
-  score: string;
-}
-
 interface GameProps {
-  game: {
-    homeTeam: {
-      teamId: number;
-      teamTricode: string;
-      teamName: string;
-      periods: PeriodScore[];
-      score: string;
-    };
-    awayTeam: {
-      teamId: number;
-      teamTricode: string;
-      teamName: string;
-      periods: PeriodScore[];
-      score: string;
-    };
-    period: number;
-    gameStatusText: string;
-    periodScoreSource?: "nba" | "basketball-reference" | "unavailable";
-    periodScoreType?: "quarters";
-  };
+  game: GameSummaryData;
 }
 
 const GameSummary: React.FC<GameProps> = ({ game }) => {

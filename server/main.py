@@ -67,6 +67,11 @@ def get_v3_scoreboard(
 def get_game_boxscore(game_id: str):
     try:
         return {"game": fetch_boxscoretraditional(game_id)}
+    except ValueError as e:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Boxscore unavailable for game {game_id}: {str(e)}",
+        )
     except Exception as e:
         print(f"Error fetching boxscore for {game_id}: {e}")
         raise HTTPException(

@@ -4,32 +4,7 @@ import GameCard from "./GameCard.jsx";
 import {Switch} from "@adobe/react-spectrum";
 import {useSearchParams} from "react-router";
 import {setItem, getItem} from "@/helpers/helpers.jsx";
-
-type GameData = {
-  gameId: string;
-  gameCode: string;
-  gameStatus: number;
-  gameLabel: string;
-  gameSubLabel: string;
-  gameTimeUTC: string;
-  gameStatusText: string;
-  ifNecessary: boolean;
-  seriesGameNumber: string;
-  seriesText: string;
-  boxscoreAvailable?: boolean;
-  homeTeam: {
-    teamName: string;
-    teamTricode: string;
-    teamId: number;
-    score: number;
-  };
-  awayTeam: {
-    teamName: string;
-    teamTricode: string;
-    teamId: number;
-    score: number;
-  };
-};
+import type {GameData} from "@/helpers/helpers";
 
 const Games = () => {
   const [searchParams] = useSearchParams({date: ""});

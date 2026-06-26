@@ -48,14 +48,17 @@ class _FakeResponse:
         pass
 
 
-def _game_summary_row():
-    return {
+def _game_summary_row(**overrides):
+    row = {
         "GAME_DATE_EST": "1946-11-01T00:00:00",
+        "GAMECODE": "19461101/NYKTRH",
         "HOME_TEAM_ID": HUS,
         "VISITOR_TEAM_ID": NYK,
         "LIVE_PERIOD": 5,
         "GAME_STATUS_ID": 3,
     }
+    row.update(overrides)
+    return row
 
 
 def _line_score_row(team_id, tricode, city, nickname, pts, qtrs=None, ot1=None):
@@ -371,7 +374,126 @@ def test_fallback_failure_returns_no_periods(monkeypatch):
     assert result["awayTeam"]["periods"] == []
 
 
+def test_scheduled_empty_linescore_does_not_call_bref(monkeypatch):
+    _patch_summary(
+        monkeypatch,
+        [_game_summary_row(GAME_STATUS_ID=1, LIVE_PERIOD=0)],
+        [],
+    )
+    monkeypatch.setattr(
+        game_summary,
+        "fetch_bref_line_score",
+        lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("unexpected")),
+    )
+
+    result = main.get_game_summary("0024600001")
+
+    assert result["gameStatusText"] == "Scheduled"
+    assert result["periodScoreSource"] == "unavailable"
+
+
+def test_final_empty_linescore_uses_bref_fallback(monkeypatch):
+    calls = []
+    _patch_summary(
+        monkeypatch,
+        [_game_summary_row(LIVE_PERIOD=4)],
+        [],
+    )
+
+    def fake_bref(game_date_est, home_team_tricode):
+        calls.append((game_date_est, home_team_tricode))
+        return {
+            "HUS": _bref_score([12, 17, 19, 18], 66),
+            "NYK": _bref_score([16, 21, 6, 25], 68),
+        }
+
+    monkeypatch.setattr(game_summary, "fetch_bref_line_score", fake_bref)
+
+    result = main.get_game_summary("0024600001")
+
+    assert calls == [("1946-11-01T00:00:00", "HUS")]
+    assert result["periodScoreSource"] == "basketball-reference"
+    assert result["gameStatusText"] == "Final"
+    assert result["homeTeam"]["score"] == "66"
+    assert result["awayTeam"]["score"] == "68"
+    assert [period["score"] for period in result["homeTeam"]["periods"]] == [
+        "12",
+        "17",
+        "19",
+        "18",
+    ]
+    assert [period["score"] for period in result["awayTeam"]["periods"]] == [
+        "16",
+        "21",
+        "6",
+        "25",
+    ]
+
+
+def test_final_sparse_linescore_uses_bref_fallback(monkeypatch):
+    calls = []
+    _patch_summary(
+        monkeypatch,
+        [_game_summary_row(LIVE_PERIOD=4)],
+        [_line_score_row(HUS, "HUS", "Toronto", "Huskies", 66)],
+    )
+
+    def fake_bref(game_date_est, home_team_tricode):
+        calls.append((game_date_est, home_team_tricode))
+        return {
+            "HUS": _bref_score([12, 17, 19, 18], 66),
+            "NYK": _bref_score([16, 21, 6, 25], 68),
+        }
+
+    monkeypatch.setattr(game_summary, "fetch_bref_line_score", fake_bref)
+
+    result = main.get_game_summary("0024600001")
+
+    assert calls == [("1946-11-01T00:00:00", "HUS")]
+    assert result["periodScoreSource"] == "basketball-reference"
+    assert result["homeTeam"]["teamName"] == "Toronto Huskies"
+    assert result["homeTeam"]["score"] == "66"
+    assert result["awayTeam"]["teamTricode"] == "NYK"
+    assert result["awayTeam"]["score"] == "68"
+    assert [period["score"] for period in result["awayTeam"]["periods"]] == [
+        "16",
+        "21",
+        "6",
+        "25",
+    ]
+
+
+def test_final_empty_linescore_bref_failure_is_not_scheduled(monkeypatch):
+    _patch_summary(
+        monkeypatch,
+        [_game_summary_row(LIVE_PERIOD=4)],
+        [],
+    )
+    monkeypatch.setattr(
+        game_summary,
+        "fetch_bref_line_score",
+        lambda *args, **kwargs: (_ for _ in ()).throw(RuntimeError("offline")),
+    )
+
+    result = main.get_game_summary("0024600001")
+
+    assert result["gameStatusText"] == "Final"
+    assert result["periodScoreSource"] == "unavailable"
+    assert result["homeTeam"]["periods"] == []
+    assert result["awayTeam"]["periods"] == []
+
+
 def test_bref_url_uses_historical_home_team_mapping():
     assert game_summary.build_bref_boxscore_url(
         "1946-11-01T00:00:00", "HUS"
     ) == "https://www.basketball-reference.com/boxscores/194611010TRH.html"
+
+
+def test_bref_url_preserves_modern_wizards_home_team_code():
+    assert game_summary.build_bref_boxscore_url(
+        "2024-01-31T00:00:00", "WAS"
+    ) == "https://www.basketball-reference.com/boxscores/202401310WAS.html"
+
+
+def test_bref_parser_preserves_modern_wizards_team_code():
+    assert game_summary.from_bref_team_code("WAS") == "WAS"

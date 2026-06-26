@@ -5,6 +5,7 @@ import DarkModeToggle from "@/components/DarkModeToggle";
 import PlayerTable from "./PlayerTable";
 // import InactivePlayers from "./InactivePlayers";
 import { getBoxScores, getGameSummary } from "@/services/nbaService";
+import type { GameSummaryData, GameSummaryTeam } from "@/helpers/helpers";
 
 interface BoxscoreTeam {
   teamId: number;
@@ -37,22 +38,24 @@ const Boxscore = () => {
     return <h1>Error loading boxscore data</h1>;
   }
 
-  const buildTeamFromBoxscore = (team: BoxscoreTeam) => ({
+  const buildTeamFromBoxscore = (team: BoxscoreTeam): GameSummaryTeam => ({
     teamId: team.teamId ?? 0,
     teamTricode: team.teamTricode ?? "",
     teamName: `${team.teamCity ?? ""} ${team.teamName ?? ""}`.trim(),
     score: String(team.statistics?.points ?? ""),
-    periods: [] as Array<{ period: number; score: string }>,
+    periods: [],
   });
 
-  const summaryData = gameSummaryQuery.data ?? (!gameSummaryQuery.isLoading && game ? {
+  const fallbackSummaryData: GameSummaryData | null = !gameSummaryQuery.isLoading && game ? {
     homeTeam: buildTeamFromBoxscore(game.homeTeam),
     awayTeam: buildTeamFromBoxscore(game.awayTeam),
     period: 0,
     gameStatusText: game.gameStatusText ?? "Unknown",
-    periodScoreSource: "unavailable" as const,
-    periodScoreType: "quarters" as const,
-  } : null);
+    periodScoreSource: "unavailable",
+    periodScoreType: "quarters",
+  } : null;
+
+  const summaryData = gameSummaryQuery.data ?? fallbackSummaryData;
 
   return (
     <div className="bg-slate-50 dark:bg-neutral-950 min-h-screen">

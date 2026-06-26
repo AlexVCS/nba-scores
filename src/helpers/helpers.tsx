@@ -1,3 +1,29 @@
+export interface GameData {
+  gameId: string;
+  gameCode: string;
+  gameStatus: number;
+  gameLabel: string;
+  gameSubLabel: string;
+  gameTimeUTC: string;
+  gameStatusText: string;
+  ifNecessary: boolean;
+  seriesGameNumber: string;
+  seriesText: string;
+  boxscoreAvailable?: boolean;
+  homeTeam: {
+    teamName: string;
+    teamTricode: string;
+    teamId: number;
+    score: number;
+  };
+  awayTeam: {
+    teamName: string;
+    teamTricode: string;
+    teamId: number;
+    score: number;
+  };
+}
+
 export type Team = {
   teamName: string;
   teamTricode: string;
@@ -19,6 +45,32 @@ export type GameTeam = {
   name: string;
   score: number;
 };
+
+export type PeriodScore = {
+  period: number;
+  score: string;
+};
+
+export type PeriodScoreSource = "nba" | "basketball-reference" | "unavailable";
+
+export type PeriodScoreType = "quarters";
+
+export interface GameSummaryTeam {
+  teamId: number;
+  teamTricode: string;
+  teamName: string;
+  periods: PeriodScore[];
+  score: string;
+}
+
+export interface GameSummaryData {
+  homeTeam: GameSummaryTeam;
+  awayTeam: GameSummaryTeam;
+  period: number;
+  gameStatusText: string;
+  periodScoreSource?: PeriodScoreSource;
+  periodScoreType?: PeriodScoreType;
+}
 
 export type TeamsInSeries = {
   id: number;

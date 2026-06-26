@@ -1,35 +1,11 @@
 import {Link} from "react-router-dom";
 import TeamLogos from "@/components/TeamLogos";
 import {generateWatchLink} from "@/helpers/helpers";
+import type {GameData} from "@/helpers/helpers";
 
 interface GameCardProps {
   showScores: boolean;
-  // dateParam: string;
-  game: {
-    gameId: string;
-    gameCode: string;
-    gameTimeUTC: string;
-    gameStatus: number;
-    gameStatusText: string;
-    gameLabel: string;
-    gameSubLabel: string;
-    ifNecessary: boolean;
-    seriesGameNumber: string;
-    seriesText: string;
-    boxscoreAvailable?: boolean;
-    homeTeam: {
-      teamName: string;
-      teamTricode: string;
-      score: number;
-      teamId: number;
-    };
-    awayTeam: {
-      teamName: string;
-      teamTricode: string;
-      score: number;
-      teamId: number;
-    };
-  };
+  game: GameData;
 }
 
 function GameCard({game, showScores = false}: GameCardProps) {

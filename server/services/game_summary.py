@@ -8,7 +8,6 @@ BREF_TEAM_CODE_OVERRIDES = {
     "HUS": "TRH",
     "BOM": "STB",
     "DEF": "DTF",
-    "WAS": "WSC",
 }
 
 BREF_REQUEST_HEADERS = {
@@ -247,6 +246,137 @@ def build_reliable_bref_periods(home_row, away_row, bref_line_score):
     return None, None
 
 
+def parse_gamecode_team_tricodes(game_code):
+    matchup = str(game_code or "").split("/")[-1]
+    if len(matchup) < 6:
+        return "", ""
+
+    away_tricode = from_bref_team_code(matchup[:3])
+    home_tricode = from_bref_team_code(matchup[3:6])
+    return home_tricode, away_tricode
+
+
+def first_row(filtered):
+    if filtered is None or filtered.empty:
+        return None
+    return filtered.iloc[0]
+
+
+def clean_tricode(value):
+    if value is None or str(value) == "nan" or str(value) == "None":
+        return ""
+    return str(value)
+
+
+def row_tricode(row):
+    if row is None:
+        return ""
+    return clean_tricode(row.get("TEAM_ABBREVIATION"))
+
+
+def bref_period_scores_match_own_total(bref_team_score):
+    if not bref_team_score:
+        return False
+
+    periods = bref_team_score.get("periods")
+    if not periods:
+        return False
+
+    total = bref_team_score.get("total")
+    if total is None:
+        return True
+
+    period_total = 0
+    for period in periods:
+        score = safe_int(period.get("score"))
+        if score is None:
+            return False
+        period_total += score
+
+    return period_total == safe_int(total)
+
+
+def score_from_row_or_bref(row, bref_team_score):
+    if row is not None and safe_int(row.get("PTS")) is not None:
+        return safe_score(row.get("PTS"))
+    if bref_team_score:
+        return safe_score(bref_team_score.get("total"))
+    return "0"
+
+
+def sparse_summary_team(team_id, row, tricode, bref_team_score, periods):
+    return {
+        "teamId": int(team_id),
+        "teamTricode": row_tricode(row) or clean_tricode(tricode),
+        "teamName": get_team_name(row) if row is not None else "",
+        "score": score_from_row_or_bref(row, bref_team_score),
+        "periods": periods,
+    }
+
+
+def make_sparse_linescore_response(
+    game_id,
+    game_meta,
+    home_team_id,
+    visitor_team_id,
+    live_period,
+    game_status_id,
+    home_filtered,
+    away_filtered,
+):
+    home_row = first_row(home_filtered)
+    away_row = first_row(away_filtered)
+    parsed_home_tricode, parsed_away_tricode = parse_gamecode_team_tricodes(
+        game_meta.get("GAMECODE")
+    )
+    home_tricode = row_tricode(home_row) or parsed_home_tricode
+    away_tricode = row_tricode(away_row) or parsed_away_tricode
+    home_periods = []
+    away_periods = []
+    home_bref = None
+    away_bref = None
+    period_score_source = "unavailable"
+
+    if home_tricode and away_tricode:
+        try:
+            bref_line_score = fetch_bref_line_score(
+                game_meta["GAME_DATE_EST"], home_tricode
+            )
+            if bref_line_score:
+                home_bref = bref_line_score.get(home_tricode)
+                away_bref = bref_line_score.get(away_tricode)
+                if (
+                    home_bref
+                    and away_bref
+                    and period_sets_match(
+                        home_bref.get("periods"), away_bref.get("periods")
+                    )
+                    and bref_period_scores_match_own_total(home_bref)
+                    and bref_period_scores_match_own_total(away_bref)
+                ):
+                    home_periods = home_bref.get("periods")
+                    away_periods = away_bref.get("periods")
+                    period_score_source = "basketball-reference"
+        except Exception as e:
+            print(f"Basketball-Reference fallback failed for {game_id}: {e}")
+
+    return {
+        "homeTeam": sparse_summary_team(
+            home_team_id, home_row, home_tricode, home_bref, home_periods
+        ),
+        "awayTeam": sparse_summary_team(
+            visitor_team_id, away_row, away_tricode, away_bref, away_periods
+        ),
+        "gameStatusText": get_game_status(
+            game_status_id,
+            get_status_period(game_status_id, live_period, home_periods, away_periods),
+        ),
+        "period": int(live_period) if live_period else 0,
+        "periodScoreSource": period_score_source,
+        "periodScoreType": "quarters",
+    }
+
+
 def get_game_status(status_id, period):
     if status_id == 3:
         if period > 4:
@@ -334,14 +464,37 @@ def fetch_game_summary(game_id: str):
     game_status_id = game_meta["GAME_STATUS_ID"]
     fallback_linescore = summary.line_score.get_data_frame()
     game_linescore = fallback_linescore if not fallback_linescore.empty else None
+    is_scheduled = safe_int(game_status_id) == 1
 
     if game_linescore is None or game_linescore.empty:
-        return make_scheduled_response(home_team_id, visitor_team_id)
+        if is_scheduled:
+            return make_scheduled_response(home_team_id, visitor_team_id)
+        return make_sparse_linescore_response(
+            game_id,
+            game_meta,
+            home_team_id,
+            visitor_team_id,
+            live_period,
+            game_status_id,
+            None,
+            None,
+        )
 
     home_filtered = game_linescore[game_linescore["TEAM_ID"] == home_team_id]
     away_filtered = game_linescore[game_linescore["TEAM_ID"] == visitor_team_id]
     if home_filtered.empty or away_filtered.empty:
-        return make_scheduled_response(home_team_id, visitor_team_id)
+        if is_scheduled:
+            return make_scheduled_response(home_team_id, visitor_team_id)
+        return make_sparse_linescore_response(
+            game_id,
+            game_meta,
+            home_team_id,
+            visitor_team_id,
+            live_period,
+            game_status_id,
+            home_filtered,
+            away_filtered,
+        )
 
     home_row = home_filtered.iloc[0]
     away_row = away_filtered.iloc[0]

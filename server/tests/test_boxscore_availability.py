@@ -26,6 +26,10 @@ def test_boxscore_metadata_unavailable_for_scheduled_game():
     assert is_boxscore_available_metadata("0024600206", "2024-11-01", 1) is False
 
 
+def test_boxscore_metadata_unavailable_for_missing_status():
+    assert is_boxscore_available_metadata("0024600206", "2024-11-01", None) is False
+
+
 def test_boxscore_metadata_unavailable_for_invalid_game_id():
     assert is_boxscore_available_metadata("not-a-game", "2024-11-01", 2) is False
 
@@ -78,6 +82,7 @@ def test_playoff_normalization_adds_boxscore_availability():
             "TEAM_NAME": "Celtics",
             "WL": "W",
             "PTS": 107,
+            "GAME_STATUS_ID": 3,
         },
         {
             "GAME_ID": "0042300401",
@@ -88,12 +93,45 @@ def test_playoff_normalization_adds_boxscore_availability():
             "TEAM_NAME": "Mavericks",
             "WL": "L",
             "PTS": 89,
+            "GAME_STATUS_ID": 3,
         },
     ]
 
     result = playoffs.normalize_playoff_games(pandas.DataFrame(rows))
 
     assert result[0]["boxscoreAvailable"] is True
+
+
+def test_playoff_normalization_marks_scheduled_game_unavailable():
+    pandas = pytest.importorskip("pandas")
+    rows = [
+        {
+            "GAME_ID": "0042500401",
+            "GAME_DATE": "2026-06-04",
+            "MATCHUP": "BOS vs. DAL",
+            "TEAM_ID": 1610612738,
+            "TEAM_ABBREVIATION": "BOS",
+            "TEAM_NAME": "Celtics",
+            "WL": None,
+            "PTS": 0,
+            "GAME_STATUS_ID": 1,
+        },
+        {
+            "GAME_ID": "0042500401",
+            "GAME_DATE": "2026-06-04",
+            "MATCHUP": "DAL @ BOS",
+            "TEAM_ID": 1610612742,
+            "TEAM_ABBREVIATION": "DAL",
+            "TEAM_NAME": "Mavericks",
+            "WL": None,
+            "PTS": 0,
+            "GAME_STATUS_ID": 1,
+        },
+    ]
+
+    result = playoffs.normalize_playoff_games(pandas.DataFrame(rows))
+
+    assert result[0]["boxscoreAvailable"] is False
 
 
 def test_existing_boxscore_endpoint_still_errors_on_upstream_failure(monkeypatch):
@@ -109,3 +147,19 @@ def test_existing_boxscore_endpoint_still_errors_on_upstream_failure(monkeypatch
 
     assert exc.value.status_code == 500
     assert "Failed to fetch boxscore" in exc.value.detail
+
+
+def test_boxscore_endpoint_maps_unavailable_data_to_not_found(monkeypatch):
+    def fake_boxscore(*args, **kwargs):
+        return _FakeBoxScoreTraditional(payload={"boxScoreTraditional": None})
+
+    monkeypatch.setattr(
+        game_summary.boxscoretraditionalv3, "BoxScoreTraditionalV3", fake_boxscore
+    )
+
+    with pytest.raises(HTTPException) as exc:
+        main.get_game_boxscore("0024600206")
+
+    assert exc.value.status_code == 404
+    assert "Boxscore unavailable" in exc.value.detail
+    assert "no usable game data" in exc.value.detail
