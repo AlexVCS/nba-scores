@@ -22,7 +22,7 @@
 
 ## About
 
-Find the scores and stats of your favorite NBA team! Scorez can be accessed for games from the 1946/47 season, and after. Boxscores are only available for games from the 2019/20 season, and after. Explore NBA playoff brackets going back to the 1946/47 season, with round-by-round reveal controls and detailed series views.
+Find the scores and stats of your favorite NBA team! Scorez, boxscores, and playoff data go back to the 1946/47 season.
 
 ## Screenshots
 
@@ -64,7 +64,7 @@ Navigate to the [Playoffs](https://nba-scorez.onrender.com/playoffs) page to exp
 - Select any season with the year picker
 - Toggle results round by round to avoid spoilers
 - Click any series to see a game-by-game breakdown with scores, dates, and links to box scores
-- Watch links are available for seasons from 2012/13 onward
+- Watch links are available for seasons from 2012/13 onward, depending on League Pass availability
 - On desktop, the bracket is rendered with [React Flow](https://reactflow.dev/)
 
 <div align='right'>

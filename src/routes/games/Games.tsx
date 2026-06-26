@@ -16,6 +16,7 @@ type GameData = {
   ifNecessary: boolean;
   seriesGameNumber: string;
   seriesText: string;
+  boxscoreAvailable?: boolean;
   homeTeam: {
     teamName: string;
     teamTricode: string;
@@ -69,11 +70,11 @@ const Games = () => {
     queryKey: ["games", dateParam],
     queryFn: () => getScores(dateParam),
   });
+  const games = data?.games ?? [];
 
   if (isLoading) return <h1>Loading...</h1>;
   if (error) return <h1>{JSON.stringify(error)}</h1>;
   if (!data) return <h1>Didn't receive any games</h1>;
-  const {games} = data;
   return (
     <>
       {games.some((game) => game.gameStatus !== 1) && (

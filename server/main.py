@@ -1,16 +1,18 @@
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from nba_api.stats.endpoints import (
-    boxscoresummaryv2,
-    boxscoretraditionalv3,
     ScheduleLeagueV2,
     scoreboardv2,
     scoreboardv3,
 )
 from datetime import datetime
 from .utils.season import get_nba_season
+from .utils.boxscore_availability import (
+    is_boxscore_available_metadata,
+)
 from .services.nba_schedule import get_game_days_in_month
 from .models.schemas import GameDaysResponse
+from .services.game_summary import fetch_boxscoretraditional, fetch_game_summary
 from .services.playoffs import (
     get_normalized_playoff_games,
     fetch_playoff_team_games_df,
@@ -29,6 +31,17 @@ app.add_middleware(
 )
 
 
+def add_boxscore_availability_to_scoreboard(scoreboard, target_date):
+    for game in scoreboard.get("games", []):
+        game_date = str(game.get("gameTimeUTC") or target_date)[:10]
+        game["boxscoreAvailable"] = is_boxscore_available_metadata(
+            game.get("gameId"),
+            game_date,
+            game.get("gameStatus"),
+        )
+    return scoreboard
+
+
 @app.get("/")
 def get_v3_scoreboard(
     date: str = Query(
@@ -41,7 +54,9 @@ def get_v3_scoreboard(
         target_date = date if date else datetime.now().strftime("%Y-%m-%d")
         board = scoreboardv3.ScoreboardV3(game_date=target_date, league_id="00")
         full_data = board.get_dict()
-        return full_data["scoreboard"]
+        return add_boxscore_availability_to_scoreboard(
+            full_data["scoreboard"], target_date
+        )
     except Exception as e:
         raise HTTPException(
             status_code=500, detail=f"Failed to fetch ScoreboardV3: {str(e)}"
@@ -51,16 +66,7 @@ def get_v3_scoreboard(
 @app.get("/games/{game_id}/boxscore")
 def get_game_boxscore(game_id: str):
     try:
-        box = boxscoretraditionalv3.BoxScoreTraditionalV3(
-            game_id=game_id,
-            range_type=0,
-            start_period=0,
-            end_period=10,
-            start_range=0,
-            end_range=0,
-        )
-        data = box.get_dict()
-        return {"game": data["boxScoreTraditional"]}
+        return {"game": fetch_boxscoretraditional(game_id)}
     except Exception as e:
         print(f"Error fetching boxscore for {game_id}: {e}")
         raise HTTPException(
@@ -71,143 +77,7 @@ def get_game_boxscore(game_id: str):
 @app.get("/gamesummary/{game_id}")
 def get_game_summary(game_id: str):
     try:
-        summary = boxscoresummaryv2.BoxScoreSummaryV2(game_id=game_id)
-        game_summary_df = summary.game_summary.get_data_frame()
-        if game_summary_df.empty:
-            raise HTTPException(status_code=404, detail="Game not found")
-        game_meta = game_summary_df.iloc[0]
-        home_team_id = game_meta["HOME_TEAM_ID"]
-        visitor_team_id = game_meta["VISITOR_TEAM_ID"]
-        live_period = game_meta["LIVE_PERIOD"]
-        game_status_id = game_meta["GAME_STATUS_ID"]
-        fallback_linescore = summary.line_score.get_data_frame()
-        game_linescore = fallback_linescore if not fallback_linescore.empty else None
-        def make_scheduled_response(home_id, away_id):
-            return {
-                "homeTeam": {
-                    "teamId": int(home_id),
-                    "teamTricode": "",
-                    "teamName": "",
-                    "score": "0",
-                    "periods": [],
-                },
-                "awayTeam": {
-                    "teamId": int(away_id),
-                    "teamTricode": "",
-                    "teamName": "",
-                    "score": "0",
-                    "periods": [],
-                },
-                "gameStatusText": "Scheduled",
-                "period": 0,
-            }
-
-        if game_linescore is None or game_linescore.empty:
-            return make_scheduled_response(home_team_id, visitor_team_id)
-
-        def build_periods(row):
-            periods = []
-            for q in range(1, 5):
-                col_name = f"PTS_QTR{q}"
-                if col_name in row.index:
-                    score = row[col_name]
-                    if (
-                        score is not None
-                        and str(score) != "nan"
-                        and str(score) != ""
-                        and str(score) != "None"
-                    ):
-                        try:
-                            periods.append(
-                                {"period": q, "score": str(int(float(score)))}
-                            )
-                        except (ValueError, TypeError):
-                            pass
-            for ot in range(1, 11):
-                col_name = f"PTS_OT{ot}"
-                if col_name in row.index:
-                    score = row[col_name]
-                    if (
-                        score is not None
-                        and str(score) != "nan"
-                        and str(score) != ""
-                        and str(score) != "None"
-                    ):
-                        try:
-                            score_int = int(float(score))
-                            if score_int > 0:
-                                periods.append(
-                                    {"period": 4 + ot, "score": str(score_int)}
-                                )
-                        except (ValueError, TypeError):
-                            pass
-            return periods
-
-        def get_game_status(status_id, period):
-            if status_id == 3:
-                if period > 4:
-                    return (
-                        f"Final/OT{period - 4}" if period > 5 else "Final/OT"
-                    )
-                return "Final"
-            elif status_id == 2:
-                if period > 4:
-                    return f"OT{period - 4}"
-                return f"Q{period}"
-            else:
-                return "Scheduled"
-
-        home_filtered = game_linescore[game_linescore["TEAM_ID"] == home_team_id]
-        away_filtered = game_linescore[game_linescore["TEAM_ID"] == visitor_team_id]
-        if home_filtered.empty or away_filtered.empty:
-            return make_scheduled_response(home_team_id, visitor_team_id)
-        home_row = home_filtered.iloc[0]
-        away_row = away_filtered.iloc[0]
-        home_pts = home_row.get("PTS", 0)
-        away_pts = away_row.get("PTS", 0)
-
-        def safe_score(pts):
-            if (
-                pts is None
-                or str(pts) == "nan"
-                or str(pts) == "None"
-                or str(pts) == ""
-            ):
-                return "0"
-            try:
-                return str(int(float(pts)))
-            except (ValueError, TypeError):
-                return "0"
-
-        def get_team_name(row):
-            city = row.get("TEAM_CITY_NAME", "")
-            nickname = (
-                row.get("TEAM_NAME")
-                if "TEAM_NAME" in row.index
-                else row.get("TEAM_NICKNAME", "")
-            )
-            return f"{city} {nickname}".strip()
-
-        return {
-            "homeTeam": {
-                "teamId": int(home_row["TEAM_ID"]),
-                "teamTricode": home_row["TEAM_ABBREVIATION"],
-                "teamName": get_team_name(home_row),
-                "score": safe_score(home_pts),
-                "periods": build_periods(home_row),
-            },
-            "awayTeam": {
-                "teamId": int(away_row["TEAM_ID"]),
-                "teamTricode": away_row["TEAM_ABBREVIATION"],
-                "teamName": get_team_name(away_row),
-                "score": safe_score(away_pts),
-                "periods": build_periods(away_row),
-            },
-            "gameStatusText": get_game_status(
-                game_status_id, int(live_period) if live_period else 0
-            ),
-            "period": int(live_period) if live_period else 0,
-        }
+        return fetch_game_summary(game_id)
     except HTTPException:
         raise
     except Exception as e:

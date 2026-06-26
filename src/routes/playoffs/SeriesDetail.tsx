@@ -25,6 +25,10 @@ function SeriesDetail() {
   };
   const { data, isLoading, error } = usePlayoffData(season);
   const model = useMemo(() => data ? buildPlayoffBracketModel(data) : null, [data]);
+  const series = useMemo(
+    () => model ? findSeriesBySlug(seriesSlug ?? '', model.series) : undefined,
+    [model, seriesSlug]
+  );
 
   if (!isValidYear) {
     return (
@@ -40,8 +44,6 @@ function SeriesDetail() {
   if (isLoading) return <p className="p-4 dark:text-slate-50">Loading...</p>;
   if (error) return <p className="p-4 dark:text-slate-50">Error: {String(error)}</p>;
   if (!data) return <p className="p-4 dark:text-slate-50">No data available</p>;
-
-  const series = model ? findSeriesBySlug(seriesSlug ?? '', model.series) : undefined;
 
   if (!series) {
     return (
@@ -127,13 +129,14 @@ function SeriesDetail() {
                 const gameDate = formatGameDate(game.date);
                 const homeWon = isRevealed && game.homeTeam.score > game.awayTeam.score;
                 const awayWon = isRevealed && game.awayTeam.score > game.homeTeam.score;
+                const boxscoreAvailable = game.boxscoreAvailable === true;
 
                 return (
                   <div
                     key={game.gameId}
                     className="relative text-sm text-gray-700 dark:text-slate-300 flex items-center gap-3 py-3"
                   >
-                    {isRevealed && (
+                    {isRevealed && boxscoreAvailable && (
                       <Link to={`/games/${game.gameId}/boxscore`} className="absolute inset-0 sm:hidden" aria-label="Box score" />
                     )}
                     <span className="text-gray-400 dark:text-gray-500 shrink-0 w-14">Game {index + 1}</span>
@@ -157,7 +160,7 @@ function SeriesDetail() {
                         Watch
                       </a>
                     )}
-                    {isRevealed && (
+                    {isRevealed && boxscoreAvailable && (
                       <>
                         <svg
                           className="sm:hidden shrink-0 text-gray-400 dark:text-gray-500"

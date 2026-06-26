@@ -80,6 +80,7 @@ export type SeriesGame = {
   date: string;
   round: number;
   roundName: string;
+  boxscoreAvailable?: boolean;
   homeTeam: GameTeam;
   awayTeam: GameTeam;
   winnerTeamId: number | null;
@@ -198,9 +199,19 @@ export const placeholderTeamLogoUrl = "https://cdn.nba.com/logos/nba/fallback.sv
 
 export const placeholderPlayerHeadshot = "https://placehold.co/48x48?text=No+headshot";
 
-export function formatMinutesPlayed(minutesString: string) {
-  const minutes = parseInt(minutesString.match(/(\d+)M/)?.[1] || "0");
-  return minutes < 10 ? minutes.toString() : minutes.toString();
+export function formatMinutesPlayed(minutesString: string): string {
+  const normalizedMinutes = minutesString.trim();
+  if (normalizedMinutes.length === 0) return "0";
+
+  if (normalizedMinutes.includes(":")) {
+    const [minutes] = normalizedMinutes.split(":");
+    return minutes && /^\d+$/.test(minutes) ? minutes : "0";
+  }
+
+  if (/^\d+$/.test(normalizedMinutes)) return normalizedMinutes;
+
+  const minutesMatch = normalizedMinutes.match(/(\d+)M/);
+  return minutesMatch ? minutesMatch[1] : "0";
 }
 
 export const firstNameInitial = (playerName: string): string => {

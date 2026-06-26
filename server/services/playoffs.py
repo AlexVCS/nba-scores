@@ -9,6 +9,7 @@ from nba_api.stats.endpoints import LeagueGameLog, boxscoresummaryv2, leaguegame
 from requests.exceptions import ConnectionError as RequestsConnectionError
 from requests.exceptions import ReadTimeout
 
+from server.utils.boxscore_availability import is_boxscore_available_metadata
 from server.utils.season import get_nba_season
 
 _CONFERENCES_JSON = (
@@ -739,6 +740,10 @@ def normalize_playoff_games(df):
             {
                 "gameId": str(game_id),
                 "date": home_team["GAME_DATE"],
+                "boxscoreAvailable": is_boxscore_available_metadata(
+                    str(game_id),
+                    home_team["GAME_DATE"],
+                ),
                 "round": 0,
                 "roundName": "Round 0",
                 "homeTeam": {
