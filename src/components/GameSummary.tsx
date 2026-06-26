@@ -1,29 +1,31 @@
 // import OvertimeHead from "@/components/Overtime";
+import type { GameSummaryData, PeriodScore } from "@/helpers/helpers";
 import TeamLogos from "./TeamLogos";
 import {ArrowIconRight, ArrowIconLeft} from "./ArrowIcon";
 
 interface GameProps {
-  game: {
-    homeTeam: {
-      teamId: number;
-      teamTricode: string;
-      teamName: string;
-      periods: Array<{period: number; score: string}>;
-      score: string;
-    };
-    awayTeam: {
-      teamId: number;
-      teamTricode: string;
-      teamName: string;
-      periods: Array<{period: number; score: string}>;
-      score: string;
-    };
-    period: number;
-    gameStatusText: string;
-  };
+  game: GameSummaryData;
 }
 
 const GameSummary: React.FC<GameProps> = ({ game }) => {
+  const homePeriods = game.homeTeam.periods ?? [];
+  const awayPeriods = game.awayTeam.periods ?? [];
+  const showPeriodScores = (
+    homePeriods.length > 0
+    && awayPeriods.length === homePeriods.length
+    && homePeriods.every((period, index) => period.period === awayPeriods[index]?.period)
+  );
+  const periodColumns = showPeriodScores ? homePeriods : [];
+
+  const periodHeader = (period: number) => {
+    if (period <= 4) return String(period);
+    return period === 5 ? "OT" : `OT${period - 4}`;
+  };
+
+  const findScoreForPeriod = (periods: PeriodScore[], period: number) => (
+    periods.find((periodScore) => periodScore.period === period)?.score ?? ""
+  );
+
   return (
     <div className="flex flex-col md:grid md:grid-cols-3 items-center gap-3 md:gap-4 p-4 rounded-lg dark:text-slate-50 text-neutral-950">
       <div className="flex md:hidden w-full justify-center items-center gap-8">
@@ -88,13 +90,9 @@ const GameSummary: React.FC<GameProps> = ({ game }) => {
             <thead>
               <tr>
                 <th className="text-left pl-1.5 md:pl-3 pr-2 md:pr-8"></th>
-                <th className="px-1 md:px-2 text-center">1</th>
-                <th className="px-1 md:px-2 text-center">2</th>
-                <th className="px-1 md:px-2 text-center">3</th>
-                <th className="px-1 md:px-2 text-center">4</th>
-                {game.homeTeam.periods.slice(4).map((p) => (
-                  <th className="px-1 md:px-2 text-center" key={`ot-header-${p.period}`}>
-                    OT{p.period - 4}
+                {periodColumns.map((period) => (
+                  <th className="px-1 md:px-2 text-center" key={`period-header-${period.period}`}>
+                    {periodHeader(period.period)}
                   </th>
                 ))}
                 <th className="px-1 md:px-2 text-center">T</th>
@@ -105,9 +103,9 @@ const GameSummary: React.FC<GameProps> = ({ game }) => {
                 <td className="text-left pl-1.5 md:pl-3 pr-1">
                   {game.homeTeam.teamTricode}
                 </td>
-                {game.homeTeam.periods.map((period) => (
+                {periodColumns.map((period) => (
                   <td className="px-1 md:px-2 text-center" key={period.period}>
-                    {period.score}
+                    {findScoreForPeriod(homePeriods, period.period)}
                   </td>
                 ))}
                 <td className="px-1 md:px-2 text-center font-bold">{game.homeTeam.score}</td>
@@ -116,9 +114,9 @@ const GameSummary: React.FC<GameProps> = ({ game }) => {
                 <td className="text-left pl-1.5 md:pl-3 pr-1">
                   {game.awayTeam.teamTricode}
                 </td>
-                {game.awayTeam.periods.map((period) => (
+                {periodColumns.map((period) => (
                   <td className="px-1 md:px-2 text-center" key={period.period}>
-                    {period.score}
+                    {findScoreForPeriod(awayPeriods, period.period)}
                   </td>
                 ))}
                 <td className="px-1 md:px-2 text-center font-bold">{game.awayTeam.score}</td>

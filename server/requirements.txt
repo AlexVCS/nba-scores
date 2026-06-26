@@ -2,5 +2,6 @@ fastapi
 uvicorn[standard]
 nba_api
 requests
+beautifulsoup4
 numpy
 pandas

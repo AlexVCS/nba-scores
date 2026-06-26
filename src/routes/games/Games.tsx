@@ -4,31 +4,7 @@ import GameCard from "./GameCard.jsx";
 import {Switch} from "@adobe/react-spectrum";
 import {useSearchParams} from "react-router";
 import {setItem, getItem} from "@/helpers/helpers.jsx";
-
-type GameData = {
-  gameId: string;
-  gameCode: string;
-  gameStatus: number;
-  gameLabel: string;
-  gameSubLabel: string;
-  gameTimeUTC: string;
-  gameStatusText: string;
-  ifNecessary: boolean;
-  seriesGameNumber: string;
-  seriesText: string;
-  homeTeam: {
-    teamName: string;
-    teamTricode: string;
-    teamId: number;
-    score: number;
-  };
-  awayTeam: {
-    teamName: string;
-    teamTricode: string;
-    teamId: number;
-    score: number;
-  };
-};
+import type {GameData} from "@/helpers/helpers";
 
 const Games = () => {
   const [searchParams] = useSearchParams({date: ""});
@@ -69,11 +45,11 @@ const Games = () => {
     queryKey: ["games", dateParam],
     queryFn: () => getScores(dateParam),
   });
+  const games = data?.games ?? [];
 
   if (isLoading) return <h1>Loading...</h1>;
   if (error) return <h1>{JSON.stringify(error)}</h1>;
   if (!data) return <h1>Didn't receive any games</h1>;
-  const {games} = data;
   return (
     <>
       {games.some((game) => game.gameStatus !== 1) && (

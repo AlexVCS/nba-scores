@@ -5,6 +5,7 @@ import DarkModeToggle from "@/components/DarkModeToggle";
 import PlayerTable from "./PlayerTable";
 // import InactivePlayers from "./InactivePlayers";
 import { getBoxScores, getGameSummary } from "@/services/nbaService";
+import type { GameSummaryData, GameSummaryTeam } from "@/helpers/helpers";
 
 interface BoxscoreTeam {
   teamId: number;
@@ -27,37 +28,49 @@ const Boxscore = () => {
     queryFn: () => getGameSummary(gameId),
   });
 
-  if (boxscoreQuery.isLoading) {
+  if (boxscoreQuery.isLoading || (boxscoreQuery.isError && gameSummaryQuery.isLoading)) {
     return <h1>Loading...</h1>;
   }
 
-  if (boxscoreQuery.isError || !boxscoreQuery.data) {
+  const game = boxscoreQuery.data?.game;
+
+  if (!game && (gameSummaryQuery.isError || !gameSummaryQuery.data)) {
     return <h1>Error loading boxscore data</h1>;
   }
 
-  const { game } = boxscoreQuery.data;
-
-  const buildTeamFromBoxscore = (team: BoxscoreTeam) => ({
+  const buildTeamFromBoxscore = (team: BoxscoreTeam): GameSummaryTeam => ({
     teamId: team.teamId ?? 0,
     teamTricode: team.teamTricode ?? "",
     teamName: `${team.teamCity ?? ""} ${team.teamName ?? ""}`.trim(),
     score: String(team.statistics?.points ?? ""),
-    periods: [] as Array<{ period: number; score: string }>,
+    periods: [],
   });
 
-  const summaryData = gameSummaryQuery.data ?? (!gameSummaryQuery.isLoading ? {
+  const fallbackSummaryData: GameSummaryData | null = !gameSummaryQuery.isLoading && game ? {
     homeTeam: buildTeamFromBoxscore(game.homeTeam),
     awayTeam: buildTeamFromBoxscore(game.awayTeam),
     period: 0,
     gameStatusText: game.gameStatusText ?? "Unknown",
-  } : null);
+    periodScoreSource: "unavailable",
+    periodScoreType: "quarters",
+  } : null;
+
+  const summaryData = gameSummaryQuery.data ?? fallbackSummaryData;
 
   return (
-    <div className="bg-slate-50 dark:bg-neutral-950">
+    <div className="bg-slate-50 dark:bg-neutral-950 min-h-screen">
       <DarkModeToggle />
       {summaryData && <GameSummary game={summaryData} />}
-      <PlayerTable team={game.homeTeam} />
-      <PlayerTable team={game.awayTeam} />
+      {game ? (
+        <>
+          <PlayerTable team={game.homeTeam} />
+          <PlayerTable team={game.awayTeam} />
+        </>
+      ) : (
+        <p className="px-4 pb-6 text-center text-sm text-neutral-700 dark:text-slate-300">
+          Player boxscore is unavailable for this game.
+        </p>
+      )}
       {/* <InactivePlayers game={game} /> */}
     </div>
   );

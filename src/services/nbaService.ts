@@ -1,4 +1,4 @@
-import type { PlayoffBracketResponse } from "@/helpers/helpers";
+import type { GameSummaryData, PlayoffBracketResponse } from "@/helpers/helpers";
 
 const getBaseUrl = () => import.meta.env.DEV
   ? import.meta.env.VITE_API_URL_DEV
@@ -20,7 +20,7 @@ export const getBoxScores = async (gameId: string) => {
   return response.json();
 };
 
-export const getGameSummary = async (gameId: string) => {
+export const getGameSummary = async (gameId: string): Promise<GameSummaryData> => {
   const url = `${getBaseUrl()}/gamesummary/${gameId}`;
   const response = await fetch(url);
   if (!response.ok) throw new Error("Game summary fetch failed");

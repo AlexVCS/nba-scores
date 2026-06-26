@@ -1,41 +1,21 @@
 import {Link} from "react-router-dom";
 import TeamLogos from "@/components/TeamLogos";
 import {generateWatchLink} from "@/helpers/helpers";
+import type {GameData} from "@/helpers/helpers";
 
 interface GameCardProps {
   showScores: boolean;
-  // dateParam: string;
-  game: {
-    gameId: string;
-    gameCode: string;
-    gameTimeUTC: string;
-    gameStatus: number;
-    gameStatusText: string;
-    gameLabel: string;
-    gameSubLabel: string;
-    ifNecessary: boolean;
-    seriesGameNumber: string;
-    seriesText: string;
-    homeTeam: {
-      teamName: string;
-      teamTricode: string;
-      score: number;
-      teamId: number;
-    };
-    awayTeam: {
-      teamName: string;
-      teamTricode: string;
-      score: number;
-      teamId: number;
-    };
-  };
+  game: GameData;
 }
 
 function GameCard({game, showScores = false}: GameCardProps) {
   const gameHasStarted = game.gameStatus !== 1;
+  const shouldShowBoxscore =
+    showScores &&
+    gameHasStarted &&
+    game.gameId.length > 0 &&
+    game.boxscoreAvailable === true;
   const watchGameLink = generateWatchLink(game.awayTeam.teamTricode, game.homeTeam.teamTricode, game.gameId);
-  const endOf1819Season = new Date("2019-06-15T00:00:00Z");
-  const gameDateUtc = new Date(game.gameTimeUTC);
 
   return (
     <div className="flex justify-center lg:justify-start">
@@ -76,7 +56,7 @@ function GameCard({game, showScores = false}: GameCardProps) {
               ""
             ) : (
               <div className="flex flex-col gap-1">
-                {showScores && gameDateUtc >= endOf1819Season && (
+                {shouldShowBoxscore && (
                   <Link to={`/games/${game.gameId}/boxscore`}>Box score</Link>
                 )}
                 <Link to={`${watchGameLink}`} target="_blank">

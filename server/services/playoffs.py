@@ -9,6 +9,7 @@ from nba_api.stats.endpoints import LeagueGameLog, boxscoresummaryv2, leaguegame
 from requests.exceptions import ConnectionError as RequestsConnectionError
 from requests.exceptions import ReadTimeout
 
+from server.utils.boxscore_availability import is_boxscore_available_metadata
 from server.utils.season import get_nba_season
 
 _CONFERENCES_JSON = (
@@ -712,6 +713,17 @@ def determine_winner(home_team, away_team, home_score, away_score):
     return home_team if home_score > away_score else away_team
 
 
+def get_playoff_game_status(row) -> int | None:
+    for key in ("GAME_STATUS_ID", "GAME_STATUS", "gameStatus"):
+        if key in row and row.get(key) is not None:
+            return int(row[key])
+
+    if row.get("WL") in {"W", "L"} and row.get("PTS") is not None:
+        return 3
+
+    return 1
+
+
 def normalize_playoff_games(df):
     normalized_games = []
 
@@ -739,6 +751,11 @@ def normalize_playoff_games(df):
             {
                 "gameId": str(game_id),
                 "date": home_team["GAME_DATE"],
+                "boxscoreAvailable": is_boxscore_available_metadata(
+                    str(game_id),
+                    home_team["GAME_DATE"],
+                    get_playoff_game_status(home_team),
+                ),
                 "round": 0,
                 "roundName": "Round 0",
                 "homeTeam": {

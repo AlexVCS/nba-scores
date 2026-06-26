@@ -1,3 +1,29 @@
+export interface GameData {
+  gameId: string;
+  gameCode: string;
+  gameStatus: number;
+  gameLabel: string;
+  gameSubLabel: string;
+  gameTimeUTC: string;
+  gameStatusText: string;
+  ifNecessary: boolean;
+  seriesGameNumber: string;
+  seriesText: string;
+  boxscoreAvailable?: boolean;
+  homeTeam: {
+    teamName: string;
+    teamTricode: string;
+    teamId: number;
+    score: number;
+  };
+  awayTeam: {
+    teamName: string;
+    teamTricode: string;
+    teamId: number;
+    score: number;
+  };
+}
+
 export type Team = {
   teamName: string;
   teamTricode: string;
@@ -19,6 +45,32 @@ export type GameTeam = {
   name: string;
   score: number;
 };
+
+export type PeriodScore = {
+  period: number;
+  score: string;
+};
+
+export type PeriodScoreSource = "nba" | "basketball-reference" | "unavailable";
+
+export type PeriodScoreType = "quarters";
+
+export interface GameSummaryTeam {
+  teamId: number;
+  teamTricode: string;
+  teamName: string;
+  periods: PeriodScore[];
+  score: string;
+}
+
+export interface GameSummaryData {
+  homeTeam: GameSummaryTeam;
+  awayTeam: GameSummaryTeam;
+  period: number;
+  gameStatusText: string;
+  periodScoreSource?: PeriodScoreSource;
+  periodScoreType?: PeriodScoreType;
+}
 
 export type TeamsInSeries = {
   id: number;
@@ -80,6 +132,7 @@ export type SeriesGame = {
   date: string;
   round: number;
   roundName: string;
+  boxscoreAvailable?: boolean;
   homeTeam: GameTeam;
   awayTeam: GameTeam;
   winnerTeamId: number | null;
@@ -198,9 +251,19 @@ export const placeholderTeamLogoUrl = "https://cdn.nba.com/logos/nba/fallback.sv
 
 export const placeholderPlayerHeadshot = "https://placehold.co/48x48?text=No+headshot";
 
-export function formatMinutesPlayed(minutesString: string) {
-  const minutes = parseInt(minutesString.match(/(\d+)M/)?.[1] || "0");
-  return minutes < 10 ? minutes.toString() : minutes.toString();
+export function formatMinutesPlayed(minutesString: string): string {
+  const normalizedMinutes = minutesString.trim();
+  if (normalizedMinutes.length === 0) return "0";
+
+  if (normalizedMinutes.includes(":")) {
+    const [minutes] = normalizedMinutes.split(":");
+    return minutes && /^\d+$/.test(minutes) ? minutes : "0";
+  }
+
+  if (/^\d+$/.test(normalizedMinutes)) return normalizedMinutes;
+
+  const minutesMatch = normalizedMinutes.match(/(\d+)M/);
+  return minutesMatch ? minutesMatch[1] : "0";
 }
 
 export const firstNameInitial = (playerName: string): string => {
