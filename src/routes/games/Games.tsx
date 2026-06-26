@@ -3,6 +3,7 @@ import {useState, useEffect} from "react";
 import GameCard from "./GameCard.jsx";
 import {Switch} from "@adobe/react-spectrum";
 import {useSearchParams} from "react-router";
+import NoGamesQuickLinks from "@/components/NoGamesQuickLinks";
 import {setItem, getItem} from "@/helpers/helpers.jsx";
 import type {GameData} from "@/helpers/helpers";
 
@@ -62,9 +63,7 @@ const Games = () => {
         </div>
       )}
       {games.length === 0 ? (
-        <div className="flex justify-center text-lg dark:text-slate-50 text-neutral-950">
-          No games today
-        </div>
+        <NoGamesQuickLinks />
       ) : (
         <section className="px-4 py-6">
           <div
