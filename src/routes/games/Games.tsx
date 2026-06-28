@@ -63,7 +63,7 @@ const Games = () => {
         </div>
       )}
       {games.length === 0 ? (
-        <NoGamesQuickLinks />
+        <NoGamesQuickLinks selectedDateParam={dateParam} />
       ) : (
         <section className="px-4 py-6">
           <div

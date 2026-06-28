@@ -7,6 +7,7 @@ import {getGameDays} from "@/services/nbaService";
 interface NoGamesQuickLinksProps {
   today?: Date;
   randomIndex?: number;
+  selectedDateParam?: string;
 }
 
 interface QuickLink {
@@ -15,11 +16,30 @@ interface QuickLink {
   to: string;
 }
 
+const GAME_DAYS_MIN_YEAR = 2000;
+const GAME_DAYS_MAX_YEAR = 2100;
+
 const formatDateParam = (date: Date): string => {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
+};
+
+const isSupportedGameDaysYear = (date: Date): boolean => {
+  const year = date.getFullYear();
+  return year >= GAME_DAYS_MIN_YEAR && year <= GAME_DAYS_MAX_YEAR;
+};
+
+const parseDateParam = (dateParam: string): Date | undefined => {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateParam);
+  if (!match) return undefined;
+
+  const [, year, month, day] = match;
+  const date = new Date(Number(year), Number(month) - 1, Number(day));
+
+  if (formatDateParam(date) !== dateParam) return undefined;
+  return date;
 };
 
 const getRecentMonths = (date: Date, count = 12): Date[] =>
@@ -50,8 +70,29 @@ const pickRandomDate = (
   return dates[Math.abs(index) % dates.length];
 };
 
-function NoGamesQuickLinks({today = new Date(), randomIndex}: NoGamesQuickLinksProps) {
-  const recentMonths = useMemo(() => getRecentMonths(today), [today]);
+function NoGamesQuickLinks({
+  today = new Date(),
+  randomIndex,
+  selectedDateParam,
+}: NoGamesQuickLinksProps) {
+  const selectedDate = useMemo(
+    () => parseDateParam(selectedDateParam ?? ""),
+    [selectedDateParam],
+  );
+  const activeDate = useMemo(
+    () => selectedDate ?? today,
+    [selectedDate, today],
+  );
+  const activeDateSupportsGameDays = isSupportedGameDaysYear(activeDate);
+  const selectedDateLabel = selectedDate
+    ? formatShortDate(formatDateParam(selectedDate))
+    : undefined;
+  const recentMonths = useMemo(
+    () => activeDateSupportsGameDays
+      ? getRecentMonths(activeDate).filter(isSupportedGameDaysYear)
+      : [],
+    [activeDate, activeDateSupportsGameDays],
+  );
   const gameDayQueries = useQueries({
     queries: recentMonths.map((month) => {
       const year = month.getFullYear();
@@ -66,37 +107,37 @@ function NoGamesQuickLinks({today = new Date(), randomIndex}: NoGamesQuickLinksP
     }),
   });
 
-  const yesterday = useMemo(() => {
-    const date = new Date(today);
+  const previousDateParam = useMemo(() => {
+    const date = new Date(activeDate);
     date.setDate(date.getDate() - 1);
     return formatDateParam(date);
-  }, [today]);
+  }, [activeDate]);
 
   const availableGameDays = useMemo(() => {
-    const todayParam = formatDateParam(today);
+    const activeDateParam = formatDateParam(activeDate);
 
     return gameDayQueries
       .flatMap((query) => query.data?.game_days ?? [])
-      .filter((dateParam) => dateParam < todayParam)
+      .filter((dateParam) => dateParam < activeDateParam)
       .sort((a, b) => b.localeCompare(a));
-  }, [gameDayQueries, today]);
+  }, [gameDayQueries, activeDate]);
 
-  const lastGameDay = availableGameDays[0] ?? yesterday;
+  const lastGameDay = availableGameDays[0] ?? previousDateParam;
 
   const randomGameDay = useMemo(() => {
     return pickRandomDate(availableGameDays, lastGameDay, randomIndex);
   }, [availableGameDays, lastGameDay, randomIndex]);
 
-  const currentPlayoffSeason = getDefaultPlayoffSeason(today);
+  const currentPlayoffSeason = getDefaultPlayoffSeason(activeDate);
 
   const quickLinks: QuickLink[] = [
     {
       label: "Yesterday",
-      detail: formatShortDate(yesterday),
-      to: `/?date=${yesterday}`,
+      detail: formatShortDate(previousDateParam),
+      to: `/?date=${previousDateParam}`,
     },
     {
-      label: "Last Game Day",
+      label: "Last Game of the Season",
       detail: formatShortDate(lastGameDay),
       to: `/?date=${lastGameDay}`,
     },
@@ -105,7 +146,7 @@ function NoGamesQuickLinks({today = new Date(), randomIndex}: NoGamesQuickLinksP
       to: `/?date=${randomGameDay}`,
     },
     {
-      label: "Last Playoffs",
+      label: "Year's Playoffs",
       detail: currentPlayoffSeason,
       to: `/playoffs?season=${currentPlayoffSeason}`,
     },
@@ -113,21 +154,23 @@ function NoGamesQuickLinks({today = new Date(), randomIndex}: NoGamesQuickLinksP
 
   return (
     <section className="px-4 py-6">
-      <div className="relative isolate mx-auto max-w-3xl overflow-visible rounded-lg border border-slate-200 bg-white/85 p-4 shadow-sm shadow-slate-200/70 dark:border-neutral-800 dark:bg-neutral-900/80 dark:shadow-none sm:p-5">
-        <div className="relative z-10 border-b border-slate-200 pb-4 text-center dark:border-neutral-800">
+      <div className="relative isolate mx-auto max-w-3xl overflow-visible p-4 sm:p-5">
+        <div className="relative z-10 pb-4 text-center">
           <h2 className="relative z-10 text-2xl font-bold text-neutral-950 dark:text-slate-50">
-            No games today
+            {selectedDateLabel
+              ? `No games on ${selectedDateLabel}`
+              : "No games today"}
           </h2>
           <p className="relative z-10 mt-1 text-sm text-slate-600 dark:text-slate-300">
             Try another night.
           </p>
         </div>
-        <div className="relative z-10 mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="relative z-10 mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
           {quickLinks.map(({label, detail, to}) => (
             <Link
               key={`${label}-${to}`}
               to={to}
-              className="group flex min-h-20 flex-col justify-center rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-left transition hover:-translate-y-0.5 hover:border-blue-300 hover:bg-white hover:shadow-md hover:shadow-blue-100/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:border-neutral-800 dark:bg-neutral-950 dark:hover:border-amber-400/70 dark:hover:bg-neutral-900 dark:hover:shadow-none dark:focus-visible:ring-amber-400 dark:focus-visible:ring-offset-neutral-950"
+              className="flex min-h-20 flex-col items-center justify-center rounded-md border border-slate-200 bg-white px-4 py-3 text-center transition-colors hover:border-blue-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:border-neutral-800 dark:bg-neutral-950 dark:hover:border-amber-400 dark:focus-visible:ring-amber-400"
             >
               <span className="min-w-0">
                 <span className="block text-sm font-semibold text-neutral-950 dark:text-slate-50">
