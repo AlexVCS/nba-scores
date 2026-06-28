@@ -59,7 +59,7 @@ Find the scores and stats of your favorite NBA team! Scorez, boxscores, and play
 
 ## Playoffs
 
-Navigate to the [Playoffs](https://nba-scorez.onrender.com/playoffs) page to explore interactive bracket visualizations.
+Navigate to the [Playoffs](https://nbascorez.com/playoffs) page to explore interactive bracket visualizations.
 
 - Select any season with the year picker
 - Toggle results round by round to avoid spoilers
