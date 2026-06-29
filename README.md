@@ -77,15 +77,6 @@ Navigate to the [Playoffs](https://nbascorez.com/playoffs) page to explore inter
 
 [![React.JS]][React-url][![Tailwindcss]][Tailwind-url][![TypeScript]][Typescript-url][![FastAPI]][FastAPI-url]
 
-<div align='right'>
-
-[Back to Top](#top)
-
-</div>
-
-
-</div>
-
 ## Local Project Setup
 
 Git, Node.js, Python, and PNPM (or your package manager of choice) are required to run this project locally. 
