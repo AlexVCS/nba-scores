@@ -94,12 +94,6 @@ Git, Node.js, Python, and PNPM (or your package manager of choice) are required 
 
 AI coding agents from [OpenAI](https://openai.com) and [Anthropic](https://anthropic.com) assisted in writing code throughout this project.
 
-<div align='right'>
-
-[Back to Top](#top)
-
-</div>
-
 ### Clone the repo
 
 Copy this and run it in your terminal:
