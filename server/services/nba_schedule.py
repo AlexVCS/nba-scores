@@ -27,7 +27,7 @@ def _parse_schedule_v2(season: str) -> set[str]:
     Primary: Use ScheduleLeagueV2 to get all game dates for a season.
     Returns a set of date strings like {"2025-10-21", "2025-10-22", ...}.
     """
-    schedule = ScheduleLeagueV2(season=season, timeout=None)
+    schedule = ScheduleLeagueV2(season=season)
     frames = schedule.get_data_frames()
 
     # ScheduleLeagueV2 returns a frame with a date column.
@@ -64,7 +64,6 @@ def _parse_game_log_fallback(season: str) -> set[str]:
     log = LeagueGameLog(
         season=season,
         season_type_all_star="Regular Season",
-        timeout=None,
     )
     df = log.get_data_frames()[0]
 

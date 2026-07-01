@@ -58,7 +58,6 @@ def test_fetch_uses_league_game_log_for_completed_season(monkeypatch):
             "season": "1983-84",
             "season_type_all_star": "Playoffs",
             "league_id": "00",
-            "timeout": None,
         }
     ]
 
@@ -89,7 +88,6 @@ def test_fetch_uses_league_game_finder_for_current_playoff_window(monkeypatch):
             "season_nullable": "2025-26",
             "season_type_nullable": "Playoffs",
             "league_id_nullable": "00",
-            "timeout": None,
         }
     ]
 

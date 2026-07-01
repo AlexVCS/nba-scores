@@ -94,7 +94,7 @@ def get_game_summary(game_id: str):
 
 @app.get("/debug/linescore/{game_date}")
 def debug_linescore(game_date: str):
-    sb = scoreboardv2.ScoreboardV2(game_date=game_date, timeout=None)
+    sb = scoreboardv2.ScoreboardV2(game_date=game_date)
     linescore_df = sb.line_score.get_data_frame()
     return {
         "columns": list(linescore_df.columns),

@@ -206,14 +206,12 @@ def fetch_playoff_team_games_df(season: str, today: date | None = None):
                 season_nullable=season,
                 season_type_nullable="Playoffs",
                 league_id_nullable="00",
-                timeout=None,
             )
         else:
             games = LeagueGameLog(
                 season=season,
                 season_type_all_star="Playoffs",
                 league_id="00",
-                timeout=None,
             )
         df = games.get_data_frames()[0]
     except (ReadTimeout, RequestsConnectionError) as e:
@@ -818,8 +816,7 @@ def fetch_corrected_team_scores(game_id):
 
     try:
         line_score = boxscoresummaryv2.BoxScoreSummaryV2(
-            game_id=game_id,
-            timeout=None,
+            game_id=game_id
         ).line_score.get_data_frame()
     except (ReadTimeout, RequestsConnectionError):
         return None
