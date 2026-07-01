@@ -24,7 +24,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://nba-scorez.onrender.com", "https://nbascorez.com", "http://localhost:5173"],
+    allow_origins=["https://nba-scorez.onrender.com", "https://nbascorez.com", "http://localhost:5173", "https://nba-scores-616b.onrender.com"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
