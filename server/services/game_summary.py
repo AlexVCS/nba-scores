@@ -17,7 +17,6 @@ BREF_REQUEST_HEADERS = {
     )
 }
 
-BREF_REQUEST_TIMEOUT_SECONDS = 2
 BREF_LINE_SCORE_CACHE: dict[tuple[str, str], dict | None] = {}
 
 
@@ -115,7 +114,7 @@ def fetch_bref_line_score(game_date_est, home_team_tricode):
 
     url = build_bref_boxscore_url(game_date_est, home_team_tricode)
     response = requests.get(
-        url, headers=BREF_REQUEST_HEADERS, timeout=BREF_REQUEST_TIMEOUT_SECONDS
+        url, headers=BREF_REQUEST_HEADERS
     )
     response.raise_for_status()
     line_score = extract_bref_line_score(response.text)
@@ -443,6 +442,7 @@ def fetch_boxscoretraditional(game_id: str):
         end_period=10,
         start_range=0,
         end_range=0,
+        timeout=None,
     )
     data = box.get_dict()
     game = data.get("boxScoreTraditional")
@@ -452,7 +452,7 @@ def fetch_boxscoretraditional(game_id: str):
 
 
 def fetch_game_summary(game_id: str):
-    summary = boxscoresummaryv2.BoxScoreSummaryV2(game_id=game_id)
+    summary = boxscoresummaryv2.BoxScoreSummaryV2(game_id=game_id, timeout=None)
     game_summary_df = summary.game_summary.get_data_frame()
     if game_summary_df.empty:
         raise HTTPException(status_code=404, detail="Game not found")

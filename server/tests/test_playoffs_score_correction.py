@@ -77,7 +77,7 @@ def test_correct_game_scores_keeps_original_when_fetch_fails(monkeypatch):
 def test_fetch_corrected_team_scores_parses_and_caches(monkeypatch):
     monkeypatch.setattr(playoffs, "_linescore_cache", {})
 
-    calls = {"n": 0}
+    calls = []
 
     class _FakeResult:
         def get_data_frame(self):
@@ -90,7 +90,7 @@ def test_fetch_corrected_team_scores_parses_and_caches(monkeypatch):
 
     class _FakeSummary:
         def __init__(self, *a, **k):
-            calls["n"] += 1
+            calls.append({"args": a, "kwargs": k})
             self.line_score = _FakeResult()
 
     monkeypatch.setattr(playoffs.boxscoresummaryv2, "BoxScoreSummaryV2", _FakeSummary)
@@ -101,4 +101,6 @@ def test_fetch_corrected_team_scores_parses_and_caches(monkeypatch):
     # Second call is served from cache (no new API construction).
     second = playoffs.fetch_corrected_team_scores("0048300051")
     assert second == {PHX: 111, UTA: 110}
-    assert calls["n"] == 1
+    assert calls == [
+        {"args": (), "kwargs": {"game_id": "0048300051", "timeout": None}}
+    ]

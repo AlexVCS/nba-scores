@@ -70,6 +70,66 @@ def test_scoreboard_route_adds_boxscore_availability(monkeypatch):
     assert result["games"][1]["boxscoreAvailable"] is False
 
 
+def test_scoreboard_route_passes_no_timeout(monkeypatch):
+    calls = []
+
+    class FakeScoreboardV3(_FakeScoreboardV3):
+        def __init__(self, *args, **kwargs):
+            calls.append({"args": args, "kwargs": kwargs})
+
+    monkeypatch.setattr(main.scoreboardv3, "ScoreboardV3", FakeScoreboardV3)
+
+    main.get_v3_scoreboard(date="2024-11-01")
+
+    assert calls == [
+        {
+            "args": (),
+            "kwargs": {
+                "game_date": "2024-11-01",
+                "league_id": "00",
+                "timeout": None,
+            },
+        }
+    ]
+
+
+def test_fetch_boxscoretraditional_passes_no_timeout(monkeypatch):
+    calls = []
+
+    def fake_boxscore(*args, **kwargs):
+        calls.append({"args": args, "kwargs": kwargs})
+        return _FakeBoxScoreTraditional(
+            payload={
+                "boxScoreTraditional": {
+                    "homeTeam": {"teamId": 1},
+                    "awayTeam": {"teamId": 2},
+                }
+            }
+        )
+
+    monkeypatch.setattr(
+        game_summary.boxscoretraditionalv3, "BoxScoreTraditionalV3", fake_boxscore
+    )
+
+    result = game_summary.fetch_boxscoretraditional("0024600206")
+
+    assert result["homeTeam"]["teamId"] == 1
+    assert calls == [
+        {
+            "args": (),
+            "kwargs": {
+                "game_id": "0024600206",
+                "range_type": 0,
+                "start_period": 0,
+                "end_period": 10,
+                "start_range": 0,
+                "end_range": 0,
+                "timeout": None,
+            },
+        }
+    ]
+
+
 def test_playoff_normalization_adds_boxscore_availability():
     pandas = pytest.importorskip("pandas")
     rows = [

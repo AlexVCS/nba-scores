@@ -116,20 +116,38 @@ def _assert_no_period_fallback(result):
     assert result["awayTeam"]["periods"] == []
 
 
-def test_bref_fetch_uses_short_timeout(monkeypatch):
+def test_game_summary_fetch_passes_no_timeout(monkeypatch):
+    calls = []
+
+    class FakeBoxScoreSummaryV2:
+        def __init__(self, *args, **kwargs):
+            calls.append({"args": args, "kwargs": kwargs})
+            self.game_summary = _FakeResult([])
+            self.line_score = _FakeResult([])
+
+    monkeypatch.setattr(
+        game_summary.boxscoresummaryv2, "BoxScoreSummaryV2", FakeBoxScoreSummaryV2
+    )
+
+    with pytest.raises(game_summary.HTTPException):
+        game_summary.fetch_game_summary("0024600206")
+
+    assert calls == [{"args": (), "kwargs": {"game_id": "0024600206", "timeout": None}}]
+
+
+def test_bref_fetch_does_not_pass_timeout(monkeypatch):
     calls = []
     monkeypatch.setattr(game_summary, "BREF_LINE_SCORE_CACHE", {})
 
-    def fake_get(url, headers, timeout):
-        calls.append({"url": url, "headers": headers, "timeout": timeout})
+    def fake_get(*args, **kwargs):
+        calls.append({"args": args, "kwargs": kwargs})
         return _FakeResponse(BREF_LINE_SCORE_HTML)
 
     monkeypatch.setattr(game_summary.requests, "get", fake_get)
 
     game_summary.fetch_bref_line_score("1946-11-01T00:00:00", "HUS")
 
-    assert game_summary.BREF_REQUEST_TIMEOUT_SECONDS == 2
-    assert calls[0]["timeout"] == game_summary.BREF_REQUEST_TIMEOUT_SECONDS
+    assert "timeout" not in calls[0]["kwargs"]
 
 
 def test_bref_fetch_caches_successful_parse(monkeypatch):
