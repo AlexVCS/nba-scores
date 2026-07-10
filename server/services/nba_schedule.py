@@ -3,7 +3,7 @@ import logging
 from datetime import date, datetime
 from collections import defaultdict
 
-from nba_api.stats.endpoints import ScheduleLeagueV2, LeagueGameLog
+from server.services import nba_stats_client
 from ..utils.season import get_nba_season
 
 
@@ -27,7 +27,7 @@ def _parse_schedule_v2(season: str) -> set[str]:
     Primary: Use ScheduleLeagueV2 to get all game dates for a season.
     Returns a set of date strings like {"2025-10-21", "2025-10-22", ...}.
     """
-    schedule = ScheduleLeagueV2(season=season)
+    schedule = nba_stats_client.fetch_schedule_league_v2(season)
     frames = schedule.get_data_frames()
 
     # ScheduleLeagueV2 returns a frame with a date column.
@@ -61,7 +61,7 @@ def _parse_game_log_fallback(season: str) -> set[str]:
     """
     Fallback: Use LeagueGameLog (only completed games).
     """
-    log = LeagueGameLog(
+    log = nba_stats_client.fetch_league_game_log(
         season=season,
         season_type_all_star="Regular Season",
     )

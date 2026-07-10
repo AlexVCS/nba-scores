@@ -1,15 +1,15 @@
 [project]
 name = "nba-scores-api"
 version = "0.1.0"
-requires-python = ">=3.12"
+requires-python = "==3.12.*"
 dependencies = [
-  "fastapi[standard]",
-  "uvicorn[standard]",
-  "nba_api",
-  "requests",
-  "beautifulsoup4",
-  "numpy",
-  "pandas",
+  "fastapi[standard]>=0.128,<0.129",
+  "uvicorn[standard]>=0.38,<0.39",
+  "nba_api>=1.11,<1.12",
+  "requests>=2.32,<2.33",
+  "beautifulsoup4>=4.14,<4.15",
+  "numpy>=2.3,<2.4",
+  "pandas>=2.3,<2.4",
 ]
 
 [tool.fastapi]

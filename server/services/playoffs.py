@@ -5,10 +5,9 @@ from datetime import date, timedelta
 from pathlib import Path
 
 from fastapi import HTTPException
-from nba_api.stats.endpoints import LeagueGameLog, boxscoresummaryv2, leaguegamefinder
-from requests.exceptions import ConnectionError as RequestsConnectionError
-from requests.exceptions import ReadTimeout
 
+from server.services import nba_stats_client
+from server.services.nba_stats_client import UpstreamUnavailableError
 from server.utils.boxscore_availability import is_boxscore_available_metadata
 from server.utils.season import get_nba_season
 
@@ -202,22 +201,22 @@ def fetch_playoff_team_games_df(season: str, today: date | None = None):
 
     try:
         if source == "league_game_finder":
-            games = leaguegamefinder.LeagueGameFinder(
+            games = nba_stats_client.fetch_league_game_finder(
                 season_nullable=season,
                 season_type_nullable="Playoffs",
                 league_id_nullable="00",
             )
         else:
-            games = LeagueGameLog(
+            games = nba_stats_client.fetch_league_game_log(
                 season=season,
                 season_type_all_star="Playoffs",
                 league_id="00",
             )
         df = games.get_data_frames()[0]
-    except (ReadTimeout, RequestsConnectionError) as e:
+    except UpstreamUnavailableError as e:
         raise HTTPException(
             status_code=503,
-            detail=f"NBA Stats API unavailable: {e}",
+            detail=f"NBA Stats API unavailable: {e.error_type}",
         ) from e
 
     _df_cache[cache_key] = (time.monotonic(), df)
@@ -815,10 +814,10 @@ def fetch_corrected_team_scores(game_id):
         return _linescore_cache[game_id]
 
     try:
-        line_score = boxscoresummaryv2.BoxScoreSummaryV2(
-            game_id=game_id
+        line_score = nba_stats_client.fetch_boxscore_summary(
+            game_id
         ).line_score.get_data_frame()
-    except (ReadTimeout, RequestsConnectionError):
+    except UpstreamUnavailableError:
         return None
 
     scores = {}

@@ -1,18 +1,27 @@
-from fastapi import FastAPI, HTTPException, Query
+import logging
+import time
+from datetime import datetime, timezone
+
+import requests
+from fastapi import Depends, FastAPI, Header, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
-from nba_api.stats.endpoints import (
-    ScheduleLeagueV2,
-    scoreboardv2,
-    scoreboardv3,
+from requests.exceptions import RequestException
+from server.services import nba_stats_client
+from server.services.nba_stats_client import (
+    UpstreamBadResponseError,
+    UpstreamUnavailableError,
 )
-from datetime import datetime
 from .utils.season import get_nba_season
 from .utils.boxscore_availability import (
     is_boxscore_available_metadata,
 )
 from .services.nba_schedule import get_game_days_in_month
 from .models.schemas import GameDaysResponse
-from .services.game_summary import fetch_boxscoretraditional, fetch_game_summary
+from .services.game_summary import (
+    fetch_boxscoretraditional,
+    fetch_bref_line_score,
+    fetch_game_summary,
+)
 from .services.playoffs import (
     get_normalized_playoff_games,
     fetch_playoff_team_games_df,
@@ -20,15 +29,24 @@ from .services.playoffs import (
     get_playoff_series,
 )
 
+logger = logging.getLogger(__name__)
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://nba-scorez.onrender.com", "https://nbascorez.com", "http://localhost:5173", "https://nba-scores.fastapicloud.dev/"],
+    allow_origins=["https://nba-scorez.onrender.com", "https://nbascorez.com", "http://localhost:5173", "https://api.nbascorez.com/"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.middleware("http")
+async def normalize_leading_path_slashes(request, call_next):
+    path = request.scope.get("path", "")
+    if path.startswith("//"):
+        request.scope["path"] = "/" + path.lstrip("/")
+    return await call_next(request)
 
 
 def add_boxscore_availability_to_scoreboard(scoreboard, target_date):
@@ -42,6 +60,21 @@ def add_boxscore_availability_to_scoreboard(scoreboard, target_date):
     return scoreboard
 
 
+def raise_upstream_http(error: UpstreamUnavailableError | UpstreamBadResponseError):
+    status_code = 503 if isinstance(error, UpstreamUnavailableError) else 502
+    raise HTTPException(status_code=status_code, detail=error.public_detail()) from error
+
+
+@app.get("/healthz")
+def healthz():
+    return {
+        "ok": True,
+        "service": "nba-scores-api",
+        "version": "0.1.0",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+    }
+
+
 @app.get("/")
 def get_v3_scoreboard(
     date: str = Query(
@@ -52,21 +85,18 @@ def get_v3_scoreboard(
 ):
     try:
         target_date = date if date else datetime.now().strftime("%Y-%m-%d")
-        board = scoreboardv3.ScoreboardV3(game_date=target_date, league_id="00")
-        full_data = board.get_dict()
-        return add_boxscore_availability_to_scoreboard(
-            full_data["scoreboard"], target_date
-        )
-    except Exception as e:
-        raise HTTPException(
-            status_code=500, detail=f"Failed to fetch ScoreboardV3: {str(e)}"
-        )
+        scoreboard = nba_stats_client.fetch_scoreboard_v3(target_date)
+        return add_boxscore_availability_to_scoreboard(scoreboard, target_date)
+    except (UpstreamUnavailableError, UpstreamBadResponseError) as e:
+        raise_upstream_http(e)
 
 
 @app.get("/games/{game_id}/boxscore")
 def get_game_boxscore(game_id: str):
     try:
         return {"game": fetch_boxscoretraditional(game_id)}
+    except (UpstreamUnavailableError, UpstreamBadResponseError) as e:
+        raise_upstream_http(e)
     except ValueError as e:
         raise HTTPException(
             status_code=404,
@@ -85,6 +115,8 @@ def get_game_summary(game_id: str):
         return fetch_game_summary(game_id)
     except HTTPException:
         raise
+    except (UpstreamUnavailableError, UpstreamBadResponseError) as e:
+        raise_upstream_http(e)
     except Exception as e:
         print(f"Error fetching game summary for {game_id}: {e}")
         raise HTTPException(
@@ -94,7 +126,7 @@ def get_game_summary(game_id: str):
 
 @app.get("/debug/linescore/{game_date}")
 def debug_linescore(game_date: str):
-    sb = scoreboardv2.ScoreboardV2(game_date=game_date)
+    sb = nba_stats_client.fetch_scoreboard_v2(game_date)
     linescore_df = sb.line_score.get_data_frame()
     return {
         "columns": list(linescore_df.columns),
@@ -110,11 +142,14 @@ def debug_schedule(
     league_id: str = Query("00", alias="LeagueID"),
 ):
     try:
-        schedule = ScheduleLeagueV2(season=season, league_id=league_id)
+        schedule = nba_stats_client.fetch_schedule_league_v2(
+            season=season,
+            league_id=league_id,
+        )
         frames = schedule.get_data_frames()
         df = frames[0]
         date_col = None
-        for candidate in ["gameDate", "gameDateTimeEst", "gameDateEst"]:
+        for candidate in ["GAME_DATE", "gameDate", "gameDateTimeEst", "gameDateEst"]:
             if candidate in df.columns:
                 date_col = candidate
                 break
@@ -129,12 +164,13 @@ def debug_schedule(
             "total_game_days": len(dates),
             "game_dates": sorted(dates),
         }
+    except (UpstreamUnavailableError, UpstreamBadResponseError) as e:
+        raise_upstream_http(e)
     except Exception as e:
         raise HTTPException(
-            status_code=500,
-            detail=f"Failed to fetch schedule for {season}: {str(e)}",
+            status_code=502,
+            detail=f"Failed to parse schedule for {season}: {type(e).__name__}",
         )
-
 
 @app.get("/api/game-days", response_model=GameDaysResponse)
 def game_days(
@@ -144,6 +180,8 @@ def game_days(
     season = get_nba_season(year, month)
     try:
         days = get_game_days_in_month(year, month)
+    except (UpstreamUnavailableError, UpstreamBadResponseError) as e:
+        raise_upstream_http(e)
     except Exception as e:
         print(f"ERROR in game_days: {type(e).__name__}: {e}")
         import traceback
@@ -162,7 +200,10 @@ def game_days(
 
 @app.get("/playoffs/raw")
 def raw_playoff_games(season: str = "2023-24"):
-    df = fetch_playoff_team_games_df(season)
+    try:
+        df = fetch_playoff_team_games_df(season)
+    except (UpstreamUnavailableError, UpstreamBadResponseError) as e:
+        raise_upstream_http(e)
 
     return {
         "season": season,
@@ -173,7 +214,10 @@ def raw_playoff_games(season: str = "2023-24"):
 
 @app.get("/playoffs")
 def playoff_games(season: str = "2023-24"):
-    return get_normalized_playoff_games(season)
+    try:
+        return get_normalized_playoff_games(season)
+    except (UpstreamUnavailableError, UpstreamBadResponseError) as e:
+        raise_upstream_http(e)
 
 @app.get("/playoffs/series")
 def playoff_series(season: str = "2023-24"):
@@ -181,6 +225,8 @@ def playoff_series(season: str = "2023-24"):
         return get_playoff_series(season)
     except HTTPException:
         raise
+    except (UpstreamUnavailableError, UpstreamBadResponseError) as e:
+        raise_upstream_http(e)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
@@ -193,6 +239,8 @@ def playoff_games_and_series(season: str = "2023-24"):
         return get_playoff_games_and_series(season)
     except HTTPException:
         raise
+    except (UpstreamUnavailableError, UpstreamBadResponseError) as e:
+        raise_upstream_http(e)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 

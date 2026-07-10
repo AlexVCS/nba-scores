@@ -1,7 +1,8 @@
 from bs4 import BeautifulSoup, Comment
 from fastapi import HTTPException
 import requests
-from nba_api.stats.endpoints import boxscoresummaryv2, boxscoretraditionalv3
+
+from server.services import nba_stats_client
 
 
 BREF_TEAM_CODE_OVERRIDES = {
@@ -306,7 +307,7 @@ def score_from_row_or_bref(row, bref_team_score):
 
 def sparse_summary_team(team_id, row, tricode, bref_team_score, periods):
     return {
-        "teamId": int(team_id),
+        "teamId": safe_int(team_id) or 0,
         "teamTricode": row_tricode(row) or clean_tricode(tricode),
         "teamName": get_team_name(row) if row is not None else "",
         "score": score_from_row_or_bref(row, bref_team_score),
@@ -415,14 +416,14 @@ def get_team_name(row):
 def make_scheduled_response(home_id, away_id):
     return {
         "homeTeam": {
-            "teamId": int(home_id),
+            "teamId": safe_int(home_id) or 0,
             "teamTricode": "",
             "teamName": "",
             "score": "0",
             "periods": [],
         },
         "awayTeam": {
-            "teamId": int(away_id),
+            "teamId": safe_int(away_id) or 0,
             "teamTricode": "",
             "teamName": "",
             "score": "0",
@@ -436,23 +437,130 @@ def make_scheduled_response(home_id, away_id):
 
 
 def fetch_boxscoretraditional(game_id: str):
-    box = boxscoretraditionalv3.BoxScoreTraditionalV3(
-        game_id=game_id,
-        range_type=0,
-        start_period=0,
-        end_period=10,
-        start_range=0,
-        end_range=0,
-    )
-    data = box.get_dict()
+    data = nba_stats_client.fetch_boxscore_traditional(game_id)
     game = data.get("boxScoreTraditional")
     if not game or not game.get("homeTeam") or not game.get("awayTeam"):
         raise ValueError("BoxscoreTraditionalV3 returned no usable game data")
     return game
 
 
-def fetch_game_summary(game_id: str):
-    summary = boxscoresummaryv2.BoxScoreSummaryV2(game_id=game_id)
+def build_v3_periods(team):
+    periods = []
+    for raw_period in team.get("periods") or []:
+        period = safe_int(raw_period.get("period"))
+        score = safe_int(raw_period.get("score"))
+        if period is None or period < 1 or score is None or score < 0:
+            return []
+        periods.append({"period": period, "score": str(score)})
+
+    periods.sort(key=lambda item: item["period"])
+    if len({item["period"] for item in periods}) != len(periods):
+        return []
+    return periods
+
+
+def v3_period_scores_match_total(team, periods):
+    total = safe_int(team.get("score"))
+    if total is None or not periods:
+        return False
+    return sum(safe_int(period["score"]) or 0 for period in periods) == total
+
+
+def v3_summary_team(team, periods):
+    team_id = safe_int(team.get("teamId"))
+    if team_id is None:
+        raise ValueError("BoxScoreSummaryV3 team is missing teamId")
+
+    team_city = clean_tricode(team.get("teamCity"))
+    team_name = clean_tricode(team.get("teamName"))
+    return {
+        "teamId": team_id,
+        "teamTricode": clean_tricode(team.get("teamTricode")),
+        "teamName": f"{team_city} {team_name}".strip(),
+        "score": safe_score(team.get("score")),
+        "periods": periods,
+    }
+
+
+def normalize_v3_game_summary(game_id, summary):
+    data = summary.get_dict()
+    game = data.get("boxScoreSummary") if isinstance(data, dict) else None
+    if not isinstance(game, dict) or game.get("gameId") != game_id:
+        raise ValueError("BoxScoreSummaryV3 returned no usable game data")
+
+    game_status_id = safe_int(game.get("gameStatus"))
+    live_period = safe_int(game.get("period")) or 0
+    if game_status_id is None:
+        raise ValueError("BoxScoreSummaryV3 is missing game status")
+
+    home = game.get("homeTeam")
+    away = game.get("awayTeam")
+    if not isinstance(home, dict) or not isinstance(away, dict):
+        raise ValueError("BoxScoreSummaryV3 is missing team data")
+
+    # A scheduled game can legitimately have no scores or periods yet.
+    if game_status_id == 1:
+        return {
+            "homeTeam": v3_summary_team(home, []),
+            "awayTeam": v3_summary_team(away, []),
+            "gameStatusText": clean_tricode(game.get("gameStatusText")) or "Scheduled",
+            "period": live_period,
+            "periodScoreSource": "unavailable",
+            "periodScoreType": "quarters",
+        }
+
+    home_periods = build_v3_periods(home)
+    away_periods = build_v3_periods(away)
+    periods_are_reliable = period_sets_match(home_periods, away_periods)
+    if game_status_id == 3:
+        periods_are_reliable = (
+            periods_are_reliable
+            and v3_period_scores_match_total(home, home_periods)
+            and v3_period_scores_match_total(away, away_periods)
+        )
+
+    period_score_source = "nba" if periods_are_reliable else "unavailable"
+    if not periods_are_reliable:
+        home_periods = []
+        away_periods = []
+        home_tricode = clean_tricode(home.get("teamTricode"))
+        away_tricode = clean_tricode(away.get("teamTricode"))
+        game_date = game.get("gameEt") or game.get("gameTimeUTC")
+        if game_date and home_tricode and away_tricode:
+            try:
+                bref_line_score = fetch_bref_line_score(game_date, home_tricode)
+                home_bref = bref_line_score.get(home_tricode) if bref_line_score else None
+                away_bref = bref_line_score.get(away_tricode) if bref_line_score else None
+                if (
+                    period_sets_match(
+                        home_bref.get("periods") if home_bref else None,
+                        away_bref.get("periods") if away_bref else None,
+                    )
+                    and bref_period_scores_match_total(home.get("score"), home_bref)
+                    and bref_period_scores_match_total(away.get("score"), away_bref)
+                ):
+                    home_periods = home_bref["periods"]
+                    away_periods = away_bref["periods"]
+                    period_score_source = "basketball-reference"
+            except Exception as e:
+                print(f"Basketball-Reference fallback failed for {game_id}: {e}")
+
+    status_period = get_status_period(
+        game_status_id, live_period, home_periods, away_periods
+    )
+    return {
+        "homeTeam": v3_summary_team(home, home_periods),
+        "awayTeam": v3_summary_team(away, away_periods),
+        "gameStatusText": clean_tricode(game.get("gameStatusText"))
+        or get_game_status(game_status_id, status_period),
+        "period": live_period,
+        "periodScoreSource": period_score_source,
+        "periodScoreType": "quarters",
+    }
+
+
+def fetch_game_summary_v2(game_id: str):
+    summary = nba_stats_client.fetch_boxscore_summary(game_id)
     game_summary_df = summary.game_summary.get_data_frame()
     if game_summary_df.empty:
         raise HTTPException(status_code=404, detail="Game not found")
@@ -546,3 +654,12 @@ def fetch_game_summary(game_id: str):
         "periodScoreSource": period_score_source,
         "periodScoreType": "quarters",
     }
+
+
+def fetch_game_summary(game_id: str):
+    try:
+        summary = nba_stats_client.fetch_boxscore_summary_v3(game_id)
+        return normalize_v3_game_summary(game_id, summary)
+    except Exception as v3_error:
+        print(f"BoxScoreSummaryV3 fallback to V2 for {game_id}: {v3_error}")
+        return fetch_game_summary_v2(game_id)
