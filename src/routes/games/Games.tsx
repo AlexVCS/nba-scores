@@ -1,56 +1,14 @@
-import {useQuery} from "@tanstack/react-query";
-import {useState, useEffect} from "react";
 import GameCard from "./GameCard.jsx";
 import {Switch} from "@adobe/react-spectrum";
-import {useSearchParams} from "react-router";
 import NoGamesQuickLinks from "@/components/NoGamesQuickLinks";
-import {setItem, getItem} from "@/helpers/helpers.jsx";
-import type {GameData} from "@/helpers/helpers";
+import {useScoresPage} from "@/designs/hooks/useScoresPage";
 
 const Games = () => {
-  const [searchParams] = useSearchParams({date: ""});
-  const dateParam: string = searchParams.get("date") ?? "";
-  const [showScores, setShowScores] = useState(() => {
-    const item = getItem("showScores");
-    return item === undefined ? false : item;
-  });
-
-  useEffect(() => {
-    setItem("showScores", showScores);
-  }, [showScores]);
-
-  const getScores = async (dateParam: string): Promise<{games: GameData[]}> => {
-    try {
-      const baseUrl = import.meta.env.DEV
-        ? import.meta.env.VITE_API_URL_DEV
-        : import.meta.env.VITE_API_URL_PROD;
-      
-      const url = dateParam 
-        ? `${baseUrl}/?date=${dateParam}` 
-        : `${baseUrl}/`;
-
-      const response = await fetch(url);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      return response.json();
-    } catch (error) {
-      console.error(`This call didn't work, this is the ${error}`);
-      throw error;
-    }
-  };
-
-  const {isLoading, data, error} = useQuery({
-    queryKey: ["games", dateParam],
-    queryFn: () => getScores(dateParam),
-  });
-  const games = data?.games ?? [];
+  const {isLoading, hasData, games, error, dateParam, showScores, setShowScores} = useScoresPage();
 
   if (isLoading) return <h1>Loading...</h1>;
   if (error) return <h1>{JSON.stringify(error)}</h1>;
-  if (!data) return <h1>Didn't receive any games</h1>;
+  if (!hasData) return <h1>Didn't receive any games</h1>;
   return (
     <>
       {games.some((game) => game.gameStatus !== 1) && (

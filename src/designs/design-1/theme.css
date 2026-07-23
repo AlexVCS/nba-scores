@@ -1,0 +1,63 @@
+.design-ledger {
+  --page-bg: #f1eadc;
+  --surface: #f8f3e8;
+  --surface-muted: #e8dfcf;
+  --text: #191713;
+  --muted: #716b60;
+  --accent: #d94f1e;
+  --accent-contrast: #fff8eb;
+  --border: #2a2720;
+  --display-font: "Fraunces", Georgia, serif;
+  --body-font: "Archivo", sans-serif;
+  --number-font: "Fraunces", Georgia, serif;
+  --display-weight: 800;
+  --radius: 0;
+  --line-width: 1px;
+  --card-gap: 0;
+  --card-shadow: none;
+  --small-shadow: 5px 5px 0 #191713;
+  --page-texture: repeating-linear-gradient(0deg, transparent 0 3px, rgb(25 23 19 / 3%) 4px);
+  --switcher-bg: #191713;
+  --switcher-fg: #f8f3e8;
+  --switcher-accent: #d94f1e;
+}
+
+.dark .design-ledger {
+  --page-bg: #1b1a17;
+  --surface: #24221e;
+  --surface-muted: #201e1a;
+  --text: #f0e8d8;
+  --muted: #aaa293;
+  --accent: #ff7140;
+  --accent-contrast: #171512;
+  --border: #716b60;
+  --small-shadow: 5px 5px 0 #0a0908;
+}
+
+.design-ledger .concept-header__brand { display: grid; grid-template-columns: 1fr auto; align-items: end; }
+.design-ledger .concept-header__brand::after { content: "EST. 2025"; padding-bottom: 5px; color: var(--muted); font-size: 9px; font-weight: 800; letter-spacing: .2em; }
+.design-ledger .concept-scoreboard-intro, .design-ledger .concept-playoff-intro { border-bottom: 5px double var(--border); }
+.design-ledger .concept-games-grid { grid-template-columns: 1fr; }
+.design-ledger .concept-game-card { display: grid; grid-template-columns: 150px 1fr auto; align-items: stretch; border-width: 0 0 1px; }
+.design-ledger .concept-game-card__status { display: flex; min-height: 100%; flex-direction: column; align-items: flex-start; justify-content: center; border-right: 1px solid var(--border); border-bottom: 0; }
+.design-ledger .concept-game-card__status strong { font-family: var(--display-font); font-size: 22px; text-align: left; text-transform: none; }
+.design-ledger .concept-game-card__matchup { min-height: 150px; grid-template-columns: 1fr 40px 1fr; }
+.design-ledger .concept-team { grid-template-columns: auto 1fr auto; justify-items: start; gap: 14px; text-align: left; }
+.design-ledger .concept-team__designation { display: none; }
+.design-ledger .concept-team__score { grid-column: 3; grid-row: 1; margin: 0; font-size: 58px; }
+.design-ledger .concept-team div { grid-row: 1; }
+.design-ledger .concept-game-card footer { min-width: 110px; flex-direction: column; justify-content: center; border-top: 0; border-left: 1px solid var(--border); }
+.design-ledger .concept-bracket__rounds { border-top: 4px double var(--border); padding-top: 16px; }
+.design-ledger .concept-series-card > div.is-winner::after { content: "W"; font: 800 8px var(--body-font); }
+.design-ledger .concept-series-games article:nth-child(even) { background: color-mix(in srgb, var(--surface) 65%, transparent); }
+
+@media (max-width: 760px) {
+  .design-ledger .concept-header__brand { display: block; }
+  .design-ledger .concept-header__brand::after { display: none; }
+  .design-ledger .concept-game-card { display: block; border: 1px solid var(--border); }
+  .design-ledger .concept-game-card__status { min-height: 44px; flex-direction: row; align-items: center; justify-content: space-between; border-right: 0; border-bottom: 1px solid var(--border); }
+  .design-ledger .concept-team { display: grid; grid-template-columns: 1fr; justify-items: center; text-align: center; }
+  .design-ledger .concept-team__score { grid-column: 1; grid-row: auto; font-size: 42px; }
+  .design-ledger .concept-team div { grid-row: auto; }
+  .design-ledger .concept-game-card footer { flex-direction: row; border-top: 1px solid var(--border); border-left: 0; }
+}

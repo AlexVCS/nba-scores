@@ -1,0 +1,61 @@
+.design-broadcast {
+  --page-bg: #d9e7ed;
+  --surface: #eef7f8;
+  --surface-muted: #aec9d3;
+  --text: #061c45;
+  --muted: #426376;
+  --accent: #ed2b45;
+  --accent-contrast: #fff;
+  --border: #0d3ead;
+  --display-font: "Barlow Condensed", sans-serif;
+  --body-font: "Barlow Condensed", sans-serif;
+  --number-font: "Barlow Condensed", sans-serif;
+  --display-weight: 700;
+  --display-spacing: -.02em;
+  --radius: 4px;
+  --line-width: 2px;
+  --card-shadow: 8px 8px 0 #0d3ead;
+  --small-shadow: 4px 4px 0 #ed2b45;
+  --page-texture: repeating-linear-gradient(0deg, transparent 0 4px, rgb(6 28 69 / 7%) 5px);
+  --texture-opacity: .4;
+  --switcher-bg: #061c45;
+  --switcher-fg: #effcff;
+  --switcher-accent: #27e5f1;
+}
+
+.dark .design-broadcast {
+  --page-bg: #030d20;
+  --surface: #071b3c;
+  --surface-muted: #07152d;
+  --text: #effcff;
+  --muted: #75aaba;
+  --accent: #ff3154;
+  --accent-contrast: #fff;
+  --border: #21d9e6;
+  --card-shadow: 8px 8px 0 #122c72;
+}
+
+.design-broadcast .concept-header { border: 2px solid var(--border); border-top: 0; background: color-mix(in srgb, var(--surface) 92%, transparent); }
+.design-broadcast .concept-header__utility, .design-broadcast .concept-header nav { padding-inline: 18px; }
+.design-broadcast .concept-header__brand { position: relative; overflow: hidden; padding-inline: 18px; background: linear-gradient(110deg, var(--border) 0 12%, transparent 12% 100%); }
+.design-broadcast .concept-header__title { text-transform: uppercase; text-shadow: 3px 3px 0 color-mix(in srgb, var(--accent) 75%, transparent); }
+.design-broadcast .concept-header__brand p { padding-left: 13%; }
+.design-broadcast .concept-scoreboard-intro h1, .design-broadcast .concept-playoff-intro h1 { text-transform: uppercase; }
+.design-broadcast .concept-games-grid { gap: 22px; }
+.design-broadcast .concept-game-card::after { content: "ON AIR"; position: absolute; top: 52px; right: -32px; width: 120px; padding: 4px 0; transform: rotate(45deg); background: var(--accent); color: white; font-size: 8px; font-weight: 700; letter-spacing: .15em; text-align: center; }
+.design-broadcast .concept-game-card__status { background: var(--border); color: white; border-color: var(--border); }
+.design-broadcast .concept-game-card__status span, .design-broadcast .concept-game-card__status small { color: #bdeff5; }
+.design-broadcast .concept-team strong, .design-broadcast .concept-team__score { font-style: italic; letter-spacing: .02em; }
+.design-broadcast .concept-game-card footer { background: repeating-linear-gradient(90deg, var(--surface-muted) 0 18px, var(--surface) 18px 36px); }
+.design-broadcast .concept-bracket__group { border-width: 3px 1px 1px; }
+.design-broadcast .concept-bracket__group > header { display: flex; align-items: center; justify-content: space-between; padding: 7px 12px; background: var(--border); color: white; }
+.design-broadcast .concept-bracket__group > header span { color: #bdeff5; }
+.design-broadcast .concept-series-card > small { background: var(--accent); color: white; }
+.design-broadcast .concept-game-summary__status { display: inline-block; padding: 6px 14px; background: var(--accent); color: white; }
+.design-broadcast .concept-player-ledger thead { background: var(--border); color: white; }
+.design-broadcast .concept-series-games__number { display: grid; width: 34px; height: 34px; place-items: center; background: var(--border); color: white; }
+
+@media (max-width: 700px) {
+  .design-broadcast .concept-header { width: calc(100% - 20px); }
+  .design-broadcast .concept-header__brand p { padding-left: 0; }
+}

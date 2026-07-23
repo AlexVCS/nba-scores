@@ -1,66 +1,23 @@
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router";
 import GameSummary from "@/components/GameSummary";
 import DarkModeToggle from "@/components/DarkModeToggle";
 import PlayerTable from "./PlayerTable";
 // import InactivePlayers from "./InactivePlayers";
-import { getBoxScores, getGameSummary } from "@/services/nbaService";
-import type { GameSummaryData, GameSummaryTeam } from "@/helpers/helpers";
-
-interface BoxscoreTeam {
-  teamId: number;
-  teamTricode: string;
-  teamCity: string;
-  teamName: string;
-  statistics?: { points: number };
-}
+import {useBoxscorePage} from "@/designs/hooks/useBoxscorePage";
 
 const Boxscore = () => {
-  const { gameId = "" } = useParams();
+  const {game, summary, isLoading, isError} = useBoxscorePage();
 
-  const boxscoreQuery = useQuery({
-    queryKey: ["boxscore", gameId],
-    queryFn: () => getBoxScores(gameId),
-  });
-
-  const gameSummaryQuery = useQuery({
-    queryKey: ["gameSummary", gameId],
-    queryFn: () => getGameSummary(gameId),
-  });
-
-  if (boxscoreQuery.isLoading || (boxscoreQuery.isError && gameSummaryQuery.isLoading)) {
+  if (isLoading) {
     return <h1>Loading...</h1>;
   }
-
-  const game = boxscoreQuery.data?.game;
-
-  if (!game && (gameSummaryQuery.isError || !gameSummaryQuery.data)) {
+  if (isError) {
     return <h1>Error loading boxscore data</h1>;
   }
-
-  const buildTeamFromBoxscore = (team: BoxscoreTeam): GameSummaryTeam => ({
-    teamId: team.teamId ?? 0,
-    teamTricode: team.teamTricode ?? "",
-    teamName: `${team.teamCity ?? ""} ${team.teamName ?? ""}`.trim(),
-    score: String(team.statistics?.points ?? ""),
-    periods: [],
-  });
-
-  const fallbackSummaryData: GameSummaryData | null = !gameSummaryQuery.isLoading && game ? {
-    homeTeam: buildTeamFromBoxscore(game.homeTeam),
-    awayTeam: buildTeamFromBoxscore(game.awayTeam),
-    period: 0,
-    gameStatusText: game.gameStatusText ?? "Unknown",
-    periodScoreSource: "unavailable",
-    periodScoreType: "quarters",
-  } : null;
-
-  const summaryData = gameSummaryQuery.data ?? fallbackSummaryData;
 
   return (
     <div className="bg-slate-50 dark:bg-neutral-950 min-h-screen">
       <DarkModeToggle />
-      {summaryData && <GameSummary game={summaryData} />}
+      {summary && <GameSummary game={summary} />}
       {game ? (
         <>
           <PlayerTable team={game.homeTeam} />

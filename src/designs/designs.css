@@ -1,0 +1,16 @@
+@import "@fontsource/fraunces/latin-600.css";
+@import "@fontsource/fraunces/latin-800.css";
+@import "@fontsource/barlow-condensed/latin-500.css";
+@import "@fontsource/barlow-condensed/latin-700.css";
+@import "@fontsource/cormorant-garamond/latin-600.css";
+@import "@fontsource/cormorant-garamond/latin-700.css";
+@import "@fontsource/bitter/latin-500.css";
+@import "@fontsource/bitter/latin-800.css";
+@import "@fontsource/archivo/latin-500.css";
+@import "@fontsource/archivo/latin-800.css";
+@import "./base.css";
+@import "./design-1/theme.css";
+@import "./design-2/theme.css";
+@import "./design-3/theme.css";
+@import "./design-4/theme.css";
+@import "./design-5/theme.css";

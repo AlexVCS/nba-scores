@@ -1,0 +1,61 @@
+.design-playbook {
+  --page-bg: #e1bb79;
+  --surface: #f6e9c9;
+  --surface-muted: #2c5c49;
+  --text: #10263a;
+  --muted: #6f6048;
+  --accent: #e95325;
+  --accent-contrast: #fff8e6;
+  --border: #173f33;
+  --display-font: "Bitter", serif;
+  --body-font: "Bitter", serif;
+  --number-font: "Bitter", serif;
+  --display-weight: 800;
+  --display-spacing: -.035em;
+  --radius: 3px;
+  --card-gap: 24px;
+  --card-shadow: 5px 8px 0 rgb(16 38 58 / 28%);
+  --small-shadow: 4px 4px 0 rgb(16 38 58 / 35%);
+  --page-texture: linear-gradient(90deg, transparent 49.7%, rgb(255 255 255 / 40%) 49.8% 50.2%, transparent 50.3%), radial-gradient(circle at 50% 50%, transparent 0 110px, rgb(255 255 255 / 35%) 111px 114px, transparent 115px), repeating-linear-gradient(90deg, rgb(112 62 18 / 9%) 0 2px, transparent 2px 72px);
+  --texture-opacity: .7;
+  --switcher-bg: #153c31;
+  --switcher-fg: #fff2d2;
+  --switcher-accent: #ff6332;
+}
+
+.dark .design-playbook {
+  --page-bg: #143c31;
+  --surface: #214e40;
+  --surface-muted: #0e3028;
+  --text: #f3e9cc;
+  --muted: #b8c7ad;
+  --accent: #ff7548;
+  --accent-contrast: #122b24;
+  --border: #d8d0b3;
+  --card-shadow: 5px 8px 0 rgb(0 0 0 / 30%);
+  --page-texture: linear-gradient(90deg, transparent 49.7%, rgb(255 255 255 / 18%) 49.8% 50.2%, transparent 50.3%), radial-gradient(circle at 50% 50%, transparent 0 110px, rgb(255 255 255 / 15%) 111px 114px, transparent 115px);
+}
+
+.design-playbook .concept-header { margin-top: 16px; padding-inline: 18px; background: color-mix(in srgb, var(--surface) 90%, transparent); transform: rotate(-.35deg); box-shadow: var(--card-shadow); }
+.design-playbook .concept-header__title::after { content: "✕"; margin-left: 12px; color: var(--accent); font-size: .5em; }
+.design-playbook .concept-scoreboard-intro h1, .design-playbook .concept-playoff-intro h1 { text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 5px; text-underline-offset: 8px; }
+.design-playbook .concept-games-grid { align-items: start; }
+.design-playbook .concept-game-card:nth-child(odd) { transform: rotate(-.6deg); }
+.design-playbook .concept-game-card:nth-child(even) { transform: rotate(.55deg); }
+.design-playbook .concept-game-card::before { content: ""; position: absolute; z-index: 2; top: -8px; left: calc(50% - 34px); width: 68px; height: 18px; transform: rotate(-2deg); background: rgb(245 222 168 / 72%); box-shadow: 0 1px 2px rgb(0 0 0 / 15%); }
+.design-playbook .concept-game-card__status { margin: 12px 12px 0; border: 2px dashed var(--border); }
+.design-playbook .concept-team__score { border: 3px solid var(--accent); border-radius: 50%; padding: 7px 10px; transform: rotate(-5deg); }
+.design-playbook .concept-game-card__versus { color: var(--accent); font-size: 16px; }
+.design-playbook .concept-bracket__group { position: relative; background: color-mix(in srgb, var(--surface-muted) 90%, transparent); color: #fff4d7; box-shadow: var(--card-shadow); }
+.design-playbook .concept-bracket__group::after { content: "→ → →"; position: absolute; top: 18px; right: 20px; color: var(--accent); font-size: 18px; letter-spacing: .2em; }
+.design-playbook .concept-bracket__group > header span, .design-playbook .concept-bracket__round h3 { color: #dbe4d1; }
+.design-playbook .concept-series-card { color: var(--text); }
+.design-playbook .concept-game-summary__score > div:nth-child(1) { transform: rotate(-.5deg); }
+.design-playbook .concept-game-summary__score > div:nth-child(2) { transform: rotate(.5deg); }
+.design-playbook .concept-series-games article { margin-bottom: 4px; padding-inline: 12px; border-left: 4px solid var(--accent); background: color-mix(in srgb, var(--surface) 92%, transparent); }
+
+@media (max-width: 700px) {
+  .design-playbook .concept-header { width: calc(100% - 30px); }
+  .design-playbook .concept-game-card:nth-child(n) { transform: none; }
+  .design-playbook .concept-bracket__group::after { display: none; }
+}

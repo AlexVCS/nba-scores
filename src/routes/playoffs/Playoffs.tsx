@@ -1,26 +1,12 @@
-import { useSearchParams, Link } from "react-router";
-import { useEffect, useState } from "react";
+import {Link} from "react-router";
 import PlayoffYearPicker from "@/components/PlayoffYearPicker";
-import { usePlayoffData } from "@/hooks/usePlayoffData";
 import PlayoffBracketFlow from "@/components/PlayoffBracketFlow";
 import DarkModeToggle from "@/components/DarkModeToggle";
 import Header from "@/components/Header";
-import { getDefaultPlayoffSeason } from "@/helpers/helpers";
+import {usePlayoffsPage} from "@/designs/hooks/usePlayoffsPage";
 
 function Playoffs() {
-  const [searchParams] = useSearchParams();
-  const seasonParam = searchParams.get("season");
-  const [season, setSeason] = useState<string | null>(seasonParam);
-
-  useEffect(() => {
-    if (!seasonParam) {
-      setSeason(getDefaultPlayoffSeason());
-    } else {
-      setSeason(seasonParam);
-    }
-  }, [seasonParam]);
-
-  const { data, isLoading, error } = usePlayoffData(season);
+  const {data, isLoading, error} = usePlayoffsPage();
 
   return (
     <div className="bg-slate-50 dark:bg-neutral-950">

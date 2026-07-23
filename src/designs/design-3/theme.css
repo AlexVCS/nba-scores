@@ -1,0 +1,63 @@
+.design-tunnel {
+  --page-bg: #e9e2d7;
+  --surface: #f6f0e7;
+  --surface-muted: #ddd2c2;
+  --text: #211b18;
+  --muted: #71655d;
+  --accent: #99692d;
+  --accent-contrast: #fff9ef;
+  --border: #a79783;
+  --display-font: "Cormorant Garamond", Georgia, serif;
+  --body-font: "Archivo", sans-serif;
+  --number-font: "Cormorant Garamond", Georgia, serif;
+  --display-weight: 700;
+  --display-spacing: -.04em;
+  --radius: 24px;
+  --card-gap: 34px;
+  --card-shadow: 0 24px 70px rgb(52 34 24 / 15%);
+  --small-shadow: 0 12px 30px rgb(52 34 24 / 14%);
+  --page-texture: radial-gradient(circle at 20% 0%, rgb(153 105 45 / 25%), transparent 35%), radial-gradient(circle at 90% 40%, rgb(92 18 32 / 14%), transparent 38%);
+  --texture-opacity: 1;
+  --switcher-bg: #201715;
+  --switcher-fg: #f3e8d5;
+  --switcher-accent: #c49855;
+}
+
+.dark .design-tunnel {
+  --page-bg: #0a0909;
+  --surface: #141111;
+  --surface-muted: #100d0e;
+  --text: #efe4d1;
+  --muted: #95877b;
+  --accent: #c99a59;
+  --accent-contrast: #17100c;
+  --border: #493c34;
+  --card-shadow: 0 24px 90px rgb(0 0 0 / 55%);
+}
+
+.design-tunnel .concept-header { padding-top: 32px; border-bottom-color: color-mix(in srgb, var(--accent) 50%, transparent); }
+.design-tunnel .concept-header__brand { padding-block: 55px; text-align: center; }
+.design-tunnel .concept-header__brand p { margin-inline: auto; }
+.design-tunnel .concept-header nav { justify-content: center; }
+.design-tunnel .concept-header__title { font-size: clamp(3.5rem, 9vw, 8rem); }
+.design-tunnel .concept-scoreboard-intro, .design-tunnel .concept-playoff-intro { text-align: center; grid-template-columns: 1fr; justify-items: center; }
+.design-tunnel .concept-games-grid { max-width: 1000px; grid-template-columns: 1fr; }
+.design-tunnel .concept-game-card { padding: 12px; border-color: color-mix(in srgb, var(--accent) 50%, var(--border)); }
+.design-tunnel .concept-game-card__status { border: 0; }
+.design-tunnel .concept-game-card__status strong { font-family: var(--display-font); font-size: 20px; }
+.design-tunnel .concept-game-card__matchup { min-height: 250px; }
+.design-tunnel .concept-team strong { font-size: 36px; }
+.design-tunnel .concept-team__score { font-size: 68px; }
+.design-tunnel .concept-game-card footer { border: 0; justify-content: center; }
+.design-tunnel .concept-game-card footer a { padding: 10px 18px; border: 1px solid var(--border); border-radius: 999px; }
+.design-tunnel .concept-bracket__group { padding: 34px; border-radius: 32px; box-shadow: var(--card-shadow); }
+.design-tunnel .concept-series-card { border-color: color-mix(in srgb, var(--accent) 50%, var(--border)); box-shadow: 0 12px 28px rgb(0 0 0 / 10%); }
+.design-tunnel .concept-game-summary__score, .design-tunnel .concept-series-hero__matchup { border-radius: 32px; overflow: hidden; box-shadow: var(--card-shadow); }
+.design-tunnel .concept-player-ledger > header { border-bottom: 1px solid var(--accent); }
+.design-tunnel .concept-series-games article { margin-bottom: 8px; padding-inline: 18px; border: 1px solid var(--border); border-radius: 14px; background: var(--surface); }
+
+@media (max-width: 700px) {
+  .design-tunnel .concept-header__brand { padding-block: 38px; }
+  .design-tunnel .concept-game-card__matchup { min-height: 200px; }
+  .design-tunnel .concept-team__score { font-size: 48px; }
+}
