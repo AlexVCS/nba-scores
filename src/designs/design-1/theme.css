@@ -1,63 +1,112 @@
-.design-ledger {
-  --page-bg: #f1eadc;
-  --surface: #f8f3e8;
-  --surface-muted: #e8dfcf;
-  --text: #191713;
-  --muted: #716b60;
-  --accent: #d94f1e;
-  --accent-contrast: #fff8eb;
-  --border: #2a2720;
-  --display-font: "Fraunces", Georgia, serif;
-  --body-font: "Archivo", sans-serif;
-  --number-font: "Fraunces", Georgia, serif;
+.design-playbook {
+  --page-bg: #e1bb79;
+  --surface: #f6e9c9;
+  --surface-muted: #2c5c49;
+  --text: #10263a;
+  --muted: #6f6048;
+  --accent: #e95325;
+  --accent-contrast: #fff8e6;
+  --border: #173f33;
+  --display-font: "Bitter", serif;
+  --body-font: "Bitter", serif;
+  --number-font: "Bitter", serif;
   --display-weight: 800;
-  --radius: 0;
-  --line-width: 1px;
-  --card-gap: 0;
-  --card-shadow: none;
-  --small-shadow: 5px 5px 0 #191713;
-  --page-texture: repeating-linear-gradient(0deg, transparent 0 3px, rgb(25 23 19 / 3%) 4px);
-  --switcher-bg: #191713;
-  --switcher-fg: #f8f3e8;
-  --switcher-accent: #d94f1e;
+  --display-spacing: -.035em;
+  --radius: 3px;
+  --card-gap: 24px;
+  --card-shadow: 5px 8px 0 rgb(16 38 58 / 28%);
+  --small-shadow: 4px 4px 0 rgb(16 38 58 / 35%);
+  --page-texture: linear-gradient(90deg, transparent 49.7%, rgb(255 255 255 / 40%) 49.8% 50.2%, transparent 50.3%), radial-gradient(circle at 50% 50%, transparent 0 110px, rgb(255 255 255 / 35%) 111px 114px, transparent 115px), repeating-linear-gradient(90deg, rgb(112 62 18 / 9%) 0 2px, transparent 2px 72px);
+  --texture-opacity: .7;
+  --switcher-bg: #153c31;
+  --switcher-fg: #fff2d2;
+  --switcher-accent: #ff6332;
+  --scoreboard-face: #111a2b;
+  --scoreboard-edge: #354158;
+  --scoreboard-divider: #354158;
+  --scoreboard-glow: #ff9900;
 }
 
-.dark .design-ledger {
-  --page-bg: #1b1a17;
-  --surface: #24221e;
-  --surface-muted: #201e1a;
-  --text: #f0e8d8;
-  --muted: #aaa293;
-  --accent: #ff7140;
-  --accent-contrast: #171512;
-  --border: #716b60;
-  --small-shadow: 5px 5px 0 #0a0908;
+.dark .design-playbook {
+  --page-bg: #143c31;
+  --surface: #214e40;
+  --surface-muted: #0e3028;
+  --text: #f3e9cc;
+  --muted: #b8c7ad;
+  --accent: #ff7548;
+  --accent-contrast: #122b24;
+  --border: #d8d0b3;
+  --card-shadow: 5px 8px 0 rgb(0 0 0 / 30%);
+  --page-texture: linear-gradient(90deg, transparent 49.7%, rgb(255 255 255 / 18%) 49.8% 50.2%, transparent 50.3%), radial-gradient(circle at 50% 50%, transparent 0 110px, rgb(255 255 255 / 15%) 111px 114px, transparent 115px);
 }
 
-.design-ledger .concept-header__brand { display: grid; grid-template-columns: 1fr auto; align-items: end; }
-.design-ledger .concept-header__brand::after { content: "EST. 2025"; padding-bottom: 5px; color: var(--muted); font-size: 9px; font-weight: 800; letter-spacing: .2em; }
-.design-ledger .concept-scoreboard-intro, .design-ledger .concept-playoff-intro { border-bottom: 5px double var(--border); }
-.design-ledger .concept-games-grid { grid-template-columns: 1fr; }
-.design-ledger .concept-game-card { display: grid; grid-template-columns: 150px 1fr auto; align-items: stretch; border-width: 0 0 1px; }
-.design-ledger .concept-game-card__status { display: flex; min-height: 100%; flex-direction: column; align-items: flex-start; justify-content: center; border-right: 1px solid var(--border); border-bottom: 0; }
-.design-ledger .concept-game-card__status strong { font-family: var(--display-font); font-size: 22px; text-align: left; text-transform: none; }
-.design-ledger .concept-game-card__matchup { min-height: 150px; grid-template-columns: 1fr 40px 1fr; }
-.design-ledger .concept-team { grid-template-columns: auto 1fr auto; justify-items: start; gap: 14px; text-align: left; }
-.design-ledger .concept-team__designation { display: none; }
-.design-ledger .concept-team__score { grid-column: 3; grid-row: 1; margin: 0; font-size: 58px; }
-.design-ledger .concept-team div { grid-row: 1; }
-.design-ledger .concept-game-card footer { min-width: 110px; flex-direction: column; justify-content: center; border-top: 0; border-left: 1px solid var(--border); }
-.design-ledger .concept-bracket__rounds { border-top: 4px double var(--border); padding-top: 16px; }
-.design-ledger .concept-series-card > div.is-winner::after { content: "W"; font: 800 8px var(--body-font); }
-.design-ledger .concept-series-games article:nth-child(even) { background: color-mix(in srgb, var(--surface) 65%, transparent); }
+.design-playbook .concept-header { margin-top: 16px; padding-inline: 18px; background: color-mix(in srgb, var(--surface) 90%, transparent); transform: rotate(-.35deg); box-shadow: var(--card-shadow); }
+.design-playbook .concept-header__utility { justify-content: flex-end; }
+.design-playbook .concept-header__brand { padding-block: 12px 10px; }
+.design-playbook .concept-header__logo-link { display: block; width: fit-content; margin-inline: auto; }
+.design-playbook .concept-header__logo { display: block; width: clamp(250px, 26vw, 320px); height: auto; margin-block: clamp(-44px, -3.5vw, -32px); }
+.design-playbook .concept-header nav { justify-content: center; }
+.design-playbook .concept-scoreboard-intro h1, .design-playbook .concept-playoff-intro h1 { text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 5px; text-underline-offset: 8px; }
+.design-playbook .concept-games-grid { align-items: start; }
+.design-playbook .concept-game-card:nth-child(odd) { transform: rotate(-.6deg); }
+.design-playbook .concept-game-card:nth-child(even) { transform: rotate(.55deg); }
+.design-playbook .concept-game-card::before { content: ""; position: absolute; z-index: 2; top: -8px; left: calc(50% - 34px); width: 68px; height: 18px; transform: rotate(-2deg); background: rgb(245 222 168 / 72%); box-shadow: 0 1px 2px rgb(0 0 0 / 15%); }
+.design-playbook .concept-game-card__status { margin: 12px 12px 0; border: 2px dashed var(--border); }
+.design-playbook .concept-team--scoreboard > div strong { display: none; }
+.design-playbook .concept-team__score {
+  display: grid;
+  min-width: 116px;
+  min-height: 178px;
+  overflow: hidden;
+  grid-template-rows: 1fr 1fr;
+  place-items: center;
+  margin-top: 11px;
+  padding: 14px 16px;
+  transform: none;
+  border: 4px solid var(--scoreboard-edge);
+  border-radius: 6px;
+  background: var(--scoreboard-face);
+  box-shadow: inset 0 0 20px rgb(0 0 0 / 16%);
+  color: var(--scoreboard-glow);
+  font-family: "Archivo", sans-serif;
+  font-size: 50px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 1;
+  text-shadow:
+    0 0 5px rgb(255 153 0 / 86%),
+    0 0 14px rgb(255 153 0 / 28%);
+}
+.design-playbook .concept-team__score span {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  padding: 0;
+  border-bottom: 4px solid var(--scoreboard-divider);
+  color: inherit;
+  font-size: 34px;
+  letter-spacing: .02em;
+  line-height: 1;
+  text-shadow:
+    0 0 5px rgb(255 153 0 / 86%),
+    0 0 14px rgb(255 153 0 / 28%);
+}
+.design-playbook .concept-game-card__versus { color: var(--accent); font-size: 16px; }
+.design-playbook .concept-bracket__group { position: relative; background: color-mix(in srgb, var(--surface-muted) 90%, transparent); color: #fff4d7; box-shadow: var(--card-shadow); }
+.design-playbook .concept-bracket__group::after { content: "→ → →"; position: absolute; top: 18px; right: 20px; color: var(--accent); font-size: 18px; letter-spacing: .2em; }
+.design-playbook .concept-bracket__group > header span, .design-playbook .concept-bracket__round h3 { color: #dbe4d1; }
+.design-playbook .concept-series-card { color: var(--text); }
+.design-playbook .concept-game-summary__score > div:nth-child(1) { transform: rotate(-.5deg); }
+.design-playbook .concept-game-summary__score > div:nth-child(2) { transform: rotate(.5deg); }
+.design-playbook .concept-series-games article { margin-bottom: 4px; padding-inline: 12px; border-left: 4px solid var(--accent); background: color-mix(in srgb, var(--surface) 92%, transparent); }
 
-@media (max-width: 760px) {
-  .design-ledger .concept-header__brand { display: block; }
-  .design-ledger .concept-header__brand::after { display: none; }
-  .design-ledger .concept-game-card { display: block; border: 1px solid var(--border); }
-  .design-ledger .concept-game-card__status { min-height: 44px; flex-direction: row; align-items: center; justify-content: space-between; border-right: 0; border-bottom: 1px solid var(--border); }
-  .design-ledger .concept-team { display: grid; grid-template-columns: 1fr; justify-items: center; text-align: center; }
-  .design-ledger .concept-team__score { grid-column: 1; grid-row: auto; font-size: 42px; }
-  .design-ledger .concept-team div { grid-row: auto; }
-  .design-ledger .concept-game-card footer { flex-direction: row; border-top: 1px solid var(--border); border-left: 0; }
+@media (max-width: 700px) {
+  .design-playbook .concept-header { width: calc(100% - 30px); }
+  .design-playbook .concept-header__logo { width: clamp(220px, 74vw, 270px); }
+  .design-playbook .concept-game-card:nth-child(n) { transform: none; }
+  .design-playbook .concept-team__score { min-width: 92px; min-height: 142px; padding: 11px 12px; border-width: 3px; font-size: 42px; }
+  .design-playbook .concept-team__score span { border-bottom-width: 3px; font-size: 27px; }
+  .design-playbook .concept-bracket__group::after { display: none; }
 }

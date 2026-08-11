@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./designs/design-4/hardwood.css";
 
 @custom-variant dark (&:where(.dark, .dark *));
 

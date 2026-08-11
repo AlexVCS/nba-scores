@@ -1,8 +1,6 @@
-import {useMemo} from "react";
-import {useQueries} from "@tanstack/react-query";
 import {Link} from "react-router-dom";
 import {getDefaultPlayoffSeason} from "@/helpers/helpers";
-import {getGameDays} from "@/services/nbaService";
+import {useRandomGameDay} from "@/hooks/useRandomGameDay";
 
 interface NoGamesQuickLinksProps {
   today?: Date;
@@ -16,40 +14,6 @@ interface QuickLink {
   to: string;
 }
 
-const GAME_DAYS_MIN_YEAR = 2000;
-const GAME_DAYS_MAX_YEAR = 2100;
-
-const formatDateParam = (date: Date): string => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-};
-
-const isSupportedGameDaysYear = (date: Date): boolean => {
-  const year = date.getFullYear();
-  return year >= GAME_DAYS_MIN_YEAR && year <= GAME_DAYS_MAX_YEAR;
-};
-
-const parseDateParam = (dateParam: string): Date | undefined => {
-  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateParam);
-  if (!match) return undefined;
-
-  const [, year, month, day] = match;
-  const date = new Date(Number(year), Number(month) - 1, Number(day));
-
-  if (formatDateParam(date) !== dateParam) return undefined;
-  return date;
-};
-
-const getRecentMonths = (date: Date, count = 12): Date[] =>
-  Array.from({length: count}, (_, index) => {
-    const month = new Date(date);
-    month.setDate(1);
-    month.setMonth(month.getMonth() - index);
-    return month;
-  });
-
 const formatShortDate = (dateParam: string): string => {
   const [year, month, day] = dateParam.split("-").map(Number);
   return new Date(year, month - 1, day).toLocaleDateString("en-US", {
@@ -59,82 +23,29 @@ const formatShortDate = (dateParam: string): string => {
   });
 };
 
-const pickRandomDate = (
-  dates: string[],
-  fallbackDate: string,
-  randomIndex?: number,
-): string => {
-  if (dates.length === 0) return fallbackDate;
-
-  const index = randomIndex ?? Math.floor(Math.random() * dates.length);
-  return dates[Math.abs(index) % dates.length];
-};
-
 function NoGamesQuickLinks({
-  today = new Date(),
+  today,
   randomIndex,
   selectedDateParam,
 }: NoGamesQuickLinksProps) {
-  const selectedDate = useMemo(
-    () => parseDateParam(selectedDateParam ?? ""),
-    [selectedDateParam],
-  );
-  const activeDate = useMemo(
-    () => selectedDate ?? today,
-    [selectedDate, today],
-  );
-  const activeDateSupportsGameDays = isSupportedGameDaysYear(activeDate);
+  const {
+    activeDate,
+    lastGameDay,
+    previousDate,
+    randomGameDay,
+    selectedDate,
+  } = useRandomGameDay({dateParam: selectedDateParam, randomIndex, today});
   const selectedDateLabel = selectedDate
-    ? formatShortDate(formatDateParam(selectedDate))
+    ? formatShortDate(selectedDateParam!)
     : undefined;
-  const recentMonths = useMemo(
-    () => activeDateSupportsGameDays
-      ? getRecentMonths(activeDate).filter(isSupportedGameDaysYear)
-      : [],
-    [activeDate, activeDateSupportsGameDays],
-  );
-  const gameDayQueries = useQueries({
-    queries: recentMonths.map((month) => {
-      const year = month.getFullYear();
-      const monthNumber = month.getMonth() + 1;
-
-      return {
-        queryKey: ["gameDays", year, monthNumber],
-        queryFn: () => getGameDays(year, monthNumber),
-        staleTime: 1000 * 60 * 60,
-        gcTime: 1000 * 60 * 60 * 24,
-      };
-    }),
-  });
-
-  const previousDateParam = useMemo(() => {
-    const date = new Date(activeDate);
-    date.setDate(date.getDate() - 1);
-    return formatDateParam(date);
-  }, [activeDate]);
-
-  const availableGameDays = useMemo(() => {
-    const activeDateParam = formatDateParam(activeDate);
-
-    return gameDayQueries
-      .flatMap((query) => query.data?.game_days ?? [])
-      .filter((dateParam) => dateParam < activeDateParam)
-      .sort((a, b) => b.localeCompare(a));
-  }, [gameDayQueries, activeDate]);
-
-  const lastGameDay = availableGameDays[0] ?? previousDateParam;
-
-  const randomGameDay = useMemo(() => {
-    return pickRandomDate(availableGameDays, lastGameDay, randomIndex);
-  }, [availableGameDays, lastGameDay, randomIndex]);
 
   const currentPlayoffSeason = getDefaultPlayoffSeason(activeDate);
 
   const quickLinks: QuickLink[] = [
     {
       label: "Yesterday",
-      detail: formatShortDate(previousDateParam),
-      to: `/?date=${previousDateParam}`,
+      detail: formatShortDate(previousDate),
+      to: `/?date=${previousDate}`,
     },
     {
       label: "Last Game of the Season",
@@ -143,7 +54,7 @@ function NoGamesQuickLinks({
     },
     {
       label: "Random Game Day",
-      to: `/?date=${randomGameDay}`,
+      to: `/?date=${randomGameDay ?? lastGameDay}`,
     },
     {
       label: "Year's Playoffs",

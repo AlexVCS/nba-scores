@@ -1,61 +1,146 @@
-.design-broadcast {
-  --page-bg: #d9e7ed;
-  --surface: #eef7f8;
-  --surface-muted: #aec9d3;
-  --text: #061c45;
-  --muted: #426376;
-  --accent: #ed2b45;
-  --accent-contrast: #fff;
-  --border: #0d3ead;
-  --display-font: "Barlow Condensed", sans-serif;
-  --body-font: "Barlow Condensed", sans-serif;
-  --number-font: "Barlow Condensed", sans-serif;
+.design-radar {
+  --page-bg: #eef1f6;
+  --surface: #fff;
+  --surface-muted: #e4e8f0;
+  --text: #13161d;
+  --muted: #5b6372;
+  --accent: #1272f2;
+  --accent-contrast: #f4f8ff;
+  --border: #d7dce6;
+  --display-font: "Space Grotesk", sans-serif;
+  --body-font: "Archivo", sans-serif;
+  --number-font: "Space Grotesk", sans-serif;
   --display-weight: 700;
   --display-spacing: -.02em;
-  --radius: 4px;
-  --line-width: 2px;
-  --card-shadow: 8px 8px 0 #0d3ead;
-  --small-shadow: 4px 4px 0 #ed2b45;
-  --page-texture: repeating-linear-gradient(0deg, transparent 0 4px, rgb(6 28 69 / 7%) 5px);
-  --texture-opacity: .4;
-  --switcher-bg: #061c45;
-  --switcher-fg: #effcff;
-  --switcher-accent: #27e5f1;
+  --radius: 6px;
+  --line-width: 1px;
+  --card-gap: 14px;
+  --card-shadow: 0 10px 26px rgb(19 22 29 / 7%);
+  --small-shadow: 0 5px 14px rgb(19 22 29 / 8%);
+  --page-texture: radial-gradient(rgb(19 22 29 / 20%) 1px, transparent 1.4px);
+  --texture-opacity: .35;
+  --switcher-bg: #141519;
+  --switcher-fg: #f2f4f8;
+  --switcher-accent: #2f8bff;
 }
 
-.dark .design-broadcast {
-  --page-bg: #030d20;
-  --surface: #071b3c;
-  --surface-muted: #07152d;
-  --text: #effcff;
-  --muted: #75aaba;
-  --accent: #ff3154;
-  --accent-contrast: #fff;
-  --border: #21d9e6;
-  --card-shadow: 8px 8px 0 #122c72;
+.dark .design-radar {
+  --page-bg: #131418;
+  --surface: #1a1c22;
+  --surface-muted: #15171c;
+  --text: #f2f4f8;
+  --muted: #8a93a5;
+  --accent: #2f8bff;
+  --accent-contrast: #f4f8ff;
+  --border: #272a33;
+  --card-shadow: 0 18px 40px rgb(0 0 0 / 45%);
+  --small-shadow: 0 8px 22px rgb(0 0 0 / 40%);
+  --page-texture: radial-gradient(rgb(255 255 255 / 9%) 1px, transparent 1.4px);
 }
 
-.design-broadcast .concept-header { border: 2px solid var(--border); border-top: 0; background: color-mix(in srgb, var(--surface) 92%, transparent); }
-.design-broadcast .concept-header__utility, .design-broadcast .concept-header nav { padding-inline: 18px; }
-.design-broadcast .concept-header__brand { position: relative; overflow: hidden; padding-inline: 18px; background: linear-gradient(110deg, var(--border) 0 12%, transparent 12% 100%); }
-.design-broadcast .concept-header__title { text-transform: uppercase; text-shadow: 3px 3px 0 color-mix(in srgb, var(--accent) 75%, transparent); }
-.design-broadcast .concept-header__brand p { padding-left: 13%; }
-.design-broadcast .concept-scoreboard-intro h1, .design-broadcast .concept-playoff-intro h1 { text-transform: uppercase; }
-.design-broadcast .concept-games-grid { gap: 22px; }
-.design-broadcast .concept-game-card::after { content: "ON AIR"; position: absolute; top: 52px; right: -32px; width: 120px; padding: 4px 0; transform: rotate(45deg); background: var(--accent); color: white; font-size: 8px; font-weight: 700; letter-spacing: .15em; text-align: center; }
-.design-broadcast .concept-game-card__status { background: var(--border); color: white; border-color: var(--border); }
-.design-broadcast .concept-game-card__status span, .design-broadcast .concept-game-card__status small { color: #bdeff5; }
-.design-broadcast .concept-team strong, .design-broadcast .concept-team__score { font-style: italic; letter-spacing: .02em; }
-.design-broadcast .concept-game-card footer { background: repeating-linear-gradient(90deg, var(--surface-muted) 0 18px, var(--surface) 18px 36px); }
-.design-broadcast .concept-bracket__group { border-width: 3px 1px 1px; }
-.design-broadcast .concept-bracket__group > header { display: flex; align-items: center; justify-content: space-between; padding: 7px 12px; background: var(--border); color: white; }
-.design-broadcast .concept-bracket__group > header span { color: #bdeff5; }
-.design-broadcast .concept-series-card > small { background: var(--accent); color: white; }
-.design-broadcast .concept-game-summary__status { display: inline-block; padding: 6px 14px; background: var(--accent); color: white; }
-.design-broadcast .concept-player-ledger thead { background: var(--border); color: white; }
-.design-broadcast .concept-series-games__number { display: grid; width: 34px; height: 34px; place-items: center; background: var(--border); color: white; }
+.design-radar .concept-page::before { background-size: 26px 26px; }
+.design-radar .concept-header__issue, .design-radar .concept-scoreboard-intro span, .design-radar .concept-playoff-intro span, .design-radar .concept-scoreboard-toolbar, .design-radar .concept-game-card__status span, .design-radar .concept-game-card__status small, .design-radar .concept-team__designation, .design-radar .concept-control-index, .design-radar .concept-footer, .design-radar .concept-back-row, .design-radar .concept-series-card > small, .design-radar .concept-game-summary__status, .design-radar .concept-series-hero > span { font-family: "IBM Plex Mono", monospace; font-weight: 500; }
+.design-radar .concept-header__title { text-transform: uppercase; letter-spacing: .05em; font-size: clamp(2rem, 4.6vw, 4rem); }
+.design-radar .concept-header__brand p { text-transform: none; letter-spacing: .02em; }
+.design-radar .concept-header nav a { letter-spacing: .16em; }
+.design-radar .concept-header nav a.is-active::after { height: 2px; box-shadow: 0 0 14px var(--accent); }
+.design-radar .concept-scoreboard-intro h1, .design-radar .concept-playoff-intro h1 { letter-spacing: -.02em; }
+.design-radar .concept-date-picker, .design-radar .concept-season-picker { border-radius: var(--radius); box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 24%, transparent), 0 0 26px color-mix(in srgb, var(--accent) 18%, transparent); }
+.design-radar .concept-spoiler-toggle { border-radius: var(--radius); }
+.design-radar .concept-spoiler-toggle__icon { border-radius: 4px; }
+.design-radar .concept-game-card { transition: border-color 180ms ease, box-shadow 180ms ease; }
+.design-radar .concept-game-card:hover { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 0 30px color-mix(in srgb, var(--accent) 25%, transparent); }
+.design-radar .concept-game-card__status span::before { content: ""; display: inline-block; width: 6px; height: 6px; margin-right: 8px; background: #2ecc71; vertical-align: 1px; }
+.design-radar .concept-game-card__status strong { font-family: var(--display-font); font-size: 13px; letter-spacing: .06em; }
+.design-radar .concept-team strong { font-size: 24px; letter-spacing: .02em; text-transform: uppercase; }
+.design-radar .concept-team__score { display: inline-block; min-width: 74px; margin-top: 10px; padding: 4px 10px; border: 1px solid var(--border); border-radius: 5px; background: var(--surface-muted); color: var(--text); font-size: 36px; }
+.dark .design-radar .concept-team__score { background: #101115; text-shadow: 0 0 22px color-mix(in srgb, var(--accent) 60%, transparent); }
+.design-radar .concept-game-card__versus { font-family: "IBM Plex Mono", monospace; }
+.design-radar .concept-game-card footer a:first-child { padding: 8px 14px; border-radius: 5px; background: var(--accent); color: var(--accent-contrast); }
+.design-radar .concept-stat-toggle button[aria-pressed="true"] { box-shadow: 0 0 18px color-mix(in srgb, var(--accent) 40%, transparent); }
+.design-radar .concept-page-state > span { border-radius: 5px; }
+.design-radar .concept-bracket__group { border-radius: 8px; }
+.design-radar .concept-bracket__group > header span { font-family: "IBM Plex Mono", monospace; }
+.design-radar .concept-series-card > div.is-winner { color: var(--text); }
+.design-radar .concept-series-card > div.is-winner strong::after { content: " ▲"; color: #2ecc71; font-size: .68em; }
+.design-radar .concept-series-card > div:not(.is-winner) strong::after { content: " ▼"; color: transparent; font-size: .68em; }
+.design-radar .concept-series-hero__result { border-radius: 6px; box-shadow: 0 0 30px color-mix(in srgb, var(--accent) 45%, transparent); }
+.design-radar .concept-game-summary__score strong { color: var(--text); }
+.dark .design-radar .concept-game-summary__score strong { text-shadow: 0 0 34px color-mix(in srgb, var(--accent) 55%, transparent); }
+.design-radar .concept-player-ledger > header span { color: var(--accent); }
+.design-radar .concept-player-ledger thead th { font-family: "IBM Plex Mono", monospace; font-weight: 500; }
+.design-radar .concept-series-games__number { font-family: "IBM Plex Mono", monospace; }
+
+@media (prefers-reduced-motion: reduce) {
+  .design-radar .concept-game-card { transition: none; }
+}
+
+/* Box score prototype: sticky score strip, leaders, team switch, tap-to-expand ledger */
+.design-radar .radar-scorebar { position: sticky; z-index: 60; top: 0; display: flex; min-height: 46px; align-items: center; justify-content: center; gap: 14px; border-bottom: 1px solid var(--border); background: color-mix(in srgb, var(--page-bg) 86%, transparent); backdrop-filter: blur(10px); font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 500; letter-spacing: .12em; }
+.design-radar .radar-scorebar span { color: var(--muted); }
+.design-radar .radar-scorebar strong { font-family: var(--display-font); font-size: 19px; font-weight: 700; letter-spacing: 0; font-variant-numeric: tabular-nums; }
+.design-radar .radar-scorebar em { padding: 3px 9px; border: 1px solid var(--border); border-radius: 4px; color: var(--muted); font-size: 9px; font-style: normal; }
+
+.design-radar .radar-eyebrow { display: block; margin-bottom: 10px; color: var(--accent); font-family: "IBM Plex Mono", monospace; font-size: 10px; font-weight: 500; letter-spacing: .2em; }
+
+.design-radar .radar-leaders { width: min(760px, calc(100% - 32px)); margin: 0 auto 22px; }
+.design-radar .radar-leaders__grid { display: grid; gap: 10px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.design-radar .radar-leader { display: grid; align-items: center; padding: 12px 14px; gap: 2px 12px; grid-template-columns: auto 1fr; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); box-shadow: var(--card-shadow); }
+.design-radar .radar-leader img { display: block; width: 46px; height: 34px; max-width: none; object-fit: contain; grid-row: span 3; }
+.design-radar .radar-leader figure { display: contents; }
+.design-radar .radar-leader__who { display: flex; align-items: baseline; gap: 7px; min-width: 0; }
+.design-radar .radar-leader__who small { color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 8px; font-weight: 500; letter-spacing: .14em; }
+.design-radar .radar-leader__who span { overflow: hidden; font-size: 12px; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
+.design-radar .radar-leader > strong { display: flex; align-items: baseline; gap: 5px; font-family: var(--display-font); font-size: 27px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+.design-radar .radar-leader > strong b { color: var(--accent); font-family: "IBM Plex Mono", monospace; font-size: 8px; font-weight: 500; letter-spacing: .14em; }
+.design-radar .radar-leader > em { color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 10px; font-style: normal; font-weight: 500; }
+
+.design-radar .radar-team-switch { position: sticky; z-index: 50; top: 46px; display: grid; width: min(760px, calc(100% - 32px)); margin: 0 auto 12px; padding: 5px; gap: 5px; grid-template-columns: 1fr 1fr; border: 1px solid var(--border); border-radius: 9px; background: color-mix(in srgb, var(--page-bg) 90%, transparent); backdrop-filter: blur(9px); }
+.design-radar .radar-team-switch button { display: flex; min-height: 42px; align-items: center; justify-content: center; gap: 9px; border: 0; border-radius: 6px; background: transparent; color: var(--muted); cursor: pointer; font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 500; letter-spacing: .12em; transition: background 160ms ease, color 160ms ease; }
+.design-radar .radar-team-switch button strong { font-family: var(--display-font); font-size: 16px; font-weight: 700; letter-spacing: 0; font-variant-numeric: tabular-nums; }
+.design-radar .radar-team-switch button[aria-pressed="true"] { background: var(--accent); color: var(--accent-contrast); box-shadow: 0 0 18px color-mix(in srgb, var(--accent) 40%, transparent); }
+
+.design-radar .radar-ledger { width: min(760px, calc(100% - 32px)); margin: 0 auto 60px; overflow: hidden; border: 1px solid var(--border); border-radius: 9px; background: var(--surface); }
+.design-radar .radar-ledger table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.design-radar .radar-ledger thead th { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 9px; font-weight: 500; letter-spacing: .14em; text-align: right; }
+.design-radar .radar-ledger thead th:first-child { text-align: left; }
+.design-radar .radar-ledger td { padding: 8px 12px; border-bottom: 1px solid var(--border); font-size: 13px; text-align: right; white-space: nowrap; }
+.design-radar .radar-ledger tbody th { padding: 5px 8px; border-bottom: 1px solid var(--border); text-align: left; }
+.design-radar .radar-ledger tbody tr:last-child th, .design-radar .radar-ledger tbody tr:last-child td { border-bottom: 0; }
+.design-radar .radar-ledger tr.is-open th, .design-radar .radar-ledger tr.is-open td { border-bottom: 0; }
+.design-radar .radar-ledger__player { display: flex; width: 100%; min-height: 44px; align-items: center; gap: 9px; padding: 2px 4px; border: 0; border-radius: 6px; background: transparent; color: inherit; cursor: pointer; font: inherit; text-align: left; }
+.design-radar .radar-ledger__player img { width: 44px; height: 32px; max-width: none; object-fit: contain; }
+.design-radar .radar-ledger__player figure { display: contents; }
+.design-radar .radar-ledger__name { display: flex; min-width: 0; align-items: baseline; gap: 6px; }
+.design-radar .radar-ledger__name > span { overflow: hidden; font-size: 13px; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
+.design-radar .radar-ledger__name small { color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 8px; font-weight: 500; }
+.design-radar .radar-ledger__chevron { width: 14px; margin-left: auto; flex-shrink: 0; color: var(--muted); transition: transform 160ms ease; }
+.design-radar .radar-ledger__player[aria-expanded="true"] .radar-ledger__chevron { transform: rotate(180deg); color: var(--accent); }
+.design-radar .radar-ledger__player:hover .radar-ledger__name > span { color: var(--accent); }
+.design-radar .radar-ledger__detail td { padding: 4px 12px 14px 61px; border-bottom: 1px solid var(--border); text-align: left; white-space: normal; }
+.design-radar .radar-statline { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 500; }
+.design-radar .radar-statline strong { color: var(--text); font-weight: 700; }
+.design-radar .radar-statline a { display: inline-flex; align-items: center; gap: 5px; color: var(--accent); font-size: 10px; letter-spacing: .08em; text-decoration: none; text-transform: uppercase; }
+.design-radar .radar-statline a svg { width: 11px; }
+.design-radar .radar-ledger__dnp td { color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 10px; font-weight: 500; white-space: normal; }
+.design-radar .radar-ledger__dnp .radar-ledger__player { cursor: default; opacity: .6; }
+
+@media (min-width: 700px) {
+  .design-radar .radar-leaders__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+@media (min-width: 700px) {
+  .design-radar .radar-ledger__player img { display: block; }
+}
 
 @media (max-width: 700px) {
-  .design-broadcast .concept-header { width: calc(100% - 20px); }
-  .design-broadcast .concept-header__brand p { padding-left: 0; }
+  .design-radar .concept-boxscore-page .concept-game-summary { margin-top: 26px; }
+  .design-radar .radar-scorebar strong { font-size: 17px; }
+  .design-radar .radar-ledger__detail td { padding-left: 14px; }
+  .design-radar .radar-leader > em { font-size: 9px; }
+  .design-radar .radar-leader { padding: 10px 12px; gap: 2px 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .design-radar .radar-ledger__chevron, .design-radar .radar-team-switch button { transition: none; }
 }

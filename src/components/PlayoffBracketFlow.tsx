@@ -8,7 +8,7 @@ import type { PlayoffBracketResponse } from '@/helpers/helpers';
 import { transformToBracketData } from '@/utils/bracketTransformer';
 import type { BracketNodeData } from '@/utils/bracketTransformer';
 import { buildPlayoffBracketModel, canRevealRound as canRevealRoundFromModel } from '@/utils/playoffBracketModel';
-import { seasonToYear } from '@/utils/seriesSlug';
+import { useBracketSeriesPath } from './bracketSeriesPath';
 import { bracketSizing } from '@/utils/bracketSizing';
 import { useViewportSize } from '@/hooks/useViewportSize';
 import type { ViewportSize } from '@/hooks/useViewportSize';
@@ -115,6 +115,7 @@ interface PlayoffBracketFlowProps {
 
 function PlayoffBracketFlowInner({ playoffPicture }: PlayoffBracketFlowProps) {
   const navigate = useNavigate();
+  const buildSeriesPath = useBracketSeriesPath();
   const viewportSize = useViewportSize();
   const sizing = bracketSizing[viewportSize];
   const [revealedRounds, setRevealedRounds] = useState<Set<number>>(new Set());
@@ -143,8 +144,8 @@ function PlayoffBracketFlowInner({ playoffPicture }: PlayoffBracketFlowProps) {
   const handleNodeClick = useCallback((_event: React.MouseEvent, node: Node) => {
     if (node.type !== 'seriesNode') return;
     const data = node.data as BracketNodeData;
-    navigate(`/playoffs/${seasonToYear(data.season)}/${data.seriesSlug}`);
-  }, [navigate]);
+    navigate(buildSeriesPath(data.season, data.seriesSlug));
+  }, [navigate, buildSeriesPath]);
 
   const { nodes, edges } = useMemo(
     () => transformToBracketData(model, revealedRounds, season, sizing),

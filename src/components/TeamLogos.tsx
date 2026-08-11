@@ -2,6 +2,7 @@ import { placeholderTeamLogoUrl } from "@/helpers/helpers";
 import { HISTORICAL_TEAM_LOGOS } from "@/constants/historicalTeamLogos";
 
 const add_contrast_to_logos = new Set<number | string>([
+  1610612740, // NOP Pelicans
   1610612751, // BKN Nets
   1610612741, // CHI Bulls
   1610612757, // POR Trail Blazers

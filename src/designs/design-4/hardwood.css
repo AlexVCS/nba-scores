@@ -1,0 +1,82 @@
+.design-hardwood {
+  --hw-page: #e1bb79;
+  --hw-surface: #fffcf3;
+  --hw-surface-muted: #f2e8d2;
+  --hw-ink: #131210;
+  --hw-muted: #6e6555;
+  --hw-court: #55492f;
+  --hw-accent: #d7a500;
+  --hw-accent-ink: #7c5a00;
+  --hw-accent-contrast: #131313;
+  --hw-line: #ddd2b4;
+  --hw-winner-arrow: #1d8f46;
+  --hw-shadow-card: 0 10px 26px rgb(43 29 6 / 14%);
+  --hw-shadow-small: 0 5px 14px rgb(43 29 6 / 14%);
+  --hw-shadow-card-hover: 0 18px 40px rgb(43 29 6 / 26%);
+  --hw-page-texture: linear-gradient(90deg, transparent 49.7%, rgb(255 255 255 / 40%) 49.8% 50.2%, transparent 50.3%), radial-gradient(circle at 50% 50%, transparent 0 110px, rgb(255 255 255 / 35%) 111px 114px, transparent 115px), repeating-linear-gradient(90deg, rgb(112 62 18 / 9%) 0 2px, transparent 2px 72px);
+  --switcher-bg: #101010;
+  --switcher-fg: #fff;
+  --switcher-accent: #ffd524;
+}
+
+.dark .design-hardwood {
+  --hw-page: #143c31;
+  --hw-surface: #161815;
+  --hw-surface-muted: #101310;
+  --hw-ink: #fff;
+  --hw-muted: #98a290;
+  --hw-court: #aab5a1;
+  --hw-accent: #ffd524;
+  --hw-accent-ink: #ffd524;
+  --hw-line: #2b2f28;
+  --hw-winner-arrow: #43d97b;
+  --hw-shadow-card: 0 18px 42px rgb(0 0 0 / 50%);
+  --hw-shadow-small: 0 8px 22px rgb(0 0 0 / 45%);
+  --hw-shadow-card-hover: 0 24px 52px rgb(0 0 0 / 60%);
+  --hw-page-texture: linear-gradient(90deg, transparent 49.7%, rgb(255 255 255 / 18%) 49.8% 50.2%, transparent 50.3%), radial-gradient(circle at 50% 50%, transparent 0 110px, rgb(255 255 255 / 15%) 111px 114px, transparent 115px);
+}
+
+@theme inline {
+  --color-hw-page: var(--hw-page);
+  --color-hw-surface: var(--hw-surface);
+  --color-hw-surface-muted: var(--hw-surface-muted);
+  --color-hw-ink: var(--hw-ink);
+  --color-hw-muted: var(--hw-muted);
+  --color-hw-court: var(--hw-court);
+  --color-hw-accent: var(--hw-accent);
+  --color-hw-accent-ink: var(--hw-accent-ink);
+  --color-hw-accent-contrast: var(--hw-accent-contrast);
+  --color-hw-line: var(--hw-line);
+  --color-hw-winner-arrow: var(--hw-winner-arrow);
+  --shadow-hw-card: var(--hw-shadow-card);
+  --shadow-hw-small: var(--hw-shadow-small);
+  --shadow-hw-card-hover: var(--hw-shadow-card-hover);
+  --font-hw-display: "Poppins", sans-serif;
+  --radius-hw: 10px;
+  --animate-hw-enter: hw-enter 550ms both;
+  --animate-hw-pop-in: hw-pop-in 200ms cubic-bezier(.16, 1, .3, 1);
+  --animate-hw-pop-out: hw-pop-out 130ms ease-in forwards;
+  --animate-hw-fade-in: hw-fade-in 180ms ease-out;
+  --animate-hw-fade-out: hw-fade-in 130ms ease-in reverse forwards;
+  --animate-hw-sheet-up: hw-sheet-up 260ms cubic-bezier(.16, 1, .3, 1);
+}
+
+@keyframes hw-enter {
+  from { opacity: 0; transform: translateY(18px); }
+}
+
+@keyframes hw-pop-in {
+  from { opacity: 0; transform: translateY(-8px); }
+}
+
+@keyframes hw-pop-out {
+  to { opacity: 0; }
+}
+
+@keyframes hw-fade-in {
+  from { opacity: 0; }
+}
+
+@keyframes hw-sheet-up {
+  from { transform: translateY(100%); }
+}

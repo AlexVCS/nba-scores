@@ -4,16 +4,17 @@ import { Player } from "@/helpers/helpers.jsx";
 
 interface PlayerHeadShotProps {
   player: Player
+  className?: string
 }
 
-const PlayerHeadshot: React.FC<PlayerHeadShotProps> = ({player}) => {
+const PlayerHeadshot: React.FC<PlayerHeadShotProps> = ({player, className}) => {
 const headshotUrl = `https://cdn.nba.com/headshots/nba/latest/260x190/${player.personId}.png`;
 
   return (
     <figure>
       <img
         src={headshotUrl}
-        className="hidden md:block md:place-self-center"
+        className={className ?? "hidden md:block md:place-self-center"}
         alt={`${player.nameI} headshot`}
         width="52"
         height="38"

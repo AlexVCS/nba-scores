@@ -189,11 +189,18 @@
 .concept-player-ledger > header span { color: var(--accent); font-family: var(--display-font); font-size: 36px; line-height: 1; }
 .concept-player-ledger > header h2 { font-family: var(--display-font); font-size: 25px; line-height: 1; }
 .concept-player-ledger > header small { color: var(--muted); font-size: 9px; font-weight: 800; line-height: 1; letter-spacing: .15em; }
+.concept-stat-toggle { display: inline-flex; align-self: center; gap: 3px; padding: 3px; border: 1px solid var(--border); border-radius: calc(var(--radius) + 3px); background: var(--surface); }
+.concept-stat-toggle button { min-height: 32px; padding: 0 13px; border: 0; border-radius: var(--radius); background: transparent; color: var(--muted); cursor: pointer; font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; transition: background 160ms ease, color 160ms ease; }
+.concept-stat-toggle button[aria-pressed="true"] { background: var(--accent); color: var(--accent-contrast); }
+
 .concept-player-ledger__scroll { overflow-x: auto; outline-offset: 4px; }
-.concept-player-ledger table { width: 100%; min-width: 1300px; border-collapse: collapse; background: var(--surface); font-variant-numeric: tabular-nums; }
+.concept-player-ledger table { width: 100%; border-collapse: collapse; background: var(--surface); font-variant-numeric: tabular-nums; }
+.concept-player-ledger--compact table { min-width: 640px; }
+.concept-player-ledger--full table { min-width: 1300px; }
 .concept-player-ledger th, .concept-player-ledger td { padding: 12px 10px; border-bottom: 1px solid var(--border); font-size: 11px; text-align: right; white-space: nowrap; }
 .concept-player-ledger thead th { color: var(--muted); font-size: 9px; letter-spacing: .08em; }
 .concept-player-ledger th:first-child { position: sticky; z-index: 1; left: 0; min-width: 190px; background: var(--surface); text-align: left; }
+.concept-player-ledger td.concept-player-ledger__dnp { text-align: left; }
 .concept-player-ledger tbody th a { font-size: 13px; font-weight: 800; text-decoration: none; }
 .concept-player-ledger__player { display: inline-flex; align-items: center; gap: 10px; }
 .concept-player-ledger__player figure { display: contents; }
@@ -285,11 +292,15 @@
   .concept-game-summary__score strong { justify-self: center; }
   .concept-game-summary__score img { width: 52px !important; height: 52px !important; }
   .concept-player-ledger > header { grid-template-columns: auto 1fr; }
-  .concept-player-ledger > header small { display: none; }
+  .concept-player-ledger > header .concept-stat-toggle { grid-column: 1 / -1; justify-self: start; }
   .concept-series-hero__matchup > div:not(.concept-series-hero__result) { min-height: 220px; padding-inline: 8px; }
   .concept-series-hero__matchup strong { font-size: clamp(1.9rem, 9vw, 3rem); }
+  .concept-series-hero__matchup figure { width: 64px !important; height: 64px !important; }
   .concept-series-hero__matchup img { width: 64px !important; height: 64px !important; }
+  .concept-series-hero__result { min-width: clamp(48px, 16vw, 72px); padding: 8px; }
+  .concept-series-hero__result strong { font-size: clamp(1.25rem, 6vw, 1.5rem); }
   .concept-series-hero__matchup small { display: none; }
+  .concept-series-games > header h2 { font-size: clamp(1.25rem, 6vw, 1.5rem); line-height: 1.1; text-wrap: balance; }
   .concept-series-games article { grid-template-columns: 36px 1fr auto; gap: 9px; }
   .concept-series-games time { display: none; }
   .concept-series-games article > div { justify-content: flex-start; font-size: 12px; }

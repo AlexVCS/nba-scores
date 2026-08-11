@@ -48,7 +48,7 @@ function DesignSeriesPage({designId}: DesignSeriesPageProps) {
           const watch = generateWatchLink(game.awayTeam.tricode, game.homeTeam.tricode, game.gameId);
           return (
             <article key={game.gameId}>
-              <span className="concept-series-games__number">{String(index + 1).padStart(2, "0")}</span>
+              <span className="concept-series-games__number">{index + 1}</span>
               <time>{formatGameDate(game.date)}</time>
               <div>{state.isRevealed ? <><strong>{game.awayTeam.tricode} {game.awayTeam.score}</strong><span>—</span><strong>{game.homeTeam.score} {game.homeTeam.tricode}</strong></> : <span>Result hidden</span>}</div>
               <nav>

@@ -95,7 +95,6 @@ const GameSummary: React.FC<GameProps> = ({ game }) => {
                     {periodHeader(period.period)}
                   </th>
                 ))}
-                <th className="px-1 md:px-2 text-center">T</th>
               </tr>
             </thead>
             <tbody>
@@ -108,7 +107,6 @@ const GameSummary: React.FC<GameProps> = ({ game }) => {
                     {findScoreForPeriod(homePeriods, period.period)}
                   </td>
                 ))}
-                <td className="px-1 md:px-2 text-center font-bold">{game.homeTeam.score}</td>
               </tr>
               <tr>
                 <td className="text-left pl-1.5 md:pl-3 pr-1">
@@ -119,7 +117,6 @@ const GameSummary: React.FC<GameProps> = ({ game }) => {
                     {findScoreForPeriod(awayPeriods, period.period)}
                   </td>
                 ))}
-                <td className="px-1 md:px-2 text-center font-bold">{game.awayTeam.score}</td>
               </tr>
             </tbody>
           </table>

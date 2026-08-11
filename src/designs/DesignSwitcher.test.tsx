@@ -16,15 +16,16 @@ function renderSwitcher() {
 describe("DesignSwitcher", () => {
   it("marks the active design and maps equivalent deep links", () => {
     renderSwitcher();
-    expect(screen.getByRole("link", {name: "View Broadcast ’96 design"})).toHaveAttribute("aria-current", "page");
+    expect(screen.getByRole("link", {name: "View The Radar design"})).toHaveAttribute("aria-current", "page");
     expect(screen.getByRole("link", {name: "View Original Scorez design"})).toHaveAttribute(
       "href",
       `${DESIGN_PREVIEW_BASE_PATH}/original/games/0042500131/boxscore?date=2026-04-18#stats`,
     );
-    expect(screen.getByRole("link", {name: "View Swiss Stat Lab design"})).toHaveAttribute(
+    expect(screen.getByRole("link", {name: "View Gold on Hardwood design"})).toHaveAttribute(
       "href",
-      `${DESIGN_PREVIEW_BASE_PATH}/design-5/games/0042500131/boxscore?date=2026-04-18#stats`,
+      `${DESIGN_PREVIEW_BASE_PATH}/design-4/games/0042500131/boxscore?date=2026-04-18#stats`,
     );
+    expect(screen.getAllByRole("link", {name: /View .* design/})).toHaveLength(5);
   });
 
   it("opens and dismisses the mobile design sheet", async () => {

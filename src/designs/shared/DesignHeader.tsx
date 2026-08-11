@@ -9,32 +9,48 @@ interface DesignHeaderProps {
   section: "scores" | "playoffs" | "boxscore" | "series";
 }
 
-const TAGLINES: Record<AlternateDesignId, string> = {
-  "design-1": "The daily record of the Association",
-  "design-2": "Live from the basketball control room",
-  "design-3": "The game, after hours",
-  "design-4": "Tonight’s board. Every possession matters.",
-  "design-5": "Games, reduced to signal",
+const LOGO_DESIGNS = new Set<AlternateDesignId>(["design-1", "design-4"]);
+
+const TAGLINES: Record<Exclude<AlternateDesignId, "design-1" | "design-4">, string> = {
+  "design-2": "Every game on the radar, coast to coast",
+  "design-3": "Tonight’s numbers, up in lights",
 };
 
 function DesignHeader({designId, section}: DesignHeaderProps) {
   const definition = getDesignDefinition(designId);
+  const isPlaybook = designId === "design-1";
+  const showsLogo = LOGO_DESIGNS.has(designId);
+  const usesPlayoffzLogo = designId === "design-4" && (section === "playoffs" || section === "series");
 
   return (
     <header className="concept-header">
       <div className="concept-header__utility">
-        <span className="concept-header__issue">NBA / {String(definition.number).padStart(2, "0")}</span>
+        {!isPlaybook && designId !== "design-4" && (
+          <span className="concept-header__issue">NBA / {String(definition.number).padStart(2, "0")}</span>
+        )}
         <DarkModeToggle />
       </div>
       <div className="concept-header__brand">
-        <Link to={designPath(designId, "/")} className="concept-header__title">
-          {definition.name}
-        </Link>
-        <p>{TAGLINES[designId]}</p>
+        {showsLogo ? (
+          <Link to={designPath(designId, "/")} className="concept-header__logo-link">
+            <img
+              className={`concept-header__logo${usesPlayoffzLogo ? " concept-header__logo--playoffz" : ""}`}
+              src={usesPlayoffzLogo ? "/images/playoffz.png" : "/images/dark-mode-logo.webp"}
+              alt={usesPlayoffzLogo ? "NBA Playoffz" : "NBA Scorez"}
+            />
+          </Link>
+        ) : (
+          <>
+            <Link to={designPath(designId, "/")} className="concept-header__title">
+              {definition.name}
+            </Link>
+            <p>{TAGLINES[designId as Exclude<AlternateDesignId, "design-1" | "design-4">]}</p>
+          </>
+        )}
       </div>
       <nav aria-label={`${definition.name} navigation`}>
-        <Link className={section === "scores" || section === "boxscore" ? "is-active" : ""} to={designPath(designId, "/")}>Scores</Link>
-        <Link className={section === "playoffs" || section === "series" ? "is-active" : ""} to={designPath(designId, "/playoffs")}>Playoffs</Link>
+        <Link className={section === "scores" || section === "boxscore" ? "is-active" : ""} to={designPath(designId, "/")}>Scorez</Link>
+        <Link className={section === "playoffs" || section === "series" ? "is-active" : ""} to={designPath(designId, "/playoffs")}>Playoffz</Link>
       </nav>
     </header>
   );

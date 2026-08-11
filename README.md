@@ -16,6 +16,7 @@
 [Playoffs](#playoffs) |
 [Built With](#built-with) |
 [Local Project Setup](#local-project-setup) |
+[VS Code Tasks](#vs-code-tasks) |
 [AI Agents](#ai-agents) |
 [Clone the repo](#clone-the-repo) |
 [Contact](#contact)
@@ -103,6 +104,22 @@ To run the backend, open a terminal and run this:
 source server/venv/bin/activate
 uvicorn server.main:app --reload
 ```
+
+## VS Code Tasks
+
+Run a task from **Tasks: Run Task** in the Command Palette. See [`.vscode/tasks.json`](.vscode/tasks.json) for the definitions.
+
+| Task | What it does |
+| ---- | ------------ |
+| Dev Client | Runs `pnpm dev` |
+| Dev Server | Runs the FastAPI server in `server/venv` |
+| Dev Full Stack | Runs the client and server in parallel |
+
+<div align='right'>
+
+[Back to Top](#top)
+
+</div>
 
 ## Contact
 

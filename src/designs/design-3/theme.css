@@ -1,63 +1,93 @@
-.design-tunnel {
-  --page-bg: #e9e2d7;
-  --surface: #f6f0e7;
-  --surface-muted: #ddd2c2;
-  --text: #211b18;
-  --muted: #71655d;
-  --accent: #99692d;
-  --accent-contrast: #fff9ef;
-  --border: #a79783;
-  --display-font: "Cormorant Garamond", Georgia, serif;
-  --body-font: "Archivo", sans-serif;
-  --number-font: "Cormorant Garamond", Georgia, serif;
-  --display-weight: 700;
-  --display-spacing: -.04em;
-  --radius: 24px;
-  --card-gap: 34px;
-  --card-shadow: 0 24px 70px rgb(52 34 24 / 15%);
-  --small-shadow: 0 12px 30px rgb(52 34 24 / 14%);
-  --page-texture: radial-gradient(circle at 20% 0%, rgb(153 105 45 / 25%), transparent 35%), radial-gradient(circle at 90% 40%, rgb(92 18 32 / 14%), transparent 38%);
+.design-marquee {
+  --page-bg: #fbfaf5;
+  --surface: #fff;
+  --surface-muted: #f1efe6;
+  --text: #101010;
+  --muted: #71716a;
+  --accent: #d7a500;
+  --accent-contrast: #101010;
+  --border: #e4e2d6;
+  --display-font: "Poppins", sans-serif;
+  --body-font: "Poppins", sans-serif;
+  --number-font: "Poppins", sans-serif;
+  --display-weight: 800;
+  --display-spacing: -.03em;
+  --radius: 10px;
+  --line-width: 1px;
+  --card-gap: 16px;
+  --card-shadow: 0 10px 26px rgb(16 16 16 / 7%);
+  --small-shadow: 0 5px 14px rgb(16 16 16 / 8%);
+  --page-texture: radial-gradient(circle at 85% 0%, rgb(215 165 0 / 9%), transparent 40%);
   --texture-opacity: 1;
-  --switcher-bg: #201715;
-  --switcher-fg: #f3e8d5;
-  --switcher-accent: #c49855;
+  --switcher-bg: #101010;
+  --switcher-fg: #fff;
+  --switcher-accent: #ffd524;
 }
 
-.dark .design-tunnel {
-  --page-bg: #0a0909;
-  --surface: #141111;
-  --surface-muted: #100d0e;
-  --text: #efe4d1;
-  --muted: #95877b;
-  --accent: #c99a59;
-  --accent-contrast: #17100c;
-  --border: #493c34;
-  --card-shadow: 0 24px 90px rgb(0 0 0 / 55%);
+.dark .design-marquee {
+  --page-bg: #0f0f0f;
+  --surface: #181816;
+  --surface-muted: #131311;
+  --text: #fff;
+  --muted: #98978c;
+  --accent: #ffd524;
+  --accent-contrast: #131313;
+  --border: #29291f;
+  --card-shadow: 0 18px 42px rgb(0 0 0 / 50%);
+  --small-shadow: 0 8px 22px rgb(0 0 0 / 45%);
+  --page-texture: radial-gradient(circle at 85% 0%, rgb(255 213 36 / 7%), transparent 40%);
 }
 
-.design-tunnel .concept-header { padding-top: 32px; border-bottom-color: color-mix(in srgb, var(--accent) 50%, transparent); }
-.design-tunnel .concept-header__brand { padding-block: 55px; text-align: center; }
-.design-tunnel .concept-header__brand p { margin-inline: auto; }
-.design-tunnel .concept-header nav { justify-content: center; }
-.design-tunnel .concept-header__title { font-size: clamp(3.5rem, 9vw, 8rem); }
-.design-tunnel .concept-scoreboard-intro, .design-tunnel .concept-playoff-intro { text-align: center; grid-template-columns: 1fr; justify-items: center; }
-.design-tunnel .concept-games-grid { max-width: 1000px; grid-template-columns: 1fr; }
-.design-tunnel .concept-game-card { padding: 12px; border-color: color-mix(in srgb, var(--accent) 50%, var(--border)); }
-.design-tunnel .concept-game-card__status { border: 0; }
-.design-tunnel .concept-game-card__status strong { font-family: var(--display-font); font-size: 20px; }
-.design-tunnel .concept-game-card__matchup { min-height: 250px; }
-.design-tunnel .concept-team strong { font-size: 36px; }
-.design-tunnel .concept-team__score { font-size: 68px; }
-.design-tunnel .concept-game-card footer { border: 0; justify-content: center; }
-.design-tunnel .concept-game-card footer a { padding: 10px 18px; border: 1px solid var(--border); border-radius: 999px; }
-.design-tunnel .concept-bracket__group { padding: 34px; border-radius: 32px; box-shadow: var(--card-shadow); }
-.design-tunnel .concept-series-card { border-color: color-mix(in srgb, var(--accent) 50%, var(--border)); box-shadow: 0 12px 28px rgb(0 0 0 / 10%); }
-.design-tunnel .concept-game-summary__score, .design-tunnel .concept-series-hero__matchup { border-radius: 32px; overflow: hidden; box-shadow: var(--card-shadow); }
-.design-tunnel .concept-player-ledger > header { border-bottom: 1px solid var(--accent); }
-.design-tunnel .concept-series-games article { margin-bottom: 8px; padding-inline: 18px; border: 1px solid var(--border); border-radius: 14px; background: var(--surface); }
+.design-marquee .concept-header__issue { letter-spacing: .26em; }
+.design-marquee .concept-header__title { color: var(--accent); text-transform: uppercase; }
+.design-marquee .concept-header__brand p { font-weight: 600; letter-spacing: .12em; }
+.design-marquee .concept-header nav a { font-weight: 700; letter-spacing: .12em; }
+.design-marquee .concept-header nav a.is-active::after { height: 4px; }
+.design-marquee .concept-scoreboard-intro h1, .design-marquee .concept-playoff-intro h1 { color: var(--accent); text-transform: uppercase; letter-spacing: -.02em; line-height: 1; }
+.design-marquee .concept-scoreboard-intro span, .design-marquee .concept-playoff-intro span { color: var(--text); letter-spacing: .24em; }
+.design-marquee .concept-date-picker, .design-marquee .concept-season-picker { border-radius: var(--radius); }
+.design-marquee .concept-spoiler-toggle { border: 0; border-radius: var(--radius); background: var(--accent); color: var(--accent-contrast); font-weight: 800 !important; }
+.design-marquee .concept-spoiler-toggle__icon { border-radius: 7px; background: var(--accent-contrast); color: var(--accent); }
+.design-marquee .concept-game-card { transition: transform 180ms ease, box-shadow 180ms ease; }
+.design-marquee .concept-game-card:hover { transform: translateY(-3px); box-shadow: 0 18px 40px rgb(16 16 16 / 12%); }
+.dark .design-marquee .concept-game-card:hover { box-shadow: 0 24px 52px rgb(0 0 0 / 60%); }
+.design-marquee .concept-game-card__status span, .design-marquee .concept-game-card__status small { font-weight: 700; letter-spacing: .18em; }
+.design-marquee .concept-game-card__status strong { font-weight: 700; }
+.design-marquee .concept-team__designation { font-weight: 700; letter-spacing: .22em; }
+.design-marquee .concept-team strong { font-size: 24px; font-weight: 800; text-transform: uppercase; }
+.design-marquee .concept-team__score { color: var(--text); font-size: 48px; font-weight: 800; letter-spacing: -.02em; }
+.dark .design-marquee .concept-team__score { color: var(--accent); }
+.design-marquee .concept-game-card__versus { display: grid; width: 32px; height: 32px; place-items: center; border-radius: 50%; background: var(--accent); color: var(--accent-contrast); font-weight: 800; }
+.design-marquee .concept-game-card footer a:hover { color: var(--accent); }
+.design-marquee .concept-empty-links a, .design-marquee .concept-standalone-link { border-radius: var(--radius); font-weight: 700; }
+.design-marquee .concept-page-state { border-radius: 14px; }
+.design-marquee .concept-page-state > span { border-radius: 10px; font-weight: 800; }
+.design-marquee .concept-page-state h2 { text-transform: uppercase; }
+.design-marquee .concept-stat-toggle { border-radius: 12px; }
+.design-marquee .concept-stat-toggle button { border-radius: 9px; font-weight: 800; }
+.design-marquee .concept-bracket__round-controls button { border-radius: var(--radius); font-weight: 800; }
+.design-marquee .concept-bracket__round-controls button span { border-radius: 7px; }
+.design-marquee .concept-bracket__group { border-radius: 14px; }
+.design-marquee .concept-bracket__group > header h2 { text-transform: uppercase; }
+.design-marquee .concept-series-card { border-radius: var(--radius); }
+.design-marquee .concept-series-card:hover { border-color: var(--accent); }
+.design-marquee .concept-series-card > div.is-winner { color: var(--text); background: color-mix(in srgb, var(--accent) 14%, var(--surface)); }
+.design-marquee .concept-series-card > div.is-winner strong::before { content: "▲ "; color: #22b357; font-size: .72em; }
+.dark .design-marquee .concept-series-card > div.is-winner strong::before { color: #43d97b; }
+.design-marquee .concept-series-hero__matchup strong { text-transform: uppercase; }
+.design-marquee .concept-series-hero__result { border-radius: 12px; }
+.design-marquee .concept-game-summary__status { letter-spacing: .26em; }
+.design-marquee .concept-game-summary__score strong { color: var(--text); }
+.dark .design-marquee .concept-game-summary__score strong { color: var(--accent); }
+.design-marquee .concept-game-summary__periods { border-radius: var(--radius); }
+.design-marquee .concept-player-ledger > header { border-bottom: 4px solid var(--accent); }
+.design-marquee .concept-player-ledger > header h2 { text-transform: uppercase; }
+.design-marquee .concept-player-ledger thead th { font-weight: 700; letter-spacing: .14em; }
+.design-marquee .concept-series-games > header { border-bottom: 4px solid var(--accent); }
+.design-marquee .concept-series-games > header h2 { text-transform: uppercase; }
+.design-marquee .concept-footer { font-weight: 700; letter-spacing: .22em; }
 
-@media (max-width: 700px) {
-  .design-tunnel .concept-header__brand { padding-block: 38px; }
-  .design-tunnel .concept-game-card__matchup { min-height: 200px; }
-  .design-tunnel .concept-team__score { font-size: 48px; }
+@media (prefers-reduced-motion: reduce) {
+  .design-marquee .concept-game-card { transition: none; }
+  .design-marquee .concept-game-card:hover { transform: none; }
 }

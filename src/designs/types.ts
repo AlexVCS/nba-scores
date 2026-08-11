@@ -3,8 +3,7 @@ export type DesignId =
   | "design-1"
   | "design-2"
   | "design-3"
-  | "design-4"
-  | "design-5";
+  | "design-4";
 
 export type DesignPage = "scores" | "boxscore" | "playoffs" | "series";
 

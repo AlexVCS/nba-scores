@@ -1,7 +1,7 @@
 import type {DesignId} from "./types";
 import {getDesignPreviewBasePath} from "./previewConfig";
 
-const DESIGN_PREFIX = /^\/(original|design-([1-5]))(?=\/|$)/;
+const DESIGN_PREFIX = /^\/(original|design-[1-4])(?=\/|$)/;
 const KNOWN_ROUTE = /^(?:\/$|\/games\/[^/]+\/boxscore\/?$|\/playoffs\/?$|\/playoffs\/\d{4}\/[^/]+\/?$)/;
 
 export interface DesignLocation {

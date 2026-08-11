@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import TeamLogos from './TeamLogos';
 import type { SeriesData } from '@/helpers/helpers';
-import { buildSeriesSlug, seasonToYear } from '@/utils/seriesSlug';
+import { buildSeriesSlug } from '@/utils/seriesSlug';
+import { useBracketSeriesPath } from './bracketSeriesPath';
 
 interface MobileSeriesCardProps {
   series: SeriesData;
@@ -11,6 +12,7 @@ interface MobileSeriesCardProps {
 }
 
 function MobileSeriesCard({ series, allSeries, season, isRevealed }: MobileSeriesCardProps) {
+  const buildSeriesPath = useBracketSeriesPath();
   const [team1, team2] = series.teams;
   const team1Wins = series.wins[team1.id] || 0;
   const team2Wins = series.wins[team2.id] || 0;
@@ -55,7 +57,7 @@ function MobileSeriesCard({ series, allSeries, season, isRevealed }: MobileSerie
 
   return (
     <Link
-      to={`/playoffs/${seasonToYear(season)}/${seriesSlug}`}
+      to={buildSeriesPath(season, seriesSlug)}
       className="block border-2 border-gray-700 rounded-lg overflow-hidden hover:border-blue-400 dark:hover:border-blue-400 transition-colors duration-200"
     >
       {series.targetWins && (

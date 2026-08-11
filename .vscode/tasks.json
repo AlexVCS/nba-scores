@@ -1,0 +1,48 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Dev Client",
+      "type": "process",
+      "command": "/usr/bin/env",
+      "args": [
+        "-u",
+        "VIRTUAL_ENV",
+        "-u",
+        "PYTHONHOME",
+        "pnpm",
+        "dev"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "panel": "dedicated",
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "Dev Server",
+      "type": "shell",
+      "command": "source server/venv/bin/activate && uvicorn server.main:app --reload",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "panel": "dedicated",
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "Dev Full Stack",
+      "dependsOn": [
+        "Dev Client",
+        "Dev Server"
+      ],
+      "dependsOrder": "parallel",
+      "problemMatcher": []
+    }
+  ]
+}

@@ -13,17 +13,25 @@ interface DesignGameCardProps {
   index: number;
 }
 
-function Team({game, side, showScore}: {game: GameData; side: "home" | "away"; showScore: boolean}) {
+function Team({designId, game, side, showScore}: {designId: AlternateDesignId; game: GameData; side: "home" | "away"; showScore: boolean}) {
   const team = side === "home" ? game.homeTeam : game.awayTeam;
+  const scoreboardTeam = team.teamId > 0 ? team.teamTricode : "TBD";
+  const showPlaybookScoreboard = designId === "design-1" && showScore;
+
   return (
-    <div className={`concept-team concept-team--${side}`}>
+    <div className={`concept-team concept-team--${side}${showPlaybookScoreboard ? " concept-team--scoreboard" : ""}`}>
       <span className="concept-team__designation">{side === "home" ? "HOME" : "AWAY"}</span>
       <TeamLogos teamName={team.teamName} teamId={team.teamId} size={58} tricode={team.teamTricode} />
       <div>
-        <strong>{team.teamId > 0 ? team.teamTricode : "TBD"}</strong>
+        <strong>{scoreboardTeam}</strong>
         <small>{team.teamName}</small>
       </div>
-      {showScore && <b className="concept-team__score">{team.score}</b>}
+      {showScore && (
+        <b className="concept-team__score">
+          {showPlaybookScoreboard && <span aria-hidden="true">{scoreboardTeam}</span>}
+          {team.score}
+        </b>
+      )}
     </div>
   );
 }
@@ -33,18 +41,19 @@ function DesignGameCard({designId, game, showScores, index}: DesignGameCardProps
   const reveal = showScores && started;
   const boxscore = reveal && game.boxscoreAvailable === true && game.gameId.length > 0;
   const watch = generateWatchLink(game.awayTeam.teamTricode, game.homeTeam.teamTricode, game.gameId);
+  const centerStatus = designId === "design-4";
 
   return (
     <article className="concept-game-card" style={{"--card-index": index} as React.CSSProperties}>
-      <header className="concept-game-card__status">
-        <span>GAME {String(index + 1).padStart(2, "0")}</span>
+      <header className={`concept-game-card__status${centerStatus ? " concept-game-card__status--centered" : ""}`}>
+        {!centerStatus && <span>GAME {String(index + 1).padStart(2, "0")}</span>}
         <strong>{game.gameStatusText}</strong>
         {game.gameLabel && <small>{game.gameLabel} · {game.gameSubLabel}</small>}
       </header>
       <div className="concept-game-card__matchup">
-        <Team game={game} side="away" showScore={reveal} />
+        <Team designId={designId} game={game} side="away" showScore={reveal} />
         <span className="concept-game-card__versus">VS</span>
-        <Team game={game} side="home" showScore={reveal} />
+        <Team designId={designId} game={game} side="home" showScore={reveal} />
       </div>
       {!game.gameStatusText.includes(":") && (
         <footer>

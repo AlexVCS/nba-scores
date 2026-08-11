@@ -2,7 +2,7 @@ import { Handle, Position } from '@xyflow/react';
 import { Link } from 'react-router-dom';
 import TeamLogos from './TeamLogos';
 import type { BracketNodeData } from '@/utils/bracketTransformer';
-import { seasonToYear } from '@/utils/seriesSlug';
+import { useBracketSeriesPath } from './bracketSeriesPath';
 
 interface BracketSeriesNodeProps {
   data: BracketNodeData;
@@ -12,6 +12,7 @@ const HANDLE_STYLE = { background: 'transparent', border: 'none', width: 1, heig
 
 function BracketSeriesNode({ data }: BracketSeriesNodeProps) {
   const { team1, team2, team1Wins, team2Wins, winnerTeamId, isRevealed, sizing, seriesSlug, season, targetWins } = data;
+  const buildSeriesPath = useBracketSeriesPath();
 
   const team1IsWinner = winnerTeamId === team1.id;
   const team2IsWinner = winnerTeamId === team2.id;
@@ -58,7 +59,7 @@ function BracketSeriesNode({ data }: BracketSeriesNodeProps) {
       <Handle type="target" position={Position.Right} id="tgt-right" style={{ ...HANDLE_STYLE, top: '50%' }} />
 
       <Link
-        to={`/playoffs/${seasonToYear(season)}/${seriesSlug}`}
+        to={buildSeriesPath(season, seriesSlug)}
         className="block border-2 border-gray-700 rounded-lg bg-gray-900 overflow-hidden hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-lg transition-all duration-200"
         title={targetWins ? `Best of ${targetWins * 2 - 1}` : undefined}
       >

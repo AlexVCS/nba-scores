@@ -15,18 +15,11 @@ const Header = ({ variant = "default" }: HeaderProps) => {
             alt="NBA Playoffz Logo"
           />
         ) : (
-          <>
-            <img
-              className="w-xs dark:hidden"
-              src="/images/light-mode-logo.webp"
-              alt="NBA Scorez Logo"
-            />
-            <img
-              className="w-xs hidden dark:block"
-              src="/images/dark-mode-logo.webp"
-              alt="NBA Scorez Logo"
-            />
-          </>
+          <img
+            className="w-xs"
+            src="/images/dark-mode-logo.webp"
+            alt="NBA Scorez Logo"
+          />
         )}
       </header>
     </article>

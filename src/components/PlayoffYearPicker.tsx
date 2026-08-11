@@ -123,7 +123,7 @@ const PlayoffYearPicker = () => {
         menuTrigger="focus"
       >
         <Label className="cursor-default dark:text-slate-50 text-neutral-950 text-sm sm:text-base">
-          Playoff Season
+          Playoffs
         </Label>
 
         <div className="flex rounded-lg bg-white/90 focus-within:bg-white group-open:bg-white transition pl-3 shadow-md text-gray-700 text-sm sm:text-base focus-visible:ring-2 ring-black outline-none">

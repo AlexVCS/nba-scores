@@ -5,8 +5,12 @@ import {DESIGN_DEFINITIONS} from "./designRegistry";
 const DESIGN_PREVIEW_BASE_PATH = "/preview/test-token-that-is-at-least-32-characters";
 
 describe("design routes", () => {
-  it.each([1, 2, 3, 4, 5])("detects design-%s", (number) => {
+  it.each([1, 2, 3, 4])("detects design-%s", (number) => {
     expect(detectDesignId(`${DESIGN_PREVIEW_BASE_PATH}/design-${number}/playoffs`)).toBe(`design-${number}`);
+  });
+
+  it.each([5, 11, 14, 16])("does not recognize retired design-%s", (number) => {
+    expect(detectDesignId(`${DESIGN_PREVIEW_BASE_PATH}/design-${number}/playoffs`)).toBe("original");
   });
 
   it("treats public and formerly predictable routes as original", () => {
@@ -21,11 +25,11 @@ describe("design routes", () => {
   });
 
   it("maps deep routes while preserving search and hash", () => {
-    expect(buildDesignHref("design-5", {
+    expect(buildDesignHref("design-4", {
       pathname: `${DESIGN_PREVIEW_BASE_PATH}/design-2/playoffs/2025/east-finals`,
       search: "?season=2024-25&revealed=true",
       hash: "#games",
-    })).toBe(`${DESIGN_PREVIEW_BASE_PATH}/design-5/playoffs/2025/east-finals?season=2024-25&revealed=true#games`);
+    })).toBe(`${DESIGN_PREVIEW_BASE_PATH}/design-4/playoffs/2025/east-finals?season=2024-25&revealed=true#games`);
   });
 
   it("maps a design route to the preview copy of the original", () => {
@@ -50,8 +54,9 @@ describe("design routes", () => {
     expect(designPath("design-4", "https://nba.com/game/example")).toBe("https://nba.com/game/example");
   });
 
-  it("registers the original and five unique alternatives", () => {
-    expect(DESIGN_DEFINITIONS).toHaveLength(6);
-    expect(new Set(DESIGN_DEFINITIONS.map((design) => design.id)).size).toBe(6);
+  it("registers the original and four unique alternatives", () => {
+    expect(DESIGN_DEFINITIONS).toHaveLength(5);
+    expect(new Set(DESIGN_DEFINITIONS.map((design) => design.id)).size).toBe(5);
+    expect(DESIGN_DEFINITIONS.map((design) => design.number)).toEqual([null, 1, 2, 3, 4]);
   });
 });

@@ -1,7 +1,7 @@
-import DesignScoresPage from "../shared/DesignScoresPage";
+import HardwoodScoresPage from "./components/HardwoodScoresPage";
 
 function ScoresPage() {
-  return <DesignScoresPage designId="design-4" />;
+  return <HardwoodScoresPage />;
 }
 
 export default ScoresPage;
