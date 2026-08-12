@@ -1,6 +1,10 @@
 @import "tailwindcss";
 @import "./designs/design-4/hardwood.css";
 
+@theme {
+  --breakpoint-switcher: 900px;
+}
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 .react-flow__controls-button {
