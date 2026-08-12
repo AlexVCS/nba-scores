@@ -33,7 +33,7 @@ function HardwoodLeaders({game}: {game: {awayTeam: DesignBoxscoreTeam; homeTeam:
   return (
     <section className={hwContainer} aria-label="Top performers">
       <h2 className="mb-3 text-[13px] font-extrabold tracking-[.22em] uppercase">Top performers</h2>
-      <div className="grid grid-cols-2 gap-3 min-[900px]:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 switcher:grid-cols-4">
         {leaders.map(({team, player}) => (
           <article key={player.personId} className="grid grid-cols-[auto_1fr] items-center gap-x-3 gap-y-0.5 rounded-hw border border-hw-line bg-hw-surface px-4 py-3.5 shadow-hw-card max-[700px]:gap-x-2.5 max-[700px]:px-3 max-[700px]:py-[11px] [&_figure]:contents [&_img]:row-span-3 [&_img]:h-[38px] [&_img]:w-[52px] [&_img]:max-w-none [&_img]:object-contain max-[700px]:[&_img]:h-[32px] max-[700px]:[&_img]:w-[44px]">
             <PlayerHeadshot player={player} className="block place-self-center" />

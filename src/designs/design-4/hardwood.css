@@ -17,6 +17,7 @@
   --switcher-bg: #101010;
   --switcher-fg: #fff;
   --switcher-accent: #ffd524;
+  background: var(--hw-page);
 }
 
 .dark .design-hardwood {

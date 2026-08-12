@@ -256,10 +256,7 @@
 
 @keyframes concept-enter { from { opacity: 0; transform: translateY(18px); } }
 
-@media (min-width: 900px) {
-  .design-route__content { padding-right: 66px; }
-}
-
+/* keep in sync with --breakpoint-switcher in src/index.css */
 @media (max-width: 899px) {
   .design-switcher--desktop { display: none; }
   .design-switcher__mobile-trigger { position: fixed; z-index: 90; right: 14px; bottom: max(14px, env(safe-area-inset-bottom)); display: inline-flex; min-height: 44px; align-items: center; gap: 8px; padding: 0 14px; border: 1px solid rgb(255 255 255 / 25%); border-radius: 999px; background: var(--switcher-bg); color: var(--switcher-fg); box-shadow: 0 12px 32px rgb(0 0 0 / 30%); font: 800 11px/1 "Archivo", sans-serif; letter-spacing: .04em; }

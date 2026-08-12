@@ -49,7 +49,7 @@ function DesignRoute({designId, children}: DesignRouteProps) {
       data-design={designId}
       data-design-name={definition.name}
     >
-      <div className="design-route__content">{children}</div>
+      <div className="design-route__content switcher:px-[66px]">{children}</div>
       <DesignSwitcher activeDesign={designId} />
     </div>
   );
