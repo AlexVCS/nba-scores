@@ -31,7 +31,7 @@ const YEARS_PER_PAGE = 9;
 const calendarNavButton =
   "flex size-[34px] shrink-0 cursor-pointer items-center justify-center rounded-full border border-hw-ink/16 bg-transparent text-hw-court transition-colors duration-[160ms] [transition-timing-function:ease] hover:border-hw-accent hover:text-hw-accent data-disabled:cursor-default data-disabled:opacity-[.35] data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-hw-accent motion-reduce:transition-none max-[700px]:size-10 [&_svg]:size-[15px]";
 const travelOption =
-  "cursor-pointer rounded-lg border border-transparent bg-transparent px-0 py-3 text-center text-[13px] font-semibold text-hw-ink tabular-nums data-hovered:bg-hw-ink/9 data-disabled:cursor-default data-disabled:bg-transparent data-disabled:text-[color-mix(in_srgb,var(--hw-muted)_45%,var(--hw-surface))] data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-hw-accent";
+  "cursor-pointer rounded-lg border border-transparent bg-transparent px-0 py-3 text-center text-[13px] font-semibold text-hw-ink tabular-nums data-hovered:bg-hw-ink/9 data-disabled:cursor-default data-disabled:bg-transparent data-disabled:text-hw-court/70 dark:data-disabled:text-hw-muted/45 data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-hw-accent";
 
 const toJsDate = (date: CalendarDate) => new Date(date.year, date.month - 1, date.day);
 const longDate = (date: CalendarDate) =>
@@ -211,10 +211,10 @@ function MarqueeDatePicker() {
           <path d="M3 10h18M8 3v4M16 3v4" />
         </svg>
       </div>
-      <p className="mx-0.5 mt-2 text-xs font-semibold text-hw-muted">Type any date back to 1946 — Enter to go</p>
+      <p className="mx-0.5 mt-2 text-xs font-semibold text-hw-court dark:text-hw-muted">Type any date back to 1946 — Enter to go</p>
       <div className="my-4 -mx-5 h-px bg-hw-line max-[700px]:-mx-4" role="presentation" />
 
-      <div className="min-h-[300px] w-[292px] max-[700px]:min-h-0 max-[700px]:w-full">
+      <div className="min-h-[270px] w-[292px] max-[700px]:min-h-0 max-[700px]:w-full">
         {view === "calendar" && (
           <Calendar
             value={selected}
@@ -248,13 +248,13 @@ function MarqueeDatePicker() {
             </header>
             <CalendarGrid weekdayStyle="short" className="mx-auto border-separate [border-spacing:3px]">
               <CalendarGridHeader>
-                {(day) => <CalendarHeaderCell className="pb-1 text-[11px] font-semibold text-hw-muted">{day.slice(0, 2)}</CalendarHeaderCell>}
+                {(day) => <CalendarHeaderCell className="pb-1 text-[11px] font-semibold text-hw-court dark:text-hw-muted">{day.slice(0, 2)}</CalendarHeaderCell>}
               </CalendarGridHeader>
               <CalendarGridBody>
                 {(date) => (
                   <CalendarCell
                     date={date}
-                    className="flex size-9 cursor-pointer items-center justify-center rounded-full text-[13px] text-hw-ink outline-none data-hovered:bg-hw-ink/9 data-outside-month:invisible data-unavailable:cursor-default data-unavailable:text-[color-mix(in_srgb,var(--hw-muted)_62%,var(--hw-surface))] data-unavailable:line-through data-unavailable:data-hovered:bg-transparent data-disabled:cursor-default data-disabled:text-[color-mix(in_srgb,var(--hw-muted)_45%,var(--hw-surface))] data-selected:bg-hw-accent data-selected:font-extrabold data-selected:text-hw-accent-contrast data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-hw-accent max-[700px]:size-10 max-[700px]:text-sm"
+                    className="flex size-9 cursor-pointer items-center justify-center rounded-full text-[13px] text-hw-ink outline-none data-hovered:bg-hw-ink/9 data-outside-month:invisible data-unavailable:cursor-default data-unavailable:text-hw-court dark:data-unavailable:text-hw-muted/62 data-unavailable:line-through data-unavailable:data-hovered:bg-transparent data-disabled:cursor-default data-disabled:text-hw-court/70 dark:data-disabled:text-hw-muted/45 data-selected:bg-hw-accent data-selected:font-extrabold data-selected:text-hw-accent-contrast data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-hw-accent max-[700px]:size-10 max-[700px]:text-sm"
                   />
                 )}
               </CalendarGridBody>
@@ -373,9 +373,10 @@ function MarqueeDatePicker() {
             )}
           </Button>
           {isNarrow ? (
-            /* Portals carry the scope because react-aria mounts them under document.body. */
-            <ModalOverlay className="design-hardwood group fixed inset-0 z-[130] flex items-end bg-black/50 font-hw-display text-hw-ink data-entering:animate-hw-fade-in data-exiting:animate-hw-fade-out motion-reduce:data-entering:animate-none motion-reduce:data-exiting:animate-none" isDismissable>
-              <Modal className="w-full rounded-t-2xl border border-b-0 border-hw-line bg-hw-surface px-4 pt-2.5 pb-[calc(18px+env(safe-area-inset-bottom))] group-data-entering:animate-hw-sheet-up motion-reduce:group-data-entering:animate-none">
+            /* Portals carry the scope because react-aria mounts them under document.body.
+               bg needs ! where design-hardwood is on the same element: its unlayered `background: var(--hw-page)` beats layered utilities. */
+            <ModalOverlay className="design-hardwood group fixed inset-0 z-[130] flex items-end bg-black/50! font-hw-display text-hw-ink data-entering:animate-hw-fade-in data-exiting:animate-hw-fade-out motion-reduce:data-entering:animate-none motion-reduce:data-exiting:animate-none" isDismissable>
+              <Modal className="w-full rounded-t-2xl border border-b-0 border-hw-line bg-white px-4 pt-2.5 pb-[calc(18px+env(safe-area-inset-bottom))] group-data-entering:animate-hw-sheet-up dark:bg-hw-surface motion-reduce:group-data-entering:animate-none">
                 <div className="mx-auto mb-3.5 h-1 w-9 rounded-sm bg-hw-ink/25" role="presentation" />
                 {pickerDialog}
               </Modal>
@@ -383,13 +384,13 @@ function MarqueeDatePicker() {
           ) : (
             /* Portals carry the scope because react-aria mounts them under document.body. */
             <Popover
-              className="design-hardwood overflow-y-auto overscroll-contain rounded-hw border border-hw-line bg-hw-surface font-hw-display text-hw-ink shadow-hw-card [scrollbar-gutter:stable] data-entering:animate-hw-pop-in data-exiting:animate-hw-pop-out motion-reduce:data-entering:animate-none motion-reduce:data-exiting:animate-none"
+              className="design-hardwood overflow-y-auto overscroll-contain rounded-hw border border-hw-line bg-white! font-hw-display text-hw-ink shadow-hw-card [scrollbar-gutter:stable] data-entering:animate-hw-pop-in data-exiting:animate-hw-pop-out dark:bg-hw-surface! motion-reduce:data-entering:animate-none motion-reduce:data-exiting:animate-none"
               placement="bottom"
               offset={20}
               containerPadding={12}
               shouldFlip={false}
             >
-              <OverlayArrow className="[&>div]:size-[13px] [&>div]:translate-y-[-6.5px] [&>div]:rotate-45 [&>div]:border-t [&>div]:border-l [&>div]:border-hw-line [&>div]:bg-hw-surface">
+              <OverlayArrow className="[&>div]:size-[13px] [&>div]:translate-y-[-6.5px] [&>div]:rotate-45 [&>div]:border-t [&>div]:border-l [&>div]:border-hw-line [&>div]:bg-white dark:[&>div]:bg-hw-surface">
                 <div />
               </OverlayArrow>
               {pickerDialog}
