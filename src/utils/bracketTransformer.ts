@@ -194,7 +194,7 @@ function createBracketEdges(
       targetHandle,
       animated: false,
       style: {
-        stroke: '#f59e0b',
+        stroke: 'var(--hw-bracket-line, #f59e0b)',
         strokeWidth: 2,
       },
       type: 'bracketEdge',

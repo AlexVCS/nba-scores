@@ -9,6 +9,7 @@
   --hw-accent-ink: #7c5a00;
   --hw-accent-contrast: #131313;
   --hw-line: #ddd2b4;
+  --hw-bracket-line: #131210;
   --hw-winner-arrow: #1d8f46;
   --hw-shadow-card: 0 10px 26px rgb(43 29 6 / 14%);
   --hw-shadow-small: 0 5px 14px rgb(43 29 6 / 14%);
@@ -30,6 +31,7 @@
   --hw-accent: #ffd524;
   --hw-accent-ink: #ffd524;
   --hw-line: #2b2f28;
+  --hw-bracket-line: #f59e0b;
   --hw-winner-arrow: #43d97b;
   --hw-shadow-card: 0 18px 42px rgb(0 0 0 / 50%);
   --hw-shadow-small: 0 8px 22px rgb(0 0 0 / 45%);
@@ -48,6 +50,7 @@
   --color-hw-accent-ink: var(--hw-accent-ink);
   --color-hw-accent-contrast: var(--hw-accent-contrast);
   --color-hw-line: var(--hw-line);
+  --color-hw-bracket-line: var(--hw-bracket-line);
   --color-hw-winner-arrow: var(--hw-winner-arrow);
   --shadow-hw-card: var(--hw-shadow-card);
   --shadow-hw-small: var(--hw-shadow-small);
