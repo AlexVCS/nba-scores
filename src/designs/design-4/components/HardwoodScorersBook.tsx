@@ -189,11 +189,13 @@ interface HardwoodScorersBookProps {
 }
 
 // Row tracks: [headshot] [name] [stat columns] [chevron]. The mobile facet always
-// carries four columns; the wide ledger carries the full eleven.
+// carries four columns; the wide ledger carries the full eleven. Stat tracks floor
+// at max-content so a wide value (a totals line like "20-28") never wraps; the
+// ellipsized name column absorbs the slack instead.
 const rowTracks = {
   stacked:
-    "grid-cols-[44px_minmax(0,1fr)_repeat(4,minmax(38px,auto))_15px] max-[420px]:grid-cols-[minmax(0,1fr)_repeat(4,minmax(38px,auto))_15px] min-[900px]:grid-cols-[44px_minmax(0,2fr)_repeat(11,minmax(46px,1fr))_30px]",
-  comparison: "grid-cols-[28px_minmax(82px,1.9fr)_repeat(11,minmax(0,1fr))_12px]",
+    "grid-cols-[44px_minmax(0,1fr)_repeat(4,minmax(38px,auto))_15px] max-[420px]:grid-cols-[minmax(0,1fr)_repeat(4,minmax(38px,auto))_15px] min-[900px]:grid-cols-[44px_minmax(0,2fr)_repeat(11,minmax(max-content,1fr))_30px]",
+  comparison: "grid-cols-[28px_minmax(82px,1.9fr)_repeat(11,minmax(max-content,1fr))_12px]",
 };
 
 function HardwoodScorersBook({team, comparison = false}: HardwoodScorersBookProps) {
@@ -281,7 +283,7 @@ function HardwoodScorersBook({team, comparison = false}: HardwoodScorersBookProp
                   {columns.map((column) => (
                     <span key={column.label} className="grid justify-items-end gap-[3px]">
                       {!wide && <small className={colLabel}>{column.label}</small>}
-                      <strong className={`leading-none font-bold tabular-nums ${comparison ? "text-[10px]" : "text-[13px]"}`}>{column.value(player.statistics)}</strong>
+                      <strong className={`leading-none font-bold tabular-nums whitespace-nowrap ${comparison ? "text-[10px]" : "text-[13px]"}`}>{column.value(player.statistics)}</strong>
                     </span>
                   ))}
                   <ChevronDown aria-hidden="true" className={`shrink-0 justify-self-end text-hw-muted transition-transform duration-[180ms] group-aria-expanded:rotate-180 group-aria-expanded:text-hw-accent-ink motion-reduce:transition-none ${comparison ? "w-3" : "w-[15px]"}`} />
@@ -324,7 +326,7 @@ function HardwoodScorersBook({team, comparison = false}: HardwoodScorersBookProp
                 {isMinutes ? null : isUnavailable ? (
                   <strong className={`leading-none font-bold text-hw-muted ${comparison ? "text-[10px]" : "text-[13px]"}`} aria-label="Not totaled">—</strong>
                 ) : (
-                  <strong className={`leading-none font-extrabold tabular-nums ${comparison ? "text-[11px]" : "text-sm"} ${isPoints ? "dark:text-hw-accent" : ""}`}>{column.value(totals)}</strong>
+                  <strong className={`leading-none font-extrabold tabular-nums whitespace-nowrap ${comparison ? "text-[11px]" : "text-sm"} ${isPoints ? "dark:text-hw-accent" : ""}`}>{column.value(totals)}</strong>
                 )}
               </span>
             );

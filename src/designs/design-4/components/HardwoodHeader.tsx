@@ -1,5 +1,6 @@
 import {Link} from "react-router";
 import DarkModeToggle from "@/components/DarkModeToggle";
+import {useTheme} from "@/hooks/useTheme";
 import {designPath} from "../../designRoutes";
 import {hwContainer} from "./hardwoodStyles";
 
@@ -9,6 +10,8 @@ interface HardwoodHeaderProps {
 
 function HardwoodHeader({section}: HardwoodHeaderProps) {
   const usesPlayoffzLogo = section === "playoffs" || section === "series";
+  const {theme} = useTheme();
+  const playoffzSrc = theme === "dark" ? "/images/playoffz-dark.png" : "/images/playoffz.png";
   const scoresActive = section === "scores" || section === "boxscore";
   const playoffsActive = section === "playoffs" || section === "series";
   const navLink =
@@ -25,7 +28,7 @@ function HardwoodHeader({section}: HardwoodHeaderProps) {
             className={usesPlayoffzLogo
               ? "block h-auto w-[clamp(250px,28vw,340px)]"
               : "my-[clamp(-40px,-3vw,-28px)] block h-auto w-[clamp(230px,24vw,300px)] max-[700px]:w-[clamp(200px,64vw,260px)]"}
-            src={usesPlayoffzLogo ? "/images/playoffz.png" : "/images/dark-mode-logo.webp"}
+            src={usesPlayoffzLogo ? playoffzSrc : "/images/dark-mode-logo.webp"}
             alt={usesPlayoffzLogo ? "NBA Playoffz" : "NBA Scorez"}
           />
         </Link>

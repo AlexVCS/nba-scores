@@ -1,5 +1,6 @@
 import {Link} from "react-router";
 import DarkModeToggle from "@/components/DarkModeToggle";
+import {useTheme} from "@/hooks/useTheme";
 import {getDesignDefinition} from "../designRegistry";
 import {designPath} from "../designRoutes";
 import type {AlternateDesignId} from "../types";
@@ -21,6 +22,8 @@ function DesignHeader({designId, section}: DesignHeaderProps) {
   const isPlaybook = designId === "design-1";
   const showsLogo = LOGO_DESIGNS.has(designId);
   const usesPlayoffzLogo = designId === "design-4" && (section === "playoffs" || section === "series");
+  const {theme} = useTheme();
+  const playoffzSrc = theme === "dark" ? "/images/playoffz-dark.png" : "/images/playoffz.png";
 
   return (
     <header className="concept-header">
@@ -35,7 +38,7 @@ function DesignHeader({designId, section}: DesignHeaderProps) {
           <Link to={designPath(designId, "/")} className="concept-header__logo-link">
             <img
               className={`concept-header__logo${usesPlayoffzLogo ? " concept-header__logo--playoffz" : ""}`}
-              src={usesPlayoffzLogo ? "/images/playoffz.png" : "/images/dark-mode-logo.webp"}
+              src={usesPlayoffzLogo ? playoffzSrc : "/images/dark-mode-logo.webp"}
               alt={usesPlayoffzLogo ? "NBA Playoffz" : "NBA Scorez"}
             />
           </Link>

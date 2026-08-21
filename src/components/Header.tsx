@@ -1,9 +1,13 @@
+import { useTheme } from "@/hooks/useTheme";
+
 type HeaderProps = {
   variant?: "default" | "playoffs";
 };
 
 const Header = ({ variant = "default" }: HeaderProps) => {
   const isPlayoffs = variant === "playoffs";
+  const { theme } = useTheme();
+  const playoffzSrc = theme === "dark" ? "/images/playoffz-dark.png" : "/images/playoffz.png";
 
   return (
     <article>
@@ -11,7 +15,7 @@ const Header = ({ variant = "default" }: HeaderProps) => {
         {isPlayoffs ? (
           <img
             className="w-48 sm:w-xs"
-            src="/images/playoffz.png"
+            src={playoffzSrc}
             alt="NBA Playoffz Logo"
           />
         ) : (
