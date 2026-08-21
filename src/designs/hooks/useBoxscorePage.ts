@@ -3,6 +3,31 @@ import {useParams} from "react-router";
 import type {GameSummaryData, GameSummaryTeam, Player} from "@/helpers/helpers";
 import {getBoxScores, getGameSummary} from "@/services/nbaService";
 
+// Team-level totals from the box score endpoint. Every field beyond `points`
+// is optional so older payloads and fixtures that only carry the score keep working.
+export interface DesignTeamStatistics {
+  points: number;
+  minutes?: string;
+  fieldGoalsMade?: number;
+  fieldGoalsAttempted?: number;
+  fieldGoalsPercentage?: number;
+  threePointersMade?: number;
+  threePointersAttempted?: number;
+  threePointersPercentage?: number;
+  freeThrowsMade?: number;
+  freeThrowsAttempted?: number;
+  freeThrowsPercentage?: number;
+  reboundsOffensive?: number;
+  reboundsDefensive?: number;
+  reboundsTotal?: number;
+  assists?: number;
+  steals?: number;
+  blocks?: number;
+  turnovers?: number;
+  foulsPersonal?: number;
+  plusMinusPoints?: number;
+}
+
 export interface DesignBoxscoreTeam {
   teamId: number;
   teamTricode: string;
@@ -10,7 +35,7 @@ export interface DesignBoxscoreTeam {
   teamName: string;
   score: number;
   players: Player[];
-  statistics?: {points: number};
+  statistics?: DesignTeamStatistics;
 }
 
 export interface DesignBoxscoreGame {

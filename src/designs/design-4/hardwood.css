@@ -22,7 +22,7 @@
 }
 
 .dark .design-hardwood {
-  --hw-page: #143c31;
+  --hw-page: #12372d;
   --hw-surface: #161815;
   --hw-surface-muted: #101310;
   --hw-ink: #fff;
@@ -36,7 +36,9 @@
   --hw-shadow-card: 0 18px 42px rgb(0 0 0 / 50%);
   --hw-shadow-small: 0 8px 22px rgb(0 0 0 / 45%);
   --hw-shadow-card-hover: 0 24px 52px rgb(0 0 0 / 60%);
-  --hw-page-texture: linear-gradient(90deg, transparent 49.7%, rgb(255 255 255 / 18%) 49.8% 50.2%, transparent 50.3%), radial-gradient(circle at 50% 50%, transparent 0 110px, rgb(255 255 255 / 15%) 111px 114px, transparent 115px);
+  --hw-court-line: rgb(236 245 230 / 26%);
+  /* Floodlit green: court lines, a floodlight pool, edge vignette, plank seams + lacquer sheen, staggered plank ends */
+  --hw-page-texture: linear-gradient(90deg, transparent calc(50% - 1.5px), var(--hw-court-line) calc(50% - 1.5px) calc(50% + 1.5px), transparent calc(50% + 1.5px)), radial-gradient(circle at 50% 50%, transparent 0 118px, var(--hw-court-line) 119px 122px, transparent 123px), linear-gradient(90deg, transparent calc(50% - 700px), var(--hw-court-line) calc(50% - 700px) calc(50% - 697px), transparent calc(50% - 697px) calc(50% + 697px), var(--hw-court-line) calc(50% + 697px) calc(50% + 700px), transparent calc(50% + 700px)), radial-gradient(ellipse 62% 55% at 50% 38%, rgb(74 140 110 / 55%) 0%, rgb(40 96 76 / 22%) 45%, transparent 72%), radial-gradient(ellipse 120% 100% at 50% 50%, transparent 55%, rgb(3 14 10 / 70%) 100%), repeating-linear-gradient(90deg, rgb(0 0 0 / 22%) 0 1px, rgb(255 255 255 / 4%) 1px 2px, transparent 2px 72px), repeating-linear-gradient(90deg, transparent 0 36px, rgb(255 255 255 / 2.5%) 36px 54px, transparent 54px 72px), repeating-linear-gradient(0deg, transparent 0 395px, rgb(0 0 0 / 14%) 395px 396px, transparent 396px 720px);
 }
 
 @theme inline {
@@ -63,6 +65,8 @@
   --animate-hw-fade-in: hw-fade-in 180ms ease-out;
   --animate-hw-fade-out: hw-fade-in 130ms ease-in reverse forwards;
   --animate-hw-sheet-up: hw-sheet-up 260ms cubic-bezier(.16, 1, .3, 1);
+  --animate-hw-unfold: hw-unfold 200ms ease;
+  --animate-hw-fill: hw-fill 420ms cubic-bezier(.16, 1, .3, 1);
 }
 
 @keyframes hw-enter {
@@ -83,4 +87,12 @@
 
 @keyframes hw-sheet-up {
   from { transform: translateY(100%); }
+}
+
+@keyframes hw-unfold {
+  from { opacity: 0; transform: translateY(-4px); }
+}
+
+@keyframes hw-fill {
+  from { transform: scaleX(0); }
 }

@@ -9,7 +9,7 @@ describe("design routes", () => {
     expect(detectDesignId(`${DESIGN_PREVIEW_BASE_PATH}/design-${number}/playoffs`)).toBe(`design-${number}`);
   });
 
-  it.each([5, 11, 14, 16])("does not recognize retired design-%s", (number) => {
+  it.each([5, 6, 11, 14, 16])("does not recognize retired design-%s", (number) => {
     expect(detectDesignId(`${DESIGN_PREVIEW_BASE_PATH}/design-${number}/playoffs`)).toBe("original");
   });
 

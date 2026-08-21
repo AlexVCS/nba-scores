@@ -21,7 +21,7 @@ function HardwoodGameSummary({summary}: HardwoodGameSummaryProps) {
 
   return (
     <section className={`${hwNarrowContainer} mt-[46px] mb-[60px] text-center`}>
-      <span className="text-[10px] font-extrabold tracking-[.26em] text-hw-court uppercase">{summary.gameStatusText}</span>
+      <span className="text-sm font-extrabold tracking-[.26em] text-hw-court uppercase dark:text-hw-accent">{summary.gameStatusText}</span>
       <div className="mt-6 grid grid-cols-2 gap-px border border-hw-line bg-hw-line max-[700px]:[&_img]:size-[52px]!">
         {[summary.awayTeam, summary.homeTeam].map((team) => (
           <div key={team.teamId || team.teamTricode} className="grid grid-cols-[auto_auto_1fr] items-center gap-[18px] bg-hw-surface px-5 py-[34px] text-left max-[700px]:grid-cols-1 max-[700px]:justify-items-center max-[700px]:px-2.5 max-[700px]:py-[25px] max-[700px]:text-center">
@@ -39,7 +39,7 @@ function HardwoodGameSummary({summary}: HardwoodGameSummaryProps) {
         ))}
       </div>
       {periods.length > 0 && (
-        <div className="mt-3.5 overflow-x-auto rounded-hw border border-hw-line bg-hw-surface [&_table]:w-full [&_table]:min-w-[460px] [&_table]:border-collapse [&_th]:border-r [&_th]:border-hw-line [&_th]:px-3.5 [&_th]:py-2.5 [&_th]:text-center [&_th]:text-xs [&_td]:border-r [&_td]:border-hw-line [&_td]:px-3.5 [&_td]:py-2.5 [&_td]:text-center [&_td]:text-xs">
+        <div className="mt-3.5 overflow-x-auto rounded-hw border border-hw-line bg-hw-surface max-[700px]:hidden [&_table]:w-full [&_table]:min-w-[460px] [&_table]:border-collapse [&_th]:border-r [&_th]:border-hw-line [&_th]:px-3.5 [&_th]:py-2.5 [&_th]:text-center [&_th]:text-xs [&_td]:border-r [&_td]:border-hw-line [&_td]:px-3.5 [&_td]:py-2.5 [&_td]:text-center [&_td]:text-xs">
           <table>
             <thead><tr><th>TEAM</th>{periods.map((period) => <th key={period}>{periodLabel(period)}</th>)}</tr></thead>
             <tbody>

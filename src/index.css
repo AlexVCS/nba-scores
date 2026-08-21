@@ -7,6 +7,11 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Subtle light halo so dark historical/fallback logos stay legible on dark backgrounds. */
+.dark .team-logo--halo {
+  filter: drop-shadow(0 0 0.5px rgb(255 255 255 / 0.85)) drop-shadow(0 0 2px rgb(255 255 255 / 0.35));
+}
+
 .react-flow__controls-button {
   background: #1a1a1a !important;
   border: none !important;

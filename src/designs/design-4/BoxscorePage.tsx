@@ -1,4 +1,5 @@
 import {useState} from "react";
+import {useSearchParams} from "react-router";
 import PlayerHeadshot from "@/components/PlayerHeadshot";
 import type {Player} from "@/helpers/helpers";
 import {useBoxscorePage} from "../hooks/useBoxscorePage";
@@ -10,7 +11,7 @@ import HardwoodGameSummary from "./components/HardwoodGameSummary";
 import HardwoodHeader from "./components/HardwoodHeader";
 import HardwoodPage from "./components/HardwoodPage";
 import HardwoodPageState from "./components/HardwoodPageState";
-import HardwoodPlayerTable from "./components/HardwoodPlayerTable";
+import HardwoodScorersBook from "./components/HardwoodScorersBook";
 import {hwContainer} from "./components/hardwoodStyles";
 
 const playerName = (player: Player) => `${player.firstName} ${player.familyName}`;
@@ -56,6 +57,20 @@ function HardwoodLeaders({game}: {game: {awayTeam: DesignBoxscoreTeam; homeTeam:
 function BoxscorePage() {
   const state = useBoxscorePage();
   const [side, setSide] = useState<"away" | "home">("away");
+  // Desktop ledgers compare by default; `?view=stacked` opts into the stacked
+  // layout so a link can carry the reader straight to either arrangement.
+  const [searchParams, setSearchParams] = useSearchParams();
+  const isComparing = searchParams.get("view") !== "stacked";
+  const toggleComparing = () =>
+    setSearchParams(
+      (current) => {
+        const next = new URLSearchParams(current);
+        if (isComparing) next.set("view", "stacked");
+        else next.delete("view");
+        return next;
+      },
+      {replace: true},
+    );
   const game = state.game;
   const activeTeam = game ? (side === "away" ? game.awayTeam : game.homeTeam) : null;
   const teamButton =
@@ -71,15 +86,37 @@ function BoxscorePage() {
           {game && activeTeam ? (
             <>
               <HardwoodLeaders game={game} />
-              <div className="sticky top-2.5 z-40 mx-auto mt-[26px] grid w-[min(560px,calc(100%_-_48px))] grid-cols-2 gap-1.5 rounded-[14px] border border-hw-line bg-hw-surface/88 p-1.5 shadow-hw-small backdrop-blur-[10px] max-[700px]:w-[min(calc(100%_-_28px),560px)]" role="group" aria-label="Choose team box score">
+              <div className="sticky top-2.5 z-40 mx-auto mt-[26px] grid w-[min(560px,calc(100%_-_48px))] grid-cols-2 gap-1.5 rounded-[14px] border border-hw-line bg-hw-surface/88 p-1.5 shadow-hw-small backdrop-blur-[10px] min-[900px]:hidden max-[700px]:w-[min(calc(100%_-_28px),560px)]" role="group" aria-label="Choose team box score">
                 {([["away", game.awayTeam], ["home", game.homeTeam]] as const).map(([key, team]) => (
                   <button className={teamButton} key={key} type="button" aria-pressed={side === key} onClick={() => setSide(key)}>
                     {team.teamTricode} <strong>{teamScore(team)}</strong>
                   </button>
                 ))}
               </div>
-              <div className="mx-auto mt-1 mb-20 w-[min(1180px,calc(100%_-_32px))]">
-                <HardwoodPlayerTable key={activeTeam.teamId} team={activeTeam} />
+              <div className="mx-auto mt-1 mb-20 w-[min(1180px,calc(100%_-_32px))] min-[900px]:hidden">
+                <HardwoodScorersBook key={activeTeam.teamId} team={activeTeam} />
+              </div>
+              <div className="hidden min-[900px]:block">
+                <div className="mx-auto mt-[26px] mb-[18px] flex w-[min(1180px,calc(100%_-_32px))] items-center justify-center border-y border-hw-line py-3">
+                  <button
+                    type="button"
+                    className="min-h-[52px] min-w-[184px] cursor-pointer rounded-hw border border-hw-line bg-hw-surface px-6 text-xs font-bold tracking-[.12em] text-hw-ink uppercase whitespace-nowrap shadow-hw-small transition-[transform,background-color,color] duration-[160ms] [transition-timing-function:cubic-bezier(.16,1,.3,1)] hover:bg-hw-surface-muted active:translate-y-px focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-hw-ink motion-reduce:transition-none"
+                    onClick={toggleComparing}
+                  >
+                    {isComparing ? "Stack teams" : "Compare teams"}
+                  </button>
+                </div>
+                {isComparing ? (
+                  <div className="mx-auto mb-20 grid w-[min(1760px,calc(100%_-_32px))] grid-cols-2 items-stretch gap-3">
+                    <HardwoodScorersBook team={game.awayTeam} comparison />
+                    <HardwoodScorersBook team={game.homeTeam} comparison />
+                  </div>
+                ) : (
+                  <div className="mx-auto mb-20 grid w-[min(1180px,calc(100%_-_32px))] gap-12">
+                    <HardwoodScorersBook team={game.awayTeam} />
+                    <HardwoodScorersBook team={game.homeTeam} />
+                  </div>
+                )}
               </div>
             </>
           ) : <HardwoodPageState kind="empty" title="Player ledger unavailable" detail="The game summary is still available above." />}
