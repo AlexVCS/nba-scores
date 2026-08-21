@@ -189,7 +189,8 @@ describe("hardwood scorer's book", () => {
 
     const totals = screen.getByLabelText("Cleveland Cavaliers totals");
     expect(totals).toHaveTextContent("Totals");
-    for (const value of ["240", "44-88", "12-36", "17-20", "47", "29", "9", "4", "+13", "117"]) {
+    expect(totals).not.toHaveTextContent("240");
+    for (const value of ["44-88", "12-36", "17-20", "47", "29", "9", "4", "+13", "117"]) {
       expect(totals).toHaveTextContent(value);
     }
     expect(totals).not.toHaveTextContent("—");
@@ -204,7 +205,7 @@ describe("hardwood scorer's book", () => {
     render(<HardwoodScorersBook team={team} />);
 
     const totals = screen.getByLabelText("Cleveland Cavaliers totals");
-    expect(totals).toHaveTextContent("Totals3011756");
+    expect(totals).toHaveTextContent("Totals11756");
     expect(totals.querySelectorAll("small")).toHaveLength(0);
 
     await user.click(screen.getByRole("button", {name: "Shooting"}));
@@ -217,7 +218,7 @@ describe("hardwood scorer's book", () => {
     render(<HardwoodScorersBook team={team} />);
 
     const totals = screen.getByLabelText("Cleveland Cavaliers totals");
-    expect(totals).toHaveTextContent("30");
+    expect(totals).not.toHaveTextContent("30");
     expect(totals).toHaveTextContent("5-10");
     expect(totals).toHaveTextContent("117");
   });

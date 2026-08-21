@@ -316,11 +316,12 @@ function HardwoodScorersBook({team, comparison = false}: HardwoodScorersBookProp
           <span className={comparison ? "" : "max-[420px]:hidden"} />
           <span className={`self-center font-extrabold tracking-[.14em] uppercase ${comparison ? "text-[9px]" : "text-[10px]"}`}>Totals</span>
           {columns.map((column) => {
+            const isMinutes = column.label === "MIN";
             const isPoints = column.label === "PTS";
             const isUnavailable = column.label === "+/-" && !Number.isFinite(totals.plusMinusPoints);
             return (
               <span key={column.label} className="grid justify-items-end gap-[3px]">
-                {isUnavailable ? (
+                {isMinutes ? null : isUnavailable ? (
                   <strong className={`leading-none font-bold text-hw-muted ${comparison ? "text-[10px]" : "text-[13px]"}`} aria-label="Not totaled">—</strong>
                 ) : (
                   <strong className={`leading-none font-extrabold tabular-nums ${comparison ? "text-[11px]" : "text-sm"} ${isPoints ? "dark:text-hw-accent" : ""}`}>{column.value(totals)}</strong>
