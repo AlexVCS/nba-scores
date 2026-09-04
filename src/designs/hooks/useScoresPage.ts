@@ -9,15 +9,22 @@ interface ScoresResponse {
   games: GameData[];
 }
 
-export function useScoresPage() {
+interface ScoresPageOptions {
+  persistScoreReveal?: boolean;
+}
+
+export function useScoresPage({persistScoreReveal = true}: ScoresPageOptions = {}) {
   const [searchParams] = useSearchParams({date: ""});
   const dateParam = searchParams.get("date") ?? "";
   const [showScores, setShowScores] = useState<boolean>(() => {
+    if (!persistScoreReveal) return false;
     const stored = getItem("showScores");
     return typeof stored === "boolean" ? stored : false;
   });
 
-  useEffect(() => setItem("showScores", showScores), [showScores]);
+  useEffect(() => {
+    if (persistScoreReveal) setItem("showScores", showScores);
+  }, [persistScoreReveal, showScores]);
 
   const query = useQuery({
     queryKey: ["games", dateParam],
@@ -33,7 +40,9 @@ export function useScoresPage() {
     setShowScores,
     hasStartedGames: games.some((game) => game.gameStatus !== 1),
     isLoading: query.isLoading,
+    isFetching: query.isFetching,
     error: query.error,
+    refetch: query.refetch,
     hasData: query.data !== undefined,
   };
 }

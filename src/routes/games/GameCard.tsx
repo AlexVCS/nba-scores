@@ -1,14 +1,17 @@
-import {Link} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import TeamLogos from "@/components/TeamLogos";
+import {isValidDateParam} from "@/helpers/dateParam";
 import {generateWatchLink} from "@/helpers/helpers";
 import type {GameData} from "@/helpers/helpers";
 
 interface GameCardProps {
   showScores: boolean;
   game: GameData;
+  dateParam: string;
 }
 
-function GameCard({game, showScores = false}: GameCardProps) {
+function GameCard({game, showScores = false, dateParam}: GameCardProps) {
+  const location = useLocation();
   const gameHasStarted = game.gameStatus !== 1;
   const shouldShowBoxscore =
     showScores &&
@@ -16,6 +19,8 @@ function GameCard({game, showScores = false}: GameCardProps) {
     game.gameId.length > 0 &&
     game.boxscoreAvailable === true;
   const watchGameLink = generateWatchLink(game.awayTeam.teamTricode, game.homeTeam.teamTricode, game.gameId);
+  const isOriginalPreview = /^\/original(?=\/|$)/.test(location.pathname);
+  const boxscorePath = `${isOriginalPreview ? "/original" : ""}/games/${game.gameId}/boxscore${isValidDateParam(dateParam) ? `?date=${dateParam}` : ""}`;
 
   return (
     <div className="flex justify-center lg:justify-start">
@@ -57,7 +62,7 @@ function GameCard({game, showScores = false}: GameCardProps) {
             ) : (
               <div className="flex flex-col gap-1">
                 {shouldShowBoxscore && (
-                  <Link to={`/games/${game.gameId}/boxscore`}>Box score</Link>
+                  <Link to={boxscorePath}>Box score</Link>
                 )}
                 <Link to={`${watchGameLink}`} target="_blank">
                   Watch

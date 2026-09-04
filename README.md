@@ -1,7 +1,7 @@
 [![alex-linkedin-shield]][alex-linkedin-url]
 
 <div align="center">
-  <img src="./public/images/dark-mode-logo.webp" style="height:200px" />
+  <img src="./public/images/nba-scorez-lockup.svg" style="height:200px" />
    <p align="center">
     Bienvenue! 
     <br />
@@ -104,6 +104,33 @@ To run the backend, open a terminal and run this:
 source server/venv/bin/activate
 uvicorn server.main:app --reload
 ```
+
+### API configuration and phone testing
+
+During development, `VITE_API_URL_DEV` overrides the backend URL. Set it in `.env.local` when using another backend address or port:
+
+```dotenv
+VITE_API_URL_DEV=http://localhost:9000
+```
+
+When that variable is unset or empty, requests use the browser's protocol and hostname on port 8000. This works on your computer and on a phone accessing your computer's LAN IP.
+
+For phone testing, connect both devices to the same network. Run these commands in separate terminals from the project root:
+
+```bash
+VITE_API_URL_DEV= pnpm dev --host 0.0.0.0 --port 5173 --strictPort
+```
+
+```bash
+source server/venv/bin/activate
+uvicorn server.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+Open `http://<your-computer-LAN-IP>:5173` on the phone. The empty command-line override enables the hostname fallback even if `.env` contains a development URL. For a custom backend, set `VITE_API_URL_DEV` to an address reachable from the phone; `localhost` on a phone refers to the phone itself. The backend's existing CORS configuration allows private-network IP origins on HTTP port 5173.
+
+For deployment, set `VITE_API_URL_PROD` in the frontend build environment to your public backend URL, such as `https://api.nbascorez.com`, before running `pnpm build`. Production builds use this value independently of `VITE_API_URL_DEV` and the phone fallback. Use a URL without a trailing slash and ensure the backend allows your deployed frontend origin through CORS. Restart the development server after changing environment variables; rebuild the frontend after changing the production URL.
+
+Open `/design-1` to view Gold on Hardwood, or `/original` to compare the original design with the design switcher. These routes require no token and work on the HTTP LAN address above. Deep links use the same prefix, for example `/design-1/playoffs`.
 
 ## VS Code Tasks
 

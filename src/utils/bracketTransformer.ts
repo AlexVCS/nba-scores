@@ -25,6 +25,8 @@ export type BracketNodeData = {
   sizing: BracketSizing;
   targetWins: number | null;
   isFinals: boolean;
+  isFeaturedFinals: boolean;
+  displayWidth: number;
 };
 
 function groupBy<T>(items: T[], getKey: (item: T) => string): Record<string, T[]> {
@@ -43,6 +45,21 @@ export function groupSeriesByBracketGroup(model: PlayoffBracketModel): Record<st
 function isModernTwoConferenceModel(model: PlayoffBracketModel): boolean {
   const groupIds = new Set(model.groups.map(group => group.id));
   return groupIds.has('west-conference') && groupIds.has('east-conference') && groupIds.has('finals');
+}
+
+function supportsModernPresentation(model: PlayoffBracketModel): boolean {
+  return isModernTwoConferenceModel(model) && model.format.era === 'modern-play-in-era';
+}
+
+function sizingForModel(sizing: BracketSizing, modernPresentation: boolean): BracketSizing {
+  if (modernPresentation) return sizing;
+  return {
+    ...sizing,
+    nodeWidth: sizing.historicalNodeWidth,
+    finalsNodeWidth: sizing.historicalNodeWidth,
+    hSpacing: sizing.historicalHSpacing,
+    vSpacing: sizing.historicalVSpacing,
+  };
 }
 
 function getFinalsRound(model: PlayoffBracketModel): number {
@@ -127,13 +144,20 @@ function buildNode(
   season: string,
   sizing: BracketSizing,
   modernLayout: boolean,
+  modernPresentation: boolean,
 ): Node<BracketNodeData> | null {
   if (!shouldShowSeries(series, model, revealedRounds)) return null;
   const [team1, team2] = series.teams;
   if (!team1 || !team2) return null;
-  const { position, lane } = modernLayout
+  const { position: basePosition, lane } = modernLayout
     ? getModernPosition(series, model, sizing)
     : getHistoricalPosition(series, model, sizing);
+  const position = modernPresentation && series.isFinals
+    ? {
+        x: basePosition.x - ((sizing.finalsNodeWidth - sizing.nodeWidth) / 2),
+        y: basePosition.y,
+      }
+    : basePosition;
 
   return {
     id: series.seriesKey,
@@ -158,6 +182,8 @@ function buildNode(
       sizing,
       targetWins: series.targetWins,
       isFinals: series.isFinals,
+      isFeaturedFinals: modernPresentation && series.isFinals,
+      displayWidth: modernPresentation && series.isFinals ? sizing.finalsNodeWidth : sizing.nodeWidth,
     },
   };
 }
@@ -215,16 +241,16 @@ function createGroupLabels(
       {
         id: 'group-label-west',
         type: 'conferenceLabel',
-        position: { x: nodeWidth / 2, y: -40 },
-        data: { label: 'Western Conference' },
+        position: { x: nodeWidth / 2, y: -48 },
+        data: { label: 'Western Conf.' },
         selectable: false,
         draggable: false,
       },
       {
         id: 'group-label-east',
         type: 'conferenceLabel',
-        position: { x: hSpacing * maxConferenceRound * 2 + nodeWidth / 2, y: -40 },
-        data: { label: 'Eastern Conference' },
+        position: { x: hSpacing * maxConferenceRound * 2 + nodeWidth / 2, y: -48 },
+        data: { label: 'Eastern Conf.' },
         selectable: false,
         draggable: false,
       },
@@ -257,10 +283,12 @@ export function transformToBracketData(
   sizing: BracketSizing,
 ): { nodes: Node[]; edges: Edge[] } {
   const modernLayout = isModernTwoConferenceModel(model);
+  const modernPresentation = supportsModernPresentation(model);
+  const layoutSizing = sizingForModel(sizing, modernPresentation);
   const seriesNodes = model.series
-    .map(series => buildNode(series, model, revealedRounds, season, sizing, modernLayout))
+    .map(series => buildNode(series, model, revealedRounds, season, layoutSizing, modernLayout, modernPresentation))
     .filter((node): node is Node<BracketNodeData> => node !== null);
-  const labelNodes = createGroupLabels(model, sizing, modernLayout);
+  const labelNodes = createGroupLabels(model, layoutSizing, modernLayout);
   const edges = createBracketEdges(seriesNodes, model, revealedRounds);
 
   return { nodes: [...seriesNodes, ...labelNodes], edges };

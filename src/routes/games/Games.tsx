@@ -36,6 +36,7 @@ const Games = () => {
                 key={gamedata.gameId}
                 showScores={showScores}
                 game={gamedata}
+                dateParam={dateParam}
               />
             ))}
           </div>

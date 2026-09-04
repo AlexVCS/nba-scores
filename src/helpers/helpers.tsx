@@ -172,6 +172,10 @@ export type PlayoffBracketResponse = {
 
 export interface Player {
   personId: number;
+  status?: string;
+  played?: number;
+  notPlayingReason?: string;
+  notPlayingDescription?: string;
   firstName: string;
   familyName: string;
   nameI: string;

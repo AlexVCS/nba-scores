@@ -1,0 +1,491 @@
+{
+  "date": "2026-09-04",
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "theme": "dark",
+  "results": "hidden",
+  "seasons": [
+    {
+      "input": "1946-47",
+      "minAdjacentGap": 12,
+      "minDividerGap": 16,
+      "season": "1946-47"
+    },
+    {
+      "input": "1947-48",
+      "minAdjacentGap": 12,
+      "minDividerGap": 16,
+      "season": "1947-48"
+    },
+    {
+      "input": "1948-49",
+      "minAdjacentGap": 2,
+      "minDividerGap": 2,
+      "season": "1948-49"
+    },
+    {
+      "input": "1949-50",
+      "minAdjacentGap": 12,
+      "minDividerGap": 16,
+      "season": "1949-50"
+    },
+    {
+      "input": "1950-51",
+      "minAdjacentGap": 2,
+      "minDividerGap": 2,
+      "season": "1950-51"
+    },
+    {
+      "input": "1951-52",
+      "minAdjacentGap": 2,
+      "minDividerGap": 2,
+      "season": "1951-52"
+    },
+    {
+      "input": "1952-53",
+      "minAdjacentGap": 2,
+      "minDividerGap": 2,
+      "season": "1952-53"
+    },
+    {
+      "input": "1953-54",
+      "minAdjacentGap": 12,
+      "minDividerGap": 16,
+      "season": "1953-54"
+    },
+    {
+      "input": "1954-55",
+      "minAdjacentGap": 123.5,
+      "minDividerGap": 16,
+      "season": "1954-55"
+    },
+    {
+      "input": "1955-56",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "1955-56"
+    },
+    {
+      "input": "1956-57",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "1956-57"
+    },
+    {
+      "input": "1957-58",
+      "minAdjacentGap": 12,
+      "minDividerGap": 16,
+      "season": "1957-58"
+    },
+    {
+      "input": "1958-59",
+      "minAdjacentGap": 123.5,
+      "minDividerGap": 16,
+      "season": "1958-59"
+    },
+    {
+      "input": "1959-60",
+      "minAdjacentGap": 123.5,
+      "minDividerGap": 16,
+      "season": "1959-60"
+    },
+    {
+      "input": "1960-61",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "1960-61"
+    },
+    {
+      "input": "1961-62",
+      "minAdjacentGap": null,
+      "minDividerGap": 16,
+      "season": "1961-62"
+    },
+    {
+      "input": "1962-63",
+      "minAdjacentGap": 2,
+      "minDividerGap": 2,
+      "season": "1962-63"
+    },
+    {
+      "input": "1963-64",
+      "minAdjacentGap": null,
+      "minDividerGap": 16,
+      "season": "1963-64"
+    },
+    {
+      "input": "1964-65",
+      "minAdjacentGap": null,
+      "minDividerGap": 16,
+      "season": "1964-65"
+    },
+    {
+      "input": "1965-66",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "1965-66"
+    },
+    {
+      "input": "1966-67",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "1966-67"
+    },
+    {
+      "input": "1967-68",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "1967-68"
+    },
+    {
+      "input": "1968-69",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "1968-69"
+    },
+    {
+      "input": "1969-70",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "1969-70"
+    },
+    {
+      "input": "1970-71",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "1970-71"
+    },
+    {
+      "input": "1971-72",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "1971-72"
+    },
+    {
+      "input": "1972-73",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "1972-73"
+    },
+    {
+      "input": "1973-74",
+      "minAdjacentGap": 12,
+      "minDividerGap": 16,
+      "season": "1973-74"
+    },
+    {
+      "input": "1974-75",
+      "minAdjacentGap": 2,
+      "minDividerGap": 2,
+      "season": "1974-75"
+    },
+    {
+      "input": "1975-76",
+      "minAdjacentGap": 2,
+      "minDividerGap": 2,
+      "season": "1975-76"
+    },
+    {
+      "input": "1976-77",
+      "minAdjacentGap": -68.5,
+      "minDividerGap": 2,
+      "season": "1976-77"
+    },
+    {
+      "input": "1977-78",
+      "minAdjacentGap": -68.5,
+      "minDividerGap": 2,
+      "season": "1977-78"
+    },
+    {
+      "input": "1978-79",
+      "minAdjacentGap": -68.5,
+      "minDividerGap": 2,
+      "season": "1978-79"
+    },
+    {
+      "input": "1979-80",
+      "minAdjacentGap": 2,
+      "minDividerGap": 2,
+      "season": "1979-80"
+    },
+    {
+      "input": "1980-81",
+      "minAdjacentGap": 2,
+      "minDividerGap": 2,
+      "season": "1980-81"
+    },
+    {
+      "input": "1981-82",
+      "minAdjacentGap": 2,
+      "minDividerGap": 2,
+      "season": "1981-82"
+    },
+    {
+      "input": "1982-83",
+      "minAdjacentGap": 2,
+      "minDividerGap": 2,
+      "season": "1982-83"
+    },
+    {
+      "input": "1983-84",
+      "minAdjacentGap": 2,
+      "minDividerGap": 2,
+      "season": "1983-84"
+    },
+    {
+      "input": "1984-85",
+      "minAdjacentGap": 2,
+      "minDividerGap": 2,
+      "season": "1984-85"
+    },
+    {
+      "input": "1985-86",
+      "minAdjacentGap": 2,
+      "minDividerGap": 2,
+      "season": "1985-86"
+    },
+    {
+      "input": "1986-87",
+      "minAdjacentGap": 2,
+      "minDividerGap": 2,
+      "season": "1986-87"
+    },
+    {
+      "input": "1987-88",
+      "minAdjacentGap": 2,
+      "minDividerGap": 2,
+      "season": "1987-88"
+    },
+    {
+      "input": "1988-89",
+      "minAdjacentGap": 2,
+      "minDividerGap": 2,
+      "season": "1988-89"
+    },
+    {
+      "input": "1989-90",
+      "minAdjacentGap": 2,
+      "minDividerGap": 2,
+      "season": "1989-90"
+    },
+    {
+      "input": "1990-91",
+      "minAdjacentGap": 2,
+      "minDividerGap": 2,
+      "season": "1990-91"
+    },
+    {
+      "input": "1991-92",
+      "minAdjacentGap": 2,
+      "minDividerGap": 2,
+      "season": "1991-92"
+    },
+    {
+      "input": "1992-93",
+      "minAdjacentGap": 2,
+      "minDividerGap": 2,
+      "season": "1992-93"
+    },
+    {
+      "input": "1993-94",
+      "minAdjacentGap": 2,
+      "minDividerGap": 2,
+      "season": "1993-94"
+    },
+    {
+      "input": "1994-95",
+      "minAdjacentGap": 2,
+      "minDividerGap": 2,
+      "season": "1994-95"
+    },
+    {
+      "input": "1995-96",
+      "minAdjacentGap": 2,
+      "minDividerGap": 2,
+      "season": "1995-96"
+    },
+    {
+      "input": "1996-97",
+      "minAdjacentGap": 2,
+      "minDividerGap": 2,
+      "season": "1996-97"
+    },
+    {
+      "input": "1997-98",
+      "minAdjacentGap": 2,
+      "minDividerGap": 2,
+      "season": "1997-98"
+    },
+    {
+      "input": "1998-99",
+      "minAdjacentGap": 2,
+      "minDividerGap": 2,
+      "season": "1998-99"
+    },
+    {
+      "input": "1999-00",
+      "minAdjacentGap": 2,
+      "minDividerGap": 2,
+      "season": "1999-00"
+    },
+    {
+      "input": "2000-01",
+      "minAdjacentGap": 2,
+      "minDividerGap": 2,
+      "season": "2000-01"
+    },
+    {
+      "input": "2001-02",
+      "minAdjacentGap": 2,
+      "minDividerGap": 2,
+      "season": "2001-02"
+    },
+    {
+      "input": "2002-03",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "2002-03"
+    },
+    {
+      "input": "2003-04",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "2003-04"
+    },
+    {
+      "input": "2004-05",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "2004-05"
+    },
+    {
+      "input": "2005-06",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "2005-06"
+    },
+    {
+      "input": "2006-07",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "2006-07"
+    },
+    {
+      "input": "2007-08",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "2007-08"
+    },
+    {
+      "input": "2008-09",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "2008-09"
+    },
+    {
+      "input": "2009-10",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "2009-10"
+    },
+    {
+      "input": "2010-11",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "2010-11"
+    },
+    {
+      "input": "2011-12",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "2011-12"
+    },
+    {
+      "input": "2012-13",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "2012-13"
+    },
+    {
+      "input": "2013-14",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "2013-14"
+    },
+    {
+      "input": "2014-15",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "2014-15"
+    },
+    {
+      "input": "2015-16",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "2015-16"
+    },
+    {
+      "input": "2016-17",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "2016-17"
+    },
+    {
+      "input": "2017-18",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "2017-18"
+    },
+    {
+      "input": "2018-19",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "2018-19"
+    },
+    {
+      "input": "2019-20",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "2019-20"
+    },
+    {
+      "input": "2020-21",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "2020-21"
+    },
+    {
+      "input": "2021-22",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "2021-22"
+    },
+    {
+      "input": "2022-23",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "2022-23"
+    },
+    {
+      "input": "2023-24",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "2023-24"
+    },
+    {
+      "input": "2024-25",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "2024-25"
+    },
+    {
+      "input": "2025-26",
+      "minAdjacentGap": 30,
+      "minDividerGap": 16,
+      "season": "2025-26"
+    }
+  ]
+}

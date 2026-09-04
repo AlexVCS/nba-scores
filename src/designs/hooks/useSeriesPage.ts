@@ -1,4 +1,4 @@
-import {useMemo} from "react";
+import {useCallback, useMemo} from "react";
 import {useParams, useSearchParams} from "react-router";
 import {usePlayoffData} from "@/hooks/usePlayoffData";
 import {buildPlayoffBracketModel} from "@/utils/playoffBracketModel";
@@ -17,12 +17,12 @@ export function useSeriesPage() {
     [model, seriesSlug],
   );
 
-  const setIsRevealed = (value: boolean) => setSearchParams((previous) => {
+  const setIsRevealed = useCallback((value: boolean) => setSearchParams((previous) => {
     const next = new URLSearchParams(previous);
     if (value) next.set("revealed", "true");
     else next.delete("revealed");
     return next;
-  }, {replace: true});
+  }, {replace: true}), [setSearchParams]);
 
   return {
     ...query,

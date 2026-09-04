@@ -28,6 +28,10 @@ export type PlayoffBracketModel = {
   fallbackMode: boolean;
 };
 
+function abbreviateConference(label: string): string {
+  return label.replace(/\bConference\b/g, "Conf.");
+}
+
 function playoffYearFromSeason(season: string): number {
   return Number.parseInt(season.split("-")[0], 10) + 1;
 }
@@ -114,7 +118,8 @@ export function buildPlayoffBracketModel(response: PlayoffBracketResponse): Play
         : fallbackGroup;
 
       groupsById.set(group.id, response.groups?.find(g => g.id === group.id) ?? group);
-      roundLabels.set(item.round, isFinals ? "NBA Finals" : item.roundName);
+      const roundName = isFinals ? "NBA Finals" : abbreviateConference(item.roundName);
+      roundLabels.set(item.round, roundName);
 
       const positionKey = `${group.id}-${item.round}`;
       const nextPosition = positions.get(positionKey) ?? 0;
@@ -123,17 +128,18 @@ export function buildPlayoffBracketModel(response: PlayoffBracketResponse): Play
       return {
         ...item,
         bracketGroupId: group.id,
-        bracketGroupLabel: group.label,
+        bracketGroupLabel: abbreviateConference(group.label),
         bracketGroupKind: group.kind,
         bracketOrder: item.bracketOrder ?? nextPosition,
         targetWins: item.targetWins ?? null,
         isFinals,
-        roundName: isFinals ? "NBA Finals" : item.roundName,
+        roundName,
       };
     });
 
   const groups = (response.groups ?? [...groupsById.values()])
     .filter(group => series.some(item => item.bracketGroupId === group.id))
+    .map(group => ({...group, label: abbreviateConference(group.label)}))
     .sort((a, b) => a.sortOrder - b.sortOrder);
 
   const rounds = (response.rounds ?? [...roundLabels.entries()].map(([round, label]) => ({
@@ -141,7 +147,9 @@ export function buildPlayoffBracketModel(response: PlayoffBracketResponse): Play
     label,
     sortOrder: round,
     defaultRevealed: round === Math.min(...response.series.map(item => item.round)),
-  }))).sort((a, b) => a.sortOrder - b.sortOrder);
+  })))
+    .map(round => ({...round, label: abbreviateConference(round.label)}))
+    .sort((a, b) => a.sortOrder - b.sortOrder);
 
   return {
     season: response.season,

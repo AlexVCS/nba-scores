@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import TeamLogos from "./TeamLogos";
 import { ThemeContext } from "@/context/ThemeContext";
@@ -43,5 +43,41 @@ describe("TeamLogos", () => {
   it("adds the halo class to the placeholder logo", () => {
     render(<TeamLogos teamId={0} size={40} />);
     expect(screen.getByRole("img", { name: "Placeholder team logo" })).toHaveClass("team-logo--halo");
+  });
+});
+
+
+describe("historical logo recovery", () => {
+  it("distinguishes the Capitols from the Wizards despite their shared WAS code", () => {
+    const { rerender } = render(<TeamLogos teamId={1610610036} tricode="WAS" size={64} />);
+    expect(screen.getByRole("img").getAttribute("src")).toContain("was-washington-capitols");
+    rerender(<TeamLogos teamId={1610612764} tricode="WAS" size={64} />);
+    expect(screen.getByRole("img").getAttribute("src")).toContain("/1610612764/global/L/");
+  });
+
+  it.each(["AND", "CLR", "DEF", "INO", "MIH", "PIT", "SHE", "WAT", "DTF"])(
+    "resolves recovered %s logos even without a team ID", (tricode) => {
+      render(<TeamLogos teamId={0} tricode={tricode.toLowerCase()} size={64} />);
+      expect(screen.getByRole("img").getAttribute("src")).toContain("/images/historical-team-logos/");
+    }
+  );
+
+  it("tries the other CDN theme before stopping at the placeholder", () => {
+    renderWithTheme("dark", <TeamLogos teamId={1610612741} size={40} />);
+    fireEvent.error(screen.getByRole("img"));
+    expect(screen.getByRole("img").getAttribute("src")).toContain("/global/L/");
+    fireEvent.error(screen.getByRole("img"));
+    const placeholder = screen.getByRole("img", { name: "Placeholder team logo" });
+    const source = placeholder.getAttribute("src");
+    fireEvent.error(placeholder);
+    expect(placeholder).toHaveAttribute("src", source);
+  });
+
+  it("resets a failed image when the team changes and avoids a modern historical substitute", () => {
+    const { rerender } = render(<TeamLogos teamId={1610612737} tricode="MIH" size={64} />);
+    fireEvent.error(screen.getByRole("img"));
+    expect(screen.getByRole("img", { name: "Placeholder team logo" })).toBeInTheDocument();
+    rerender(<TeamLogos teamId={1610610036} tricode="WAS" size={64} />);
+    expect(screen.getByRole("img").getAttribute("src")).toContain("was-washington-capitols");
   });
 });

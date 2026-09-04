@@ -1,0 +1,569 @@
+/* Hallmark · pre-emit critique: P5 H4 E4 S5 R4 V4 · genre: playful · macrostructure: Workbench · design-system: DESIGN.md · designed-as-app */
+.design-hardwood {
+  --hw-page: #e1bb79;
+  --hw-surface: #fffcf3;
+  --hw-surface-muted: #f2e8d2;
+  --hw-ink: #131210;
+  --hw-muted: #6e6555;
+  --hw-court: #55492f;
+  --hw-accent: #d7a500;
+  --hw-accent-ink: #7c5a00;
+  --hw-accent-contrast: #131313;
+  --hw-line: #ddd2b4;
+  --hw-bracket-line: #7c5a00;
+  --hw-winner-arrow: #d7a500;
+  --hw-shadow-card: 0 10px 26px rgb(43 29 6 / 14%);
+  --hw-shadow-small: 0 5px 14px rgb(43 29 6 / 14%);
+  --hw-shadow-card-hover: 0 18px 40px rgb(43 29 6 / 26%);
+  --hw-page-texture: linear-gradient(90deg, transparent 49.7%, rgb(255 255 255 / 40%) 49.8% 50.2%, transparent 50.3%), radial-gradient(circle at 50% 50%, transparent 0 110px, rgb(255 255 255 / 35%) 111px 114px, transparent 115px), repeating-linear-gradient(90deg, rgb(112 62 18 / 9%) 0 2px, transparent 2px 72px);
+  --switcher-bg: #101010;
+  --switcher-fg: #fff;
+  --switcher-accent: #ffd524;
+  background: var(--hw-page);
+}
+
+.dark .design-hardwood {
+  --hw-page: #12372d;
+  --hw-surface: #161815;
+  --hw-surface-muted: #101310;
+  --hw-ink: #fff;
+  --hw-muted: #98a290;
+  --hw-court: #aab5a1;
+  --hw-accent: #ffd524;
+  --hw-accent-ink: #ffd524;
+  --hw-line: #2b2f28;
+  --hw-bracket-line: #ffd524;
+  --hw-winner-arrow: #ffd524;
+  --hw-shadow-card: 0 18px 42px rgb(0 0 0 / 50%);
+  --hw-shadow-small: 0 8px 22px rgb(0 0 0 / 45%);
+  --hw-shadow-card-hover: 0 24px 52px rgb(0 0 0 / 60%);
+  --hw-court-line: rgb(236 245 230 / 26%);
+  /* Floodlit green: court lines, a floodlight pool, edge vignette, plank seams + lacquer sheen, staggered plank ends */
+  --hw-page-texture: linear-gradient(90deg, transparent calc(50% - 1.5px), var(--hw-court-line) calc(50% - 1.5px) calc(50% + 1.5px), transparent calc(50% + 1.5px)), radial-gradient(circle at 50% 50%, transparent 0 118px, var(--hw-court-line) 119px 122px, transparent 123px), linear-gradient(90deg, transparent calc(50% - 700px), var(--hw-court-line) calc(50% - 700px) calc(50% - 697px), transparent calc(50% - 697px) calc(50% + 697px), var(--hw-court-line) calc(50% + 697px) calc(50% + 700px), transparent calc(50% + 700px)), radial-gradient(ellipse 62% 55% at 50% 38%, rgb(74 140 110 / 55%) 0%, rgb(40 96 76 / 22%) 45%, transparent 72%), radial-gradient(ellipse 120% 100% at 50% 50%, transparent 55%, rgb(3 14 10 / 70%) 100%), repeating-linear-gradient(90deg, rgb(0 0 0 / 22%) 0 1px, rgb(255 255 255 / 4%) 1px 2px, transparent 2px 72px), repeating-linear-gradient(90deg, transparent 0 36px, rgb(255 255 255 / 2.5%) 36px 54px, transparent 54px 72px), repeating-linear-gradient(0deg, transparent 0 395px, rgb(0 0 0 / 14%) 395px 396px, transparent 396px 720px);
+}
+
+@theme inline {
+  --color-hw-page: var(--hw-page);
+  --color-hw-surface: var(--hw-surface);
+  --color-hw-surface-muted: var(--hw-surface-muted);
+  --color-hw-ink: var(--hw-ink);
+  --color-hw-muted: var(--hw-muted);
+  --color-hw-court: var(--hw-court);
+  --color-hw-accent: var(--hw-accent);
+  --color-hw-accent-ink: var(--hw-accent-ink);
+  --color-hw-accent-contrast: var(--hw-accent-contrast);
+  --color-hw-line: var(--hw-line);
+  --color-hw-bracket-line: var(--hw-bracket-line);
+  --color-hw-winner-arrow: var(--hw-winner-arrow);
+  --shadow-hw-card: var(--hw-shadow-card);
+  --shadow-hw-small: var(--hw-shadow-small);
+  --shadow-hw-card-hover: var(--hw-shadow-card-hover);
+  --font-hw-display: "Poppins", sans-serif;
+  --radius-hw: 10px;
+  --animate-hw-enter: hw-enter 550ms both;
+  --animate-hw-pop-in: hw-pop-in 200ms cubic-bezier(.16, 1, .3, 1);
+  --animate-hw-pop-out: hw-pop-out 130ms ease-in forwards;
+  --animate-hw-fade-in: hw-fade-in 180ms ease-out;
+  --animate-hw-fade-out: hw-fade-in 130ms ease-in reverse forwards;
+  --animate-hw-sheet-up: hw-sheet-up 260ms cubic-bezier(.16, 1, .3, 1);
+  --animate-hw-unfold: hw-unfold 200ms ease;
+  --animate-hw-fill: hw-fill 420ms cubic-bezier(.16, 1, .3, 1);
+}
+
+@keyframes hw-enter {
+  from { opacity: 0; transform: translateY(18px); }
+}
+
+@keyframes hw-pop-in {
+  from { opacity: 0; transform: translateY(-8px); }
+}
+
+@keyframes hw-pop-out {
+  to { opacity: 0; }
+}
+
+@keyframes hw-fade-in {
+  from { opacity: 0; }
+}
+
+@keyframes hw-sheet-up {
+  from { transform: translateY(100%); }
+}
+
+@keyframes hw-unfold {
+  from { opacity: 0; transform: translateY(-4px); }
+}
+
+@keyframes hw-fill {
+  from { transform: scaleX(0); }
+}
+
+/* Bracket tracks keep every advancing matchup at the midpoint of its feeders. */
+.design-hardwood .hw-playoff-bracket {
+  --hw-bracket-column-width: 15rem;
+}
+
+.design-hardwood .hw-bracket-group {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(142px, 1fr);
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+/* Historical groups use only the space their recorded rounds need. */
+.design-hardwood .hw-bracket-group--fallback {
+  grid-auto-columns: var(--hw-bracket-column-width);
+}
+
+.design-hardwood .hw-bracket-fallback-finals {
+  width: var(--hw-bracket-column-width);
+  max-width: 100%;
+}
+
+/* The stacked layout also serves tablets and small desktop windows. */
+.design-hardwood .mobile-bracket {
+  width: 100%;
+  max-width: 30rem;
+  margin-inline: auto;
+  color: var(--hw-ink);
+  font-family: var(--font-hw-display);
+}
+
+.design-hardwood .hw-bracket-group--mirrored {
+  direction: rtl;
+}
+
+.design-hardwood .hw-bracket-group--mirrored > * {
+  direction: ltr;
+}
+
+.design-hardwood .hw-bracket-round {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.design-hardwood .hw-bracket-finals {
+  padding-top: 2.25rem;
+}
+
+/* Matchups usually occupy alternate tracks; historical byes can use neighbors. Reserve the tallest card in either
+   reveal state plus a 16px gap, shared by both conferences and their connectors.
+   Finals occupy track four, so their larger lock message uses the central space. */
+.design-hardwood .hw-bracket-round--exact {
+  --hw-bracket-clearance: 16px;
+  --hw-bracket-track-gap: 6px;
+  --hw-bracket-pitch: calc((var(--hw-bracket-card-height, 126px) + var(--hw-bracket-clearance)) / var(--hw-bracket-row-separation, 2));
+  --hw-bracket-track-height: calc(var(--hw-bracket-pitch) - var(--hw-bracket-track-gap));
+  --hw-bracket-half-track: calc(var(--hw-bracket-track-height) / 2);
+  --hw-bracket-overhang: max(0px, calc((var(--hw-bracket-card-height, 126px) - var(--hw-bracket-track-height)) / 2), calc(var(--hw-bracket-finals-height, 176px) / 2 - 3 * var(--hw-bracket-pitch) - var(--hw-bracket-half-track)));
+}
+
+.design-hardwood .hw-bracket-round--exact .hw-bracket-slots {
+  display: grid;
+  grid-template-rows: repeat(7, var(--hw-bracket-track-height));
+  row-gap: var(--hw-bracket-track-gap);
+  /* The heading already supplies the 16px clearance through its bottom margin. */
+  margin-top: var(--hw-bracket-overhang);
+  margin-bottom: var(--hw-bracket-overhang);
+}
+
+.design-hardwood .hw-bracket-junction {
+  margin-block: var(--hw-bracket-half-track);
+}
+
+/* Real components measure wrapping without exposing future matchups or controls. */
+.design-hardwood .hw-bracket-measure {
+  position: absolute;
+  inset: 0 0 auto;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.design-hardwood .hw-bracket-round--fallback .hw-bracket-slots {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.design-hardwood .hw-bracket-slot {
+  position: relative;
+  grid-column: 1;
+  align-self: center;
+  width: 100%;
+}
+
+/* Keep BEM selectors in scoped CSS so Tailwind does not turn underscores into spaces. */
+.design-hardwood .mobile-bracket__round-rail {
+  border-bottom: 1px solid var(--hw-line);
+  background: var(--hw-page);
+  box-shadow: var(--hw-shadow-small);
+  backdrop-filter: blur(8px);
+}
+
+.design-hardwood .mobile-bracket__round-jump {
+  border-color: var(--hw-line);
+  background: var(--hw-surface);
+  color: var(--hw-muted);
+  box-shadow: var(--hw-shadow-small);
+}
+
+.design-hardwood .mobile-bracket__round-jump--current {
+  border-color: var(--hw-accent);
+  background: var(--hw-accent);
+  color: var(--hw-accent-contrast);
+}
+
+/* A locked round keeps its hidden state even when it is the current scroll target. */
+.design-hardwood .mobile-bracket__round-jump--locked {
+  border-color: var(--hw-line);
+  background: var(--hw-surface-muted);
+  color: var(--hw-muted);
+  opacity: 1;
+}
+
+.design-hardwood .mobile-bracket__hide-all {
+  border: 1px solid var(--hw-line);
+  border-radius: var(--radius-hw);
+  background: var(--hw-surface);
+  color: var(--hw-accent-ink);
+  box-shadow: var(--hw-shadow-small);
+}
+
+.design-hardwood .mobile-bracket__round {
+  border: 1px solid var(--hw-line);
+  border-radius: var(--radius-hw);
+  background: var(--hw-surface);
+  padding: 14px;
+  box-shadow: var(--hw-shadow-card);
+}
+
+.design-hardwood .mobile-bracket__round--locked {
+  background: var(--hw-surface-muted);
+  box-shadow: var(--hw-shadow-small);
+}
+
+.design-hardwood .mobile-bracket__round-header {
+  border-bottom: 3px solid var(--hw-accent);
+  padding-bottom: 12px;
+}
+
+.design-hardwood .mobile-bracket__round-header h2 {
+  color: var(--hw-ink);
+  font-family: var(--font-hw-display);
+}
+
+.design-hardwood .mobile-bracket__reveal {
+  border: 1px solid var(--hw-accent);
+  background: var(--hw-accent);
+  color: var(--hw-accent-contrast);
+  box-shadow: var(--hw-shadow-small);
+}
+
+.design-hardwood .mobile-bracket__reveal--hide {
+  border-color: var(--hw-line);
+  background: var(--hw-surface);
+  color: var(--hw-accent-ink);
+}
+
+.design-hardwood .mobile-bracket__round-jump:focus-visible,
+.design-hardwood .mobile-bracket__hide-all:focus-visible,
+.design-hardwood .mobile-bracket__reveal:focus-visible {
+  outline: 3px solid var(--hw-accent);
+  outline-offset: 2px;
+}
+
+.design-hardwood .mobile-bracket__group-label,
+.design-hardwood .mobile-series-card__format {
+  color: var(--hw-muted);
+}
+
+.design-hardwood .mobile-series-card {
+  border-color: var(--hw-line);
+  border-radius: var(--radius-hw);
+  background: var(--hw-surface);
+  color: var(--hw-ink);
+  box-shadow: var(--hw-shadow-small);
+}
+
+.design-hardwood .mobile-series-card:focus-visible {
+  border-color: var(--hw-accent);
+  outline: 2px solid var(--hw-accent);
+  outline-offset: 3px;
+}
+
+.design-hardwood .mobile-series-card__matchup {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  min-height: 148px;
+  padding-block: 12px 14px;
+}
+
+.design-hardwood .mobile-series-card__team {
+  align-self: stretch;
+  justify-content: center;
+  gap: 7px;
+  padding-block: 0;
+  color: var(--hw-muted);
+}
+
+.design-hardwood .mobile-series-card__team--winner {
+  color: var(--hw-ink);
+}
+
+.design-hardwood .mobile-series-card__logo {
+  width: 64px;
+  height: 64px;
+}
+
+.design-hardwood .mobile-series-card__tricode {
+  color: var(--hw-ink);
+  font-family: var(--font-hw-display);
+  font-size: clamp(1.25rem, 6vw, 1.5rem);
+}
+
+.design-hardwood .mobile-series-card__winner-line {
+  background: transparent;
+}
+
+.design-hardwood .mobile-series-card__team--winner .mobile-series-card__winner-line {
+  background: var(--hw-accent);
+}
+
+.design-hardwood .mobile-series-card__versus {
+  align-self: center;
+  border: 1px solid var(--hw-accent);
+  border-radius: 7px;
+  background: var(--hw-accent);
+  color: var(--hw-accent-contrast);
+  box-shadow: var(--hw-shadow-small);
+  font-family: var(--font-hw-display);
+}
+
+.design-hardwood .mobile-series-card__versus--hidden {
+  letter-spacing: 0.12em;
+}
+
+.design-hardwood .mobile-series-card__versus--revealed {
+  min-width: 68px;
+  font-size: 1.25rem;
+  letter-spacing: -0.03em;
+}
+
+/* The mobile bracket remains a vertical document; the rail only orients and jumps. */
+@media (max-width: 639px) {
+  .design-hardwood .mobile-bracket {
+    padding-bottom: calc(2rem + env(safe-area-inset-bottom));
+  }
+
+  .design-hardwood .mobile-bracket__round-rail {
+    scrollbar-width: none;
+  }
+
+  .design-hardwood .mobile-bracket__round-rail::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .design-hardwood .mobile-bracket__round-jump:not(.mobile-bracket__round-jump--current):hover,
+  .design-hardwood .mobile-bracket__hide-all:hover,
+  .design-hardwood .mobile-bracket__reveal--hide:hover {
+    border-color: var(--hw-accent);
+    color: var(--hw-accent-ink);
+  }
+
+  .dark .design-hardwood .mobile-bracket__round-jump:not(.mobile-bracket__round-jump--current):hover,
+  .dark .design-hardwood .mobile-bracket__hide-all:hover,
+  .dark .design-hardwood .mobile-bracket__reveal--hide:hover {
+    color: var(--hw-accent);
+  }
+}
+
+/* The first two BAA tournaments have two unequal paths to the Finals. */
+.design-hardwood .hw-baa-bracket {
+  width: 100%;
+  max-width: 1000px;
+  margin-inline: auto;
+}
+
+.design-hardwood .hw-baa-tree {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 48px minmax(0, 1fr) 48px minmax(0, 1fr);
+  grid-template-rows: 48px repeat(5, 104px);
+}
+
+.design-hardwood .hw-baa-column-heading {
+  grid-row: 1;
+  align-self: start;
+  border-bottom: 3px solid var(--hw-accent);
+  padding-bottom: 12px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.design-hardwood .hw-baa-column-heading--quarters { grid-column: 1; }
+.design-hardwood .hw-baa-column-heading--semis { grid-column: 3; }
+.design-hardwood .hw-baa-column-heading--finals { grid-column: 5; }
+.design-hardwood .hw-baa-series { min-width: 0; position: relative; }
+.design-hardwood .hw-baa-series--division { grid-column: 3; grid-row: 2 / span 2; }
+.design-hardwood .hw-baa-quarter--1 { grid-column: 1; grid-row: 3 / span 2; }
+.design-hardwood .hw-baa-quarter--2 { grid-column: 1; grid-row: 5 / span 2; }
+.design-hardwood .hw-baa-series--qualifier { grid-column: 3; grid-row: 4 / span 2; }
+.design-hardwood .hw-baa-series--finals { grid-column: 5; grid-row: 3 / span 2; }
+.design-hardwood .hw-baa-series-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 28px;
+  margin: 0;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.design-hardwood .hw-baa-card { height: 128px; }
+.design-hardwood .hw-baa-locked {
+  height: 128px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  text-align: center;
+  font-size: 12px;
+}
+
+.design-hardwood .hw-baa-series-control { display: flex; align-items: center; min-height: 48px; }
+.design-hardwood .hw-baa-reveal {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 12px;
+  border-radius: var(--radius-hw);
+  background: var(--hw-surface);
+  color: var(--hw-accent-ink);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.dark .design-hardwood .hw-baa-reveal { color: var(--hw-accent); }
+.design-hardwood .hw-baa-reveal:hover { background: var(--hw-surface-muted); }
+.design-hardwood .hw-baa-reveal:focus-visible { outline: 3px solid var(--hw-accent); outline-offset: 3px; }
+.design-hardwood .hw-baa-mobile-destination,
+.design-hardwood .hw-baa-reveal-mobile-copy,
+.design-hardwood .hw-baa-mobile-round { display: none; }
+.design-hardwood .hw-baa-connections { grid-row: 2 / 7; pointer-events: none; }
+.design-hardwood .hw-baa-connections--qualifiers { grid-column: 2; }
+.design-hardwood .hw-baa-connections--finals { grid-column: 4; }
+.design-hardwood .hw-baa-connections svg { width: 100%; height: 100%; overflow: visible; }
+.design-hardwood .hw-baa-connections path { fill: none; stroke: var(--hw-court); opacity: .65; stroke-width: 2px; vector-effect: non-scaling-stroke; }
+
+@media (max-width: 899px) {
+  .design-hardwood .hw-baa-bracket { max-width: 420px; }
+  .design-hardwood .hw-baa-mobile-round { display: inline; margin-left: auto; color: var(--hw-court); font-size: 10px; }
+  .design-hardwood .hw-baa-tree { display: flex; flex-direction: column; gap: 24px; }
+  .design-hardwood .hw-baa-column-heading,
+  .design-hardwood .hw-baa-connections { display: none; }
+  .design-hardwood .hw-baa-series--division { padding-bottom: 20px; border-bottom: 1px solid var(--hw-bracket-line); }
+  .design-hardwood .hw-baa-series--finals { margin-top: 8px; padding-top: 16px; border-top: 3px solid var(--hw-accent); }
+  .design-hardwood .hw-baa-mobile-destination { display: block; margin-top: 8px; font-size: 11px; color: var(--hw-court); }
+
+  .design-hardwood .hw-baa-series:has(> .hw-baa-series-control button) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 12px;
+  }
+
+  .design-hardwood .hw-baa-series:has(> .hw-baa-series-control button) > .hw-baa-series-title {
+    grid-area: 1 / 1;
+    align-self: center;
+    height: auto;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 2px 8px;
+  }
+
+  .design-hardwood .hw-baa-series:has(> .hw-baa-series-control button) .hw-baa-mobile-round {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .design-hardwood .hw-baa-series-control:has(button) {
+    grid-area: 1 / 2;
+    min-height: 44px;
+    margin-bottom: 12px;
+  }
+
+  .design-hardwood .hw-baa-card,
+  .design-hardwood .hw-baa-mobile-destination { grid-column: 1 / -1; }
+
+  .design-hardwood .hw-baa-reveal,
+  .dark .design-hardwood .hw-baa-reveal,
+  .design-hardwood .hw-baa-all-results {
+    padding: 0 12px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: inherit;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .05em;
+    box-shadow: none;
+  }
+
+  .design-hardwood .hw-baa-reveal > svg,
+  .design-hardwood .hw-baa-reveal-desktop-copy { display: none; }
+  .design-hardwood .hw-baa-reveal-mobile-copy { display: inline; }
+}
+
+/* Small historical fields fit beside their Finals instead of burying the destination. */
+@media (min-width: 1100px) {
+  .design-hardwood .hw-bracket-compact {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 32px;
+  }
+
+  .design-hardwood .hw-bracket-compact > .contents > div {
+    flex: 0 1 496px;
+    min-width: 0;
+  }
+
+  .design-hardwood .hw-bracket-compact .hw-bracket-group--fallback {
+    grid-auto-columns: minmax(0, 1fr);
+  }
+
+  .design-hardwood .hw-bracket-compact .hw-bracket-slots {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+
+  .design-hardwood .hw-bracket-compact .hw-bracket-slot {
+    grid-column: auto;
+    align-self: start;
+  }
+
+  .design-hardwood .hw-bracket-compact .hw-bracket-fallback-finals {
+    flex: 0 0 var(--hw-bracket-column-width);
+    margin: 0;
+    padding-top: 36px;
+  }
+
+}

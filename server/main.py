@@ -19,6 +19,7 @@ from .services.nba_schedule import get_game_days_in_month
 from .models.schemas import GameDaysResponse
 from .services.game_summary import (
     fetch_boxscoretraditional,
+    fetch_inactive_players,
     fetch_bref_line_score,
     fetch_game_summary,
 )
@@ -35,6 +36,7 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["https://nba-scorez.onrender.com", "https://nbascorez.com", "http://localhost:5173", "https://api.nbascorez.com"],
+    allow_origin_regex=r"^http://(?:127\.0\.0\.1|localhost|10(?:\.\d{1,3}){3}|192\.168(?:\.\d{1,3}){2}|172\.(?:1[6-9]|2\d|3[01])(?:\.\d{1,3}){2}):5173$",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -109,6 +111,17 @@ def get_game_boxscore(game_id: str):
         )
 
 
+@app.get("/games/{game_id}/inactive-players")
+def get_game_inactive_players(game_id: str):
+    try:
+        return fetch_inactive_players(game_id)
+    except (UpstreamUnavailableError, UpstreamBadResponseError) as e:
+        raise_upstream_http(e)
+    except Exception as e:
+        logger.warning("Inactive players unavailable for %s: %s", game_id, e)
+        raise HTTPException(status_code=502, detail="Inactive players unavailable") from e
+
+
 @app.get("/gamesummary/{game_id}")
 def get_game_summary(game_id: str):
     try:
@@ -174,7 +187,7 @@ def debug_schedule(
 
 @app.get("/api/game-days", response_model=GameDaysResponse)
 def game_days(
-    year: int = Query(..., ge=2000, le=2100, description="Calendar year"),
+    year: int = Query(..., ge=1946, le=2100, description="Calendar year"),
     month: int = Query(..., ge=1, le=12, description="Month (1-12)"),
 ):
     season = get_nba_season(year, month)

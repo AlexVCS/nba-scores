@@ -2,7 +2,7 @@ import pytest
 from fastapi import HTTPException
 
 from server import main
-from server.services import game_summary
+from server.services import nba_stats_client
 from server.services import playoffs
 from server.utils.boxscore_availability import is_boxscore_available_metadata
 
@@ -62,7 +62,11 @@ class _FakeScoreboardV3:
 
 
 def test_scoreboard_route_adds_boxscore_availability(monkeypatch):
-    monkeypatch.setattr(main.scoreboardv3, "ScoreboardV3", _FakeScoreboardV3)
+    monkeypatch.setattr(
+        nba_stats_client,
+        "fetch_scoreboard_v3",
+        lambda game_date: _FakeScoreboardV3().get_dict()["scoreboard"],
+    )
 
     result = main.get_v3_scoreboard(date="2024-11-01")
 
@@ -134,27 +138,31 @@ def test_playoff_normalization_marks_scheduled_game_unavailable():
     assert result[0]["boxscoreAvailable"] is False
 
 
-def test_existing_boxscore_endpoint_still_errors_on_upstream_failure(monkeypatch):
+def test_boxscore_endpoint_maps_upstream_bad_response_to_bad_gateway(monkeypatch):
     def fake_boxscore(*args, **kwargs):
         return _FakeBoxScoreTraditional(error=RuntimeError("NBA endpoint failed"))
 
     monkeypatch.setattr(
-        game_summary.boxscoretraditionalv3, "BoxScoreTraditionalV3", fake_boxscore
+        nba_stats_client.boxscoretraditionalv3, "BoxScoreTraditionalV3", fake_boxscore
     )
 
     with pytest.raises(HTTPException) as exc:
         main.get_game_boxscore("0024600206")
 
-    assert exc.value.status_code == 500
-    assert "Failed to fetch boxscore" in exc.value.detail
+    assert exc.value.status_code == 502
+    assert exc.value.detail["provider"] == "stats.nba.com"
+    assert exc.value.detail["endpoint"] == "BoxScoreTraditionalV3"
+    assert exc.value.detail["errorType"] == "RuntimeError"
+    assert isinstance(exc.value.detail["durationMs"], int)
+    assert exc.value.detail["durationMs"] >= 0
 
 
 def test_boxscore_endpoint_maps_unavailable_data_to_not_found(monkeypatch):
     def fake_boxscore(*args, **kwargs):
-        return _FakeBoxScoreTraditional(payload={"boxScoreTraditional": None})
+        return {"boxScoreTraditional": None}
 
     monkeypatch.setattr(
-        game_summary.boxscoretraditionalv3, "BoxScoreTraditionalV3", fake_boxscore
+        nba_stats_client, "fetch_boxscore_traditional", fake_boxscore
     )
 
     with pytest.raises(HTTPException) as exc:

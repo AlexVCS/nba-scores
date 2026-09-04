@@ -86,8 +86,8 @@ def _timeout():
     return NBA_API_TIMEOUT_SECONDS
 
 
-def _run(endpoint: str, operation: Callable[[], T]) -> T:
-    attempts = max(1, NBA_API_RETRIES + 1)
+def _run(endpoint: str, operation: Callable[[], T], *, retries: int | None = None) -> T:
+    attempts = max(1, (NBA_API_RETRIES if retries is None else retries) + 1)
     started = time.monotonic()
 
     for attempt in range(1, attempts + 1):
@@ -203,14 +203,17 @@ def fetch_boxscore_traditional(game_id: str) -> dict:
     return _run("BoxScoreTraditionalV3", operation)
 
 
-def fetch_boxscore_summary(game_id: str):
+def fetch_boxscore_summary(
+    game_id: str, *, timeout: float | None = None, retries: int | None = None
+):
     return _run(
         "BoxScoreSummaryV2",
         lambda: boxscoresummaryv2.BoxScoreSummaryV2(
             game_id=game_id,
             headers=_headers(),
-            timeout=_timeout(),
+            timeout=_timeout() if timeout is None else timeout,
         ),
+        retries=retries,
     )
 
 

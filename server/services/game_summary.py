@@ -436,6 +436,39 @@ def make_scheduled_response(home_id, away_id):
     }
 
 
+def clean_text(value):
+    if value is None or str(value) == "nan" or str(value) == "None":
+        return ""
+    return str(value).strip()
+
+
+def fetch_inactive_players(game_id: str):
+    summary = nba_stats_client.fetch_boxscore_summary(game_id, timeout=2, retries=0)
+    inactive_players = summary.inactive_players.get_data_frame()
+    if inactive_players is None:
+        raise ValueError("BoxScoreSummaryV2 returned no inactive-player data")
+
+    teams = {}
+    for _, row in inactive_players.iterrows():
+        team_id = safe_int(row.get("TEAM_ID"))
+        person_id = safe_int(row.get("PLAYER_ID"))
+        if team_id is None or person_id is None:
+            continue
+
+        teams.setdefault(str(team_id), []).append(
+            {
+                "personId": person_id,
+                "firstName": clean_text(row.get("FIRST_NAME")),
+                "familyName": clean_text(row.get("LAST_NAME")),
+                "jerseyNum": clean_text(row.get("JERSEY_NUM")),
+                "teamId": team_id,
+                "teamTricode": clean_text(row.get("TEAM_ABBREVIATION")),
+                "status": "INACTIVE",
+            }
+        )
+    return {"teams": teams}
+
+
 def fetch_boxscoretraditional(game_id: str):
     data = nba_stats_client.fetch_boxscore_traditional(game_id)
     game = data.get("boxScoreTraditional")

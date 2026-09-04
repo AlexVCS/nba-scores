@@ -113,7 +113,7 @@ A two-scene palette — day hardwood and night court — sharing one gold accent
 - **Chalk Line** (#ddd2b4 day / #2b2f28 night): every border and divider; always 1px.
 
 ### Named Rules
-**The One Gold Rule.** Gold is the only interface accent, kept under ~10% of any screen. Team colors may appear as content only in the design-4 series hero: one 4px × 56px rule between each modern team's tricode and name, using the raw team color by day and a fixed 65% team-color/white mix at night. If either team has no known color, both rules are omitted. Team-color washes, gradients, and accent side-borders remain prohibited. Any other second saturated hue (violet, blue, red) is a system violation — the stock react-aria purple palette is the canonical counter-example and has been rejected.
+**The One Gold Rule.** Gold is the only interface accent, kept under ~10% of any screen. Team colors may appear as content only in the design-1 series hero: one 4px × 56px rule between each modern team's tricode and name, using the raw team color by day and a fixed 65% team-color/white mix at night. If either team has no known color, both rules are omitted. Team-color washes, gradients, and accent side-borders remain prohibited. Any other second saturated hue (violet, blue, red) is a system violation — the stock react-aria purple palette is the canonical counter-example and has been rejected.
 **The Ground Stays Ground Rule.** Court green and hardwood tan never appear inside a card or control; they are the floor the scorecards sit on.
 
 ## Typography

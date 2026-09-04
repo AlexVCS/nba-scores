@@ -23,11 +23,11 @@ def _patch_finder(monkeypatch):
             return [pd.DataFrame()]
 
     monkeypatch.setattr(
-        playoffs.leaguegamefinder,
-        "LeagueGameFinder",
+        playoffs.nba_stats_client,
+        "fetch_league_game_finder",
         _FakePlayoffClient,
     )
-    monkeypatch.setattr(playoffs, "LeagueGameLog", _FakePlayoffClient)
+    monkeypatch.setattr(playoffs.nba_stats_client, "fetch_league_game_log", _FakePlayoffClient)
     monkeypatch.setattr(playoffs, "_df_cache", {})
     return calls
 

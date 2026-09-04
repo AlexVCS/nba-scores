@@ -1,7 +1,9 @@
 import {useQuery} from "@tanstack/react-query";
-import {useParams} from "react-router";
+import {useParams, useSearchParams} from "react-router";
+import {isValidDateParam} from "@/helpers/dateParam";
 import type {GameSummaryData, GameSummaryTeam, Player} from "@/helpers/helpers";
-import {getBoxScores, getGameSummary} from "@/services/nbaService";
+import type {InactivePlayer} from "@/services/nbaService";
+import {getBoxScores, getGameSummary, getInactivePlayers} from "@/services/nbaService";
 
 // Team-level totals from the box score endpoint. Every field beyond `points`
 // is optional so older payloads and fixtures that only carry the score keep working.
@@ -28,6 +30,8 @@ export interface DesignTeamStatistics {
   plusMinusPoints?: number;
 }
 
+export type {InactivePlayer} from "@/services/nbaService";
+
 export interface DesignBoxscoreTeam {
   teamId: number;
   teamTricode: string;
@@ -35,6 +39,7 @@ export interface DesignBoxscoreTeam {
   teamName: string;
   score: number;
   players: Player[];
+  inactivePlayers?: InactivePlayer[];
   statistics?: DesignTeamStatistics;
 }
 
@@ -58,6 +63,9 @@ const buildSummaryTeam = (team: DesignBoxscoreTeam): GameSummaryTeam => ({
 
 export function useBoxscorePage() {
   const {gameId = ""} = useParams();
+  const [searchParams] = useSearchParams();
+  const dateParam = searchParams.get("date") ?? "";
+  const scoreboardPath = isValidDateParam(dateParam) ? `/?date=${dateParam}` : "/";
   const boxscoreQuery = useQuery({
     queryKey: ["boxscore", gameId],
     queryFn: () => getBoxScores(gameId) as Promise<BoxscoreResponse>,
@@ -66,7 +74,28 @@ export function useBoxscorePage() {
     queryKey: ["gameSummary", gameId],
     queryFn: () => getGameSummary(gameId),
   });
-  const game = boxscoreQuery.data?.game;
+  const inactiveQuery = useQuery({
+    queryKey: ["inactivePlayers", gameId],
+    queryFn: ({signal}) => getInactivePlayers(gameId, signal),
+    enabled: Boolean(gameId),
+    staleTime: 5 * 60 * 1000,
+    retry: false,
+  });
+  const boxscoreGame = boxscoreQuery.data?.game;
+  const inactiveTeams = inactiveQuery.data?.teams;
+  const game = boxscoreGame && inactiveTeams
+    ? {
+        ...boxscoreGame,
+        homeTeam: {
+          ...boxscoreGame.homeTeam,
+          inactivePlayers: inactiveTeams[String(boxscoreGame.homeTeam.teamId)] ?? [],
+        },
+        awayTeam: {
+          ...boxscoreGame.awayTeam,
+          inactivePlayers: inactiveTeams[String(boxscoreGame.awayTeam.teamId)] ?? [],
+        },
+      }
+    : boxscoreGame;
 
   const fallbackSummary: GameSummaryData | null = !summaryQuery.isLoading && game
     ? {
@@ -81,6 +110,7 @@ export function useBoxscorePage() {
 
   return {
     gameId,
+    scoreboardPath,
     game,
     summary: summaryQuery.data ?? fallbackSummary,
     isLoading: boxscoreQuery.isLoading || (boxscoreQuery.isError && summaryQuery.isLoading),

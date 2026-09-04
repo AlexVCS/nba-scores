@@ -1,5 +1,7 @@
 # Historical Logo Review Notes
 
+See [September recovery results](historical-logo-recovery-2026-09-04.md) for nine newly enabled identities and the remaining Jets gap. The exclusions below describe the earlier June pass.
+
 Reviewer/date: Codex, 2026-06-18.
 
 These notes record the accepted entries in `src/constants/historicalTeamLogos.ts`.

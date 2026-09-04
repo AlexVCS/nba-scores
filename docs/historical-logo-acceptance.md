@@ -12,21 +12,16 @@ Accepted logos should also have a backup outside normal repo history. Remote
 URLs can disappear, change content, block hotlinking, or replace assets without
 warning; the backup is the fallback source of truth if that happens.
 
-## Current Logo Rendering Path
+## Current logo rendering path
 
-- Historical logos live in `src/constants/historicalTeamLogos.ts`.
-- `src/components/TeamLogos.tsx` checks `HISTORICAL_TEAM_LOGOS[tricode]`.
-- If no historical URL exists, `TeamLogos` falls back to
-  `https://cdn.nba.com/logos/nba/${teamId}/global/L/logo.svg`.
-- If the image load errors, `TeamLogos` falls back to `placeholderTeamLogoUrl`.
+- Historical assets live in `src/constants/historicalTeamLogos.ts` and are app-served.
+- `TeamLogos` checks a team-ID override first, then normalized tricode and aliases.
+- Without a historical asset, it tries the NBA CDN theme variant, then the opposite variant.
+- The placeholder is the final fallback; its error does not start another request.
+- Scores, boxscores and playoff call sites pass tricodes in the current working tree.
+- Shared IDs across renamed franchises still require season-aware selection for exact era matching.
 
-Current limitation:
-
-- Playoff views pass `tricode` into `TeamLogos`, so historical logos are active
-  there.
-- The scores list and boxscore summary currently call `TeamLogos` without
-  `tricode`, so historical mappings cannot be visually verified there until
-  those call sites pass tricodes.
+See [September recovery results](historical-logo-recovery-2026-09-04.md) for sources, quality exceptions and verification. Gold on Hardwood currently uses 58px score-card, 70px summary and 88px series-header logos, larger than the original size table below.
 
 ## Required Metadata For Each Candidate
 

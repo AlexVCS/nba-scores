@@ -1,0 +1,29 @@
+[
+  {
+    "label": "Dev Client",
+    "command": "pnpm",
+    "args": ["dev", "--host", "0.0.0.0"],
+    "cwd": "/Users/alexcurtis-slep/Documents/projects/nba-scores",
+    "use_new_terminal": true,
+    "allow_concurrent_runs": false,
+    "reveal": "always",
+    "tags": ["nba-dev"]
+  },
+  {
+    "label": "Dev Server",
+    "command": "/Users/alexcurtis-slep/Documents/projects/nba-scores/server/venv/bin/uvicorn",
+    "args": [
+      "server.main:app",
+      "--reload",
+      "--host",
+      "0.0.0.0",
+      "--port",
+      "8000"
+    ],
+    "cwd": "/Users/alexcurtis-slep/Documents/projects/nba-scores",
+    "use_new_terminal": true,
+    "allow_concurrent_runs": false,
+    "reveal": "always",
+    "tags": ["nba-dev"]
+  }
+]

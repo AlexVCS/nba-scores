@@ -1,6 +1,6 @@
 """Tests for defensive playoff score repair.
 
-These tests are offline: the boxscoresummaryv2 client is monkeypatched, so no
+These tests are offline: the NBA Stats summary fetcher is monkeypatched, so no
 real API calls are made.
 """
 
@@ -93,12 +93,14 @@ def test_fetch_corrected_team_scores_parses_and_caches(monkeypatch):
             calls["n"] += 1
             self.line_score = _FakeResult()
 
-    monkeypatch.setattr(playoffs.boxscoresummaryv2, "BoxScoreSummaryV2", _FakeSummary)
+    monkeypatch.setattr(
+        playoffs.nba_stats_client, "fetch_boxscore_summary", _FakeSummary
+    )
 
     first = playoffs.fetch_corrected_team_scores("0048300051")
     assert first == {PHX: 111, UTA: 110}
 
-    # Second call is served from cache (no new API construction).
+    # Second call is served from cache (no new fetch).
     second = playoffs.fetch_corrected_team_scores("0048300051")
     assert second == {PHX: 111, UTA: 110}
     assert calls["n"] == 1

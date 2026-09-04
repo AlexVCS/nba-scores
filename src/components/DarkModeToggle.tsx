@@ -12,7 +12,7 @@ const DarkModeToggle = () => {
   const prefersReducedMotion = useReducedMotion();
 
   const themeButtonLabel =
-    theme === "light" ? "toggle_theme_dark" : "toggle_theme_light";
+    theme === "light" ? "Switch to dark mode" : "Switch to light mode";
 
   const themeIconSwitchVariants: Variants = prefersReducedMotion
     ? {}

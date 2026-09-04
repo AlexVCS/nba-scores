@@ -11,7 +11,9 @@
         "-u",
         "PYTHONHOME",
         "pnpm",
-        "dev"
+        "dev",
+        "--host",
+        "0.0.0.0"
       ],
       "options": {
         "cwd": "${workspaceFolder}"
@@ -25,7 +27,7 @@
     {
       "label": "Dev Server",
       "type": "shell",
-      "command": "source server/venv/bin/activate && uvicorn server.main:app --reload",
+      "command": "source server/venv/bin/activate && uvicorn server.main:app --reload --host 0.0.0.0 --port 8000",
       "options": {
         "cwd": "${workspaceFolder}"
       },

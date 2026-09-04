@@ -8,6 +8,9 @@ const Header = ({ variant = "default" }: HeaderProps) => {
   const isPlayoffs = variant === "playoffs";
   const { theme } = useTheme();
   const playoffzSrc = theme === "dark" ? "/images/playoffz-dark.png" : "/images/playoffz.png";
+  const scorezSrc = theme === "dark"
+    ? "/images/nba-scorez-lockup-dark.svg"
+    : "/images/nba-scorez-lockup.svg";
 
   return (
     <article>
@@ -21,7 +24,7 @@ const Header = ({ variant = "default" }: HeaderProps) => {
         ) : (
           <img
             className="w-xs"
-            src="/images/dark-mode-logo.webp"
+            src={scorezSrc}
             alt="NBA Scorez Logo"
           />
         )}

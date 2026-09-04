@@ -1,9 +1,4 @@
-export type DesignId =
-  | "original"
-  | "design-1"
-  | "design-2"
-  | "design-3"
-  | "design-4";
+export type DesignId = "original" | "design-1";
 
 export type DesignPage = "scores" | "boxscore" | "playoffs" | "series";
 

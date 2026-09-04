@@ -54,11 +54,14 @@ def get_playoff_end_year(season: str) -> int:
 def get_playoff_format(season: str, finals_round: int | None = None):
     playoff_year = get_playoff_end_year(season)
 
-    if playoff_year <= 1948:
+    if playoff_year in {1947, 1948}:
         era = "baa-runners-up-bracket"
         bracket_type = "hybrid"
         exact = False
-        notes = ["Early BAA runners-up bracket; rendered as grouped historical rounds."]
+        notes = [
+            "Division winners played each other for one Finals spot. "
+            "The second- and third-place teams played two rounds for the other."
+        ]
     elif playoff_year == 1950:
         era = "three-division-transitional"
         bracket_type = "multi-division"
@@ -89,7 +92,7 @@ def get_playoff_format(season: str, finals_round: int | None = None):
         era = "six-team-round-robin"
         bracket_type = "round-robin-plus-finals"
         exact = False
-        notes = ["Division round-robin format; connectors are shown only when derivable."]
+        notes = ["In 1954, each division opened with a three-team round robin. The top two teams advanced to the division finals."]
     elif 1955 <= playoff_year <= 1966:
         era = "six-team-bye"
         bracket_type = "multi-division"
@@ -255,6 +258,23 @@ def get_finals_round(playoff_series):
     return None
 
 
+# Regular-season division winners, not the winners of playoff series.
+# https://en.wikipedia.org/wiki/1947_BAA_playoffs
+# https://en.wikipedia.org/wiki/1948_BAA_playoffs
+BAA_DIVISION_WINNERS = {
+    1947: frozenset({1610610025, 1610610036}),  # Chicago, Washington
+    1948: frozenset({1610612744, 1610610034}),  # Philadelphia, St. Louis
+}
+
+
+def is_baa_division_winners_series(series, playoff_year):
+    return (
+        playoff_year in BAA_DIVISION_WINNERS
+        and {team["id"] for team in series.get("teams", [])}
+        == BAA_DIVISION_WINNERS[playoff_year]
+    )
+
+
 def get_group_for_series(series, playoff_year: int, is_finals: bool):
     if is_finals:
         return {
@@ -262,6 +282,15 @@ def get_group_for_series(series, playoff_year: int, is_finals: bool):
             "label": "NBA Finals",
             "kind": "finals",
             "sortOrder": 99,
+        }
+
+    if playoff_year in BAA_DIVISION_WINNERS:
+        division_winners = is_baa_division_winners_series(series, playoff_year)
+        return {
+            "id": "division-winners" if division_winners else "other-qualifiers",
+            "label": "Division winners" if division_winners else "Second- and third-place teams",
+            "kind": "league",
+            "sortOrder": 10 if division_winners else 20,
         }
 
     conf = _get_series_conference(series)
@@ -367,6 +396,17 @@ def enrich_playoff_bracket_response(season: str, playoff_series):
             "games": list(series.get("games", [])),
         }
         is_finals = finals_round is not None and series_copy["round"] == finals_round
+        if playoff_year in BAA_DIVISION_WINNERS:
+            # These semifinals ran alongside the other qualifiers' quarterfinals.
+            if is_baa_division_winners_series(series_copy, playoff_year):
+                series_copy["round"] = 2
+            series_copy["roundName"] = {
+                1: "Quarterfinals", 2: "Semifinals", 3: "NBA Finals",
+            }[series_copy["round"]]
+            series_copy["games"] = [
+                {**game, "round": series_copy["round"], "roundName": series_copy["roundName"]}
+                for game in series_copy["games"]
+            ]
         group = get_group_for_series(series_copy, playoff_year, is_finals)
         groups_by_id[group["id"]] = group
 
@@ -381,6 +421,8 @@ def enrich_playoff_bracket_response(season: str, playoff_series):
             series_copy["round"],
             is_finals,
         )
+        if is_baa_division_winners_series(series_copy, playoff_year):
+            series_copy["targetWins"] = 4
         series_copy["isFinals"] = is_finals
         enriched_series.append(series_copy)
 

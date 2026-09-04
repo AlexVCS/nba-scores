@@ -1,0 +1,5933 @@
+{
+  "date": "2026-09-04",
+  "viewport": {
+    "width": 1600,
+    "height": 1000
+  },
+  "theme": "light",
+  "results": "globally revealed",
+  "seasons": [
+    {
+      "input": "1946-47",
+      "rounds": [
+        {
+          "cardGaps": [],
+          "exact": false,
+          "gap": 16,
+          "heights": [
+            98
+          ],
+          "label": "Semifinals"
+        },
+        {
+          "cardGaps": [
+            12
+          ],
+          "exact": false,
+          "gap": 16,
+          "heights": [
+            126,
+            126
+          ],
+          "label": "Quarterfinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": false,
+          "gap": 16,
+          "heights": [
+            126
+          ],
+          "label": "Semifinals"
+        }
+      ],
+      "season": "1946-47"
+    },
+    {
+      "input": "1947-48",
+      "rounds": [
+        {
+          "cardGaps": [],
+          "exact": false,
+          "gap": 16,
+          "heights": [
+            98
+          ],
+          "label": "Semifinals"
+        },
+        {
+          "cardGaps": [
+            12
+          ],
+          "exact": false,
+          "gap": 16,
+          "heights": [
+            126,
+            126
+          ],
+          "label": "Quarterfinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": false,
+          "gap": 16,
+          "heights": [
+            126
+          ],
+          "label": "Semifinals"
+        }
+      ],
+      "season": "1947-48"
+    },
+    {
+      "input": "1948-49",
+      "rounds": [
+        {
+          "cardGaps": [
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 66,
+          "heights": [
+            126
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 66,
+          "heights": [
+            126
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1948-49"
+    },
+    {
+      "input": "1949-50",
+      "rounds": [
+        {
+          "cardGaps": [
+            12,
+            12,
+            12
+          ],
+          "exact": false,
+          "gap": 16,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": false,
+          "gap": 16,
+          "heights": [
+            104
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [
+            12,
+            12
+          ],
+          "exact": false,
+          "gap": 16,
+          "heights": [
+            126,
+            126,
+            126
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": false,
+          "gap": 16,
+          "heights": [
+            126
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": false,
+          "gap": 16,
+          "heights": [
+            126
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": false,
+          "gap": 16,
+          "heights": [
+            126
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1949-50"
+    },
+    {
+      "input": "1950-51",
+      "rounds": [
+        {
+          "cardGaps": [
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 66,
+          "heights": [
+            126
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 66,
+          "heights": [
+            126
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1950-51"
+    },
+    {
+      "input": "1951-52",
+      "rounds": [
+        {
+          "cardGaps": [
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 66,
+          "heights": [
+            126
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 66,
+          "heights": [
+            126
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1951-52"
+    },
+    {
+      "input": "1952-53",
+      "rounds": [
+        {
+          "cardGaps": [
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 66,
+          "heights": [
+            126
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 66,
+          "heights": [
+            126
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1952-53"
+    },
+    {
+      "input": "1953-54",
+      "rounds": [
+        {
+          "cardGaps": [
+            12
+          ],
+          "exact": false,
+          "gap": 16,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            12,
+            12,
+            12
+          ],
+          "exact": false,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        }
+      ],
+      "season": "1953-54"
+    },
+    {
+      "input": "1954-55",
+      "rounds": [
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 205,
+          "heights": [
+            104
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1954-55"
+    },
+    {
+      "input": "1955-56",
+      "rounds": [
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 205,
+          "heights": [
+            104
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1955-56"
+    },
+    {
+      "input": "1956-57",
+      "rounds": [
+        {
+          "cardGaps": [
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 205,
+          "heights": [
+            104
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 205,
+          "heights": [
+            104
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1956-57"
+    },
+    {
+      "input": "1957-58",
+      "rounds": [
+        {
+          "cardGaps": [
+            12
+          ],
+          "exact": false,
+          "gap": 16,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [
+            12
+          ],
+          "exact": false,
+          "gap": 16,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1957-58"
+    },
+    {
+      "input": "1958-59",
+      "rounds": [
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 205,
+          "heights": [
+            104
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1958-59"
+    },
+    {
+      "input": "1959-60",
+      "rounds": [
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 205,
+          "heights": [
+            104
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1959-60"
+    },
+    {
+      "input": "1960-61",
+      "rounds": [
+        {
+          "cardGaps": [
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 205,
+          "heights": [
+            104
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 205,
+          "heights": [
+            104
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1960-61"
+    },
+    {
+      "input": "1961-62",
+      "rounds": [
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1961-62"
+    },
+    {
+      "input": "1962-63",
+      "rounds": [
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 205,
+          "heights": [
+            104
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Semifinals"
+        }
+      ],
+      "season": "1962-63"
+    },
+    {
+      "input": "1963-64",
+      "rounds": [
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1963-64"
+    },
+    {
+      "input": "1964-65",
+      "rounds": [
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1964-65"
+    },
+    {
+      "input": "1965-66",
+      "rounds": [
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 205,
+          "heights": [
+            104
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1965-66"
+    },
+    {
+      "input": "1966-67",
+      "rounds": [
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1966-67"
+    },
+    {
+      "input": "1967-68",
+      "rounds": [
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1967-68"
+    },
+    {
+      "input": "1968-69",
+      "rounds": [
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Semifinals"
+        }
+      ],
+      "season": "1968-69"
+    },
+    {
+      "input": "1969-70",
+      "rounds": [
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 205,
+          "heights": [
+            104
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        }
+      ],
+      "season": "1969-70"
+    },
+    {
+      "input": "1970-71",
+      "rounds": [
+        {
+          "cardGaps": [
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 205,
+          "heights": [
+            104
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        }
+      ],
+      "season": "1970-71"
+    },
+    {
+      "input": "1971-72",
+      "rounds": [
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Semifinals"
+        }
+      ],
+      "season": "1971-72"
+    },
+    {
+      "input": "1972-73",
+      "rounds": [
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Semifinals"
+        }
+      ],
+      "season": "1972-73"
+    },
+    {
+      "input": "1973-74",
+      "rounds": [
+        {
+          "cardGaps": [
+            12,
+            12,
+            12
+          ],
+          "exact": false,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            12
+          ],
+          "exact": false,
+          "gap": 16,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        }
+      ],
+      "season": "1973-74"
+    },
+    {
+      "input": "1974-75",
+      "rounds": [
+        {
+          "cardGaps": [
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1974-75"
+    },
+    {
+      "input": "1975-76",
+      "rounds": [
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1975-76"
+    },
+    {
+      "input": "1976-77",
+      "rounds": [
+        {
+          "cardGaps": [
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158,
+            -34
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1976-77"
+    },
+    {
+      "input": "1977-78",
+      "rounds": [
+        {
+          "cardGaps": [
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158,
+            -34
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1977-78"
+    },
+    {
+      "input": "1978-79",
+      "rounds": [
+        {
+          "cardGaps": [
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158,
+            -34
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1978-79"
+    },
+    {
+      "input": "1979-80",
+      "rounds": [
+        {
+          "cardGaps": [
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1979-80"
+    },
+    {
+      "input": "1980-81",
+      "rounds": [
+        {
+          "cardGaps": [
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1980-81"
+    },
+    {
+      "input": "1981-82",
+      "rounds": [
+        {
+          "cardGaps": [
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1981-82"
+    },
+    {
+      "input": "1982-83",
+      "rounds": [
+        {
+          "cardGaps": [
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1982-83"
+    },
+    {
+      "input": "1983-84",
+      "rounds": [
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1983-84"
+    },
+    {
+      "input": "1984-85",
+      "rounds": [
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1984-85"
+    },
+    {
+      "input": "1985-86",
+      "rounds": [
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1985-86"
+    },
+    {
+      "input": "1986-87",
+      "rounds": [
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1986-87"
+    },
+    {
+      "input": "1987-88",
+      "rounds": [
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1987-88"
+    },
+    {
+      "input": "1988-89",
+      "rounds": [
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1988-89"
+    },
+    {
+      "input": "1989-90",
+      "rounds": [
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1989-90"
+    },
+    {
+      "input": "1990-91",
+      "rounds": [
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1990-91"
+    },
+    {
+      "input": "1991-92",
+      "rounds": [
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1991-92"
+    },
+    {
+      "input": "1992-93",
+      "rounds": [
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1992-93"
+    },
+    {
+      "input": "1993-94",
+      "rounds": [
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1993-94"
+    },
+    {
+      "input": "1994-95",
+      "rounds": [
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1994-95"
+    },
+    {
+      "input": "1995-96",
+      "rounds": [
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1995-96"
+    },
+    {
+      "input": "1996-97",
+      "rounds": [
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1996-97"
+    },
+    {
+      "input": "1997-98",
+      "rounds": [
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1997-98"
+    },
+    {
+      "input": "1998-99",
+      "rounds": [
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1998-99"
+    },
+    {
+      "input": "1999-00",
+      "rounds": [
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "1999-00"
+    },
+    {
+      "input": "2000-01",
+      "rounds": [
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "2000-01"
+    },
+    {
+      "input": "2001-02",
+      "rounds": [
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            2,
+            2,
+            2
+          ],
+          "exact": true,
+          "gap": 2,
+          "heights": [
+            126,
+            126,
+            126,
+            126
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "2001-02"
+    },
+    {
+      "input": "2002-03",
+      "rounds": [
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "2002-03"
+    },
+    {
+      "input": "2003-04",
+      "rounds": [
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "2003-04"
+    },
+    {
+      "input": "2004-05",
+      "rounds": [
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "2004-05"
+    },
+    {
+      "input": "2005-06",
+      "rounds": [
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "2005-06"
+    },
+    {
+      "input": "2006-07",
+      "rounds": [
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "2006-07"
+    },
+    {
+      "input": "2007-08",
+      "rounds": [
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "2007-08"
+    },
+    {
+      "input": "2008-09",
+      "rounds": [
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "2008-09"
+    },
+    {
+      "input": "2009-10",
+      "rounds": [
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "2009-10"
+    },
+    {
+      "input": "2010-11",
+      "rounds": [
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "2010-11"
+    },
+    {
+      "input": "2011-12",
+      "rounds": [
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "2011-12"
+    },
+    {
+      "input": "2012-13",
+      "rounds": [
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "2012-13"
+    },
+    {
+      "input": "2013-14",
+      "rounds": [
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "2013-14"
+    },
+    {
+      "input": "2014-15",
+      "rounds": [
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "2014-15"
+    },
+    {
+      "input": "2015-16",
+      "rounds": [
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "2015-16"
+    },
+    {
+      "input": "2016-17",
+      "rounds": [
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "2016-17"
+    },
+    {
+      "input": "2017-18",
+      "rounds": [
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "2017-18"
+    },
+    {
+      "input": "2018-19",
+      "rounds": [
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "2018-19"
+    },
+    {
+      "input": "2019-20",
+      "rounds": [
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "2019-20"
+    },
+    {
+      "input": "2020-21",
+      "rounds": [
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "2020-21"
+    },
+    {
+      "input": "2021-22",
+      "rounds": [
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "2021-22"
+    },
+    {
+      "input": "2022-23",
+      "rounds": [
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "2022-23"
+    },
+    {
+      "input": "2023-24",
+      "rounds": [
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "2023-24"
+    },
+    {
+      "input": "2024-25",
+      "rounds": [
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "2024-25"
+    },
+    {
+      "input": "2025-26",
+      "rounds": [
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 169,
+          "heights": [
+            176
+          ]
+        },
+        {
+          "cardGaps": [
+            30,
+            30,
+            30
+          ],
+          "exact": true,
+          "gap": 16,
+          "heights": [
+            98,
+            98,
+            98,
+            98
+          ],
+          "label": "First Round"
+        },
+        {
+          "cardGaps": [
+            158
+          ],
+          "exact": true,
+          "gap": 80,
+          "heights": [
+            98,
+            98
+          ],
+          "label": "Conf. Semifinals"
+        },
+        {
+          "cardGaps": [],
+          "exact": true,
+          "gap": 208,
+          "heights": [
+            98
+          ],
+          "label": "Conf. Finals"
+        }
+      ],
+      "season": "2025-26"
+    }
+  ]
+}

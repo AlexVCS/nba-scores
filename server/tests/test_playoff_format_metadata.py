@@ -124,3 +124,41 @@ def test_metadata_includes_groups_rounds_and_advancement_edges():
             "winnerTeamId": bos,
         }
     ]
+
+
+@pytest.mark.parametrize(
+    "season,leaders,others",
+    [
+        ("1946-47", [(1610610025, "CHS"), (1610610036, "WAS")],
+         [(1610612744, "PHW"), (1610610034, "BOM"), (1610612752, "NYK"), (1610610026, "CLR")]),
+        ("1947-48", [(1610612744, "PHW"), (1610610034, "BOM")],
+         [(1610610024, "BAL"), (1610612752, "NYK"), (1610610025, "CHS"), (1610612738, "BOS")]),
+    ],
+)
+def test_early_baa_bracket_has_two_routes_to_finals(season, leaders, others):
+    source = [
+        _series("leaders", 1, leaders, leaders[0][0]),
+        _series("quarter-a", 1, others[:2], others[0][0]),
+        _series("quarter-b", 1, others[2:], others[2][0]),
+        _series("semi", 2, [others[0], others[2]], others[0][0]),
+        _series("final", 3, [leaders[0], others[0]], others[0][0]),
+    ]
+    bracket = playoffs.enrich_playoff_bracket_response(season, source)
+    series = {item["seriesKey"]: item for item in bracket["series"]}
+    assert [group["label"] for group in bracket["groups"]] == [
+        "Division winners", "Second- and third-place teams", "NBA Finals",
+    ]
+    assert [r["label"] for r in bracket["rounds"]] == ["Quarterfinals", "Semifinals", "NBA Finals"]
+    assert series["leaders"]["round"] == 2
+    assert series["leaders"]["targetWins"] == 4
+    assert series["leaders"]["games"][0]["roundName"] == "Semifinals"
+    assert series["semi"]["targetWins"] == 2
+    assert series["quarter-a"]["targetWins"] == 2
+    assert series["final"]["targetWins"] == 4
+    assert source[0]["round"] == 1
+    assert source[0]["games"][0]["roundName"] == "First Round"
+
+
+def test_early_baa_note_is_limited_to_first_two_seasons():
+    for season in ["1948-49", "1949-50", "1953-54", "2025-26"]:
+        assert "Division winners played" not in " ".join(playoffs.get_playoff_format(season)["notes"])

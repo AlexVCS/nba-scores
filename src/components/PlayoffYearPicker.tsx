@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 
 const current_year = new Date().getFullYear();
-const first_playoff_end_year = 1951;
+const first_playoff_end_year = 1947;
 const playoff_start_month = 3; // April (0-indexed)
 const playoff_start_day = 15;
 

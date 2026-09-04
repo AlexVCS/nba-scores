@@ -1,3 +1,5 @@
+from unittest.mock import Mock
+
 import pandas as pd
 import pytest
 
@@ -78,15 +80,54 @@ def _line_score_row(team_id, tricode, city, nickname, pts, qtrs=None, ot1=None):
 
 
 def _patch_summary(monkeypatch, game_summary_rows, line_score_rows):
-    class FakeBoxScoreSummaryV2:
-        def __init__(self, *args, **kwargs):
-            self._summary = _FakeSummary(game_summary_rows, line_score_rows)
-            self.game_summary = self._summary.game_summary
-            self.line_score = self._summary.line_score
-
     monkeypatch.setattr(
-        game_summary.boxscoresummaryv2, "BoxScoreSummaryV2", FakeBoxScoreSummaryV2
+        game_summary.nba_stats_client,
+        "fetch_boxscore_summary",
+        lambda game_id: _FakeSummary(game_summary_rows, line_score_rows),
     )
+
+
+def test_game_summary_uses_v3_without_requesting_v2(monkeypatch):
+    game_id = "0024600001"
+    summary = Mock()
+    summary.get_dict.return_value = {
+        "boxScoreSummary": {
+            "gameId": game_id,
+            "gameStatus": 1,
+            "period": 0,
+            "homeTeam": {"teamId": HUS},
+            "awayTeam": {"teamId": NYK},
+        }
+    }
+    fetch_v3 = Mock(return_value=summary)
+    fetch_v2 = Mock(side_effect=AssertionError("V2 must not be requested"))
+    monkeypatch.setattr(game_summary.nba_stats_client, "fetch_boxscore_summary_v3", fetch_v3)
+    monkeypatch.setattr(game_summary.nba_stats_client, "fetch_boxscore_summary", fetch_v2)
+
+    result = main.get_game_summary(game_id)
+
+    fetch_v3.assert_called_once_with(game_id)
+    fetch_v2.assert_not_called()
+    assert result["gameStatusText"] == "Scheduled"
+    assert result["homeTeam"]["teamId"] == HUS
+    assert result["awayTeam"]["teamId"] == NYK
+
+
+def test_game_summary_falls_back_to_v2_when_v3_is_unavailable(monkeypatch):
+    game_id = "0024600001"
+    error = game_summary.nba_stats_client.UpstreamUnavailableError(
+        endpoint="BoxScoreSummaryV3", error_type="ReadTimeout", duration_ms=10
+    )
+    fetch_v3 = Mock(side_effect=error)
+    _patch_summary(monkeypatch, [_game_summary_row(GAME_STATUS_ID=1)], [])
+    monkeypatch.setattr(game_summary.nba_stats_client, "fetch_boxscore_summary_v3", fetch_v3)
+
+    result = main.get_game_summary(game_id)
+
+    fetch_v3.assert_called_once_with(game_id)
+    assert result["gameStatusText"] == "Scheduled"
+    assert result["homeTeam"]["teamId"] == HUS
+    assert result["awayTeam"]["teamId"] == NYK
 
 
 def _bref_score(period_scores, total):
@@ -207,7 +248,7 @@ def test_invalid_nba_period_data_uses_bref_fallback(monkeypatch):
 
     monkeypatch.setattr(game_summary, "fetch_bref_line_score", fake_bref)
 
-    result = main.get_game_summary("0024600001")
+    result = game_summary.fetch_game_summary_v2("0024600001")
 
     assert calls == [("1946-11-01T00:00:00", "HUS")]
     assert result["periodScoreSource"] == "basketball-reference"
@@ -237,7 +278,7 @@ def test_bref_fallback_rejects_period_sum_mismatch(monkeypatch):
         },
     )
 
-    result = main.get_game_summary("0024600001")
+    result = game_summary.fetch_game_summary_v2("0024600001")
 
     _assert_no_period_fallback(result)
 
@@ -253,7 +294,7 @@ def test_bref_fallback_rejects_parsed_total_mismatch(monkeypatch):
         },
     )
 
-    result = main.get_game_summary("0024600001")
+    result = game_summary.fetch_game_summary_v2("0024600001")
 
     _assert_no_period_fallback(result)
 
@@ -269,7 +310,7 @@ def test_bref_fallback_rejects_mismatched_period_sets(monkeypatch):
         },
     )
 
-    result = main.get_game_summary("0024600001")
+    result = game_summary.fetch_game_summary_v2("0024600001")
 
     _assert_no_period_fallback(result)
 
@@ -308,7 +349,7 @@ def test_valid_nba_period_data_does_not_call_bref(monkeypatch):
         lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("unexpected")),
     )
 
-    result = main.get_game_summary("0024600001")
+    result = game_summary.fetch_game_summary_v2("0024600001")
 
     assert result["periodScoreSource"] == "nba"
     assert result["gameStatusText"] == "Final"
@@ -339,7 +380,7 @@ def test_final_overtime_status_uses_validated_periods(monkeypatch):
         lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("unexpected")),
     )
 
-    result = main.get_game_summary("0024600001")
+    result = game_summary.fetch_game_summary_v2("0024600001")
 
     assert result["periodScoreSource"] == "nba"
     assert result["gameStatusText"] == "Final/OT"
@@ -367,7 +408,7 @@ def test_fallback_failure_returns_no_periods(monkeypatch):
         lambda *args, **kwargs: (_ for _ in ()).throw(RuntimeError("offline")),
     )
 
-    result = main.get_game_summary("0024600001")
+    result = game_summary.fetch_game_summary_v2("0024600001")
 
     assert result["periodScoreSource"] == "unavailable"
     assert result["homeTeam"]["periods"] == []
@@ -386,7 +427,7 @@ def test_scheduled_empty_linescore_does_not_call_bref(monkeypatch):
         lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("unexpected")),
     )
 
-    result = main.get_game_summary("0024600001")
+    result = game_summary.fetch_game_summary_v2("0024600001")
 
     assert result["gameStatusText"] == "Scheduled"
     assert result["periodScoreSource"] == "unavailable"
@@ -409,7 +450,7 @@ def test_final_empty_linescore_uses_bref_fallback(monkeypatch):
 
     monkeypatch.setattr(game_summary, "fetch_bref_line_score", fake_bref)
 
-    result = main.get_game_summary("0024600001")
+    result = game_summary.fetch_game_summary_v2("0024600001")
 
     assert calls == [("1946-11-01T00:00:00", "HUS")]
     assert result["periodScoreSource"] == "basketball-reference"
@@ -447,7 +488,7 @@ def test_final_sparse_linescore_uses_bref_fallback(monkeypatch):
 
     monkeypatch.setattr(game_summary, "fetch_bref_line_score", fake_bref)
 
-    result = main.get_game_summary("0024600001")
+    result = game_summary.fetch_game_summary_v2("0024600001")
 
     assert calls == [("1946-11-01T00:00:00", "HUS")]
     assert result["periodScoreSource"] == "basketball-reference"
@@ -475,7 +516,7 @@ def test_final_empty_linescore_bref_failure_is_not_scheduled(monkeypatch):
         lambda *args, **kwargs: (_ for _ in ()).throw(RuntimeError("offline")),
     )
 
-    result = main.get_game_summary("0024600001")
+    result = game_summary.fetch_game_summary_v2("0024600001")
 
     assert result["gameStatusText"] == "Final"
     assert result["periodScoreSource"] == "unavailable"

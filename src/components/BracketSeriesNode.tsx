@@ -20,27 +20,26 @@ function BracketSeriesNode({ data }: BracketSeriesNodeProps) {
   const renderRow = (team: typeof team1, wins: number, isWinner: boolean, isTopRow: boolean) => {
     const showWinner = isRevealed && isWinner;
     const cornerClass = isTopRow ? 'rounded-t-md' : 'rounded-b-md';
+    const rowStateClass = showWinner ? 'bracket-series-row--winner' : 'bracket-series-row--regular';
 
     return (
       <div
-        className={`flex items-center justify-between ${sizing.rowGapClass} ${sizing.rowPadClass} bg-gray-900 ${cornerClass} ${isTopRow ? 'border-b-2 border-gray-700' : ''}`}
+        className={`bracket-series-row ${rowStateClass} flex items-center justify-between ${sizing.rowGapClass} ${sizing.rowPadClass} bg-white dark:bg-neutral-950 ${cornerClass} ${isTopRow ? 'bracket-series-row--top border-b border-neutral-300 dark:border-neutral-700' : 'bracket-series-row--bottom'}`}
       >
-        <div className={`flex items-center ${sizing.rowGapClass} min-w-0`}>
-          <div className={`flex-shrink-0 ${sizing.logoPadClass}`}>
+        <div className={`bracket-series-team flex items-center ${sizing.rowGapClass} min-w-0`}>
+          <div className={`bracket-series-logo flex-shrink-0 ${sizing.logoPadClass}`}>
             <TeamLogos teamName={team.tricode} teamId={team.id} size={sizing.logoSize} tricode={team.tricode} />
           </div>
           <span
-            className={`font-mono ${sizing.tricodeClass} truncate tracking-wider text-amber-500 ${showWinner ? 'font-bold' : 'font-semibold'}`}
-            style={{ textShadow: '0 0 5px rgba(245, 158, 11, 0.7)' }}
+            className={`bracket-series-tricode ${sizing.tricodeClass} truncate tracking-wide text-neutral-900 dark:text-neutral-100 ${showWinner ? 'font-bold' : 'font-semibold'}`}
           >
             {team.tricode}
           </span>
         </div>
-        <div className={`flex items-center ${sizing.rowGapClass} flex-shrink-0`}>
+        <div className={`bracket-series-result flex items-center ${sizing.rowGapClass} flex-shrink-0`}>
           {isRevealed && (
             <span
-              className={`font-mono ${sizing.scoreClass} font-bold tabular-nums text-amber-500`}
-              style={{ textShadow: '0 0 10px rgba(245, 158, 11, 0.7)' }}
+              className={`bracket-series-score ${sizing.scoreClass} font-bold tabular-nums text-neutral-900 dark:text-neutral-100`}
             >
               {wins}
             </span>
@@ -51,7 +50,10 @@ function BracketSeriesNode({ data }: BracketSeriesNodeProps) {
   };
 
   return (
-    <div style={{ width: `${sizing.nodeWidth}px`, position: 'relative' }}>
+    <div
+      className={`bracket-series-node ${data.isFinals ? 'bracket-series-node--finals' : ''} ${isRevealed ? 'bracket-series-node--revealed' : 'bracket-series-node--hidden'}`}
+      style={{ width: `${data.displayWidth}px`, position: 'relative' }}
+    >
       {/* Source handles: exit from the winner row's outer edge toward the next round */}
       <Handle type="source" position={Position.Right} id="src-right" style={{ ...HANDLE_STYLE, top: '50%' }} />
       <Handle type="source" position={Position.Left} id="src-left" style={{ ...HANDLE_STYLE, top: '50%' }} />
@@ -60,8 +62,9 @@ function BracketSeriesNode({ data }: BracketSeriesNodeProps) {
 
       <Link
         to={buildSeriesPath(season, seriesSlug)}
-        className="block border-2 border-gray-700 rounded-lg bg-gray-900 overflow-hidden hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-lg transition-all duration-200"
+        className={`bracket-series-card nodrag nopan ${isRevealed ? 'bracket-series-card--revealed' : ''} block overflow-hidden rounded-lg border border-neutral-300 bg-white text-neutral-900 shadow-sm transition-colors duration-200 hover:border-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 dark:border-neutral-700 dark:bg-neutral-950 dark:text-neutral-100 dark:hover:border-neutral-500 dark:focus-visible:ring-offset-neutral-950`}
         title={targetWins ? `Best of ${targetWins * 2 - 1}` : undefined}
+        aria-label={`${team1.tricode} vs ${team2.tricode}: view series games`}
       >
         {renderRow(team1, team1Wins, team1IsWinner, true)}
         {renderRow(team2, team2Wins, team2IsWinner, false)}

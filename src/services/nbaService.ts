@@ -1,7 +1,7 @@
 import type { GameSummaryData, PlayoffBracketResponse } from "@/helpers/helpers";
 
 const getBaseUrl = () => import.meta.env.DEV
-  ? import.meta.env.VITE_API_URL_DEV
+  ? import.meta.env.VITE_API_URL_DEV || `${window.location.protocol}//${window.location.hostname}:8000`
   : import.meta.env.VITE_API_URL_PROD;
 
 export const getScores = async (dateParam: string) => {
@@ -46,5 +46,25 @@ export const getPlayoffPicture = async (season: string): Promise<PlayoffBracketR
   const url = `${getBaseUrl()}/playoffs/series?season=${season}`;
   const response = await fetch(url);
   if (!response.ok) throw new Error("Playoff picture fetch failed");
+  return response.json();
+};
+
+
+export interface InactivePlayer {
+  personId: number;
+  firstName: string;
+  familyName: string;
+}
+
+export interface InactivePlayersResponse {
+  teams: Record<string, InactivePlayer[]>;
+}
+
+export const getInactivePlayers = async (
+  gameId: string,
+  signal?: AbortSignal,
+): Promise<InactivePlayersResponse> => {
+  const response = await fetch(`${getBaseUrl()}/games/${gameId}/inactive-players`, {signal});
+  if (!response.ok) throw new Error("Inactive players fetch failed");
   return response.json();
 };
