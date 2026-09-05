@@ -26,6 +26,8 @@ const TeamLogos = ({ teamName, teamId, size, tricode }: TeamLogoProps) => {
   const candidates = historicalLogoUrl ? [historicalLogoUrl] : teamId ? [
     `https://cdn.nba.com/logos/nba/${teamId}/global/${cdnVariant}/logo.svg`,
     `https://cdn.nba.com/logos/nba/${teamId}/global/${cdnVariant === "D" ? "L" : "D"}/logo.svg`,
+    `https://cdn.nba.com/logos/nba/${teamId}/primary/${cdnVariant}/logo.svg`,
+    `https://cdn.nba.com/logos/nba/${teamId}/primary/${cdnVariant === "D" ? "L" : "D"}/logo.svg`,
   ] : [];
   candidates.push(placeholderTeamLogoUrl);
   const requestKey = candidates.join("|");

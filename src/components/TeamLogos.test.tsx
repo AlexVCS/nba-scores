@@ -62,10 +62,17 @@ describe("historical logo recovery", () => {
     }
   );
 
-  it("tries the other CDN theme before stopping at the placeholder", () => {
-    renderWithTheme("dark", <TeamLogos teamId={1610612741} size={40} />);
+  it.each(["light", "dark"] as const)("tries both global themes, then both primary themes before the placeholder in %s mode", (theme) => {
+    renderWithTheme(theme, <TeamLogos teamId={1610612741} size={40} />);
+    const variant = theme === "dark" ? "D" : "L";
+    const otherVariant = variant === "D" ? "L" : "D";
+    expect(screen.getByRole("img").getAttribute("src")).toContain(`/global/${variant}/`);
     fireEvent.error(screen.getByRole("img"));
-    expect(screen.getByRole("img").getAttribute("src")).toContain("/global/L/");
+    expect(screen.getByRole("img").getAttribute("src")).toContain(`/global/${otherVariant}/`);
+    fireEvent.error(screen.getByRole("img"));
+    expect(screen.getByRole("img").getAttribute("src")).toContain(`/primary/${variant}/`);
+    fireEvent.error(screen.getByRole("img"));
+    expect(screen.getByRole("img").getAttribute("src")).toContain(`/primary/${otherVariant}/`);
     fireEvent.error(screen.getByRole("img"));
     const placeholder = screen.getByRole("img", { name: "Placeholder team logo" });
     const source = placeholder.getAttribute("src");
