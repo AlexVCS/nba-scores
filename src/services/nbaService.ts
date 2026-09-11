@@ -1,8 +1,21 @@
 import type { GameSummaryData, PlayoffBracketResponse } from "@/helpers/helpers";
+import type {AskResponse} from "@/helpers/ask";
 
 const getBaseUrl = () => import.meta.env.DEV
   ? import.meta.env.VITE_API_URL_DEV || `${window.location.protocol}//${window.location.hostname}:8000`
   : import.meta.env.VITE_API_URL_PROD;
+
+export const askQuestion = async (question: string, signal?: AbortSignal): Promise<AskResponse> => {
+  const response = await fetch(`${getBaseUrl()}/ask`, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({question}),
+    signal,
+  });
+  if (response.status === 429) throw new Error("Search has reached its request limit. Please try again later.");
+  if (!response.ok) throw new Error("Search is unavailable right now. Please try again shortly.");
+  return response.json();
+};
 
 export const getScores = async (dateParam: string) => {
   const url = dateParam 
