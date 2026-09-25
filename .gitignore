@@ -42,3 +42,7 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+server/.ask-state/
+
+# Generated design studies, screenshots, patches and local backups
+/output/
