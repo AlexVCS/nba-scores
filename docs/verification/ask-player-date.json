@@ -1,0 +1,30 @@
+{
+  "question": "How many points did Shai Gilgeous-Alexander score on January 2, 2024?",
+  "http_status": 200,
+  "elapsed_ms": 2800.9,
+  "response": {
+    "status": "ok",
+    "message": null,
+    "items": [
+      {
+        "kind": "statistic",
+        "title": "Shai Gilgeous-Alexander",
+        "title_spoiler": true,
+        "fields": [
+          {
+            "label": "Points",
+            "value": 36,
+            "spoiler": true
+          }
+        ],
+        "links": [
+          {
+            "label": "Game details",
+            "path": "/games/0022300462/boxscore?date=2024-01-02",
+            "spoiler": true
+          }
+        ]
+      }
+    ]
+  }
+}

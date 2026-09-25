@@ -1,0 +1,24 @@
+{
+  "date": "2026-09-10",
+  "origin": "http://192.168.1.80:5173",
+  "page": "/video-verification.html",
+  "reportedBy": "user",
+  "agentObserved": false,
+  "deployedOriginTested": false,
+  "devices": [
+    {
+      "device": "iPhone 12 mini",
+      "os": "iOS 26.5",
+      "browser": "Safari",
+      "report": "looks like ti worked on iphone now going to ipad",
+      "result": "overall local pass reported; individual control results and event log not supplied"
+    },
+    {
+      "device": "2018 iPad Pro",
+      "os": "iPadOS 26.5",
+      "browser": "Safari",
+      "report": "looks like it works fine there too",
+      "result": "overall local pass reported; individual control results and event log not supplied"
+    }
+  ]
+}

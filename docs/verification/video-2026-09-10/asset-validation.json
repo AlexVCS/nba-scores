@@ -1,0 +1,2748 @@
+[
+  {
+    "gameId": "0022500931",
+    "seasonType": "Regular Season",
+    "stat": "FGM",
+    "player": "James Harden",
+    "playerId": 201935,
+    "boxscoreValue": 6,
+    "httpStatus": 200,
+    "eventCount": 6,
+    "mediaRecordCount": 6,
+    "validHttpsMp4Count": 6,
+    "eventChecks": [
+      {
+        "eventId": 114,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 263,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 318,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 376,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 379,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 383,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      }
+    ],
+    "metadataIdentityPass": true,
+    "mediaRangeProbe": {
+      "url": "https://videos.nba.com/nba/pbp/media/2026/03/09/0022500931/114/9a75aa1d-fc6c-fb6b-cf9b-e862e9fec5c2_960x540.mp4",
+      "at": "2026-09-10T16:03:10.861118+00:00",
+      "status": 206,
+      "headers": {
+        "Accept-Ranges": "bytes",
+        "Content-Type": "video/mp4",
+        "Content-Range": "bytes 0-1023/31580089",
+        "Content-Length": "1024"
+      },
+      "first32BytesHex": "00000018667479706d703432000000006d7034326d703431000015b26d6f6f76"
+    }
+  },
+  {
+    "gameId": "0022500931",
+    "seasonType": "Regular Season",
+    "stat": "AST",
+    "player": "James Harden",
+    "playerId": 201935,
+    "boxscoreValue": 5,
+    "httpStatus": 200,
+    "eventCount": 5,
+    "mediaRecordCount": 5,
+    "validHttpsMp4Count": 5,
+    "eventChecks": [
+      {
+        "eventId": 101,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 404,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 413,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 417,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 439,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      }
+    ],
+    "metadataIdentityPass": true,
+    "mediaRangeProbe": {
+      "url": "https://videos.nba.com/nba/pbp/media/2026/03/09/0022500931/101/93f41b86-01cb-4f9f-f48c-d44a21b54b15_960x540.mp4",
+      "at": "2026-09-10T16:03:10.992505+00:00",
+      "status": 206,
+      "headers": {
+        "Accept-Ranges": "bytes",
+        "Content-Type": "video/mp4",
+        "Content-Range": "bytes 0-1023/31580089",
+        "Content-Length": "1024"
+      },
+      "first32BytesHex": "00000018667479706d703432000000006d7034326d703431000015b26d6f6f76"
+    }
+  },
+  {
+    "gameId": "0022500931",
+    "seasonType": "Regular Season",
+    "stat": "FGA",
+    "player": "Quentin Grimes",
+    "playerId": 1629656,
+    "boxscoreValue": 13,
+    "httpStatus": 200,
+    "eventCount": 13,
+    "mediaRecordCount": 13,
+    "validHttpsMp4Count": 11,
+    "eventChecks": [
+      {
+        "eventId": 44,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 69,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 83,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 133,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 160,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 271,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 275,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 301,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 358,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 384,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 511,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 516,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 533,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      }
+    ],
+    "metadataIdentityPass": true,
+    "mediaRangeProbe": {
+      "url": "https://videos.nba.com/nba/pbp/media/2026/03/09/0022500931/44/6203ebe5-8340-5edd-a7f1-886b86034bce_960x540.mp4",
+      "at": "2026-09-10T16:03:11.087014+00:00",
+      "status": 206,
+      "headers": {
+        "Accept-Ranges": "bytes",
+        "Content-Type": "video/mp4",
+        "Content-Range": "bytes 0-1023/31580089",
+        "Content-Length": "1024"
+      },
+      "first32BytesHex": "00000018667479706d703432000000006d7034326d703431000015b26d6f6f76"
+    }
+  },
+  {
+    "gameId": "0022500931",
+    "seasonType": "Regular Season",
+    "stat": "FG3M",
+    "player": "Keon Ellis",
+    "playerId": 1631165,
+    "boxscoreValue": 4,
+    "httpStatus": 200,
+    "eventCount": 4,
+    "mediaRecordCount": 4,
+    "validHttpsMp4Count": 4,
+    "eventChecks": [
+      {
+        "eventId": 131,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 239,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 269,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 284,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      }
+    ],
+    "metadataIdentityPass": true,
+    "mediaRangeProbe": {
+      "url": "https://videos.nba.com/nba/pbp/media/2026/03/09/0022500931/131/974a7f7f-9a77-52b6-a7bc-17f6eb547f8d_960x540.mp4",
+      "at": "2026-09-10T16:03:11.191887+00:00",
+      "status": 206,
+      "headers": {
+        "Accept-Ranges": "bytes",
+        "Content-Type": "video/mp4",
+        "Content-Range": "bytes 0-1023/31580089",
+        "Content-Length": "1024"
+      },
+      "first32BytesHex": "00000018667479706d703432000000006d7034326d703431000015b26d6f6f76"
+    }
+  },
+  {
+    "gameId": "0022500931",
+    "seasonType": "Regular Season",
+    "stat": "FG3A",
+    "player": "James Harden",
+    "playerId": 201935,
+    "boxscoreValue": 8,
+    "httpStatus": 200,
+    "eventCount": 8,
+    "mediaRecordCount": 8,
+    "validHttpsMp4Count": 8,
+    "eventChecks": [
+      {
+        "eventId": 39,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 114,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 118,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 263,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 328,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 379,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 435,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 578,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      }
+    ],
+    "metadataIdentityPass": true,
+    "mediaRangeProbe": {
+      "url": "https://videos.nba.com/nba/pbp/media/2026/03/09/0022500931/39/f7d88e01-7b70-14d9-eb0f-32542ecece42_960x540.mp4",
+      "at": "2026-09-10T16:03:11.286414+00:00",
+      "status": 206,
+      "headers": {
+        "Accept-Ranges": "bytes",
+        "Content-Type": "video/mp4",
+        "Content-Range": "bytes 0-1023/31580089",
+        "Content-Length": "1024"
+      },
+      "first32BytesHex": "00000018667479706d703432000000006d7034326d703431000015b26d6f6f76"
+    }
+  },
+  {
+    "gameId": "0022500931",
+    "seasonType": "Regular Season",
+    "stat": "FTM",
+    "player": "Donovan Mitchell",
+    "playerId": 1628378,
+    "boxscoreValue": 9,
+    "httpStatus": 200,
+    "eventCount": 0,
+    "mediaRecordCount": 0,
+    "validHttpsMp4Count": 0,
+    "eventChecks": [],
+    "metadataIdentityPass": false
+  },
+  {
+    "gameId": "0022500931",
+    "seasonType": "Regular Season",
+    "stat": "FTA",
+    "player": "Donovan Mitchell",
+    "playerId": 1628378,
+    "boxscoreValue": 9,
+    "httpStatus": 200,
+    "eventCount": 0,
+    "mediaRecordCount": 0,
+    "validHttpsMp4Count": 0,
+    "eventChecks": [],
+    "metadataIdentityPass": false
+  },
+  {
+    "gameId": "0022500931",
+    "seasonType": "Regular Season",
+    "stat": "REB",
+    "player": "Dean Wade",
+    "playerId": 1629731,
+    "boxscoreValue": 10,
+    "httpStatus": 200,
+    "eventCount": 10,
+    "mediaRecordCount": 10,
+    "validHttpsMp4Count": 10,
+    "eventChecks": [
+      {
+        "eventId": 8,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 40,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 242,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 283,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 365,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 369,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 371,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 382,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 412,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 597,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      }
+    ],
+    "metadataIdentityPass": true,
+    "mediaRangeProbe": {
+      "url": "https://videos.nba.com/nba/pbp/media/2026/03/09/0022500931/8/07359b13-a1a8-5c58-181e-fa28817a8d90_960x540.mp4",
+      "at": "2026-09-10T16:03:11.375133+00:00",
+      "status": 206,
+      "headers": {
+        "Accept-Ranges": "bytes",
+        "Content-Type": "video/mp4",
+        "Content-Range": "bytes 0-1023/31580089",
+        "Content-Length": "1024"
+      },
+      "first32BytesHex": "00000018667479706d703432000000006d7034326d703431000015b26d6f6f76"
+    }
+  },
+  {
+    "gameId": "0022500931",
+    "seasonType": "Regular Season",
+    "stat": "OREB",
+    "player": "Dean Wade",
+    "playerId": 1629731,
+    "boxscoreValue": 4,
+    "httpStatus": 200,
+    "eventCount": 4,
+    "mediaRecordCount": 4,
+    "validHttpsMp4Count": 4,
+    "eventChecks": [
+      {
+        "eventId": 8,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 40,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 365,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 371,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      }
+    ],
+    "metadataIdentityPass": true,
+    "mediaRangeProbe": {
+      "url": "https://videos.nba.com/nba/pbp/media/2026/03/09/0022500931/8/07359b13-a1a8-5c58-181e-fa28817a8d90_960x540.mp4",
+      "at": "2026-09-10T16:03:11.470580+00:00",
+      "status": 206,
+      "headers": {
+        "Accept-Ranges": "bytes",
+        "Content-Type": "video/mp4",
+        "Content-Range": "bytes 0-1023/31580089",
+        "Content-Length": "1024"
+      },
+      "first32BytesHex": "00000018667479706d703432000000006d7034326d703431000015b26d6f6f76"
+    }
+  },
+  {
+    "gameId": "0022500931",
+    "seasonType": "Regular Season",
+    "stat": "DREB",
+    "player": "Evan Mobley",
+    "playerId": 1630596,
+    "boxscoreValue": 7,
+    "httpStatus": 200,
+    "eventCount": 7,
+    "mediaRecordCount": 7,
+    "validHttpsMp4Count": 7,
+    "eventChecks": [
+      {
+        "eventId": 27,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 333,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 378,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 397,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 438,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 548,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 617,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      }
+    ],
+    "metadataIdentityPass": true,
+    "mediaRangeProbe": {
+      "url": "https://videos.nba.com/nba/pbp/media/2026/03/09/0022500931/27/7742b1d8-da8c-2efc-0cc2-2be744fb80a2_960x540.mp4",
+      "at": "2026-09-10T16:03:11.561407+00:00",
+      "status": 206,
+      "headers": {
+        "Accept-Ranges": "bytes",
+        "Content-Type": "video/mp4",
+        "Content-Range": "bytes 0-1023/31580089",
+        "Content-Length": "1024"
+      },
+      "first32BytesHex": "00000018667479706d703432000000006d7034326d703431000015b26d6f6f76"
+    }
+  },
+  {
+    "gameId": "0022500931",
+    "seasonType": "Regular Season",
+    "stat": "STL",
+    "player": "Donovan Mitchell",
+    "playerId": 1628378,
+    "boxscoreValue": 2,
+    "httpStatus": 200,
+    "eventCount": 2,
+    "mediaRecordCount": 2,
+    "validHttpsMp4Count": 2,
+    "eventChecks": [
+      {
+        "eventId": 207,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 320,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      }
+    ],
+    "metadataIdentityPass": true,
+    "mediaRangeProbe": {
+      "url": "https://videos.nba.com/nba/pbp/media/2026/03/09/0022500931/207/5623f966-aa38-546c-4978-02d479558fea_960x540.mp4",
+      "at": "2026-09-10T16:03:11.651815+00:00",
+      "status": 206,
+      "headers": {
+        "Accept-Ranges": "bytes",
+        "Content-Type": "video/mp4",
+        "Content-Range": "bytes 0-1023/31580089",
+        "Content-Length": "1024"
+      },
+      "first32BytesHex": "00000018667479706d703432000000006d7034326d703431000015b26d6f6f76"
+    }
+  },
+  {
+    "gameId": "0022500931",
+    "seasonType": "Regular Season",
+    "stat": "BLK",
+    "player": "Evan Mobley",
+    "playerId": 1630596,
+    "boxscoreValue": 3,
+    "httpStatus": 200,
+    "eventCount": 3,
+    "mediaRecordCount": 3,
+    "validHttpsMp4Count": 3,
+    "eventChecks": [
+      {
+        "eventId": 37,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 410,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 419,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      }
+    ],
+    "metadataIdentityPass": true,
+    "mediaRangeProbe": {
+      "url": "https://videos.nba.com/nba/pbp/media/2026/03/09/0022500931/37/b47611e0-21ff-e660-295f-5be249d9d7b2_960x540.mp4",
+      "at": "2026-09-10T16:03:11.750093+00:00",
+      "status": 206,
+      "headers": {
+        "Accept-Ranges": "bytes",
+        "Content-Type": "video/mp4",
+        "Content-Range": "bytes 0-1023/31580089",
+        "Content-Length": "1024"
+      },
+      "first32BytesHex": "00000018667479706d703432000000006d7034326d703431000015b26d6f6f76"
+    }
+  },
+  {
+    "gameId": "0022500931",
+    "seasonType": "Regular Season",
+    "stat": "TOV",
+    "player": "Trendon Watford",
+    "playerId": 1630570,
+    "boxscoreValue": 4,
+    "httpStatus": 200,
+    "eventCount": 4,
+    "mediaRecordCount": 4,
+    "validHttpsMp4Count": 4,
+    "eventChecks": [
+      {
+        "eventId": 98,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 130,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 320,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 497,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      }
+    ],
+    "metadataIdentityPass": true,
+    "mediaRangeProbe": {
+      "url": "https://videos.nba.com/nba/pbp/media/2026/03/09/0022500931/98/853524b2-d33d-4d48-cf63-47bb47460d6b_960x540.mp4",
+      "at": "2026-09-10T16:03:11.840949+00:00",
+      "status": 206,
+      "headers": {
+        "Accept-Ranges": "bytes",
+        "Content-Type": "video/mp4",
+        "Content-Range": "bytes 0-1023/31580089",
+        "Content-Length": "1024"
+      },
+      "first32BytesHex": "00000018667479706d703432000000006d7034326d703431000015b26d6f6f76"
+    }
+  },
+  {
+    "gameId": "0022500931",
+    "seasonType": "Regular Season",
+    "stat": "PTS",
+    "player": "James Harden",
+    "playerId": 201935,
+    "boxscoreValue": 21,
+    "httpStatus": 200,
+    "eventCount": 6,
+    "mediaRecordCount": 6,
+    "validHttpsMp4Count": 6,
+    "eventChecks": [
+      {
+        "eventId": 114,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 263,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 318,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 376,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 379,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 383,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      }
+    ],
+    "metadataIdentityPass": true,
+    "mediaRangeProbe": {
+      "url": "https://videos.nba.com/nba/pbp/media/2026/03/09/0022500931/114/9a75aa1d-fc6c-fb6b-cf9b-e862e9fec5c2_960x540.mp4",
+      "at": "2026-09-10T16:03:11.942296+00:00",
+      "status": 206,
+      "headers": {
+        "Accept-Ranges": "bytes",
+        "Content-Type": "video/mp4",
+        "Content-Range": "bytes 0-1023/31580089",
+        "Content-Length": "1024"
+      },
+      "first32BytesHex": "00000018667479706d703432000000006d7034326d703431000015b26d6f6f76"
+    }
+  },
+  {
+    "gameId": "0042400407",
+    "seasonType": "Playoffs",
+    "stat": "FGM",
+    "player": "Shai Gilgeous-Alexander",
+    "playerId": 1628983,
+    "boxscoreValue": 8,
+    "httpStatus": 200,
+    "eventCount": 8,
+    "mediaRecordCount": 8,
+    "validHttpsMp4Count": 8,
+    "eventChecks": [
+      {
+        "eventId": 15,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 29,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 115,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 244,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 312,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 417,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 435,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 540,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      }
+    ],
+    "metadataIdentityPass": true,
+    "mediaRangeProbe": {
+      "url": "https://videos.nba.com/nba/pbp/media/2025/06/22/0042400407/15/4b943dcb-9cc3-44f6-135f-f1da63b11959_960x540.mp4",
+      "at": "2026-09-10T16:03:12.815918+00:00",
+      "status": 206,
+      "headers": {
+        "Accept-Ranges": "bytes",
+        "Content-Type": "video/mp4",
+        "Content-Range": "bytes 0-1023/31580089",
+        "Content-Length": "1024"
+      },
+      "first32BytesHex": "00000018667479706d703432000000006d7034326d703431000015b26d6f6f76"
+    }
+  },
+  {
+    "gameId": "0042400407",
+    "seasonType": "Playoffs",
+    "stat": "AST",
+    "player": "Shai Gilgeous-Alexander",
+    "playerId": 1628983,
+    "boxscoreValue": 12,
+    "httpStatus": 200,
+    "eventCount": 12,
+    "mediaRecordCount": 12,
+    "validHttpsMp4Count": 12,
+    "eventChecks": [
+      {
+        "eventId": 60,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 70,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 84,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 118,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 252,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 289,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 344,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 423,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 427,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 447,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 568,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 575,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      }
+    ],
+    "metadataIdentityPass": true,
+    "mediaRangeProbe": {
+      "url": "https://videos.nba.com/nba/pbp/media/2025/06/22/0042400407/60/d9a8c134-94d8-ac4c-89ee-1a892ff7cd38_960x540.mp4",
+      "at": "2026-09-10T16:03:12.922600+00:00",
+      "status": 206,
+      "headers": {
+        "Accept-Ranges": "bytes",
+        "Content-Type": "video/mp4",
+        "Content-Range": "bytes 0-1023/31580089",
+        "Content-Length": "1024"
+      },
+      "first32BytesHex": "00000018667479706d703432000000006d7034326d703431000015b26d6f6f76"
+    }
+  },
+  {
+    "gameId": "0052400101",
+    "seasonType": "PlayIn",
+    "stat": "FGM",
+    "player": "Cole Anthony",
+    "playerId": 1630175,
+    "boxscoreValue": 10,
+    "httpStatus": 200,
+    "eventCount": 10,
+    "mediaRecordCount": 10,
+    "validHttpsMp4Count": 10,
+    "eventChecks": [
+      {
+        "eventId": 149,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 189,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 227,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 283,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 503,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 512,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 552,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 591,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 639,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 650,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      }
+    ],
+    "metadataIdentityPass": true,
+    "mediaRangeProbe": {
+      "url": "https://videos.nba.com/nba/pbp/media/2025/04/15/0052400101/149/688bfc54-0f8c-354f-355d-89ebb1d36f4c_960x540.mp4",
+      "at": "2026-09-10T16:03:13.675427+00:00",
+      "status": 206,
+      "headers": {
+        "Accept-Ranges": "bytes",
+        "Content-Type": "video/mp4",
+        "Content-Range": "bytes 0-1023/31580089",
+        "Content-Length": "1024"
+      },
+      "first32BytesHex": "00000018667479706d703432000000006d7034326d703431000015b26d6f6f76"
+    }
+  },
+  {
+    "gameId": "0052400101",
+    "seasonType": "PlayIn",
+    "stat": "AST",
+    "player": "Paolo Banchero",
+    "playerId": 1631094,
+    "boxscoreValue": 7,
+    "httpStatus": 200,
+    "eventCount": 7,
+    "mediaRecordCount": 7,
+    "validHttpsMp4Count": 7,
+    "eventChecks": [
+      {
+        "eventId": 11,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 48,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 68,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 132,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 137,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 314,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 650,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      }
+    ],
+    "metadataIdentityPass": true,
+    "mediaRangeProbe": {
+      "url": "https://videos.nba.com/nba/pbp/media/2025/04/15/0052400101/11/090bf21f-6bfa-6cf9-be14-09e6ba6d22a0_960x540.mp4",
+      "at": "2026-09-10T16:03:13.758906+00:00",
+      "status": 206,
+      "headers": {
+        "Accept-Ranges": "bytes",
+        "Content-Type": "video/mp4",
+        "Content-Range": "bytes 0-1023/31580089",
+        "Content-Length": "1024"
+      },
+      "first32BytesHex": "00000018667479706d703432000000006d7034326d703431000015b26d6f6f76"
+    }
+  },
+  {
+    "gameId": "0052400101",
+    "seasonType": "Playoffs",
+    "stat": "FGM",
+    "player": "Cole Anthony",
+    "playerId": 1630175,
+    "boxscoreValue": 10,
+    "httpStatus": 200,
+    "eventCount": 0,
+    "mediaRecordCount": 0,
+    "validHttpsMp4Count": 0,
+    "eventChecks": [],
+    "metadataIdentityPass": false
+  },
+  {
+    "gameId": "0052400101",
+    "seasonType": "Playoffs",
+    "stat": "AST",
+    "player": "Paolo Banchero",
+    "playerId": 1631094,
+    "boxscoreValue": 7,
+    "httpStatus": 200,
+    "eventCount": 0,
+    "mediaRecordCount": 0,
+    "validHttpsMp4Count": 0,
+    "eventChecks": [],
+    "metadataIdentityPass": false
+  },
+  {
+    "gameId": "0052400101",
+    "seasonType": "Regular Season",
+    "stat": "FGM",
+    "player": "Cole Anthony",
+    "playerId": 1630175,
+    "boxscoreValue": 10,
+    "httpStatus": 200,
+    "eventCount": 0,
+    "mediaRecordCount": 0,
+    "validHttpsMp4Count": 0,
+    "eventChecks": [],
+    "metadataIdentityPass": false
+  },
+  {
+    "gameId": "0052400101",
+    "seasonType": "Regular Season",
+    "stat": "AST",
+    "player": "Paolo Banchero",
+    "playerId": 1631094,
+    "boxscoreValue": 7,
+    "httpStatus": 200,
+    "eventCount": 0,
+    "mediaRecordCount": 0,
+    "validHttpsMp4Count": 0,
+    "eventChecks": [],
+    "metadataIdentityPass": false
+  },
+  {
+    "gameId": "0052400101",
+    "seasonType": "Play-In",
+    "stat": "FGM",
+    "player": "Cole Anthony",
+    "playerId": 1630175,
+    "boxscoreValue": 10,
+    "httpStatus": 400,
+    "eventCount": 0,
+    "mediaRecordCount": 0,
+    "validHttpsMp4Count": 0,
+    "eventChecks": [],
+    "metadataIdentityPass": false
+  },
+  {
+    "gameId": "0052400101",
+    "seasonType": "Play-In",
+    "stat": "AST",
+    "player": "Paolo Banchero",
+    "playerId": 1631094,
+    "boxscoreValue": 7,
+    "httpStatus": 400,
+    "eventCount": 0,
+    "mediaRecordCount": 0,
+    "validHttpsMp4Count": 0,
+    "eventChecks": [],
+    "metadataIdentityPass": false
+  },
+  {
+    "gameId": "0012400001",
+    "seasonType": "Pre Season",
+    "stat": "FGM",
+    "player": "Payton Pritchard",
+    "playerId": 1630202,
+    "boxscoreValue": 6,
+    "httpStatus": 200,
+    "eventCount": 6,
+    "mediaRecordCount": 6,
+    "validHttpsMp4Count": 6,
+    "eventChecks": [
+      {
+        "eventId": 210,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 232,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 308,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 311,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 523,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 566,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      }
+    ],
+    "metadataIdentityPass": true,
+    "mediaRangeProbe": {
+      "url": "https://videos.nba.com/nba/pbp/media/2024/10/04/0012400001/210/20df6cd0-fe9e-fd98-0bc8-42f357b9ec14_960x540.mp4",
+      "at": "2026-09-10T16:03:14.470685+00:00",
+      "status": 206,
+      "headers": {
+        "Accept-Ranges": "bytes",
+        "Content-Type": "video/mp4",
+        "Content-Range": "bytes 0-1023/31580089",
+        "Content-Length": "1024"
+      },
+      "first32BytesHex": "00000018667479706d703432000000006d7034326d703431000015b26d6f6f76"
+    }
+  },
+  {
+    "gameId": "0012400001",
+    "seasonType": "Pre Season",
+    "stat": "AST",
+    "player": "Russell Westbrook",
+    "playerId": 201566,
+    "boxscoreValue": 8,
+    "httpStatus": 200,
+    "eventCount": 8,
+    "mediaRecordCount": 8,
+    "validHttpsMp4Count": 8,
+    "eventChecks": [
+      {
+        "eventId": 157,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 168,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 184,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 230,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 234,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 253,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 406,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 423,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      }
+    ],
+    "metadataIdentityPass": true,
+    "mediaRangeProbe": {
+      "url": "https://videos.nba.com/nba/pbp/media/2024/10/04/0012400001/157/9ab1417f-bff5-90a8-906a-b2dd0b9611af_960x540.mp4",
+      "at": "2026-09-10T16:03:14.566393+00:00",
+      "status": 206,
+      "headers": {
+        "Accept-Ranges": "bytes",
+        "Content-Type": "video/mp4",
+        "Content-Range": "bytes 0-1023/31580089",
+        "Content-Length": "1024"
+      },
+      "first32BytesHex": "00000018667479706d703432000000006d7034326d703431000015b26d6f6f76"
+    }
+  },
+  {
+    "gameId": "0022300001",
+    "seasonType": "Regular Season",
+    "stat": "FGM",
+    "player": "Donovan Mitchell",
+    "playerId": 1628378,
+    "boxscoreValue": 13,
+    "httpStatus": 200,
+    "eventCount": 13,
+    "mediaRecordCount": 13,
+    "validHttpsMp4Count": 13,
+    "eventChecks": [
+      {
+        "eventId": 15,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 22,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 47,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 83,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 218,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 224,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 312,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 319,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 399,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 444,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 546,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 600,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 613,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      }
+    ],
+    "metadataIdentityPass": true,
+    "mediaRangeProbe": {
+      "url": "https://videos.nba.com/nba/pbp/media/2023/11/03/0022300001/15/58fb576c-a146-8350-2dd2-be77f762f8aa_960x540.mp4",
+      "at": "2026-09-10T16:03:15.122704+00:00",
+      "status": 206,
+      "headers": {
+        "Accept-Ranges": "bytes",
+        "Content-Type": "video/mp4",
+        "Content-Range": "bytes 0-1023/31580089",
+        "Content-Length": "1024"
+      },
+      "first32BytesHex": "00000018667479706d703432000000006d7034326d703431000015b26d6f6f76"
+    }
+  },
+  {
+    "gameId": "0022300001",
+    "seasonType": "Regular Season",
+    "stat": "AST",
+    "player": "Tyrese Haliburton",
+    "playerId": 1630169,
+    "boxscoreValue": 13,
+    "httpStatus": 200,
+    "eventCount": 13,
+    "mediaRecordCount": 13,
+    "validHttpsMp4Count": 13,
+    "eventChecks": [
+      {
+        "eventId": 7,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 81,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 236,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 244,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 285,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 313,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 317,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 322,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 438,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 536,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 544,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 581,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 594,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      }
+    ],
+    "metadataIdentityPass": true,
+    "mediaRangeProbe": {
+      "url": "https://videos.nba.com/nba/pbp/media/2023/11/03/0022300001/7/21bcfc40-9577-3023-fadb-cc2ac5d61348_960x540.mp4",
+      "at": "2026-09-10T16:03:15.211764+00:00",
+      "status": 206,
+      "headers": {
+        "Accept-Ranges": "bytes",
+        "Content-Type": "video/mp4",
+        "Content-Range": "bytes 0-1023/31580089",
+        "Content-Length": "1024"
+      },
+      "first32BytesHex": "00000018667479706d703432000000006d7034326d703431000015b26d6f6f76"
+    }
+  },
+  {
+    "gameId": "0022000001",
+    "seasonType": "Regular Season",
+    "stat": "FGM",
+    "player": "Kyrie Irving",
+    "playerId": 202681,
+    "boxscoreValue": 10,
+    "httpStatus": 200,
+    "eventCount": 10,
+    "mediaRecordCount": 10,
+    "validHttpsMp4Count": 10,
+    "eventChecks": [
+      {
+        "eventId": 12,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 52,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 71,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 79,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 98,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 137,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 296,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 350,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 359,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 459,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      }
+    ],
+    "metadataIdentityPass": true,
+    "mediaRangeProbe": {
+      "url": "https://videos.nba.com/nba/pbp/media/2020/12/22/0022000001/12/499bc11b-cb47-9f39-838c-08db7a768b2b_960x540.mp4",
+      "at": "2026-09-10T16:03:16.035745+00:00",
+      "status": 206,
+      "headers": {
+        "Accept-Ranges": "bytes",
+        "Content-Type": "video/mp4",
+        "Content-Range": "bytes 0-1023/31580089",
+        "Content-Length": "1024"
+      },
+      "first32BytesHex": "00000018667479706d703432000000006d7034326d703431000015b26d6f6f76"
+    }
+  },
+  {
+    "gameId": "0022000001",
+    "seasonType": "Regular Season",
+    "stat": "AST",
+    "player": "Stephen Curry",
+    "playerId": 201939,
+    "boxscoreValue": 10,
+    "httpStatus": 200,
+    "eventCount": 10,
+    "mediaRecordCount": 10,
+    "validHttpsMp4Count": 10,
+    "eventChecks": [
+      {
+        "eventId": 117,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 158,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 161,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 285,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 315,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 448,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 452,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 455,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 512,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 526,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      }
+    ],
+    "metadataIdentityPass": true,
+    "mediaRangeProbe": {
+      "url": "https://videos.nba.com/nba/pbp/media/2020/12/22/0022000001/117/d3b879b2-f25e-cc0f-2626-758ef4206612_960x540.mp4",
+      "at": "2026-09-10T16:03:16.124401+00:00",
+      "status": 206,
+      "headers": {
+        "Accept-Ranges": "bytes",
+        "Content-Type": "video/mp4",
+        "Content-Range": "bytes 0-1023/31580089",
+        "Content-Length": "1024"
+      },
+      "first32BytesHex": "00000018667479706d703432000000006d7034326d703431000015b26d6f6f76"
+    }
+  },
+  {
+    "gameId": "0021500001",
+    "seasonType": "Regular Season",
+    "stat": "FGM",
+    "player": "Dennis Schr\u00f6der",
+    "playerId": 203471,
+    "boxscoreValue": 8,
+    "httpStatus": 200,
+    "eventCount": 8,
+    "mediaRecordCount": 8,
+    "validHttpsMp4Count": 8,
+    "eventChecks": [
+      {
+        "eventId": 81,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 105,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 108,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 126,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 321,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 341,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 365,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 428,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      }
+    ],
+    "metadataIdentityPass": true,
+    "mediaRangeProbe": {
+      "url": "https://videos.nba.com/nba/pbp/media/2015/10/27/0021500001/81/432c477d-c88b-d6a0-ecfc-ff597e419f38_960x540.mp4",
+      "at": "2026-09-10T16:03:16.837425+00:00",
+      "status": 206,
+      "headers": {
+        "Accept-Ranges": "bytes",
+        "Content-Type": "video/mp4",
+        "Content-Range": "bytes 0-1023/31580089",
+        "Content-Length": "1024"
+      },
+      "first32BytesHex": "00000018667479706d703432000000006d7034326d703431000015b26d6f6f76"
+    }
+  },
+  {
+    "gameId": "0021500001",
+    "seasonType": "Regular Season",
+    "stat": "AST",
+    "player": "Reggie Jackson",
+    "playerId": 202704,
+    "boxscoreValue": 5,
+    "httpStatus": 200,
+    "eventCount": 5,
+    "mediaRecordCount": 5,
+    "validHttpsMp4Count": 5,
+    "eventChecks": [
+      {
+        "eventId": 55,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 58,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 86,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 214,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 295,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      }
+    ],
+    "metadataIdentityPass": true,
+    "mediaRangeProbe": {
+      "url": "https://videos.nba.com/nba/pbp/media/2015/10/27/0021500001/55/9b8d1688-c137-9099-aa4e-c44d90db6d73_960x540.mp4",
+      "at": "2026-09-10T16:03:16.940628+00:00",
+      "status": 206,
+      "headers": {
+        "Accept-Ranges": "bytes",
+        "Content-Type": "video/mp4",
+        "Content-Range": "bytes 0-1023/31580089",
+        "Content-Length": "1024"
+      },
+      "first32BytesHex": "00000018667479706d703432000000006d7034326d703431000015b26d6f6f76"
+    }
+  },
+  {
+    "gameId": "0021400001",
+    "seasonType": "Regular Season",
+    "stat": "FGM",
+    "player": "Anthony Davis",
+    "playerId": 203076,
+    "boxscoreValue": 10,
+    "httpStatus": 200,
+    "eventCount": 10,
+    "mediaRecordCount": 10,
+    "validHttpsMp4Count": 10,
+    "eventChecks": [
+      {
+        "eventId": 25,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 40,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 251,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 256,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 314,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 337,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 351,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 369,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 436,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 557,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      }
+    ],
+    "metadataIdentityPass": true,
+    "mediaRangeProbe": {
+      "url": "https://videos.nba.com/nba/pbp/media/2014/10/28/0021400001/25/b227528b-5f7f-e4d7-1bf9-9e2d5487db7f_960x540.mp4",
+      "at": "2026-09-10T16:03:17.686929+00:00",
+      "status": 206,
+      "headers": {
+        "Accept-Ranges": "bytes",
+        "Content-Type": "video/mp4",
+        "Content-Range": "bytes 0-1023/31580089",
+        "Content-Length": "1024"
+      },
+      "first32BytesHex": "00000018667479706d703432000000006d7034326d703431000015b26d6f6f76"
+    }
+  },
+  {
+    "gameId": "0021400001",
+    "seasonType": "Regular Season",
+    "stat": "AST",
+    "player": "Elfrid Payton",
+    "playerId": 203901,
+    "boxscoreValue": 7,
+    "httpStatus": 200,
+    "eventCount": 7,
+    "mediaRecordCount": 7,
+    "validHttpsMp4Count": 7,
+    "eventChecks": [
+      {
+        "eventId": 4,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 47,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 53,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 198,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 218,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 346,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      },
+      {
+        "eventId": 356,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": true
+      }
+    ],
+    "metadataIdentityPass": true,
+    "mediaRangeProbe": {
+      "url": "https://videos.nba.com/nba/pbp/media/2014/10/28/0021400001/4/ad51773e-5287-547c-43ad-4c778ace414a_960x540.mp4",
+      "at": "2026-09-10T16:03:17.776761+00:00",
+      "status": 206,
+      "headers": {
+        "Accept-Ranges": "bytes",
+        "Content-Type": "video/mp4",
+        "Content-Range": "bytes 0-1023/31580089",
+        "Content-Length": "1024"
+      },
+      "first32BytesHex": "00000018667479706d703432000000006d7034326d703431000015b26d6f6f76"
+    }
+  },
+  {
+    "gameId": "0021300001",
+    "seasonType": "Regular Season",
+    "stat": "FGM",
+    "player": "Paul George",
+    "playerId": 202331,
+    "boxscoreValue": 8,
+    "httpStatus": 200,
+    "eventCount": 8,
+    "mediaRecordCount": 8,
+    "validHttpsMp4Count": 0,
+    "eventChecks": [
+      {
+        "eventId": 5,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 16,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 64,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 124,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 298,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 329,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 376,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 456,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      }
+    ],
+    "metadataIdentityPass": true
+  },
+  {
+    "gameId": "0021300001",
+    "seasonType": "Regular Season",
+    "stat": "AST",
+    "player": "Jameer Nelson",
+    "playerId": 2749,
+    "boxscoreValue": 7,
+    "httpStatus": 200,
+    "eventCount": 7,
+    "mediaRecordCount": 7,
+    "validHttpsMp4Count": 0,
+    "eventChecks": [
+      {
+        "eventId": 70,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 73,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 163,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 171,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 180,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 301,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 455,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      }
+    ],
+    "metadataIdentityPass": true
+  },
+  {
+    "gameId": "0021200001",
+    "seasonType": "Regular Season",
+    "stat": "FGM",
+    "player": "Kyrie Irving",
+    "playerId": 202681,
+    "boxscoreValue": 11,
+    "httpStatus": 200,
+    "eventCount": 11,
+    "mediaRecordCount": 11,
+    "validHttpsMp4Count": 0,
+    "eventChecks": [
+      {
+        "eventId": 6,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 22,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 49,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 88,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 198,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 291,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 298,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 337,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 361,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 461,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 502,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      }
+    ],
+    "metadataIdentityPass": true
+  },
+  {
+    "gameId": "0021200001",
+    "seasonType": "Regular Season",
+    "stat": "AST",
+    "player": "Anderson Varejao",
+    "playerId": 2760,
+    "boxscoreValue": 9,
+    "httpStatus": 200,
+    "eventCount": 9,
+    "mediaRecordCount": 9,
+    "validHttpsMp4Count": 0,
+    "eventChecks": [
+      {
+        "eventId": 22,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 49,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 279,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 298,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 337,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 381,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 388,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 513,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      },
+      {
+        "eventId": 519,
+        "gameMatches": true,
+        "pbpDescriptionMatches": true,
+        "playerAndTeamMatch": true,
+        "statSemanticsMatch": true,
+        "mediaUrlMatchesGameAndEvent": false
+      }
+    ],
+    "metadataIdentityPass": true
+  }
+]

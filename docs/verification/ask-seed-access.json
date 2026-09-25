@@ -1,0 +1,78 @@
+{
+  "split": "seed",
+  "fixture_sha256": "16cc615d6d7e066dc4d3693880525da3dc7ce9dd117cd3e4db945087d3e52288",
+  "prompt_sha256": "18ce831fbbab86534926a2690449b654a367a4ce1b4c14c7ce06512a840361b9",
+  "reserved_or_measured_usd": 0.004424,
+  "models": [
+    {
+      "model": "gpt-4.1-mini",
+      "attempted": 1,
+      "passed": 0,
+      "median_ms": 6479.6,
+      "p95_ms": 6479.6,
+      "measured_cost_usd": 0,
+      "unknown_cost_requests": 1,
+      "field_pass_counts": {
+        "intent": 0,
+        "operation": 0,
+        "mentions": 0,
+        "date_expressions": 0,
+        "round_mention": 0,
+        "game_number": 0,
+        "statistics": 0,
+        "clarification": 0,
+        "schema": 0
+      },
+      "results": [
+        {
+          "id": "seed-01",
+          "passed": false,
+          "checks": {
+            "schema": false
+          },
+          "actual": null,
+          "usage": null,
+          "cost_usd": null,
+          "error": "AskParserUnavailable",
+          "latency_ms": 6479.6,
+          "repeat": 1
+        }
+      ]
+    },
+    {
+      "model": "gpt-4.1-nano",
+      "attempted": 1,
+      "passed": 0,
+      "median_ms": 6137.5,
+      "p95_ms": 6137.5,
+      "measured_cost_usd": 0,
+      "unknown_cost_requests": 1,
+      "field_pass_counts": {
+        "intent": 0,
+        "operation": 0,
+        "mentions": 0,
+        "date_expressions": 0,
+        "round_mention": 0,
+        "game_number": 0,
+        "statistics": 0,
+        "clarification": 0,
+        "schema": 0
+      },
+      "results": [
+        {
+          "id": "seed-01",
+          "passed": false,
+          "checks": {
+            "schema": false
+          },
+          "actual": null,
+          "usage": null,
+          "cost_usd": null,
+          "error": "AskParserUnavailable",
+          "latency_ms": 6137.5,
+          "repeat": 1
+        }
+      ]
+    }
+  ]
+}

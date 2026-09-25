@@ -1,0 +1,2018 @@
+{
+  "split": "seed",
+  "fixture_sha256": "a100ef8d058ce23c9bd8ee51bcffba1973c4729f8540113a0a2f2c206ff72e25",
+  "prompt_sha256": "daf8aafc137586f5e612df37352457f14736f5c39b877a9846dbf0891041a1ba",
+  "cost_basis": "regular token list prices; excludes discounts and complimentary tokens",
+  "actual_billed_cost_usd": null,
+  "reserved_or_list_price_usd": 0.03311310000000001,
+  "models": [
+    {
+      "model": "gpt-4.1-mini-2025-04-14",
+      "attempted": 25,
+      "passed": 10,
+      "median_ms": 1684.4,
+      "p95_ms": 5907.8,
+      "list_price_cost_usd": 0.013336,
+      "unknown_usage_requests": 3,
+      "field_pass_counts": {
+        "intent": 19,
+        "operation": 20,
+        "mentions": 18,
+        "date_expressions": 19,
+        "round_mention": 17,
+        "game_number": 22,
+        "statistics": 22,
+        "clarification": 19,
+        "schema": 22
+      },
+      "results": [
+        {
+          "id": "seed-001",
+          "passed": true,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": true,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "game_search",
+            "operation": "list",
+            "mentions": [],
+            "date_expressions": [
+              {
+                "text": "today",
+                "kind": "relative"
+              }
+            ],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1255,
+            "output_tokens": 51,
+            "total_tokens": 1306
+          },
+          "list_price_cost_usd": 0.0005836,
+          "error": null,
+          "latency_ms": 1206.7,
+          "repeat": 1
+        },
+        {
+          "id": "seed-002",
+          "passed": true,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": true,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "game_search",
+            "operation": "list",
+            "mentions": [
+              {
+                "text": "Cavs",
+                "kind": "team"
+              }
+            ],
+            "date_expressions": [
+              {
+                "text": "last week",
+                "kind": "relative"
+              }
+            ],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1256,
+            "output_tokens": 62,
+            "total_tokens": 1318
+          },
+          "list_price_cost_usd": 0.0006016,
+          "error": null,
+          "latency_ms": 2761.2,
+          "repeat": 1
+        },
+        {
+          "id": "seed-003",
+          "passed": true,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": true,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "game_search",
+            "operation": "list",
+            "mentions": [
+              {
+                "text": "Lakers",
+                "kind": "team"
+              },
+              {
+                "text": "Celtics",
+                "kind": "team"
+              }
+            ],
+            "date_expressions": [
+              {
+                "text": "January 23, 2025",
+                "kind": "calendar_date"
+              }
+            ],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1261,
+            "output_tokens": 78,
+            "total_tokens": 1339
+          },
+          "list_price_cost_usd": 0.0006292,
+          "error": null,
+          "latency_ms": 1800.1,
+          "repeat": 1
+        },
+        {
+          "id": "seed-004",
+          "passed": false,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": true,
+            "date_expressions": true,
+            "round_mention": false,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "playoff_series",
+            "operation": "series_result",
+            "mentions": [],
+            "date_expressions": [
+              {
+                "text": "2024",
+                "kind": "season"
+              }
+            ],
+            "round_mention": "2024 NBA Finals",
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1258,
+            "output_tokens": 57,
+            "total_tokens": 1315
+          },
+          "list_price_cost_usd": 0.0005944000000000001,
+          "error": null,
+          "latency_ms": 2088.0,
+          "repeat": 1
+        },
+        {
+          "id": "seed-005",
+          "passed": false,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": true,
+            "date_expressions": false,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "postseason_summary",
+            "operation": "summary",
+            "mentions": [],
+            "date_expressions": [
+              {
+                "text": "2024 postseason",
+                "kind": "season"
+              }
+            ],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1257,
+            "output_tokens": 54,
+            "total_tokens": 1311
+          },
+          "list_price_cost_usd": 0.0005892,
+          "error": null,
+          "latency_ms": 2022.0,
+          "repeat": 1
+        },
+        {
+          "id": "seed-006",
+          "passed": false,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": false,
+            "date_expressions": false,
+            "round_mention": false,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "boxscore_stats",
+            "operation": "player_stats",
+            "mentions": [
+              {
+                "text": "Tatum",
+                "kind": "player"
+              },
+              {
+                "text": "2024 Finals",
+                "kind": "unknown"
+              }
+            ],
+            "date_expressions": [],
+            "round_mention": "2024 Finals",
+            "game_number": 4,
+            "statistics": [
+              "points"
+            ],
+            "ambiguities": [],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1267,
+            "output_tokens": 68,
+            "total_tokens": 1335
+          },
+          "list_price_cost_usd": 0.0006156,
+          "error": null,
+          "latency_ms": 2329.6,
+          "repeat": 1
+        },
+        {
+          "id": "seed-007",
+          "passed": false,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": true,
+            "date_expressions": false,
+            "round_mention": false,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "boxscore_stats",
+            "operation": "leaders",
+            "mentions": [
+              {
+                "text": "Celtics",
+                "kind": "team"
+              }
+            ],
+            "date_expressions": [
+              {
+                "text": "2024 Finals",
+                "kind": "unknown"
+              }
+            ],
+            "round_mention": "2024 Finals",
+            "game_number": 4,
+            "statistics": [
+              "points"
+            ],
+            "ambiguities": [],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1266,
+            "output_tokens": 69,
+            "total_tokens": 1335
+          },
+          "list_price_cost_usd": 0.0006168,
+          "error": null,
+          "latency_ms": 1364.4,
+          "repeat": 1
+        },
+        {
+          "id": "seed-008",
+          "passed": true,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": true,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "boxscore_stats",
+            "operation": "team_stats",
+            "mentions": [
+              {
+                "text": "Knicks",
+                "kind": "team"
+              }
+            ],
+            "date_expressions": [
+              {
+                "text": "March 3, 2025",
+                "kind": "calendar_date"
+              }
+            ],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [
+              "rebounds"
+            ],
+            "ambiguities": [],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1265,
+            "output_tokens": 73,
+            "total_tokens": 1338
+          },
+          "list_price_cost_usd": 0.0006228,
+          "error": null,
+          "latency_ms": 1660.7,
+          "repeat": 1
+        },
+        {
+          "id": "seed-009",
+          "passed": true,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": true,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "game_search",
+            "operation": "list",
+            "mentions": [
+              {
+                "text": "Boston",
+                "kind": "team"
+              }
+            ],
+            "date_expressions": [
+              {
+                "text": "yesterday",
+                "kind": "relative"
+              }
+            ],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1255,
+            "output_tokens": 61,
+            "total_tokens": 1316
+          },
+          "list_price_cost_usd": 0.0005996,
+          "error": null,
+          "latency_ms": 2076.7,
+          "repeat": 1
+        },
+        {
+          "id": "seed-010",
+          "passed": true,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": true,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "game_search",
+            "operation": "list",
+            "mentions": [],
+            "date_expressions": [
+              {
+                "text": "1947-01-01",
+                "kind": "calendar_date"
+              }
+            ],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1260,
+            "output_tokens": 57,
+            "total_tokens": 1317
+          },
+          "list_price_cost_usd": 0.0005952,
+          "error": null,
+          "latency_ms": 1585.6,
+          "repeat": 1
+        },
+        {
+          "id": "seed-011",
+          "passed": false,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": true,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": false,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "game_search",
+            "operation": "list",
+            "mentions": [],
+            "date_expressions": [
+              {
+                "text": "2025-02-30",
+                "kind": "calendar_date"
+              }
+            ],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [
+              {
+                "field": "date",
+                "reason": "February 30th is an invalid calendar date"
+              }
+            ],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1259,
+            "output_tokens": 74,
+            "total_tokens": 1333
+          },
+          "list_price_cost_usd": 0.000622,
+          "error": null,
+          "latency_ms": 1433.7,
+          "repeat": 1
+        },
+        {
+          "id": "seed-012",
+          "passed": true,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": true,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "game_search",
+            "operation": "list",
+            "mentions": [
+              {
+                "text": "Lakers",
+                "kind": "team"
+              }
+            ],
+            "date_expressions": [
+              {
+                "text": "last Friday",
+                "kind": "relative"
+              }
+            ],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1255,
+            "output_tokens": 62,
+            "total_tokens": 1317
+          },
+          "list_price_cost_usd": 0.0006012000000000001,
+          "error": null,
+          "latency_ms": 1419.9,
+          "repeat": 1
+        },
+        {
+          "id": "seed-013",
+          "passed": false,
+          "checks": {
+            "schema": false
+          },
+          "actual": null,
+          "usage": null,
+          "list_price_cost_usd": null,
+          "error": "AskParserUnavailable",
+          "provider_code": "credit_balance_exhausted",
+          "latency_ms": 5906.0,
+          "repeat": 1
+        },
+        {
+          "id": "seed-014",
+          "passed": false,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": true,
+            "date_expressions": true,
+            "round_mention": false,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "playoff_series",
+            "operation": "series_result",
+            "mentions": [
+              {
+                "text": "Lakers",
+                "kind": "team"
+              },
+              {
+                "text": "Nuggets",
+                "kind": "team"
+              }
+            ],
+            "date_expressions": [
+              {
+                "text": "2023",
+                "kind": "season"
+              }
+            ],
+            "round_mention": "2023 Conference Finals",
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1260,
+            "output_tokens": 77,
+            "total_tokens": 1337
+          },
+          "list_price_cost_usd": 0.0006272000000000001,
+          "error": null,
+          "latency_ms": 2545.1,
+          "repeat": 1
+        },
+        {
+          "id": "seed-015",
+          "passed": false,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": true,
+            "date_expressions": true,
+            "round_mention": false,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "playoff_series",
+            "operation": "series_result",
+            "mentions": [
+              {
+                "text": "Celtics",
+                "kind": "team"
+              }
+            ],
+            "date_expressions": [
+              {
+                "text": "2024",
+                "kind": "season"
+              }
+            ],
+            "round_mention": "2024 first round",
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1260,
+            "output_tokens": 68,
+            "total_tokens": 1328
+          },
+          "list_price_cost_usd": 0.0006127999999999999,
+          "error": null,
+          "latency_ms": 1702.8,
+          "repeat": 1
+        },
+        {
+          "id": "seed-016",
+          "passed": false,
+          "checks": {
+            "schema": false
+          },
+          "actual": null,
+          "usage": null,
+          "list_price_cost_usd": null,
+          "error": "AskParserUnavailable",
+          "provider_code": "credit_balance_exhausted",
+          "latency_ms": 5907.8,
+          "repeat": 1
+        },
+        {
+          "id": "seed-017",
+          "passed": true,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": true,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "boxscore_stats",
+            "operation": "leaders",
+            "mentions": [
+              {
+                "text": "Heat",
+                "kind": "team"
+              }
+            ],
+            "date_expressions": [
+              {
+                "text": "2024-01-15",
+                "kind": "calendar_date"
+              }
+            ],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [
+              "blocks"
+            ],
+            "ambiguities": [],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1264,
+            "output_tokens": 69,
+            "total_tokens": 1333
+          },
+          "list_price_cost_usd": 0.000616,
+          "error": null,
+          "latency_ms": 1569.6,
+          "repeat": 1
+        },
+        {
+          "id": "seed-018",
+          "passed": true,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": true,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "game_search",
+            "operation": "list",
+            "mentions": [
+              {
+                "text": "Warriors",
+                "kind": "team"
+              }
+            ],
+            "date_expressions": [
+              {
+                "text": "last night",
+                "kind": "relative"
+              }
+            ],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1254,
+            "output_tokens": 62,
+            "total_tokens": 1316
+          },
+          "list_price_cost_usd": 0.0006008000000000001,
+          "error": null,
+          "latency_ms": 1463.2,
+          "repeat": 1
+        },
+        {
+          "id": "seed-019",
+          "passed": false,
+          "checks": {
+            "intent": false,
+            "operation": false,
+            "mentions": true,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": false,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "postseason_summary",
+            "operation": "summary",
+            "mentions": [],
+            "date_expressions": [],
+            "round_mention": "Finals",
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [
+              {
+                "field": "date",
+                "reason": "which year or season is not specified"
+              }
+            ],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1254,
+            "output_tokens": 59,
+            "total_tokens": 1313
+          },
+          "list_price_cost_usd": 0.000596,
+          "error": null,
+          "latency_ms": 1489.4,
+          "repeat": 1
+        },
+        {
+          "id": "seed-020",
+          "passed": false,
+          "checks": {
+            "intent": false,
+            "operation": false,
+            "mentions": true,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "game_search",
+            "operation": "list",
+            "mentions": [
+              {
+                "text": "Lakers",
+                "kind": "team"
+              }
+            ],
+            "date_expressions": [],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [
+              {
+                "field": "date",
+                "reason": "missing date or time frame for game search"
+              }
+            ],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1253,
+            "output_tokens": 68,
+            "total_tokens": 1321
+          },
+          "list_price_cost_usd": 0.00061,
+          "error": null,
+          "latency_ms": 1653.4,
+          "repeat": 1
+        },
+        {
+          "id": "seed-021",
+          "passed": false,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": false,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "unsupported",
+            "operation": null,
+            "mentions": [
+              {
+                "text": "LeBron",
+                "kind": "player"
+              }
+            ],
+            "date_expressions": [],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": "Career stats are not supported."
+          },
+          "usage": {
+            "input_tokens": 1258,
+            "output_tokens": 56,
+            "total_tokens": 1314
+          },
+          "list_price_cost_usd": 0.0005928000000000001,
+          "error": null,
+          "latency_ms": 1684.4,
+          "repeat": 1
+        },
+        {
+          "id": "seed-022",
+          "passed": false,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": false,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "unsupported",
+            "operation": null,
+            "mentions": [
+              {
+                "text": "Jordan",
+                "kind": "player"
+              },
+              {
+                "text": "LeBron",
+                "kind": "player"
+              }
+            ],
+            "date_expressions": [],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": "career comparison requests are unsupported"
+          },
+          "usage": {
+            "input_tokens": 1257,
+            "output_tokens": 63,
+            "total_tokens": 1320
+          },
+          "list_price_cost_usd": 0.0006036,
+          "error": null,
+          "latency_ms": 1424.8,
+          "repeat": 1
+        },
+        {
+          "id": "seed-023",
+          "passed": false,
+          "checks": {
+            "schema": false
+          },
+          "actual": null,
+          "usage": null,
+          "list_price_cost_usd": null,
+          "error": "AskParserUnavailable",
+          "provider_code": "credit_balance_exhausted",
+          "latency_ms": 6110.8,
+          "repeat": 1
+        },
+        {
+          "id": "seed-024",
+          "passed": false,
+          "checks": {
+            "intent": false,
+            "operation": true,
+            "mentions": false,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": false,
+            "schema": true,
+            "unsupported": false
+          },
+          "actual": {
+            "intent": "needs_clarification",
+            "operation": null,
+            "mentions": [
+              {
+                "text": "his",
+                "kind": "unknown"
+              }
+            ],
+            "date_expressions": [],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [
+              {
+                "field": "player",
+                "reason": "The pronoun 'his' does not specify which player is being referred to."
+              }
+            ],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1255,
+            "output_tokens": 77,
+            "total_tokens": 1332
+          },
+          "list_price_cost_usd": 0.0006252,
+          "error": null,
+          "latency_ms": 1839.0,
+          "repeat": 1
+        },
+        {
+          "id": "seed-025",
+          "passed": true,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": true,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "unsupported",
+            "operation": null,
+            "mentions": [],
+            "date_expressions": [],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": "NBA news is not supported in this product."
+          },
+          "usage": {
+            "input_tokens": 1255,
+            "output_tokens": 49,
+            "total_tokens": 1304
+          },
+          "list_price_cost_usd": 0.0005804,
+          "error": null,
+          "latency_ms": 1340.5,
+          "repeat": 1
+        }
+      ]
+    },
+    {
+      "model": "gpt-4.1-nano-2025-04-14",
+      "attempted": 25,
+      "passed": 7,
+      "median_ms": 1660.8,
+      "p95_ms": 4658.0,
+      "list_price_cost_usd": 0.0031719,
+      "unknown_usage_requests": 4,
+      "field_pass_counts": {
+        "intent": 17,
+        "operation": 16,
+        "mentions": 15,
+        "date_expressions": 16,
+        "round_mention": 18,
+        "game_number": 21,
+        "statistics": 21,
+        "clarification": 19,
+        "schema": 21
+      },
+      "results": [
+        {
+          "id": "seed-001",
+          "passed": true,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": true,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "game_search",
+            "operation": "list",
+            "mentions": [],
+            "date_expressions": [
+              {
+                "text": "today",
+                "kind": "relative"
+              }
+            ],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1255,
+            "output_tokens": 53,
+            "total_tokens": 1308
+          },
+          "list_price_cost_usd": 0.0001467,
+          "error": null,
+          "latency_ms": 2051.5,
+          "repeat": 1
+        },
+        {
+          "id": "seed-002",
+          "passed": false,
+          "checks": {
+            "intent": true,
+            "operation": false,
+            "mentions": false,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "game_search",
+            "operation": null,
+            "mentions": [],
+            "date_expressions": [
+              {
+                "text": "last week",
+                "kind": "relative"
+              }
+            ],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1256,
+            "output_tokens": 55,
+            "total_tokens": 1311
+          },
+          "list_price_cost_usd": 0.0001476,
+          "error": null,
+          "latency_ms": 1596.0,
+          "repeat": 1
+        },
+        {
+          "id": "seed-003",
+          "passed": true,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": true,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "game_search",
+            "operation": "list",
+            "mentions": [
+              {
+                "text": "Lakers",
+                "kind": "team"
+              },
+              {
+                "text": "Celtics",
+                "kind": "team"
+              }
+            ],
+            "date_expressions": [
+              {
+                "text": "January 23, 2025",
+                "kind": "calendar_date"
+              }
+            ],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1261,
+            "output_tokens": 80,
+            "total_tokens": 1341
+          },
+          "list_price_cost_usd": 0.00015810000000000002,
+          "error": null,
+          "latency_ms": 2071.4,
+          "repeat": 1
+        },
+        {
+          "id": "seed-004",
+          "passed": false,
+          "checks": {
+            "schema": false
+          },
+          "actual": null,
+          "usage": null,
+          "list_price_cost_usd": null,
+          "error": "AskParserInvalidResponse",
+          "provider_code": null,
+          "latency_ms": 1323.5,
+          "repeat": 1
+        },
+        {
+          "id": "seed-005",
+          "passed": false,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": true,
+            "date_expressions": false,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "postseason_summary",
+            "operation": "summary",
+            "mentions": [],
+            "date_expressions": [],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1257,
+            "output_tokens": 49,
+            "total_tokens": 1306
+          },
+          "list_price_cost_usd": 0.0001453,
+          "error": null,
+          "latency_ms": 1617.0,
+          "repeat": 1
+        },
+        {
+          "id": "seed-006",
+          "passed": false,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": true,
+            "date_expressions": false,
+            "round_mention": false,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "boxscore_stats",
+            "operation": "player_stats",
+            "mentions": [
+              {
+                "text": "Tatum",
+                "kind": "player"
+              }
+            ],
+            "date_expressions": [
+              {
+                "text": "game 4 of the 2024 Finals",
+                "kind": "unknown"
+              }
+            ],
+            "round_mention": "2024 Finals",
+            "game_number": 4,
+            "statistics": [
+              "points"
+            ],
+            "ambiguities": [],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1267,
+            "output_tokens": 76,
+            "total_tokens": 1343
+          },
+          "list_price_cost_usd": 0.0001571,
+          "error": null,
+          "latency_ms": 1777.4,
+          "repeat": 1
+        },
+        {
+          "id": "seed-007",
+          "passed": false,
+          "checks": {
+            "schema": false
+          },
+          "actual": null,
+          "usage": null,
+          "list_price_cost_usd": null,
+          "error": "AskParserInvalidResponse",
+          "provider_code": null,
+          "latency_ms": 1660.8,
+          "repeat": 1
+        },
+        {
+          "id": "seed-008",
+          "passed": false,
+          "checks": {
+            "schema": false
+          },
+          "actual": null,
+          "usage": null,
+          "list_price_cost_usd": null,
+          "error": "AskParserUnavailable",
+          "provider_code": "credit_balance_exhausted",
+          "latency_ms": 5687.8,
+          "repeat": 1
+        },
+        {
+          "id": "seed-009",
+          "passed": false,
+          "checks": {
+            "intent": false,
+            "operation": false,
+            "mentions": true,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "boxscore_stats",
+            "operation": "team_stats",
+            "mentions": [
+              {
+                "text": "Boston",
+                "kind": "team"
+              }
+            ],
+            "date_expressions": [
+              {
+                "text": "yesterday",
+                "kind": "relative"
+              }
+            ],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1255,
+            "output_tokens": 65,
+            "total_tokens": 1320
+          },
+          "list_price_cost_usd": 0.0001515,
+          "error": null,
+          "latency_ms": 1434.3,
+          "repeat": 1
+        },
+        {
+          "id": "seed-010",
+          "passed": false,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": false,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "game_search",
+            "operation": "list",
+            "mentions": [
+              {
+                "text": "1947-01-01",
+                "kind": "unknown"
+              }
+            ],
+            "date_expressions": [
+              {
+                "text": "1947-01-01",
+                "kind": "calendar_date"
+              }
+            ],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1260,
+            "output_tokens": 73,
+            "total_tokens": 1333
+          },
+          "list_price_cost_usd": 0.00015519999999999998,
+          "error": null,
+          "latency_ms": 1696.8,
+          "repeat": 1
+        },
+        {
+          "id": "seed-011",
+          "passed": false,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": true,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": false
+          },
+          "actual": {
+            "intent": "game_search",
+            "operation": "list",
+            "mentions": [],
+            "date_expressions": [
+              {
+                "text": "2025-02-30",
+                "kind": "calendar_date"
+              }
+            ],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": "Invalid date, February 30th does not exist."
+          },
+          "usage": {
+            "input_tokens": 1259,
+            "output_tokens": 69,
+            "total_tokens": 1328
+          },
+          "list_price_cost_usd": 0.0001535,
+          "error": null,
+          "latency_ms": 1574.8,
+          "repeat": 1
+        },
+        {
+          "id": "seed-012",
+          "passed": true,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": true,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "game_search",
+            "operation": "list",
+            "mentions": [
+              {
+                "text": "Lakers",
+                "kind": "team"
+              }
+            ],
+            "date_expressions": [
+              {
+                "text": "last Friday",
+                "kind": "relative"
+              }
+            ],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1255,
+            "output_tokens": 64,
+            "total_tokens": 1319
+          },
+          "list_price_cost_usd": 0.0001511,
+          "error": null,
+          "latency_ms": 1444.8,
+          "repeat": 1
+        },
+        {
+          "id": "seed-013",
+          "passed": false,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": true,
+            "date_expressions": false,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": false
+          },
+          "actual": {
+            "intent": "postseason_summary",
+            "operation": "summary",
+            "mentions": [],
+            "date_expressions": [],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": "Postseason summary for 1950-51 is unsupported."
+          },
+          "usage": {
+            "input_tokens": 1259,
+            "output_tokens": 60,
+            "total_tokens": 1319
+          },
+          "list_price_cost_usd": 0.0001499,
+          "error": null,
+          "latency_ms": 1222.3,
+          "repeat": 1
+        },
+        {
+          "id": "seed-014",
+          "passed": false,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": false,
+            "date_expressions": false,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "playoff_series",
+            "operation": "series_result",
+            "mentions": [
+              {
+                "text": "Lakers and Nuggets 2023 conference finals",
+                "kind": "unknown"
+              }
+            ],
+            "date_expressions": [
+              {
+                "text": "2023 conference finals",
+                "kind": "season"
+              }
+            ],
+            "round_mention": "Conference Finals",
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1260,
+            "output_tokens": 76,
+            "total_tokens": 1336
+          },
+          "list_price_cost_usd": 0.0001564,
+          "error": null,
+          "latency_ms": 2047.3,
+          "repeat": 1
+        },
+        {
+          "id": "seed-015",
+          "passed": false,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": false,
+            "date_expressions": false,
+            "round_mention": false,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "playoff_series",
+            "operation": "series_result",
+            "mentions": [
+              {
+                "text": "Celtics 2024 first round",
+                "kind": "team"
+              }
+            ],
+            "date_expressions": [],
+            "round_mention": "2024 First Round",
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1260,
+            "output_tokens": 65,
+            "total_tokens": 1325
+          },
+          "list_price_cost_usd": 0.000152,
+          "error": null,
+          "latency_ms": 1471.5,
+          "repeat": 1
+        },
+        {
+          "id": "seed-016",
+          "passed": true,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": true,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "boxscore_stats",
+            "operation": "player_stats",
+            "mentions": [
+              {
+                "text": "LeBron James",
+                "kind": "player"
+              },
+              {
+                "text": "Lakers",
+                "kind": "team"
+              }
+            ],
+            "date_expressions": [
+              {
+                "text": "2024-01-15",
+                "kind": "calendar_date"
+              }
+            ],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [
+              "assists"
+            ],
+            "ambiguities": [],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1269,
+            "output_tokens": 83,
+            "total_tokens": 1352
+          },
+          "list_price_cost_usd": 0.00016010000000000002,
+          "error": null,
+          "latency_ms": 1764.6,
+          "repeat": 1
+        },
+        {
+          "id": "seed-017",
+          "passed": false,
+          "checks": {
+            "intent": true,
+            "operation": false,
+            "mentions": true,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "boxscore_stats",
+            "operation": "player_stats",
+            "mentions": [
+              {
+                "text": "Heat",
+                "kind": "team"
+              }
+            ],
+            "date_expressions": [
+              {
+                "text": "2024-01-15",
+                "kind": "calendar_date"
+              }
+            ],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [
+              "blocks"
+            ],
+            "ambiguities": [],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1264,
+            "output_tokens": 71,
+            "total_tokens": 1335
+          },
+          "list_price_cost_usd": 0.00015480000000000002,
+          "error": null,
+          "latency_ms": 1192.5,
+          "repeat": 1
+        },
+        {
+          "id": "seed-018",
+          "passed": false,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": false,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "game_search",
+            "operation": "list",
+            "mentions": [],
+            "date_expressions": [
+              {
+                "text": "last night",
+                "kind": "relative"
+              }
+            ],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1254,
+            "output_tokens": 55,
+            "total_tokens": 1309
+          },
+          "list_price_cost_usd": 0.0001474,
+          "error": null,
+          "latency_ms": 1305.2,
+          "repeat": 1
+        },
+        {
+          "id": "seed-019",
+          "passed": false,
+          "checks": {
+            "intent": false,
+            "operation": false,
+            "mentions": true,
+            "date_expressions": true,
+            "round_mention": false,
+            "game_number": true,
+            "statistics": true,
+            "clarification": false,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "postseason_summary",
+            "operation": "summary",
+            "mentions": [],
+            "date_expressions": [],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1254,
+            "output_tokens": 49,
+            "total_tokens": 1303
+          },
+          "list_price_cost_usd": 0.000145,
+          "error": null,
+          "latency_ms": 1031.6,
+          "repeat": 1
+        },
+        {
+          "id": "seed-020",
+          "passed": false,
+          "checks": {
+            "intent": false,
+            "operation": false,
+            "mentions": false,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": false,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "game_search",
+            "operation": "list",
+            "mentions": [
+              {
+                "text": "Lakers game",
+                "kind": "team"
+              }
+            ],
+            "date_expressions": [],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1253,
+            "output_tokens": 58,
+            "total_tokens": 1311
+          },
+          "list_price_cost_usd": 0.0001485,
+          "error": null,
+          "latency_ms": 1775.6,
+          "repeat": 1
+        },
+        {
+          "id": "seed-021",
+          "passed": true,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": true,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "unsupported",
+            "operation": null,
+            "mentions": [],
+            "date_expressions": [],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": "Career points statistics are outside the supported scope of this product."
+          },
+          "usage": {
+            "input_tokens": 1258,
+            "output_tokens": 52,
+            "total_tokens": 1310
+          },
+          "list_price_cost_usd": 0.0001466,
+          "error": null,
+          "latency_ms": 1809.5,
+          "repeat": 1
+        },
+        {
+          "id": "seed-022",
+          "passed": true,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": true,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "unsupported",
+            "operation": null,
+            "mentions": [],
+            "date_expressions": [],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": "Career comparison requests are outside the supported scope of this product."
+          },
+          "usage": {
+            "input_tokens": 1257,
+            "output_tokens": 54,
+            "total_tokens": 1311
+          },
+          "list_price_cost_usd": 0.0001473,
+          "error": null,
+          "latency_ms": 957.3,
+          "repeat": 1
+        },
+        {
+          "id": "seed-023",
+          "passed": false,
+          "checks": {
+            "schema": false
+          },
+          "actual": null,
+          "usage": null,
+          "list_price_cost_usd": null,
+          "error": "AskParserUnavailable",
+          "provider_code": "credit_balance_exhausted",
+          "latency_ms": 4658.0,
+          "repeat": 1
+        },
+        {
+          "id": "seed-024",
+          "passed": false,
+          "checks": {
+            "intent": false,
+            "operation": true,
+            "mentions": true,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "needs_clarification",
+            "operation": null,
+            "mentions": [],
+            "date_expressions": [],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": "Insufficient information to determine which player or game is being referred to."
+          },
+          "usage": {
+            "input_tokens": 1255,
+            "output_tokens": 59,
+            "total_tokens": 1314
+          },
+          "list_price_cost_usd": 0.0001491,
+          "error": null,
+          "latency_ms": 2729.5,
+          "repeat": 1
+        },
+        {
+          "id": "seed-025",
+          "passed": true,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": true,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "unsupported",
+            "operation": null,
+            "mentions": [],
+            "date_expressions": [],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": "Fetching news from the internet is outside the scope of NBA data analysis."
+          },
+          "usage": {
+            "input_tokens": 1255,
+            "output_tokens": 58,
+            "total_tokens": 1313
+          },
+          "list_price_cost_usd": 0.00014869999999999998,
+          "error": null,
+          "latency_ms": 2818.4,
+          "repeat": 1
+        }
+      ]
+    }
+  ]
+}

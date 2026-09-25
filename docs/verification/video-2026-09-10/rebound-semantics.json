@@ -1,0 +1,42 @@
+[
+  {
+    "stat": "OREB",
+    "playerId": 1629731,
+    "expectedEventIds": [
+      8,
+      40,
+      365,
+      371
+    ],
+    "playlistEventIds": [
+      8,
+      40,
+      365,
+      371
+    ],
+    "pass": true
+  },
+  {
+    "stat": "DREB",
+    "playerId": 1630596,
+    "expectedEventIds": [
+      27,
+      333,
+      378,
+      397,
+      438,
+      548,
+      617
+    ],
+    "playlistEventIds": [
+      27,
+      333,
+      378,
+      397,
+      438,
+      548,
+      617
+    ],
+    "pass": true
+  }
+]

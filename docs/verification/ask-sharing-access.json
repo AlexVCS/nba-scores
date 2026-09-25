@@ -1,0 +1,73 @@
+{
+  "split": "seed",
+  "fixture_sha256": "a100ef8d058ce23c9bd8ee51bcffba1973c4729f8540113a0a2f2c206ff72e25",
+  "prompt_sha256": "daf8aafc137586f5e612df37352457f14736f5c39b877a9846dbf0891041a1ba",
+  "cost_basis": "regular token list prices; excludes discounts and complimentary tokens",
+  "actual_billed_cost_usd": null,
+  "reserved_or_list_price_usd": 0.0005836000000000001,
+  "models": [
+    {
+      "model": "gpt-4.1-mini-2025-04-14",
+      "attempted": 1,
+      "passed": 1,
+      "median_ms": 3174.0,
+      "p95_ms": 3174.0,
+      "list_price_cost_usd": 0.0005836,
+      "unknown_usage_requests": 0,
+      "field_pass_counts": {
+        "intent": 1,
+        "operation": 1,
+        "mentions": 1,
+        "date_expressions": 1,
+        "round_mention": 1,
+        "game_number": 1,
+        "statistics": 1,
+        "clarification": 1,
+        "schema": 1
+      },
+      "results": [
+        {
+          "id": "seed-001",
+          "passed": true,
+          "checks": {
+            "intent": true,
+            "operation": true,
+            "mentions": true,
+            "date_expressions": true,
+            "round_mention": true,
+            "game_number": true,
+            "statistics": true,
+            "clarification": true,
+            "schema": true,
+            "unsupported": true
+          },
+          "actual": {
+            "intent": "game_search",
+            "operation": "list",
+            "mentions": [],
+            "date_expressions": [
+              {
+                "text": "today",
+                "kind": "relative"
+              }
+            ],
+            "round_mention": null,
+            "game_number": null,
+            "statistics": [],
+            "ambiguities": [],
+            "unsupported_reason": null
+          },
+          "usage": {
+            "input_tokens": 1255,
+            "output_tokens": 51,
+            "total_tokens": 1306
+          },
+          "list_price_cost_usd": 0.0005836,
+          "error": null,
+          "latency_ms": 3174.0,
+          "repeat": 1
+        }
+      ]
+    }
+  ]
+}

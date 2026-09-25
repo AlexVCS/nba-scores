@@ -1,0 +1,82 @@
+[
+  {
+    "question": "Who won the 2023 NBA Finals?",
+    "http_status": 200,
+    "elapsed_ms": 2489.5,
+    "response": {
+      "status": "ok",
+      "message": null,
+      "items": [
+        {
+          "kind": "series",
+          "title": "NBA Finals",
+          "title_spoiler": true,
+          "fields": [
+            {
+              "label": "Team 1",
+              "value": "Denver Nuggets",
+              "spoiler": true
+            },
+            {
+              "label": "Team 1 wins",
+              "value": 4,
+              "spoiler": true
+            },
+            {
+              "label": "Team 2",
+              "value": "Miami Heat",
+              "spoiler": true
+            },
+            {
+              "label": "Team 2 wins",
+              "value": 1,
+              "spoiler": true
+            },
+            {
+              "label": "Series winner",
+              "value": "DEN",
+              "spoiler": true
+            }
+          ],
+          "links": [
+            {
+              "label": "Series",
+              "path": "/playoffs/2023/the-finals",
+              "spoiler": true
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "question": "How many points did Tatum score in game 4 of the 2024 Finals?",
+    "http_status": 200,
+    "elapsed_ms": 5237.1,
+    "response": {
+      "status": "unavailable",
+      "message": "Question interpretation is unavailable right now. You can still browse games by date.",
+      "items": []
+    }
+  },
+  {
+    "question": "Show games on June 17, 2024",
+    "http_status": 200,
+    "elapsed_ms": 4.7,
+    "response": {
+      "status": "unavailable",
+      "message": "Question interpretation is unavailable right now. You can still browse games by date.",
+      "items": []
+    }
+  },
+  {
+    "question": "Who is the greatest player ever?",
+    "http_status": 200,
+    "elapsed_ms": 3.7,
+    "response": {
+      "status": "unavailable",
+      "message": "Question interpretation is unavailable right now. You can still browse games by date.",
+      "items": []
+    }
+  }
+]
