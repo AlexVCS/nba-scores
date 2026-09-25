@@ -23,8 +23,8 @@ function FinalsRoundHeader({
   suppressRevealControls,
 }: FinalsRoundHeaderProps) {
   return (
-    <div className={`mb-4 flex ${suppressRevealControls ? "" : "min-h-[76px]"} min-w-0 flex-col items-center gap-2 border-b-[3px] border-hw-accent pb-3 text-center`}>
-      <h2 id={headingId} className="text-[11px] leading-[1.35] font-black tracking-[.12em] text-hw-ink uppercase">NBA Finals</h2>
+    <div className={`mb-4 flex ${suppressRevealControls ? "" : "min-h-[76px]"} min-w-0 flex-col items-center gap-2 border-b-[3px] border-hw-accent-ink pb-3 text-center`}>
+      <h2 id={headingId} className="text-[11px] leading-[1.35] font-black tracking-[.12em] text-hw-ink uppercase">{finalsRound?.label ?? "Finals"}</h2>
       {finalsRound && !suppressRevealControls ? (
         <RoundRevealButton
           label={finalsRound.label}

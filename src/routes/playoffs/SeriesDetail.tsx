@@ -1,5 +1,6 @@
-import { useParams, Link, useSearchParams } from 'react-router-dom';
+import { useParams, Link, useSearchParams, useLocation } from 'react-router';
 import { Switch } from '@adobe/react-spectrum';
+import {useResultsVisibility} from "@/hooks/useResultsVisibility";
 import { useMemo } from 'react';
 import { usePlayoffData } from '@/hooks/usePlayoffData';
 import { generateWatchLink, formatGameDate } from '@/helpers/helpers';
@@ -10,11 +11,14 @@ import { buildPlayoffBracketModel } from '@/utils/playoffBracketModel';
 import { yearToSeason, findSeriesBySlug } from '@/utils/seriesSlug';
 
 function SeriesDetail() {
+  const location = useLocation();
+  const {showAllResults} = useResultsVisibility();
+  const prefix = location.pathname.startsWith("/original/") ? "/original" : "";
   const { year, seriesSlug } = useParams<{ year: string; seriesSlug: string }>();
   const isValidYear = !!year && /^\d{4}$/.test(year);
   const season = isValidYear ? yearToSeason(year) : null;
   const [searchParams, setSearchParams] = useSearchParams();
-  const isRevealed = searchParams.get('revealed') === 'true';
+  const isRevealed = showAllResults || searchParams.get('revealed') === 'true';
   const setIsRevealed = (value: boolean) => {
     setSearchParams(prev => {
       const next = new URLSearchParams(prev);
@@ -83,7 +87,7 @@ function SeriesDetail() {
       </Link>
       </div>
 
-      <div className="flex justify-center mb-6">
+      {!showAllResults && <div className="flex justify-center mb-6">
         <Switch
           isSelected={isRevealed}
           onChange={setIsRevealed}
@@ -92,7 +96,7 @@ function SeriesDetail() {
             {isRevealed ? 'Hide Results' : 'Show Results'}
           </span>
         </Switch>
-      </div>
+      </div>}
 
       <div className="rounded overflow-hidden mb-6">
         <div
@@ -129,16 +133,12 @@ function SeriesDetail() {
                 const gameDate = formatGameDate(game.date);
                 const homeWon = isRevealed && game.homeTeam.score > game.awayTeam.score;
                 const awayWon = isRevealed && game.awayTeam.score > game.homeTeam.score;
-                const boxscoreAvailable = game.boxscoreAvailable === true;
 
                 return (
                   <div
                     key={game.gameId}
                     className="relative text-sm text-gray-700 dark:text-slate-300 flex items-center gap-3 py-3"
                   >
-                    {isRevealed && boxscoreAvailable && (
-                      <Link to={`/games/${game.gameId}/boxscore`} className="absolute inset-0 sm:hidden" aria-label="Box score" />
-                    )}
                     <span className="text-gray-400 dark:text-gray-500 shrink-0 w-14">Game {index + 1}</span>
                     <span className="font-medium shrink-0 hidden sm:block">{gameDate}</span>
                     {isRevealed ? (
@@ -160,26 +160,12 @@ function SeriesDetail() {
                         Watch
                       </a>
                     )}
-                    {isRevealed && boxscoreAvailable && (
-                      <>
-                        <svg
-                          className="sm:hidden shrink-0 text-gray-400 dark:text-gray-500"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 16 16"
-                          fill="none"
-                          aria-hidden="true"
-                        >
-                          <path d="M6 3l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                        <Link
-                          to={`/games/${game.gameId}/boxscore`}
-                          className="hidden sm:inline text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 shrink-0"
-                        >
-                          Box score
-                        </Link>
-                      </>
-                    )}
+                    {game.gameId && <Link
+                      to={`${prefix}/games/${game.gameId}/boxscore?date=${game.date.slice(0, 10)}`}
+                      state={{from: location.pathname + location.search}}
+                      aria-label={`View game ${index + 1}: ${game.awayTeam.tricode} at ${game.homeTeam.tricode}`}
+                      className="after:absolute after:inset-0 text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 shrink-0 focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-blue-500"
+                    >Game details</Link>}
                   </div>
                 );
               })}

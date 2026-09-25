@@ -7,7 +7,6 @@ import type {
   RoundDefinition,
   SeriesData,
 } from "@/helpers/helpers";
-import { getTeamConference } from "@/constants/nbaTeams";
 
 export type RenderSeries = SeriesData & {
   bracketGroupId: string;
@@ -28,10 +27,6 @@ export type PlayoffBracketModel = {
   fallbackMode: boolean;
 };
 
-function abbreviateConference(label: string): string {
-  return label.replace(/\bConference\b/g, "Conf.");
-}
-
 function playoffYearFromSeason(season: string): number {
   return Number.parseInt(season.split("-")[0], 10) + 1;
 }
@@ -49,28 +44,19 @@ function makeFallbackFormat(season: string, finalsRound: number | null): Playoff
 
 function fallbackGroupForSeries(series: SeriesData, isFinals: boolean): BracketGroup {
   if (isFinals) {
-    return { id: "finals", label: "NBA Finals", kind: "finals", sortOrder: 99 };
+    return { id: "finals", label: series.roundName, kind: "finals", sortOrder: 99 };
   }
 
-  const conf = getTeamConference(series.teams[0]?.id) ?? getTeamConference(series.teams[1]?.id);
-  if (conf === "West") {
-    return { id: "west-conference", label: "Western Conference", kind: "conference", sortOrder: 10 };
-  }
-  if (conf === "East") {
-    return { id: "east-conference", label: "Eastern Conference", kind: "conference", sortOrder: 20 };
-  }
-
+  // Current team conferences cannot identify historical division membership.
   return { id: "league", label: "League Bracket", kind: "league", sortOrder: 30 };
 }
 
 function inferFinalsRound(series: SeriesData[]): number | null {
-  if (series.length === 0) return null;
-  const byRound = new Map<number, number>();
-  for (const item of series) {
-    byRound.set(item.round, (byRound.get(item.round) ?? 0) + 1);
-  }
-  const maxRound = Math.max(...series.map(item => item.round));
-  return byRound.get(maxRound) === 1 ? maxRound : null;
+  const finals = series.filter(item => item.isFinals === true || (
+    item.isFinals === undefined && (item.bracketGroupKind === "finals" || /^(?:NBA |BAA )?Finals$/i.test(item.roundName))
+  ));
+  const rounds = new Set(finals.map(item => item.round));
+  return rounds.size === 1 ? finals[0].round : null;
 }
 
 function buildFallbackEdges(series: RenderSeries[]): BracketEdge[] {
@@ -97,7 +83,7 @@ function buildFallbackEdges(series: RenderSeries[]): BracketEdge[] {
 }
 
 export function buildPlayoffBracketModel(response: PlayoffBracketResponse): PlayoffBracketModel {
-  const finalsRound = response.format?.finalsRound ?? inferFinalsRound(response.series);
+  const finalsRound = response.format ? response.format.finalsRound : inferFinalsRound(response.series);
   const format = response.format ?? makeFallbackFormat(response.season, finalsRound);
   const groupsById = new Map<string, BracketGroup>();
   const roundLabels = new Map<number, string>();
@@ -107,18 +93,19 @@ export function buildPlayoffBracketModel(response: PlayoffBracketResponse): Play
     .sort((a, b) => a.round - b.round || (a.bracketOrder ?? 0) - (b.bracketOrder ?? 0) || a.seriesKey.localeCompare(b.seriesKey))
     .map((item): RenderSeries => {
       const isFinals = item.isFinals ?? (finalsRound !== null && item.round === finalsRound);
-      const fallbackGroup = fallbackGroupForSeries(item, isFinals);
-      const group: BracketGroup = item.bracketGroupId
+      const roundName = response.rounds?.find(round => round.round === item.round)?.label ?? item.roundName;
+      const fallbackGroup = fallbackGroupForSeries({...item, roundName}, isFinals);
+      const providedGroup = response.groups?.find(group => group.id === item.bracketGroupId);
+      const group: BracketGroup = providedGroup ?? (item.bracketGroupId
         ? {
             id: item.bracketGroupId,
             label: item.bracketGroupLabel ?? fallbackGroup.label,
             kind: item.bracketGroupKind ?? fallbackGroup.kind,
             sortOrder: fallbackGroup.sortOrder,
           }
-        : fallbackGroup;
+        : fallbackGroup);
 
-      groupsById.set(group.id, response.groups?.find(g => g.id === group.id) ?? group);
-      const roundName = isFinals ? "NBA Finals" : abbreviateConference(item.roundName);
+      groupsById.set(group.id, group);
       roundLabels.set(item.round, roundName);
 
       const positionKey = `${group.id}-${item.round}`;
@@ -128,7 +115,7 @@ export function buildPlayoffBracketModel(response: PlayoffBracketResponse): Play
       return {
         ...item,
         bracketGroupId: group.id,
-        bracketGroupLabel: abbreviateConference(group.label),
+        bracketGroupLabel: group.label,
         bracketGroupKind: group.kind,
         bracketOrder: item.bracketOrder ?? nextPosition,
         targetWins: item.targetWins ?? null,
@@ -139,16 +126,14 @@ export function buildPlayoffBracketModel(response: PlayoffBracketResponse): Play
 
   const groups = (response.groups ?? [...groupsById.values()])
     .filter(group => series.some(item => item.bracketGroupId === group.id))
-    .map(group => ({...group, label: abbreviateConference(group.label)}))
     .sort((a, b) => a.sortOrder - b.sortOrder);
 
-  const rounds = (response.rounds ?? [...roundLabels.entries()].map(([round, label]) => ({
+  const rounds = [...(response.rounds ?? [...roundLabels.entries()].map(([round, label]) => ({
     round,
     label,
     sortOrder: round,
     defaultRevealed: round === Math.min(...response.series.map(item => item.round)),
-  })))
-    .map(round => ({...round, label: abbreviateConference(round.label)}))
+  })))]
     .sort((a, b) => a.sortOrder - b.sortOrder);
 
   return {

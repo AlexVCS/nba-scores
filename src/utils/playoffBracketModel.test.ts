@@ -40,7 +40,7 @@ describe('buildPlayoffBracketModel', () => {
       seriesCount: 2,
       series: [
         series('R1-bos-nyk', 1),
-        series('R2-bos-lal', 2, [bos, lal]),
+        {...series('R2-bos-lal', 2, [bos, lal]), roundName: 'NBA Finals'},
       ],
     };
 
@@ -51,6 +51,50 @@ describe('buildPlayoffBracketModel', () => {
     expect(model.series[1].isFinals).toBe(true);
     expect(model.series[1].roundName).toBe('NBA Finals');
     expect(model.groups.some(group => group.id === 'finals')).toBe(true);
+  });
+
+  it('does not turn the latest available series into Finals in an incomplete bracket', () => {
+    const model = buildPlayoffBracketModel({
+      season: '1960-61', teamGameRowCount: 2, gameCount: 1, seriesCount: 1,
+      series: [{...series('east-semifinal', 1), roundName: 'Division Semifinals'}],
+    });
+
+    expect(model.format.finalsRound).toBeNull();
+    expect(model.series[0].isFinals).toBe(false);
+    expect(model.series[0].roundName).toBe('Division Semifinals');
+    expect(model.groups).toEqual([{id: 'league', label: 'League Bracket', kind: 'league', sortOrder: 30}]);
+  });
+
+  it('honors an explicit null finals round instead of inferring a championship', () => {
+    const model = buildPlayoffBracketModel({
+      season: '1953-54', teamGameRowCount: 2, gameCount: 1, seriesCount: 1,
+      format: {era: 'six-team-round-robin', playoffYear: 1954, finalsRound: null,
+        bracketType: 'round-robin-plus-finals', supportsExactBracket: false, notes: []},
+      series: [{...series('unresolved', 1), roundName: 'Finals'}],
+    });
+
+    expect(model.format.finalsRound).toBeNull();
+    expect(model.series[0].isFinals).toBe(false);
+  });
+
+  it('uses canonical round and group metadata without replacing BAA Finals or division names', () => {
+    const model = buildPlayoffBracketModel({
+      season: '1948-49', teamGameRowCount: 4, gameCount: 2, seriesCount: 2,
+      format: {era: 'eight-team-division', playoffYear: 1949, finalsRound: 3,
+        bracketType: 'single-elimination', supportsExactBracket: true, notes: []},
+      groups: [{id: 'east-division', label: 'Eastern Division', kind: 'division', sortOrder: 1},
+        {id: 'finals', label: 'BAA Finals', kind: 'finals', sortOrder: 99}],
+      rounds: [{round: 1, label: 'Division Semifinals', sortOrder: 1, defaultRevealed: true},
+        {round: 3, label: 'BAA Finals', sortOrder: 3, defaultRevealed: false}],
+      edges: [],
+      series: [{...series('east', 1), bracketGroupId: 'east-division'},
+        {...series('finals', 3), bracketGroupId: 'finals', bracketGroupLabel: 'NBA Finals'}],
+    });
+
+    expect(model.series.map(item => item.roundName)).toEqual(['Division Semifinals', 'BAA Finals']);
+    expect(model.series.map(item => item.bracketGroupLabel)).toEqual(['Eastern Division', 'BAA Finals']);
+    expect(model.series[1].isFinals).toBe(true);
+    expect(model.rounds.map(round => round.label)).toEqual(['Division Semifinals', 'BAA Finals']);
   });
 
   it('uses fallback metadata consistently for legacy detail slugs', () => {
@@ -68,7 +112,7 @@ describe('buildPlayoffBracketModel', () => {
     const model = buildPlayoffBracketModel(response);
     const slug = buildSeriesSlug(model.series[0], model.series);
 
-    expect(slug).toBe('west-conference-semifinal-1');
+    expect(slug).toBe('league-semifinal-1');
     expect(findSeriesBySlug(slug, model.series)?.seriesKey).toBe('R2-mnl-ftw');
   });
 

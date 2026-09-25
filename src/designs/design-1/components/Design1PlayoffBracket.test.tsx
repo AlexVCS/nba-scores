@@ -62,7 +62,7 @@ function makeBracket(exact = false): PlayoffBracketResponse {
 function renderBracket(exact = false, showAllResults = false, playoffPicture = makeBracket(exact)) {
   const content = (picture: PlayoffBracketResponse) => (
     <MemoryRouter>
-      <ResultsVisibilityContext.Provider value={{showAllResults, setShowAllResults: vi.fn(), toggleShowAllResults: vi.fn()}}>
+      <ResultsVisibilityContext.Provider value={{showAllResults, setShowAllResults: vi.fn(), toggleShowAllResults: vi.fn(), isSpoilerHintDismissed: true, dismissSpoilerHint: vi.fn()}}>
         <Design1PlayoffBracket playoffPicture={picture} />
       </ResultsVisibilityContext.Provider>
     </MemoryRouter>
@@ -254,5 +254,28 @@ describe("Design1PlayoffBracket Finals controls", () => {
     fireEvent.click(finals.getByRole("button", {name: "Hide results"}));
     expect(finals.getByRole("link", {name: "Celtics versus Knicks. View series details."})).toBeInTheDocument();
     expect(within(mobile.getByRole("region", {name: "Division Finals"})).getByRole("button", {name: "Hide results"})).toBeInTheDocument();
+  });
+});
+
+
+describe("historical round names", () => {
+  it.each([false, true])("uses BAA metadata in desktop and mobile headings, locked states and announcements (exact: %s)", exact => {
+    const bracket = makeBracket(exact);
+    bracket.season = "1948-49";
+    bracket.rounds![0].label = "Division Semifinals";
+    bracket.rounds![2].label = "BAA Finals";
+    bracket.groups!.find(group => group.kind === "finals")!.label = "BAA Finals";
+    const {desktop, mobile, container} = renderBracket(exact, false, bracket);
+
+    expect(desktop.getAllByRole("heading", {name: "BAA Finals"}).length).toBeGreaterThan(0);
+    expect(mobile.getByRole("region", {name: "BAA Finals"})).toBeInTheDocument();
+    expect(within(mobile.getByRole("region", {name: "BAA Finals"})).getByRole("heading", {level: 3, name: "BAA Finals"})).toBeInTheDocument();
+    expect(desktop.getByLabelText("BAA Finals locked until Division Finals is revealed")).toBeInTheDocument();
+    expect(container).not.toHaveTextContent("NBA Finals");
+    fireEvent.click(desktop.getAllByRole("button", {name: "Reveal Division Semifinals results"})[0]);
+    expect(within(container).getByRole("status")).toHaveTextContent("Division Semifinals results revealed.");
+    fireEvent.click(desktop.getAllByRole("button", {name: "Reveal Division Finals results"})[0]);
+    fireEvent.click(desktop.getByRole("button", {name: "Reveal BAA Finals results"}));
+    expect(within(container).getByRole("status")).toHaveTextContent("BAA Finals results revealed.");
   });
 });

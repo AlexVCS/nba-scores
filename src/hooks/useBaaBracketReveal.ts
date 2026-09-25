@@ -63,7 +63,7 @@ function useBaaBracketReveal(
       return {
         season: model.season,
         series: new Set([...shown, key]),
-        statusMessage: `${series.bracketGroupLabel} ${series.roundName} results revealed.`,
+        statusMessage: `${series.isFinals ? series.roundName : `${series.bracketGroupLabel} ${series.roundName}`} results revealed.`,
       };
     });
   }, [forceShowAll, incoming, model.season, seriesByKey, topology]);
@@ -86,7 +86,7 @@ function useBaaBracketReveal(
       season: model.season,
       series: new Set([...(previous.season === model.season ? previous.series : [])]
         .filter(shown => !hidden.has(shown))),
-      statusMessage: `${series.bracketGroupLabel} ${series.roundName} and dependent results are hidden.`,
+      statusMessage: `${series.isFinals ? series.roundName : `${series.bracketGroupLabel} ${series.roundName}`} and dependent results are hidden.`,
     }));
   }, [forceShowAll, model.season, seriesByKey, topology]);
 

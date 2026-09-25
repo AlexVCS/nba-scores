@@ -150,7 +150,7 @@ function MobileBracket({
                     {groups.map(group => (
                       <div key={group.id}>
                         <h3 className="mb-2 text-[10px] font-extrabold uppercase tracking-widest text-hw-muted">
-                          {group.kind === "finals" ? "NBA Finals" : group.label}
+                          {group.label}
                         </h3>
                         <div className="flex flex-col gap-2">
                           {group.series.map((series, seriesIndex) => (
@@ -179,7 +179,7 @@ function MobileBracket({
               ) : (
                 <div className="flex flex-col gap-5">
                   {groups.map(group => <div key={group.id} className="mobile-bracket__group">
-                    <h3 className="mobile-bracket__group-label mb-2 text-[11px] font-extrabold uppercase tracking-widest">{group.kind === "finals" ? "NBA Finals" : group.label}</h3>
+                    <h3 className="mobile-bracket__group-label mb-2 text-[11px] font-extrabold uppercase tracking-widest">{group.label}</h3>
                     <div className="flex flex-col gap-2">
                       {group.series.map((series: RenderSeries) => <MobileSeriesCard key={series.seriesKey} series={series} allSeries={model.series} season={model.season} isRevealed={isRevealed} />)}
                     </div>

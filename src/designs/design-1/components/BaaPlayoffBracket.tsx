@@ -17,6 +17,12 @@ function BaaPlayoffBracket({model, forceShowAll}: BaaPlayoffBracketProps) {
   const buildSeriesPath = useBracketSeriesPath();
   if (!topology) return null;
 
+  const roundLabel = (series: RenderSeries) => model.rounds.find(round => round.round === series.round)?.label ?? series.roundName;
+  const groupLabel = (series: RenderSeries) => model.groups.find(group => group.id === series.bracketGroupId)?.label ?? series.bracketGroupLabel;
+  const quarterfinalLabel = roundLabel(topology.quarterfinals[0]);
+  const semifinalLabel = roundLabel(topology.qualifierSemifinal);
+  const finalsLabel = roundLabel(topology.finals);
+
   const renderSeries = (series: RenderSeries, title: string, position: string, prerequisite?: string) => {
     const available = reveal.canRevealSeries(series.seriesKey);
     const shown = reveal.revealedSeries.has(series.seriesKey);
@@ -26,7 +32,7 @@ function BaaPlayoffBracket({model, forceShowAll}: BaaPlayoffBracketProps) {
         <h3 className="hw-baa-series-title">
           {series.isFinals ? <Trophy size={16} aria-hidden="true" /> : null}
           {title}
-          {(position === "division" || position === "qualifier") && <span className="hw-baa-mobile-round">Semifinal</span>}
+          {(position === "division" || position === "qualifier") && <span className="hw-baa-mobile-round">{roundLabel(series)}</span>}
         </h3>
         {available || shown ? (
           <BracketSeriesCard
@@ -39,7 +45,7 @@ function BaaPlayoffBracket({model, forceShowAll}: BaaPlayoffBracketProps) {
         ) : (
           <div className="hw-baa-locked rounded-hw border border-dashed border-hw-bracket-line bg-hw-surface/85 text-hw-muted">
             <LockKeyhole size={18} aria-hidden="true" />
-            <p>{series.isFinals ? "The two semifinal winners" : "The two quarterfinal winners"}</p>
+            <p>{`Winners of the ${series.isFinals ? semifinalLabel : quarterfinalLabel}`}</p>
             <p className="text-[10px] leading-4">Reveal {prerequisite} to see the matchup.</p>
           </div>
         )}
@@ -61,7 +67,7 @@ function BaaPlayoffBracket({model, forceShowAll}: BaaPlayoffBracketProps) {
           </div>
         )}
         {(position === "division" || position === "qualifier") && (
-          <p className="hw-baa-mobile-destination">Winner advances to Finals</p>
+          <p className="hw-baa-mobile-destination">Winner advances to {finalsLabel}</p>
         )}
       </section>
     );
@@ -89,30 +95,30 @@ function BaaPlayoffBracket({model, forceShowAll}: BaaPlayoffBracketProps) {
           <button
             type="button"
             onClick={reveal.revealedSeries.size ? reveal.hideAllResults : reveal.showAllResults}
-            className="hw-baa-all-results min-h-11 rounded-hw border border-hw-line bg-hw-surface px-4 text-[10px] font-black tracking-[.1em] text-hw-accent-ink uppercase shadow-hw-small focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-hw-accent dark:text-hw-accent"
+            className="hw-baa-all-results min-h-11 cursor-pointer rounded-hw border border-hw-line bg-hw-surface px-4 text-[10px] font-black tracking-[.1em] text-hw-accent-ink uppercase shadow-hw-small focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-hw-accent dark:text-hw-accent"
           >
             {reveal.revealedSeries.size ? "Hide all results" : "Show all results"}
           </button>
         </div>
       )}
       <div className="hw-baa-tree">
-        <div className="hw-baa-column-heading hw-baa-column-heading--quarters">Quarterfinals</div>
-        <div className="hw-baa-column-heading hw-baa-column-heading--semis">Semifinals</div>
-        <div className="hw-baa-column-heading hw-baa-column-heading--finals">Finals</div>
+        <div className="hw-baa-column-heading hw-baa-column-heading--quarters">{quarterfinalLabel}</div>
+        <div className="hw-baa-column-heading hw-baa-column-heading--semis">{semifinalLabel}</div>
+        <div className="hw-baa-column-heading hw-baa-column-heading--finals">{finalsLabel}</div>
         <div className="hw-baa-connections hw-baa-connections--qualifiers" aria-hidden="true">
           <svg viewBox="0 0 48 520" preserveAspectRatio="none"><path d="M0 196 H24 V404 H0 M24 300 H48" /></svg>
         </div>
         <div className="hw-baa-connections hw-baa-connections--finals" aria-hidden="true">
           <svg viewBox="0 0 48 520" preserveAspectRatio="none"><path d="M0 92 H24 V300 H0 M24 196 H48" /></svg>
         </div>
-        {renderSeries(topology.divisionWinner, "Division winners", "division")}
+        {renderSeries(topology.divisionWinner, groupLabel(topology.divisionWinner), "division")}
         {topology.quarterfinals.map((series, index) => (
           <div key={series.seriesKey} className={`hw-baa-quarter hw-baa-quarter--${index + 1}`}>
-            {renderSeries(series, `Quarterfinal ${index + 1}`, "quarter")}
+            {renderSeries(series, `${roundLabel(series)}, series ${index + 1}`, "quarter")}
           </div>
         ))}
-        {renderSeries(topology.qualifierSemifinal, "Other qualifiers", "qualifier", "both quarterfinals")}
-        {renderSeries(topology.finals, "BAA Finals", "finals", "both semifinals")}
+        {renderSeries(topology.qualifierSemifinal, groupLabel(topology.qualifierSemifinal), "qualifier", quarterfinalLabel)}
+        {renderSeries(topology.finals, finalsLabel, "finals", semifinalLabel)}
       </div>
     </div>
   );

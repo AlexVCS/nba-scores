@@ -1,6 +1,7 @@
 import {
   Button,
   ComboBox,
+  Group,
   Input,
   Label,
   ListBox,
@@ -8,7 +9,7 @@ import {
   Popover,
 } from "react-aria-components";
 import ChevronUpDownIcon from "@spectrum-icons/workflow/ChevronUpDown";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router";
 
 const current_year = new Date().getFullYear();
@@ -66,7 +67,52 @@ const parseSeasonInput = (value: string): number | null => {
   return null;
 };
 
-const PlayoffYearPicker = () => {
+interface PlayoffYearPickerProps {
+  align?: "left" | "center";
+  variant?: "default" | "hardwood";
+}
+
+const PICKER_STYLES = {
+  default: {
+    container: "mt-2 mb-4",
+    comboBox: "w-[160px] sm:w-[200px]",
+    label: "dark:text-slate-50 text-neutral-950 text-sm sm:text-base",
+    labelText: "Playoffs",
+    group:
+      "rounded-lg bg-white/90 focus-within:bg-white group-open:bg-white transition pl-3 shadow-md text-gray-700 focus-visible:ring-2 ring-black",
+    input: "",
+    inputAlignment: {left: "", center: ""},
+    button: "px-2 sm:px-3 text-gray-700 rounded-r-lg pressed:bg-purple-100",
+    popover: "rounded-lg drop-shadow-lg ring-1 ring-black/10 bg-white",
+    popoverStyle: undefined,
+    listBox: "p-1",
+    option:
+      "rounded-md cursor-default text-gray-700 hover:bg-gray-100 focus:bg-violet-700 focus:text-white selected:bg-violet-100 selected:font-semibold",
+  },
+  hardwood: {
+    container: "w-full",
+    comboBox: "w-full",
+    label: "text-[11px] font-extrabold tracking-[.1em] text-hw-ink uppercase",
+    labelText: "Season",
+    group:
+      "rounded-hw bg-hw-surface-muted text-hw-ink focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-hw-accent-ink",
+    input: "min-h-11 tabular-nums",
+    inputAlignment: {left: "pl-3 pr-11", center: "px-11"},
+    button:
+      "absolute inset-y-0 right-0 w-11 cursor-pointer justify-center rounded-r-hw text-hw-ink data-hovered:bg-hw-ink/5 data-pressed:bg-hw-ink/10 data-focus-visible:outline-2 data-focus-visible:outline-hw-accent-ink",
+    popover:
+      "design-hardwood z-50 rounded-hw border border-hw-line font-hw-display text-hw-ink shadow-hw-small",
+    popoverStyle: {backgroundColor: "var(--hw-surface)"},
+    listBox: "max-h-60 overflow-auto",
+    option:
+      "min-h-9 cursor-pointer font-sans text-sm font-normal tabular-nums text-hw-ink data-hovered:bg-hw-surface-muted data-focused:bg-hw-surface-muted data-selected:bg-hw-ink data-selected:text-hw-surface dark:data-selected:bg-hw-accent dark:data-selected:text-hw-accent-contrast data-focus-visible:outline-2 data-focus-visible:-outline-offset-2 data-focus-visible:outline-hw-accent-ink",
+  },
+};
+
+const PlayoffYearPicker = ({align = "left", variant = "default"}: PlayoffYearPickerProps) => {
+  const fieldRef = useRef<HTMLDivElement>(null);
+  const styles = PICKER_STYLES[variant];
+  const alignment = align === "center" ? "text-center" : "text-left";
   const [searchParams, setSearchParams] = useSearchParams();
 
   const seasonParam = searchParams.get("season") ?? "";
@@ -109,7 +155,7 @@ const PlayoffYearPicker = () => {
   };
 
   return (
-    <div className="flex justify-center mt-2 mb-4">
+    <div className={`flex justify-center ${styles.container}`}>
       <ComboBox
         selectedKey={String(selectedYear)}
         inputValue={inputValue}
@@ -119,14 +165,17 @@ const PlayoffYearPicker = () => {
           id: String(year),
           label: formatSeason(year),
         }))}
-        className="group flex flex-col gap-1 w-[160px] sm:w-[200px]"
+        className={`group flex flex-col gap-1 ${styles.comboBox}`}
         menuTrigger="focus"
       >
-        <Label className="cursor-default dark:text-slate-50 text-neutral-950 text-sm sm:text-base">
-          Playoffs
+        <Label className={`cursor-default ${alignment} ${styles.label}`}>
+          {styles.labelText}
         </Label>
 
-        <div className="flex rounded-lg bg-white/90 focus-within:bg-white group-open:bg-white transition pl-3 shadow-md text-gray-700 text-sm sm:text-base focus-visible:ring-2 ring-black outline-none">
+        <Group
+          ref={fieldRef}
+          className={`relative flex text-sm sm:text-base outline-none ${styles.group}`}
+        >
           <Input
             onBlur={handleCommitInput}
             onKeyDown={(event) => {
@@ -134,22 +183,28 @@ const PlayoffYearPicker = () => {
                 handleCommitInput();
               }
             }}
-            className="flex flex-1 min-w-0 py-1.5 sm:py-2 text-left bg-transparent outline-none"
+            className={`flex flex-1 min-w-0 py-1.5 sm:py-2 bg-transparent outline-none ${alignment} ${styles.input} ${styles.inputAlignment[align]}`}
           />
 
-          <Button className="px-2 sm:px-3 flex items-center text-gray-700 rounded-r-lg pressed:bg-purple-100 outline-none">
+          <Button className={`flex items-center outline-none ${styles.button}`}>
             <ChevronUpDownIcon size="XS" />
           </Button>
-        </div>
+        </Group>
 
-        <Popover className="w-[--trigger-width] overflow-auto rounded-lg drop-shadow-lg ring-1 ring-black/10 bg-white max-h-60">
-          <ListBox className="outline-none p-1">
+        <Popover
+          triggerRef={fieldRef}
+          placement="bottom start"
+          offset={8}
+          className={`w-[var(--trigger-width)] overflow-auto max-h-60 ${styles.popover}`}
+          style={styles.popoverStyle}
+        >
+          <ListBox className={`outline-none ${styles.listBox}`}>
             {(item: { id: string; label: string }) => (
               <ListBoxItem
                 key={item.id}
                 id={item.id}
                 textValue={item.label}
-                className="px-3 py-2 rounded-md cursor-default outline-none text-gray-700 hover:bg-gray-100 focus:bg-violet-700 focus:text-white selected:bg-violet-100 selected:font-semibold"
+                className={`px-3 py-2 outline-none ${alignment} ${styles.option}`}
               >
                 {item.label}
               </ListBoxItem>

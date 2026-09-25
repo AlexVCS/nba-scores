@@ -146,7 +146,7 @@ function RoundColumn({
       className={`hw-bracket-round ${exactLayout ? "hw-bracket-round--exact" : "hw-bracket-round--fallback"}`}
       aria-labelledby={headingId}
     >
-      <div className={`mb-4 flex ${suppressRevealControls ? "" : "min-h-[76px]"} min-w-0 flex-col items-center gap-2 border-b-[3px] border-hw-accent pb-3 text-center`}>
+      <div className={`mb-4 flex ${suppressRevealControls ? "" : "min-h-[76px]"} min-w-0 flex-col items-center gap-2 border-b-[3px] border-hw-accent-ink pb-3 text-center`}>
         <h3
           id={headingId}
           className="max-w-full text-[11px] leading-[1.35] font-black tracking-[.12em] text-hw-ink uppercase"
@@ -326,8 +326,8 @@ function FinalsColumn({finalsContent, finalsRound, finalsRevealed, finalsCanReve
         suppressRevealControls={suppressRevealControls}
       />
       <div className="hw-bracket-measure" data-finals-measure aria-hidden="true" {...{inert: ""}}>
-        <FinalsDestination isLocked prerequisiteLabel={finalsPrerequisite?.label} />
-        <FinalsDestination isLocked={false}>{finalsContent}</FinalsDestination>
+        <FinalsDestination label={finalsRound?.label ?? "Finals"} isLocked prerequisiteLabel={finalsPrerequisite?.label} />
+        <FinalsDestination label={finalsRound?.label ?? "Finals"} isLocked={false}>{finalsContent}</FinalsDestination>
       </div>
       <div className="hw-bracket-slots">
         <div className="hw-bracket-slot z-[1]" style={{gridRow: 4}}>
@@ -337,7 +337,7 @@ function FinalsColumn({finalsContent, finalsRound, finalsRevealed, finalsCanReve
           {incomingSides.includes("right") ? (
             <span className="pointer-events-none absolute top-1/2 -right-3 z-0 w-3 border-t-2 border-hw-bracket-line" aria-hidden="true" />
           ) : null}
-          <FinalsDestination isLocked={!finalsCanReveal && !finalsRevealed} prerequisiteLabel={finalsPrerequisite?.label}>
+          <FinalsDestination label={finalsRound?.label ?? "Finals"} isLocked={!finalsCanReveal && !finalsRevealed} prerequisiteLabel={finalsPrerequisite?.label}>
             {finalsContent}
           </FinalsDestination>
         </div>
@@ -427,7 +427,7 @@ function Design1PlayoffBracket({playoffPicture}: Design1PlayoffBracketProps) {
             <button
               type="button"
               onClick={anyRevealed ? reveal.hideAllResults : reveal.showAllResults}
-              className="min-h-11 rounded-hw border border-hw-line bg-hw-surface px-4 text-[10px] font-black tracking-[.1em] text-hw-accent-ink uppercase shadow-hw-small focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-hw-accent dark:text-hw-accent"
+              className="min-h-11 cursor-pointer rounded-hw border border-hw-line bg-hw-surface px-4 text-[10px] font-black tracking-[.1em] text-hw-accent-ink uppercase shadow-hw-small focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-hw-accent dark:text-hw-accent"
             >
               {anyRevealed ? "Hide all results" : "Show all results"}
             </button>
@@ -510,7 +510,7 @@ function Design1PlayoffBracket({playoffPicture}: Design1PlayoffBracketProps) {
                         hideRound={reveal.hideRound}
                         suppressRevealControls={showAllResultsGlobally}
                       />
-                      <FinalsDestination isLocked={!finalsCanReveal && !finalsRevealed} prerequisiteLabel={finalsPrerequisite?.label}>
+                      <FinalsDestination label={finalsRound?.label ?? "Finals"} isLocked={!finalsCanReveal && !finalsRevealed} prerequisiteLabel={finalsPrerequisite?.label}>
                         {finalsContent}
                       </FinalsDestination>
                     </div>

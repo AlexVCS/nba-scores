@@ -80,8 +80,8 @@ describe("transformToBracketData", () => {
 
     expect(nodes.some(node => node.type === "roundLabel" || node.id.startsWith("round-label-"))).toBe(false);
     expect(nodes.filter(node => node.type === "conferenceLabel").map(node => node.data.label)).toEqual([
-      "Western Conf.",
-      "Eastern Conf.",
+      "Western Conference",
+      "Eastern Conference",
     ]);
   });
 

@@ -8,8 +8,8 @@ function makeModel(): PlayoffBracketModel {
   const teams = ["Washington Capitols", "Chicago Stags", "Cleveland Rebels", "New York Knicks", "Philadelphia Warriors", "St. Louis Bombers"]
     .map((name, index) => ({id: index + 1, name, tricode: ["WAS", "CHS", "CLR", "NYK", "PHW", "STB"][index]}));
   const series = (key: string, round: number, first: number, second: number): RenderSeries => ({
-    seriesKey: key, round, roundName: "Semifinals", bracketGroupId: key === "division" ? "division-winners" : "other-qualifiers",
-    bracketGroupLabel: "", bracketGroupKind: "league", bracketOrder: first,
+    seriesKey: key, round, roundName: round === 1 ? "Quarterfinals" : round === 2 ? "Semifinals" : "BAA Finals", bracketGroupId: key === "division" ? "division-winners" : "other-qualifiers",
+    bracketGroupLabel: key === "division" ? "Division winners" : key === "finals" ? "BAA Finals" : "Other qualifiers", bracketGroupKind: "league", bracketOrder: first,
     targetWins: round === 1 ? 2 : 4, isFinals: round === 3,
     teams: [teams[first], teams[second]], wins: {[teams[first].id]: 2, [teams[second].id]: 4},
     winnerTeamId: teams[second].id, winnerTeamTricode: teams[second].tricode, gameCount: 6, games: [],
@@ -45,13 +45,13 @@ describe("BaaPlayoffBracket", () => {
     renderBracket();
     fireEvent.click(screen.getByRole("button", {name: "Reveal Division winners results"}));
     expect(screen.getByRole("link", {name: "Washington Capitols 2, Chicago Stags 4. View series details."})).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", {name: "Reveal Quarterfinal 1 results"}));
+    fireEvent.click(screen.getByRole("button", {name: "Reveal Quarterfinals, series 1 results"}));
     expect(within(screen.getByRole("region", {name: "Other qualifiers"})).queryByRole("link")).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", {name: "Reveal Quarterfinal 2 results"}));
+    fireEvent.click(screen.getByRole("button", {name: "Reveal Quarterfinals, series 2 results"}));
     expect(within(screen.getByRole("region", {name: "Other qualifiers"})).getByRole("link")).toHaveAccessibleName("New York Knicks versus Philadelphia Warriors. View series details.");
     fireEvent.click(screen.getByRole("button", {name: "Reveal Other qualifiers results"}));
     expect(within(screen.getByRole("region", {name: "BAA Finals"})).getByRole("link")).toHaveAccessibleName("Chicago Stags versus Philadelphia Warriors. View series details.");
-    fireEvent.click(screen.getByRole("button", {name: "Hide Quarterfinal 1 results"}));
+    fireEvent.click(screen.getByRole("button", {name: "Hide Quarterfinals, series 1 results"}));
     expect(within(screen.getByRole("region", {name: "BAA Finals"})).queryByRole("link")).not.toBeInTheDocument();
     expect(screen.getByRole("button", {name: "Hide Division winners results"})).toBeInTheDocument();
   });
