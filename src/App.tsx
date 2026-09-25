@@ -3,11 +3,9 @@ import Games from "./routes/games/Games.jsx";
 import React from "react";
 import { Link } from "react-router";
 import GameDatePicker from "./components/GameDatePicker.jsx";
-// import PageLayout from "./PageLayout.jsx";
 import DarkModeToggle from "./components/DarkModeToggle.jsx";
 // import Boxscore from "./routes/games/boxscore/Boxscore.jsx";
 import Header from "./components/Header.jsx";
-import AskSearch from "@/components/AskSearch";
 
 function App() {
   return (
@@ -23,7 +21,6 @@ function App() {
       </div>
       <Header />
       <GameDatePicker />
-      <AskSearch className="mx-auto my-6 w-[min(1180px,calc(100%_-_32px))]" />
       <Games />
       {/* <ReactQueryDevtools /> */}
     </div>

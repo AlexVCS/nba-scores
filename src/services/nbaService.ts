@@ -1,21 +1,8 @@
 import type { GameSummaryData, PlayoffBracketResponse } from "@/helpers/helpers";
-import type {AskResponse} from "@/helpers/ask";
 
 const getBaseUrl = () => import.meta.env.DEV
   ? import.meta.env.VITE_API_URL_DEV || `${window.location.protocol}//${window.location.hostname}:8000`
   : import.meta.env.VITE_API_URL_PROD;
-
-export const askQuestion = async (question: string, signal?: AbortSignal): Promise<AskResponse> => {
-  const response = await fetch(`${getBaseUrl()}/ask`, {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({question}),
-    signal,
-  });
-  if (response.status === 429) throw new Error("Search has reached its request limit. Please try again later.");
-  if (!response.ok) throw new Error("Search is unavailable right now. Please try again shortly.");
-  return response.json();
-};
 
 export const getScores = async (dateParam: string) => {
   const url = dateParam 
@@ -29,13 +16,56 @@ export const getScores = async (dateParam: string) => {
 export const getBoxScores = async (gameId: string) => {
   const url = `${getBaseUrl()}/games/${gameId}/boxscore`;
   const response = await fetch(url);
+  if (response.status === 404) return {game: null};
   if (!response.ok) throw new Error("Boxscore fetch failed");
   return response.json();
 };
 
-export const getGameSummary = async (gameId: string): Promise<GameSummaryData> => {
+export interface GameDetails {
+  gameId: string;
+  gameStatus: number | null;
+  gameStatusText: string;
+  gameTimeUTC: string | null;
+  gameDate: string | null;
+  homeTeam: {teamId: number; teamTricode: string; teamName: string};
+  awayTeam: GameDetails["homeTeam"];
+  venue: string | null;
+  venueCity?: string | null;
+  venueState?: string | null;
+  broadcast: string | null;
+  boxscoreAvailable: boolean;
+}
+
+export const getGameDetails = async (gameId: string, date: string, signal?: AbortSignal): Promise<GameDetails> => {
+  const response = await fetch(`${getBaseUrl()}/games/${gameId}/details${date ? `?date=${date}` : ""}`, {signal});
+  if (!response.ok) throw new Error("Game details fetch failed");
+  return response.json();
+};
+
+export interface MatchupTeam {
+  teamId: number;
+  teamTricode: string;
+  score: number;
+}
+
+export interface LastMatchup {
+  gameId: string;
+  gameDate: string;
+  homeTeam: MatchupTeam;
+  awayTeam: MatchupTeam;
+}
+
+export const getLastMatchups = async (teamId: number, opponentId: number, before: string, signal?: AbortSignal): Promise<{games: LastMatchup[]}> => {
+  const params = new URLSearchParams({teamId: String(teamId), opponentId: String(opponentId), before});
+  const response = await fetch(`${getBaseUrl()}/matchups?${params}`, {signal});
+  if (!response.ok) throw new Error("Last matchups fetch failed");
+  return response.json();
+};
+
+export const getGameSummary = async (gameId: string): Promise<GameSummaryData | null> => {
   const url = `${getBaseUrl()}/gamesummary/${gameId}`;
   const response = await fetch(url);
+  if (response.status === 404) return null;
   if (!response.ok) throw new Error("Game summary fetch failed");
   return response.json();
 };
@@ -52,6 +82,20 @@ export const getGameDays = async (year: number, month: number): Promise<GameDays
   const url = `${getBaseUrl()}/api/game-days?year=${year}&month=${month}`;
   const response = await fetch(url);
   if (!response.ok) throw new Error("Game days fetch failed");
+  return response.json();
+};
+
+export interface RecentGameDaysResponse {
+  before: string;
+  game_days: string[];
+  total: number;
+}
+
+export const getRecentGameDays = async (before: string): Promise<RecentGameDaysResponse> => {
+  const params = new URLSearchParams({before});
+  const url = `${getBaseUrl()}/api/game-days/recent?${params}`;
+  const response = await fetch(url);
+  if (!response.ok) throw new Error("Recent game days fetch failed");
   return response.json();
 };
 
