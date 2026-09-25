@@ -25,9 +25,9 @@ function HardwoodGameSummary({summary}: HardwoodGameSummaryProps) {
       <div className="mt-6 grid grid-cols-2 gap-px border border-hw-line bg-hw-line max-[700px]:[&_img]:size-[52px]!">
         {[summary.awayTeam, summary.homeTeam].map((team) => (
           <div key={team.teamId || team.teamTricode} className="grid grid-cols-[auto_auto_1fr] items-center gap-[18px] bg-hw-surface px-5 py-[34px] text-left max-[700px]:grid-cols-1 max-[700px]:justify-items-center max-[700px]:px-2.5 max-[700px]:py-[25px] max-[700px]:text-center">
-            <TeamLogos teamName={team.teamName} teamId={team.teamId} size={70} tricode={team.teamTricode} />
-            <span className="text-[28px]">{team.teamTricode}</span>
-            <strong className="justify-self-end text-[clamp(3rem,8vw,6rem)] leading-[.8] font-extrabold text-hw-ink tabular-nums dark:text-hw-accent max-[700px]:justify-self-center">
+            <TeamLogos teamName={team.teamName} teamId={team.teamId} size={56} tricode={team.teamTricode} />
+            <span className="text-hw-heading">{team.teamTricode}</span>
+            <strong className="justify-self-end text-hw-score-hero leading-[.8] font-extrabold text-hw-ink tabular-nums dark:text-hw-accent max-[700px]:justify-self-center">
               {team.teamId === winnerId && (
                 <span className="text-hw-winner-arrow" aria-label="Winner">
                   <HardwoodWinnerArrow className="mr-[.14em] align-middle" />

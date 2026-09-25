@@ -1,5 +1,6 @@
 import {useState} from "react";
 import {useSearchParams} from "react-router";
+import GameDetailsPanel from "../shared/GameDetailsPanel";
 import PlayerHeadshot from "@/components/PlayerHeadshot";
 import type {Player} from "@/helpers/helpers";
 import {useBoxscorePage} from "../hooks/useBoxscorePage";
@@ -7,10 +8,13 @@ import type {DesignBoxscoreTeam, InactivePlayer} from "../hooks/useBoxscorePage"
 import {designPath} from "../designRoutes";
 import {getActiveBoxscorePlayers, getInactivePlayers} from "../shared/inactivePlayerUtils";
 import HardwoodBackRow from "./components/HardwoodBackRow";
+import HardwoodBoxscoreSkeleton from "./components/HardwoodBoxscoreSkeleton";
 import HardwoodGameSummary from "./components/HardwoodGameSummary";
 import HardwoodHeader from "./components/HardwoodHeader";
+import HardwoodLastMatchups from "./components/HardwoodLastMatchups";
 import HardwoodPage from "./components/HardwoodPage";
 import HardwoodPageState from "./components/HardwoodPageState";
+import HardwoodPregameSummary from "./components/HardwoodPregameSummary";
 import HardwoodScorersBook from "./components/HardwoodScorersBook";
 import {hwContainer} from "./components/hardwoodStyles";
 
@@ -63,13 +67,13 @@ function HardwoodInactivePlayers({game}: {game: {awayTeam: DesignBoxscoreTeam; h
 
   return (
     <section className={`${hwContainer} mb-20`} aria-labelledby="hardwood-inactive-heading">
-      <h2 id="hardwood-inactive-heading" className="mb-2.5 border-b border-hw-line pb-2 text-[10px] font-extrabold tracking-[.18em] text-hw-muted uppercase">
+      <h2 id="hardwood-inactive-heading" className="mb-2.5 border-b border-hw-line pb-2 text-[10px] font-extrabold tracking-[.18em] text-hw-court uppercase dark:text-hw-muted">
         Inactive players
       </h2>
       <div className="grid gap-1.5 text-xs leading-5">
         {teams.map(({team, players}) => (
           <p key={team.teamId} className="m-0 min-w-0 break-words">
-            <strong className="mr-1.5 text-[10px] font-extrabold tracking-[.12em] text-hw-accent-ink">{team.teamTricode}:</strong>
+            <strong className="mr-1.5 text-[10px] font-extrabold tracking-[.12em] text-hw-court dark:text-hw-accent-ink">{team.teamTricode}:</strong>
             {players.map(inactivePlayerName).join(", ")}
           </p>
         ))}
@@ -103,8 +107,11 @@ function BoxscorePage() {
   return (
     <HardwoodPage>
       <HardwoodHeader section="boxscore" scoresPath={state.scoreboardPath} />
-      <HardwoodBackRow href={designPath("design-1", state.scoreboardPath)} label="Scoreboard" detail="BOX SCORE" />
-      {state.isLoading ? <HardwoodPageState kind="loading" /> : state.isError ? <HardwoodPageState kind="error" title="Box score unavailable" /> : (
+      <HardwoodBackRow href={designPath("design-1", state.backPath)} label={state.backLabel} detail="BOX SCORE" />
+      {state.isPregame && state.details ? <>
+        <HardwoodPregameSummary details={state.details} />
+        <HardwoodLastMatchups games={state.lastMatchups} isLoading={state.lastMatchupsLoading} showScores={state.scoresVisible} onReveal={state.reveal} />
+      </> : state.isHidden || state.isError || state.isUnavailable ? <GameDetailsPanel state={state} hardwood /> : state.isLoading ? <HardwoodBoxscoreSkeleton /> : (
         <>
           {state.summary && <HardwoodGameSummary summary={state.summary} />}
           {game && activeTeam ? (
@@ -144,7 +151,10 @@ function BoxscorePage() {
               </div>
               <HardwoodInactivePlayers game={game} />
             </>
-          ) : <HardwoodPageState kind="empty" title="Player ledger unavailable" detail="The game summary is still available above." />}
+          ) : <>
+            <HardwoodPageState kind="empty" title="Player ledger unavailable" detail={state.statsError ? "Player stats could not be loaded." : "Player stats are not available for this game."} />
+            {state.statsError && <button type="button" className="mx-auto mb-8 block min-h-12 cursor-pointer rounded-hw border border-hw-line px-6 font-bold" onClick={state.retry}>Try again</button>}
+          </>}
         </>
       )}
     </HardwoodPage>

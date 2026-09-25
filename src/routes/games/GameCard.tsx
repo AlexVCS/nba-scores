@@ -1,4 +1,4 @@
-import {Link, useLocation} from "react-router-dom";
+import {Link, useLocation} from "react-router";
 import TeamLogos from "@/components/TeamLogos";
 import {isValidDateParam} from "@/helpers/dateParam";
 import {generateWatchLink} from "@/helpers/helpers";
@@ -12,19 +12,14 @@ interface GameCardProps {
 
 function GameCard({game, showScores = false, dateParam}: GameCardProps) {
   const location = useLocation();
-  const gameHasStarted = game.gameStatus !== 1;
-  const shouldShowBoxscore =
-    showScores &&
-    gameHasStarted &&
-    game.gameId.length > 0 &&
-    game.boxscoreAvailable === true;
+  const gameHasStarted = game.gameStatus === 2 || game.gameStatus === 3;
   const watchGameLink = generateWatchLink(game.awayTeam.teamTricode, game.homeTeam.teamTricode, game.gameId);
   const isOriginalPreview = /^\/original(?=\/|$)/.test(location.pathname);
   const boxscorePath = `${isOriginalPreview ? "/original" : ""}/games/${game.gameId}/boxscore${isValidDateParam(dateParam) ? `?date=${dateParam}` : ""}`;
 
   return (
     <div className="flex justify-center lg:justify-start">
-      <article className="grid grid-cols-3 w-[336px] h-[178px] justify-items-center items-center">
+      <article className="relative grid grid-cols-3 w-[336px] h-[178px] justify-items-center items-center">
         <div className="flex flex-col items-center text-center">
           <TeamLogos
             teamName={game.homeTeam.teamName}
@@ -55,20 +50,17 @@ function GameCard({game, showScores = false, dateParam}: GameCardProps) {
         </div>
 
         <div className="text-base text-center place-self-center dark:text-slate-50 text-neutral-950">
-          {game.gameStatusText}
+          {!showScores && gameHasStarted ? (game.gameStatus === 3 ? "Final" : "Live") : game.gameStatusText}
           <div className="text-xs mt-2">
-            {game.gameStatusText.includes(":") ? (
-              ""
-            ) : (
-              <div className="flex flex-col gap-1">
-                {shouldShowBoxscore && (
-                  <Link to={boxscorePath}>Box score</Link>
-                )}
-                <Link to={`${watchGameLink}`} target="_blank">
-                  Watch
-                </Link>
-              </div>
-            )}
+            <div className="flex flex-col gap-1">
+              {game.gameId && <Link
+                to={boxscorePath}
+                state={{from: location.pathname + location.search}}
+                aria-label={`View ${game.awayTeam.teamTricode} at ${game.homeTeam.teamTricode} game details`}
+                className="after:absolute after:inset-0 focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-blue-500"
+              >Game details</Link>}
+              {!game.gameStatusText.includes(":") && <a className="relative z-10" href={watchGameLink} target="_blank" rel="noopener noreferrer">Watch</a>}
+            </div>
           </div>
           {game.gameLabel.length > 0 && (
             <div className="text-xs mt-2">

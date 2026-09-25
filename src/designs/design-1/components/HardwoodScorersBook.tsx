@@ -1,7 +1,8 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import type {CSSProperties} from "react";
 import {ChevronDown, ExternalLink} from "lucide-react";
 import PlayerHeadshot from "@/components/PlayerHeadshot";
+import useMediaQuery from "@/hooks/useMediaQuery";
 import type {Player, PlayerStatistics} from "@/helpers/helpers";
 import {firstNameInitial, formatMinutesPlayed, formatPlayerNameLink} from "@/helpers/helpers";
 import type {DesignBoxscoreTeam, DesignTeamStatistics} from "../../hooks/useBoxscorePage";
@@ -103,20 +104,6 @@ const WIDE_COLUMNS: FacetColumn[] = ["MIN", "FG", "3PT", "FT", "REB", "AST", "ST
 
 const WIDE_LEDGER_QUERY = "(min-width: 768px)";
 
-function useWideLedger() {
-  const [isWide, setIsWide] = useState(
-    () => typeof window !== "undefined" && (window.matchMedia?.(WIDE_LEDGER_QUERY).matches ?? false),
-  );
-  useEffect(() => {
-    const query = window.matchMedia?.(WIDE_LEDGER_QUERY);
-    if (!query) return undefined;
-    const onChange = (event: MediaQueryListEvent) => setIsWide(event.matches);
-    query.addEventListener("change", onChange);
-    return () => query.removeEventListener("change", onChange);
-  }, []);
-  return isWide;
-}
-
 // Counters the collapsed row may already show, keyed by that row's column label.
 // The sheet only repeats a number when the current row layout hides it.
 const COUNTERS: Array<{column: string; label: string; value: (player: Player) => string | number}> = [
@@ -202,7 +189,7 @@ const rowTracks = {
 function HardwoodScorersBook({team, comparison = false}: HardwoodScorersBookProps) {
   const [facetId, setFacetId] = useState<Facet>("line");
   const [expanded, setExpanded] = useState<Set<number>>(new Set());
-  const isWide = useWideLedger();
+  const isWide = useMediaQuery(WIDE_LEDGER_QUERY);
   const facet = FACETS.find((option) => option.id === facetId) ?? FACETS[0];
   const wide = comparison || isWide;
   const columns = wide ? WIDE_COLUMNS : facet.columns;
@@ -233,8 +220,8 @@ function HardwoodScorersBook({team, comparison = false}: HardwoodScorersBookProp
     >
       <header className="flex items-end justify-between gap-3.5 border-b-4 border-hw-accent pb-3 max-[700px]:flex-col max-[700px]:items-stretch">
         <div className="grid grid-cols-[auto_1fr] items-baseline gap-4 max-[700px]:h-[60px]">
-          <span className={`${comparison ? "text-3xl" : "text-4xl"} leading-none text-hw-accent-ink`}>{team.teamTricode}</span>
-          <h2 className={`${comparison ? "text-xl" : "text-[25px]"} leading-none font-extrabold uppercase`}>{team.teamCity} {team.teamName}</h2>
+          <span className={`${comparison ? "text-3xl" : "text-4xl"} leading-none text-hw-court dark:text-hw-accent-ink`}>{team.teamTricode}</span>
+          <h2 className="text-hw-heading leading-none font-bold uppercase">{team.teamCity} {team.teamName}</h2>
         </div>
         {!wide && (
           <div className="inline-flex gap-[3px] rounded-[13px] border border-hw-line bg-hw-surface p-[3px] max-[700px]:grid max-[700px]:grid-cols-3" role="group" aria-label="Choose the stats shown on each row">

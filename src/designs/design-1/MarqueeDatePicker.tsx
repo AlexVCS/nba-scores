@@ -216,7 +216,7 @@ function MarqueeDatePicker() {
         className="min-w-0"
       >
         <div
-          className={`flex items-center gap-2.5 rounded-hw border bg-hw-surface-muted px-3.5 py-2.5 text-hw-ink transition-shadow duration-[160ms] [transition-timing-function:ease] focus-within:shadow-[0_0_0_2px_var(--hw-accent)] motion-reduce:transition-none ${fieldError ? "border-hw-accent" : "border-hw-line"}`}
+          className={`flex items-center rounded-hw border bg-hw-surface-muted px-3.5 py-2.5 text-hw-ink transition-shadow duration-[160ms] [transition-timing-function:ease] focus-within:shadow-[0_0_0_2px_var(--hw-accent)] motion-reduce:transition-none ${fieldError ? "border-hw-accent" : "border-hw-line"}`}
           role="presentation"
         >
           <DateInput className="flex flex-1 items-center text-[15px] font-semibold tabular-nums">
@@ -227,20 +227,6 @@ function MarqueeDatePicker() {
               />
             )}
           </DateInput>
-          <svg
-            className="size-4 shrink-0 text-hw-muted"
-            aria-hidden="true"
-            focusable="false"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <rect x="3" y="5" width="18" height="16" rx="2" />
-            <path d="M3 10h18M8 3v4M16 3v4" />
-          </svg>
         </div>
         <div aria-live="polite" aria-atomic="true">
           {fieldError && (
@@ -268,7 +254,7 @@ function MarqueeDatePicker() {
       </p>
       <div className="my-4 -mx-5 h-px bg-hw-line max-[700px]:-mx-4" role="presentation" />
 
-      <div className="min-h-[270px] w-[292px] max-[700px]:min-h-0 max-[700px]:w-full">
+      <div className="min-h-[270px] w-[292px] max-[700px]:min-h-[337px] max-[700px]:w-full">
         {view === "calendar" && (
           <Calendar
             value={selected}
@@ -394,12 +380,12 @@ function MarqueeDatePicker() {
   );
 
   const stepButton =
-    "flex size-12 items-center justify-center rounded-full border border-hw-ink/16 bg-hw-ink/4 text-hw-accent-ink transition-colors duration-[160ms] [transition-timing-function:ease] group-hover:border-hw-accent group-hover:bg-hw-accent/10 group-focus-visible:outline-2 group-focus-visible:outline-offset-3 group-focus-visible:outline-hw-accent motion-reduce:transition-none max-[700px]:size-11 max-[700px]:border-hw-accent/40 max-[700px]:bg-hw-accent/6 [&_svg]:size-5";
+    "flex size-10 items-center justify-center rounded-full border border-hw-ink/16 bg-hw-ink/4 text-hw-court dark:text-hw-accent-ink transition-colors duration-[160ms] [transition-timing-function:ease] group-hover:border-hw-accent group-hover:bg-hw-accent/10 group-focus-visible:outline-2 group-focus-visible:outline-offset-3 group-focus-visible:outline-hw-court dark:group-focus-visible:outline-hw-accent motion-reduce:transition-none max-[700px]:size-11 max-[700px]:border-hw-accent/40 max-[700px]:bg-hw-accent/6 [&_svg]:size-4 max-[700px]:[&_svg]:size-5";
   const marqueeDate =
-    "relative inline-block text-inherit text-balance after:absolute after:right-[.04em] after:bottom-[-.16em] after:left-[.04em] after:h-[3px] after:rounded-sm after:bg-hw-accent after:opacity-55 after:transition-opacity after:duration-[160ms] group-hover:after:opacity-100 group-aria-expanded:after:opacity-100 group-data-focus-visible:after:h-[5px] group-data-focus-visible:after:opacity-100 motion-reduce:after:transition-none";
+    "relative inline-block text-inherit text-balance after:absolute after:right-[.04em] after:bottom-[-.16em] after:left-[.04em] after:h-[3px] after:rounded-sm after:bg-hw-accent-ink after:opacity-100 dark:after:bg-hw-accent dark:after:opacity-55 after:transition-opacity after:duration-[160ms] group-data-focus-visible:after:h-[5px] dark:group-hover:after:opacity-100 dark:group-aria-expanded:after:opacity-100 dark:group-data-focus-visible:after:opacity-100 motion-reduce:after:transition-none";
 
   return (
-    <section className={`${hwContainer} flex items-center justify-center gap-[clamp(20px,4vw,48px)] pt-[clamp(34px,6vw,78px)] pb-7 max-[700px]:grid max-[700px]:grid-cols-[44px_minmax(0,1fr)_44px] max-[700px]:gap-[clamp(10px,3vw,20px)] max-[700px]:pt-[38px]`}>
+    <section className={`${hwContainer} flex items-center justify-center gap-[clamp(16px,2.5vw,32px)] pt-[clamp(24px,3vw,40px)] pb-7 max-[700px]:grid max-[700px]:grid-cols-[44px_minmax(0,1fr)_44px] max-[700px]:gap-[clamp(10px,3vw,20px)] max-[700px]:pt-[38px]`}>
       <Link
         className="group flex shrink-0 items-center gap-[9px] text-hw-court no-underline outline-none max-[700px]:justify-center"
         to={`?date=${prevDate.toString()}`}
@@ -411,10 +397,10 @@ function MarqueeDatePicker() {
         </small>
       </Link>
 
-      <h1 className="m-0 min-w-0 text-center text-[clamp(2rem,5vw,4.8rem)] leading-[1.04] font-extrabold tracking-[-.02em] uppercase max-[700px]:w-full max-[700px]:leading-[1.08]">
+      <h1 className="m-0 min-w-0 text-center text-hw-display leading-[1.04] font-bold tracking-[-.02em] uppercase max-[700px]:w-full max-[700px]:text-[2rem] max-[700px]:leading-[1.08]">
         <DialogTrigger isOpen={isOpen} onOpenChange={handleOpenChange}>
           <Button
-            className="group inline-block cursor-pointer border-0 bg-transparent px-0 pb-[.18em] text-center text-inherit uppercase outline-none [font:inherit] [letter-spacing:inherit] [line-height:inherit] dark:text-hw-accent data-focus-visible:rounded-md data-focus-visible:outline-3 data-focus-visible:outline-offset-[12px] data-focus-visible:outline-hw-accent/75"
+            className="group inline-block cursor-pointer border-0 bg-transparent px-0 pb-[.18em] text-center text-inherit uppercase outline-none [font:inherit] [letter-spacing:inherit] [line-height:inherit] dark:text-hw-accent data-focus-visible:rounded-md data-focus-visible:outline-3 data-focus-visible:outline-offset-[12px] data-focus-visible:outline-hw-court dark:data-focus-visible:outline-hw-accent/75"
             aria-label={dateParam ? `Change date — ${fullLabel}` : "Choose a date"}
           >
             {dateParam ? (

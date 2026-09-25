@@ -1,6 +1,6 @@
 import {useMemo, useState} from "react";
-import {useQueries} from "@tanstack/react-query";
-import {getGameDays} from "@/services/nbaService";
+import {useQuery} from "@tanstack/react-query";
+import {getRecentGameDays} from "@/services/nbaService";
 
 const GAME_DAYS_MIN_YEAR = 2000;
 const GAME_DAYS_MAX_YEAR = 2100;
@@ -25,14 +25,6 @@ const isSupportedYear = (date: Date): boolean => {
   const year = date.getFullYear();
   return year >= GAME_DAYS_MIN_YEAR && year <= GAME_DAYS_MAX_YEAR;
 };
-
-const getRecentMonths = (date: Date): Date[] =>
-  Array.from({length: 12}, (_, index) => {
-    const month = new Date(date);
-    month.setDate(1);
-    month.setMonth(month.getMonth() - index);
-    return month;
-  });
 
 export const chooseRandomGameDay = (
   dates: string[],
@@ -62,17 +54,14 @@ export function useRandomGameDay({
     [fallbackToday, selectedDate, today],
   );
   const supported = isSupportedYear(activeDate);
-  const months = useMemo(
-    () => supported ? getRecentMonths(activeDate).filter(isSupportedYear) : [],
-    [activeDate, supported],
-  );
-  const queries = useQueries({
-    queries: months.map((month) => ({
-      queryKey: ["gameDays", month.getFullYear(), month.getMonth() + 1],
-      queryFn: () => getGameDays(month.getFullYear(), month.getMonth() + 1),
-      staleTime: 1000 * 60 * 60,
-      gcTime: 1000 * 60 * 60 * 24,
-    })),
+  const activeDateParam = formatGameDateParam(activeDate);
+  const query = useQuery({
+    queryKey: ["recentGameDays", activeDateParam],
+    queryFn: () => getRecentGameDays(activeDateParam),
+    enabled: supported,
+    staleTime: 1000 * 60 * 60,
+    gcTime: 1000 * 60 * 60 * 24,
+    retry: 1,
   });
 
   const previousDate = useMemo(() => {
@@ -80,14 +69,14 @@ export function useRandomGameDay({
     date.setDate(date.getDate() - 1);
     return formatGameDateParam(date);
   }, [activeDate]);
-  const isLoading = supported && queries.some((query) => query.isPending);
+  const isLoading = supported && query.isPending;
+  const gameDays = query.data?.game_days;
   const availableDates = useMemo(() => {
     if (isLoading) return [];
-    const activeDateParam = formatGameDateParam(activeDate);
-    return [...new Set(queries.flatMap((query) => query.data?.game_days ?? []))]
+    return [...new Set(gameDays ?? [])]
       .filter((candidate) => candidate < activeDateParam)
       .sort((a, b) => b.localeCompare(a));
-  }, [activeDate, isLoading, queries]);
+  }, [activeDateParam, gameDays, isLoading]);
   const availableDatesKey = availableDates.join(",");
   const randomGameDay = useMemo(() => {
     if (isLoading) return undefined;
