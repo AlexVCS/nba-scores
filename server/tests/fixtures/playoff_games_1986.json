@@ -1,0 +1,254 @@
+[
+  {
+    "gameId": "0048500101",
+    "date": "1986-04-17",
+    "boxscoreAvailable": true,
+    "round": 1,
+    "roundName": "First Round",
+    "homeTeam": {
+      "id": 1610612738,
+      "tricode": "BOS",
+      "name": "Boston Celtics",
+      "score": 123
+    },
+    "awayTeam": {
+      "id": 1610612741,
+      "tricode": "CHI",
+      "name": "Chicago Bulls",
+      "score": 104
+    },
+    "winnerTeamId": 1610612738,
+    "winnerTeamAbbreviation": "BOS"
+  },
+  {
+    "gameId": "0048500131",
+    "date": "1986-04-17",
+    "boxscoreAvailable": true,
+    "round": 1,
+    "roundName": "First Round",
+    "homeTeam": {
+      "id": 1610612737,
+      "tricode": "ATL",
+      "name": "Atlanta Hawks",
+      "score": 140
+    },
+    "awayTeam": {
+      "id": 1610612765,
+      "tricode": "DET",
+      "name": "Detroit Pistons",
+      "score": 122
+    },
+    "winnerTeamId": 1610612737,
+    "winnerTeamAbbreviation": "ATL"
+  },
+  {
+    "gameId": "0048500132",
+    "date": "1986-04-19",
+    "boxscoreAvailable": true,
+    "round": 1,
+    "roundName": "First Round",
+    "homeTeam": {
+      "id": 1610612737,
+      "tricode": "ATL",
+      "name": "Atlanta Hawks",
+      "score": 137
+    },
+    "awayTeam": {
+      "id": 1610612765,
+      "tricode": "DET",
+      "name": "Detroit Pistons",
+      "score": 125
+    },
+    "winnerTeamId": 1610612737,
+    "winnerTeamAbbreviation": "ATL"
+  },
+  {
+    "gameId": "0048509102",
+    "date": "1986-04-20",
+    "boxscoreAvailable": true,
+    "round": 1,
+    "roundName": "First Round",
+    "homeTeam": {
+      "id": 1610612738,
+      "tricode": "BOS",
+      "name": "Boston Celtics",
+      "score": 135
+    },
+    "awayTeam": {
+      "id": 1610612741,
+      "tricode": "CHI",
+      "name": "Chicago Bulls",
+      "score": 131
+    },
+    "winnerTeamId": 1610612738,
+    "winnerTeamAbbreviation": "BOS"
+  },
+  {
+    "gameId": "0048500005",
+    "date": "1986-04-22",
+    "boxscoreAvailable": true,
+    "round": 1,
+    "roundName": "First Round",
+    "homeTeam": {
+      "id": 1610612765,
+      "tricode": "DET",
+      "name": "Detroit Pistons",
+      "score": 106
+    },
+    "awayTeam": {
+      "id": 1610612737,
+      "tricode": "ATL",
+      "name": "Atlanta Hawks",
+      "score": 97
+    },
+    "winnerTeamId": 1610612765,
+    "winnerTeamAbbreviation": "DET"
+  },
+  {
+    "gameId": "0048500103",
+    "date": "1986-04-22",
+    "boxscoreAvailable": true,
+    "round": 1,
+    "roundName": "First Round",
+    "homeTeam": {
+      "id": 1610612741,
+      "tricode": "CHI",
+      "name": "Chicago Bulls",
+      "score": 104
+    },
+    "awayTeam": {
+      "id": 1610612738,
+      "tricode": "BOS",
+      "name": "Boston Celtics",
+      "score": 122
+    },
+    "winnerTeamId": 1610612738,
+    "winnerTeamAbbreviation": "BOS"
+  },
+  {
+    "gameId": "0048500134",
+    "date": "1986-04-25",
+    "boxscoreAvailable": true,
+    "round": 1,
+    "roundName": "First Round",
+    "homeTeam": {
+      "id": 1610612765,
+      "tricode": "DET",
+      "name": "Detroit Pistons",
+      "score": 113
+    },
+    "awayTeam": {
+      "id": 1610612737,
+      "tricode": "ATL",
+      "name": "Atlanta Hawks",
+      "score": 114
+    },
+    "winnerTeamId": 1610612737,
+    "winnerTeamAbbreviation": "ATL"
+  },
+  {
+    "gameId": "0048503001",
+    "date": "1986-04-27",
+    "boxscoreAvailable": true,
+    "round": 1,
+    "roundName": "First Round",
+    "homeTeam": {
+      "id": 1610612738,
+      "tricode": "BOS",
+      "name": "Boston Celtics",
+      "score": 103
+    },
+    "awayTeam": {
+      "id": 1610612737,
+      "tricode": "ATL",
+      "name": "Atlanta Hawks",
+      "score": 91
+    },
+    "winnerTeamId": 1610612738,
+    "winnerTeamAbbreviation": "BOS"
+  },
+  {
+    "gameId": "0048500105",
+    "date": "1986-04-29",
+    "boxscoreAvailable": true,
+    "round": 1,
+    "roundName": "First Round",
+    "homeTeam": {
+      "id": 1610612738,
+      "tricode": "BOS",
+      "name": "Boston Celtics",
+      "score": 119
+    },
+    "awayTeam": {
+      "id": 1610612737,
+      "tricode": "ATL",
+      "name": "Atlanta Hawks",
+      "score": 108
+    },
+    "winnerTeamId": 1610612738,
+    "winnerTeamAbbreviation": "BOS"
+  },
+  {
+    "gameId": "0048500203",
+    "date": "1986-05-02",
+    "boxscoreAvailable": true,
+    "round": 1,
+    "roundName": "First Round",
+    "homeTeam": {
+      "id": 1610612737,
+      "tricode": "ATL",
+      "name": "Atlanta Hawks",
+      "score": 107
+    },
+    "awayTeam": {
+      "id": 1610612738,
+      "tricode": "BOS",
+      "name": "Boston Celtics",
+      "score": 111
+    },
+    "winnerTeamId": 1610612738,
+    "winnerTeamAbbreviation": "BOS"
+  },
+  {
+    "gameId": "0048500204",
+    "date": "1986-05-04",
+    "boxscoreAvailable": true,
+    "round": 1,
+    "roundName": "First Round",
+    "homeTeam": {
+      "id": 1610612737,
+      "tricode": "ATL",
+      "name": "Atlanta Hawks",
+      "score": 106
+    },
+    "awayTeam": {
+      "id": 1610612738,
+      "tricode": "BOS",
+      "name": "Boston Celtics",
+      "score": 94
+    },
+    "winnerTeamId": 1610612737,
+    "winnerTeamAbbreviation": "ATL"
+  },
+  {
+    "gameId": "0048500147",
+    "date": "1986-05-06",
+    "boxscoreAvailable": true,
+    "round": 1,
+    "roundName": "First Round",
+    "homeTeam": {
+      "id": 1610612738,
+      "tricode": "BOS",
+      "name": "Boston Celtics",
+      "score": 132
+    },
+    "awayTeam": {
+      "id": 1610612737,
+      "tricode": "ATL",
+      "name": "Atlanta Hawks",
+      "score": 99
+    },
+    "winnerTeamId": 1610612738,
+    "winnerTeamAbbreviation": "BOS"
+  }
+]

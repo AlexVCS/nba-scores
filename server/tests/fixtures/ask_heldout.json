@@ -1,0 +1,1800 @@
+[
+  {
+    "utterance": "Find Dubs games on 2025-11-04",
+    "expected": {
+      "intent": "game_search",
+      "operation": "list",
+      "mentions": [
+        {
+          "text": "Dubs",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2025-11-04",
+          "kind": "calendar_date"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-001"
+  },
+  {
+    "utterance": "Find Sixers games on 2024-04-12",
+    "expected": {
+      "intent": "game_search",
+      "operation": "list",
+      "mentions": [
+        {
+          "text": "Sixers",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2024-04-12",
+          "kind": "calendar_date"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-002"
+  },
+  {
+    "utterance": "Find Mavs games on 2023-01-20",
+    "expected": {
+      "intent": "game_search",
+      "operation": "list",
+      "mentions": [
+        {
+          "text": "Mavs",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2023-01-20",
+          "kind": "calendar_date"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-003"
+  },
+  {
+    "utterance": "Find Wolves games on 2022-03-15",
+    "expected": {
+      "intent": "game_search",
+      "operation": "list",
+      "mentions": [
+        {
+          "text": "Wolves",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2022-03-15",
+          "kind": "calendar_date"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-004"
+  },
+  {
+    "utterance": "Find BKN games on 2021-12-31",
+    "expected": {
+      "intent": "game_search",
+      "operation": "list",
+      "mentions": [
+        {
+          "text": "BKN",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2021-12-31",
+          "kind": "calendar_date"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-005"
+  },
+  {
+    "utterance": "Find Pelicans games on 2020-10-10",
+    "expected": {
+      "intent": "game_search",
+      "operation": "list",
+      "mentions": [
+        {
+          "text": "Pelicans",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2020-10-10",
+          "kind": "calendar_date"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-006"
+  },
+  {
+    "utterance": "Find Spurs games on 2019-05-01",
+    "expected": {
+      "intent": "game_search",
+      "operation": "list",
+      "mentions": [
+        {
+          "text": "Spurs",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2019-05-01",
+          "kind": "calendar_date"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-007"
+  },
+  {
+    "utterance": "Find Raptors games on 2010-01-08",
+    "expected": {
+      "intent": "game_search",
+      "operation": "list",
+      "mentions": [
+        {
+          "text": "Raptors",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2010-01-08",
+          "kind": "calendar_date"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-008"
+  },
+  {
+    "utterance": "Find Minneapolis Lakers games on 1950-01-08",
+    "expected": {
+      "intent": "game_search",
+      "operation": "list",
+      "mentions": [
+        {
+          "text": "Minneapolis Lakers",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "1950-01-08",
+          "kind": "calendar_date"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-009"
+  },
+  {
+    "utterance": "Find Seattle SuperSonics games on 1996-06-12",
+    "expected": {
+      "intent": "game_search",
+      "operation": "list",
+      "mentions": [
+        {
+          "text": "Seattle SuperSonics",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "1996-06-12",
+          "kind": "calendar_date"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-010"
+  },
+  {
+    "utterance": "Find Fort Wayne Pistons games on 1956-03-02",
+    "expected": {
+      "intent": "game_search",
+      "operation": "list",
+      "mentions": [
+        {
+          "text": "Fort Wayne Pistons",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "1956-03-02",
+          "kind": "calendar_date"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-011"
+  },
+  {
+    "utterance": "Find Syracuse Nationals games on 1950-02-14",
+    "expected": {
+      "intent": "game_search",
+      "operation": "list",
+      "mentions": [
+        {
+          "text": "Syracuse Nationals",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "1950-02-14",
+          "kind": "calendar_date"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-012"
+  },
+  {
+    "utterance": "Show Bulls games yesterday",
+    "expected": {
+      "intent": "game_search",
+      "operation": "list",
+      "mentions": [
+        {
+          "text": "Bulls",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "yesterday",
+          "kind": "relative"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-013"
+  },
+  {
+    "utterance": "Show Nets games today",
+    "expected": {
+      "intent": "game_search",
+      "operation": "list",
+      "mentions": [
+        {
+          "text": "Nets",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "today",
+          "kind": "relative"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-014"
+  },
+  {
+    "utterance": "Show Knicks games tomorrow",
+    "expected": {
+      "intent": "game_search",
+      "operation": "list",
+      "mentions": [
+        {
+          "text": "Knicks",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "tomorrow",
+          "kind": "relative"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-015"
+  },
+  {
+    "utterance": "Show Bucks games last week",
+    "expected": {
+      "intent": "game_search",
+      "operation": "list",
+      "mentions": [
+        {
+          "text": "Bucks",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "last week",
+          "kind": "relative"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-016"
+  },
+  {
+    "utterance": "Show Nuggets games this week",
+    "expected": {
+      "intent": "game_search",
+      "operation": "list",
+      "mentions": [
+        {
+          "text": "Nuggets",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "this week",
+          "kind": "relative"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-017"
+  },
+  {
+    "utterance": "Show Jazz games last Monday",
+    "expected": {
+      "intent": "game_search",
+      "operation": "list",
+      "mentions": [
+        {
+          "text": "Jazz",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "last Monday",
+          "kind": "relative"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-018"
+  },
+  {
+    "utterance": "Show Suns games last Sunday",
+    "expected": {
+      "intent": "game_search",
+      "operation": "list",
+      "mentions": [
+        {
+          "text": "Suns",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "last Sunday",
+          "kind": "relative"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-019"
+  },
+  {
+    "utterance": "Show Kings games last night",
+    "expected": {
+      "intent": "game_search",
+      "operation": "list",
+      "mentions": [
+        {
+          "text": "Kings",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "last night",
+          "kind": "relative"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-020"
+  },
+  {
+    "utterance": "Show Pacers games tonight",
+    "expected": {
+      "intent": "game_search",
+      "operation": "list",
+      "mentions": [
+        {
+          "text": "Pacers",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "tonight",
+          "kind": "relative"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-021"
+  },
+  {
+    "utterance": "Show Celtics games past seven days",
+    "expected": {
+      "intent": "game_search",
+      "operation": "list",
+      "mentions": [
+        {
+          "text": "Celtics",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "past seven days",
+          "kind": "relative"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-022"
+  },
+  {
+    "utterance": "How many assists did Jokic have for the Nuggets on 2024-02-01?",
+    "expected": {
+      "intent": "boxscore_stats",
+      "operation": "player_stats",
+      "mentions": [
+        {
+          "text": "Nuggets",
+          "kind": "team"
+        },
+        {
+          "text": "Jokic",
+          "kind": "player"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2024-02-01",
+          "kind": "calendar_date"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [
+        "assists"
+      ],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-023"
+  },
+  {
+    "utterance": "How many points did Stephen Curry have for the Warriors on 2023-12-25?",
+    "expected": {
+      "intent": "boxscore_stats",
+      "operation": "player_stats",
+      "mentions": [
+        {
+          "text": "Warriors",
+          "kind": "team"
+        },
+        {
+          "text": "Stephen Curry",
+          "kind": "player"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2023-12-25",
+          "kind": "calendar_date"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [
+        "points"
+      ],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-024"
+  },
+  {
+    "utterance": "How many rebounds did Giannis Antetokounmpo have for the Bucks on 2024-03-01?",
+    "expected": {
+      "intent": "boxscore_stats",
+      "operation": "player_stats",
+      "mentions": [
+        {
+          "text": "Bucks",
+          "kind": "team"
+        },
+        {
+          "text": "Giannis Antetokounmpo",
+          "kind": "player"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2024-03-01",
+          "kind": "calendar_date"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [
+        "rebounds"
+      ],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-025"
+  },
+  {
+    "utterance": "How many turnovers did Luka Doncic have for the Mavericks on 2024-06-14?",
+    "expected": {
+      "intent": "boxscore_stats",
+      "operation": "player_stats",
+      "mentions": [
+        {
+          "text": "Mavericks",
+          "kind": "team"
+        },
+        {
+          "text": "Luka Doncic",
+          "kind": "player"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2024-06-14",
+          "kind": "calendar_date"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [
+        "turnovers"
+      ],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-026"
+  },
+  {
+    "utterance": "How many blocks did Anthony Davis have for the Lakers on 2023-05-12?",
+    "expected": {
+      "intent": "boxscore_stats",
+      "operation": "player_stats",
+      "mentions": [
+        {
+          "text": "Lakers",
+          "kind": "team"
+        },
+        {
+          "text": "Anthony Davis",
+          "kind": "player"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2023-05-12",
+          "kind": "calendar_date"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [
+        "blocks"
+      ],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-027"
+  },
+  {
+    "utterance": "How many steals did Jimmy Butler have for the Heat on 2023-06-07?",
+    "expected": {
+      "intent": "boxscore_stats",
+      "operation": "player_stats",
+      "mentions": [
+        {
+          "text": "Heat",
+          "kind": "team"
+        },
+        {
+          "text": "Jimmy Butler",
+          "kind": "player"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2023-06-07",
+          "kind": "calendar_date"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [
+        "steals"
+      ],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-028"
+  },
+  {
+    "utterance": "How many points did Brown score in the fourth game of the 2024 NBA Finals?",
+    "expected": {
+      "intent": "boxscore_stats",
+      "operation": "player_stats",
+      "mentions": [
+        {
+          "text": "Brown",
+          "kind": "player"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2024",
+          "kind": "season"
+        }
+      ],
+      "round_mention": "NBA Finals",
+      "game_number": 4,
+      "statistics": [
+        "points"
+      ],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-029"
+  },
+  {
+    "utterance": "Who led the Mavericks in rebounds in game 2 of the 2024 Finals?",
+    "expected": {
+      "intent": "boxscore_stats",
+      "operation": "leaders",
+      "mentions": [
+        {
+          "text": "Mavericks",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2024",
+          "kind": "season"
+        }
+      ],
+      "round_mention": "Finals",
+      "game_number": 2,
+      "statistics": [
+        "rebounds"
+      ],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-030"
+  },
+  {
+    "utterance": "How many free throws did Boston make on 2024-06-17?",
+    "expected": {
+      "intent": "boxscore_stats",
+      "operation": "team_stats",
+      "mentions": [
+        {
+          "text": "Boston",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2024-06-17",
+          "kind": "calendar_date"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [
+        "free_throws"
+      ],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-031"
+  },
+  {
+    "utterance": "What was Tatum's field goal percentage for Boston on 2024-06-17?",
+    "expected": {
+      "intent": "boxscore_stats",
+      "operation": "player_stats",
+      "mentions": [
+        {
+          "text": "Boston",
+          "kind": "team"
+        },
+        {
+          "text": "Tatum",
+          "kind": "player"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2024-06-17",
+          "kind": "calendar_date"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [
+        "field_goal_percentage"
+      ],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-032"
+  },
+  {
+    "utterance": "Who had the most assists for the Knicks on 2025-03-03?",
+    "expected": {
+      "intent": "boxscore_stats",
+      "operation": "leaders",
+      "mentions": [
+        {
+          "text": "Knicks",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2025-03-03",
+          "kind": "calendar_date"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [
+        "assists"
+      ],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-033"
+  },
+  {
+    "utterance": "What was Curry's plus minus for the Warriors on 2022-06-16?",
+    "expected": {
+      "intent": "boxscore_stats",
+      "operation": "player_stats",
+      "mentions": [
+        {
+          "text": "Warriors",
+          "kind": "team"
+        },
+        {
+          "text": "Curry",
+          "kind": "player"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2022-06-16",
+          "kind": "calendar_date"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [
+        "plus_minus"
+      ],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-034"
+  },
+  {
+    "utterance": "Who won the 2023 NBA Finals?",
+    "expected": {
+      "intent": "playoff_series",
+      "operation": "series_result",
+      "mentions": [],
+      "date_expressions": [
+        {
+          "text": "2023",
+          "kind": "season"
+        }
+      ],
+      "round_mention": "NBA Finals",
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-035"
+  },
+  {
+    "utterance": "Who won the 2022 NBA Finals?",
+    "expected": {
+      "intent": "playoff_series",
+      "operation": "series_result",
+      "mentions": [],
+      "date_expressions": [
+        {
+          "text": "2022",
+          "kind": "season"
+        }
+      ],
+      "round_mention": "NBA Finals",
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-036"
+  },
+  {
+    "utterance": "Who won the 2019 NBA Finals?",
+    "expected": {
+      "intent": "playoff_series",
+      "operation": "series_result",
+      "mentions": [],
+      "date_expressions": [
+        {
+          "text": "2019",
+          "kind": "season"
+        }
+      ],
+      "round_mention": "NBA Finals",
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-037"
+  },
+  {
+    "utterance": "Who won the 2016 NBA Finals?",
+    "expected": {
+      "intent": "playoff_series",
+      "operation": "series_result",
+      "mentions": [],
+      "date_expressions": [
+        {
+          "text": "2016",
+          "kind": "season"
+        }
+      ],
+      "round_mention": "NBA Finals",
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-038"
+  },
+  {
+    "utterance": "Who won the 1998 NBA Finals?",
+    "expected": {
+      "intent": "playoff_series",
+      "operation": "series_result",
+      "mentions": [],
+      "date_expressions": [
+        {
+          "text": "1998",
+          "kind": "season"
+        }
+      ],
+      "round_mention": "NBA Finals",
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-039"
+  },
+  {
+    "utterance": "Who won the 1951 NBA Finals?",
+    "expected": {
+      "intent": "playoff_series",
+      "operation": "series_result",
+      "mentions": [],
+      "date_expressions": [
+        {
+          "text": "1951",
+          "kind": "season"
+        }
+      ],
+      "round_mention": "NBA Finals",
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-040"
+  },
+  {
+    "utterance": "Show the Celtics 2023 conference finals series result",
+    "expected": {
+      "intent": "playoff_series",
+      "operation": "series_result",
+      "mentions": [
+        {
+          "text": "Celtics",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2023",
+          "kind": "season"
+        }
+      ],
+      "round_mention": "conference finals",
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-041"
+  },
+  {
+    "utterance": "Show the Heat 2020 conference finals series result",
+    "expected": {
+      "intent": "playoff_series",
+      "operation": "series_result",
+      "mentions": [
+        {
+          "text": "Heat",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2020",
+          "kind": "season"
+        }
+      ],
+      "round_mention": "conference finals",
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-042"
+  },
+  {
+    "utterance": "Show the Warriors 2022 first round series result",
+    "expected": {
+      "intent": "playoff_series",
+      "operation": "series_result",
+      "mentions": [
+        {
+          "text": "Warriors",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2022",
+          "kind": "season"
+        }
+      ],
+      "round_mention": "first round",
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-043"
+  },
+  {
+    "utterance": "Show the Lakers 2020 semifinals series result",
+    "expected": {
+      "intent": "playoff_series",
+      "operation": "series_result",
+      "mentions": [
+        {
+          "text": "Lakers",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2020",
+          "kind": "season"
+        }
+      ],
+      "round_mention": "semifinals",
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-044"
+  },
+  {
+    "utterance": "Show the Bulls 1996 first round series result",
+    "expected": {
+      "intent": "playoff_series",
+      "operation": "series_result",
+      "mentions": [
+        {
+          "text": "Bulls",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "1996",
+          "kind": "season"
+        }
+      ],
+      "round_mention": "first round",
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-045"
+  },
+  {
+    "utterance": "Show the Knicks 1999 conference finals series result",
+    "expected": {
+      "intent": "playoff_series",
+      "operation": "series_result",
+      "mentions": [
+        {
+          "text": "Knicks",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "1999",
+          "kind": "season"
+        }
+      ],
+      "round_mention": "conference finals",
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-046"
+  },
+  {
+    "utterance": "Summarize 2023 postseason results",
+    "expected": {
+      "intent": "postseason_summary",
+      "operation": "summary",
+      "mentions": [],
+      "date_expressions": [
+        {
+          "text": "2023",
+          "kind": "season"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-047"
+  },
+  {
+    "utterance": "Summarize 1947 postseason results",
+    "expected": {
+      "intent": "postseason_summary",
+      "operation": "summary",
+      "mentions": [],
+      "date_expressions": [
+        {
+          "text": "1947",
+          "kind": "season"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-048"
+  },
+  {
+    "utterance": "Summarize Celtics 2024 postseason results",
+    "expected": {
+      "intent": "postseason_summary",
+      "operation": "summary",
+      "mentions": [
+        {
+          "text": "Celtics",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2024",
+          "kind": "season"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-049"
+  },
+  {
+    "utterance": "Summarize Warriors 2015 postseason results",
+    "expected": {
+      "intent": "postseason_summary",
+      "operation": "summary",
+      "mentions": [
+        {
+          "text": "Warriors",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2015",
+          "kind": "season"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-050"
+  },
+  {
+    "utterance": "Summarize Bulls 1998 postseason results",
+    "expected": {
+      "intent": "postseason_summary",
+      "operation": "summary",
+      "mentions": [
+        {
+          "text": "Bulls",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "1998",
+          "kind": "season"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-051"
+  },
+  {
+    "utterance": "Summarize Raptors 2019 postseason results",
+    "expected": {
+      "intent": "postseason_summary",
+      "operation": "summary",
+      "mentions": [
+        {
+          "text": "Raptors",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2019",
+          "kind": "season"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-052"
+  },
+  {
+    "utterance": "Summarize Lakers 2020 postseason results",
+    "expected": {
+      "intent": "postseason_summary",
+      "operation": "summary",
+      "mentions": [
+        {
+          "text": "Lakers",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2020",
+          "kind": "season"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-053"
+  },
+  {
+    "utterance": "Summarize Nuggets 2023 postseason results",
+    "expected": {
+      "intent": "postseason_summary",
+      "operation": "summary",
+      "mentions": [
+        {
+          "text": "Nuggets",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2023",
+          "kind": "season"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-054"
+  },
+  {
+    "utterance": "Summarize Heat 2013 postseason results",
+    "expected": {
+      "intent": "postseason_summary",
+      "operation": "summary",
+      "mentions": [
+        {
+          "text": "Heat",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2013",
+          "kind": "season"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-055"
+  },
+  {
+    "utterance": "Summarize Mavericks 2011 postseason results",
+    "expected": {
+      "intent": "postseason_summary",
+      "operation": "summary",
+      "mentions": [
+        {
+          "text": "Mavericks",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2011",
+          "kind": "season"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "holdout-056"
+  },
+  {
+    "utterance": "Who won the championship?",
+    "expected": {
+      "intent": "needs_clarification",
+      "operation": null,
+      "mentions": [],
+      "date_expressions": [],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [
+        {
+          "field": "season",
+          "reason": "Required information is missing or ambiguous."
+        }
+      ],
+      "unsupported_reason": null
+    },
+    "id": "holdout-057"
+  },
+  {
+    "utterance": "Scores please",
+    "expected": {
+      "intent": "needs_clarification",
+      "operation": null,
+      "mentions": [],
+      "date_expressions": [],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [
+        {
+          "field": "date",
+          "reason": "Required information is missing or ambiguous."
+        }
+      ],
+      "unsupported_reason": null
+    },
+    "id": "holdout-058"
+  },
+  {
+    "utterance": "How many points did Curry score?",
+    "expected": {
+      "intent": "needs_clarification",
+      "operation": null,
+      "mentions": [
+        {
+          "text": "Curry",
+          "kind": "player"
+        }
+      ],
+      "date_expressions": [],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [
+        "points"
+      ],
+      "ambiguities": [
+        {
+          "field": "game",
+          "reason": "Required information is missing or ambiguous."
+        }
+      ],
+      "unsupported_reason": null
+    },
+    "id": "holdout-059"
+  },
+  {
+    "utterance": "Show the Knicks matchup",
+    "expected": {
+      "intent": "needs_clarification",
+      "operation": null,
+      "mentions": [
+        {
+          "text": "Knicks",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [
+        {
+          "field": "date",
+          "reason": "Required information is missing or ambiguous."
+        }
+      ],
+      "unsupported_reason": null
+    },
+    "id": "holdout-060"
+  },
+  {
+    "utterance": "Who led in scoring?",
+    "expected": {
+      "intent": "needs_clarification",
+      "operation": null,
+      "mentions": [],
+      "date_expressions": [],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [
+        "points"
+      ],
+      "ambiguities": [
+        {
+          "field": "game",
+          "reason": "Required information is missing or ambiguous."
+        }
+      ],
+      "unsupported_reason": null
+    },
+    "id": "holdout-061"
+  },
+  {
+    "utterance": "Show the Finals game 3 boxscore points",
+    "expected": {
+      "intent": "needs_clarification",
+      "operation": null,
+      "mentions": [],
+      "date_expressions": [],
+      "round_mention": "Finals",
+      "game_number": 3,
+      "statistics": [
+        "points"
+      ],
+      "ambiguities": [
+        {
+          "field": "season",
+          "reason": "Required information is missing or ambiguous."
+        }
+      ],
+      "unsupported_reason": null
+    },
+    "id": "holdout-062"
+  },
+  {
+    "utterance": "What was Boston's playoff series result?",
+    "expected": {
+      "intent": "needs_clarification",
+      "operation": null,
+      "mentions": [
+        {
+          "text": "Boston",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [
+        {
+          "field": "season",
+          "reason": "Required information is missing or ambiguous."
+        }
+      ],
+      "unsupported_reason": null
+    },
+    "id": "holdout-063"
+  },
+  {
+    "utterance": "How did LA do yesterday?",
+    "expected": {
+      "intent": "needs_clarification",
+      "operation": null,
+      "mentions": [
+        {
+          "text": "LA",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "yesterday",
+          "kind": "relative"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [
+        {
+          "field": "team",
+          "reason": "Required information is missing or ambiguous."
+        }
+      ],
+      "unsupported_reason": null
+    },
+    "id": "holdout-064"
+  },
+  {
+    "utterance": "How many points did he score last night?",
+    "expected": {
+      "intent": "needs_clarification",
+      "operation": null,
+      "mentions": [],
+      "date_expressions": [
+        {
+          "text": "last night",
+          "kind": "relative"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [
+        "points"
+      ],
+      "ambiguities": [
+        {
+          "field": "player",
+          "reason": "Required information is missing or ambiguous."
+        }
+      ],
+      "unsupported_reason": null
+    },
+    "id": "holdout-065"
+  },
+  {
+    "utterance": "Show the 2024 playoff game statistics",
+    "expected": {
+      "intent": "needs_clarification",
+      "operation": null,
+      "mentions": [],
+      "date_expressions": [
+        {
+          "text": "2024",
+          "kind": "season"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [
+        {
+          "field": "game",
+          "reason": "Required information is missing or ambiguous."
+        },
+        {
+          "field": "statistic",
+          "reason": "Required information is missing or ambiguous."
+        }
+      ],
+      "unsupported_reason": null
+    },
+    "id": "holdout-066"
+  },
+  {
+    "utterance": "Who is the greatest NBA player ever?",
+    "expected": {
+      "intent": "unsupported",
+      "operation": null,
+      "mentions": [],
+      "date_expressions": [],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": "Outside the supported search scope."
+    },
+    "id": "holdout-067"
+  },
+  {
+    "utterance": "Compare every championship team in history",
+    "expected": {
+      "intent": "unsupported",
+      "operation": null,
+      "mentions": [],
+      "date_expressions": [],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": "Outside the supported search scope."
+    },
+    "id": "holdout-068"
+  },
+  {
+    "utterance": "Give me Jokic's career averages",
+    "expected": {
+      "intent": "unsupported",
+      "operation": null,
+      "mentions": [],
+      "date_expressions": [],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": "Outside the supported search scope."
+    },
+    "id": "holdout-069"
+  },
+  {
+    "utterance": "Who scored more career points, Kobe or Jordan?",
+    "expected": {
+      "intent": "unsupported",
+      "operation": null,
+      "mentions": [],
+      "date_expressions": [],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": "Outside the supported search scope."
+    },
+    "id": "holdout-070"
+  },
+  {
+    "utterance": "Now compare that to his next game",
+    "expected": {
+      "intent": "unsupported",
+      "operation": null,
+      "mentions": [],
+      "date_expressions": [],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": "Outside the supported search scope."
+    },
+    "id": "holdout-071"
+  },
+  {
+    "utterance": "What is the NFL schedule today?",
+    "expected": {
+      "intent": "unsupported",
+      "operation": null,
+      "mentions": [],
+      "date_expressions": [],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": "Outside the supported search scope."
+    },
+    "id": "holdout-072"
+  },
+  {
+    "utterance": "Predict the next NBA champion",
+    "expected": {
+      "intent": "unsupported",
+      "operation": null,
+      "mentions": [],
+      "date_expressions": [],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": "Outside the supported search scope."
+    },
+    "id": "holdout-073"
+  },
+  {
+    "utterance": "How much will Lakers tickets cost?",
+    "expected": {
+      "intent": "unsupported",
+      "operation": null,
+      "mentions": [],
+      "date_expressions": [],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": "Outside the supported search scope."
+    },
+    "id": "holdout-074"
+  },
+  {
+    "utterance": "Calculate season averages for all players",
+    "expected": {
+      "intent": "unsupported",
+      "operation": null,
+      "mentions": [],
+      "date_expressions": [],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": "Outside the supported search scope."
+    },
+    "id": "holdout-075"
+  }
+]

@@ -1,0 +1,564 @@
+[
+  {
+    "utterance": "What games are on today?",
+    "expected": {
+      "intent": "game_search",
+      "operation": "list",
+      "mentions": [],
+      "date_expressions": [
+        {
+          "text": "today",
+          "kind": "relative"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "seed-001"
+  },
+  {
+    "utterance": "Show the Cavs games last week",
+    "expected": {
+      "intent": "game_search",
+      "operation": "list",
+      "mentions": [
+        {
+          "text": "Cavs",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "last week",
+          "kind": "relative"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "seed-002"
+  },
+  {
+    "utterance": "Lakers versus Celtics on January 23, 2025",
+    "expected": {
+      "intent": "game_search",
+      "operation": "list",
+      "mentions": [
+        {
+          "text": "Lakers",
+          "kind": "team"
+        },
+        {
+          "text": "Celtics",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "January 23, 2025",
+          "kind": "calendar_date"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "seed-003"
+  },
+  {
+    "utterance": "Who won the 2024 NBA Finals?",
+    "expected": {
+      "intent": "playoff_series",
+      "operation": "series_result",
+      "mentions": [],
+      "date_expressions": [
+        {
+          "text": "2024",
+          "kind": "season"
+        }
+      ],
+      "round_mention": "NBA Finals",
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "seed-004"
+  },
+  {
+    "utterance": "Summarize the 2024 postseason",
+    "expected": {
+      "intent": "postseason_summary",
+      "operation": "summary",
+      "mentions": [],
+      "date_expressions": [
+        {
+          "text": "2024",
+          "kind": "season"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "seed-005"
+  },
+  {
+    "utterance": "How many points did Tatum score in game 4 of the 2024 Finals?",
+    "expected": {
+      "intent": "boxscore_stats",
+      "operation": "player_stats",
+      "mentions": [
+        {
+          "text": "Tatum",
+          "kind": "player"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2024",
+          "kind": "season"
+        }
+      ],
+      "round_mention": "Finals",
+      "game_number": 4,
+      "statistics": [
+        "points"
+      ],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "seed-006"
+  },
+  {
+    "utterance": "Who led the Celtics in points in game 4 of the 2024 Finals?",
+    "expected": {
+      "intent": "boxscore_stats",
+      "operation": "leaders",
+      "mentions": [
+        {
+          "text": "Celtics",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2024",
+          "kind": "season"
+        }
+      ],
+      "round_mention": "Finals",
+      "game_number": 4,
+      "statistics": [
+        "points"
+      ],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "seed-007"
+  },
+  {
+    "utterance": "How many rebounds did the Knicks have on March 3, 2025?",
+    "expected": {
+      "intent": "boxscore_stats",
+      "operation": "team_stats",
+      "mentions": [
+        {
+          "text": "Knicks",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "March 3, 2025",
+          "kind": "calendar_date"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [
+        "rebounds"
+      ],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "seed-008"
+  },
+  {
+    "utterance": "How did Boston do yesterday?",
+    "expected": {
+      "intent": "game_search",
+      "operation": "list",
+      "mentions": [
+        {
+          "text": "Boston",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "yesterday",
+          "kind": "relative"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "seed-009"
+  },
+  {
+    "utterance": "Show the games on 1947-01-01",
+    "expected": {
+      "intent": "game_search",
+      "operation": "list",
+      "mentions": [],
+      "date_expressions": [
+        {
+          "text": "1947-01-01",
+          "kind": "calendar_date"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "seed-010"
+  },
+  {
+    "utterance": "Show games on 2025-02-30",
+    "expected": {
+      "intent": "game_search",
+      "operation": "list",
+      "mentions": [],
+      "date_expressions": [
+        {
+          "text": "2025-02-30",
+          "kind": "calendar_date"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "seed-011"
+  },
+  {
+    "utterance": "Show the Lakers games last Friday",
+    "expected": {
+      "intent": "game_search",
+      "operation": "list",
+      "mentions": [
+        {
+          "text": "Lakers",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "last Friday",
+          "kind": "relative"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "seed-012"
+  },
+  {
+    "utterance": "Summarize the 1950-51 postseason",
+    "expected": {
+      "intent": "postseason_summary",
+      "operation": "summary",
+      "mentions": [],
+      "date_expressions": [
+        {
+          "text": "1950-51",
+          "kind": "season"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "seed-013"
+  },
+  {
+    "utterance": "Show the Lakers and Nuggets 2023 conference finals result",
+    "expected": {
+      "intent": "playoff_series",
+      "operation": "series_result",
+      "mentions": [
+        {
+          "text": "Lakers",
+          "kind": "team"
+        },
+        {
+          "text": "Nuggets",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2023",
+          "kind": "season"
+        }
+      ],
+      "round_mention": "conference finals",
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "seed-014"
+  },
+  {
+    "utterance": "What was the Celtics 2024 first round result?",
+    "expected": {
+      "intent": "playoff_series",
+      "operation": "series_result",
+      "mentions": [
+        {
+          "text": "Celtics",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2024",
+          "kind": "season"
+        }
+      ],
+      "round_mention": "first round",
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "seed-015"
+  },
+  {
+    "utterance": "How many assists did LeBron James have for the Lakers on 2024-01-15?",
+    "expected": {
+      "intent": "boxscore_stats",
+      "operation": "player_stats",
+      "mentions": [
+        {
+          "text": "Lakers",
+          "kind": "team"
+        },
+        {
+          "text": "LeBron James",
+          "kind": "player"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2024-01-15",
+          "kind": "calendar_date"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [
+        "assists"
+      ],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "seed-016"
+  },
+  {
+    "utterance": "Who led the Heat in blocks on 2024-01-15?",
+    "expected": {
+      "intent": "boxscore_stats",
+      "operation": "leaders",
+      "mentions": [
+        {
+          "text": "Heat",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "2024-01-15",
+          "kind": "calendar_date"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [
+        "blocks"
+      ],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "seed-017"
+  },
+  {
+    "utterance": "Show Warriors games last night",
+    "expected": {
+      "intent": "game_search",
+      "operation": "list",
+      "mentions": [
+        {
+          "text": "Warriors",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [
+        {
+          "text": "last night",
+          "kind": "relative"
+        }
+      ],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": null
+    },
+    "id": "seed-018"
+  },
+  {
+    "utterance": "Who won the Finals?",
+    "expected": {
+      "intent": "needs_clarification",
+      "operation": null,
+      "mentions": [],
+      "date_expressions": [],
+      "round_mention": "Finals",
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [
+        {
+          "field": "season",
+          "reason": "Required information is missing or ambiguous."
+        }
+      ],
+      "unsupported_reason": null
+    },
+    "id": "seed-019"
+  },
+  {
+    "utterance": "Show the Lakers game",
+    "expected": {
+      "intent": "needs_clarification",
+      "operation": null,
+      "mentions": [
+        {
+          "text": "Lakers",
+          "kind": "team"
+        }
+      ],
+      "date_expressions": [],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [
+        {
+          "field": "date",
+          "reason": "Required information is missing or ambiguous."
+        }
+      ],
+      "unsupported_reason": null
+    },
+    "id": "seed-020"
+  },
+  {
+    "utterance": "How many career points does LeBron have?",
+    "expected": {
+      "intent": "unsupported",
+      "operation": null,
+      "mentions": [],
+      "date_expressions": [],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": "Outside the supported search scope."
+    },
+    "id": "seed-021"
+  },
+  {
+    "utterance": "Compare Jordan and LeBron across their careers",
+    "expected": {
+      "intent": "unsupported",
+      "operation": null,
+      "mentions": [],
+      "date_expressions": [],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": "Outside the supported search scope."
+    },
+    "id": "seed-022"
+  },
+  {
+    "utterance": "What is the weather in Boston?",
+    "expected": {
+      "intent": "unsupported",
+      "operation": null,
+      "mentions": [],
+      "date_expressions": [],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": "Outside the supported search scope."
+    },
+    "id": "seed-023"
+  },
+  {
+    "utterance": "What about his next game?",
+    "expected": {
+      "intent": "unsupported",
+      "operation": null,
+      "mentions": [],
+      "date_expressions": [],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": "Outside the supported search scope."
+    },
+    "id": "seed-024"
+  },
+  {
+    "utterance": "Find NBA news from the internet",
+    "expected": {
+      "intent": "unsupported",
+      "operation": null,
+      "mentions": [],
+      "date_expressions": [],
+      "round_mention": null,
+      "game_number": null,
+      "statistics": [],
+      "ambiguities": [],
+      "unsupported_reason": "Outside the supported search scope."
+    },
+    "id": "seed-025"
+  }
+]
