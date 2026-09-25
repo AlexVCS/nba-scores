@@ -16,16 +16,21 @@ def conferences_json():
         return json.load(f)
 
 
-def test_east_team_ids_match_json(conferences_json):
-    from server.services.playoffs import EAST_TEAM_IDS
+@pytest.mark.parametrize(
+    ("team_id", "expected_conference"),
+    [
+        pytest.param(1610612738, "East", id="celtics"),
+        pytest.param(1610612748, "East", id="heat"),
+        pytest.param(1610612747, "West", id="lakers"),
+        pytest.param(1610612744, "West", id="warriors"),
+    ],
+)
+def test_series_conference_for_known_team(team_id, expected_conference):
+    from server.services.playoffs import _get_series_conference
 
-    assert EAST_TEAM_IDS == frozenset(conferences_json["east"])
+    series = {"teams": [{"id": team_id}]}
 
-
-def test_west_team_ids_match_json(conferences_json):
-    from server.services.playoffs import WEST_TEAM_IDS
-
-    assert WEST_TEAM_IDS == frozenset(conferences_json["west"])
+    assert _get_series_conference(series) == expected_conference
 
 
 def test_no_overlap_between_conferences(conferences_json):
@@ -37,3 +42,9 @@ def test_no_overlap_between_conferences(conferences_json):
 def test_conference_sizes(conferences_json):
     assert len(conferences_json["east"]) == 15
     assert len(conferences_json["west"]) == 15
+
+
+@pytest.mark.parametrize("conference", ["east", "west"])
+def test_no_duplicate_ids_within_conference(conferences_json, conference):
+    team_ids = conferences_json[conference]
+    assert len(team_ids) == len(set(team_ids)), f"Duplicate team IDs in {conference}"

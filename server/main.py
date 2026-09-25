@@ -1,12 +1,14 @@
 import logging
 import time
-from datetime import datetime, timezone
+from datetime import date as calendar_date, datetime, timezone
 
 import requests
-from fastapi import Depends, FastAPI, Header, HTTPException, Query
+from fastapi import Depends, FastAPI, Header, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from requests.exceptions import RequestException
 from server.services import nba_stats_client
+from server.services.game_details import fetch_game_details
+from server.services.last_matchups import fetch_last_matchups
 from server.services.nba_stats_client import (
     UpstreamBadResponseError,
     UpstreamUnavailableError,
@@ -15,8 +17,14 @@ from .utils.season import get_nba_season
 from .utils.boxscore_availability import (
     is_boxscore_available_metadata,
 )
-from .services.nba_schedule import get_game_days_in_month
-from .models.schemas import GameDaysResponse
+from .services.nba_schedule import (
+    ScheduleLookupCooldownError,
+    get_game_days_in_month,
+    get_next_game_date,
+    get_recent_game_days,
+)
+from .models.schemas import GameDaysResponse, RecentGameDaysResponse
+from .models.ask_response import AskQuestion, AskResponse
 from .services.game_summary import (
     fetch_boxscoretraditional,
     fetch_inactive_players,
@@ -51,12 +59,10 @@ async def normalize_leading_path_slashes(request, call_next):
     return await call_next(request)
 
 
-def add_boxscore_availability_to_scoreboard(scoreboard, target_date):
+def add_boxscore_availability_to_scoreboard(scoreboard):
     for game in scoreboard.get("games", []):
-        game_date = str(game.get("gameTimeUTC") or target_date)[:10]
         game["boxscoreAvailable"] = is_boxscore_available_metadata(
             game.get("gameId"),
-            game_date,
             game.get("gameStatus"),
         )
     return scoreboard
@@ -77,6 +83,18 @@ def healthz():
     }
 
 
+@app.post("/ask", response_model=AskResponse)
+def ask(question: AskQuestion, request: Request):
+    from .services.ask import answer_question
+    from .services.ask_limits import BudgetLimitError, RateLimitError
+
+    try:
+        # Proxy trust is configured in uvicorn; never trust arbitrary forwarded headers here.
+        return answer_question(question.question, request.client.host if request.client else "unknown")
+    except (BudgetLimitError, RateLimitError) as error:
+        raise HTTPException(status_code=429, detail="Search has reached its request limit. Please try again later.", headers={"Retry-After": "60"}) from error
+
+
 @app.get("/")
 def get_v3_scoreboard(
     date: str = Query(
@@ -88,9 +106,41 @@ def get_v3_scoreboard(
     try:
         target_date = date if date else datetime.now().strftime("%Y-%m-%d")
         scoreboard = nba_stats_client.fetch_scoreboard_v3(target_date)
-        return add_boxscore_availability_to_scoreboard(scoreboard, target_date)
+        if not date and not scoreboard["games"]:
+            try:
+                scoreboard["nextGameDate"] = get_next_game_date(calendar_date.fromisoformat(target_date))
+            except ScheduleLookupCooldownError:
+                pass
+            except Exception:
+                logger.warning("Next game date unavailable", exc_info=True)
+        return add_boxscore_availability_to_scoreboard(scoreboard)
     except (UpstreamUnavailableError, UpstreamBadResponseError) as e:
         raise_upstream_http(e)
+
+
+@app.get("/games/{game_id}/details")
+def get_game_details(game_id: str, date: str | None = Query(default=None, pattern=r"^\d{4}-\d{2}-\d{2}$")):
+    try:
+        return fetch_game_details(game_id, date)
+    except (UpstreamUnavailableError, UpstreamBadResponseError) as e:
+        raise_upstream_http(e)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e)) from e
+
+
+@app.get("/matchups")
+def get_last_matchups(
+    team_id: int = Query(alias="teamId"),
+    opponent_id: int = Query(alias="opponentId"),
+    before: calendar_date = Query(),
+    limit: int = Query(default=4, ge=1, le=10),
+):
+    try:
+        return fetch_last_matchups(team_id, opponent_id, before, limit)
+    except (UpstreamUnavailableError, UpstreamBadResponseError) as e:
+        raise_upstream_http(e)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e)) from e
 
 
 @app.get("/games/{game_id}/boxscore")
@@ -207,6 +257,27 @@ def game_days(
         year=year,
         month=month,
         season=season,
+        game_days=days,
+        total=len(days),
+    )
+
+@app.get("/api/game-days/recent", response_model=RecentGameDaysResponse)
+def recent_game_days(
+    before: calendar_date = Query(..., description="Exclusive upper bound (YYYY-MM-DD)"),
+    months: int = Query(12, ge=1, le=24, description="Calendar months to include, ending with before's month"),
+):
+    try:
+        days = get_recent_game_days(before, months)
+    except (UpstreamUnavailableError, UpstreamBadResponseError) as e:
+        raise_upstream_http(e)
+    except Exception as e:
+        logger.exception("recent_game_days failed")
+        raise HTTPException(
+            status_code=502,
+            detail=f"Failed to fetch schedule from NBA API: {e}",
+        )
+    return RecentGameDaysResponse(
+        before=before.isoformat(),
         game_days=days,
         total=len(days),
     )

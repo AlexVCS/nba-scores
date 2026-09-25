@@ -4,7 +4,6 @@ def is_valid_nba_game_id(game_id: str | None) -> bool:
 
 def is_boxscore_available_metadata(
     game_id: str | None,
-    game_date: str | None,
     game_status: int | None,
 ) -> bool:
     if not is_valid_nba_game_id(game_id):

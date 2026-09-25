@@ -19,23 +19,19 @@ class _FakeBoxScoreTraditional:
 
 
 def test_boxscore_metadata_available_for_started_supported_game():
-    assert is_boxscore_available_metadata("0024600206", "2024-11-01", 2) is True
+    assert is_boxscore_available_metadata("0024600206", 2) is True
 
 
 def test_boxscore_metadata_unavailable_for_scheduled_game():
-    assert is_boxscore_available_metadata("0024600206", "2024-11-01", 1) is False
+    assert is_boxscore_available_metadata("0024600206", 1) is False
 
 
 def test_boxscore_metadata_unavailable_for_missing_status():
-    assert is_boxscore_available_metadata("0024600206", "2024-11-01", None) is False
+    assert is_boxscore_available_metadata("0024600206", None) is False
 
 
 def test_boxscore_metadata_unavailable_for_invalid_game_id():
-    assert is_boxscore_available_metadata("not-a-game", "2024-11-01", 2) is False
-
-
-def test_boxscore_metadata_available_for_historical_started_game():
-    assert is_boxscore_available_metadata("0024600206", "1996-10-31", 2) is True
+    assert is_boxscore_available_metadata("not-a-game", 2) is False
 
 
 class _FakeScoreboardV3:

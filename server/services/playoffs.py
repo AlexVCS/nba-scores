@@ -1,6 +1,6 @@
 import json
 import time
-from collections import defaultdict
+from collections import Counter, defaultdict
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -151,14 +151,16 @@ def get_playoff_format(season: str, finals_round: int | None = None):
 
 def get_target_wins(playoff_year: int, round_number: int, is_finals: bool):
     if playoff_year == 1954 and not is_finals:
-        return None
+        return None if round_number == 1 else 2
     if is_finals:
         return 4
     if playoff_year <= 1950:
         return 2
     if 1951 <= playoff_year <= 1953:
         return 2 if round_number == 1 else 3
-    if 1955 <= playoff_year <= 1960:
+    if 1955 <= playoff_year <= 1957:
+        return 2 if round_number == 1 else 3
+    if 1958 <= playoff_year <= 1960:
         return 2 if round_number == 1 else 4
     if 1961 <= playoff_year <= 1967:
         return 3 if round_number == 1 else 4
@@ -226,13 +228,51 @@ def fetch_playoff_team_games_df(season: str, today: date | None = None):
     return df
 
 
-def get_round_name(round_number: int):
+# Numeric stages retain the NBA source positions (2/3/4) for the ordinary
+# three-round formats. The exceptional formats have their own ordered stages.
+# Sources: NBA season recaps 1946-47, 1948-49, 1949-50, 1953-54,
+# 1970-71 and 1974-75: https://www.nba.com/news/history-season-review-1949-50
+# BAA championship naming: https://www.nba.com/lakers/history/season-capsule
+# and https://www.nba.com/news/history-top-moments-warriors-first-nba-title-1947
+
+def get_stage_rules(season: str):
+    """Tournament stages and entry/advancement rules, independent of teams."""
+    year = get_playoff_end_year(season)
+    championship = "BAA Finals" if year <= 1949 else "NBA Finals"
+    if year <= 1948:
+        names = {1: "Quarterfinals", 2: "Semifinals", 3: championship}
+    elif year == 1950:
+        names = {1: "Division Semifinals", 2: "Division Finals", 3: "NBA Semifinals", 4: championship}
+    elif year == 1954:
+        names = {1: "Division Round Robin", 2: "Division Finals", 3: championship}
+    elif year <= 1970:
+        names = {2: "Division Semifinals", 3: "Division Finals", 4: championship}
+    elif year <= 1974:
+        names = {2: "Conference Semifinals", 3: "Conference Finals", 4: championship}
+    else:
+        names = {1: "First Round", 2: "Conference Semifinals", 3: "Conference Finals", 4: championship}
+
+    first_round = min(names)
+    opening_byes = year <= 1948 or 1955 <= year <= 1966 or 1975 <= year <= 1983
     return {
-        1: "First Round",
-        2: "Conference Semifinals",
-        3: "Conference Finals",
-        4: "NBA Finals",
-    }.get(round_number, f"Round {round_number}")
+        "names": names,
+        "entryRounds": (first_round, first_round + 1) if opening_byes else (first_round,),
+        # In 1950 one division champion bypassed the league semifinal.
+        "byeTransitions": {(2, 4)} if year == 1950 else set(),
+        # These formats do not use the ordinary NBA stage-code convention.
+        "sourceRoundCodes": year not in {1947, 1948, 1950, 1954},
+        # In 1954, pool games and later elimination series could share opponents.
+        "stageDates": (("1954-03-16", 1), ("1954-03-24", 2), ("1954-03-31", 3)) if year == 1954 else (),
+    }
+
+
+def get_round_names(season: str):
+    return get_stage_rules(season)["names"]
+
+
+def get_round_name(round_number: int, season: str | None = None):
+    names = get_round_names(season or "2025-26")
+    return names.get(round_number, "Round not determined")
 
 
 def get_series_dates(series):
@@ -243,18 +283,11 @@ def get_series_dates(series):
     return (dates[0], dates[-1])
 
 
-def get_finals_round(playoff_series):
-    if not playoff_series:
-        return None
-
-    by_round = defaultdict(list)
-    for series in playoff_series:
-        by_round[series["round"]].append(series)
-
-    max_round = max(by_round.keys())
-    if len(by_round[max_round]) == 1:
-        return max_round
-
+def get_finals_round(playoff_series, season: str | None = None):
+    """Only a championship stage is Finals, even when one earlier series exists."""
+    expected_round = max(get_round_names(season or "2025-26"))
+    if any(series["round"] == expected_round for series in playoff_series):
+        return expected_round
     return None
 
 
@@ -279,7 +312,7 @@ def get_group_for_series(series, playoff_year: int, is_finals: bool):
     if is_finals:
         return {
             "id": "finals",
-            "label": "NBA Finals",
+            "label": "BAA Finals" if playoff_year <= 1949 else "NBA Finals",
             "kind": "finals",
             "sortOrder": 99,
         }
@@ -316,15 +349,16 @@ def get_group_for_series(series, playoff_year: int, is_finals: bool):
     }
 
 
-def get_round_definitions(playoff_series):
+def get_round_definitions(playoff_series, season: str | None = None):
     rounds = {}
+    first_round = min(get_round_names(season or "2025-26"))
     for series in playoff_series:
         round_number = series["round"]
         rounds[round_number] = {
             "round": round_number,
-            "label": series.get("roundName") or get_round_name(round_number),
+            "label": get_round_name(round_number, season),
             "sortOrder": round_number,
-            "defaultRevealed": round_number == 1,
+            "defaultRevealed": round_number == first_round,
         }
 
     return [rounds[key] for key in sorted(rounds)]
@@ -382,7 +416,7 @@ def get_advancement_edges(playoff_series):
 
 
 def enrich_playoff_bracket_response(season: str, playoff_series):
-    finals_round = get_finals_round(playoff_series)
+    finals_round = get_finals_round(playoff_series, season)
     playoff_format = get_playoff_format(season, finals_round)
     playoff_year = playoff_format["playoffYear"]
     groups_by_id = {}
@@ -396,28 +430,21 @@ def enrich_playoff_bracket_response(season: str, playoff_series):
             "games": list(series.get("games", [])),
         }
         is_finals = finals_round is not None and series_copy["round"] == finals_round
-        if playoff_year in BAA_DIVISION_WINNERS:
-            # These semifinals ran alongside the other qualifiers' quarterfinals.
-            if is_baa_division_winners_series(series_copy, playoff_year):
-                series_copy["round"] = 2
-            series_copy["roundName"] = {
-                1: "Quarterfinals", 2: "Semifinals", 3: "NBA Finals",
-            }[series_copy["round"]]
-            series_copy["games"] = [
-                {**game, "round": series_copy["round"], "roundName": series_copy["roundName"]}
-                for game in series_copy["games"]
-            ]
+        series_copy["roundName"] = get_round_name(series_copy["round"], season)
+        series_copy["games"] = [
+            {**game, "round": series_copy["round"], "roundName": series_copy["roundName"]}
+            for game in series_copy["games"]
+        ]
         group = get_group_for_series(series_copy, playoff_year, is_finals)
+        if playoff_year == 1950 and series_copy["round"] == 3:
+            group = {"id": "nba-semifinals", "label": "NBA Semifinals", "kind": "league", "sortOrder": 90}
         groups_by_id[group["id"]] = group
-
-        if is_finals:
-            series_copy["roundName"] = "NBA Finals"
 
         series_copy["bracketGroupId"] = group["id"]
         series_copy["bracketGroupLabel"] = group["label"]
         series_copy["bracketGroupKind"] = group["kind"]
-        series_copy["targetWins"] = get_target_wins(
-            playoff_year,
+        series_copy["targetWins"] = get_series_target_wins_for_round(
+            season,
             series_copy["round"],
             is_finals,
         )
@@ -446,7 +473,7 @@ def enrich_playoff_bracket_response(season: str, playoff_series):
     return {
         "format": playoff_format,
         "groups": groups,
-        "rounds": get_round_definitions(enriched_series),
+        "rounds": get_round_definitions(enriched_series, season),
         "edges": (
             get_advancement_edges(enriched_series)
             if playoff_format["supportsExactBracket"]
@@ -619,118 +646,93 @@ def summarize_series(games):
     return summaries
 
 
-def infer_rounds_from_bracket_progression(games):
+def apply_rounds_to_games(games, season: str):
+    """Resolve stages once, using tournament structure and source evidence.
+
+    A complete path anchors the earliest and final stages. Shorter paths align
+    with their next matchup, except where the format permits a round to be
+    skipped. Partial data needs trustworthy source codes to anchor absolute
+    stages; otherwise its round remains undetermined.
     """
-    Infer playoff rounds by following winners through the bracket.
-
-    This fallback is meant for seasons where GAME_ID does not encode the round.
-
-    Rule:
-      - A series with no previous winning series feeding into it is Round 1.
-      - If a series includes the winner of an earlier series, it must be after
-        that earlier series.
-      - Round = 1 + max(rounds of previous series whose winners appear in this
-        series).
-
-    Example for 2000-01:
-      PHI beats IND in Round 1.
-      TOR beats NYK in Round 1.
-      PHI vs TOR is then inferred as Round 2.
-    """
-    if not games:
-        return {}
-
-    series_summaries = summarize_series(games)
-
-    sorted_series = sorted(
-        series_summaries.values(),
-        key=lambda series: (
-            series["startDate"],
-            series["endDate"],
-            series["matchupKey"],
-        ),
-    )
-
-    round_assignments = {}
-
-    for current_series in sorted_series:
-        predecessor_rounds = []
-
-        for previous_series in sorted_series:
-            previous_key = previous_series["matchupKey"]
-
-            if previous_key == current_series["matchupKey"]:
-                continue
-
-            if previous_key not in round_assignments:
-                continue
-
-            previous_winner_id = previous_series["winnerTeamId"]
-
-            if previous_winner_id is None:
-                continue
-
-            previous_ended_before_current_started = (
-                previous_series["endDate"] < current_series["startDate"]
-            )
-
-            previous_winner_in_current_series = (
-                previous_winner_id in current_series["teamIds"]
-            )
-
-            if previous_ended_before_current_started and previous_winner_in_current_series:
-                predecessor_rounds.append(round_assignments[previous_key])
-
-        if predecessor_rounds:
-            round_num = max(predecessor_rounds) + 1
-        else:
-            round_num = 1
-
-        # Clamp to normal NBA playoff round range.
-        # This protects against odd historical data without creating Round 5+.
-        if round_num > 4:
-            round_num = 4
-
-        round_assignments[current_series["matchupKey"]] = round_num
-
-    return round_assignments
-
-
-def apply_rounds_to_games(games):
-    """Infer and apply rounds to normalized playoff games."""
     if not games:
         return games
 
-    games_with_rounds = []
+    rules = get_stage_rules(season)
+    names = rules["names"]
+    first_round, final_round = min(names), max(names)
+    assignments = {}
 
-    if can_use_game_id_round_code(games):
+    if rules["stageDates"]:
         for game in games:
-            round_num = infer_round_from_game_id(game["gameId"])
+            assignments[game["gameId"]] = max(
+                (stage for start, stage in rules["stageDates"] if str(game["date"])[:10] >= start),
+                default=0,
+            )
+    else:
+        summaries = sorted(summarize_series(games).values(), key=lambda item: (item["startDate"], item["endDate"]))
+        predecessors = defaultdict(list)
+        successors = {}
+        for previous in summaries:
+            following = next((
+                current for current in summaries
+                if previous["endDate"] < current["startDate"]
+                and previous["winnerTeamId"] in current["teamIds"]
+            ), None)
+            if following:
+                previous_key, next_key = previous["matchupKey"], following["matchupKey"]
+                successors[previous_key] = next_key
+                predecessors[next_key].append(previous_key)
 
-            game_copy = game.copy()
-            game_copy["round"] = round_num
-            game_copy["roundName"] = get_round_name(round_num)
+        stages = {}
+        for series in summaries:
+            key = series["matchupKey"]
+            stages[key] = max((stages[parent] + 1 for parent in predecessors[key]), default=first_round)
 
-            games_with_rounds.append(game_copy)
+        # A full path anchors only its connected bracket. Other components may
+        # be partial extracts and must provide their own absolute-stage evidence.
+        terminals = {}
+        for series in reversed(summaries):
+            key = series["matchupKey"]
+            terminals[key] = terminals[successors[key]] if key in successors else key
+        anchored = {key for key in stages if stages[terminals[key]] == final_round}
+        for series in reversed(summaries):
+            key = series["matchupKey"]
+            if key in anchored and key in successors:
+                next_stage = stages[successors[key]]
+                if (stages[key], next_stage) not in rules["byeTransitions"]:
+                    stages[key] = max(stages[key], next_stage - 1)
 
-        return games_with_rounds
+        incomplete_terminals = {
+            terminals[key] for key in anchored
+            if not predecessors[key] and stages[key] not in rules["entryRounds"]
+        }
+        anchored = {key for key in anchored if terminals[key] not in incomplete_terminals}
 
-    round_assignments = infer_rounds_from_bracket_progression(games)
+        for series in summaries:
+            key = series["matchupKey"]
+            # Require a strict majority of this matchup's games. Malformed or
+            # tied source votes cannot overrule progression or invent a stage.
+            votes = Counter()
+            if rules["sourceRoundCodes"]:
+                for game in series["games"]:
+                    game_id = str(game.get("gameId", ""))
+                    code = infer_round_from_game_id(game_id)
+                    if len(game_id) == 10 and game_id[-1] in "1234567" and code in names:
+                        votes[code] += 1
+            source_stage = next((code for code, count in votes.items() if count > series["gameCount"] / 2), 0)
 
-    for game in games:
-        matchup_key = get_matchup_key(game)
-        round_num = round_assignments.get(matchup_key, 0)
+            if key not in anchored:
+                known_parents = [stages[parent] for parent in predecessors[key] if stages[parent]]
+                stages[key] = max(source_stage, max(known_parents) + 1 if known_parents else 0)
+            if stages[key] not in names:
+                stages[key] = 0
 
-        game_copy = game.copy()
-        game_copy["round"] = round_num
-        game_copy["roundName"] = get_round_name(round_num)
+        assignments = {game["gameId"]: stages[get_matchup_key(game)] for game in games}
 
-        games_with_rounds.append(game_copy)
-
-    return sorted(
-        games_with_rounds,
-        key=lambda game: (game["date"], game["gameId"]),
-    )
+    return [
+        {**game, "round": assignments[game["gameId"]], "roundName": get_round_name(assignments[game["gameId"]], season)}
+        for game in sorted(games, key=lambda item: (item["date"], item["gameId"]))
+    ]
 
 
 def determine_winner(home_team, away_team, home_score, away_score):
@@ -794,7 +796,6 @@ def normalize_playoff_games(df):
                 "date": home_team["GAME_DATE"],
                 "boxscoreAvailable": is_boxscore_available_metadata(
                     str(game_id),
-                    home_team["GAME_DATE"],
                     get_playoff_game_status(home_team),
                 ),
                 "round": 0,
@@ -1064,7 +1065,11 @@ def series_wins_for_games(games):
 
 
 def get_series_target_wins_for_round(season, round_number, is_finals):
+    if round_number not in get_round_names(season):
+        return None
     playoff_year = get_playoff_end_year(season)
+    if 1949 <= playoff_year <= 1974 and playoff_year not in {1950, 1954}:
+        round_number -= 1
     return get_target_wins(playoff_year, round_number, is_finals)
 
 
@@ -1114,7 +1119,7 @@ def is_valid_orphan_merge(season, orphan_series, target_series, all_series):
     if orphan_date < start_date - tolerance or orphan_date > end_date + tolerance:
         return False
 
-    initial_finals_round = get_finals_round(all_series)
+    initial_finals_round = get_finals_round(all_series, season)
     is_target_finals = (
         initial_finals_round is not None
         and target_series["round"] == initial_finals_round
@@ -1223,7 +1228,7 @@ def reconcile_duplicate_matchup_rounds(season, games):
         round_num = orphan_round_updates[series_key]
         game_copy = game.copy()
         game_copy["round"] = round_num
-        game_copy["roundName"] = get_round_name(round_num)
+        game_copy["roundName"] = get_round_name(round_num, season)
         reconciled_games.append(game_copy)
 
     return sorted(
@@ -1309,7 +1314,7 @@ def get_normalized_playoff_games(season: str):
     df = fetch_playoff_team_games_df(season)
     games = normalize_playoff_games(df)
     games = correct_game_scores(games)
-    games = apply_rounds_to_games(games)
+    games = apply_rounds_to_games(games, season)
     games = reconcile_duplicate_matchup_rounds(season, games)
 
     return {
@@ -1324,7 +1329,7 @@ def get_playoff_series(season: str):
     df = fetch_playoff_team_games_df(season)
     games = normalize_playoff_games(df)
     games = correct_game_scores(games)
-    games = apply_rounds_to_games(games)
+    games = apply_rounds_to_games(games, season)
     games = reconcile_duplicate_matchup_rounds(season, games)
     playoff_series = derive_playoff_series(games)
     bracket = enrich_playoff_bracket_response(season, playoff_series)
@@ -1346,7 +1351,7 @@ def get_playoff_games_and_series(season: str):
     df = fetch_playoff_team_games_df(season)
     games = normalize_playoff_games(df)
     games = correct_game_scores(games)
-    games = apply_rounds_to_games(games)
+    games = apply_rounds_to_games(games, season)
     games = reconcile_duplicate_matchup_rounds(season, games)
     playoff_series = derive_playoff_series(games)
     bracket = enrich_playoff_bracket_response(season, playoff_series)

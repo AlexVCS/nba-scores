@@ -228,15 +228,22 @@ def fetch_boxscore_summary_v3(game_id: str):
     )
 
 
-def fetch_schedule_league_v2(season: str, league_id: str = "00"):
+def fetch_schedule_league_v2(
+    season: str,
+    league_id: str = "00",
+    *,
+    timeout: float | None = None,
+    retries: int | None = None,
+):
     return _run(
         "ScheduleLeagueV2",
         lambda: ScheduleLeagueV2(
             season=season,
             league_id=league_id,
             headers=_headers(),
-            timeout=_timeout(),
+            timeout=_timeout() if timeout is None else timeout,
         ),
+        retries=retries,
     )
 
 

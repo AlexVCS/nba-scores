@@ -57,7 +57,12 @@ def _add_game(rows, game_id, date, away, home, winner_abbr):
 
 def _series_for_rows(season, rows):
     normalized = playoffs.normalize_playoff_games(pd.DataFrame(rows))
-    with_rounds = playoffs.apply_rounds_to_games(normalized)
+    # Feed malformed source splits directly to the reconciliation unit under test.
+    # The season-aware resolver now fixes these splits before reconciliation.
+    with_rounds = [
+        {**game, "round": playoffs.infer_round_from_game_id(game["gameId"])}
+        for game in normalized
+    ]
     reconciled = playoffs.reconcile_duplicate_matchup_rounds(season, with_rounds)
     series = playoffs.derive_playoff_series(reconciled)
     bracket = playoffs.enrich_playoff_bracket_response(season, series)

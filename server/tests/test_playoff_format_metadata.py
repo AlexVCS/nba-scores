@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 import pytest
 
 from server.services import playoffs
@@ -41,13 +43,13 @@ def test_1954_round_robin_format_marks_dynamic_finals_round():
         [
             _series("R1-a", 1, [(1610612738, "BOS"), (1610612752, "NYK")], 1610612738),
             _series("R1-b", 1, [(mnl, "MNL"), (1610612758, "ROC")], mnl),
-            _series("R2-final", 2, [(mnl, "MNL"), (syr, "SYR")], mnl),
+            _series("R3-final", 3, [(mnl, "MNL"), (syr, "SYR")], mnl),
         ],
     )
 
     assert bracket["format"]["era"] == "six-team-round-robin"
     assert bracket["format"]["bracketType"] == "round-robin-plus-finals"
-    assert bracket["format"]["finalsRound"] == 2
+    assert bracket["format"]["finalsRound"] == 3
     assert bracket["series"][-1]["isFinals"] is True
     assert bracket["series"][-1]["roundName"] == "NBA Finals"
 
@@ -106,21 +108,21 @@ def test_metadata_includes_groups_rounds_and_advancement_edges():
     bos = 1610612738
     nyk = 1610612752
     lal = 1610612747
-    first = _series("R1-bos-nyk", 1, [(bos, "BOS"), (nyk, "NYK")], bos)
-    final = _series("R2-bos-lal", 2, [(bos, "BOS"), (lal, "LAL")], bos)
+    first = _series("R2-bos-nyk", 2, [(bos, "BOS"), (nyk, "NYK")], bos)
+    final = _series("R4-bos-lal", 4, [(bos, "BOS"), (lal, "LAL")], bos)
 
     bracket = playoffs.enrich_playoff_bracket_response("1950-51", [first, final])
 
     assert bracket["format"]["era"] == "1951-two-division-eight-team"
     assert bracket["groups"]
     assert bracket["rounds"] == [
-        {"round": 1, "label": "First Round", "sortOrder": 1, "defaultRevealed": True},
-        {"round": 2, "label": "NBA Finals", "sortOrder": 2, "defaultRevealed": False},
+        {"round": 2, "label": "Division Semifinals", "sortOrder": 2, "defaultRevealed": True},
+        {"round": 4, "label": "NBA Finals", "sortOrder": 4, "defaultRevealed": False},
     ]
     assert bracket["edges"] == [
         {
-            "sourceSeriesKey": "R1-bos-nyk",
-            "targetSeriesKey": "R2-bos-lal",
+            "sourceSeriesKey": "R2-bos-nyk",
+            "targetSeriesKey": "R4-bos-lal",
             "winnerTeamId": bos,
         }
     ]
@@ -137,26 +139,26 @@ def test_metadata_includes_groups_rounds_and_advancement_edges():
 )
 def test_early_baa_bracket_has_two_routes_to_finals(season, leaders, others):
     source = [
-        _series("leaders", 1, leaders, leaders[0][0]),
+        _series("leaders", 2, leaders, leaders[0][0]),
         _series("quarter-a", 1, others[:2], others[0][0]),
         _series("quarter-b", 1, others[2:], others[2][0]),
         _series("semi", 2, [others[0], others[2]], others[0][0]),
         _series("final", 3, [leaders[0], others[0]], others[0][0]),
     ]
+    original_source = deepcopy(source)
     bracket = playoffs.enrich_playoff_bracket_response(season, source)
     series = {item["seriesKey"]: item for item in bracket["series"]}
     assert [group["label"] for group in bracket["groups"]] == [
-        "Division winners", "Second- and third-place teams", "NBA Finals",
+        "Division winners", "Second- and third-place teams", "BAA Finals",
     ]
-    assert [r["label"] for r in bracket["rounds"]] == ["Quarterfinals", "Semifinals", "NBA Finals"]
+    assert [r["label"] for r in bracket["rounds"]] == ["Quarterfinals", "Semifinals", "BAA Finals"]
     assert series["leaders"]["round"] == 2
     assert series["leaders"]["targetWins"] == 4
     assert series["leaders"]["games"][0]["roundName"] == "Semifinals"
     assert series["semi"]["targetWins"] == 2
     assert series["quarter-a"]["targetWins"] == 2
     assert series["final"]["targetWins"] == 4
-    assert source[0]["round"] == 1
-    assert source[0]["games"][0]["roundName"] == "First Round"
+    assert source == original_source
 
 
 def test_early_baa_note_is_limited_to_first_two_seasons():
