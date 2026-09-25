@@ -1,3 +1,4 @@
+import {useState} from "react";
 import {Link, useLocation} from "react-router";
 import TeamLogos from "@/components/TeamLogos";
 import type {LastMatchup, MatchupTeam} from "@/services/nbaService";
@@ -9,7 +10,6 @@ interface HardwoodLastMatchupsProps {
   games: LastMatchup[];
   isLoading: boolean;
   showScores: boolean;
-  onReveal: () => void;
 }
 
 const formatDate = (value: string) =>
@@ -29,8 +29,12 @@ function MatchupSide({team, won, showScore, align}: {team: MatchupTeam; won: boo
   );
 }
 
-function HardwoodLastMatchups({games, isLoading, showScores, onReveal}: HardwoodLastMatchupsProps) {
+// Revealing past meetings is local to this section: it must never reveal the
+// upcoming game itself, which would leak live scores once it tips off.
+function HardwoodLastMatchups({games, isLoading, showScores: showAllScores}: HardwoodLastMatchupsProps) {
   const location = useLocation();
+  const [revealed, setRevealed] = useState(false);
+  const showScores = showAllScores || revealed;
   if (!isLoading && games.length === 0) return null;
 
   return (
@@ -38,7 +42,7 @@ function HardwoodLastMatchups({games, isLoading, showScores, onReveal}: Hardwood
       <div className="mb-3 flex items-center justify-between gap-4 border-b border-hw-line pb-2">
         <h2 id="hardwood-last-matchups-heading" className="text-[13px] font-extrabold tracking-[.22em] uppercase">Last matchups</h2>
         {!showScores && games.length > 0 && (
-          <button type="button" className="cursor-pointer rounded-hw border border-hw-line bg-hw-surface px-3 py-1.5 text-[10px] font-extrabold tracking-[.12em] uppercase hover:bg-hw-surface-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-hw-accent" onClick={onReveal}>
+          <button type="button" className="cursor-pointer rounded-hw border border-hw-line bg-hw-surface px-3 py-1.5 text-[10px] font-extrabold tracking-[.12em] uppercase hover:bg-hw-surface-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-hw-accent" onClick={() => setRevealed(true)}>
             Show results
           </button>
         )}

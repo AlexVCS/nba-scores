@@ -1,28 +1,20 @@
+import threading
 from datetime import date
 from unittest.mock import Mock, call
 
-import pandas as pd
 import pytest
 from fastapi.testclient import TestClient
 
 from server import main
 from server.services import nba_schedule
 from server.services.nba_stats_client import UpstreamUnavailableError
-
-
-@pytest.fixture(autouse=True)
-def clear_schedule_cache():
-    nba_schedule._cache.clear()
-    nba_schedule._schedule_failure_until.clear()
-    yield
-    nba_schedule._cache.clear()
-    nba_schedule._schedule_failure_until.clear()
+from server.tests.schedule_helpers import schedule_endpoint, season_schedule
 
 
 def test_next_date_crosses_offseason_and_uses_schedule_cache(monkeypatch):
     def schedule(season, *, timeout=None, retries=None):
         dates = ["2026-06-15"] if season == "2025-26" else ["2026-10-05", "2026-10-03"]
-        return Mock(get_data_frames=lambda: [pd.DataFrame({"gameDateEst": dates})])
+        return schedule_endpoint(dates)
 
     fetch = Mock(side_effect=schedule)
     monkeypatch.setattr(nba_schedule.nba_stats_client, "fetch_schedule_league_v2", fetch)
@@ -43,12 +35,25 @@ def test_next_date_excludes_today_and_earlier_dates(monkeypatch):
 
 
 def test_optional_lookup_does_not_wait_for_a_busy_season(monkeypatch):
-    fetch = Mock()
-    monkeypatch.setattr(nba_schedule, "_parse_schedule_v2", fetch)
-    with nba_schedule._get_season_lock("2025-26"):
+    entered, release = threading.Event(), threading.Event()
+
+    def slow_parse(season, **_):
+        entered.set()
+        assert release.wait(2)
+        return season_schedule({"2025-10-21"})
+
+    parse = Mock(side_effect=slow_parse)
+    monkeypatch.setattr(nba_schedule, "_parse_schedule_v2", parse)
+    regular = threading.Thread(target=nba_schedule.get_season_game_dates, args=("2025-26",))
+    regular.start()
+    try:
+        assert entered.wait(2)
         with pytest.raises(nba_schedule.ScheduleLookupCooldownError):
             nba_schedule.get_season_game_dates("2025-26", optional_lookup=True)
-    fetch.assert_not_called()
+    finally:
+        release.set()
+        regular.join(2)
+    parse.assert_called_once()
 
 
 @pytest.mark.parametrize("error", [
@@ -108,7 +113,7 @@ def test_next_date_raises_original_failure_after_upcoming_season_is_empty(monkey
 
 
 def test_schedule_parser_accepts_nba_game_date_format(monkeypatch):
-    schedule = Mock(get_data_frames=lambda: [pd.DataFrame({"gameDate": ["10/03/2026 00:00:00"]})])
+    schedule = schedule_endpoint({"2026-10-03"}, date_format="nba")
     monkeypatch.setattr(nba_schedule.nba_stats_client, "fetch_schedule_league_v2", Mock(return_value=schedule))
     assert nba_schedule.get_season_game_dates("2026-27") == {"2026-10-03"}
 

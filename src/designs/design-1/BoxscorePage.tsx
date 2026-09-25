@@ -110,7 +110,7 @@ function BoxscorePage() {
       <HardwoodBackRow href={designPath("design-1", state.backPath)} label={state.backLabel} detail="BOX SCORE" />
       {state.isPregame && state.details ? <>
         <HardwoodPregameSummary details={state.details} />
-        <HardwoodLastMatchups games={state.lastMatchups} isLoading={state.lastMatchupsLoading} showScores={state.scoresVisible} onReveal={state.reveal} />
+        <HardwoodLastMatchups key={state.gameId} games={state.lastMatchups} isLoading={state.lastMatchupsLoading} showScores={state.showAllResults} />
       </> : state.isHidden || state.isError || state.isUnavailable ? <GameDetailsPanel state={state} hardwood /> : state.isLoading ? <HardwoodBoxscoreSkeleton /> : (
         <>
           {state.summary && <HardwoodGameSummary summary={state.summary} />}

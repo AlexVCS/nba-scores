@@ -215,6 +215,7 @@ export function useBoxscorePage() {
     details,
     isPregame,
     isHidden,
+    showAllResults,
     scoresVisible,
     reveal: () => setVisit({...visit, revealed: true}),
     game,

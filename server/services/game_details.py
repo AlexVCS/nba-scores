@@ -1,22 +1,15 @@
 """Matchup metadata without requiring player statistics or period scores."""
 
 import logging
-import threading
-import time
 from datetime import date, datetime
 
 from server.services import nba_stats_client
 from server.services.game_summary import safe_int, parse_gamecode_team_tricodes
+from server.services.nba_schedule import ScheduleLookupCooldownError, get_season_schedule
+from server.services.scoreboard import get_scoreboard
 from server.utils.boxscore_availability import is_valid_nba_game_id
 
 logger = logging.getLogger(__name__)
-
-# The season schedule is a multi-megabyte payload that takes seconds to fetch,
-# so keep a per-season gameId index in memory rather than refetching per page.
-SCHEDULE_TTL_SECONDS = 6 * 3600
-_schedule_cache: dict[str, tuple[float, dict]] = {}
-_schedule_lock = threading.Lock()
-_schedule_failures: dict[str, float] = {}
 
 
 def _game_date(value):
@@ -28,41 +21,21 @@ def _game_date(value):
     return date.fromisoformat(text[:10]).isoformat()
 
 
-def _schedule_index(season):
-    cached = _schedule_cache.get(season)
-    if cached and time.monotonic() - cached[0] < SCHEDULE_TTL_SECONDS:
-        return cached[1]
-    # Serialize cold loads so concurrent pregame visits share the large payload.
-    with _schedule_lock:
-        return _load_schedule_index(season)
-
-
-def _load_schedule_index(season):
-    cached = _schedule_cache.get(season)
-    if cached and time.monotonic() - cached[0] < SCHEDULE_TTL_SECONDS:
-        return cached[1]
-    if time.monotonic() < _schedule_failures.get(season, 0):
-        return {}
-    try:
-        schedule = nba_stats_client.fetch_schedule_league_v2(season, timeout=2, retries=0).get_dict()
-    except (nba_stats_client.UpstreamError, ValueError):
-        _schedule_failures[season] = time.monotonic() + 60
-        raise
-    _schedule_failures.pop(season, None)
-    index = {
-        game.get("gameId"): {**game, "gameDate": day.get("gameDate")}
-        for day in schedule.get("leagueSchedule", {}).get("gameDates", [])
-        for game in day.get("games", [])
-        if game.get("gameId")
-    }
-    _schedule_cache[season] = (time.monotonic(), index)
-    return index
-
-
 def _schedule_game(game_id):
     year = int(game_id[3:5])
     year += 1900 if year >= 46 else 2000
-    return _schedule_index(f"{year}-{str(year + 1)[-2:]}").get(game_id)
+    try:
+        # Shares the calendar's season schedule; pregame pages wait for an
+        # in-flight fetch rather than starting their own.
+        schedule = get_season_schedule(
+            f"{year}-{str(year + 1)[-2:]}",
+            allow_completed_fallback=False,
+            optional_lookup=True,
+            wait=True,
+        )
+    except ScheduleLookupCooldownError:
+        return None
+    return schedule.games.get(game_id)
 
 
 def _legacy_game(game_id):
@@ -104,7 +77,7 @@ def fetch_game_details(game_id: str, game_date: str | None = None):
     # A date hint avoids summary coverage limitations for early NBA/BAA games.
     if game_date:
         try:
-            board = nba_stats_client.fetch_scoreboard_v3(game_date)
+            board = get_scoreboard(game_date)
             game = next((g for g in board["games"] if g.get("gameId") == game_id), None)
         except (nba_stats_client.UpstreamError, ValueError) as exc:
             error = exc

@@ -3,6 +3,8 @@
 .ruff_cache
 node_modules
 dist
-venv
-.env
+**/venv
+**/.env
+**/.ask-state
 .beads
+server/tests

@@ -1,52 +1,72 @@
 import time
 import logging
-import threading
+from dataclasses import dataclass, field
 from datetime import date, datetime
+from types import MappingProxyType
+from typing import Mapping
 
 from server.services import nba_stats_client
-from ..utils.season import get_nba_season
+from ..utils.season import current_nba_season, get_nba_season
+from ..utils.ttl_cache import LoadInProgressError, TTLCache
 
 
 logger = logging.getLogger(__name__)
 
-_cache: dict[str, dict] = {}
-# Structure: { "2025-26": { "fetched_at": float, "game_dates": set[str] } }
-_schedule_failure_until: dict[str, float] = {}
-# Per-season locks so concurrent cold-cache callers trigger a single upstream fetch.
-_season_locks: dict[str, threading.Lock] = {}
-_season_locks_guard = threading.Lock()
+SOURCE_SCHEDULE = "ScheduleLeagueV2"
+SOURCE_GAME_LOG = "LeagueGameLog"
 
-CACHE_TTL_SECONDS = 6 * 3600  # 6 hours for the raw season blob
+# Lifetimes for (is current or upcoming season, source).
+CURRENT_SCHEDULE_TTL_SECONDS = 6 * 3600
+CURRENT_GAME_LOG_TTL_SECONDS = 5 * 60
+PAST_SCHEDULE_TTL_SECONDS = 7 * 24 * 3600
+PAST_GAME_LOG_TTL_SECONDS = 3600
+SCHEDULE_CACHE_MAX_ENTRIES = 16
 SCHEDULE_FAILURE_COOLDOWN_SECONDS = 60
+
+
+@dataclass(frozen=True)
+class SeasonSchedule:
+    """One season's schedule, shared by the calendar, next-game and game-details lookups.
+
+    ``games`` indexes published schedule games by gameId and is empty for the
+    completed-games fallback, which only knows dates.
+    """
+
+    season: str
+    source: str
+    game_dates: frozenset[str]
+    games: Mapping[str, Mapping] = field(default_factory=lambda: MappingProxyType({}))
+
+    @property
+    def is_schedule(self) -> bool:
+        return self.source == SOURCE_SCHEDULE
+
+
+# The ScheduleLeagueV2 payload is several megabytes and takes seconds to fetch,
+# so every consumer reads the same per-season entry.
+_schedule_cache: TTLCache[str, SeasonSchedule] = TTLCache(SCHEDULE_CACHE_MAX_ENTRIES)
+_schedule_failure_until: dict[str, float] = {}
 
 
 class ScheduleLookupCooldownError(Exception):
     """Raised when an optional schedule lookup is cooling down after a failure."""
 
 
-def _is_cache_valid(season: str) -> bool:
-    if season not in _cache:
-        return False
-    age = time.time() - _cache[season]["fetched_at"]
-    return age < CACHE_TTL_SECONDS
+def season_schedule_ttl(schedule: SeasonSchedule, current_season: str | None = None) -> float:
+    current_season = current_season or current_nba_season()
+    is_past = int(schedule.season[:4]) < int(current_season[:4])
+    if schedule.is_schedule:
+        return PAST_SCHEDULE_TTL_SECONDS if is_past else CURRENT_SCHEDULE_TTL_SECONDS
+    return PAST_GAME_LOG_TTL_SECONDS if is_past else CURRENT_GAME_LOG_TTL_SECONDS
 
 
-def _get_season_lock(season: str) -> threading.Lock:
-    with _season_locks_guard:
-        lock = _season_locks.get(season)
-        if lock is None:
-            lock = threading.Lock()
-            _season_locks[season] = lock
-        return lock
-
-
-def _get_cached_dates(season: str, allow_completed_fallback: bool) -> set[str] | None:
-    entry = _cache.get(season)
-    if entry is None or not _is_cache_valid(season):
+def _normalize_date(value) -> str | None:
+    if not value:
         return None
-    if allow_completed_fallback or entry.get("is_schedule", False):
-        return entry["game_dates"]
-    return None
+    text = str(value)
+    if "/" in text:
+        return datetime.strptime(text.split(" ")[0], "%m/%d/%Y").date().isoformat()
+    return date.fromisoformat(text[:10]).isoformat()
 
 
 def _parse_schedule_v2(
@@ -54,10 +74,9 @@ def _parse_schedule_v2(
     *,
     timeout: float | None = None,
     retries: int | None = None,
-) -> set[str]:
+) -> SeasonSchedule:
     """
-    Primary: Use ScheduleLeagueV2 to get all game dates for a season.
-    Returns a set of date strings like {"2025-10-21", "2025-10-22", ...}.
+    Primary: Use ScheduleLeagueV2 to get every published game for a season.
     """
     if timeout is None and retries is None:
         schedule = nba_stats_client.fetch_schedule_league_v2(season)
@@ -67,40 +86,25 @@ def _parse_schedule_v2(
             timeout=timeout,
             retries=retries,
         )
-    frames = schedule.get_data_frames()
+    data = schedule.get_dict()
+    game_days = (data.get("leagueSchedule") or {}).get("gameDates") if isinstance(data, dict) else None
+    if not isinstance(game_days, list):
+        raise ValueError("Schedule response missing leagueSchedule.gameDates")
 
-    # ScheduleLeagueV2 returns a frame with a date column.
-    # The exact column name can vary; common names:
-    # "GAME_DATE", "gameDateTimeEst", etc.
-    # Inspect with: print(frames[0].columns.tolist())
-    df = frames[0]
-
-    # Identify the date column (defensive)
-    date_col = None
-    for candidate in ["GAME_DATE", "gameDateEst", "gameDateTimeEst", "gameDate"]:
-        if candidate in df.columns:
-            date_col = candidate
-            break
-
-    if date_col is None:
-        raise ValueError(
-            f"Could not find date column. Columns: {df.columns.tolist()}"
-        )
-
-    # Normalize to YYYY-MM-DD strings
     dates: set[str] = set()
-    for raw in df[date_col].dropna().unique():
-        value = str(raw)
-        if "/" in value:
-            parsed = datetime.strptime(value.split(" ")[0], "%m/%d/%Y").date()
-        else:
-            parsed = date.fromisoformat(value[:10])
-        dates.add(parsed.isoformat())
+    games: dict[str, Mapping] = {}
+    for day in game_days:
+        for game in day.get("games") or []:
+            game_date = _normalize_date(game.get("gameDateEst") or day.get("gameDate"))
+            if game_date:
+                dates.add(game_date)
+            if game.get("gameId"):
+                games[game["gameId"]] = MappingProxyType({**game, "gameDate": day.get("gameDate")})
 
-    return dates
+    return SeasonSchedule(season, SOURCE_SCHEDULE, frozenset(dates), MappingProxyType(games))
 
 
-def _parse_game_log_fallback(season: str) -> set[str]:
+def _parse_game_log_fallback(season: str) -> SeasonSchedule:
     """
     Fallback: Use LeagueGameLog (only completed games).
     """
@@ -115,7 +119,48 @@ def _parse_game_log_fallback(season: str) -> set[str]:
         parsed = str(raw)[:10]
         dates.add(parsed)
 
-    return dates
+    return SeasonSchedule(season, SOURCE_GAME_LOG, frozenset(dates))
+
+
+def get_season_schedule(
+    season: str,
+    *,
+    allow_completed_fallback: bool = True,
+    optional_lookup: bool = False,
+    wait: bool | None = None,
+) -> SeasonSchedule:
+    """
+    Return a season's schedule from the shared cache, fetching on a miss.
+
+    Concurrent callers for the same season share one upstream fetch. Optional
+    lookups use a short timeout, cool down after failures and, unless ``wait``
+    is set, fail fast instead of waiting behind another caller's fetch.
+    Strict callers (``allow_completed_fallback=False``) ignore fallback entries.
+    """
+    policy = (optional_lookup, allow_completed_fallback)
+
+    def weaker_policy(tag) -> bool:
+        # A failed fetch only answers callers whose policy it fully covered.
+        other_optional, other_fallback = tag
+        return (other_optional and not optional_lookup) or (allow_completed_fallback and not other_fallback)
+
+    try:
+        return _schedule_cache.get_or_load(
+            season,
+            lambda: _fetch_season_schedule(
+                season,
+                allow_completed_fallback=allow_completed_fallback,
+                optional_lookup=optional_lookup,
+            ),
+            season_schedule_ttl,
+            accept=None if allow_completed_fallback else (lambda schedule: schedule.is_schedule),
+            # Optional homepage enrichment must not wait behind a long regular lookup.
+            wait=not optional_lookup if wait is None else wait,
+            tag=policy,
+            retry_after=weaker_policy,
+        )
+    except LoadInProgressError as error:
+        raise ScheduleLookupCooldownError(f"Schedule lookup for {season} is already in progress") from error
 
 
 def get_season_game_dates(
@@ -123,51 +168,31 @@ def get_season_game_dates(
     *,
     allow_completed_fallback: bool = True,
     optional_lookup: bool = False,
-) -> set[str]:
+) -> frozenset[str]:
     """
     Return all game dates (as 'YYYY-MM-DD' strings) for an NBA season.
-    Uses in-memory cache; fetches from NBA API on miss. Concurrent callers
-    for the same season share a single upstream fetch (per-season lock).
     """
-    cached = _get_cached_dates(season, allow_completed_fallback)
-    if cached is not None:
-        return cached
-
-    lock = _get_season_lock(season)
-    # Optional homepage enrichment must not wait behind a long regular lookup.
-    if not lock.acquire(blocking=not optional_lookup):
-        raise ScheduleLookupCooldownError(f"Schedule lookup for {season} is already in progress")
-    try:
-        # Double-checked: another thread may have populated the cache while
-        # we were waiting for the lock.
-        cached = _get_cached_dates(season, allow_completed_fallback)
-        if cached is not None:
-            return cached
-        return _fetch_season_game_dates(
-            season,
-            allow_completed_fallback=allow_completed_fallback,
-            optional_lookup=optional_lookup,
-        )
-    finally:
-        lock.release()
+    return get_season_schedule(
+        season,
+        allow_completed_fallback=allow_completed_fallback,
+        optional_lookup=optional_lookup,
+    ).game_dates
 
 
-def _fetch_season_game_dates(
+def _fetch_season_schedule(
     season: str,
     *,
     allow_completed_fallback: bool,
     optional_lookup: bool,
-) -> set[str]:
-    """Fetch a season's game dates upstream and store them in the cache.
-    Caller must hold the season lock."""
+) -> SeasonSchedule:
+    """Fetch a season's schedule upstream. Runs once per in-flight season."""
     if optional_lookup and time.monotonic() < _schedule_failure_until.get(season, 0):
         raise ScheduleLookupCooldownError(
             f"Schedule lookup for {season} is temporarily cooling down"
         )
 
-    is_schedule = True
     try:
-        game_dates = _parse_schedule_v2(
+        schedule = _parse_schedule_v2(
             season,
             timeout=2 if optional_lookup else None,
             retries=0 if optional_lookup else None,
@@ -176,8 +201,9 @@ def _fetch_season_game_dates(
         logger.info(
             "Fetched schedule via ScheduleLeagueV2 for %s: %d dates",
             season,
-            len(game_dates),
+            len(schedule.game_dates),
         )
+        return schedule
     except Exception as e:
         if not allow_completed_fallback:
             if optional_lookup:
@@ -191,15 +217,7 @@ def _fetch_season_game_dates(
             season,
             e,
         )
-        game_dates = _parse_game_log_fallback(season)
-        is_schedule = False
-
-    _cache[season] = {
-        "fetched_at": time.time(),
-        "game_dates": game_dates,
-        "is_schedule": is_schedule,
-    }
-    return game_dates
+        return _parse_game_log_fallback(season)
 
 
 def get_game_days_in_month(year: int, month: int) -> list[str]:

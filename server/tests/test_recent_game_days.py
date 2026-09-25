@@ -3,13 +3,13 @@ import time
 from datetime import date
 from unittest.mock import Mock
 
-import pandas as pd
 import pytest
 from fastapi.testclient import TestClient
 
 from server import main
 from server.services import nba_schedule
 from server.services.nba_stats_client import UpstreamUnavailableError
+from server.tests.schedule_helpers import schedule_endpoint
 
 
 SEASON_DATES = {
@@ -18,19 +18,8 @@ SEASON_DATES = {
 }
 
 
-@pytest.fixture(autouse=True)
-def clear_schedule_state():
-    nba_schedule._cache.clear()
-    nba_schedule._schedule_failure_until.clear()
-    nba_schedule._season_locks.clear()
-    yield
-    nba_schedule._cache.clear()
-    nba_schedule._schedule_failure_until.clear()
-    nba_schedule._season_locks.clear()
-
-
 def _schedule_response(dates):
-    return Mock(get_data_frames=lambda: [pd.DataFrame({"gameDateEst": sorted(dates)})])
+    return schedule_endpoint(dates)
 
 
 def test_recent_game_days_spans_season_boundary_sorted_desc(monkeypatch):

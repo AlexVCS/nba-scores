@@ -5,15 +5,7 @@ import pytest
 from requests.exceptions import Timeout
 
 from server.services import nba_schedule, nba_stats_client
-
-
-@pytest.fixture(autouse=True)
-def clear_schedule_state():
-    nba_schedule._cache.clear()
-    nba_schedule._schedule_failure_until.clear()
-    yield
-    nba_schedule._cache.clear()
-    nba_schedule._schedule_failure_until.clear()
+from server.tests.schedule_helpers import schedule_endpoint, season_schedule
 
 
 def test_schedule_client_optional_policy_uses_one_short_attempt(monkeypatch):
@@ -46,7 +38,7 @@ def test_schedule_client_defaults_keep_configured_timeout_and_retries(monkeypatc
 
 def test_optional_failure_suppresses_retry_until_cooldown_expires(monkeypatch):
     now = [100.0]
-    fetch = Mock(side_effect=[Timeout("offline"), {"2026-10-03"}])
+    fetch = Mock(side_effect=[Timeout("offline"), season_schedule({"2026-10-03"})])
     monkeypatch.setattr(nba_schedule.time, "monotonic", lambda: now[0])
     monkeypatch.setattr(nba_schedule, "_parse_schedule_v2", fetch)
 
@@ -70,7 +62,7 @@ def test_optional_failure_suppresses_retry_until_cooldown_expires(monkeypatch):
 
 def test_cooldown_is_per_season(monkeypatch):
     monkeypatch.setattr(nba_schedule.time, "monotonic", lambda: 100.0)
-    fetch = Mock(side_effect=[Timeout("offline"), {"2026-10-03"}])
+    fetch = Mock(side_effect=[Timeout("offline"), season_schedule({"2026-10-03"})])
     monkeypatch.setattr(nba_schedule, "_parse_schedule_v2", fetch)
 
     with pytest.raises(Timeout):
@@ -85,11 +77,7 @@ def test_cooldown_is_per_season(monkeypatch):
 def test_valid_schedule_cache_wins_during_cooldown(monkeypatch):
     monkeypatch.setattr(nba_schedule.time, "monotonic", lambda: 100.0)
     nba_schedule._schedule_failure_until["2025-26"] = 160.0
-    nba_schedule._cache["2025-26"] = {
-        "fetched_at": nba_schedule.time.time(),
-        "game_dates": {"2026-04-12"},
-        "is_schedule": True,
-    }
+    nba_schedule._schedule_cache.set("2025-26", season_schedule({"2026-04-12"}), 60)
     parse = Mock()
     monkeypatch.setattr(nba_schedule, "_parse_schedule_v2", parse)
 
@@ -100,19 +88,19 @@ def test_valid_schedule_cache_wins_during_cooldown(monkeypatch):
 @pytest.mark.parametrize("dates", [set(), {"2026-10-03"}])
 def test_successful_schedule_clears_failure_state(monkeypatch, dates):
     nba_schedule._schedule_failure_until["2025-26"] = 160.0
-    monkeypatch.setattr(nba_schedule, "_parse_schedule_v2", Mock(return_value=dates))
+    monkeypatch.setattr(nba_schedule, "_parse_schedule_v2", Mock(return_value=season_schedule(dates)))
 
     assert nba_schedule.get_season_game_dates("2025-26") == dates
     assert "2025-26" not in nba_schedule._schedule_failure_until
 
 
 def test_optional_parse_error_starts_cooldown(monkeypatch):
-    schedule = Mock(get_data_frames=lambda: [pd.DataFrame({"unexpected": ["2026-10-03"]})])
+    schedule = Mock(get_dict=lambda: {"unexpected": ["2026-10-03"]})
     fetch = Mock(return_value=schedule)
     monkeypatch.setattr(nba_schedule.time, "monotonic", lambda: 100.0)
     monkeypatch.setattr(nba_schedule.nba_stats_client, "fetch_schedule_league_v2", fetch)
 
-    with pytest.raises(ValueError, match="Could not find date column"):
+    with pytest.raises(ValueError, match="missing leagueSchedule.gameDates"):
         nba_schedule.get_season_game_dates(
             "2025-26", allow_completed_fallback=False, optional_lookup=True
         )
@@ -126,7 +114,7 @@ def test_optional_parse_error_starts_cooldown(monkeypatch):
 def test_regular_lookup_ignores_optional_cooldown_and_keeps_fallback(monkeypatch):
     nba_schedule._schedule_failure_until["2025-26"] = float("inf")
     schedule = Mock(side_effect=Timeout("offline"))
-    fallback = Mock(return_value={"2025-10-21"})
+    fallback = Mock(return_value=season_schedule({"2025-10-21"}, source=nba_schedule.SOURCE_GAME_LOG))
     monkeypatch.setattr(nba_schedule, "_parse_schedule_v2", schedule)
     monkeypatch.setattr(nba_schedule, "_parse_game_log_fallback", fallback)
 
@@ -148,10 +136,7 @@ def test_next_game_date_uses_optional_schedule_policy(monkeypatch):
 
 
 def test_empty_published_schedules_are_cached_without_cooldown(monkeypatch):
-    schedule = Mock(
-        get_data_frames=lambda: [pd.DataFrame({"gameDateEst": pd.Series(dtype=str)})]
-    )
-    fetch = Mock(return_value=schedule)
+    fetch = Mock(return_value=schedule_endpoint(set()))
     monkeypatch.setattr(nba_schedule.nba_stats_client, "fetch_schedule_league_v2", fetch)
 
     for _ in range(2):

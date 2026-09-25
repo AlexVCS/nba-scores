@@ -7,18 +7,9 @@ import pytest
 from fastapi import HTTPException
 
 from server import main
-from server.services import game_details as details
+from server.services import game_details as details, nba_schedule
 
 GAME_ID = "0012600009"
-
-
-@pytest.fixture(autouse=True)
-def clear_schedule_cache():
-    details._schedule_cache.clear()
-    details._schedule_failures.clear()
-    yield
-    details._schedule_cache.clear()
-    details._schedule_failures.clear()
 
 
 def game(status=1, status_text="7:00 pm ET"):
@@ -174,7 +165,7 @@ def test_schedule_failure_cools_down_then_retries(monkeypatch):
         calls.append(season)
         raise details.nba_stats_client.UpstreamUnavailableError("ScheduleLeagueV2", "Timeout", 10)
 
-    monkeypatch.setattr(details.time, "monotonic", lambda: now[0])
+    monkeypatch.setattr(nba_schedule.time, "monotonic", lambda: now[0])
     monkeypatch.setattr(details.nba_stats_client, "fetch_schedule_league_v2", fail)
     with pytest.raises(details.nba_stats_client.UpstreamUnavailableError):
         details._schedule_game(GAME_ID)

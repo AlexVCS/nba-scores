@@ -3,7 +3,7 @@ import time
 from datetime import date as calendar_date, datetime, timezone
 
 import requests
-from fastapi import Depends, FastAPI, Header, HTTPException, Query, Request
+from fastapi import Depends, FastAPI, Header, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from requests.exceptions import RequestException
 from server.services import nba_stats_client
@@ -13,7 +13,8 @@ from server.services.nba_stats_client import (
     UpstreamBadResponseError,
     UpstreamUnavailableError,
 )
-from .utils.season import get_nba_season
+from server.services.scoreboard import get_scoreboard
+from .utils.season import get_nba_season, nba_today
 from .utils.boxscore_availability import (
     is_boxscore_available_metadata,
 )
@@ -24,7 +25,6 @@ from .services.nba_schedule import (
     get_recent_game_days,
 )
 from .models.schemas import GameDaysResponse, RecentGameDaysResponse
-from .models.ask_response import AskQuestion, AskResponse
 from .services.game_summary import (
     fetch_boxscoretraditional,
     fetch_inactive_players,
@@ -83,18 +83,6 @@ def healthz():
     }
 
 
-@app.post("/ask", response_model=AskResponse)
-def ask(question: AskQuestion, request: Request):
-    from .services.ask import answer_question
-    from .services.ask_limits import BudgetLimitError, RateLimitError
-
-    try:
-        # Proxy trust is configured in uvicorn; never trust arbitrary forwarded headers here.
-        return answer_question(question.question, request.client.host if request.client else "unknown")
-    except (BudgetLimitError, RateLimitError) as error:
-        raise HTTPException(status_code=429, detail="Search has reached its request limit. Please try again later.", headers={"Retry-After": "60"}) from error
-
-
 @app.get("/")
 def get_v3_scoreboard(
     date: str = Query(
@@ -104,8 +92,9 @@ def get_v3_scoreboard(
     ),
 ):
     try:
-        target_date = date if date else datetime.now().strftime("%Y-%m-%d")
-        scoreboard = nba_stats_client.fetch_scoreboard_v3(target_date)
+        # Resolve the default before the cache lookup so it shares today's entry.
+        target_date = date if date else nba_today().isoformat()
+        scoreboard = get_scoreboard(target_date)
         if not date and not scoreboard["games"]:
             try:
                 scoreboard["nextGameDate"] = get_next_game_date(calendar_date.fromisoformat(target_date))
@@ -116,6 +105,8 @@ def get_v3_scoreboard(
         return add_boxscore_availability_to_scoreboard(scoreboard)
     except (UpstreamUnavailableError, UpstreamBadResponseError) as e:
         raise_upstream_http(e)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=f"Invalid date: {date}") from e
 
 
 @app.get("/games/{game_id}/details")
