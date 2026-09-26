@@ -1,4 +1,3 @@
-import time
 import logging
 from dataclasses import dataclass, field
 from datetime import date, datetime
@@ -22,6 +21,7 @@ PAST_SCHEDULE_TTL_SECONDS = 7 * 24 * 3600
 PAST_GAME_LOG_TTL_SECONDS = 3600
 SCHEDULE_CACHE_MAX_ENTRIES = 16
 SCHEDULE_FAILURE_COOLDOWN_SECONDS = 60
+SCHEDULE_COOLDOWN_MAX_ENTRIES = 16
 
 
 @dataclass(frozen=True)
@@ -43,9 +43,10 @@ class SeasonSchedule:
 
 
 # The ScheduleLeagueV2 payload is several megabytes and takes seconds to fetch,
-# so every consumer reads the same per-season entry.
-_schedule_cache: TTLCache[str, SeasonSchedule] = TTLCache(SCHEDULE_CACHE_MAX_ENTRIES)
-_schedule_failure_until: dict[str, float] = {}
+# so every consumer reads the same entry, keyed by (league ID, season).
+_schedule_cache: TTLCache[tuple[str, str], SeasonSchedule] = TTLCache(SCHEDULE_CACHE_MAX_ENTRIES)
+# Seasons whose optional lookup recently failed, keyed like the schedule cache.
+_schedule_cooldowns: TTLCache[tuple[str, str], bool] = TTLCache(SCHEDULE_COOLDOWN_MAX_ENTRIES)
 
 
 class ScheduleLookupCooldownError(Exception):
@@ -72,6 +73,7 @@ def _normalize_date(value) -> str | None:
 def _parse_schedule_v2(
     season: str,
     *,
+    league_id: str = nba_stats_client.NBA_LEAGUE_ID,
     timeout: float | None = None,
     retries: int | None = None,
 ) -> SeasonSchedule:
@@ -79,10 +81,11 @@ def _parse_schedule_v2(
     Primary: Use ScheduleLeagueV2 to get every published game for a season.
     """
     if timeout is None and retries is None:
-        schedule = nba_stats_client.fetch_schedule_league_v2(season)
+        schedule = nba_stats_client.fetch_schedule_league_v2(season, league_id=league_id)
     else:
         schedule = nba_stats_client.fetch_schedule_league_v2(
             season,
+            league_id=league_id,
             timeout=timeout,
             retries=retries,
         )
@@ -104,13 +107,14 @@ def _parse_schedule_v2(
     return SeasonSchedule(season, SOURCE_SCHEDULE, frozenset(dates), MappingProxyType(games))
 
 
-def _parse_game_log_fallback(season: str) -> SeasonSchedule:
+def _parse_game_log_fallback(season: str, *, league_id: str = nba_stats_client.NBA_LEAGUE_ID) -> SeasonSchedule:
     """
     Fallback: Use LeagueGameLog (only completed games).
     """
     log = nba_stats_client.fetch_league_game_log(
         season=season,
         season_type_all_star="Regular Season",
+        league_id=league_id,
     )
     df = log.get_data_frames()[0]
 
@@ -128,6 +132,7 @@ def get_season_schedule(
     allow_completed_fallback: bool = True,
     optional_lookup: bool = False,
     wait: bool | None = None,
+    league_id: str = nba_stats_client.NBA_LEAGUE_ID,
 ) -> SeasonSchedule:
     """
     Return a season's schedule from the shared cache, fetching on a miss.
@@ -146,11 +151,12 @@ def get_season_schedule(
 
     try:
         return _schedule_cache.get_or_load(
-            season,
+            (league_id, season),
             lambda: _fetch_season_schedule(
                 season,
                 allow_completed_fallback=allow_completed_fallback,
                 optional_lookup=optional_lookup,
+                league_id=league_id,
             ),
             season_schedule_ttl,
             accept=None if allow_completed_fallback else (lambda schedule: schedule.is_schedule),
@@ -184,9 +190,11 @@ def _fetch_season_schedule(
     *,
     allow_completed_fallback: bool,
     optional_lookup: bool,
+    league_id: str = nba_stats_client.NBA_LEAGUE_ID,
 ) -> SeasonSchedule:
     """Fetch a season's schedule upstream. Runs once per in-flight season."""
-    if optional_lookup and time.monotonic() < _schedule_failure_until.get(season, 0):
+    key = (league_id, season)
+    if optional_lookup and _schedule_cooldowns.get(key):
         raise ScheduleLookupCooldownError(
             f"Schedule lookup for {season} is temporarily cooling down"
         )
@@ -194,10 +202,11 @@ def _fetch_season_schedule(
     try:
         schedule = _parse_schedule_v2(
             season,
+            league_id=league_id,
             timeout=2 if optional_lookup else None,
             retries=0 if optional_lookup else None,
         )
-        _schedule_failure_until.pop(season, None)
+        _schedule_cooldowns.pop(key)
         logger.info(
             "Fetched schedule via ScheduleLeagueV2 for %s: %d dates",
             season,
@@ -207,9 +216,7 @@ def _fetch_season_schedule(
     except Exception as e:
         if not allow_completed_fallback:
             if optional_lookup:
-                _schedule_failure_until[season] = (
-                    time.monotonic() + SCHEDULE_FAILURE_COOLDOWN_SECONDS
-                )
+                _schedule_cooldowns.set(key, True, SCHEDULE_FAILURE_COOLDOWN_SECONDS)
             raise
         logger.warning(
             "ScheduleLeagueV2 failed for %s (%s), falling back to "
@@ -217,7 +224,7 @@ def _fetch_season_schedule(
             season,
             e,
         )
-        return _parse_game_log_fallback(season)
+        return _parse_game_log_fallback(season, league_id=league_id)
 
 
 def get_game_days_in_month(year: int, month: int) -> list[str]:

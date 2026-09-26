@@ -71,7 +71,7 @@ def test_live_entry_expires_quickly_and_final_refetch_gets_completed_lifetime(mo
     monkeypatch.setattr(scoreboard.nba_stats_client, "fetch_scoreboard_v3", fetch)
 
     assert scoreboard.get_scoreboard("2026-01-20")["games"][0]["gameStatus"] == 2
-    assert scoreboard._scoreboard_cache.expires_in("2026-01-20") == scoreboard.LIVE_TTL_SECONDS
+    assert scoreboard._scoreboard_cache.expires_in(("00", "2026-01-20")) == scoreboard.LIVE_TTL_SECONDS
     clock[0] += scoreboard.LIVE_TTL_SECONDS - 1
     assert scoreboard.get_scoreboard("2026-01-20")["games"][0]["gameStatus"] == 2
     assert fetch.call_count == 1
@@ -79,7 +79,7 @@ def test_live_entry_expires_quickly_and_final_refetch_gets_completed_lifetime(mo
     clock[0] += 1
     assert scoreboard.get_scoreboard("2026-01-20")["games"][0]["gameStatus"] == 3
     assert fetch.call_count == 2
-    assert scoreboard._scoreboard_cache.expires_in("2026-01-20") == scoreboard.RECENT_FINAL_TTL_SECONDS
+    assert scoreboard._scoreboard_cache.expires_in(("00", "2026-01-20")) == scoreboard.RECENT_FINAL_TTL_SECONDS
 
 
 def test_repeated_route_requests_reuse_cache_and_return_identical_bodies(monkeypatch):
@@ -93,7 +93,7 @@ def test_repeated_route_requests_reuse_cache_and_return_identical_bodies(monkeyp
     assert first.status_code == second.status_code == 200
     assert first.json() == second.json()
     assert [g["boxscoreAvailable"] for g in first.json()["games"]] == [True, False]
-    fetch.assert_called_once_with("2024-11-01")
+    fetch.assert_called_once_with("2024-11-01", league_id="00")
 
 
 def test_default_and_explicit_today_share_one_entry(monkeypatch):
@@ -106,7 +106,7 @@ def test_default_and_explicit_today_share_one_entry(monkeypatch):
     explicit = client.get("/", params={"date": "2026-01-20"})
 
     assert default.json() == explicit.json()
-    fetch.assert_called_once_with("2026-01-20")
+    fetch.assert_called_once_with("2026-01-20", league_id="00")
 
 
 def test_default_date_uses_nba_eastern_time(monkeypatch):
@@ -126,7 +126,7 @@ def test_default_and_explicit_today_share_one_in_flight_call(monkeypatch):
     monkeypatch.setattr(main, "nba_today", lambda: date(2026, 1, 20))
     calls = []
 
-    def slow_fetch(game_date):
+    def slow_fetch(game_date, **_):
         calls.append(game_date)
         time.sleep(0.2)
         return board(2)
@@ -147,7 +147,7 @@ def test_default_and_explicit_today_share_one_in_flight_call(monkeypatch):
 
 
 def test_different_dates_do_not_serialize(monkeypatch):
-    def slow_fetch(game_date):
+    def slow_fetch(game_date, **_):
         time.sleep(0.3)
         return board(3)
 
@@ -180,7 +180,7 @@ def test_route_enrichment_does_not_leak_into_cache(monkeypatch):
 
     assert client.get("/").json() == {"games": [], "nextGameDate": "2026-10-03"}
     assert client.get("/", params={"date": "2026-09-11"}).json() == {"games": []}
-    assert scoreboard._scoreboard_cache.get("2026-09-11") == {"games": []}
+    assert scoreboard._scoreboard_cache.get(("00", "2026-09-11")) == {"games": []}
 
 
 def test_upstream_failure_is_not_cached_and_retries(monkeypatch):
@@ -210,6 +210,34 @@ def test_malformed_games_are_a_bad_response_and_not_cached(monkeypatch):
         scoreboard.get_scoreboard("2024-11-01")
 
 
+@pytest.mark.parametrize("games", [
+    [None],
+    [42],
+    [[]],
+    [game(3), None],
+    [game(3), 42],
+    [game(3), []],
+], ids=["null", "scalar", "list", "mixed_null", "mixed_scalar", "mixed_list"])
+def test_malformed_game_entry_returns_502_and_next_fetch_succeeds(monkeypatch, games):
+    fetch = Mock(side_effect=[{"games": games}, board(3)])
+    monkeypatch.setattr(main.nba_stats_client, "fetch_scoreboard_v3", fetch)
+    client = TestClient(main.app)
+    key = ("00", "2024-11-01")
+
+    failed = client.get("/", params={"date": "2024-11-01"})
+    assert failed.status_code == 502
+    assert failed.json()["detail"]["errorType"] == "UnexpectedSchema"
+    assert scoreboard._scoreboard_cache.get(key) is None
+    assert key not in scoreboard._scoreboard_cache._flights
+
+    succeeded = client.get("/", params={"date": "2024-11-01"})
+    assert succeeded.status_code == 200
+    assert succeeded.json()["games"][0]["gameStatus"] == 3
+    assert fetch.call_count == 2
+    assert scoreboard._scoreboard_cache.get(key) == board(3)
+    assert key not in scoreboard._scoreboard_cache._flights
+
+
 def test_impossible_calendar_date_is_rejected_without_upstream_call(monkeypatch):
     fetch = Mock()
     monkeypatch.setattr(main.nba_stats_client, "fetch_scoreboard_v3", fetch)
@@ -233,4 +261,17 @@ def test_game_details_date_hint_reuses_the_scoreboard_cache(monkeypatch):
 
     TestClient(main.app).get("/", params={"date": "2024-11-01"})
     assert game_details.fetch_game_details("0022500001", "2024-11-01")["gameStatusText"] == "Final"
-    fetch.assert_called_once_with("2024-11-01")
+    fetch.assert_called_once_with("2024-11-01", league_id="00")
+
+
+def test_entries_are_keyed_by_league_and_date(monkeypatch):
+    fetch = Mock(side_effect=[board(3), board(1)])
+    monkeypatch.setattr(scoreboard.nba_stats_client, "fetch_scoreboard_v3", fetch)
+
+    assert scoreboard.get_scoreboard("2024-11-01")["games"][0]["gameStatus"] == 3
+    assert scoreboard.get_scoreboard("2024-11-01", league_id="10")["games"][0]["gameStatus"] == 1
+    assert scoreboard.get_scoreboard("2024-11-01")["games"][0]["gameStatus"] == 3
+    assert fetch.call_args_list == [
+        (("2024-11-01",), {"league_id": "00"}),
+        (("2024-11-01",), {"league_id": "10"}),
+    ]

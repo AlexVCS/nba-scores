@@ -1,5 +1,6 @@
 """Matchup metadata without requiring player statistics or period scores."""
 
+import copy
 import logging
 from datetime import date, datetime
 
@@ -33,9 +34,15 @@ def _schedule_game(game_id):
             optional_lookup=True,
             wait=True,
         )
-    except ScheduleLookupCooldownError:
-        return None
-    return schedule.games.get(game_id)
+    except ScheduleLookupCooldownError as exc:
+        # Report the cooldown as the upstream outage it stands for, so a game no
+        # other source identifies stays retryable rather than "not found".
+        raise nba_stats_client.UpstreamUnavailableError(
+            "ScheduleLeagueV2", type(exc).__name__, 0, str(exc)
+        ) from exc
+    scheduled = schedule.games.get(game_id)
+    # The schedule entry is shared across requests; hand out a mutable copy.
+    return copy.deepcopy(dict(scheduled)) if scheduled else None
 
 
 def _legacy_game(game_id):
@@ -89,19 +96,25 @@ def fetch_game_details(game_id: str, game_date: str | None = None):
         except (nba_stats_client.UpstreamError, ValueError) as exc:
             error = exc
     # The published schedule contains pregame venue and broadcaster information.
+    # It can be hours old, so it only enriches fresher sources and stands in for
+    # them alone while it still reports the game as scheduled.
+    scheduled = None
     if game is None or safe_int(game.get("gameStatus")) == 1:
         try:
             scheduled = _schedule_game(game_id)
-            if scheduled:
-                game = {**scheduled, **(game or {})}
         except (nba_stats_client.UpstreamError, ValueError) as exc:
             error = exc
             logger.info("Schedule details unavailable for %s: %s", game_id, exc)
+    if scheduled and (game is not None or safe_int(scheduled.get("gameStatus")) == 1):
+        game = {**scheduled, **(game or {})}
     if game is None:
         try:
             game = _legacy_game(game_id)
         except (nba_stats_client.UpstreamError, ValueError) as exc:
             error = exc
+        # A started or final schedule entry alone is not authoritative.
+        if game and scheduled:
+            game = {**scheduled, **game}
     if not game:
         if error:
             raise error

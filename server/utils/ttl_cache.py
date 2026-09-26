@@ -2,7 +2,8 @@
 
 Values are cached per process only. Lifetimes are chosen at insertion from the
 freshly loaded value, reads never extend them, and failed loads are never
-cached. Callers that add response-specific fields must copy the value first.
+cached. Pass ``copy`` to hand every reader its own copy of mutable values;
+otherwise values must be treated as read-only.
 """
 
 import threading
@@ -34,17 +35,27 @@ class _Flight(Generic[V]):
 
 
 class TTLCache(Generic[K, V]):
-    def __init__(self, max_entries: int, *, clock: Callable[[], float] | None = None):
+    def __init__(
+        self,
+        max_entries: int,
+        *,
+        clock: Callable[[], float] | None = None,
+        copy: Callable[[V], V] | None = None,
+    ):
         if max_entries < 1:
             raise ValueError("max_entries must be >= 1")
         self.max_entries = max_entries
         self._clock = clock
+        self._copy = copy
         self._entries: OrderedDict[K, _Entry[V]] = OrderedDict()
         self._flights: dict[K, _Flight[V]] = {}
         self._lock = threading.Lock()
 
     def _now(self) -> float:
         return self._clock() if self._clock else time.monotonic()
+
+    def _isolated(self, value: V) -> V:
+        return self._copy(value) if self._copy else value
 
     def _live_entry(self, key: K) -> _Entry[V] | None:
         entry = self._entries.get(key)
@@ -69,7 +80,7 @@ class TTLCache(Generic[K, V]):
     def get(self, key: K) -> V | None:
         with self._lock:
             entry = self._live_entry(key)
-            return entry.value if entry else None
+        return self._isolated(entry.value) if entry else None
 
     def expires_in(self, key: K) -> float | None:
         with self._lock:
@@ -79,6 +90,10 @@ class TTLCache(Generic[K, V]):
     def set(self, key: K, value: V, ttl_seconds: float) -> None:
         with self._lock:
             self._store(key, value, ttl_seconds)
+
+    def pop(self, key: K) -> None:
+        with self._lock:
+            self._entries.pop(key, None)
 
     def clear(self) -> None:
         with self._lock:
@@ -110,18 +125,21 @@ class TTLCache(Generic[K, V]):
         while True:
             with self._lock:
                 entry = self._live_entry(key)
-                if entry is not None and (accept is None or accept(entry.value)):
-                    return entry.value
-                flight = self._flights.get(key)
-                leader = flight is None
-                if leader:
-                    flight = _Flight(tag=tag)
-                    self._flights[key] = flight
-                elif not wait:
-                    raise LoadInProgressError(key)
+                hit = entry is not None and (accept is None or accept(entry.value))
+                if not hit:
+                    flight = self._flights.get(key)
+                    leader = flight is None
+                    if leader:
+                        flight = _Flight(tag=tag)
+                        self._flights[key] = flight
+                    elif not wait:
+                        raise LoadInProgressError(key)
 
+            # Copy outside the lock so large values do not block other keys.
+            if hit:
+                return self._isolated(entry.value)
             if leader:
-                return self._lead(key, flight, loader, ttl)
+                return self._isolated(self._lead(key, flight, loader, ttl))
 
             flight.done.wait()
             if flight.error is not None:
@@ -129,7 +147,7 @@ class TTLCache(Generic[K, V]):
                     continue
                 raise flight.error
             if accept is None or accept(flight.value):
-                return flight.value
+                return self._isolated(flight.value)
 
     def _lead(self, key: K, flight: _Flight[V], loader: Callable[[], V], ttl: Callable[[V], float]) -> V:
         try:

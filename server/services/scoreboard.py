@@ -16,7 +16,9 @@ RECENT_FINAL_WINDOW = timedelta(hours=72)
 
 SCOREBOARD_CACHE_MAX_ENTRIES = 256
 
-_scoreboard_cache: TTLCache[str, dict] = TTLCache(SCOREBOARD_CACHE_MAX_ENTRIES)
+# Keyed by (league ID, YYYY-MM-DD). Every reader receives its own deep copy so
+# response enrichment cannot leak into the shared entry.
+_scoreboard_cache: TTLCache[tuple[str, str], dict] = TTLCache(SCOREBOARD_CACHE_MAX_ENTRIES, copy=copy.deepcopy)
 
 
 def _status(game) -> int | None:
@@ -51,8 +53,8 @@ def scoreboard_ttl(scoreboard: dict, game_date: date, now: datetime | None = Non
     return RECENT_FINAL_TTL_SECONDS if now - day_end < RECENT_FINAL_WINDOW else SETTLED_TTL_SECONDS
 
 
-def _load(game_date: str) -> dict:
-    scoreboard = nba_stats_client.fetch_scoreboard_v3(game_date)
+def _load(game_date: str, league_id: str) -> dict:
+    scoreboard = nba_stats_client.fetch_scoreboard_v3(game_date, league_id=league_id)
     if not isinstance(scoreboard.get("games"), list):
         raise nba_stats_client.UpstreamBadResponseError(
             endpoint="ScoreboardV3",
@@ -60,16 +62,22 @@ def _load(game_date: str) -> dict:
             duration_ms=0,
             message="ScoreboardV3 games is not a list",
         )
+    if any(not isinstance(game, dict) for game in scoreboard["games"]):
+        raise nba_stats_client.UpstreamBadResponseError(
+            endpoint="ScoreboardV3",
+            error_type="UnexpectedSchema",
+            duration_ms=0,
+            message="ScoreboardV3 games contains a non-object entry",
+        )
     return scoreboard
 
 
-def get_scoreboard(game_date: str) -> dict:
+def get_scoreboard(game_date: str, league_id: str = nba_stats_client.NBA_LEAGUE_ID) -> dict:
     """Return a caller-owned copy of the scoreboard for a YYYY-MM-DD date."""
     parsed = date.fromisoformat(game_date)
-    key = parsed.isoformat()
-    scoreboard = _scoreboard_cache.get_or_load(
-        key,
-        lambda: _load(key),
+    day = parsed.isoformat()
+    return _scoreboard_cache.get_or_load(
+        (league_id, day),
+        lambda: _load(day, league_id),
         lambda board: scoreboard_ttl(board, parsed),
     )
-    return copy.deepcopy(scoreboard)

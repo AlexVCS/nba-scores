@@ -61,7 +61,7 @@ def test_scoreboard_route_adds_boxscore_availability(monkeypatch):
     monkeypatch.setattr(
         nba_stats_client,
         "fetch_scoreboard_v3",
-        lambda game_date: _FakeScoreboardV3().get_dict()["scoreboard"],
+        lambda game_date, **_: _FakeScoreboardV3().get_dict()["scoreboard"],
     )
 
     result = main.get_v3_scoreboard(date="2024-11-01")

@@ -50,7 +50,7 @@ def test_month_views_are_derived_from_one_cached_season(monkeypatch, clock):
     assert [r["game_days"] for r in responses] == [
         ["2025-10-21"], ["2025-11-01"], ["2026-01-15"], ["2026-02-10", "2026-02-20"], ["2026-02-10", "2026-02-20"],
     ]
-    fetch.assert_called_once_with("2025-26")
+    fetch.assert_called_once_with("2025-26", league_id="00")
 
 
 def test_fallback_entry_is_tagged_and_retried_after_short_lifetime(monkeypatch, clock):
@@ -60,15 +60,15 @@ def test_fallback_entry_is_tagged_and_retried_after_short_lifetime(monkeypatch, 
     monkeypatch.setattr(nba_schedule.nba_stats_client, "fetch_league_game_log", fallback)
 
     assert nba_schedule.get_season_game_dates("2025-26") == {"2025-10-21"}
-    cached = nba_schedule._schedule_cache.get("2025-26")
+    cached = nba_schedule._schedule_cache.get(("00", "2025-26"))
     assert cached.source == nba_schedule.SOURCE_GAME_LOG
-    assert nba_schedule._schedule_cache.expires_in("2025-26") == nba_schedule.CURRENT_GAME_LOG_TTL_SECONDS
+    assert nba_schedule._schedule_cache.expires_in(("00", "2025-26")) == nba_schedule.CURRENT_GAME_LOG_TTL_SECONDS
 
     clock[0] += nba_schedule.CURRENT_GAME_LOG_TTL_SECONDS - 1
     assert nba_schedule.get_season_game_dates("2025-26") == {"2025-10-21"}
     clock[0] += 1
     assert nba_schedule.get_season_game_dates("2025-26") == SEASON_DATES
-    assert nba_schedule._schedule_cache.get("2025-26").source == nba_schedule.SOURCE_SCHEDULE
+    assert nba_schedule._schedule_cache.get(("00", "2025-26")).source == nba_schedule.SOURCE_SCHEDULE
     assert schedule.call_count == 2
 
 
@@ -77,7 +77,7 @@ def test_past_season_uses_long_lifetime(monkeypatch, clock):
     monkeypatch.setattr(nba_schedule.nba_stats_client, "fetch_schedule_league_v2", fetch)
 
     nba_schedule.get_season_game_dates("2024-25")
-    assert nba_schedule._schedule_cache.expires_in("2024-25") == nba_schedule.PAST_SCHEDULE_TTL_SECONDS
+    assert nba_schedule._schedule_cache.expires_in(("00", "2024-25")) == nba_schedule.PAST_SCHEDULE_TTL_SECONDS
     clock[0] += nba_schedule.CURRENT_SCHEDULE_TTL_SECONDS
     nba_schedule.get_season_game_dates("2024-25")
     fetch.assert_called_once()
@@ -105,20 +105,20 @@ def test_game_details_and_calendar_share_one_schedule_fetch(monkeypatch, clock):
     assert nba_schedule.get_game_days_in_month(2025, 10) == ["2025-10-21"]
     assert game_details._schedule_game("0022500001")["arenaName"] == "Scotiabank Arena"
     assert nba_schedule.get_next_game_date(date(2025, 10, 20)) == "2025-10-21"
-    fetch.assert_called_once_with("2025-26")
+    fetch.assert_called_once_with("2025-26", league_id="00")
 
 
 def test_game_details_refetches_when_only_fallback_dates_are_cached(monkeypatch, clock):
     nba_schedule._schedule_cache.set(
-        "2025-26", season_schedule({"2025-10-21"}, source=nba_schedule.SOURCE_GAME_LOG), 300
+        ("00", "2025-26"), season_schedule({"2025-10-21"}, source=nba_schedule.SOURCE_GAME_LOG), 300
     )
     payload = {"leagueSchedule": {"gameDates": [{"games": [{"gameId": "0022500001", "arenaName": "TD Garden"}]}]}}
     fetch = Mock(return_value=SimpleNamespace(get_dict=lambda: payload))
     monkeypatch.setattr(nba_schedule.nba_stats_client, "fetch_schedule_league_v2", fetch)
 
     assert game_details._schedule_game("0022500001")["arenaName"] == "TD Garden"
-    fetch.assert_called_once_with("2025-26", timeout=2, retries=0)
-    assert nba_schedule._schedule_cache.get("2025-26").is_schedule
+    fetch.assert_called_once_with("2025-26", league_id="00", timeout=2, retries=0)
+    assert nba_schedule._schedule_cache.get(("00", "2025-26")).is_schedule
 
 
 def test_regular_lookup_retries_with_fallback_after_joined_optional_failure(monkeypatch, clock):
@@ -146,4 +146,4 @@ def test_regular_lookup_retries_with_fallback_after_joined_optional_failure(monk
     regular.join(2)
 
     assert result == [{"2025-10-21"}]
-    assert calls[0] == {"timeout": 2, "retries": 0}
+    assert calls[0] == {"league_id": "00", "timeout": 2, "retries": 0}
