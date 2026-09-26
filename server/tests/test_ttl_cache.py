@@ -211,3 +211,43 @@ def test_follower_retries_after_failure_of_weaker_load():
 
     assert len(leader_errors) == 1
     assert result == ["strong"]
+
+
+def test_copy_hook_isolates_every_reader_from_the_stored_value():
+    cache = TTLCache(4, clock=Clock(), copy=lambda value: {**value, "items": list(value["items"])})
+    loaded = cache.get_or_load("k", lambda: {"items": [1]}, lambda _: 60)
+    loaded["items"].append(2)
+    hit = cache.get_or_load("k", Mock(), lambda _: 60)
+    hit["extra"] = True
+    cache.get("k")["items"].append(3)
+    assert cache.get("k") == {"items": [1]}
+
+
+def test_copy_hook_isolates_joined_callers():
+    release = threading.Event()
+
+    def loader():
+        assert release.wait(2)
+        return {"items": [1]}
+
+    cache = TTLCache(4, copy=lambda value: {"items": list(value["items"])})
+    results = []
+    threads = [threading.Thread(target=lambda: results.append(cache.get_or_load("k", loader, lambda _: 60))) for _ in range(3)]
+    for thread in threads:
+        thread.start()
+    time.sleep(0.05)
+    release.set()
+    for thread in threads:
+        thread.join(2)
+    assert len({id(result) for result in results}) == 3
+    results[0]["items"].append(2)
+    assert cache.get("k") == {"items": [1]}
+
+
+def test_pop_removes_only_the_given_key():
+    cache = TTLCache(4, clock=Clock())
+    cache.set("a", 1, 60)
+    cache.set("b", 2, 60)
+    cache.pop("a")
+    cache.pop("missing")
+    assert (cache.get("a"), cache.get("b")) == (None, 2)

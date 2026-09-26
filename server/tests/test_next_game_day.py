@@ -12,7 +12,7 @@ from server.tests.schedule_helpers import schedule_endpoint, season_schedule
 
 
 def test_next_date_crosses_offseason_and_uses_schedule_cache(monkeypatch):
-    def schedule(season, *, timeout=None, retries=None):
+    def schedule(season, *, league_id="00", timeout=None, retries=None):
         dates = ["2026-06-15"] if season == "2025-26" else ["2026-10-05", "2026-10-03"]
         return schedule_endpoint(dates)
 
@@ -92,8 +92,8 @@ def test_schedule_failure_does_not_fall_back_to_completed_games(monkeypatch):
         call("2026-27", allow_completed_fallback=False, optional_lookup=True),
     ]
     assert parse.call_args_list == [
-        call("2025-26", timeout=2, retries=0),
-        call("2026-27", timeout=2, retries=0),
+        call("2025-26", league_id="00", timeout=2, retries=0),
+        call("2026-27", league_id="00", timeout=2, retries=0),
     ]
     log.assert_not_called()
 
@@ -152,7 +152,6 @@ def test_default_scoreboard_keeps_empty_games_on_schedule_failure(monkeypatch):
 def test_default_scoreboard_suppresses_repeated_schedule_warning(monkeypatch, caplog):
     error = UpstreamUnavailableError("ScheduleLeagueV2", "Timeout", 10)
     parse = Mock(side_effect=error)
-    monkeypatch.setattr(nba_schedule.time, "monotonic", lambda: 100.0)
     monkeypatch.setattr(main.nba_stats_client, "fetch_scoreboard_v3", Mock(return_value={"games": []}))
     monkeypatch.setattr(nba_schedule, "_parse_schedule_v2", parse)
 

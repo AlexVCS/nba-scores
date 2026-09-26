@@ -21,6 +21,7 @@ PROVIDER = "stats.nba.com"
 NBA_API_TIMEOUT_SECONDS = 10
 NBA_API_RETRIES = 2
 NBA_API_BACKOFF_SECONDS = 0.75
+NBA_LEAGUE_ID = "00"
 
 NBA_STATS_HEADERS = {
     "Host": "stats.nba.com",
@@ -145,11 +146,11 @@ def _run(endpoint: str, operation: Callable[[], T], *, retries: int | None = Non
     raise AssertionError("unreachable")
 
 
-def fetch_scoreboard_v3(game_date: str) -> dict:
+def fetch_scoreboard_v3(game_date: str, league_id: str = NBA_LEAGUE_ID) -> dict:
     def operation():
         board = scoreboardv3.ScoreboardV3(
             game_date=game_date,
-            league_id="00",
+            league_id=league_id,
             headers=_headers(),
             timeout=_timeout(),
         )
@@ -230,7 +231,7 @@ def fetch_boxscore_summary_v3(game_id: str):
 
 def fetch_schedule_league_v2(
     season: str,
-    league_id: str = "00",
+    league_id: str = NBA_LEAGUE_ID,
     *,
     timeout: float | None = None,
     retries: int | None = None,
