@@ -267,7 +267,7 @@ function HardwoodScorersBook({team, comparison = false}: HardwoodScorersBookProp
                     <span className="sr-only">{playerName(player)}</span>
                     <span className={`overflow-hidden font-extrabold text-ellipsis whitespace-nowrap underline decoration-hw-line underline-offset-3 transition-colors duration-[120ms] group-hover:text-hw-accent-ink group-hover:decoration-hw-accent group-aria-expanded:text-hw-accent-ink group-aria-expanded:decoration-hw-accent motion-reduce:transition-none ${comparison ? "text-[11px]" : "text-[13px]"} ${longName}`} aria-hidden="true">{playerName(player)}</span>
                     <span className={`overflow-hidden font-extrabold text-ellipsis whitespace-nowrap underline decoration-hw-line underline-offset-3 transition-colors duration-[120ms] group-hover:text-hw-accent-ink group-hover:decoration-hw-accent group-aria-expanded:text-hw-accent-ink group-aria-expanded:decoration-hw-accent motion-reduce:transition-none ${comparison ? "text-[11px]" : "text-[13px]"} ${shortName}`} aria-hidden="true">{shortPlayerName(player)}</span>
-                    <small className="text-[8px] leading-none font-medium text-hw-muted">{player.position || player.jerseyNum}</small>
+                    {player.position && <small className="text-[8px] leading-none font-medium text-hw-muted">{player.position}</small>}
                   </span>
                   {columns.map((column) => (
                     <span key={column.label} className="grid justify-items-end gap-[3px]">
