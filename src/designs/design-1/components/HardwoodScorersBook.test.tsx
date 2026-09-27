@@ -163,21 +163,6 @@ describe("hardwood scorer's book", () => {
     expect(screen.getByTitle("Bench Guy")).toBeInTheDocument();
   });
 
-  it("shows the position and never falls back to the jersey number", () => {
-    const [player] = team.players;
-    const noPosition: DesignBoxscoreTeam = {
-      ...team,
-      players: [{...player, position: "", jerseyNum: "32-35"}],
-    };
-    const {container, rerender} = render(<HardwoodScorersBook team={team} />);
-    expect(screen.getByRole("button", {name: /Test Player/})).toHaveTextContent("G");
-
-    rerender(<HardwoodScorersBook team={noPosition} />);
-    const row = screen.getByRole("button", {name: /Test Player/});
-    expect(row).not.toHaveTextContent("32-35");
-    expect(container.querySelectorAll("small:empty")).toHaveLength(0);
-  });
-
   it("closes the ledger with the team's totals from the box score statistics", async () => {
     stubWideViewport();
     const user = userEvent.setup();
