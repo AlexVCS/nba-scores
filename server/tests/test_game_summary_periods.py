@@ -52,6 +52,7 @@ class _FakeResponse:
 
 def _game_summary_row(**overrides):
     row = {
+        "GAME_ID": "0024600001",
         "GAME_DATE_EST": "1946-11-01T00:00:00",
         "GAMECODE": "19461101/NYKTRH",
         "HOME_TEAM_ID": HUS,

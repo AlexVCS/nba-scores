@@ -45,8 +45,8 @@ def endpoint(game):
     return SimpleNamespace(get_dict=lambda: {"boxScoreSummary": game})
 
 
-def legacy(status=3, game_date="1946-11-01T00:00:00"):
-    rows = [{"GAME_DATE_EST": game_date, "GAME_STATUS_ID": status, "GAME_STATUS_TEXT": "Final", "GAMECODE": "19461101/MIATOR",
+def legacy(status=3, game_date="1946-11-01T00:00:00", game_id=GAME_ID):
+    rows = [{"GAME_ID": game_id, "GAME_DATE_EST": game_date, "GAME_STATUS_ID": status, "GAME_STATUS_TEXT": "Final", "GAMECODE": "19461101/MIATOR",
              "HOME_TEAM_ID": HOME, "VISITOR_TEAM_ID": AWAY, "LIVE_PERIOD": 4}]
     line_score = [
         {"TEAM_ID": team_id, "TEAM_ABBREVIATION": tricode, "TEAM_CITY_NAME": "City", "TEAM_NICKNAME": tricode, "PTS": pts,
@@ -83,7 +83,7 @@ def upstream(monkeypatch, clock):
     """Upstream doubles; repair and schedule lookups fail loudly unless a test opts in."""
     sources = SimpleNamespace(
         v3=Mock(side_effect=lambda game_id, **_: endpoint(summary(game_id=game_id))),
-        v2=Mock(side_effect=lambda game_id, **_: legacy()),
+        v2=Mock(side_effect=lambda game_id, **_: legacy(game_id=game_id)),
         box=Mock(side_effect=lambda game_id: boxscore(game_id)),
         bref=Mock(side_effect=AssertionError("metadata must not request linescore repair")),
     )
@@ -109,19 +109,17 @@ def unavailable(endpoint_name="BoxScoreSummaryV3"):
     (GameMetadata(3, "", "2026-01-17", NOW - timedelta(hours=71, minutes=59)), game_data.RECENT_FINAL_TTL_SECONDS),
     (GameMetadata(3, "", "2026-01-17", NOW - timedelta(hours=72)), game_data.SETTLED_TTL_SECONDS),
     (GameMetadata(3, "", "2026-01-21", NOW + timedelta(hours=1)), game_data.UNKNOWN_TTL_SECONDS),
-    (GameMetadata(3, "", "2026-01-20", None), game_data.RECENT_FINAL_TTL_SECONDS),
-    (GameMetadata(3, "", "2026-01-17", None), game_data.RECENT_FINAL_TTL_SECONDS),
-    (GameMetadata(3, "", "2026-01-16", None), game_data.SETTLED_TTL_SECONDS),
-    (GameMetadata(3, "", "1946-11-01", None), game_data.SETTLED_TTL_SECONDS),
-    (GameMetadata(3, "", "2026-01-21", None), game_data.UNKNOWN_TTL_SECONDS),
+    # Completed games without a precise tipoff stay conservative.
+    (GameMetadata(3, "", "2026-01-20", None), game_data.UNKNOWN_TTL_SECONDS),
+    (GameMetadata(3, "", "2026-01-16", None), game_data.UNKNOWN_TTL_SECONDS),
+    (GameMetadata(3, "", "1946-11-01", None), game_data.UNKNOWN_TTL_SECONDS),
     (GameMetadata(3, "", None, None), game_data.UNKNOWN_TTL_SECONDS),
     (GameMetadata(None, "", "1946-11-01", None), game_data.UNKNOWN_TTL_SECONDS),
     (GameMetadata(7, "", "1946-11-01", None), game_data.UNKNOWN_TTL_SECONDS),
     (None, game_data.UNKNOWN_TTL_SECONDS),
 ], ids=[
     "scheduled", "live", "stale_scheduled", "final_tonight", "final_within_72h", "final_at_72h",
-    "final_before_tipoff", "date_only_today", "date_only_within_72h_of_day_end", "date_only_older",
-    "date_only_history", "date_only_future", "final_without_date", "missing_status", "unknown_status", "missing_metadata",
+    "final_before_tipoff", "date_only_today", "date_only_older", "date_only_history", "final_without_date", "missing_status", "unknown_status", "missing_metadata",
 ])
 def test_lifetime_is_chosen_from_authoritative_metadata(metadata, expected):
     assert game_data.metadata_ttl(metadata, NOW) == expected
@@ -271,7 +269,53 @@ def test_v2_without_a_game_row_or_frames_is_not_cached(upstream):
         game_data.get_summary_v2(GAME_ID)
     assert len(game_data._summary_v2_cache) == 0
     assert not game_data.get_summary_v2(GAME_ID)["game_summary"].empty
-    assert game_data._summary_v2_cache.expires_in(GAME_ID) == game_data.SETTLED_TTL_SECONDS
+    assert game_data._summary_v2_cache.expires_in(GAME_ID) == game_data.UNKNOWN_TTL_SECONDS
+
+
+@pytest.mark.parametrize("home", [{}, {"teamId": None}, {"teamId": "n/a"}], ids=["empty", "null_team", "unparseable_team"])
+def test_v3_summary_without_usable_team_ids_is_not_cached(upstream, home):
+    upstream.v3.side_effect = lambda *_, **__: endpoint({**summary(), "homeTeam": home})
+    assert game_data.get_summary_v3(GAME_ID) is None
+    assert len(game_data._summary_v3_cache) == 0
+
+
+def v2_frames(rows, line_score=()):
+    return SimpleNamespace(
+        game_summary=SimpleNamespace(get_data_frame=lambda: pd.DataFrame(rows)),
+        line_score=SimpleNamespace(get_data_frame=lambda: pd.DataFrame(list(line_score))),
+    )
+
+
+def test_v2_rejects_missing_columns_and_other_games(upstream):
+    row = legacy().game_summary.get_data_frame().iloc[0].to_dict()
+    team = {"TEAM_ID": HOME, "TEAM_ABBREVIATION": "TOR", "PTS": 100}
+    rejected = [
+        v2_frames([{k: v for k, v in row.items() if k != "GAME_STATUS_ID"}]),
+        v2_frames([{k: v for k, v in row.items() if k != "GAME_ID"}]),
+        v2_frames([row], [{k: v for k, v in team.items() if k != "TEAM_ABBREVIATION"}]),
+        v2_frames([{**row, "GAME_ID": OTHER_GAME_ID}]),
+    ]
+    upstream.v2.side_effect = rejected
+    for _ in rejected:
+        with pytest.raises(nba_stats_client.UpstreamBadResponseError):
+            game_data.get_summary_v2(GAME_ID)
+    assert len(game_data._summary_v2_cache) == 0
+    assert game_data._summary_v2_cache._flights == {}
+
+
+def test_v2_allows_sparse_history_without_line_scores(upstream):
+    upstream.v2.side_effect = lambda *_, **__: v2_frames([legacy().game_summary.get_data_frame().iloc[0].to_dict()])
+    assert game_data.get_summary_v2(GAME_ID)["line_score"].empty
+    assert game_data._summary_v2_cache.expires_in(GAME_ID) == game_data.UNKNOWN_TTL_SECONDS
+
+
+def test_date_only_utc_time_is_not_a_tipoff(upstream):
+    game = {**summary(), "gameTimeUTC": "2026-01-20"}
+    upstream.v3.side_effect = lambda *_, **__: endpoint(game)
+    context = game_data.get_game_context(GAME_ID)
+    assert (context["gameDate"], context["gameDatetimeUtc"]) == ("2026-01-20", None)
+    assert game_data._summary_v3_cache.expires_in(GAME_ID) == game_data.UNKNOWN_TTL_SECONDS
+    assert game_data._boxscore_cache.expires_in(GAME_ID) == game_data.UNKNOWN_TTL_SECONDS
 
 
 def test_summary_mutations_do_not_alter_cached_entries(upstream):
@@ -438,6 +482,30 @@ def test_boxscore_failures_are_not_cached_and_retry(upstream):
     assert len(game_data._boxscore_cache) == 1
 
 
+@pytest.mark.parametrize("payload", [
+    boxscore(OTHER_GAME_ID),
+    {"boxScoreTraditional": {**boxscore()["boxScoreTraditional"], "homeTeam": {"players": []}}},
+    {"boxScoreTraditional": {**boxscore()["boxScoreTraditional"], "awayTeam": []}},
+], ids=["another_game", "missing_team_id", "team_not_object"])
+def test_mismatched_or_malformed_boxscores_are_unusable_and_not_cached(upstream, payload):
+    upstream.box.side_effect = lambda _: payload
+    response = TestClient(main.app).get(f"/games/{GAME_ID}/boxscore")
+    assert response.status_code == 404
+    assert "no usable game data" in response.json()["detail"]
+    assert len(game_data._boxscore_cache) == 0
+    assert game_data._boxscore_cache._flights == {}
+
+
+def test_sparse_boxscore_without_players_is_cached(upstream):
+    sparse = boxscore()
+    for side in ("homeTeam", "awayTeam"):
+        sparse["boxScoreTraditional"][side]["players"] = []
+    upstream.box.side_effect = lambda _: sparse
+    assert TestClient(main.app).get(f"/games/{GAME_ID}/boxscore").status_code == 200
+    assert game_data.get_game_context(GAME_ID)["homeTeam"] == {"teamId": HOME, "playerIds": []}
+    assert upstream.box.call_count == 1
+
+
 def test_invalid_game_ids_bypass_the_caches(upstream):
     assert game_data.get_boxscore("123")["gameId"] == "123"
     upstream.v3.assert_not_called()
@@ -505,7 +573,7 @@ def test_date_only_history_context_has_no_invented_tipoff(upstream):
     upstream.v3.side_effect = lambda *_, **__: endpoint(None)
     context = game_data.get_game_context(GAME_ID)
     assert (context["gameStatus"], context["gameDate"], context["gameDatetimeUtc"]) == (3, "1946-11-01", None)
-    assert game_data._summary_v2_cache.expires_in(GAME_ID) == game_data.SETTLED_TTL_SECONDS
+    assert game_data._summary_v2_cache.expires_in(GAME_ID) == game_data.UNKNOWN_TTL_SECONDS
     # Only freshly fetched V3 metadata may promote the boxscore.
     assert game_data._boxscore_cache.expires_in(GAME_ID) == game_data.UNKNOWN_TTL_SECONDS
     upstream.bref.assert_not_called()

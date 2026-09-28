@@ -8,7 +8,7 @@ extend them, and failed or unusable responses are never cached.
 import copy
 import logging
 from dataclasses import dataclass
-from datetime import date, datetime, time as day_time, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 
 import pandas as pd
 
@@ -30,6 +30,11 @@ RECENT_FINAL_WINDOW = timedelta(hours=72)
 BOXSCORE_CACHE_MAX_ENTRIES = 256
 SUMMARY_V3_CACHE_MAX_ENTRIES = 256
 SUMMARY_V2_CACHE_MAX_ENTRIES = 256
+
+V2_REQUIRED_COLUMNS = {
+    "game_summary": {"GAME_ID", "GAME_STATUS_ID", "GAME_DATE_EST", "HOME_TEAM_ID", "VISITOR_TEAM_ID", "LIVE_PERIOD"},
+    "line_score": {"TEAM_ID", "TEAM_ABBREVIATION"},
+}
 
 # The metadata lookup that sets a boxscore's lifetime runs before the boxscore
 # fetch, so it uses a short, single-attempt policy.
@@ -78,8 +83,12 @@ def _iso_date(value) -> str | None:
 
 
 def _utc_datetime(value) -> datetime | None:
+    text = str(value or "").strip()
+    # A bare date would parse as midnight, inventing a tipoff time.
+    if len(text) <= 10 or text[10] not in "T ":
+        return None
     try:
-        parsed = datetime.fromisoformat(str(value or "").strip())
+        parsed = datetime.fromisoformat(text)
     except ValueError:
         return None
     return parsed.replace(tzinfo=timezone.utc) if parsed.tzinfo is None else parsed.astimezone(timezone.utc)
@@ -118,23 +127,22 @@ def metadata_ttl(metadata: GameMetadata | None, now: datetime | None = None) -> 
     if metadata.status != 3:
         return ACTIVE_TTL_SECONDS
 
-    now = now or nba_now()
-    if metadata.datetime_utc is not None:
-        if metadata.datetime_utc > now:
-            # A final game whose tipoff is still ahead is inconsistent metadata.
-            return UNKNOWN_TTL_SECONDS
-        age = now - metadata.datetime_utc
-    elif metadata.game_date is not None:
-        # Date-only history has no precise tipoff, so measure from the end of
-        # the ET game day, the latest it could have started. The uncertainty can
-        # only shorten the completed-game lifetime, never extend it.
-        day = date.fromisoformat(metadata.game_date)
-        if datetime.combine(day, day_time(), NBA_TIMEZONE) > now:
-            return UNKNOWN_TTL_SECONDS
-        age = now - datetime.combine(day + timedelta(days=1), day_time(), NBA_TIMEZONE)
-    else:
+    # Completed games need a precise tipoff; a date alone is not enough.
+    if metadata.datetime_utc is None:
         return UNKNOWN_TTL_SECONDS
+    now = now or nba_now()
+    if metadata.datetime_utc > now:
+        # A final game whose tipoff is still ahead is inconsistent metadata.
+        return UNKNOWN_TTL_SECONDS
+    age = now - metadata.datetime_utc
     return RECENT_FINAL_TTL_SECONDS if age < RECENT_FINAL_WINDOW else SETTLED_TTL_SECONDS
+
+
+def _has_teams(game: dict) -> bool:
+    return all(
+        isinstance(game.get(side), dict) and _number(game[side].get("teamId")) is not None
+        for side in ("homeTeam", "awayTeam")
+    )
 
 
 def _load_summary_v3(game_id: str, optional: bool) -> dict | None:
@@ -146,12 +154,7 @@ def _load_summary_v3(game_id: str, optional: bool) -> dict | None:
         summary = nba_stats_client.fetch_boxscore_summary_v3(game_id)
     data = summary.get_dict()
     game = data.get("boxScoreSummary") if isinstance(data, dict) else None
-    if (
-        not isinstance(game, dict)
-        or game.get("gameId") != game_id
-        or not isinstance(game.get("homeTeam"), dict)
-        or not isinstance(game.get("awayTeam"), dict)
-    ):
+    if not isinstance(game, dict) or game.get("gameId") != game_id or not _has_teams(game):
         # Games outside V3 coverage have no usable summary; callers fall back.
         return None
     return game
@@ -191,11 +194,24 @@ def _load_summary_v2(game_id: str) -> dict:
         "line_score": summary.line_score.get_data_frame(),
     }
     if not all(isinstance(frame, pd.DataFrame) for frame in frames.values()):
+        problem = "is missing game summary or line score data"
+    else:
+        # Empty frames are legitimate sparse history; populated ones must carry
+        # every column the summary view and game details read.
+        problem = next((
+            f"{name} is missing {sorted(columns - set(frames[name].columns))}"
+            for name, columns in V2_REQUIRED_COLUMNS.items()
+            if not frames[name].empty and not columns <= set(frames[name].columns)
+        ), None)
+        rows = frames["game_summary"]
+        if problem is None and not rows.empty and str(rows.iloc[0]["GAME_ID"]) != game_id:
+            problem = "game_summary is for another game"
+    if problem:
         raise nba_stats_client.UpstreamBadResponseError(
             endpoint="BoxScoreSummaryV2",
             error_type="UnexpectedSchema",
             duration_ms=0,
-            message="BoxScoreSummaryV2 is missing game summary or line score data",
+            message=f"BoxScoreSummaryV2 {problem}",
         )
     return frames
 
@@ -216,7 +232,8 @@ def get_summary_v2(game_id: str) -> dict:
 def _fetch_boxscore(game_id: str) -> dict:
     data = nba_stats_client.fetch_boxscore_traditional(game_id)
     game = data.get("boxScoreTraditional")
-    if not game or not game.get("homeTeam") or not game.get("awayTeam"):
+    # Player lists may be empty for sparse history, but the game and teams must match.
+    if not isinstance(game, dict) or game.get("gameId") != game_id or not _has_teams(game):
         raise ValueError("BoxscoreTraditionalV3 returned no usable game data")
     return game
 
