@@ -12,6 +12,7 @@ from fastapi.testclient import TestClient
 from server import main
 from server.services import game_data, game_details, game_summary, nba_stats_client
 from server.services.game_data import GameMetadata
+from server.tests.cache_helpers import wait_for_waiters
 from server.utils.season import NBA_TIMEZONE
 
 GAME_ID = "0022500100"
@@ -175,7 +176,7 @@ def test_concurrent_summary_route_and_details_share_one_in_flight_fetch(upstream
         route = pool.submit(game_summary.fetch_game_summary, GAME_ID)
         assert entered.wait(2)
         followers = [pool.submit(game_details.fetch_game_details, GAME_ID) for _ in range(2)]
-        time.sleep(0.05)
+        wait_for_waiters(game_data._summary_v3_cache, GAME_ID, 2)
         release.set()
         assert route.result(2)["gameStatusText"] == "7:00 pm ET"
         assert [f.result(2)["gameStatus"] for f in followers] == [1, 1]
@@ -204,17 +205,33 @@ def test_different_games_load_independently(upstream):
 
 
 def test_details_never_request_player_stats_or_linescore_repair(upstream):
-    # Invalid NBA periods would trigger repair in the summary view, never in details.
-    broken = summary()
-    broken["homeTeam"]["periods"] = []
-    upstream.v3.side_effect = lambda *_, **__: endpoint(broken)
-    assert game_details.fetch_game_details(GAME_ID)["gameStatus"] == 3
+    # Quarter scores that do not add up to the final score trigger linescore
+    # repair whenever the summary view normalizes them.
+    unreliable = summary()
+    unreliable["homeTeam"]["periods"][0]["score"] = 0
+    unreliable_v2 = legacy()
+    unreliable_v2.line_score.get_data_frame = lambda: pd.DataFrame([
+        {"TEAM_ID": team_id, "TEAM_ABBREVIATION": tricode, "PTS": 100, **{f"PTS_QTR{q}": 1 for q in range(1, 5)}}
+        for team_id, tricode in ((HOME, "TOR"), (AWAY, "MIA"))
+    ])
+    upstream.bref.side_effect = None
+    upstream.bref.return_value = None
+    upstream.v3.side_effect = lambda *_, **__: endpoint(unreliable)
+    upstream.v2.side_effect = lambda *_, **__: unreliable_v2
 
+    assert game_details.fetch_game_details(GAME_ID)["gameStatus"] == 3
     upstream.v3.side_effect = unavailable()
     game_data._summary_v3_cache.clear()
     assert game_details.fetch_game_details(GAME_ID)["gameStatus"] == 3
+    upstream.v2.assert_called_once()
     upstream.box.assert_not_called()
     upstream.bref.assert_not_called()
+
+    # The same cached V2 and V3 data does trigger repair in the summary view.
+    assert game_summary.fetch_game_summary_v2(GAME_ID)["periodScoreSource"] == "unavailable"
+    upstream.v3.side_effect = lambda *_, **__: endpoint(unreliable)
+    assert game_summary.fetch_game_summary(GAME_ID)["periodScoreSource"] == "unavailable"
+    assert upstream.bref.call_count == 2
 
 
 def test_summary_status_transitions_refresh_after_short_lifetimes(upstream, clock):
@@ -353,12 +370,38 @@ def test_boxscore_joining_an_in_flight_summary_uses_it_for_promotion(upstream):
         route = pool.submit(game_summary.fetch_game_summary, GAME_ID)
         assert entered.wait(2)
         box = pool.submit(game_data.get_boxscore, GAME_ID)
-        time.sleep(0.05)
+        wait_for_waiters(game_data._summary_v3_cache, GAME_ID)
         release.set()
         route.result(2)
         box.result(2)
     upstream.v3.assert_called_once_with(GAME_ID)
     assert game_data._boxscore_cache.expires_in(GAME_ID) == game_data.RECENT_FINAL_TTL_SECONDS
+
+
+def test_lifetime_lookup_waits_only_its_own_budget_for_a_full_policy_fetch(upstream, monkeypatch):
+    # Details fetches with the full retry policy while the boxscore page loads.
+    monkeypatch.setattr(game_data, "LIFETIME_LOOKUP_TIMEOUT_SECONDS", 0.05)
+    entered, release = Event(), Event()
+
+    def slow(game_id, **kwargs):
+        entered.set()
+        assert release.wait(2)
+        return endpoint(summary())
+
+    upstream.v3.side_effect = slow
+    with ThreadPoolExecutor(max_workers=1) as pool:
+        details = pool.submit(game_details.fetch_game_details, GAME_ID)
+        try:
+            assert entered.wait(2)
+            started = time.monotonic()
+            assert game_data.get_boxscore(GAME_ID)["gameId"] == GAME_ID
+            assert time.monotonic() - started < 1
+            assert game_data._boxscore_cache.expires_in(GAME_ID) == game_data.UNKNOWN_TTL_SECONDS
+        finally:
+            release.set()
+        assert details.result(2)["gameStatus"] == 3
+    upstream.v3.assert_called_once_with(GAME_ID)
+    assert game_data._summary_v3_cache.expires_in(GAME_ID) == game_data.RECENT_FINAL_TTL_SECONDS
 
 
 def test_strict_summary_retries_after_a_failed_lifetime_lookup(upstream):
@@ -376,7 +419,7 @@ def test_strict_summary_retries_after_a_failed_lifetime_lookup(upstream):
         box = pool.submit(game_data.get_boxscore, GAME_ID)
         assert entered.wait(2)
         route = pool.submit(game_summary.fetch_game_summary, GAME_ID)
-        time.sleep(0.05)
+        wait_for_waiters(game_data._summary_v3_cache, GAME_ID)
         release.set()
         assert box.result(2)["gameId"] == GAME_ID
         assert route.result(2)["gameStatusText"] == "Final"
@@ -451,7 +494,7 @@ def test_concurrent_boxscore_route_and_context_share_one_boxscore_fetch(upstream
         route = pool.submit(main.get_game_boxscore, GAME_ID)
         assert entered.wait(2)
         context = pool.submit(game_data.get_game_context, GAME_ID)
-        time.sleep(0.05)
+        wait_for_waiters(game_data._boxscore_cache, GAME_ID)
         release.set()
         assert route.result(2)["game"]["gameId"] == GAME_ID
         assert context.result(2)["homeTeam"]["playerIds"] == [1, 2]
@@ -490,9 +533,8 @@ def test_context_propagates_boxscore_and_summary_errors(upstream):
     assert error.value.endpoint == "BoxScoreTraditionalV3"
 
 
-def test_context_and_route_mutations_do_not_leak(upstream):
-    context = game_data.get_game_context(GAME_ID)
-    context["homeTeam"]["playerIds"].append(99)
+def test_boxscore_mutations_do_not_leak_into_context_or_route(upstream):
     game_data.get_boxscore(GAME_ID)["homeTeam"]["players"].clear()
+    main.get_game_boxscore(GAME_ID)["game"]["awayTeam"]["teamId"] = None
     assert game_data.get_game_context(GAME_ID)["homeTeam"]["playerIds"] == [1, 2]
     assert main.get_game_boxscore(GAME_ID) == {"game": boxscore()["boxScoreTraditional"]}

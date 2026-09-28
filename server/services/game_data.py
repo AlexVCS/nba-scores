@@ -161,12 +161,15 @@ def _summary_v3_ttl(game: dict | None) -> float:
     return 0 if game is None else metadata_ttl(v3_metadata(game))
 
 
-def get_summary_v3(game_id: str, *, optional: bool = False, refresh: bool = False) -> dict | None:
+def get_summary_v3(
+    game_id: str, *, optional: bool = False, refresh: bool = False, wait_timeout: float | None = None
+) -> dict | None:
     """Return a caller-owned BoxScoreSummaryV3 game, or None without a usable one.
 
     ``optional`` lookups use a short single-attempt policy; a strict caller
     joined to a failed optional load retries with its own policy. ``refresh``
-    skips cached entries but still joins an in-flight fetch.
+    skips cached entries but still joins an in-flight fetch, waiting at most
+    ``wait_timeout`` seconds for it.
     """
     if not is_valid_nba_game_id(game_id):
         return _load_summary_v3(game_id, optional)
@@ -177,6 +180,7 @@ def get_summary_v3(game_id: str, *, optional: bool = False, refresh: bool = Fals
         tag=optional,
         retry_after=lambda flight_optional: flight_optional and not optional,
         refresh=refresh,
+        wait_timeout=wait_timeout,
     )
 
 
@@ -221,8 +225,10 @@ def _refreshed_metadata(game_id: str) -> GameMetadata | None:
     # Only metadata fetched for this refresh, or joined in flight, may extend a
     # boxscore's lifetime: a cached summary can predate the final buzzer. A
     # failed lookup only shortens the lifetime; it never fails the boxscore.
+    # A joined fetch may run under the full retry policy, so wait no longer than
+    # this lookup's own budget; that fetch still fills the summary cache.
     try:
-        game = get_summary_v3(game_id, optional=True, refresh=True)
+        game = get_summary_v3(game_id, optional=True, refresh=True, wait_timeout=LIFETIME_LOOKUP_TIMEOUT_SECONDS)
     except Exception as exc:
         logger.info("Boxscore lifetime metadata unavailable for %s: %s", game_id, exc)
         return None
@@ -273,9 +279,10 @@ def get_game_context(game_id: str) -> dict:
 
     def team(side):
         source = boxscore.get(side) or {}
+        team_id = _number(source.get("teamId"))
         player_ids = (_number(player.get("personId")) for player in source.get("players") or [] if isinstance(player, dict))
         return {
-            "teamId": _number(source.get("teamId")) or _number(boxscore.get(f"{side}Id")),
+            "teamId": team_id if team_id is not None else _number(boxscore.get(f"{side}Id")),
             "playerIds": list(dict.fromkeys(pid for pid in player_ids if pid is not None)),
         }
 
