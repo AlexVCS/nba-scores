@@ -187,6 +187,15 @@ def get_summary_v3(
     )
 
 
+def _bad_v2_response(problem: str) -> nba_stats_client.UpstreamBadResponseError:
+    return nba_stats_client.UpstreamBadResponseError(
+        endpoint="BoxScoreSummaryV2",
+        error_type="UnexpectedSchema",
+        duration_ms=0,
+        message=f"BoxScoreSummaryV2 {problem}",
+    )
+
+
 def _load_summary_v2(game_id: str) -> dict:
     summary = nba_stats_client.fetch_boxscore_summary(game_id)
     frames = {
@@ -194,25 +203,16 @@ def _load_summary_v2(game_id: str) -> dict:
         "line_score": summary.line_score.get_data_frame(),
     }
     if not all(isinstance(frame, pd.DataFrame) for frame in frames.values()):
-        problem = "is missing game summary or line score data"
-    else:
-        # Empty frames are legitimate sparse history; populated ones must carry
-        # every column the summary view and game details read.
-        problem = next((
-            f"{name} is missing {sorted(columns - set(frames[name].columns))}"
-            for name, columns in V2_REQUIRED_COLUMNS.items()
-            if not frames[name].empty and not columns <= set(frames[name].columns)
-        ), None)
-        rows = frames["game_summary"]
-        if problem is None and not rows.empty and str(rows.iloc[0]["GAME_ID"]) != game_id:
-            problem = "game_summary is for another game"
-    if problem:
-        raise nba_stats_client.UpstreamBadResponseError(
-            endpoint="BoxScoreSummaryV2",
-            error_type="UnexpectedSchema",
-            duration_ms=0,
-            message=f"BoxScoreSummaryV2 {problem}",
-        )
+        raise _bad_v2_response("is missing game summary or line score data")
+    # Empty frames are legitimate sparse history; populated ones must carry
+    # every column the summary view and game details read.
+    for name, columns in V2_REQUIRED_COLUMNS.items():
+        missing = columns - set(frames[name].columns)
+        if missing and not frames[name].empty:
+            raise _bad_v2_response(f"{name} is missing {sorted(missing)}")
+    rows = frames["game_summary"]
+    if not rows.empty and str(rows.iloc[0]["GAME_ID"]) != game_id:
+        raise _bad_v2_response("game_summary is for another game")
     return frames
 
 
