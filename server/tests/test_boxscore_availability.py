@@ -7,6 +7,10 @@ from server.services import playoffs
 from server.utils.boxscore_availability import is_boxscore_available_metadata
 
 
+def _no_summary(*_, **__):
+    raise nba_stats_client.UpstreamUnavailableError("BoxScoreSummaryV3", "Timeout", 0)
+
+
 class _FakeBoxScoreTraditional:
     def __init__(self, payload=None, error=None):
         self.payload = payload
@@ -141,6 +145,7 @@ def test_boxscore_endpoint_maps_upstream_bad_response_to_bad_gateway(monkeypatch
     monkeypatch.setattr(
         nba_stats_client.boxscoretraditionalv3, "BoxScoreTraditionalV3", fake_boxscore
     )
+    monkeypatch.setattr(nba_stats_client, "fetch_boxscore_summary_v3", _no_summary)
 
     with pytest.raises(HTTPException) as exc:
         main.get_game_boxscore("0024600206")
@@ -160,6 +165,7 @@ def test_boxscore_endpoint_maps_unavailable_data_to_not_found(monkeypatch):
     monkeypatch.setattr(
         nba_stats_client, "fetch_boxscore_traditional", fake_boxscore
     )
+    monkeypatch.setattr(nba_stats_client, "fetch_boxscore_summary_v3", _no_summary)
 
     with pytest.raises(HTTPException) as exc:
         main.get_game_boxscore("0024600206")

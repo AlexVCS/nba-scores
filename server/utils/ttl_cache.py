@@ -113,6 +113,7 @@ class TTLCache(Generic[K, V]):
         wait: bool = True,
         tag: Any = None,
         retry_after: Callable[[Any], bool] | None = None,
+        refresh: bool = False,
     ) -> V:
         """Return a live cached value or load it, sharing one load per key.
 
@@ -121,11 +122,13 @@ class TTLCache(Generic[K, V]):
         instead of joining another caller's load. When a joined load fails,
         its error is shared unless ``retry_after(flight_tag)`` says that load
         used a weaker policy than this caller, in which case it loads again.
+        ``refresh`` skips the cached entry, so the value comes from this call's
+        load or from one already in flight.
         """
         while True:
             with self._lock:
                 entry = self._live_entry(key)
-                hit = entry is not None and (accept is None or accept(entry.value))
+                hit = not refresh and entry is not None and (accept is None or accept(entry.value))
                 if not hit:
                     flight = self._flights.get(key)
                     leader = flight is None

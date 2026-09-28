@@ -310,7 +310,7 @@ def test_details_route_stays_unavailable_during_schedule_cooldown(monkeypatch):
         calls.append(season)
         raise details.nba_stats_client.UpstreamUnavailableError("ScheduleLeagueV2", "Timeout", 10)
 
-    legacy = SimpleNamespace(game_summary=SimpleNamespace(get_data_frame=pd.DataFrame))
+    legacy = SimpleNamespace(game_summary=SimpleNamespace(get_data_frame=pd.DataFrame), line_score=SimpleNamespace(get_data_frame=pd.DataFrame))
     monkeypatch.setattr(details.nba_stats_client, "fetch_boxscore_summary_v3", lambda _: endpoint({}))
     monkeypatch.setattr(details.nba_stats_client, "fetch_boxscore_summary", lambda _: legacy)
     monkeypatch.setattr(details.nba_stats_client, "fetch_schedule_league_v2", fail)

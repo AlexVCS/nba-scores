@@ -218,14 +218,17 @@ def fetch_boxscore_summary(
     )
 
 
-def fetch_boxscore_summary_v3(game_id: str):
+def fetch_boxscore_summary_v3(
+    game_id: str, *, timeout: float | None = None, retries: int | None = None
+):
     return _run(
         "BoxScoreSummaryV3",
         lambda: boxscoresummaryv3.BoxScoreSummaryV3(
             game_id=game_id,
             headers=_headers(),
-            timeout=_timeout(),
+            timeout=_timeout() if timeout is None else timeout,
         ),
+        retries=retries,
     )
 
 
