@@ -84,7 +84,7 @@ def test_legacy_direct_link_works_without_player_stats(monkeypatch):
     monkeypatch.setattr(details, "_schedule_game", lambda _: None)
     summary = SimpleNamespace(
         game_summary=SimpleNamespace(get_data_frame=lambda: pd.DataFrame([{
-            "GAME_DATE_EST": "1946-11-01T00:00:00", "GAME_STATUS_ID": 3,
+            "GAME_ID": "0024600001", "GAME_DATE_EST": "1946-11-01T00:00:00", "GAME_STATUS_ID": 3, "LIVE_PERIOD": 4,
             "GAME_STATUS_TEXT": "Final", "HOME_TEAM_ID": 1, "VISITOR_TEAM_ID": 2,
             "GAMECODE": "19461101/NYKHUS",
         }])),
@@ -310,7 +310,7 @@ def test_details_route_stays_unavailable_during_schedule_cooldown(monkeypatch):
         calls.append(season)
         raise details.nba_stats_client.UpstreamUnavailableError("ScheduleLeagueV2", "Timeout", 10)
 
-    legacy = SimpleNamespace(game_summary=SimpleNamespace(get_data_frame=pd.DataFrame))
+    legacy = SimpleNamespace(game_summary=SimpleNamespace(get_data_frame=pd.DataFrame), line_score=SimpleNamespace(get_data_frame=pd.DataFrame))
     monkeypatch.setattr(details.nba_stats_client, "fetch_boxscore_summary_v3", lambda _: endpoint({}))
     monkeypatch.setattr(details.nba_stats_client, "fetch_boxscore_summary", lambda _: legacy)
     monkeypatch.setattr(details.nba_stats_client, "fetch_schedule_league_v2", fail)

@@ -4,6 +4,7 @@ from unittest.mock import Mock
 
 import pytest
 
+from server.tests.cache_helpers import wait_for_waiters
 from server.utils.ttl_cache import LoadInProgressError, TTLCache
 
 
@@ -251,3 +252,57 @@ def test_pop_removes_only_the_given_key():
     cache.pop("a")
     cache.pop("missing")
     assert (cache.get("a"), cache.get("b")) == (None, 2)
+
+
+def test_refresh_skips_live_entry_and_replaces_it():
+    clock = Clock()
+    cache = TTLCache(4, clock=clock)
+    cache.set("k", "old", 60)
+    assert cache.get_or_load("k", lambda: "new", lambda _: 15, refresh=True) == "new"
+    assert (cache.get("k"), cache.expires_in("k")) == ("new", 15)
+
+
+def test_refresh_joins_a_load_already_in_flight():
+    cache = TTLCache(4)
+    entered, release = threading.Event(), threading.Event()
+
+    def slow():
+        entered.set()
+        assert release.wait(2)
+        return "value"
+
+    leader = threading.Thread(target=cache.get_or_load, args=("k", slow, lambda _: 60))
+    leader.start()
+    assert entered.wait(2)
+    result = []
+    follower = threading.Thread(target=lambda: result.append(cache.get_or_load("k", Mock(), lambda _: 60, refresh=True)))
+    follower.start()
+    wait_for_waiters(cache, "k")
+    release.set()
+    leader.join(2)
+    follower.join(2)
+    assert result == ["value"]
+
+
+def test_joined_caller_stops_waiting_after_its_timeout_while_the_load_continues():
+    cache = TTLCache(4)
+    entered, release = threading.Event(), threading.Event()
+
+    def slow():
+        entered.set()
+        assert release.wait(2)
+        return "value"
+
+    leader = threading.Thread(target=cache.get_or_load, args=("k", slow, lambda _: 60))
+    leader.start()
+    try:
+        assert entered.wait(2)
+        started = time.monotonic()
+        with pytest.raises(LoadInProgressError):
+            cache.get_or_load("k", Mock(), lambda _: 60, wait_timeout=0.05)
+        assert time.monotonic() - started < 1
+    finally:
+        release.set()
+        leader.join(2)
+    assert cache.get("k") == "value"
+    assert cache._flights == {}

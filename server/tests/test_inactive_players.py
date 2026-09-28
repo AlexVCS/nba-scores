@@ -11,7 +11,7 @@ from server.services import game_summary, nba_stats_client
 
 
 def test_boxscore_does_not_request_inactive_players(monkeypatch):
-    game = {"homeTeam": {"teamId": 1}, "awayTeam": {"teamId": 2}}
+    game = {"gameId": "123", "homeTeam": {"teamId": 1}, "awayTeam": {"teamId": 2}}
     monkeypatch.setattr(nba_stats_client, "fetch_boxscore_traditional",
                         lambda _: {"boxScoreTraditional": game})
     optional = Mock(side_effect=AssertionError("Optional lookup must not run"))

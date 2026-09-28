@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup, Comment
 from fastapi import HTTPException
 import requests
 
-from server.services import nba_stats_client
+from server.services import game_data, nba_stats_client
 
 
 BREF_TEAM_CODE_OVERRIDES = {
@@ -470,11 +470,7 @@ def fetch_inactive_players(game_id: str):
 
 
 def fetch_boxscoretraditional(game_id: str):
-    data = nba_stats_client.fetch_boxscore_traditional(game_id)
-    game = data.get("boxScoreTraditional")
-    if not game or not game.get("homeTeam") or not game.get("awayTeam"):
-        raise ValueError("BoxscoreTraditionalV3 returned no usable game data")
-    return game
+    return game_data.get_boxscore(game_id)
 
 
 def build_v3_periods(team):
@@ -515,9 +511,7 @@ def v3_summary_team(team, periods):
     }
 
 
-def normalize_v3_game_summary(game_id, summary):
-    data = summary.get_dict()
-    game = data.get("boxScoreSummary") if isinstance(data, dict) else None
+def normalize_v3_game_summary(game_id, game):
     if not isinstance(game, dict) or game.get("gameId") != game_id:
         raise ValueError("BoxScoreSummaryV3 returned no usable game data")
 
@@ -593,8 +587,8 @@ def normalize_v3_game_summary(game_id, summary):
 
 
 def fetch_game_summary_v2(game_id: str):
-    summary = nba_stats_client.fetch_boxscore_summary(game_id)
-    game_summary_df = summary.game_summary.get_data_frame()
+    summary = game_data.get_summary_v2(game_id)
+    game_summary_df = summary["game_summary"]
     if game_summary_df.empty:
         raise HTTPException(status_code=404, detail="Game not found")
 
@@ -603,7 +597,7 @@ def fetch_game_summary_v2(game_id: str):
     visitor_team_id = game_meta["VISITOR_TEAM_ID"]
     live_period = game_meta["LIVE_PERIOD"]
     game_status_id = game_meta["GAME_STATUS_ID"]
-    fallback_linescore = summary.line_score.get_data_frame()
+    fallback_linescore = summary["line_score"]
     game_linescore = fallback_linescore if not fallback_linescore.empty else None
     is_scheduled = safe_int(game_status_id) == 1
 
@@ -691,8 +685,7 @@ def fetch_game_summary_v2(game_id: str):
 
 def fetch_game_summary(game_id: str):
     try:
-        summary = nba_stats_client.fetch_boxscore_summary_v3(game_id)
-        return normalize_v3_game_summary(game_id, summary)
+        return normalize_v3_game_summary(game_id, game_data.get_summary_v3(game_id))
     except Exception as v3_error:
         print(f"BoxScoreSummaryV3 fallback to V2 for {game_id}: {v3_error}")
         return fetch_game_summary_v2(game_id)

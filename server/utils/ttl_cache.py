@@ -17,7 +17,7 @@ V = TypeVar("V")
 
 
 class LoadInProgressError(Exception):
-    """Raised for non-waiting lookups when another caller is already loading the key."""
+    """Raised when a caller will not wait, or wait any longer, for another caller's load."""
 
 
 @dataclass
@@ -32,6 +32,8 @@ class _Flight(Generic[V]):
     done: threading.Event = field(default_factory=threading.Event)
     value: V | None = None
     error: BaseException | None = None
+    # Callers that have joined this load; lets tests synchronise on joins.
+    waiters: int = 0
 
 
 class TTLCache(Generic[K, V]):
@@ -113,6 +115,8 @@ class TTLCache(Generic[K, V]):
         wait: bool = True,
         tag: Any = None,
         retry_after: Callable[[Any], bool] | None = None,
+        refresh: bool = False,
+        wait_timeout: float | None = None,
     ) -> V:
         """Return a live cached value or load it, sharing one load per key.
 
@@ -121,11 +125,15 @@ class TTLCache(Generic[K, V]):
         instead of joining another caller's load. When a joined load fails,
         its error is shared unless ``retry_after(flight_tag)`` says that load
         used a weaker policy than this caller, in which case it loads again.
+        ``refresh`` skips the cached entry, so the value comes from this call's
+        load or from one already in flight. ``wait_timeout`` bounds how long a
+        joined caller waits before raising LoadInProgressError; the other
+        caller's load continues and still fills the cache.
         """
         while True:
             with self._lock:
                 entry = self._live_entry(key)
-                hit = entry is not None and (accept is None or accept(entry.value))
+                hit = not refresh and entry is not None and (accept is None or accept(entry.value))
                 if not hit:
                     flight = self._flights.get(key)
                     leader = flight is None
@@ -134,6 +142,8 @@ class TTLCache(Generic[K, V]):
                         self._flights[key] = flight
                     elif not wait:
                         raise LoadInProgressError(key)
+                    else:
+                        flight.waiters += 1
 
             # Copy outside the lock so large values do not block other keys.
             if hit:
@@ -141,7 +151,8 @@ class TTLCache(Generic[K, V]):
             if leader:
                 return self._isolated(self._lead(key, flight, loader, ttl))
 
-            flight.done.wait()
+            if not flight.done.wait(wait_timeout):
+                raise LoadInProgressError(key)
             if flight.error is not None:
                 if retry_after is not None and retry_after(flight.tag):
                     continue

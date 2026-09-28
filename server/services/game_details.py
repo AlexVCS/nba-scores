@@ -4,7 +4,7 @@ import copy
 import logging
 from datetime import date, datetime
 
-from server.services import nba_stats_client
+from server.services import game_data, nba_stats_client
 from server.services.game_summary import safe_int, parse_gamecode_team_tricodes
 from server.services.nba_schedule import ScheduleLookupCooldownError, get_season_schedule
 from server.services.scoreboard import get_scoreboard
@@ -46,12 +46,12 @@ def _schedule_game(game_id):
 
 
 def _legacy_game(game_id):
-    summary = nba_stats_client.fetch_boxscore_summary(game_id)
-    rows = summary.game_summary.get_data_frame()
+    summary = game_data.get_summary_v2(game_id)
+    rows = summary["game_summary"]
     if rows.empty:
         return None
     row = rows.iloc[0]
-    teams = summary.line_score.get_data_frame()
+    teams = summary["line_score"]
     home_code, away_code = parse_gamecode_team_tricodes(row.get("GAMECODE"))
 
     def team(team_id, tricode):
@@ -90,8 +90,8 @@ def fetch_game_details(game_id: str, game_date: str | None = None):
             error = exc
     if game is None:
         try:
-            candidate = nba_stats_client.fetch_boxscore_summary_v3(game_id).get_dict().get("boxScoreSummary")
-            if candidate and candidate.get("gameId") == game_id and candidate.get("homeTeam", {}).get("teamId"):
+            candidate = game_data.get_summary_v3(game_id)
+            if candidate and candidate["homeTeam"].get("teamId"):
                 game = candidate
         except (nba_stats_client.UpstreamError, ValueError) as exc:
             error = exc
