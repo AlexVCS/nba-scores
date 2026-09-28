@@ -97,7 +97,10 @@ def _parse_schedule_v2(
     dates: set[str] = set()
     games: dict[str, Mapping] = {}
     for day in game_days:
-        for game in day.get("games") or []:
+        day_games = (day.get("games") or []) if isinstance(day, dict) else None
+        if not isinstance(day_games, list) or any(not isinstance(game, dict) for game in day_games):
+            raise ValueError("Schedule response has a malformed game day")
+        for game in day_games:
             game_date = _normalize_date(game.get("gameDateEst") or day.get("gameDate"))
             if game_date:
                 dates.add(game_date)

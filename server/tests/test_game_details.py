@@ -336,3 +336,16 @@ def test_summary_details_skip_enrichment_during_schedule_cooldown(monkeypatch):
     body = response.json()
     assert (body["gameStatus"], body["homeTeam"]["teamTricode"]) == (1, "TOR")
     assert (body["venue"], body["broadcast"]) == (None, None)
+
+
+@pytest.mark.parametrize("game_dates", [[None], [{"games": [None]}], [{"games": {"gameId": GAME_ID}}]], ids=["null_day", "null_game", "games_not_list"])
+def test_malformed_schedule_skips_enrichment_without_caching(monkeypatch, game_dates):
+    monkeypatch.setattr(details.nba_stats_client, "fetch_boxscore_summary_v3", lambda _: endpoint({"boxScoreSummary": game()}))
+    fetch = Mock(return_value=endpoint({"leagueSchedule": {"gameDates": game_dates}}))
+    monkeypatch.setattr(details.nba_stats_client, "fetch_schedule_league_v2", fetch)
+
+    response = TestClient(main.app).get(f"/games/{GAME_ID}/details")
+    assert response.status_code == 200
+    assert (response.json()["gameStatus"], response.json()["venue"]) == (1, None)
+    assert len(nba_schedule._schedule_cache) == 0
+    assert nba_schedule._schedule_cooldowns.get(("00", "2026-27")) is True
