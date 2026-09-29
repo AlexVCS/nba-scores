@@ -27,6 +27,21 @@ describe("Ask response details", () => {
     expect(within(details as HTMLElement).getByText("Model call this request").nextElementSibling).toHaveTextContent("Yes");
   });
 
+  it("shows which cascade tier decided each field", async () => {
+    vi.stubEnv("DEV", true);
+    const response = structuredClone(ASK_RESPONSE_FIXTURES["answer-player-stat"]);
+    response.interpreter = {
+      ...response.interpreter, adapter: "cascade", model: "jev-1.13.0+gpt-6-luna",
+      field_tiers: {intent: "jev", game_number: "luna", teams: "veto"},
+    };
+    renderFooter(response);
+    await userEvent.setup().click(screen.getByText("Response details"));
+
+    expect(screen.getByText("Decided by").nextElementSibling).toHaveTextContent(
+      "intent: Jev · game number: Luna · teams: Tiers disagreed",
+    );
+  });
+
   it("distinguishes cached interpretation from a new model call", async () => {
     vi.stubEnv("DEV", true);
     const response = structuredClone(ASK_RESPONSE_FIXTURES["answer-player-stat"]);
