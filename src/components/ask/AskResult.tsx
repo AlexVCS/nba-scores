@@ -8,52 +8,45 @@ import AskPostseasonResult from "./AskPostseasonResult";
 import AskSeriesResult from "./AskSeriesResult";
 import AskStatResult from "./AskStatResult";
 import AskSuggestions from "./AskSuggestions";
-import AskRevealButton from "./AskRevealButton";
-import {RESULT_GROUP} from "./askSpoilers";
-import type {AskRevealControls} from "./askStyles";
 
 interface AskResultProps {
   response: AskResponse;
-  controls: AskRevealControls;
+  /** The global results preference. It governs only what the user did not ask for (ADR 0006). */
+  resultsHidden: boolean;
   onAsk: (question: string, options: {remember: boolean}) => void;
   onChooseOption: (option: AskClarificationOption) => void;
   onRetry: () => void;
   onEditQuestion: () => void;
 }
 
-/** Renders one AskResponse. Every protected value goes through the spoiler helpers in askSpoilers.ts. */
-function AskResult({response, controls, onAsk, onChooseOption, onRetry, onEditQuestion}: AskResultProps) {
-  const revealed = controls.isRevealed(RESULT_GROUP);
+/**
+ * Renders one AskResponse. Asking is consent: the answer (or the record that there is none) shows in full.
+ * Clarification options, follow-up links, and suggestions were not asked for, so spoiler ones stay out
+ * while results are hidden.
+ */
+function AskResult({response, resultsHidden, onAsk, onChooseOption, onRetry, onEditQuestion}: AskResultProps) {
   const {result} = response;
-
-  if (response.spoiler_gate && !revealed) {
-    return (
-      <div className="grid gap-4">
-        {response.interpretation && <AskInterpretation interpretation={response.interpretation} revealed={false} omitProtected onEditQuestion={onEditQuestion} />}
-        <section className="grid gap-3 rounded-[12px] border border-hw-line bg-hw-surface p-4" aria-label="Hidden answer">
-          <h3 className="text-lg font-extrabold">{response.spoiler_gate.title}</h3>
-          <p className="text-sm text-hw-muted">{response.spoiler_gate.message}</p>
-          <AskRevealButton group={RESULT_GROUP} controls={controls} label="answer" />
-        </section>
-      </div>
-    );
-  }
+  const answered = response.outcome === "answer" || response.outcome === "not_found";
 
   return (
     <div className="grid gap-4">
       {response.interpretation && (
-        <AskInterpretation interpretation={response.interpretation} revealed={revealed} onEditQuestion={onEditQuestion} />
+        <AskInterpretation
+          interpretation={response.interpretation}
+          showProtected={answered || !resultsHidden}
+          onEditQuestion={onEditQuestion}
+        />
       )}
 
-      {response.outcome === "answer" && result?.kind === "games" && <AskGamesResult result={result} controls={controls} />}
-      {response.outcome === "answer" && result?.kind === "boxscore_stat" && <AskStatResult result={result} controls={controls} />}
-      {response.outcome === "answer" && result?.kind === "playoff_series" && <AskSeriesResult result={result} controls={controls} />}
-      {response.outcome === "answer" && result?.kind === "postseason_summary" && <AskPostseasonResult result={result} controls={controls} />}
+      {response.outcome === "answer" && result?.kind === "games" && <AskGamesResult result={result} resultsHidden={resultsHidden} />}
+      {response.outcome === "answer" && result?.kind === "boxscore_stat" && <AskStatResult result={result} />}
+      {response.outcome === "answer" && result?.kind === "playoff_series" && <AskSeriesResult result={result} />}
+      {response.outcome === "answer" && result?.kind === "postseason_summary" && <AskPostseasonResult result={result} resultsHidden={resultsHidden} />}
 
       {response.outcome === "needs_clarification" && response.clarification && (
         <AskClarification
           clarification={response.clarification}
-          revealed={revealed}
+          resultsHidden={resultsHidden}
           onChoose={onChooseOption}
           onEditQuestion={onEditQuestion}
         />
@@ -63,11 +56,11 @@ function AskResult({response, controls, onAsk, onChooseOption, onRetry, onEditQu
         <AskNotice outcome={response.outcome} notice={response.notice} onRetry={onRetry} />
       )}
 
-      <AskLinks links={response.links} revealed={revealed} />
+      <AskLinks links={response.links} resultsHidden={resultsHidden} />
 
       <AskSuggestions
         suggestions={response.suggestions}
-        revealed={revealed}
+        resultsHidden={resultsHidden}
         title={response.outcome === "answer" ? "Ask next" : "Try one of these"}
         variant={response.outcome === "answer" ? "chips" : "list"}
         onAsk={onAsk}

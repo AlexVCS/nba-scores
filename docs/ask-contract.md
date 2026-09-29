@@ -9,7 +9,7 @@ The code is the source of truth; this document summarizes it.
 
 | Piece | File |
 | --- | --- |
-| Shared value types (intent, stat, round, season, refs, dates, `Guarded`) | `server/ask/models/common.py` |
+| Shared value types (intent, stat, round, season, refs, dates) | `server/ask/models/common.py` |
 | Normalized application request | `server/ask/models/request.py` |
 | Candidate lookup output | `server/ask/models/candidates.py` |
 | Interpreter input/output, normalization result | `server/ask/models/interpreter.py` |
@@ -39,7 +39,7 @@ question + ClientContext
   -> [#199] RequestNormalizer.normalize()                 -> NormalizationResult (AskRequest | clarify | unsupported | invalid)
   -> [#199] CascadePolicy.decide()                        -> accept | fallback | expand_candidates | clarify | unsupported | fail
   -> [#201] resolvers/calculators on AskRequest           -> AskResponse
-  -> [#205] UI renders, applying spoiler flags
+  -> [#205] UI renders the answer; spoiler flags govern only unrequested parts
 ```
 
 Every call is synchronous. The endpoint runs them in FastAPI's threadpool, as
@@ -304,25 +304,22 @@ Other fields:
   - `reference_time` and `timezone` are always America/New_York; `dates` and
     `season` are the resolved date range and season.
 - `result` is a union discriminated by `kind`:
-  - `games`: `days[]` → `GameResultItem { date, game: <scoreboard payload>, spoilers {score, status_text, series_text, labels}, links, spoiler }`,
-    plus `total_games: Guarded<int>` and `hidden_note`. `date` is the New York
-    date of `game.gameTimeUTC` and matches the `gameCode` date.
-  - `boxscore_stat`: `game: GameContext`, whose `away`/`home` are `Guarded`
-    and whose `final_score` is `Guarded` and revealed separately. Then,
-    depending on scope, `player_line` (`values: Guarded<StatValue>[]`),
-    `team_lines`, or `leaders: Guarded<LeaderRow[]>` (leaders scope only).
-    `StatValue` has `display`, plus `made` and `attempted` for shooting stats.
-  - `playoff_series`: `teams[2]`, where each row's team is guarded when the
-    user did not name it, and seed, wins, and `won_series` are guarded. Also
-    guarded `status`, `games_played`, `summary`, and `games`, because the
-    game count reveals the series length.
-  - `postseason_summary`: guarded `finish`, `record`, `series_won`, and
-    `rounds` (team scope), and `champion`, `runner_up`, and `series` (league
-    scope). The whole `rounds` list is guarded because its length reveals
-    advancement. League `series` rows have two `teams` (each a team and its
-    wins), a `status` (`not_started`/`in_progress`/`complete`), and
-    `winner_team_id`, which is set only when complete, so unfinished series
-    are described without asserting an outcome.
+  - `games`: `days[]` → `GameResultItem { date, game: <scoreboard payload>, links }`,
+    plus `total_games`. `date` is the New York date of `game.gameTimeUTC`
+    and matches the `gameCode` date.
+  - `boxscore_stat`: `game: GameContext` (`away`, `home`, and `final_score`,
+    which is null until the game is final). Then, depending on scope,
+    `player_line` (`values: StatValue[]`), `team_lines`, or `leaders:
+    LeaderRow[]` (leaders scope only; ties share a rank). `StatValue` has
+    `display`, plus `made` and `attempted` for shooting stats.
+  - `playoff_series`: `teams[2]` (team, seed, wins, `won_series`), plus
+    `status`, `games_played`, `summary`, and `games`.
+  - `postseason_summary`: `finish`, `record`, `series_won`, and `rounds`
+    (team scope), and `champion`, `runner_up`, and `series` (league scope).
+    League `series` rows have two `teams` (each a team and its wins), a
+    `status` (`not_started`/`in_progress`/`complete`), and `winner_team_id`,
+    which is set only when complete, so unfinished series are described
+    without asserting an outcome.
 - `clarification` has `field` (`ClarifyField`), `reason`, `prompt`, `detail`,
   `hint`, and `options[]`. Each option has `label`, `sublabel`, `detail`, team
   and player IDs, a standalone rewritten `question`, and a `resolution` token.
@@ -383,50 +380,38 @@ Slugs are positional, so they do not name the teams. Do not use the
 
 ### Spoiler rules
 
-The server always sends values. Every protected value is either
-`Guarded<T> {value, spoiler}` or an object with `spoiler: true`. While results
-are hidden (the default, which respects the global preference), the UI must
-leave protected values out of the DOM and accessibility text entirely. Hiding
-them with CSS is not enough. This includes suggestions and links with
-`spoiler: true`, and interpretation items with `spoiler: true`. Each result is
-revealed locally, and the final score is revealed separately. Local reveals
-reset on a new question.
+Asking is consent (ADR 0006). Submitting a question is the consent boundary:
+the UI shows the `result`, or the `notice` that there is none, as soon as it
+arrives, whatever its age and whatever the global results preference. Results
+and notices carry no spoiler protection, and there is no gate or reveal
+control. Answers are never requested, prefetched, or rendered while the user
+is typing, and typeahead responses carry no answer values.
 
-- Participants. Entities the user supplied are echoed with `spoiler: false`.
-  In any postseason context, participants the server inferred are
-  `spoiler: true` everywhere: the interpretation items (a `game`/`series`
-  chip such as "OKC @ IND"), `GameContext.away`/`home`, series rows,
-  clarification options, links whose destination shows them, and suggestions,
-  including unsolicited ones ("Try one of these"). A suggestion that names a
-  playoff matchup the user did not ask about is a spoiler.
-- Whole units. When the shape of a value reveals a result, the whole unit is
-  guarded, not only its parts:
-  - `leaders` is one `Guarded` list, because a shared rank reveals a tie and
-    the length reveals how many tied.
-  - `rounds`/`series` (postseason) and `games` (series) are guarded lists.
-  - A `GameResultItem` whose existence reveals a result has `spoiler: true`:
-    a conditional playoff game (Games 5–7 of a best-of-seven), or a later
-    round in a team-filtered search. While hidden the UI omits the whole
-    item, and any day left empty. `total_games` is then guarded, and
-    `hidden_note` holds neutral copy. The server decides `hidden_note` from
-    the schedule and the question, never from which games were played.
-  - The embedded scoreboard `game` is rendered only through `spoilers`:
-    `score` (scores, winner), `status_text` ("Final/OT"), `series_text`
-    ("NYK leads 2-1"), and `labels` (`gameLabel`, `gameSubLabel`,
-    `seriesGameNumber`, `ifNecessary`; "Game 7" reveals series length and a
-    round label can reveal advancement). Team names and tip-off time are
-    schedule data, as on the scores page.
-- Gated questions. If every possible outcome of a question reveals a result,
-  the response carries `spoiler_gate {title, message}`. Examples: a
-  conditional game ("game 7 of the 2024 Finals": an answer if it was played,
-  `not_found` if not), and absence that reveals elimination ("Knicks games
-  last week" during the playoffs). The server decides from the question and
-  schedule, never from the outcome, and sends the same gate copy for an
-  answer and for `not_found`. While hidden the UI renders only the gate copy,
-  interpretation items with `spoiler: false` (which come from the question
-  and must not differ by outcome), and a reveal control. It must not render,
-  or change layout based on, `outcome`, `result`, `notice`, `links`, or
-  `suggestions`. A gate is allowed only on `answer` and `not_found`.
+The global preference still governs everything the user did not ask for. Those
+parts carry `spoiler: true` when they would reveal a result, and while results
+are hidden the UI leaves them out of the DOM and accessibility text entirely
+(hiding them with CSS is not enough):
+
+- Interpretation items. A participant the server inferred for a postseason
+  question (a `game`/`series` chip such as "OKC @ IND") is `spoiler: true`.
+  It is shown with an `answer` or `not_found`, and omitted beside a
+  clarification or other notice while results are hidden.
+- Clarification options. "Which game?" choices must not reveal scores,
+  winners, or series results. An option that would (such as a participant
+  inferred for a playoff round) is `spoiler: true`; the UI lists it only
+  after the user chooses to show all options. A single-game question whose
+  choice list could reveal a result, such as a playoff date or a numbered
+  series game without teams, asks for the teams before any result lookup, so
+  neither the choices nor the decision to offer them depends on which games
+  were played.
+- Links. A link is `spoiler: true` when it would reveal a result the user did
+  not ask for, such as a follow-up card for another game. Links to the game,
+  series, or date that was asked about are part of the answer and are not
+  flagged. Destination pages apply the preference themselves.
+- Suggestions, "Ask next" and "Try one of these". A suggestion that names a
+  playoff matchup or game the user did not ask about is `spoiler: true`.
+  A question taken from a spoiler-flagged suggestion or option is never saved
+  to recent history.
 
 ### `GET /ask/suggest?q=…&hidden=true|false`
 
@@ -449,14 +434,13 @@ cd <repo root> && server/venv/bin/python -m pytest -q server/tests/ask
 
 Fixtures cover:
 - `answer-games-last-week` (includes an overtime game)
-- `answer-games-conditional` (possible Games 5–7 flagged, guarded count, `hidden_note`)
-- `answer-player-stat`, `answer-team-stat`, `answer-stat-leaders` (inferred Finals participants guarded)
+- `answer-games-conditional` (includes possible Games 5–7)
+- `answer-player-stat`, `answer-team-stat`, `answer-stat-leaders` (inferred Finals participants as spoiler chips)
 - `answer-stat-leaders-tied` (two leaders share rank 1)
-- `answer-conditional-game-hidden` and `not-found-conditional-game-hidden`
-  (Game 7 that was played and one that was not, with the same `spoiler_gate`;
-  the second is the result-revealing-absence case)
-- `answer-series-hidden` (teams supplied by the user)
-- `answer-series-inferred` (participants inferred, with spoiler items, links, and suggestions)
+- `answer-conditional-game` and `not-found-conditional-game` (a Game 7 that
+  was played and one that was not; both are shown as asked)
+- `answer-series-named` (teams supplied by the user)
+- `answer-series-inferred` (participants inferred, with spoiler chips and a spoiler suggestion)
 - `answer-postseason-team`, `answer-postseason-league`, `answer-postseason-league-in-progress`
 - `clarification-which-jalen`, `clarification-year-required`
 - `clarification-two-step-player` → `clarification-two-step-year` (a token-backed partial resolution)
@@ -471,9 +455,9 @@ day, its `gameCode`, its link `?date=`, and the New York date of `gameTimeUTC`
 agree.
 
 `test_contract_rules.py` also checks, across all fixtures and models: every
-URL field is a `VerifiedLink`, and links reject off-allowlist targets. Postseason
-participants are named by the user or guarded. Conditional games and leaders
-are whole-unit spoilers. Gated outcomes share their hidden state. Dates agree.
+URL field is a `VerifiedLink`, and links reject off-allowlist targets. Requested
+answers carry no spoiler gating, and only unrequested parts carry spoiler
+flags. Inferred postseason chips are spoilers. Dates agree.
 Reference times normalize to New York across midnight and DST. Clarify and
 expansion fields agree across layers. `canonical_json` is stable.
 `src/services/ask/fixtures/links.test.ts` (Vitest, `pnpm test:run`) checks

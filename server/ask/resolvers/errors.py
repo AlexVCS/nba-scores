@@ -16,10 +16,10 @@ Resolvers return a result or raise one of these; each maps onto one
 * ``UnsupportedError`` -> ``unsupported`` with an ``UnsupportedReason``.
 
 ``reason`` is a machine code for logs and templates; ``message`` is developer
-text, not user copy. ``spoiler`` is True when the outcome itself reveals a
-protected fact ("Game 6 was not played" reveals a series ended early; "no such
-series" for a named team reveals an elimination), so the UI must not show the
-notice detail while results are hidden.
+text, not user copy. ``spoiler`` marks ambiguity whose candidates would reveal
+a result (which teams reached a round), so any options built from them must be
+flagged as spoilers. Outcomes themselves are never protected: asking is
+consent (ADR 0006).
 """
 
 from __future__ import annotations
@@ -27,7 +27,7 @@ from __future__ import annotations
 from typing import Any, Literal, Mapping, Sequence
 
 from server.ask.models.interpreter import UnsupportedReason
-from server.ask.models.response import ClarifyField, ClarifyReason, SpoilerGate
+from server.ask.models.response import ClarifyField, ClarifyReason
 from server.services import nba_stats_client
 
 NotFoundCode = Literal["no_games", "no_record", "player_did_not_play"]
@@ -40,7 +40,6 @@ class ResolverError(Exception):
         self.message = message or reason
         self.spoiler = spoiler
         self.details = dict(details or {})
-        self.spoiler_gate: SpoilerGate | None = None
 
 
 class NotFoundError(ResolverError):

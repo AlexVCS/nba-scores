@@ -123,48 +123,42 @@ def test_links_accept_app_series_slugs(href):
 # ---------------------------------------------------------------- spoilers
 
 
+def test_requested_answers_carry_no_spoiler_gating():
+    """Asking is consent (ADR 0006): results, notices, and the response itself
+    have no hidden state. Only unrequested parts carry spoiler flags."""
+    assert "spoiler_gate" not in response.AskResponse.model_fields
+    assert not hasattr(common, "Guarded")
+    for model in _contract_models():
+        if model.__module__ == response.__name__ and model.__name__ not in {
+            "VerifiedLink", "InterpretationItem", "ClarificationOption", "Suggestion",
+        }:
+            assert "spoiler" not in model.model_fields, f"{model.__name__} must not gate a requested answer"
+    for name, data in RESPONSES.items():
+        for where, node in _walk(data.get("result")):
+            if isinstance(node, dict) and "spoiler" in node:
+                assert "href" in node, f"{name}: only links inside a result may carry a spoiler flag ({where})"
+
+
 def _is_postseason(data) -> bool:
     result = data.get("result") or {}
-    if data.get("spoiler_gate") or result.get("kind") in ("playoff_series", "postseason_summary"):
+    if result.get("kind") in ("playoff_series", "postseason_summary"):
         return True
     return result.get("kind") == "boxscore_stat" and result["game"]["season_type"] == "playoffs"
 
 
-def _visible_team_ids(node):
-    """Team IDs readable while hidden (skips anything flagged as a spoiler and
-    the scoreboard payload, which GameResultItem guards)."""
-    if isinstance(node, dict):
-        if node.get("spoiler") is True or "gameId" in node:
-            return
-        if {"team_id", "tricode", "name"} <= set(node):
-            yield node["team_id"]
-        for value in node.values():
-            yield from _visible_team_ids(value)
-    elif isinstance(node, list):
-        for value in node:
-            yield from _visible_team_ids(value)
-
-
 @pytest.mark.parametrize("name", [n for n, d in RESPONSES.items() if _is_postseason(d)])
-def test_postseason_participants_are_named_or_guarded(name):
-    data = RESPONSES[name]
-    items = data["interpretation"]["items"]
-    for item in items:
+def test_inferred_postseason_chips_are_spoilers(name):
+    # The chips are shown with the answer, but the flag keeps them out beside a
+    # clarification or notice while results are hidden.
+    for item in RESPONSES[name]["interpretation"]["items"]:
         if item["origin"] == "inferred" and item["field"] in ("team", "teams", "game", "series"):
             assert item["spoiler"], f"inferred {item['field']} chip must be a spoiler"
-    named = {i["team_id"] for i in items if i["team_id"] and i["origin"] != "inferred" and not i["spoiler"]}
-    assert set(_visible_team_ids(data["result"])) <= named
 
 
-def test_gated_outcomes_share_hidden_state():
-    gated = {n: d for n, d in RESPONSES.items() if d["spoiler_gate"]}
-    assert {d["outcome"] for d in gated.values()} == {"answer", "not_found"}
-    assert len({json.dumps(d["spoiler_gate"], sort_keys=True) for d in gated.values()}) == 1
-    for data in gated.values():
-        visible = [(i["field"], i["origin"]) for i in data["interpretation"]["items"] if not i["spoiler"]]
-        assert ("round", "question") in visible and ("game_number", "question") in visible
-        assert all(link["spoiler"] for link in data["links"])
-        assert all(s["spoiler"] for s in data["suggestions"])
+def test_fixtures_cover_unrequested_spoilers():
+    suggestions = [s for d in RESPONSES.values() for s in d["suggestions"]]
+    assert any(s["spoiler"] for s in suggestions), "need a result-revealing suggestion"
+    assert any(s["spoiler"] for d in RESPONSES.values() if d["outcome"] != "answer" for s in d["suggestions"])
 
 
 def _game_items(data):
@@ -174,26 +168,15 @@ def _game_items(data):
             for item in day["games"]:
                 yield day["date"], item
     elif result.get("kind") == "playoff_series":
-        for item in result["games"]["value"]:
+        for item in result["games"]:
             yield item["date"], item
 
 
-@pytest.mark.parametrize("name", list(RESPONSES))
-def test_conditional_games_are_whole_unit_spoilers(name):
-    data = RESPONSES[name]
-    for _, item in _game_items(data):
-        if item["game"]["ifNecessary"]:
-            assert item["spoiler"] and item["spoilers"]["labels"]
-    result = data.get("result") or {}
-    if result.get("kind") == "boxscore_stat" and result["scope"] == "leaders":
-        assert result["leaders"]["spoiler"]
-
-
-def test_fixtures_cover_spoiler_edge_cases():
-    leaders = [d["result"]["leaders"]["value"] for d in RESPONSES.values() if (d["result"] or {}).get("leaders")]
+def test_fixtures_cover_result_edge_cases():
+    leaders = [d["result"]["leaders"] for d in RESPONSES.values() if (d["result"] or {}).get("leaders")]
     assert any(len({row["rank"] for row in rows}) < len(rows) for rows in leaders), "need a tied-leaders fixture"
-    assert any(item["spoiler"] for d in RESPONSES.values() for _, item in _game_items(d))
-    rows = [r for d in RESPONSES.values() if (d["result"] or {}).get("kind") == "postseason_summary" for r in d["result"]["series"]["value"]]
+    assert any(item["game"]["ifNecessary"] for d in RESPONSES.values() for _, item in _game_items(d))
+    rows = [r for d in RESPONSES.values() if (d["result"] or {}).get("kind") == "postseason_summary" for r in d["result"]["series"]]
     assert {r["status"] for r in rows} >= {"complete", "in_progress"}
 
 

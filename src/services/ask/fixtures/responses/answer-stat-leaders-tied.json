@@ -70,83 +70,70 @@
       "game_id": "0042400403",
       "date": "2025-06-11",
       "away": {
-        "value": {
-          "team_id": 1610612760,
-          "tricode": "OKC",
-          "name": "Oklahoma City Thunder"
-        },
-        "spoiler": true
+        "team_id": 1610612760,
+        "tricode": "OKC",
+        "name": "Oklahoma City Thunder"
       },
       "home": {
-        "value": {
-          "team_id": 1610612754,
-          "tricode": "IND",
-          "name": "Indiana Pacers"
-        },
-        "spoiler": true
+        "team_id": 1610612754,
+        "tricode": "IND",
+        "name": "Indiana Pacers"
       },
       "season": "2024-25",
       "season_type": "playoffs",
       "round": "finals",
       "game_number": 3,
       "final_score": {
-        "value": {
-          "away": 107,
-          "home": 116,
-          "periods": 4
-        },
-        "spoiler": true
+        "away": 107,
+        "home": 116,
+        "periods": 4
       }
     },
     "player_line": null,
     "team_lines": [],
-    "leaders": {
-      "value": [
-        {
-          "rank": 1,
-          "player": {
-            "player_id": 1631096,
-            "name": "Chet Holmgren"
-          },
-          "team": {
-            "team_id": 1610612760,
-            "tricode": "OKC",
-            "name": "Oklahoma City Thunder"
-          },
-          "value": {
-            "stat": "blocks",
-            "value": 2,
-            "display": "2",
-            "made": null,
-            "attempted": null
-          }
+    "leaders": [
+      {
+        "rank": 1,
+        "player": {
+          "player_id": 1631096,
+          "name": "Chet Holmgren"
         },
-        {
-          "rank": 1,
-          "player": {
-            "player_id": 1626167,
-            "name": "Myles Turner"
-          },
-          "team": {
-            "team_id": 1610612754,
-            "tricode": "IND",
-            "name": "Indiana Pacers"
-          },
-          "value": {
-            "stat": "blocks",
-            "value": 2,
-            "display": "2",
-            "made": null,
-            "attempted": null
-          }
+        "team": {
+          "team_id": 1610612760,
+          "tricode": "OKC",
+          "name": "Oklahoma City Thunder"
+        },
+        "value": {
+          "stat": "blocks",
+          "value": 2,
+          "display": "2",
+          "made": null,
+          "attempted": null
         }
-      ],
-      "spoiler": true
-    }
+      },
+      {
+        "rank": 1,
+        "player": {
+          "player_id": 1626167,
+          "name": "Myles Turner"
+        },
+        "team": {
+          "team_id": 1610612754,
+          "tricode": "IND",
+          "name": "Indiana Pacers"
+        },
+        "value": {
+          "stat": "blocks",
+          "value": 2,
+          "display": "2",
+          "made": null,
+          "attempted": null
+        }
+      }
+    ]
   },
   "clarification": null,
   "notice": null,
-  "spoiler_gate": null,
   "links": [
     {
       "kind": "boxscore",

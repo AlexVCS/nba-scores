@@ -11,12 +11,12 @@ behavior. The shipped UI lives in `src/components/ask/`.
 | `01b-mobile-header-entry.png` | Mobile "Ask" button |
 | `01-desktop-ask-empty.png` | Desktop empty state: recent searches, examples, scope note |
 | `01c-desktop-typeahead.png` | Typeahead for "knicks": games first, then Ask rows |
-| `02-desktop-stat-answer.png` | Single-stat answer with a separate final-score reveal |
+| `02-desktop-stat-answer.png` | Single-stat answer with its final score |
 | `03-desktop-games-last-week.png` | Game search resolved to the previous Monday–Sunday |
 | `04-desktop-dark-which-jalen.png` | Clarification with numbered candidates (dark) |
 | `05a-mobile-ask-empty-keyboard.png` | Mobile empty state above a drawn keyboard |
-| `05-mobile-series-hidden.png` | Series answer fully hidden behind one reveal |
-| `06-mobile-postseason-revealed.png` | Postseason summary after reveal |
+| `05-mobile-series-hidden.png` | Series answer (drawn hidden; see below) |
+| `06-mobile-postseason-revealed.png` | Postseason summary |
 | `07-mobile-dark-unsupported.png` | Unsupported question with examples (dark) |
 
 ## Where the images are out of date
@@ -32,9 +32,9 @@ These differences are intentional; follow #205 and `docs/ask-contract.md`:
 - `07` says an anonymous note is kept "for up to 7 days". The retention period is owned by #201 and
   is not confirmed; the shipped copy only says a note was kept when the response sets
   `diagnostics_recorded`.
-- `02` shows the stat already revealed next to a "Hide" control. Answers start hidden, and the shipped
-  UI drops local reveal and hide controls when the global "show all results" preference is on. The
-  striped bars stand in for values that are absent from the DOM and accessibility text.
+- `02`, `05`, and `06` show reveal and hide controls and striped stand-ins for hidden values. Asking is
+  consent (ADR 0006): the shipped UI shows every requested answer immediately and has no reveal or
+  hide controls. The empty state says that answers show as soon as you ask.
 - No mockup shows loading, service failure, budget exhaustion, missing historical records, or retry
   states. See the fixtures in `src/services/ask/fixtures/`.
 

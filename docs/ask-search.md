@@ -37,11 +37,13 @@ short cache lifetime. Cache failures are not stored.
 
 ## Spoilers and typeahead
 
-Resolvers decide a `spoiler_gate` from the normalized question and schedule
-before looking up the requested record. Thus a conditional playoff game has
-the same hidden-state gate whether it was played or absent. Protected whole
-game items, counts, series lengths, inferred participants, and revealing links
-carry spoiler flags. The UI omits flagged content from the DOM while hidden.
+Asking is consent (ADR 0006): Ask shows every requested answer immediately,
+whatever the global results preference. The preference still governs what the
+user did not ask for. Interpretation chips beside a clarification, clarification
+options, follow-up links, and suggestions carry spoiler flags, and the UI omits
+flagged content from the DOM while results are hidden. A single-game question
+whose choice list could reveal a result (a playoff date or a numbered series
+game without teams) asks for the teams before any result lookup.
 Typeahead uses bounded candidate lookup and direct scoreboard matches, with
 no model call. Hidden typeahead omits postseason direct games whose presence
 could reveal advancement.

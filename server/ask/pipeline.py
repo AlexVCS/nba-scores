@@ -184,10 +184,10 @@ class AskPipeline:
             info = info.model_copy(update={"cache_hit": info.cache_hit or hit})
             return self._response(question, "answer", info, interpretation=readout,
                                   result=output.result, links=list(output.links), sources=list(output.sources),
-                                  spoiler_gate=output.spoiler_gate, suggestions=suggestions(request))
+                                  suggestions=suggestions(request))
         except NotFoundError as error:
             return self._response(question, "not_found", info, interpretation=readout,
-                                  notice=notice(error.code, reason=error.reason), spoiler_gate=error.spoiler_gate)
+                                  notice=notice(error.code, reason=error.reason))
         except (AmbiguousError, ClarificationError) as error:
             return self._response(question, "needs_clarification", info, interpretation=readout,
                                   clarification={"field": error.field, "reason": error.clarify_reason,
