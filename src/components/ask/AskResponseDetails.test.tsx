@@ -42,6 +42,23 @@ describe("Ask response details", () => {
     );
   });
 
+  it("lists each field's deciding tier, confidence, and outcome when the dev server sends them", async () => {
+    vi.stubEnv("DEV", true);
+    const response = structuredClone(ASK_RESPONSE_FIXTURES["answer-player-stat"]);
+    response.interpreter = {
+      ...response.interpreter, adapter: "cascade", model: "jev-1.13.0+gpt-6-luna",
+      field_decisions: [
+        {field: "player", decided_by: "jev", confidence: 0.912, outcome: "accepted", reads: []},
+        {field: "game_number", decided_by: null, confidence: null, outcome: "undecided", reads: []},
+      ],
+    };
+    renderFooter(response);
+    await userEvent.setup().click(screen.getByText("Response details"));
+
+    const decisions = within(screen.getByText("Field decisions").nextElementSibling as HTMLElement).getAllByRole("listitem");
+    expect(decisions.map(item => item.textContent)).toEqual(["player: Jev, 0.91, accepted", "game number: Undecided, undecided"]);
+  });
+
   it("distinguishes cached interpretation from a new model call", async () => {
     vi.stubEnv("DEV", true);
     const response = structuredClone(ASK_RESPONSE_FIXTURES["answer-player-stat"]);

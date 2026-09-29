@@ -141,6 +141,25 @@ export interface AskInterpreterInfo {
   model: string | null;
   fallback_used: boolean;
   field_tiers?: Record<string, string>;
+  /** Development servers only (`ASK_DEV=1`); absent in production. */
+  field_decisions?: AskFieldDecision[];
+}
+
+export interface AskTierRead {
+  tier: string;
+  status: "selected" | "absent" | "ambiguous" | "no_matching_candidate" | "unsupported";
+  confidence: number | null;
+  action: "accepted" | "escalated" | "vetoed" | "unused";
+}
+
+/** Per-field cascade diagnostics (ADRs 0002, 0009, 0010). Dev details only; carries no values. */
+export interface AskFieldDecision {
+  field: string;
+  /** "lookup", "laya", "jev", "luna", or "veto"; null when no tier decided the field. */
+  decided_by: string | null;
+  confidence: number | null;
+  outcome: "accepted" | "escalated" | "vetoed" | "undecided";
+  reads: AskTierRead[];
 }
 
 // ---------------------------------------------------------------- interpretation
