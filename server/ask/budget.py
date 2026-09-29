@@ -133,7 +133,9 @@ class DailyBudget:
 
     def reserve(self, model: str, amount_usd: float) -> Reservation:
         try:
-            price_for(model)
+            # A cascade reports its tiers joined with "+" (TieredAdapter.model).
+            for part in model.split("+"):
+                price_for(part)
         except ValueError as exc:
             raise BudgetUnavailable("No price for requested model") from exc
         amount = self._amount(amount_usd)

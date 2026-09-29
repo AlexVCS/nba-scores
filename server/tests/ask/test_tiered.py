@@ -218,3 +218,21 @@ def test_laya_adapter_speaks_systemone_locally_for_free():
     assert price_for("laya-en").input == 0
     with pytest.raises(ValueError):
         LayaAdapter(model="jev-1.13.0")
+
+
+def test_daily_budget_prices_a_cascade_by_its_tiers(tmp_path):
+    from server.ask.budget import BudgetUnavailable, DailyBudget
+
+    budget = DailyBudget(tmp_path, 1.0)
+    config = AskConfig(api_key="sk", typesafe_api_key="ts")
+    reservation = budget.reserve(build_cascade(config).model, 0.001)
+    budget.settle(reservation, 0.0)
+    with pytest.raises(BudgetUnavailable):
+        budget.reserve("jev-1.13.0+unknown-model", 0.001)
+
+
+def test_merged_output_keeps_only_fields_the_intent_uses():
+    jev = Fake("jev", sel("intent", "game_search"), sel("date", "date:0"), absent("teams"), sel("stat", "points"))
+    out = cascade(jev).interpret(REQUEST)
+    assert {f.field for f in out.fields} == {"intent", "date", "teams"}
+    assert "stat" not in out.metadata.field_tiers

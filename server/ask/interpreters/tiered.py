@@ -150,6 +150,11 @@ class TieredAdapter:
                 # so the cascade policy asks the user rather than executing either read.
                 fields[name] = reads[0].model_copy(update={"confidence": min(reads[0].confidence or 0.5, 0.5)})
             merge.decided_by[name] = "veto"
+        if "intent" in merge.decided:
+            # Fields the chosen intent doesn't use would only confuse "Reading this as".
+            needed = self._needed(merge)
+            fields = {name: read for name, read in fields.items() if name in needed}
+            merge.decided_by = {name: tier for name, tier in merge.decided_by.items() if name in needed}
         return list(fields.values())
 
     # -- InterpreterAdapter -----------------------------------------------------------
