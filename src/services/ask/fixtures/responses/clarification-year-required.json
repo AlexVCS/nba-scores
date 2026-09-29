@@ -1,0 +1,84 @@
+{
+  "schema_version": "1",
+  "request_id": "fx-year-required",
+  "outcome": "needs_clarification",
+  "question": "lakers games on march 3",
+  "interpretation": {
+    "intent": "game_search",
+    "detected_type": "games",
+    "items": [
+      {
+        "field": "team",
+        "value": "Los Angeles Lakers",
+        "detail": null,
+        "expression": "lakers",
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": 1610612747,
+        "player_id": null,
+        "spoiler": false
+      },
+      {
+        "field": "date",
+        "value": "March 3",
+        "detail": "Year needed",
+        "expression": "march 3",
+        "origin": "question",
+        "status": "ambiguous",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      }
+    ],
+    "reference_time": "2026-09-29T12:00:00-04:00",
+    "timezone": "America/New_York",
+    "dates": null,
+    "season": null
+  },
+  "result": null,
+  "clarification": {
+    "field": "date",
+    "reason": "year_required",
+    "prompt": "Which year?",
+    "detail": "Add a year to \"March 3\".",
+    "options": [
+      {
+        "id": "date:2026-03-03",
+        "label": "March 3, 2026",
+        "sublabel": null,
+        "detail": "2025-26 season",
+        "team": null,
+        "player_id": null,
+        "question": "Lakers games on March 3, 2026",
+        "resolution": "rsv_fx_year_2026",
+        "spoiler": false
+      },
+      {
+        "id": "date:2025-03-03",
+        "label": "March 3, 2025",
+        "sublabel": null,
+        "detail": "2024-25 season",
+        "team": null,
+        "player_id": null,
+        "question": "Lakers games on March 3, 2025",
+        "resolution": "rsv_fx_year_2025",
+        "spoiler": false
+      }
+    ],
+    "hint": null
+  },
+  "notice": null,
+  "spoiler_gate": null,
+  "links": [],
+  "suggestions": [],
+  "sources": [],
+  "interpreter": {
+    "model_called": true,
+    "cache_hit": false,
+    "adapter": "jev",
+    "model": "jev-1.13.0",
+    "fallback_used": false
+  }
+}

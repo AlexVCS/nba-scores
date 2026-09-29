@@ -1,0 +1,80 @@
+{
+  "schema_version": "1",
+  "request_id": "fx-no-games",
+  "outcome": "not_found",
+  "question": "knicks games july 4 2026",
+  "interpretation": {
+    "intent": "game_search",
+    "detected_type": "games",
+    "items": [
+      {
+        "field": "team",
+        "value": "New York Knicks",
+        "detail": null,
+        "expression": "knicks",
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": 1610612752,
+        "player_id": null,
+        "spoiler": false
+      },
+      {
+        "field": "date",
+        "value": "Sat, Jul 4, 2026",
+        "detail": null,
+        "expression": "july 4 2026",
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      }
+    ],
+    "reference_time": "2026-09-29T12:00:00-04:00",
+    "timezone": "America/New_York",
+    "dates": {
+      "start": "2026-07-04",
+      "end": "2026-07-04"
+    },
+    "season": null
+  },
+  "result": null,
+  "clarification": null,
+  "notice": {
+    "code": "no_games",
+    "title": "No games found",
+    "message": "The Knicks didn't play on Saturday, July 4, 2026.",
+    "retryable": false,
+    "retry_after_seconds": null,
+    "unsupported_reason": null,
+    "diagnostics_recorded": false
+  },
+  "spoiler_gate": null,
+  "links": [
+    {
+      "kind": "scores_date",
+      "label": "Scores for July 4, 2026",
+      "href": "/?date=2026-07-04",
+      "external": false,
+      "spoiler": false
+    }
+  ],
+  "suggestions": [],
+  "sources": [
+    {
+      "name": "nba_live",
+      "label": "NBA.com",
+      "fetched_at": "2026-09-29T16:00:00Z",
+      "complete": true
+    }
+  ],
+  "interpreter": {
+    "model_called": true,
+    "cache_hit": false,
+    "adapter": "jev",
+    "model": "jev-1.13.0",
+    "fallback_used": false
+  }
+}

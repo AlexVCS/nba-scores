@@ -1,0 +1,119 @@
+{
+  "schema_version": "1",
+  "request_id": "fx-two-step-2",
+  "outcome": "needs_clarification",
+  "question": "How did Jalen Brunson do on March 3?",
+  "interpretation": {
+    "intent": "boxscore_stat",
+    "detected_type": "player_stat",
+    "items": [
+      {
+        "field": "player",
+        "value": "Jalen Brunson",
+        "detail": null,
+        "expression": "jalen",
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": 1628973,
+        "spoiler": false
+      },
+      {
+        "field": "date",
+        "value": "March 3",
+        "detail": "Year needed",
+        "expression": "march 3",
+        "origin": "question",
+        "status": "ambiguous",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      },
+      {
+        "field": "stat",
+        "value": "Full line",
+        "detail": null,
+        "expression": null,
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      }
+    ],
+    "reference_time": "2026-09-29T12:00:00-04:00",
+    "timezone": "America/New_York",
+    "dates": null,
+    "season": null
+  },
+  "result": null,
+  "clarification": {
+    "field": "date",
+    "reason": "year_required",
+    "prompt": "Which year?",
+    "detail": "Jalen Brunson played on March 3 in these seasons.",
+    "options": [
+      {
+        "id": "date:2026-03-03",
+        "label": "March 3, 2026",
+        "sublabel": null,
+        "detail": "2025-26 season · NYK @ MIA",
+        "team": {
+          "team_id": 1610612752,
+          "tricode": "NYK",
+          "name": "New York Knicks"
+        },
+        "player_id": 1628973,
+        "question": "How did Jalen Brunson do on March 3, 2026?",
+        "resolution": "rsv_fx_two_step_1628973_2026",
+        "spoiler": false
+      },
+      {
+        "id": "date:2025-03-03",
+        "label": "March 3, 2025",
+        "sublabel": null,
+        "detail": "2024-25 season · NYK vs POR",
+        "team": {
+          "team_id": 1610612752,
+          "tricode": "NYK",
+          "name": "New York Knicks"
+        },
+        "player_id": 1628973,
+        "question": "How did Jalen Brunson do on March 3, 2025?",
+        "resolution": "rsv_fx_two_step_1628973_2025",
+        "spoiler": false
+      },
+      {
+        "id": "date:2023-03-03",
+        "label": "March 3, 2023",
+        "sublabel": null,
+        "detail": "2022-23 season · NYK vs BOS",
+        "team": {
+          "team_id": 1610612752,
+          "tricode": "NYK",
+          "name": "New York Knicks"
+        },
+        "player_id": 1628973,
+        "question": "How did Jalen Brunson do on March 3, 2023?",
+        "resolution": "rsv_fx_two_step_1628973_2023",
+        "spoiler": false
+      }
+    ],
+    "hint": null
+  },
+  "notice": null,
+  "spoiler_gate": null,
+  "links": [],
+  "suggestions": [],
+  "sources": [],
+  "interpreter": {
+    "model_called": false,
+    "cache_hit": false,
+    "adapter": null,
+    "model": null,
+    "fallback_used": false
+  }
+}

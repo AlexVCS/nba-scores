@@ -1,0 +1,243 @@
+{
+  "schema_version": "1",
+  "request_id": "fx-series-hidden",
+  "outcome": "answer",
+  "question": "did the pistons beat the magic in the 2026 first round",
+  "interpretation": {
+    "intent": "playoff_series",
+    "detected_type": "series",
+    "items": [
+      {
+        "field": "team",
+        "value": "Detroit Pistons",
+        "detail": "DET",
+        "expression": "pistons",
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": 1610612765,
+        "player_id": null,
+        "spoiler": false
+      },
+      {
+        "field": "team",
+        "value": "Orlando Magic",
+        "detail": "ORL",
+        "expression": "magic",
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": 1610612753,
+        "player_id": null,
+        "spoiler": false
+      },
+      {
+        "field": "round",
+        "value": "2026 First Round",
+        "detail": null,
+        "expression": "2026 first round",
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      }
+    ],
+    "reference_time": "2026-09-29T12:00:00-04:00",
+    "timezone": "America/New_York",
+    "dates": null,
+    "season": "2025-26"
+  },
+  "result": {
+    "kind": "playoff_series",
+    "season": "2025-26",
+    "round": "first_round",
+    "conference": "east",
+    "teams": [
+      {
+        "team": {
+          "value": {
+            "team_id": 1610612765,
+            "tricode": "DET",
+            "name": "Detroit Pistons"
+          },
+          "spoiler": false
+        },
+        "seed": {
+          "value": 1,
+          "spoiler": true
+        },
+        "wins": {
+          "value": 4,
+          "spoiler": true
+        },
+        "won_series": {
+          "value": true,
+          "spoiler": true
+        }
+      },
+      {
+        "team": {
+          "value": {
+            "team_id": 1610612753,
+            "tricode": "ORL",
+            "name": "Orlando Magic"
+          },
+          "spoiler": false
+        },
+        "seed": {
+          "value": 8,
+          "spoiler": true
+        },
+        "wins": {
+          "value": 2,
+          "spoiler": true
+        },
+        "won_series": {
+          "value": false,
+          "spoiler": true
+        }
+      }
+    ],
+    "status": {
+      "value": "complete",
+      "spoiler": true
+    },
+    "games_played": {
+      "value": 6,
+      "spoiler": true
+    },
+    "summary": {
+      "value": "DET won 4-2",
+      "spoiler": true
+    },
+    "games": {
+      "value": [
+        {
+          "date": "2026-04-19",
+          "game": {
+            "gameId": "0042500131",
+            "gameCode": "20260419/ORLDET",
+            "gameStatus": 3,
+            "gameLabel": "East First Round",
+            "gameSubLabel": "",
+            "gameTimeUTC": "2026-04-20T00:30:00Z",
+            "gameStatusText": "Final",
+            "ifNecessary": false,
+            "seriesGameNumber": "Game 1",
+            "seriesText": "DET leads 1-0",
+            "boxscoreAvailable": true,
+            "period": 4,
+            "homeTeam": {
+              "teamId": 1610612765,
+              "teamName": "Pistons",
+              "teamCity": "Detroit",
+              "teamTricode": "DET",
+              "score": 108
+            },
+            "awayTeam": {
+              "teamId": 1610612753,
+              "teamName": "Magic",
+              "teamCity": "Orlando",
+              "teamTricode": "ORL",
+              "score": 101
+            }
+          },
+          "spoilers": {
+            "score": true,
+            "status_text": true,
+            "series_text": true,
+            "labels": true
+          },
+          "links": [
+            {
+              "kind": "boxscore",
+              "label": "Boxscore",
+              "href": "/games/0042500131/boxscore?date=2026-04-19",
+              "external": false,
+              "spoiler": false
+            }
+          ],
+          "spoiler": false
+        },
+        {
+          "date": "2026-04-22",
+          "game": {
+            "gameId": "0042500132",
+            "gameCode": "20260422/ORLDET",
+            "gameStatus": 3,
+            "gameLabel": "East First Round",
+            "gameSubLabel": "",
+            "gameTimeUTC": "2026-04-23T00:30:00Z",
+            "gameStatusText": "Final",
+            "ifNecessary": false,
+            "seriesGameNumber": "Game 2",
+            "seriesText": "Series tied 1-1",
+            "boxscoreAvailable": true,
+            "period": 4,
+            "homeTeam": {
+              "teamId": 1610612765,
+              "teamName": "Pistons",
+              "teamCity": "Detroit",
+              "teamTricode": "DET",
+              "score": 97
+            },
+            "awayTeam": {
+              "teamId": 1610612753,
+              "teamName": "Magic",
+              "teamCity": "Orlando",
+              "teamTricode": "ORL",
+              "score": 104
+            }
+          },
+          "spoilers": {
+            "score": true,
+            "status_text": true,
+            "series_text": true,
+            "labels": true
+          },
+          "links": [
+            {
+              "kind": "boxscore",
+              "label": "Boxscore",
+              "href": "/games/0042500132/boxscore?date=2026-04-22",
+              "external": false,
+              "spoiler": false
+            }
+          ],
+          "spoiler": false
+        }
+      ],
+      "spoiler": true
+    }
+  },
+  "clarification": null,
+  "notice": null,
+  "spoiler_gate": null,
+  "links": [
+    {
+      "kind": "playoff_series",
+      "label": "Open series",
+      "href": "/playoffs/2026/east-conference-first-round-1",
+      "external": false,
+      "spoiler": false
+    }
+  ],
+  "suggestions": [],
+  "sources": [
+    {
+      "name": "nba_stats",
+      "label": "NBA.com",
+      "fetched_at": "2026-09-29T16:00:00Z",
+      "complete": true
+    }
+  ],
+  "interpreter": {
+    "model_called": true,
+    "cache_hit": false,
+    "adapter": "jev",
+    "model": "jev-1.13.0",
+    "fallback_used": false
+  }
+}
