@@ -660,3 +660,26 @@ gained one rule that has not been checked live. The field oracle
 (`trace.expected_fields`) scores `target_team` for team-scope accept labels. The
 exposed two-team cases (release-two 019-022) are not release evidence for this
 change; only a fresh unseen set is.
+
+## Fixes after the second unseen run (not yet measured)
+
+These changes address misses exposed by `ask-unseen-two-2026-09-29`. They are
+covered by deterministic tests only; no provider was called. Validate them on a
+fresh unseen set.
+
+- Lookup: on-screen date wording ("the date I have open") offers the page date,
+  unless the question sets it aside; ordinal game numbers ("the sixth game") in
+  playoff questions; rounds named with playoff wording or numbers ("first
+  playoff round", "round 2"); "most recent"/"latest" weekdays; a one-word team
+  name no team used in the requested season stays open to exact player names
+  ("Magic" in 1987).
+- Cascade: a later confident `absent` read replaces an earlier
+  `no_matching_candidate` when lookup found no text for the field. An
+  `unsupported` outcome after an accepted intent contests the intent instead of
+  ending the cascade. Jev's unsupported outcomes keep their confidence.
+- Normalizer: with an ambiguous intent, a field unclear under every intent
+  option is asked about first.
+- Unverified live: Jev's new `target_team` question and Luna's `target_team`
+  schema and prompt rule. On the recorded exposed traces, the unsupported veto
+  turns two correct unsupported answers and one wrong one into intent
+  clarifications.
