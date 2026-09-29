@@ -6,16 +6,18 @@ import {askCap} from "./askStyles";
 interface AskInterpretationProps {
   interpretation: AskInterpretationData;
   revealed: boolean;
+  omitProtected?: boolean;
   onEditQuestion: () => void;
 }
 
 const chip = "inline-flex min-h-[30px] items-center gap-[7px] rounded-lg border px-2.5 text-xs font-bold";
 const chipLabel = "text-[9px] font-extrabold tracking-[.12em] not-italic uppercase";
 
-function AskInterpretation({interpretation, revealed, onEditQuestion}: AskInterpretationProps) {
+function AskInterpretation({interpretation, revealed, omitProtected = false, onEditQuestion}: AskInterpretationProps) {
   const {items, detected_type: detectedType, dates, season} = interpretation;
-  const hasDateItem = items.some(item => item.field === "date" || item.field === "dates" || item.field === "game");
-  const hasSeasonItem = items.some(item => item.field === "season" || item.field === "round" || item.field === "series");
+  const visibleItems = omitProtected && !revealed ? items.filter(item => !item.spoiler) : items;
+  const hasDateItem = visibleItems.some(item => item.field === "date" || item.field === "dates" || item.field === "game");
+  const hasSeasonItem = visibleItems.some(item => item.field === "season" || item.field === "round" || item.field === "series");
 
   return (
     <section aria-label="How Ask read your question">
@@ -29,7 +31,7 @@ function AskInterpretation({interpretation, revealed, onEditQuestion}: AskInterp
         )}
       </div>
       <ul className="flex flex-wrap items-center gap-1.5">
-        {items.map((item, index) => {
+        {visibleItems.map((item, index) => {
           const ambiguous = item.status === "ambiguous";
           // Inferred participants are spoilers: keep the field name, drop the value entirely.
           const hidden = item.spoiler && !revealed;

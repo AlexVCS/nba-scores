@@ -11,7 +11,6 @@ interface AskStatResultProps {
 }
 
 function statText(value: AskStatValue): string {
-  if (value.made !== null && value.attempted !== null) return `${value.made}-${value.attempted}`;
   return value.display;
 }
 
@@ -97,7 +96,7 @@ function AskStatResult({result, controls}: AskStatResultProps) {
       </div>
       <div className="flex flex-wrap items-center gap-3 border-t border-hw-line bg-hw-surface-muted px-3.5 py-3">
         <span className={`${askCap} w-[92px]`}>Final score</span>
-        {game.final_score.value === null && !game.final_score.spoiler ? (
+        {score === null ? (
           <span className="text-sm font-bold text-hw-muted">Not final yet</span>
         ) : (
         <span className="flex items-center gap-2 text-lg font-extrabold tabular-nums">
@@ -112,7 +111,7 @@ function AskStatResult({result, controls}: AskStatResultProps) {
         </span>
         )}
         <span className="flex-1" />
-        {game.final_score.spoiler && game.final_score.value !== null && (
+        {game.final_score.spoiler && (
           <AskRevealButton group={SCORE_GROUP} controls={controls} label="score" />
         )}
       </div>

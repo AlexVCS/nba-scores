@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import {afterEach, beforeEach, describe, expect, it, vi} from "vitest";
 import {ASK_RESPONSE_FIXTURES, ASK_SUGGEST_FIXTURES} from "@/services/ask/fixtures";
 import {ASK_RECENT_STORAGE_KEY} from "@/services/ask/recentSearches";
+import {RESULTS_VISIBILITY_STORAGE_KEY} from "@/providers/ResultsVisibilityProvider";
 import type {AskQuery, AskResponse} from "@/services/ask/types";
 import AskEntry from "./AskEntry";
 import {askSession} from "./askSessionStore";
@@ -133,6 +134,23 @@ describe("Ask entry and search dialog", () => {
     await user.click(screen.getByRole("button", {name: "Clear recent searches"}));
     expect(screen.queryByRole("group", {name: "Recent"})).not.toBeInTheDocument();
     expect(JSON.parse(localStorage.getItem(ASK_RECENT_STORAGE_KEY)!)).toEqual([]);
+  });
+
+  it("does not remember a protected suggestion when results are shown", async () => {
+    localStorage.setItem(RESULTS_VISIBILITY_STORAGE_KEY, "true");
+    const suggestion = "How did the Knicks do in the 2026 playoffs?";
+    const response = {...ASK_SUGGEST_FIXTURES["knicks-hidden"], questions: [
+      {question: suggestion, category: "postseason" as const, spoiler: true},
+      ...ASK_SUGGEST_FIXTURES["knicks-hidden"].questions,
+    ]};
+    vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify(response))));
+    mockRequester(ASK_RESPONSE_FIXTURES["answer-postseason-team"]);
+    const user = setup();
+    await user.keyboard("{Control>}k{/Control}");
+    await user.type(input(), "knicks");
+    await waitFor(() => expect(screen.getByRole("listbox").textContent).toContain(suggestion));
+    await user.click(screen.getByRole("option", {name: /How did the Knicks do in the 2026 playoffs/}));
+    expect(localStorage.getItem(ASK_RECENT_STORAGE_KEY)).toBeNull();
   });
 
   it("keeps digits in the search field while it is focused, and uses them to pick a clarification outside it", async () => {

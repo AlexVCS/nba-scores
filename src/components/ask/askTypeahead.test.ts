@@ -35,6 +35,7 @@ describe("buildTypeaheadGroups", () => {
 
     const shown = buildTypeaheadGroups({query: "knicks", suggest: withPlayoffs, resultsHidden: false, now});
     expect(shown.flatMap(group => group.actions.map(action => action.label)).join(" ")).toMatch(/NYK @ BOS.*playoffs/);
+    expect(shown.flatMap(group => group.actions).find(action => action.question?.includes("2026 playoffs"))?.spoiler).toBe(true);
   });
 
   it("offers only a generic bracket link for playoff keywords, never a team series", () => {

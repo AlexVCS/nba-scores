@@ -1,4 +1,4 @@
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import type {AskClarification as AskClarificationData, AskClarificationOption} from "@/services/ask/types";
 import {isEditableElement} from "./askKeyboard";
 import {withoutSpoilers} from "./askSpoilers";
@@ -12,7 +12,9 @@ interface AskClarificationProps {
 }
 
 function AskClarification({clarification, revealed, onChoose, onEditQuestion}: AskClarificationProps) {
-  const options = withoutSpoilers(clarification.options, revealed);
+  const [revealedClarification, setRevealedClarification] = useState<AskClarificationData | null>(null);
+  const optionsRevealed = revealedClarification === clarification;
+  const options = withoutSpoilers(clarification.options, revealed || optionsRevealed);
   const shortcutCount = Math.min(options.length, 9);
 
   useEffect(() => {
@@ -63,6 +65,15 @@ function AskClarification({clarification, revealed, onChoose, onEditQuestion}: A
             </li>
           ))}
         </ul>
+      )}
+      {!revealed && !optionsRevealed && (
+        <button
+          type="button"
+          className="min-h-8 w-fit cursor-pointer font-bold text-hw-accent-ink underline underline-offset-3 focus-visible:outline-2 focus-visible:outline-hw-accent"
+          onClick={() => setRevealedClarification(clarification)}
+        >
+          Show all options
+        </button>
       )}
       {clarification.hint && <p className="text-[11px] leading-[1.45] text-hw-muted">{clarification.hint}</p>}
       <div className="flex flex-wrap items-center gap-3 text-[11px] text-hw-muted">

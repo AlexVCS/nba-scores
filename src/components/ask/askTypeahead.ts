@@ -14,6 +14,7 @@ export interface AskAction {
   href?: string;
   /** Question to run for Ask rows, recents, and examples. */
   question?: string;
+  spoiler?: boolean;
 }
 
 export interface AskActionGroup {
@@ -98,7 +99,7 @@ export function buildTypeaheadGroups({query, suggest, resultsHidden, now = new D
     .filter(suggestion => !resultsHidden || !suggestion.spoiler)
     .filter(suggestion => normalizeAskQuery(suggestion.question) !== typed)
     .slice(0, TYPEAHEAD_QUESTION_LIMIT)
-    .map((suggestion, index) => askAction(suggestion.question, `ask-suggested-${index}`));
+    .map((suggestion, index) => ({...askAction(suggestion.question, `ask-suggested-${index}`), spoiler: suggestion.spoiler}));
 
   const groups: AskActionGroup[] = [
     {id: "games", label: "Games", actions: games},

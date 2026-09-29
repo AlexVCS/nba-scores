@@ -5,6 +5,7 @@ import {beforeEach, describe, expect, it, vi} from "vitest";
 import {ASK_RESPONSE_FIXTURES} from "@/services/ask/fixtures";
 import type {AskResponse} from "@/services/ask/types";
 import AskResult from "./AskResult";
+import AskFooter from "./AskFooter";
 import {AskTestProviders, perceivableText} from "./askTestUtils";
 import type {AskRevealControls} from "./askStyles";
 
@@ -100,6 +101,60 @@ describe("AskResult spoiler protection", () => {
     await user.click(screen.getByRole("button", {name: "Reveal score"}));
     expect(containsValue(perceivableText(container), "104")).toBe(true);
     expect(containsValue(perceivableText(container), "112")).toBe(true);
+  });
+
+  it("shows percentage display instead of made-attempted", async () => {
+    const user = userEvent.setup();
+    const response = structuredClone(ASK_RESPONSE_FIXTURES["answer-player-stat"]);
+    if (response.result?.kind !== "boxscore_stat" || !response.result.player_line) throw new Error("Expected player stat");
+    response.result.player_line.values[0].value = {stat: "field_goal_percentage", value: 0.5, display: "50.0%", made: 5, attempted: 10};
+    response.result.stat = "field_goal_percentage";
+    render(<AskTestProviders><Harness response={response} /></AskTestProviders>);
+    await user.click(screen.getByRole("button", {name: "Reveal fg%"}));
+    expect(screen.getByText("50.0%")).toBeInTheDocument();
+    expect(screen.queryByText("5-10")).not.toBeInTheDocument();
+  });
+
+  it("offers a local reveal for protected clarification options without listing them first", async () => {
+    const user = userEvent.setup();
+    const response = structuredClone(ASK_RESPONSE_FIXTURES["clarification-which-jalen"]);
+    if (!response.clarification) throw new Error("Expected clarification");
+    response.clarification.options[0].spoiler = true;
+    render(<AskTestProviders><Harness response={response} /></AskTestProviders>);
+    expect(screen.queryByText("Jalen Duren")).not.toBeInTheDocument();
+    await user.click(screen.getByRole("button", {name: "Show all options"}));
+    expect(screen.getByRole("button", {name: /Jalen Duren/})).toBeInTheDocument();
+  });
+
+  it("uses the same hidden score controls for a completed and an unfinished game", () => {
+    const final = structuredClone(ASK_RESPONSE_FIXTURES["answer-player-stat"]);
+    const pending = structuredClone(final);
+    if (pending.result?.kind !== "boxscore_stat") throw new Error("Expected boxscore stat");
+    pending.result.game.final_score.value = null;
+    const first = render(<AskTestProviders><Harness response={final} /></AskTestProviders>);
+    expect(screen.getByRole("button", {name: "Reveal score"})).toBeInTheDocument();
+    const finalText = perceivableText(first.container);
+    first.unmount();
+    render(<AskTestProviders><Harness response={pending} /></AskTestProviders>);
+    expect(screen.getByRole("button", {name: "Reveal score"})).toBeInTheDocument();
+    expect(perceivableText(document.body)).toBe(finalText);
+  });
+
+  it("omits protected interpretation chips in a gated response", () => {
+    const response = structuredClone(ASK_RESPONSE_FIXTURES["answer-conditional-game-hidden"]);
+    if (!response.interpretation) throw new Error("Expected interpretation");
+    response.interpretation.items.push({...response.interpretation.items[0], field: "game", value: "Spoiler matchup", spoiler: true});
+    const {container} = render(<AskTestProviders><Harness response={response} /></AskTestProviders>);
+    expect(perceivableText(container)).not.toContain("Spoiler matchup");
+    expect(within(screen.getByRole("region", {name: "How Ask read your question"})).queryByText("Hidden")).not.toBeInTheDocument();
+  });
+
+  it("keeps source completion out of the hidden footer", () => {
+    const response = ASK_RESPONSE_FIXTURES["answer-postseason-league-in-progress"];
+    const {rerender} = render(<AskFooter mode="result" resultsHidden response={response} />);
+    expect(screen.queryByText(/still in progress/)).not.toBeInTheDocument();
+    rerender(<AskFooter mode="result" resultsHidden={false} response={response} />);
+    expect(screen.getByText(/still in progress/)).toBeInTheDocument();
   });
 
   it("renders the same hidden gate for a played and an unplayed conditional game", async () => {

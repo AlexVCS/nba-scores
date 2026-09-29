@@ -29,7 +29,7 @@ function AskResult({response, controls, onAsk, onChooseOption, onRetry, onEditQu
   if (response.spoiler_gate && !revealed) {
     return (
       <div className="grid gap-4">
-        {response.interpretation && <AskInterpretation interpretation={response.interpretation} revealed={false} onEditQuestion={onEditQuestion} />}
+        {response.interpretation && <AskInterpretation interpretation={response.interpretation} revealed={false} omitProtected onEditQuestion={onEditQuestion} />}
         <section className="grid gap-3 rounded-[12px] border border-hw-line bg-hw-surface p-4" aria-label="Hidden answer">
           <h3 className="text-lg font-extrabold">{response.spoiler_gate.title}</h3>
           <p className="text-sm text-hw-muted">{response.spoiler_gate.message}</p>

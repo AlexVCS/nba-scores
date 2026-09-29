@@ -112,7 +112,7 @@ function AskPanel({onClose}: AskPanelProps) {
       navigate(withDesignPrefix(action.href, pathname));
       onClose();
     } else if (action.question) {
-      ask(action.question);
+      ask(action.question, {remember: !action.spoiler});
     }
   };
 
