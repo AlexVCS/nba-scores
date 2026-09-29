@@ -31,7 +31,9 @@ INTENTS: dict[str, str] = {
         "led the game in a statistic (e.g. 'How many points did "
         "Tatum score in game 4 of the 2024 Finals?', 'Who had the most assists last night "
         "in Knicks vs Heat?'). An unknown player or team name still has this intent; "
-        "its entity field must be no_matching_candidate."
+        "its entity field must be no_matching_candidate. A game statistic asked "
+        "without naming the game ('How many assists did Jordan have?') still has "
+        "this intent; the missing date requires clarification."
     ),
     "playoff_series": (
         "A request framed as a playoff series, matchup, or particular round. "
@@ -56,7 +58,7 @@ INTENTS: dict[str, str] = {
 }
 
 UNSUPPORTED_REASONS: dict[str, str] = {
-    "career_stats": "Career totals or career averages",
+    "career_stats": "Career totals or career averages, when the question asks about a whole career",
     "season_stats": "A player's or team's statistics over a whole season",
     "season_leaders": "Who led the league or a season in a statistic",
     "historical_comparison": "Comparing players, teams, games, or eras",

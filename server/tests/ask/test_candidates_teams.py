@@ -105,6 +105,12 @@ def test_aliases_cities_and_tricodes(service):
     assert teams(service, "what was the score in min 3").status == "not_mentioned"
 
 
+def test_bad_boys_alias_names_the_pistons(service):
+    team_set = teams(service, "How did the Bad Boys versus Lakers series go in the 1989 playoffs?")
+    assert team_ids(team_set) == [1610612765, 1610612747]
+    assert team_set.candidates[0].alias == "Bad Boys"
+
+
 def test_unknown_team_name_abstains(service):
     team_set = teams(service, "How many points did the Seattle Pilots score yesterday?")
     assert team_set.status == "no_candidates"

@@ -120,6 +120,17 @@ def test_impossible_date_is_flagged_not_moved(service):
     assert candidate.value.unresolved_reason == "invalid_date"
 
 
+def test_leap_day_names_february_29_of_its_year(service):
+    result = service.lookup("Any NBA games on leap day in 2024?", AskContext(reference_time=WEDNESDAY))
+    assert resolved(result.sets["date"]) == [("2024-02-29", "2024-02-29")]
+    # The year belongs to the date, so it is not also offered as a season.
+    assert result.sets["season"].status == "not_mentioned"
+    [candidate] = dates(service, "games on leap day 2023").candidates
+    assert candidate.value.unresolved_reason == "invalid_date"
+    [candidate] = dates(service, "games on leap day").candidates
+    assert candidate.value.unresolved_reason == "year_required"
+
+
 @pytest.mark.parametrize("question", [
     "games on January 32, 2025",
     "games from March 0-5, 2025",

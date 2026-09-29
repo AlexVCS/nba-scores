@@ -76,6 +76,12 @@ def test_questions_offer_only_candidates_and_sentinels():
     assert not any("year" in qid or "month" in qid for qid in questions)
 
 
+def test_intent_options_keep_gameless_stat_questions_out_of_career_stats():
+    questions, _ = build_questions(b.lookup_result([]))
+    assert "without naming the game" in questions["intent"]["criteria"]["boxscore_stat"]
+    assert "whole career" in questions["unsupported_reason"]["criteria"]["career_stats"]
+
+
 def test_decode_selects_confident_fields():
     candidates = b.lookup_result([CLE, LAST_WEEK])
     questions, team_ids = build_questions(candidates)

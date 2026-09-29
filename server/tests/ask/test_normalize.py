@@ -263,6 +263,14 @@ def test_specific_series_with_missing_details_clarifies_instead_of_widening_scop
         assert (result.status, result.clarify_field) == ("needs_clarification", field)
 
 
+def test_single_game_stat_without_a_game_clarifies_the_date():
+    jordan = b.player(893, "Michael Jordan")
+    interpreted = output(sel("intent", "boxscore_stat"), sel("stat_scope", "player"),
+                         sel("stat", "assists"), sel("player", jordan.id))
+    result = normalize(interpreted, b.lookup_result([jordan]))
+    assert (result.status, result.clarify_field, result.clarify_reason) == ("needs_clarification", "date", "missing")
+
+
 def test_unsupported_and_unreliable_outputs():
     unsupported = InterpreterOutput(outcome="unsupported", unsupported_reason="career_stats", metadata=META)
     assert normalize(unsupported, b.lookup_result([])).unsupported_reason == "career_stats"

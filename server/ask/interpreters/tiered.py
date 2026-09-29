@@ -200,6 +200,9 @@ class TieredAdapter:
                 else:
                     spent += usage.cost_usd
             if output.outcome == "unavailable":
+                # A failed tier decides nothing. Earlier sub-threshold reads, including
+                # "absent", stay undecided so the policy clarifies them: accepting them
+                # because a later tier timed out would be a guess (ADR 0002).
                 continue
             last = output
             if output.outcome == "unsupported":
