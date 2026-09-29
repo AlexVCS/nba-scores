@@ -6,7 +6,7 @@ interface AskResponseDetailsProps {
 
 function AskResponseDetails({interpreter}: AskResponseDetailsProps) {
   const {model_called: modelCalled, cache_hit: cacheHit, adapter, model} = interpreter;
-  const reportedModel = modelCalled || (cacheHit && Boolean(adapter));
+  const reportedModel = Boolean(model) || modelCalled || (cacheHit && Boolean(adapter));
 
   return (
     <details className="basis-full text-hw-muted">

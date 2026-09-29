@@ -39,6 +39,19 @@ describe("Ask response details", () => {
     expect(screen.getByText("gpt-6-luna")).toBeInTheDocument();
   });
 
+  it("shows the original parser model on a clarification continuation", async () => {
+    vi.stubEnv("DEV", true);
+    const response = structuredClone(ASK_RESPONSE_FIXTURES["clarification-two-step-year"]);
+    response.interpreter = {...response.interpreter, model_called: false, cache_hit: false, model: "gpt-6-luna", adapter: "openai_responses"};
+    renderFooter(response);
+    await userEvent.setup().click(screen.getByText("Response details"));
+
+    expect(screen.getByText("Model call this request").nextElementSibling).toHaveTextContent("No");
+    expect(screen.getByText("Cache hit").nextElementSibling).toHaveTextContent("No");
+    expect(screen.getByText("gpt-6-luna")).toBeInTheDocument();
+    expect(screen.queryByText("No model used for this response")).not.toBeInTheDocument();
+  });
+
   it("says when a direct response used no model", async () => {
     vi.stubEnv("DEV", true);
     renderFooter(ASK_RESPONSE_FIXTURES["unsupported-career-stats"]);
