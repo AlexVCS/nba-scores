@@ -10,10 +10,11 @@ question; the adapter keeps a field from the first tier that reads it confidentl
 * Escalation stops as soon as every field the accepted intent needs is decided.
 
 Vetoes (ADR 0002 consequence, needed for the zero-guess gate): when a later confident
-read selects different values, or reads the field as absent, after an earlier tier
-accepted a selection, the field is not executed. The final tier, which reports no
-confidence, is also vetoed by an earlier selection that reached `veto_min`. Two
-different selections become `ambiguous`; selected versus absent keeps a sub-threshold
+read selects different values, reads the field as absent, or reads it as ambiguous,
+after an earlier tier accepted a selection, the field is not executed. The final tier,
+which reports no confidence, is also vetoed by an earlier selection that reached
+`veto_min`. Two different selections, or a selection and an ambiguous read, become
+`ambiguous` with both tiers' options; selected versus absent keeps a sub-threshold
 confidence so the policy clarifies it. The user is asked instead of either tier's
 answer being trusted.
 
@@ -65,6 +66,8 @@ class _Merge:
     # accepted (vetoes any tier) or merely reached `veto_min` (vetoes only the final tier).
     vetoers: dict[str, list[tuple[FieldInterpretation, bool]]] = field(default_factory=dict)
     vetoed: set[str] = field(default_factory=set)
+    # Options from later ambiguous reads that vetoed an earlier selection.
+    vetoing_options: dict[str, list[str]] = field(default_factory=dict)
     # Models that actually made a provider call, in cascade order.
     called: list[str] = field(default_factory=list)
 
@@ -105,12 +108,14 @@ class TieredAdapter:
         for read in output.fields:
             name = read.field
             confident = _confident(tier, read)
-            if confident and read.status in ("selected", "absent"):
+            if confident and read.status in ("selected", "absent", "ambiguous"):
                 for earlier, accepted in merge.vetoers.get(name, []):
                     if not accepted and tier.accept_min is not None:
                         continue
                     if read.status != "selected" or not _same(earlier.selected, read.selected):
                         merge.vetoed.add(name)
+                        if read.status == "ambiguous":
+                            merge.vetoing_options[name] = read.alternatives
             if name in merge.decided:
                 continue
             if confident:
@@ -147,8 +152,8 @@ class TieredAdapter:
         for name in merge.vetoed & self._needed(merge):
             reads = [read for read, _ in merge.vetoers[name]]
             options: list[str] = []
-            for read in reads:
-                options.extend(v for v in read.selected if v not in options)
+            for values in [*(read.selected for read in reads), merge.vetoing_options.get(name, [])]:
+                options.extend(v for v in values if v not in options)
             if len(options) >= 2:
                 fields[name] = FieldInterpretation(field=name, status="ambiguous", alternatives=options[:12])
             else:

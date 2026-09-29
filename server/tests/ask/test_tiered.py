@@ -131,6 +131,56 @@ def test_luna_disagreeing_with_an_accepted_read_is_vetoed():
     assert (decision.action, decision.field) == ("clarify", "teams")
 
 
+def test_later_ambiguous_read_vetoes_an_accepted_selection():
+    jev = Fake("jev", sel("intent", "game_search"), sel("teams", CLE.id), sel("date", "date:0", confidence=0.3))
+    luna = Fake("luna", sel("intent", "game_search", confidence=None), sel("date", "date:0", confidence=None),
+                FieldInterpretation(field="teams", status="ambiguous", alternatives=[BOS.id, CLE.id]))
+    out = cascade(jev, luna).interpret(REQUEST)
+    teams = out.get_field("teams")
+    assert (teams.status, teams.alternatives) == ("ambiguous", [CLE.id, BOS.id])
+    assert out.metadata.field_tiers["teams"] == "veto"
+    decision = decide(out)
+    assert (decision.action, decision.field) == ("clarify", "teams")
+
+
+def test_confident_jev_ambiguity_vetoes_an_accepted_laya_selection():
+    laya = Fake("laya", sel("intent", "game_search"), sel("teams", CLE.id), sel("date", "date:0", confidence=0.3))
+    jev = Fake("jev", sel("date", "date:0"),
+               FieldInterpretation(field="teams", status="ambiguous", alternatives=[CLE.id, BOS.id], confidence=0.95))
+    out = cascade(laya, jev).interpret(REQUEST)
+    assert out.get_field("teams").status == "ambiguous"
+    assert decide(out).action == "clarify"
+
+
+def test_bare_surname_with_several_players_is_clarified_not_guessed():
+    # Unseen case 082: Jev picked Stephen Curry at 1.0 from six Currys; Luna read the
+    # player as ambiguous. The merge must ask which Curry instead of keeping Jev's pick.
+    from server.ask.candidates import CandidateLookupService
+
+    question = "How many points did Curry score on January 15, 2025?"
+    candidates = CandidateLookupService().lookup(question, CONTEXT)
+    currys = [c.id for c in candidates.sets["player"].candidates]
+    assert {"player:201939", "player:203552"} <= set(currys)
+    request = REQUEST.model_copy(update={"question": question, "candidates": candidates})
+    shared = [sel("intent", "boxscore_stat"), sel("stat_scope", "player"), sel("stat", "points"),
+              sel("aggregation", "total"), sel("date", "date:0"), absent("round"), absent("game_number"),
+              absent("teams")]
+    jev = Fake("jev", *(r.model_copy(update={"confidence": 1.0}) for r in shared),
+               sel("player", "player:201939", confidence=1.0),
+               FieldInterpretation(field="season", status="no_matching_candidate", confidence=0.69))
+    luna = Fake("luna", *(r.model_copy(update={"confidence": None}) for r in shared), absent("season", confidence=None),
+                FieldInterpretation(field="player", status="ambiguous", alternatives=currys))
+    out = cascade(jev, luna, thresholds=(0.85,)).interpret(request)
+    player = out.get_field("player")
+    assert (player.status, player.alternatives) == ("ambiguous", currys)
+    assert out.metadata.field_tiers["player"] == "veto"
+    norm = Normalizer().normalize(out, candidates, CONTEXT)
+    state = CascadeState(attempts=[CascadeAttempt(output=out, normalization=norm)], candidates=candidates,
+                         fallback_enabled=False, remaining_budget_usd=1, remaining_ms=20_000)
+    decision = POLICY.decide(state)
+    assert (decision.action, decision.field) == ("clarify", "player")
+
+
 def test_luna_dropping_a_leaning_selection_is_clarified_not_executed():
     # Jev leans CLE (0.6, below accept_min) and Luna reads no team: running an
     # unfiltered search would be a guess.
