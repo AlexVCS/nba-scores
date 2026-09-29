@@ -7,7 +7,7 @@ import re
 from typing import Iterable
 
 from server.ask.models.candidates import Candidate, CandidateLookupResult
-from server.ask.models.common import DateRange
+from server.ask.models.common import DateRange, MAX_QUESTION_LENGTH
 from server.ask.models.interpreter import InterpreterOutput
 from server.ask.models.request import AskContext, AskRequest, BoxscoreStatRequest, GameSearchRequest, PlayoffSeriesRequest, PostseasonSummaryRequest
 from server.ask.models.response import (
@@ -100,15 +100,17 @@ def suggestions(request: AskRequest) -> list[Suggestion]:
     return []
 
 
-def _rewrite(question: str, candidate: Candidate) -> str:
+def _rewrite(question: str, candidate: Candidate) -> str | None:
     value = candidate.value
     label = value.player.name if value.kind == "player" else value.team.name if value.kind == "team" else candidate.label
     matched = candidate.matched_text
     if matched:
         match = re.search(re.escape(matched), question, re.IGNORECASE)
         if match:
-            return (question[:match.start()] + label + question[match.end():])[:300]
-    return f"{question.rstrip(' ?')} {label}?"[:300]
+            rewritten = question[:match.start()] + label + question[match.end():]
+            return rewritten if len(rewritten) <= MAX_QUESTION_LENGTH else None
+    rewritten = f"{question.rstrip(' ?')} {label}?"
+    return rewritten if len(rewritten) <= MAX_QUESTION_LENGTH else None
 
 
 def _candidate_options(field: str, reason: str, pending: PendingResolution) -> Iterable[Candidate]:
@@ -125,6 +127,7 @@ def clarification(field: str, reason: str, question: str, pending: PendingResolu
                   store: ResolutionStore) -> Clarification:
     label = _FIELD_LABEL.get(field, field)
     options: list[ClarificationOption] = []
+    overlong_rewrite = False
     if field == "date" and reason == "year_required":
         today = pending.context.reference_time.year
         for year in (today, today - 1, today + 1):
@@ -139,7 +142,9 @@ def clarification(field: str, reason: str, question: str, pending: PendingResolu
                 rewritten = question.replace(expression, f"{expression}, {year}", 1)
             else:
                 rewritten = f"{question.rstrip(' ?')} in {year}?"
-            rewritten = rewritten[:300]
+            if len(rewritten) > MAX_QUESTION_LENGTH:
+                overlong_rewrite = True
+                continue
             options.append(ClarificationOption(id=f"year:{year}", label=str(year), question=rewritten,
                                                resolution=store.issue(rewritten, chosen)))
     else:
@@ -149,6 +154,9 @@ def clarification(field: str, reason: str, question: str, pending: PendingResolu
             except ValueError:
                 continue
             rewritten = _rewrite(question, candidate)
+            if rewritten is None:
+                overlong_rewrite = True
+                continue
             options.append(ClarificationOption(
                 id=candidate.id, label=candidate.label[:80], question=rewritten,
                 team=candidate.value.team if candidate.value.kind == "team" else None,
@@ -161,5 +169,6 @@ def clarification(field: str, reason: str, question: str, pending: PendingResolu
     prompt = f"Which {label}?" if reason in {"ambiguous", "year_required"} else f"Add a {label}"
     if reason == "year_required":
         prompt = "Which year?"
-    hint = "Edit your question to include a more specific name or date." if not options else None
+    hint = ("Shorten your question, then add a more specific name or date." if overlong_rewrite
+            else "Edit your question to include a more specific name or date.") if not options else None
     return Clarification(field=field, reason=reason, prompt=prompt, options=options[:9], hint=hint)

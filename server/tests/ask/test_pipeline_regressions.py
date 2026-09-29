@@ -187,3 +187,45 @@ def test_expired_reservation_is_settled_unspent(tmp_path):
     response = coordinator.answer(AskQuery(question="Who won yesterday?"))
     assert response.outcome == "unavailable"
     assert adapter.calls == 0 and budget.settlements == [0.0]
+
+
+@pytest.mark.parametrize("case", ["player", "year"])
+def test_long_clarification_does_not_issue_truncated_question(tmp_path, case):
+    if case == "player":
+        first = b.player(10, "Jalen A", matched="Jalen")
+        second = b.player(11, "Jalen B", matched="Jalen")
+        candidates = b.lookup_result([first, second])
+        fields = [
+            FieldInterpretation(field="intent", status="selected", selected=["boxscore_stat"]),
+            FieldInterpretation(field="stat_scope", status="selected", selected=["player"]),
+            FieldInterpretation(field="player", status="ambiguous",
+                                alternatives=[first.id, second.id]),
+        ]
+        base = "How did Jalen do? "
+    else:
+        day = b.date(0, "March 3", DateComponents(kind="calendar_date", month=3, day=3),
+                     unresolved="year_required", matched="March 3")
+        candidates = b.lookup_result([day])
+        fields = [
+            FieldInterpretation(field="intent", status="selected", selected=["game_search"]),
+            FieldInterpretation(field="date", status="selected", selected=[day.id]),
+        ]
+        base = "Games on March 3? "
+    question = base + "x" * (300 - len(base))
+    output = InterpreterOutput(outcome="interpreted", fields=fields,
+                               metadata=InterpreterMetadata(adapter="openai_responses", provider="openai",
+                                                            model="gpt-6-luna", latency_ms=1,
+                                                            usage=InterpreterUsage(provider_calls=1,
+                                                                                   cost_usd=0.0001)))
+
+    class ScriptedAdapter(Adapter):
+        def interpret(self, request):
+            self.calls += 1
+            return output
+
+    coordinator = pipeline(tmp_path, Lookup(candidates), ScriptedAdapter())
+    coordinator.resolutions.issue = lambda *args: pytest.fail("truncated question received a token")
+    response = coordinator.answer(AskQuery(question=question))
+    assert response.outcome == "needs_clarification"
+    assert response.clarification.options == []
+    assert "Shorten your question" in response.clarification.hint
