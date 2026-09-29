@@ -1,126 +1,320 @@
-# Natural-language search evaluation
+# Ask: interpreter evaluation (#199)
 
-The initial live validation on September 11, 2026 was blocked: the backend's
-configured OpenAI key returned HTTP 429 with `credit_balance_exhausted` and
-`insufficient_quota`. A later request using that key and the eligible
-`gpt-4.1-mini-2025-04-14` snapshot succeeded; no replacement key was needed. The key was not printed or copied into frontend code.
+This document covers the interpreter adapters, the evaluation harness, and the
+results so far. The decision on the interpreter architecture (one provider or a
+cascade) is still open. The comparison runs once #200's candidate lookup lands,
+because Jev must be measured with lookup candidates, not hand-picked ones.
 
-The initial access comparison attempted GPT-4.1 mini and GPT-4.1 nano. Both
-returned provider failures before producing an interpretation. The saved
-[access report](verification/ask-seed-access.json) records those attempts.
-Its timings describe failed requests, not successful search latency. Its fixture
-and prompt hashes identify the earlier access probe, not the revised fixture set.
-The later [sharing access probe](verification/ask-sharing-access.json) passed one
-seed question in 3.174 seconds, using $0.0005836 at regular list prices. This
-estimate does not establish an actual charge or incentive eligibility. One case
-is insufficient to select the model.
+Contract: [`docs/ask-contract.md`](ask-contract.md). Earlier prototype results are
+summarized under [History](#history-prototype-parser).
 
-The issue asks for parser evaluation before retrieval implementation. That gate
-was attempted first, but could not complete because of the provider credit limit.
-Backend implementation continued against typed fixtures. GPT-4.1 mini is a
-provisional default, not a measured winner. Do not mark the issue release-ready
-until the live gates below have run.
+## Components
 
-## Follow-up live checks
+| Piece | File | Contract role |
+| --- | --- | --- |
+| Jev adapter (`jev-1.13.0`, pinned) | `server/ask/interpreters/jev.py` | `InterpreterAdapter` (`name="jev"`) |
+| OpenAI Responses adapter (gpt-4.1-mini, Luna) | `server/ask/interpreters/openai_responses.py` | `InterpreterAdapter` (`name="openai_responses"`) |
+| Closed-set options (intents, stats, scopes, reasons) | `server/ask/interpreters/closed_sets.py` | Built from the contract enums |
+| Fallback policy | `server/ask/interpreters/cascade.py` | `CascadePolicy` |
+| Normalizer | `server/ask/normalize.py` | `RequestNormalizer` |
+| List prices and spend guard | `server/ask/interpreters/pricing.py` | |
+| Harness (driver, scoring, report) | `server/ask/eval/runner.py` | |
+| CLI (`probe`, `run`) | `scripts/ask/evaluate.py` | |
+| Hand-built smoke cases | `server/tests/ask/fixtures/eval/smoke_hand_built.json` | Plumbing only |
 
-The [endpoint probe](verification/ask-live-endpoint.json) returned a complete 2023
-Finals answer (Denver 4–1 Miami, with the Finals route) in 2.490 seconds. The next
-request failed at the parser, and the 60-second provider cooldown made subsequent
-requests unavailable. These were direct HTTP requests, not browser interaction.
+Both adapters call the provider HTTP APIs directly with `httpx`, which is now an
+explicit dependency. They don't use a provider SDK. Tests inject
+`httpx.MockTransport` and make no network calls. Adapters never raise for provider
+failures. They return `outcome="unavailable"` with a short `error_code` such as
+`timeout`, `rate_limited`, `auth_failed`, or `budget_exceeded`. Raw provider text
+never goes in the output.
 
-The follow-up seed comparison recorded intermittent `credit_balance_exhausted`
-failures as well as interpretation mistakes. A successful individual request does
-not establish reliable access or release readiness. Regular-season team records
-were then explicitly added to the prompt's unsupported scope after the user's
-Thunder question; existing live reports predate that clarification.
+## Jev: what the API actually is
 
-A subsequent browser check submitted the user's exact Shai/biggest-win question
-on the local Hardwood page. It displayed the specific unsupported explanation,
-with four selectable examples visible. This path makes no model call. Regression
-coverage now includes all three reported regular-season questions, typographic
-season dashes, and choosing an example without automatically submitting it.
-The 90 backend search tests and seven frontend search tests pass. The revised
-prompt still needs a fresh seed evaluation before any held-out run.
+TypeSafe's Jev is a "System One" model. It takes a `state` and a map of typed
+questions, and it returns typed answers. It does not generate text.
 
-## Fixtures and scoring
+- **Endpoint:** `POST https://api.typesafe.ai/v1/systemone` with
+  `Authorization: Bearer $TYPESAFE_API_KEY`. The body is
+  `{"model", "state", "questions": {id: question}}`. The response is
+  `{"model", "answers": {id: answer}, "usage": {"input_tokens", "output_tokens"}}`.
+  `GET /v1/models` lists only the aliases (`jev-latest`, `jev-preview`), but
+  versioned IDs are accepted.
+- **Question types:**
+  - `choice`: `criteria` maps each option to a description, with at most 255
+    options. The answer has `choice`, a `probabilities` value for every option,
+    and `confidence`.
+  - `score`: 2–10 ordered levels. The answer has a probability-weighted `score`,
+    `probabilities`, and `confidence`.
+  - `noul`: a yes/no question. The answer is a single probability `noul`, with no
+    confidence.
+- `instructions` and `criteria` can be strings or structured objects. The
+  documented `confidence` is `(n·p_max − 1)/(n − 1)`, so it depends on the
+  number of options.
+- **Pricing and limits:** $0.042 per million input tokens; output tokens are free.
+  The limit is 64k tokens per request (32k for state plus the longest question).
+  Documented rate limits are 1,200 requests per minute and 250k tokens per second,
+  and they are "adjusting dynamically".
+- **SDK:** `pip install typesafe-sdk` (0.7.2, which depends on `httpx2`) provides
+  `TypeSafeClient.system_one(state, questions, model=...)` with retries. The adapter
+  uses plain HTTP instead, so it adds no dependency.
+- **Documented limits** ([jaggedness](https://docs.typesafe.ai/model-jaggedness/jev-1.13)):
+  Jev reads instructions literally. It is unreliable at counting, arithmetic, and
+  comparing dates, and it loses accuracy as unrelated state grows. It is not a
+  generator. Extraction must be a Choice over options that code has already found.
 
-`server/tests/fixtures/ask_seed.json` contains 25 seed questions.
-`server/tests/fixtures/ask_heldout.json` contains 75 held-out questions covering
-aliases, relative dates, playoff years and rounds, numbered Finals games,
-boxscore statistics, historical records, ambiguity, and unsupported requests.
+### How the adapter asks
 
-Each expected value uses the full `AskInterpretation` schema, including operation,
-mentions, raw date expressions, requested statistics, round, game number,
-ambiguities, and unsupported status. Offline validation checks fixture schemas
-only; it is not a parsing accuracy measurement.
+One request per question, sending the state `{"question": ...}` (the "fan-out"
+pattern):
 
-The evaluator calls the production `parse_ask` function with its actual prompt
-and strict schema. It scores every selector, clarification fields, and schema
-validity separately. A case passes only when all checked fields match. Extra
-selectors fail. List order and capitalization are ignored, but identifiers or
-resolved dates cannot be substituted for raw mentions. Alternative expected
-interpretations can be explicitly recorded when both are valid.
+- **Contract enums** (Choices): `intent` (four intents plus `unsupported`),
+  `unsupported_reason`, `stat_scope`, `stat`, and `aggregation`.
+- **Candidate fields** (Choices over the lookup's candidate IDs): `player`,
+  `date`, `season`, `round`, and `game_number`. Each also offers `__none__` (not
+  mentioned → `absent`) and `__other__` (mentioned but not listed →
+  `no_matching_candidate`).
+- **Teams:** one Noul per team candidate, one Noul for "a team not in the list",
+  and a `team_count` Choice as a consistency check. If the count disagrees with
+  the Nouls, the field is `ambiguous`.
+- **Dates:** Jev never extracts date parts or years. It chooses among #200's date
+  candidates. The date cookbook's default-year behavior is not used.
+
+**Confidence:** for a Choice field, confidence is the probability of the chosen
+option. For teams, it is the least decisive team Noul, `min(max(p, 1 − p))`. The
+adapter only chooses between `ambiguous` and `selected`, based on two or more
+candidates reaching `ambiguity_floor` while the top option stays below
+`ambiguity_top_max`. The cascade policy decides whether a confidence is high
+enough to act on.
+
+The adapter rejects `jev-latest` and `jev-preview`, and it logs the response's
+`model` field (`resolved_model`).
+
+## OpenAI Responses adapter
+
+One class serves every OpenAI model; the model is a configuration setting. It uses
+strict structured outputs (`text.format.type = "json_schema"`, `strict: true`) and
+`store: false`. The schema is built for each question:
+
+- Every candidate-backed field is `{status, values}`, where `values` is an enum of
+  that field's candidate IDs.
+- Closed-set fields are enums of the contract values.
+- `extracted_date` (the contract's `DateComponents`) appears only when the date set
+  has no candidates. When it is present, the adapter omits the `date` field, and
+  Python resolves the components in America/New_York.
+- Unknown IDs or impossible shapes produce `outcome="unreliable"` with
+  `error_code="invalid_output"`. They are never passed through as guesses.
+
+Responses has no per-field probabilities, so `confidence` is `None`.
+
+| Model | Snapshot the key resolved (probe) | List price in/out per 1M tokens |
+| --- | --- | --- |
+| `gpt-4.1-mini-2025-04-14` | `gpt-4.1-mini-2025-04-14` | $0.40 / $1.60 |
+| `gpt-6-luna` | `gpt-6-luna` | $0.10 / $0.50 (cached $0.01) |
+| `gpt-5.6-luna` | `gpt-5.6-luna` | $0.20 / $1.20 (cached $0.02) |
+
+The model pages list no dated snapshot for either Luna model; each model's only
+snapshot is its alias. The response's `model` field also returned the undated
+name. Because of that, "exact snapshot" currently means the undated ID plus the
+evaluation date. Luna defaults to `reasoning.effort="low"`, which can be changed;
+gpt-4.1-mini gets no `reasoning` parameter.
+
+## Normalizer
+
+`Normalizer.normalize(output, candidates, context)` returns a `NormalizationResult`.
+
+- **Invalid:**
+  - Unknown or misfiled candidate IDs
+  - Non-enum closed-set values
+  - Outcomes other than `interpreted`/`unsupported`
+- **Clarify:**
+  - A required field that is `absent` (`missing`), `ambiguous`, or `no_matching_candidate`
+  - An optional field the user mentioned but that could not be pinned down, such as
+    an unknown team in a game search. It is not silently dropped.
+  - A date candidate without a resolved range, which uses its `unresolved_reason`
+    (`year_required`, `range_too_long`)
+  - A boxscore request whose date spans more than one day
+- **Unsupported:** `aggregation="per_game"` on a boxscore request →
+  `multi_game_average`.
+- **Other rules:**
+  - A player or team scope without a named stat becomes `stat_line`; leaders
+    require a stat.
+  - `extracted_date` is used only when the date set has no candidates. Its year is
+    never defaulted. `last_week` is the previous Monday–Sunday, and
+    `last_weekday` excludes today.
+
+## Fallback policy
+
+`ThresholdCascadePolicy(primary_model, fallback=None | (adapter, model), thresholds)`
+implements the table in #199. The single-provider configuration is the same class
+with no fallback, so it never returns `fallback`.
+
+| Last attempt | Decision |
+| --- | --- |
+| Valid request, weakest relevant confidence ≥ `accept_min` (or no confidences) | `accept` |
+| Valid request, a relevant field below `accept_min` | one `fallback`, else `clarify` that field |
+| Clarification read confidently (field and intent ≥ `clarify_min`) | `clarify`; the fallback never fills the gap |
+| Clarification read with low confidence | one `fallback`, else `clarify` |
+| `no_matching_candidate` | `expand_candidates` once for that field, else `clarify` |
+| Unsupported (adapter, or normalizer `multi_game_average`) | `unsupported` |
+| `unreliable` output or `invalid` normalization | one `fallback`, else clarify-or-fail |
+| Primary `unavailable` | `fallback` only if enabled and budget/time allow, else clarify-or-fail |
+| Both paths unreliable | `clarify` if an attempt pinned down the unclear field, else `fail` |
+
+"Relevant" means the fields the intent reads (`normalize.RELEVANT_FIELDS`), so a
+stray low confidence on an unrelated field does not trigger fallback. The
+`not_found` and `unavailable` outcomes from the data service never reach the
+policy.
+
+**All thresholds are uncalibrated placeholders:** `JevThresholds` and
+`PolicyThresholds` (`accept_min=0.7`, `clarify_min=0.6`, `ambiguity_floor=0.25`,
+and so on). They must be calibrated on development data before any production
+use. No cookbook values are used.
+
+## Harness
+
+`server/ask/eval/runner.py`:
+
+- `drive()` runs one question the way #201's pipeline will: adapter → normalizer →
+  policy. It loops on `fallback` and `expand_candidates`, with at most four
+  attempts.
+- `run()` executes every configuration on every labeled case under one
+  `SpendGuard`. Configurations that share a primary adapter reuse its first call,
+  so "Jev alone" and "Jev → Luna" see the same Jev read and pay for it once.
+
+Scoring:
+
+- A case is correct only when the final action matches the label.
+- For `accept`, the normalized `AskRequest` must equal the labeled request (team
+  order ignored).
+- For `clarify` with a labeled `clarify_field`, the field must match.
+- An `accept` with a wrong request, or where the label expects clarification or
+  unsupported, is a schema-valid guess. It counts as a failure and is also counted
+  separately.
+
+Each configuration reports:
+- complete-request accuracy
+- schema-valid guesses
+- service failures
+- clarification (expected / correct / issued / unneeded)
+- unsupported (expected / correct / issued / false)
+- median and p95 latency (nearest rank)
+- total cost and cost per successful answer
+- fallback rate
+- resolved model IDs
+- failure breakdown
+
+For a cascade, the report also lists the cases the fallback **fixed** and
+**worsened** compared with the primary alone.
+
+Budget controls:
+
+- **Hard spend cap:** `--spend-cap`, default $3 for `run` and $0.50 for `probe`.
+  Each call reserves a conservative estimate first: about one token per two
+  characters of the full payload, plus the full output allowance. The reservation
+  is then settled with the reported usage. If a call would exceed the cap, the run
+  stops, and the remaining cases are listed under `not_run`.
+- **Per-request timeout:** `--timeout`, default 20 seconds.
+- **Per-question deadline:** `--deadline-ms`, default 30,000.
 
 ```bash
-server/venv/bin/python scripts/evaluate-ask.py --offline --split seed
-server/venv/bin/python scripts/evaluate-ask.py --offline --split holdout
-server/venv/bin/python scripts/evaluate-ask.py --split seed --models gpt-4.1-mini-2025-04-14 gpt-4.1-nano-2025-04-14 --max-cost 1 --output docs/verification/ask-seed.json
+# live access probe (keys from the main checkout's .env; values are never printed)
+server/venv/bin/python scripts/ask/evaluate.py --luna-models gpt-6-luna gpt-5.6-luna \
+  --env-file /path/to/main/server/.env probe --spend-cap 0.40
+
+# full comparison, once #200 exposes a CandidateLookup factory
+server/venv/bin/python scripts/ask/evaluate.py --env-file ... run \
+  --cases server/tests/ask/fixtures/eval/dev.json \
+  --lookup server.ask.candidates.<module>:<factory> \
+  --configs jev gpt-4.1-mini luna jev+luna --spend-cap 3
 ```
 
-After selecting a model on the seed set, freeze the prompt and run the held-out
-set. Use repeated representative runs to measure median and p95 latency.
-Do not tune the prompt on held-out failures and then report that set as unseen.
+`run` refuses embedded hand-built candidates unless `--allow-hand-built` is passed.
+The report labels such runs as invalid for the #199 decision.
 
-```bash
-server/venv/bin/python scripts/evaluate-ask.py --split holdout --models gpt-4.1-mini-2025-04-14 --repeat 3 --max-cost 1 --output docs/verification/ask-holdout.json
-```
+Labeled cases use this format: `{id, question, reference_time, context?, tags,
+expected: {action, request?, clarify_field?, unsupported_reason?, also_accept?},
+candidates?}`. `request` is a contract `AskRequest`.
 
-The script reserves a conservative cost before each request using the complete
-serialized request's UTF-8 byte length plus framing allowance and the output
-token ceiling. It refunds the excess only when usage is known. Failures with
-unknown usage keep their reservation. Unknown model prices and custom providers
-are rejected by this comparison script.
+## Live access probe (2026-09-29)
 
-The recorded rates come from the official model pages: [GPT-4.1 mini](https://developers.openai.com/api/docs/models/gpt-4.1-mini)
-and [GPT-4.1 nano](https://developers.openai.com/api/docs/models/gpt-4.1-nano).
-They are $0.40/$1.60 and $0.10/$0.40 per million input/output tokens respectively.
-The script estimates regular input rates even if caching discounts or complimentary
-shared-data tokens apply. Reports label this `list_price_cost_usd`;
-`actual_billed_cost_usd` remains null because token usage does not establish billing.
-Confirm actual charges in the OpenAI Usage Dashboard. Refresh the rate table before
-later evaluations; account access may differ. See [configuration](ask-search.md#complimentary-shared-data-tokens)
-for enrollment and balance requirements.
+[`verification/ask-interpreter-probe.json`](verification/ask-interpreter-probe.json)
+contains the sanitized outputs, normalizations, decisions, resolved models, usage,
+and latency. It contains no keys, prompts, or raw provider text.
 
-## Separate application checks
+Setup: three hand-built smoke questions for each model: "Cavs games last week",
+"How many points did Tatum score in game 4 of the 2024 Finals?", and "Lakers vs
+Celtics on January 23".
 
-`test_ask_basketball.py` checks deterministic resolution and calculations, including
-New York date boundaries, previous calendar weeks, aliases, ties, missing values,
-player ambiguity, and the repository's real sample boxscore shape.
-`test_ask_data.py` checks authoritative retrieval, unique game selection, series
-links, pregame scores, and missing records versus provider outages.
-`test_ask.py` checks the endpoint, validation, caches, limits, and failure responses.
-`AskSearch.test.tsx` checks spoiler behavior, links, clarification, and error states.
+- All 12 calls returned the expected action and request. Each model accepted the
+  first two questions and asked a `year_required` date clarification for the third.
+- Every model resolved to the ID that was requested.
+- The key can call `jev-1.13.0`, `gpt-4.1-mini-2025-04-14`, `gpt-6-luna`, and
+  `gpt-5.6-luna`.
+- Total estimated spend was $0.0056, plus one earlier single Jev shape check of
+  about $0.0001.
 
-These offline tests do not replace live end-to-end checks. Once credit is
-available, run representative searches through `/ask`, verify game and series
-links against returned NBA data, and measure full-request median and p95 latency
-separately from parser latency. Successful requests provide token usage and a list-price estimate; actual billed
-cost must be checked separately in the provider dashboard.
+| Model | Latency per call | Cost per call |
+| --- | --- | --- |
+| Jev | 150–420 ms | ~$0.00009 (about 2.2k input tokens) |
+| gpt-4.1-mini | 2.7–3.6 s | ~$0.0009–0.0010 |
+| gpt-6-luna (effort low) | 2.2–4.0 s | ~$0.00025–0.0003 |
+| gpt-5.6-luna (effort low) | 2.1–2.9 s | ~$0.0005–0.0006 |
 
+These results show access and response shapes. They are not an accuracy result:
+three hand-built cases cannot separate the models.
 
-## Player/date regression
+Observations for calibration:
 
-The user's exact question, `How many points did Shai Gilgeous-Alexander score on
-January 2, 2024?`, now succeeds without a team mention. A live
-[HTTP probe](verification/ask-player-date.json) returned 36 points for game
-`0022300462` in 2.801 seconds. A subsequent browser submission also displayed
-36 points and the dated game-details link. NBA LeagueGameFinder and the boxscore
-both recorded that value. The browser's global results preference was enabled.
+- Jev answers every speculative question. Irrelevant closed-set answers, such as
+  `stat_scope` on a game search, are noise that the normalizer ignores.
+- On the Tatum question, Jev's `absent` confidence for optional boxscore fields
+  (`date` 0.71, `teams` 0.73) was close to the placeholder `accept_min=0.7`.
+  Calibration should decide whether low-confidence *absent* optional fields should
+  block acceptance, or only selected fields plus required absences.
 
-The parser prompt now treats a named player plus one date as sufficient.
-Python matches a player catalog ID, verifies the player's historical game/date,
-and selects its boxscore; no present-day team assumption or boxscore fanout is
-used. Tests cover ambiguity, missing games, malformed provider rows, date/player
-mismatches, duplicate game IDs, and matching the selected game to the scoreboard.
-The full backend suite passes: 351 tests. This specific live success does not
-replace the remaining seed and held-out parser evaluation gates.
+## Prototype fixture audit
+
+`server/tests/fixtures/ask_seed.json` (25 questions) and `ask_heldout.json`
+(75 questions) come from the deleted prototype (commit `b8f3a84`). They use its
+old `AskInterpretation` schema, with raw mentions and date expressions instead of
+candidate IDs and resolved requests.
+
+AUDIT_PLACEHOLDER
+
+Neither file may be used as the unseen release set. They can be mined for
+development questions, after relabeling them against the new contract. Any
+question reused this way counts as exposed.
+
+## Open work
+
+1. **Labeled dev set.** Write `server/tests/ask/fixtures/eval/dev.json`, covering
+   all four intents, aliases, historical names, relative dates, ambiguity, absent
+   candidates, historical gaps, and unsupported requests. Label with `AskRequest`
+   values.
+2. **Comparison run.** Run it with #200's lookup, `--lookup`, and its `expand`.
+3. **Calibration.** Calibrate `JevThresholds` and `PolicyThresholds` on the dev
+   set, including the weakest required selection and absent-candidate cases.
+   Record the chosen values here.
+4. **Decision.** Choose between a single provider and a cascade, and between
+   GPT-6 Luna and GPT-5.6 Luna. Justify the choice against the maintenance cost of
+   a second adapter.
+5. **Release set.** Build a separate unseen 75–100 question release set (#189).
+
+## History: prototype parser
+
+Before the contract existed, a single-call OpenAI parser (`gpt-4.1-mini`) was
+built and probed. Its first live runs, on September 11, 2026, hit
+`credit_balance_exhausted`/`insufficient_quota`. Later single probes succeeded,
+for example 1 seed question in 3.17 s at $0.00058 list price. One full seed run is
+recorded in `ask-seed.json`: gpt-4.1-mini passed 10 of 25 seed questions, with 3
+requests of unknown usage. No held-out run was recorded. The saved reports remain in
+`docs/verification/`:
+
+- `ask-seed-access.json`
+- `ask-sharing-access.json`
+- `ask-live-endpoint.json`
+- `ask-player-date.json`
+- `ask-seed.json`
+
+They describe that deleted parser and cannot be compared with the adapters above.
