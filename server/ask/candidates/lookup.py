@@ -240,10 +240,19 @@ def _looks_like_full_name(players: PlayerIndex, scan: _Scan, i: int) -> bool:
 
 # --- app context -----------------------------------------------------------
 
+# Words that place a day on the user's screen: "the date I have open", "the day
+# I'm looking at", "the date on my screen", "the displayed date".
+_ON_SCREEN = (
+    r"(?:(?:currently\s+)?(?:selected|shown|showing|displayed|open|in\s+view)"
+    r"|on\s+(?:this|the|my)\s+(?:page|screen)|here"
+    r"|i\s+(?:have|had|'ve\s+got)\s+(?:(?:open(?:ed)?|up|pulled\s+up|selected)\b|on\s+(?:the\s+|my\s+)?screen)"
+    r"|i(?:'m|\s+am)\s+(?:on|viewing|looking\s+at|seeing))"
+)
 _THAT_DAY = re.compile(
     r"\b(?:that|this|the\s+same)\s+(?:day|date|night)\b|\bon\s+this\s+date\b"
-    r"|\b(?:the\s+)?(?:day|date)\s+(?:selected|shown)(?:\s+(?:on\s+(?:this|the)\s+(?:page|screen)|here))?\b"
-    r"|\b(?:the\s+)?(?:selected|shown)\s+(?:day|date)\b"
+    rf"|\b(?:the\s+)?(?:day|date)\s+(?:(?:that|which)(?:\s+is|'s)?\s+)?{_ON_SCREEN}(?:\s+(?:on\s+(?:this|the|my)\s+(?:page|screen)|here))?"
+    r"(?![a-z])"
+    r"|\b(?:the\s+)?(?:selected|shown|displayed|open|on-?screen)\s+(?:day|date)\b"
 )
 _ON_SCREEN_SEASON = re.compile(r"\b(?:this|that|these|those)\s+(?:series|bracket|playoffs?|postseason)\b")
 

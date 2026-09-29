@@ -167,3 +167,23 @@ def test_dev_set_regression():
     assert report.abstain_correct == report.abstain_total, report.misses
     assert report.ambiguous_correct == report.ambiguous_total, report.misses
     assert report.forbidden_leaks == 0, report.misses
+
+
+@pytest.mark.parametrize("question", [
+    "Any Suns games on the day I have open?",
+    "List the games for the date I'm looking at",
+    "What games were played on the date on my screen?",
+    "Show games from the displayed date",
+    "Scores for the day that is currently selected",
+])
+def test_app_context_date_from_on_screen_wording(service, question):
+    result = lookup(service, question, route="scores", view_date=dt.date(2023, 1, 9))
+    [candidate] = result.sets["date"].candidates
+    assert candidate.source == "app_context"
+    assert candidate.value.resolved.start == dt.date(2023, 1, 9)
+
+
+def test_on_screen_wording_without_a_page_date_offers_nothing(service):
+    result = lookup(service, "Any Suns games on the day I have open?")
+    assert result.sets["date"].status == "no_candidates"
+    assert lookup(service, "What date is it today?").sets["date"].candidates[0].source != "app_context"
