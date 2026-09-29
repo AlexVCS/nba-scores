@@ -4,7 +4,10 @@ Ask is the Hardwood question interface backed by `POST /ask` and model-free
 `GET /ask/suggest`. The HTTP shapes and spoiler rules are defined in
 [`ask-contract.md`](ask-contract.md). The feature remains disabled by default:
 the backend returns `unavailable` for Ask questions and empty typeahead data
-until the release gate is explicitly enabled.
+until the release gate is explicitly enabled. Production builds show the Design 1
+Ask entry only with `VITE_ASK_ENABLED=1`; the Vite development server shows it
+by default. The frontend flag controls visibility, and the backend still needs
+`ASK_ENABLED=1` to answer questions.
 
 ## What it answers
 
