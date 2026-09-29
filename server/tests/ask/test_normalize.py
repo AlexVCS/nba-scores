@@ -98,6 +98,29 @@ def test_context_game_keeps_named_team_for_participant_verification():
     assert result.request.game.teams == [CLE.value.team]
 
 
+def test_two_team_stat_does_not_broaden_to_both_teams():
+    game_day = b.date(2, "January 12, 2024", DateComponents(kind="calendar_date", year=2024, month=1, day=12),
+                      start=dt.date(2024, 1, 12), end=dt.date(2024, 1, 12))
+    candidates = b.lookup_result([CLE, BOS, game_day])
+    result = normalize(output(
+        sel("intent", "boxscore_stat"), sel("stat_scope", "team"),
+        sel("stat", "turnovers"), sel("teams", CLE.id, BOS.id), sel("date", game_day.id),
+    ), candidates)
+    assert (result.status, result.clarify_field, result.clarify_reason) == (
+        "needs_clarification", "teams", "ambiguous"
+    )
+
+    # A standalone clarification rewrite names the chosen team and can be
+    # normalized without interpreting list order as the target.
+    resolved = normalize(output(
+        sel("intent", "boxscore_stat"), sel("stat_scope", "team"),
+        sel("stat", "turnovers"), sel("teams", CLE.id), sel("date", game_day.id),
+    ), candidates)
+    assert resolved.status == "valid"
+    assert resolved.request.team == CLE.value.team
+    assert resolved.request.game.teams == [CLE.value.team]
+
+
 def test_explicit_game_selection_takes_priority_over_context_game():
     context = CONTEXT.model_copy(update={"route": "boxscore", "game_id": "0022400001"})
     game_day = b.date(2, "June 9, 2024", DateComponents(kind="calendar_date", year=2024, month=6, day=9),

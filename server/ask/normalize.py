@@ -269,8 +269,11 @@ class Normalizer:
         if scope == "team":
             if not teams:
                 raise _Clarify("teams", "missing")
-            if len(teams) == 1:
-                team = teams[0]
+            if len(teams) > 1:
+                # The interpreter identifies matchup participants but has no
+                # field for which team's stat the user requested.
+                raise _Clarify("teams", "ambiguous")
+            team = teams[0]
 
         game = self._game_selector(output, candidates, context, teams)
         return BoxscoreStatRequest(
