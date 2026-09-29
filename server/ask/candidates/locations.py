@@ -6,6 +6,9 @@ masked so the same words do not also become a team candidate. Each city lists wh
 franchises were based there and when (the Nets in New Jersey until 2012, the
 SuperSonics in Seattle until 2008), so a dated search only matches the team that
 actually played home games there then. Defunct franchises are not covered.
+
+A city inside a "when they were in New Jersey" clause says where the team was based,
+not where the games were played, so it is masked without becoming a venue.
 """
 from __future__ import annotations
 
@@ -87,6 +90,11 @@ CITIES: dict[str, tuple[str, tuple[Tenure, ...], tuple[str, ...]]] = {
 }
 
 
+# "when they were in", "while the Nets were still based in": franchise history, not a venue.
+_HISTORY_CLAUSE = re.compile(
+    r"\b(?:when|while)\s+(?:[\w.'’]+\s+){1,3}?(?:was|were)\s+(?:still\s+)?(?:based\s+|located\s+)?$")
+
+
 @lru_cache(maxsize=1)
 def _team_ids() -> dict[str, int]:
     return {t["abbreviation"]: t["id"] for t in static_teams.get_teams()}
@@ -124,9 +132,11 @@ def mentions(masked: str, original: str) -> tuple[list[Mention], str]:
     for m in pattern.finditer(masked):
         start, end = m.span(1)
         key = phrase_to_key[m.group(1)]
+        masked = masked[:start] + " " * (end - start) + masked[end:]
+        if _HISTORY_CLAUSE.search(masked, 0, m.start()):
+            continue
         hit = Hit(field="location", key=key, label=_label(key), source="pattern", score=1.0,
                   value=location_value(key))
         out.append(Mention(field="location", start=start, end=end, text=original[start:end],
                            hits=[hit], total=1))
-        masked = masked[:start] + " " * (end - start) + masked[end:]
     return out, masked

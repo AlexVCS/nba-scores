@@ -74,3 +74,35 @@ def test_former_cities_map_to_the_franchise_then():
     seattle = location_value("seattle").location
     thunder = 1610612760
     assert seattle.hosts(thunder, dt.date(2005, 1, 1)) and not seattle.hosts(thunder, dt.date(2009, 1, 1))
+
+
+@pytest.mark.parametrize("question", [
+    "I want the Nets schedule for January 2, 2002, when they were in New Jersey.",
+    "Sonics games on January 5, 2005, back when they were still based in Seattle",
+    "the Grizzlies schedule for March 1, 2000 while the Grizzlies were in Vancouver",
+])
+def test_where_a_team_was_based_is_not_a_venue(question):
+    # Franchise history, not "games played there": no home-only filter for any tier to pick.
+    result, location, _ = sets(question)
+    assert location == [] and result.sets["location"].status == "not_mentioned"
+
+
+def test_nets_schedule_when_they_were_in_new_jersey_has_no_venue_filter():
+    result, _, teams = sets("I want the Nets schedule for January 2, 2002, when they were in New Jersey.")
+    assert teams == ["team:1610612751"]
+    output = InterpreterOutput(outcome="interpreted", fields=[
+        FieldInterpretation(field="intent", status="selected", selected=["game_search"]),
+        FieldInterpretation(field="date", status="selected", selected=[result.sets["date"].candidates[0].id]),
+        FieldInterpretation(field="teams", status="selected", selected=teams),
+    ], metadata=InterpreterMetadata(adapter="jev", provider="x", model="jev-1.13.0", latency_ms=1))
+    request = Normalizer().normalize(output, result, CONTEXT).request
+    assert request.location is None and [t.tricode for t in request.teams] == ["NJN"]
+
+
+@pytest.mark.parametrize("question, location", [
+    ("Nets games in New Jersey on January 2, 2002", ["location:new_jersey"]),
+    ("Did the Bucks have a game in Boston on December 6, 2024?", ["location:boston"]),
+    ("Were there games in Seattle on January 5, 2005?", ["location:seattle"]),
+])
+def test_explicit_venue_wording_keeps_the_filter(question, location):
+    assert sets(question)[1] == location
