@@ -1,5 +1,27 @@
 # Ask development handoff
 
+## 2026-09-29 design interview (read first)
+
+A design interview after this handoff was written reset several decisions. They
+are recorded in `docs/adr/` (index: `docs/adr/README.md`) and `docs/ask-glossary.md`,
+and they take precedence over the earlier text below where the two conflict:
+
+- The production model choice is no longer open. The cascade is Laya, then Jev,
+  then GPT Luna. Laya runs in development and evaluation only until promoted
+  (ADRs 0002, 0007, 0008).
+- Ask never hides its answers. Spoiler rules still apply to suggestions,
+  clarification options, and pages outside Ask (ADR 0006).
+- New tool families: player season stats, season leaders, records, and team
+  records. stats.nba is primary, Basketball-Reference is the fallback, and
+  Wikipedia is not used (ADRs 0003–0005).
+- Gates are per-tier precision and coverage, plus a system gate (ADR 0009).
+- Next step is stage 1 of ADR 0010: the tool registry and router over the
+  existing four intents, with Jev wired into the production adapter factory.
+
+#189 and its child issues have not been updated to match yet. Do that before
+implementation.
+
+
 Work on branch `ask/reviewed-components` in `/private/tmp/ask-reviewed-components`.
 The original workspace at `/Users/alexcurtis-slep/Documents/projects/nba-scores`
 is on `language-search` and contains unrelated untracked files. Preserve them.
