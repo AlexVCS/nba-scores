@@ -12,8 +12,8 @@ question; the adapter keeps a field from the first tier that reads it confidentl
 Vetoes (ADR 0002 consequence, needed for the zero-guess gate): when a later confident
 read selects different values, reads the field as absent, or reads it as ambiguous,
 after an earlier tier accepted a selection, the field is not executed. An `unsupported`
-outcome is a read of the intent: after an earlier intent selection that can veto it, it
-contests the intent (the user is asked) instead of ending the cascade. The final tier,
+outcome is a read of the intent: after an earlier tier accepted an intent, it contests
+the intent (the user is asked) instead of ending the cascade. The final tier,
 which reports no confidence, is also vetoed by an earlier selection that reached
 `veto_min`. Two different selections, or a selection and an ambiguous read, become
 `ambiguous` with both tiers' options; selected versus absent keeps a sub-threshold
@@ -201,14 +201,16 @@ class TieredAdapter:
     def _contests_intent(merge: _Merge, tier: Tier, output: InterpreterOutput) -> bool | None:
         """An `unsupported` outcome is a read of the intent like any other.
 
-        None: no earlier intent selection it could veto, so the request is unsupported.
-        True: a confident unsupported read disagrees with an earlier selection that can
-        veto this tier, so the intent is contested and the user is asked.
+        None: no earlier tier accepted an intent, so the request is unsupported.
+        True: a confident unsupported read disagrees with an accepted intent, so the
+        intent is contested and the user is asked.
         False: it disagrees but is not confident, so it decides nothing.
+
+        Only accepted intents contest it. A sub-threshold selection that reached
+        `veto_min` vetoes the final tier's selections so they are not executed; an
+        unsupported outcome executes nothing, so there is nothing to guard.
         """
-        vetoers = [accepted for _, accepted in merge.vetoers.get("intent", [])
-                   if accepted or tier.accept_min is None]
-        if not vetoers:
+        if not any(accepted for _, accepted in merge.vetoers.get("intent", [])):
             return None
         if tier.accept_min is None:
             return True

@@ -455,3 +455,10 @@ def test_unsupported_outcome_keeps_the_tier_confidence():
     jev = Fake("jev", outcome="unsupported", reason="prediction", unsupported_confidence=0.72)
     out = cascade(jev, Fake("luna")).interpret(REQUEST)
     assert (out.outcome, out.unsupported_confidence) == ("unsupported", 0.72)
+
+
+def test_leaning_intent_does_not_contest_a_final_unsupported_read():
+    jev = Fake("jev", sel("intent", "game_search", confidence=0.7), sel("date", "date:0"))
+    luna = Fake("luna", outcome="unsupported", reason="multi_game_average")
+    out = cascade(jev, luna).interpret(REQUEST)
+    assert (out.outcome, out.unsupported_reason) == ("unsupported", "multi_game_average")
