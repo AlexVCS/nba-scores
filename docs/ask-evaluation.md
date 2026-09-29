@@ -620,3 +620,33 @@ convention; the answer itself is correct. Remaining failures:
 
 These are exposed cases, used for tuning. Next step: freeze this configuration and
 run a new unseen set written by someone who has not seen these cases.
+
+## Frozen independent 100-question run, September 29
+
+The frozen `9291237` production cascade was run once on 100 questions written
+by an isolated agent. Each of the four Phase 1 request types has 25 cases.
+Jev used accept minimum 0.85, Luna used low effort, and the veto minimum was 0.5.
+No production configuration or tool changed during measurement.
+
+The unchanged raw report scores 89/100 and flags three accepted-request errors.
+An independently confirmed date-label error accounts for one flag: at February 8,
+21:35 New York time, "last night" is February 7, as the application selected.
+The separate semantic audit therefore finds 90/100 correct and two unsafe
+accepted interpretations. Those errors are selecting Stephen for ambiguous
+"Curry", even after Luna reports ambiguity, and treating historical "when they
+were in New Jersey" wording as a home-only venue restriction.
+
+The zero-guess gate fails. Clarification accuracy also fails at 13/15, while all
+10 unsupported cases are correct. Median latency is 2.102 seconds and p95 is
+3.728 seconds. Jev finished 49 questions without Luna; Luna ran on 51.
+Known provider usage is $0.027154; the spend guard conservatively accounted
+$0.032570 because one timed-out request has unknown usage.
+
+All 100 results survived a report-assembly path error and were summarized offline
+without another provider call. The original journal, labels, manifest, executed
+runner, and raw report remain intact. The runner's path fix has a regression test.
+See the [full evaluation and audit](verification/ask-unseen-2026-09-29.md).
+
+The set is now exposed. It measures interpretations, not retrieval or rendered
+answers, and cannot establish the incomplete tier precision gate. Production
+remains disabled; fixes require another unseen set.

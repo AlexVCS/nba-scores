@@ -1,0 +1,15 @@
+{
+  "purpose": "Pre-live duplicate and label audit; no provider calls or candidate-assisted relabeling",
+  "fixture_sha256": "fd774408c30889239ff297baaabf2b971b73e5210bfa5b842fdfe478a1d37332",
+  "prior_questions_examined": 470,
+  "exact_duplicates": [],
+  "similarity_at_least_0_9": [],
+  "method": "Casefold and remove punctuation; exact matching and difflib.SequenceMatcher lexical similarity. Does not establish semantic novelty by itself. Independent author was denied previous questions and implementation.",
+  "label_audit": "Target-team game selectors normalized; two nonunique clarification labels replaced; one near-duplicate replaced; last-season timestamps moved to active next season. All changes occurred before any provider outputs.",
+  "scope_counts": {
+    "game_search": 25,
+    "boxscore_stat": 25,
+    "playoff_series": 25,
+    "postseason_summary": 25
+  }
+}
