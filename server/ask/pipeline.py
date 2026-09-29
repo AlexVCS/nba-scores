@@ -109,15 +109,24 @@ class AskPipeline:
     def _interpret(self, question: str, context: AskContext, candidates, deadline: float):
         from server.ask.cache import CacheValue
         adapter = self._adapter()
-        key = _key(self._parse_key(question, context, candidates.alias_version, adapter), canonical_json(candidates))
+        stable_candidates = candidates.model_copy(update={"latency_ms": 0})
+        key = _key(self._parse_key(question, context, candidates.alias_version, adapter), canonical_json(stable_candidates))
 
         def load():
+            if time.monotonic() >= deadline:
+                raise TimeoutError("Ask response deadline exceeded")
             remaining_ms = max(0, int((deadline - time.monotonic()) * 1000))
             budget_left = self.budget.remaining_usd() if self.budget else 1.0
             request = InterpreterInput(question=question, context=context, candidates=candidates,
                                        deadline_ms=remaining_ms, max_cost_usd=budget_left)
             estimate = adapter.estimate_cost(request)
             reservation = self.budget.reserve(adapter.model, estimate) if self.budget else None
+            remaining_ms = int((deadline - time.monotonic()) * 1000)
+            if remaining_ms <= 0:
+                if reservation is not None:
+                    self.budget.settle(reservation, 0.0)
+                raise TimeoutError("Ask response deadline exceeded")
+            request = request.model_copy(update={"deadline_ms": remaining_ms})
             try:
                 output = adapter.interpret(request)
             except Exception:
@@ -145,7 +154,7 @@ class AskPipeline:
             return CacheValue(output, ttl)
 
         try:
-            if self.cache:
+            if self.cache is not None:
                 result = self.cache.get_or_load("answer", _key(
                     self.config.cache_version, "answer-1", self.lookup.alias_version,
                     readout.reference_time.date().isoformat(), canonical_json(request)), load)
@@ -174,6 +183,7 @@ class AskPipeline:
     def answer(self, query: AskQuery) -> AskResponse:
         from server.ask.budget import BudgetExhausted, BudgetUnavailable
 
+        deadline = time.monotonic() + self.config.deadline_seconds
         question, context = query.question, self._context(query)
         if not self.config.enabled:
             return self.disabled(question)
@@ -189,7 +199,6 @@ class AskPipeline:
         cache_hit = False
         try:
             candidates = self.lookup.lookup(question, context)
-            deadline = time.monotonic() + self.config.deadline_seconds
             attempts = []
             expanded: list[str] = []
             for _ in range(3):
