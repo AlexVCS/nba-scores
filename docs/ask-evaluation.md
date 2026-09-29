@@ -1,9 +1,9 @@
 # Ask: interpreter evaluation (#199)
 
-This document covers the interpreter adapters, the evaluation harness, and the
-results so far. The decision on the interpreter architecture (one provider or a
-cascade) is still open. The comparison runs once #200's candidate lookup lands,
-because Jev must be measured with lookup candidates, not hand-picked ones.
+This document covers the interpreter adapters, the evaluator, and the measured
+development results. The pipeline should use one GPT-6 Luna adapter. Keep it
+disabled until the separate unseen release evaluation passes the gates below.
+The comparison used #200's lookup candidates, including its expansion path.
 
 Contract: [`docs/ask-contract.md`](ask-contract.md). Earlier prototype results are
 summarized under [History](#history-prototype-parser).
@@ -166,10 +166,13 @@ stray low confidence on an unrelated field does not trigger fallback. The
 `not_found` and `unavailable` outcomes from the data service never reach the
 policy.
 
-**All thresholds are uncalibrated placeholders:** `JevThresholds` and
+**All Jev and cascade thresholds are uncalibrated placeholders:** `JevThresholds` and
 `PolicyThresholds` (`accept_min=0.7`, `clarify_min=0.6`, `ambiguity_floor=0.25`,
-and so on). They must be calibrated on development data before any production
-use. No cookbook values are used.
+and so on). Jev and the cascade failed the complete-request gate, so do not
+deploy or imply that these thresholds are calibrated. The selected OpenAI
+adapter supplies no per-field confidence; its single-provider policy accepts
+only after Python normalization, so these confidence thresholds do not affect
+the selected path. No cookbook values are used.
 
 ## Harness
 
@@ -281,7 +284,7 @@ unseen release set must pass the same gates before enabling the endpoint:
 
 | Measure | Gate |
 | --- | --- |
-| Complete request accuracy | at least 90% |
+| Complete request accuracy, among `accept` labels | at least 90% |
 | Schema-valid guesses | zero |
 | Correct clarification field | at least 90% of clarification labels |
 | Correct unsupported reason | at least 90% of unsupported labels |
@@ -326,7 +329,7 @@ failure into a different intent. Both OpenAI models also called the 28-day
 
 The second pass used 42 labels, lookup commit `5742a1c`, and the revised prompt.
 It included both Luna versions. The full case report is
-[`ask-interpreter-eval.json`](verification/ask-interpreter-eval.json). The
+[`ask-interpreter-eval-prereview.json`](verification/ask-interpreter-eval-prereview.json). The
 estimated spend was $0.089040, with no candidate errors or budget stop. No
 original label changed after the first pass. Six new cases cover invalid day
 numbers, historical team names, an unsupported leader percentage, and a page
@@ -353,6 +356,54 @@ New Year. `dev-cross-year-range` is a 43rd label added after this run; its
 lookup candidate resolves to December 30, 2025 through January 2, 2026. The
 next run must include it.
 
+### Failed transport rerun
+
+A 43-case rerun after the interpreter review fixes produced `connection_error`
+for every provider request. Its [raw report](verification/ask-interpreter-eval-transport-failure.json)
+is retained, but its accuracy numbers say nothing about model quality. The
+spend guard charged $1.428937 in conservative reservations because the adapter
+could not read usage from those responses. Actual billing for those requests
+is unknown. A local reproduction points to response decoding in the HTTP
+helper. No architecture decision uses this run; a fixed transport needs a
+bounded rerun within the remaining authorized budget.
+
+### Corrected 43-case development run and choice
+
+The HTTP decoder fix passed its offline regression test. One live GPT-6 Luna
+preflight then returned a complete request and recorded usage for $0.000100.
+The full [43-case report](verification/ask-interpreter-eval.json) used lookup
+commit `cf3737b` and the reviewed interpreter fixes. It spent an estimated
+$0.010432 of its $1.30 guard, with no candidate errors or budget stop. The
+failed transport run above remains a separate unknown billing exposure; its
+reservations still count against the overall $3 authorization.
+
+The report's `complete_request_accuracy` key is overall case correctness.
+For the gate, we recomputed complete-request accuracy on the 26 cases labeled
+`accept`. Clarification and unsupported denominators are 12 and 5.
+
+| Configuration | Complete | Clarify | Unsupported | Guesses | Failures | Median | p95 | Cost per correct |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Jev | 15/26 | 10/12 | 4/5 | 0 | 3 | 180 ms | 238 ms | $0.000144 |
+| GPT-6 Luna | 26/26 | 11/12 | 5/5 | 0 | 0 | 2,143 ms | 3,582 ms | $0.000120 |
+| Jev → GPT-6 Luna | 22/26 | 11/12 | 5/5 | 0 | 0 | 192 ms | 2,526 ms | $0.000142 |
+
+GPT-6 Luna passed every development gate. Its only miss was `dev-073`, an
+unknown Seattle Pilots team in a single-game stat question: it returned
+`unsupported/not_basketball` where the label calls for a team clarification.
+Jev and the cascade failed the complete-request gate, despite lower median
+latency. The cascade adds an adapter and threshold policy yet did not match
+Luna's accuracy. The earlier 42-case pass also put GPT-5.6 Luna behind GPT-6
+Luna on accuracy (38/42 versus 39/42), with higher estimated cost per correct
+answer ($0.000649 versus $0.000301). GPT-5.6 Luna and gpt-4.1-mini were not
+rerun after the transport fix; that earlier result is background, not a gate
+claim for the final 43 cases.
+
+Use GPT-6 Luna alone for the pipeline. The provider currently resolves its
+undated `gpt-6-luna` ID to the same undated ID, so log the evaluation date and
+resolved model and rerun the release set if it changes. Keep the endpoint
+disabled until the unseen 75–100 question release set passes the same gates
+with a separate budget and a current lookup snapshot.
+
 ## Prototype fixture audit
 
 `server/tests/fixtures/ask_seed.json` (25 questions) and `ask_heldout.json`
@@ -362,7 +413,7 @@ candidate IDs and resolved requests.
 
 The 25 seed questions and 75 old "heldout" questions were committed with the
 prototype. Their labels are not `AskRequest`s: they describe mentions, raw date
-phrases, and an old `boxscore_stats` intent. Five of the 42 new development
+phrases, and an old `boxscore_stats` intent. Five of the 43 new development
 questions exactly match questions in those files (`dev-001`, `dev-002`,
 `dev-003`, `dev-025`, and `dev-062`). The old heldout file is exposed too; its
 name does not make it an unseen release set. Keep both files as historical
@@ -374,18 +425,12 @@ question reused this way counts as exposed.
 
 ## Open work
 
-1. **Labeled dev set.** Write `server/tests/ask/fixtures/eval/dev.json`, covering
-   all four intents, aliases, historical names, relative dates, ambiguity, absent
-   candidates, historical gaps, and unsupported requests. Label with `AskRequest`
-   values.
-2. **Comparison run.** Run it with #200's lookup, `--lookup`, and its `expand`.
-3. **Calibration.** Calibrate `JevThresholds` and `PolicyThresholds` on the dev
-   set, including the weakest required selection and absent-candidate cases.
-   Record the chosen values here.
-4. **Decision.** Choose between a single provider and a cascade, and between
-   GPT-6 Luna and GPT-5.6 Luna. Justify the choice against the maintenance cost of
-   a second adapter.
-5. **Release set.** Build a separate unseen 75–100 question release set (#189).
+The development comparison is complete. Keep Jev and cascade thresholds out
+of production. #189 must run a separate unseen 75–100 question release set
+against the chosen single-provider configuration and the then-current lookup.
+The production switch stays off if any gate fails. Investigate the `dev-073`
+unknown-team miss without changing the development label or treating this
+exposed set as release evidence.
 
 ## History: prototype parser
 
