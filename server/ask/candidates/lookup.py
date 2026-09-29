@@ -14,6 +14,7 @@ different player. ``expand`` relaxes that for the cascade.
 """
 from __future__ import annotations
 
+import dataclasses
 import datetime as dt
 import re
 import time
@@ -99,7 +100,7 @@ class _Scan:
     question: str
     tokens: list[Token]
     consumed: list[bool]
-    has_upper: bool
+    team_tokens: set[int] = dataclasses.field(default_factory=set)
 
     def contiguous(self, i: int, j: int) -> bool:
         """Tokens i..j (inclusive) are all free and joined only by spaces/hyphens/periods."""
@@ -115,11 +116,20 @@ class _Scan:
         return " ".join(t.norm for t in self.tokens[i:j + 1])
 
     def eligible(self, k: int) -> bool:
-        """Can this token be a one-word name? Needs a capital unless the question has none."""
+        """Can this token be a one-word name? Needs a capital if the user writes in mixed case."""
         token = self.tokens[k]
         return (
             not self.consumed[k] and token.norm not in STOPWORDS and not token.norm.isdigit()
-            and (token.capitalized or not self.has_upper)
+            and (token.capitalized or not self.mixed_case())
+        )
+
+    def mixed_case(self) -> bool:
+        """Does the user capitalize names? Sentence-initial capitals ("How"), acronyms
+        ("NBA") and team names ("Celtics") say nothing about that; a capitalized
+        player name ("Tatum") does."""
+        return any(
+            t.capitalized and i not in self.team_tokens and not self.sentence_initial(i) and not self.upper(i, i)
+            for i, t in enumerate(self.tokens)
         )
 
     def sentence_initial(self, k: int) -> bool:
@@ -133,7 +143,7 @@ class _Scan:
 def _entity_mentions(question: str, masked: str, seasons: frozenset[int], limits: LookupLimits,
                      players: PlayerIndex, teams: TeamIndex) -> list[Mention]:
     tokens = tokenize(masked, question)
-    scan = _Scan(question, tokens, [False] * len(tokens), any(c.isupper() for c in question))
+    scan = _Scan(question, tokens, [False] * len(tokens))
     out: list[Mention] = []
     n_tokens = len(tokens)
 
@@ -171,6 +181,7 @@ def _entity_mentions(question: str, masked: str, seasons: frozenset[int], limits
                 continue
             hits, note = resolve_phrase(teams, key, seasons)
             add("team", i, j, hits[:limits.per_mention], len(hits), note)
+            scan.team_tokens.update(range(i, j + 1))
 
     # 3. Runs of name-like words that are not a known full name ("Dwight Schrute").
     k = 0
@@ -205,7 +216,9 @@ def _entity_mentions(question: str, masked: str, seasons: frozenset[int], limits
         matches += [(pid, "full_name", None, None) for pid in players.full.get(norm, ())]
         matches += [(pid, "last_name", None, None) for pid in players.last.get(norm, ())]
         matches += [(pid, "first_name", None, None) for pid in players.first.get(norm, ())]
-        if not matches and len(norm) >= 4:
+        # Fuzzy one-word matches need a capital, unless the whole question is lowercase:
+        # in sentence case, common words ("time" ~ "Timme") would match surnames.
+        if not matches and len(norm) >= 4 and (scan.tokens[k].capitalized or not any(c.isupper() for c in question)):
             matches = [(pid, "fuzzy", sim, None) for pid, sim in players.fuzzy(norm, full=False, cutoff=limits.fuzzy_last_cutoff)]
         if matches:
             hits, total = _player_hits(players, matches, seasons, limits.per_mention)

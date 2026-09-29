@@ -155,6 +155,7 @@ class Normalizer:
             return NormalizationResult(status="invalid", errors=[f"interpreter outcome {output.outcome}"])
         try:
             self._check_values(output, candidates)
+            self._check_truncation(output, candidates)
             return self._build(output, candidates, context)
         except _Clarify as c:
             return NormalizationResult(status="needs_clarification", clarify_field=c.field, clarify_reason=c.reason)
@@ -176,6 +177,16 @@ class Normalizer:
                 candidate = candidates.by_id(value)
                 if candidate is None or candidate.field != wanted:
                     raise _Invalid(f"{f.field}: unknown candidate {value!r}")
+
+    @staticmethod
+    def _check_truncation(output: InterpreterOutput, candidates: CandidateLookupResult) -> None:
+        """A selection from a truncated candidate list is never executed: the intended
+        entity may be one lookup dropped ("Jalen" has 18 matches, 8 are offered)."""
+        relevant = relevant_fields(output)
+        for f in output.fields:
+            if f.status == "selected" and f.field in relevant and f.field in CANDIDATE_SET_FOR:
+                if candidates.sets[CANDIDATE_SET_FOR[f.field]].truncated:
+                    raise _Clarify(f.field, "ambiguous")
 
     # -- field access -----------------------------------------------------------------
 
