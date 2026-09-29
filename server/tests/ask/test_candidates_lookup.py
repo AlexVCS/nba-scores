@@ -208,3 +208,14 @@ def test_ordinal_games_outside_playoff_wording_are_not_series_games(service):
 def test_ordinal_beyond_seven_is_reported_not_offered(service):
     result = lookup(service, "the ninth game of the 1999 Finals")
     assert result.sets["game_number"].status == "no_candidates"
+
+
+@pytest.mark.parametrize(("question", "round_name"), [
+    ("Open Utah's opening playoff round in 2021", "first_round"),
+    ("Pull up the Knicks' second postseason round from 2023", "conference_semifinals"),
+    ("Which series was round one for Phoenix in 2022?", "first_round"),
+    ("Show round 2 for the Sixers in 2021", "conference_semifinals"),
+])
+def test_round_wording_with_playoff_modifiers(service, question, round_name):
+    [candidate] = lookup(service, question).sets["round"].candidates
+    assert candidate.value.round == round_name

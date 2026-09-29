@@ -210,6 +210,8 @@ def season_start_years(mentions: list[Mention]) -> frozenset[int]:
 _CONF = r"(east(?:ern)?|west(?:ern)?)"
 _CONF_WORD = r"(?:\s+conf(?:erence|\.)?)?"
 _SEMIS = r"(?:semi-?finals?|semis)"
+# "first round", "first-round", "first playoff round", "opening postseason round".
+_ROUND_WORD = r"[\s-]+(?:(?:playoff|postseason|nba)[\s-]+)?round"
 ROUND_LABELS = {
     "first_round": "First Round",
     "conference_semifinals": "Conference Semifinals",
@@ -228,9 +230,9 @@ _ROUNDS: tuple[tuple[re.Pattern, str, float, str | None], ...] = tuple(
         (rf"\bconf(?:erence|\.)?\s+{_SEMIS}\b", "conference_semifinals", 1.0, None),
         (r"\bdivision\s+finals?\b", "conference_finals", 0.7, None),
         (rf"\bdivision\s+{_SEMIS}\b", "conference_semifinals", 0.7, None),
-        (r"\b(?:first|1st|opening)[\s-]+round\b", "first_round", 1.0, None),
-        (r"\b(?:second|2nd)[\s-]+round\b", "conference_semifinals", 1.0, None),
-        (r"\b(?:third|3rd)[\s-]+round\b", "conference_finals", 0.9, None),
+        (rf"\b(?:first|1st|opening){_ROUND_WORD}\b|\bround\s+(?:one|1)\b", "first_round", 1.0, None),
+        (rf"\b(?:second|2nd){_ROUND_WORD}\b|\bround\s+(?:two|2)\b", "conference_semifinals", 1.0, None),
+        (rf"\b(?:third|3rd){_ROUND_WORD}\b|\bround\s+(?:three|3)\b", "conference_finals", 0.9, None),
         (r"\bplay-?in(?:\s+tournament|\s+games?)?\b", "", 0.0, "the play-in tournament is not a playoff round"),
         (r"\bquarter-?finals?\b", "first_round", 0.6, None),
         (rf"\b{_SEMIS}\b", "conference_semifinals", 0.8, None),
