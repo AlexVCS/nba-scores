@@ -1,0 +1,1191 @@
+{
+ "schema": "ask-tier-gate-field-labels/1",
+ "fixture": "server/tests/ask/fixtures/eval/unseen-two-2026-09-29.json",
+ "fixture_sha256": "fa3e001b816baf38967fd88c837b6228f2336af811749f06499cd4b59c1cf040",
+ "labeler": {
+  "name": "claude-opus-5-5 (independent field-label subagent)",
+  "labeled_at": "2026-09-29T18:45:00-04:00",
+  "isolation_statement": "Labeled from a fresh context. I read only: the field-label brief (docs/verification/ask-unseen-two-2026-09-29-field-label-brief.md), the template (docs/verification/ask-unseen-two-2026-09-29-field-labels.template.json), the question fixture (server/tests/ask/fixtures/eval/unseen-two-2026-09-29.json), the contract schemas server/ask/models/common.py, request.py and interpreter.py, and the reference data server/ask/data/player_catalog.json and franchise_history.json. The neutral city export /private/tmp/ask-unseen-two-city-reference.json did not exist (checked with ls), and no case needed a location value. I did not read any other docs/ file, interpreter/prompt/candidate/alias/normalizer/pipeline/eval code, scripts or the scorer, other tests, git history, beads issues or pull requests; I did not search the repo, use the web for project information, or run any Ask code, lookup, model or the evaluation. Player and team IDs come only from the two reference files, queried with short Python scripts."
+ },
+ "fields_by_intent": {
+  "game_search": [
+   "teams",
+   "date",
+   "location"
+  ],
+  "boxscore_stat": [
+   "stat_scope",
+   "stat",
+   "aggregation",
+   "player",
+   "teams",
+   "date",
+   "season",
+   "round",
+   "game_number"
+  ],
+  "playoff_series": [
+   "teams",
+   "season",
+   "round"
+  ],
+  "postseason_summary": [
+   "teams",
+   "season"
+  ],
+  "unsupported": []
+ },
+ "cases": [
+  {
+   "case_id": "unseen-two-game_search-19",
+   "question": "I would like the Toronto Raptors game list.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "game_search"
+   },
+   "scored_intent": "game_search",
+   "fields": {
+    "teams": {
+     "status": "value",
+     "value": [
+      1610612761
+     ]
+    },
+    "date": {
+     "status": "absent"
+    },
+    "location": {
+     "status": "absent"
+    }
+   },
+   "notes": "Date is missing (no date, no page context), not ambiguous."
+  },
+  {
+   "case_id": "unseen-two-game_search-20",
+   "question": "Show the Suns games on September 14.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "game_search"
+   },
+   "scored_intent": "game_search",
+   "fields": {
+    "teams": {
+     "status": "value",
+     "value": [
+      1610612756
+     ]
+    },
+    "date": {
+     "status": "unresolved",
+     "reason": "year_required"
+    },
+    "location": {
+     "status": "absent"
+    }
+   },
+   "notes": "September 14 has no year, so date is unresolved/year_required."
+  },
+  {
+   "case_id": "unseen-two-game_search-21",
+   "question": "Show the Los Angeles team's games on November 20, 2023.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "game_search"
+   },
+   "scored_intent": "game_search",
+   "fields": {
+    "teams": {
+     "status": "ambiguous",
+     "alternatives": [
+      1610612747,
+      1610612746
+     ]
+    },
+    "date": {
+     "status": "value",
+     "value": {
+      "start": "2023-11-20",
+      "end": "2023-11-20"
+     }
+    },
+    "location": {
+     "status": "absent"
+    }
+   },
+   "notes": "'The Los Angeles team' is one team mention that fits both the Lakers and Clippers in 2023-24; it names a team, not a venue, so location is absent."
+  },
+  {
+   "case_id": "unseen-two-game_search-22",
+   "question": "For March 6, 2020, show the New York or Brooklyn team; I cannot remember which one.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "game_search"
+   },
+   "scored_intent": "game_search",
+   "fields": {
+    "teams": {
+     "status": "ambiguous",
+     "alternatives": [
+      1610612752,
+      1610612751
+     ]
+    },
+    "date": {
+     "status": "value",
+     "value": {
+      "start": "2020-03-06",
+      "end": "2020-03-06"
+     }
+    },
+    "location": {
+     "status": "absent"
+    }
+   },
+   "notes": "The user wants one team and explicitly cannot choose between the New York team (Knicks in 2019-20) and the Brooklyn team (Nets). Labeled ambiguous rather than a two-team value, because in game_search a two-team value would mean a Knicks-Nets matchup, which is not what is asked; the brief's two-team exception covers requests that need exactly one team (postseason summary), not game_search. City names are team references, not venues."
+  },
+  {
+   "case_id": "unseen-two-game_search-23",
+   "question": "Can I see the Pacers schedule?",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "game_search"
+   },
+   "scored_intent": "game_search",
+   "fields": {
+    "teams": {
+     "status": "value",
+     "value": [
+      1610612754
+     ]
+    },
+    "date": {
+     "status": "absent"
+    },
+    "location": {
+     "status": "absent"
+    }
+   },
+   "notes": "'Schedule' with no date or page context: date is missing."
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-06",
+   "question": "How many turnovers did the Brooklyn Nets have on April 27, 2013?",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "player",
+   "fixed_intent": "boxscore_stat",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {
+    "player": {
+     "status": "absent"
+    }
+   },
+   "notes": "Team-scope question about the Brooklyn Nets; no player named."
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-07",
+   "question": "What was Boston's field-goal percentage in this game?",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {
+    "route": "boxscore",
+    "game_id": "0042300405"
+   },
+   "label_scope": "player",
+   "fixed_intent": "boxscore_stat",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {
+    "player": {
+     "status": "absent"
+    }
+   },
+   "notes": "Team-scope question about Boston; no player named."
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-09",
+   "question": "Who led Game 5 of the 2024 NBA Finals in steals?",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "player",
+   "fixed_intent": "boxscore_stat",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {
+    "player": {
+     "status": "absent"
+    }
+   },
+   "notes": "Leaders question; 'who' asks for the leader, no player is named."
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-10",
+   "question": "New Jersey Nets free-throw percentage on June 15, 2003?",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "player",
+   "fixed_intent": "boxscore_stat",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {
+    "player": {
+     "status": "absent"
+    }
+   },
+   "notes": "Team-scope question about the New Jersey Nets; no player named."
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-12",
+   "question": "How many points did Morris score on December 12, 2018?",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "boxscore_stat"
+   },
+   "scored_intent": "boxscore_stat",
+   "fields": {
+    "stat_scope": {
+     "status": "value",
+     "value": "player"
+    },
+    "stat": {
+     "status": "value",
+     "value": "points"
+    },
+    "aggregation": {
+     "status": "value",
+     "value": "total"
+    },
+    "player": {
+     "status": "ambiguous",
+     "alternatives": [
+      202693,
+      1628420,
+      1628537,
+      202694
+     ]
+    },
+    "teams": {
+     "status": "absent"
+    },
+    "date": {
+     "status": "value",
+     "value": {
+      "start": "2018-12-12",
+      "end": "2018-12-12"
+     }
+    },
+    "season": {
+     "status": "absent"
+    },
+    "round": {
+     "status": "absent"
+    },
+    "game_number": {
+     "status": "absent"
+    }
+   },
+   "notes": "'Morris' matches every catalog player whose career span includes the 2018-19 season (the season containing December 12, 2018); all such IDs are listed as alternatives, which is broader than the two examples in the fixture rationale but agrees with its ambiguous-player clarification. Catalog stores no team, so no player could be excluded by team. Season is absent because only a calendar date is stated."
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-13",
+   "question": "Pull up Green's assists for December 12, 2018.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "boxscore_stat"
+   },
+   "scored_intent": "boxscore_stat",
+   "fields": {
+    "stat_scope": {
+     "status": "value",
+     "value": "player"
+    },
+    "stat": {
+     "status": "value",
+     "value": "assists"
+    },
+    "aggregation": {
+     "status": "value",
+     "value": "total"
+    },
+    "player": {
+     "status": "ambiguous",
+     "alternatives": [
+      101123,
+      201145,
+      201980,
+      203110,
+      203210
+     ]
+    },
+    "teams": {
+     "status": "absent"
+    },
+    "date": {
+     "status": "value",
+     "value": {
+      "start": "2018-12-12",
+      "end": "2018-12-12"
+     }
+    },
+    "season": {
+     "status": "absent"
+    },
+    "round": {
+     "status": "absent"
+    },
+    "game_number": {
+     "status": "absent"
+    }
+   },
+   "notes": "'Green' matches every catalog player whose career span includes the 2018-19 season (the season containing December 12, 2018); all such IDs are listed as alternatives, which is broader than the two examples in the fixture rationale but agrees with its ambiguous-player clarification. Catalog stores no team, so no player could be excluded by team. Season is absent because only a calendar date is stated."
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-14",
+   "question": "What was Williams's rebound total on December 12, 2018?",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "boxscore_stat"
+   },
+   "scored_intent": "boxscore_stat",
+   "fields": {
+    "stat_scope": {
+     "status": "value",
+     "value": "player"
+    },
+    "stat": {
+     "status": "value",
+     "value": "rebounds"
+    },
+    "aggregation": {
+     "status": "value",
+     "value": "total"
+    },
+    "player": {
+     "status": "ambiguous",
+     "alternatives": [
+      101107,
+      101150,
+      203710,
+      1626210,
+      1627786,
+      1629026,
+      1629140,
+      1629057
+     ]
+    },
+    "teams": {
+     "status": "absent"
+    },
+    "date": {
+     "status": "value",
+     "value": {
+      "start": "2018-12-12",
+      "end": "2018-12-12"
+     }
+    },
+    "season": {
+     "status": "absent"
+    },
+    "round": {
+     "status": "absent"
+    },
+    "game_number": {
+     "status": "absent"
+    }
+   },
+   "notes": "'Williams' matches every catalog player whose career span includes the 2018-19 season (the season containing December 12, 2018); all such IDs are listed as alternatives, which is broader than the two examples in the fixture rationale but agrees with its ambiguous-player clarification. Catalog stores no team, so no player could be excluded by team. Season is absent because only a calendar date is stated. Michael Carter-Williams excluded (different surname)."
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-15",
+   "question": "How many threes did Curry make on December 12, 2018?",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "boxscore_stat"
+   },
+   "scored_intent": "boxscore_stat",
+   "fields": {
+    "stat_scope": {
+     "status": "value",
+     "value": "player"
+    },
+    "stat": {
+     "status": "value",
+     "value": "three_pointers"
+    },
+    "aggregation": {
+     "status": "value",
+     "value": "total"
+    },
+    "player": {
+     "status": "ambiguous",
+     "alternatives": [
+      201939,
+      203552
+     ]
+    },
+    "teams": {
+     "status": "absent"
+    },
+    "date": {
+     "status": "value",
+     "value": {
+      "start": "2018-12-12",
+      "end": "2018-12-12"
+     }
+    },
+    "season": {
+     "status": "absent"
+    },
+    "round": {
+     "status": "absent"
+    },
+    "game_number": {
+     "status": "absent"
+    }
+   },
+   "notes": "'Curry' matches every catalog player whose career span includes the 2018-19 season (the season containing December 12, 2018); all such IDs are listed as alternatives, which is broader than the two examples in the fixture rationale but agrees with its ambiguous-player clarification. Catalog stores no team, so no player could be excluded by team. Season is absent because only a calendar date is stated. \"threes\" = three_pointers."
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-16",
+   "question": "Show Brown's minutes for December 12, 2018.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "boxscore_stat"
+   },
+   "scored_intent": "boxscore_stat",
+   "fields": {
+    "stat_scope": {
+     "status": "value",
+     "value": "player"
+    },
+    "stat": {
+     "status": "value",
+     "value": "minutes"
+    },
+    "aggregation": {
+     "status": "value",
+     "value": "total"
+    },
+    "player": {
+     "status": "ambiguous",
+     "alternatives": [
+      203485,
+      1627759,
+      1628425,
+      1628971,
+      1628972
+     ]
+    },
+    "teams": {
+     "status": "absent"
+    },
+    "date": {
+     "status": "value",
+     "value": {
+      "start": "2018-12-12",
+      "end": "2018-12-12"
+     }
+    },
+    "season": {
+     "status": "absent"
+    },
+    "round": {
+     "status": "absent"
+    },
+    "game_number": {
+     "status": "absent"
+    }
+   },
+   "notes": "'Brown' matches every catalog player whose career span includes the 2018-19 season (the season containing December 12, 2018); all such IDs are listed as alternatives, which is broader than the two examples in the fixture rationale but agrees with its ambiguous-player clarification. Catalog stores no team, so no player could be excluded by team. Season is absent because only a calendar date is stated."
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-17",
+   "question": "Holiday's steals on December 12, 2018, please.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "boxscore_stat"
+   },
+   "scored_intent": "boxscore_stat",
+   "fields": {
+    "stat_scope": {
+     "status": "value",
+     "value": "player"
+    },
+    "stat": {
+     "status": "value",
+     "value": "steals"
+    },
+    "aggregation": {
+     "status": "value",
+     "value": "total"
+    },
+    "player": {
+     "status": "ambiguous",
+     "alternatives": [
+      201950,
+      203200,
+      1628988
+     ]
+    },
+    "teams": {
+     "status": "absent"
+    },
+    "date": {
+     "status": "value",
+     "value": {
+      "start": "2018-12-12",
+      "end": "2018-12-12"
+     }
+    },
+    "season": {
+     "status": "absent"
+    },
+    "round": {
+     "status": "absent"
+    },
+    "game_number": {
+     "status": "absent"
+    }
+   },
+   "notes": "'Holiday' matches every catalog player whose career span includes the 2018-19 season (the season containing December 12, 2018); all such IDs are listed as alternatives, which is broader than the two examples in the fixture rationale but agrees with its ambiguous-player clarification. Catalog stores no team, so no player could be excluded by team. Season is absent because only a calendar date is stated."
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-18",
+   "question": "How many blocks did Lopez get on December 12, 2018?",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "boxscore_stat"
+   },
+   "scored_intent": "boxscore_stat",
+   "fields": {
+    "stat_scope": {
+     "status": "value",
+     "value": "player"
+    },
+    "stat": {
+     "status": "value",
+     "value": "blocks"
+    },
+    "aggregation": {
+     "status": "value",
+     "value": "total"
+    },
+    "player": {
+     "status": "ambiguous",
+     "alternatives": [
+      201572,
+      201577
+     ]
+    },
+    "teams": {
+     "status": "absent"
+    },
+    "date": {
+     "status": "value",
+     "value": {
+      "start": "2018-12-12",
+      "end": "2018-12-12"
+     }
+    },
+    "season": {
+     "status": "absent"
+    },
+    "round": {
+     "status": "absent"
+    },
+    "game_number": {
+     "status": "absent"
+    }
+   },
+   "notes": "'Lopez' matches every catalog player whose career span includes the 2018-19 season (the season containing December 12, 2018); all such IDs are listed as alternatives, which is broader than the two examples in the fixture rationale but agrees with its ambiguous-player clarification. Catalog stores no team, so no player could be excluded by team. Season is absent because only a calendar date is stated."
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-19",
+   "question": "What were Johnson's turnovers on December 12, 2018?",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "boxscore_stat"
+   },
+   "scored_intent": "boxscore_stat",
+   "fields": {
+    "stat_scope": {
+     "status": "value",
+     "value": "player"
+    },
+    "stat": {
+     "status": "value",
+     "value": "turnovers"
+    },
+    "aggregation": {
+     "status": "value",
+     "value": "total"
+    },
+    "player": {
+     "status": "ambiguous",
+     "alternatives": [
+      2207,
+      101161,
+      201949,
+      202325,
+      204020,
+      1626169,
+      1628993,
+      1629168
+     ]
+    },
+    "teams": {
+     "status": "absent"
+    },
+    "date": {
+     "status": "value",
+     "value": {
+      "start": "2018-12-12",
+      "end": "2018-12-12"
+     }
+    },
+    "season": {
+     "status": "absent"
+    },
+    "round": {
+     "status": "absent"
+    },
+    "game_number": {
+     "status": "absent"
+    }
+   },
+   "notes": "'Johnson' matches every catalog player whose career span includes the 2018-19 season (the season containing December 12, 2018); all such IDs are listed as alternatives, which is broader than the two examples in the fixture rationale but agrees with its ambiguous-player clarification. Catalog stores no team, so no player could be excluded by team. Season is absent because only a calendar date is stated."
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-20",
+   "question": "Show Young's field goals on December 12, 2018.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "boxscore_stat"
+   },
+   "scored_intent": "boxscore_stat",
+   "fields": {
+    "stat_scope": {
+     "status": "value",
+     "value": "player"
+    },
+    "stat": {
+     "status": "value",
+     "value": "field_goals"
+    },
+    "aggregation": {
+     "status": "value",
+     "value": "total"
+    },
+    "player": {
+     "status": "ambiguous",
+     "alternatives": [
+      201152,
+      201156,
+      1629027
+     ]
+    },
+    "teams": {
+     "status": "absent"
+    },
+    "date": {
+     "status": "value",
+     "value": {
+      "start": "2018-12-12",
+      "end": "2018-12-12"
+     }
+    },
+    "season": {
+     "status": "absent"
+    },
+    "round": {
+     "status": "absent"
+    },
+    "game_number": {
+     "status": "absent"
+    }
+   },
+   "notes": "'Young' matches every catalog player whose career span includes the 2018-19 season (the season containing December 12, 2018); all such IDs are listed as alternatives, which is broader than the two examples in the fixture rationale but agrees with its ambiguous-player clarification. Catalog stores no team, so no player could be excluded by team. Season is absent because only a calendar date is stated."
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-21",
+   "question": "What was Jones's plus-minus on December 12, 2018?",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "boxscore_stat"
+   },
+   "scored_intent": "boxscore_stat",
+   "fields": {
+    "stat_scope": {
+     "status": "value",
+     "value": "player"
+    },
+    "stat": {
+     "status": "value",
+     "value": "plus_minus"
+    },
+    "aggregation": {
+     "status": "value",
+     "value": "total"
+    },
+    "player": {
+     "status": "ambiguous",
+     "alternatives": [
+      203093,
+      1626145,
+      1627745,
+      1627883,
+      1629203,
+      1627884
+     ]
+    },
+    "teams": {
+     "status": "absent"
+    },
+    "date": {
+     "status": "value",
+     "value": {
+      "start": "2018-12-12",
+      "end": "2018-12-12"
+     }
+    },
+    "season": {
+     "status": "absent"
+    },
+    "round": {
+     "status": "absent"
+    },
+    "game_number": {
+     "status": "absent"
+    }
+   },
+   "notes": "'Jones' matches every catalog player whose career span includes the 2018-19 season (the season containing December 12, 2018); all such IDs are listed as alternatives, which is broader than the two examples in the fixture rationale but agrees with its ambiguous-player clarification. Catalog stores no team, so no player could be excluded by team. Season is absent because only a calendar date is stated."
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-22",
+   "question": "Get Murray's full boxscore line for December 12, 2018.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "boxscore_stat"
+   },
+   "scored_intent": "boxscore_stat",
+   "fields": {
+    "stat_scope": {
+     "status": "value",
+     "value": "player"
+    },
+    "stat": {
+     "status": "value",
+     "value": "stat_line"
+    },
+    "aggregation": {
+     "status": "value",
+     "value": "total"
+    },
+    "player": {
+     "status": "ambiguous",
+     "alternatives": [
+      1627749,
+      1627750
+     ]
+    },
+    "teams": {
+     "status": "absent"
+    },
+    "date": {
+     "status": "value",
+     "value": {
+      "start": "2018-12-12",
+      "end": "2018-12-12"
+     }
+    },
+    "season": {
+     "status": "absent"
+    },
+    "round": {
+     "status": "absent"
+    },
+    "game_number": {
+     "status": "absent"
+    }
+   },
+   "notes": "'Murray' matches every catalog player whose career span includes the 2018-19 season (the season containing December 12, 2018); all such IDs are listed as alternatives, which is broader than the two examples in the fixture rationale but agrees with its ambiguous-player clarification. Catalog stores no team, so no player could be excluded by team. Season is absent because only a calendar date is stated. \"Full boxscore line\" = stat_line."
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-23",
+   "question": "How many free throws did Chris make on December 12, 2018?",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "boxscore_stat"
+   },
+   "scored_intent": "boxscore_stat",
+   "fields": {
+    "stat_scope": {
+     "status": "value",
+     "value": "player"
+    },
+    "stat": {
+     "status": "value",
+     "value": "free_throws"
+    },
+    "aggregation": {
+     "status": "value",
+     "value": "total"
+    },
+    "player": {
+     "status": "ambiguous",
+     "alternatives": [
+      101108,
+      1628449,
+      1629185
+     ]
+    },
+    "teams": {
+     "status": "absent"
+    },
+    "date": {
+     "status": "value",
+     "value": {
+      "start": "2018-12-12",
+      "end": "2018-12-12"
+     }
+    },
+    "season": {
+     "status": "absent"
+    },
+    "round": {
+     "status": "absent"
+    },
+    "game_number": {
+     "status": "absent"
+    }
+   },
+   "notes": "'Chris' (first name) matches every catalog player named Chris whose career span includes the 2018-19 season (the season containing December 12, 2018); all such IDs are listed as alternatives, which is broader than the two examples in the fixture rationale but agrees with its ambiguous-player clarification. Catalog stores no team, so no player could be excluded by team. Season is absent because only a calendar date is stated. \"Chris\" is a first name; catalog players with first name exactly Chris active in 2018-19 are listed; Christian Wood excluded since \"Chris\" is not his catalog first name."
+  },
+  {
+   "case_id": "unseen-two-playoff_series-19",
+   "question": "I want to revisit the Pacers against the Pistons playoff series.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "playoff_series"
+   },
+   "scored_intent": "playoff_series",
+   "fields": {
+    "teams": {
+     "status": "value",
+     "value": [
+      1610612754,
+      1610612765
+     ]
+    },
+    "season": {
+     "status": "absent"
+    },
+    "round": {
+     "status": "absent"
+    }
+   },
+   "notes": "Both teams are clear; no season or page season is stated, so season is missing (not ambiguous)."
+  },
+  {
+   "case_id": "unseen-two-playoff_series-20",
+   "question": "Open the Mavericks' playoff series from 2022.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "playoff_series"
+   },
+   "scored_intent": "playoff_series",
+   "fields": {
+    "teams": {
+     "status": "value",
+     "value": [
+      1610612742
+     ]
+    },
+    "season": {
+     "status": "value",
+     "value": "2021-22"
+    },
+    "round": {
+     "status": "absent"
+    }
+   },
+   "notes": "'From 2022' is the 2022 playoffs = 2021-22; no round is named."
+  },
+  {
+   "case_id": "unseen-two-playoff_series-21",
+   "question": "Show a first-round series from the 2024 playoffs.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "playoff_series"
+   },
+   "scored_intent": "playoff_series",
+   "fields": {
+    "teams": {
+     "status": "absent"
+    },
+    "season": {
+     "status": "value",
+     "value": "2023-24"
+    },
+    "round": {
+     "status": "value",
+     "value": {
+      "round": "first_round",
+      "conference": null
+     }
+    }
+   },
+   "notes": "'A first-round series' names no team; teams absent."
+  },
+  {
+   "case_id": "unseen-two-playoff_series-22",
+   "question": "Open the Los Angeles team's first-round series from 2021.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "playoff_series"
+   },
+   "scored_intent": "playoff_series",
+   "fields": {
+    "teams": {
+     "status": "ambiguous",
+     "alternatives": [
+      1610612747,
+      1610612746
+     ]
+    },
+    "season": {
+     "status": "value",
+     "value": "2020-21"
+    },
+    "round": {
+     "status": "value",
+     "value": {
+      "round": "first_round",
+      "conference": null
+     }
+    }
+   },
+   "notes": "'The Los Angeles team' fits both the Lakers and the Clippers in 2020-21."
+  },
+  {
+   "case_id": "unseen-two-playoff_series-25",
+   "question": "What was LeBron James's per-game scoring average in the 2016 Finals series?",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "any_of": [
+     {
+      "status": "value",
+      "value": "boxscore_stat"
+     },
+     {
+      "status": "value",
+      "value": "unsupported:multi_game_average"
+     }
+    ],
+    "note": "The question asks a player boxscore statistic (LeBron's points) but as a per-game average across the 2016 Finals games; boxscore_stat is the request type it fits and multi_game_average is the reason that type rejects it (the fixture expects unsupported/multi_game_average)."
+   },
+   "scored_intent": "boxscore_stat",
+   "fields": {
+    "stat_scope": {
+     "status": "value",
+     "value": "player"
+    },
+    "stat": {
+     "status": "value",
+     "value": "points"
+    },
+    "aggregation": {
+     "status": "value",
+     "value": "per_game"
+    },
+    "player": {
+     "status": "value",
+     "value": 2544
+    },
+    "teams": {
+     "status": "absent"
+    },
+    "date": {
+     "status": "absent"
+    },
+    "season": {
+     "status": "value",
+     "value": "2015-16"
+    },
+    "round": {
+     "status": "value",
+     "value": {
+      "round": "finals",
+      "conference": null
+     }
+    },
+    "game_number": {
+     "status": "absent"
+    }
+   },
+   "notes": "Not playoff_series despite the word 'series': the question wants a player's scoring average, not the series. '2016 Finals' = season 2015-16, round finals; no game number, team or date."
+  },
+  {
+   "case_id": "unseen-two-postseason_summary-19",
+   "question": "Give me a recap of an entire NBA postseason.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "postseason_summary"
+   },
+   "scored_intent": "postseason_summary",
+   "fields": {
+    "teams": {
+     "status": "absent"
+    },
+    "season": {
+     "status": "absent"
+    }
+   },
+   "notes": "No team and no season; season is missing."
+  },
+  {
+   "case_id": "unseen-two-postseason_summary-20",
+   "question": "Recap the Nuggets' whole playoff run.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "postseason_summary"
+   },
+   "scored_intent": "postseason_summary",
+   "fields": {
+    "teams": {
+     "status": "value",
+     "value": [
+      1610612743
+     ]
+    },
+    "season": {
+     "status": "absent"
+    }
+   },
+   "notes": "Nuggets = Denver; no year stated."
+  },
+  {
+   "case_id": "unseen-two-postseason_summary-21",
+   "question": "Summarize the Los Angeles team's complete 2021 postseason.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "postseason_summary"
+   },
+   "scored_intent": "postseason_summary",
+   "fields": {
+    "teams": {
+     "status": "ambiguous",
+     "alternatives": [
+      1610612747,
+      1610612746
+     ]
+    },
+    "season": {
+     "status": "value",
+     "value": "2020-21"
+    }
+   },
+   "notes": "'The Los Angeles team' fits both the Lakers and the Clippers in 2020-21."
+  },
+  {
+   "case_id": "unseen-two-postseason_summary-22",
+   "question": "Recap Boston or Miami in the 2020 playoffs; I have not decided which team.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "postseason_summary"
+   },
+   "scored_intent": "postseason_summary",
+   "fields": {
+    "teams": {
+     "status": "value",
+     "value": [
+      1610612738,
+      1610612748
+     ]
+    },
+    "season": {
+     "status": "value",
+     "value": "2019-20"
+    }
+   },
+   "notes": "Debatable: the user names two teams with 'or' but a summary needs one. Following the brief's explicit exception ('a question that names two teams but needs one has a two-team teams value, not an ambiguous one'), teams is the two-team value; this still agrees with the fixture's teams clarification. An ambiguous label with alternatives [1610612738, 1610612748] would also be defensible on the disjunctive wording."
+  }
+ ]
+}
