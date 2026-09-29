@@ -1,0 +1,83 @@
+{
+  "schema_version": "1",
+  "request_id": "fx-no-record",
+  "outcome": "not_found",
+  "question": "how many rebounds did bill russell have on march 2 1962",
+  "interpretation": {
+    "intent": "boxscore_stat",
+    "detected_type": "player_stat",
+    "items": [
+      {
+        "field": "player",
+        "value": "Bill Russell",
+        "detail": null,
+        "expression": "bill russell",
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": 78049,
+        "spoiler": false
+      },
+      {
+        "field": "date",
+        "value": "Fri, Mar 2, 1962",
+        "detail": null,
+        "expression": "march 2 1962",
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      },
+      {
+        "field": "stat",
+        "value": "Rebounds",
+        "detail": null,
+        "expression": null,
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      }
+    ],
+    "reference_time": "2026-09-29T12:00:00-04:00",
+    "timezone": "America/New_York",
+    "dates": {
+      "start": "1962-03-02",
+      "end": "1962-03-02"
+    },
+    "season": "1961-62"
+  },
+  "result": null,
+  "clarification": null,
+  "notice": {
+    "code": "no_record",
+    "title": "No boxscore for that game",
+    "message": "NBA.com doesn't have player boxscores for games on March 2, 1962.",
+    "retryable": false,
+    "retry_after_seconds": null,
+    "unsupported_reason": null,
+    "diagnostics_recorded": false
+  },
+  "links": [],
+  "suggestions": [],
+  "sources": [
+    {
+      "name": "nba_stats",
+      "label": "NBA.com",
+      "fetched_at": "2026-09-29T16:00:00Z",
+      "complete": true
+    }
+  ],
+  "interpreter": {
+    "model_called": true,
+    "cache_hit": false,
+    "adapter": "jev",
+    "model": "jev-1.13.0",
+    "fallback_used": false
+  }
+}

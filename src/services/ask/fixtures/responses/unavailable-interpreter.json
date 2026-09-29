@@ -1,0 +1,28 @@
+{
+  "schema_version": "1",
+  "request_id": "fx-interpreter-down",
+  "outcome": "unavailable",
+  "question": "how many points did tatum score yesterday",
+  "interpretation": null,
+  "result": null,
+  "clarification": null,
+  "notice": {
+    "code": "interpreter_unavailable",
+    "title": "Ask can't read questions right now",
+    "message": "The service that reads questions isn't responding. Scores, boxscores, and playoffs still work.",
+    "retryable": true,
+    "retry_after_seconds": 60,
+    "unsupported_reason": null,
+    "diagnostics_recorded": false
+  },
+  "links": [],
+  "suggestions": [],
+  "sources": [],
+  "interpreter": {
+    "model_called": true,
+    "cache_hit": false,
+    "adapter": "jev",
+    "model": "jev-1.13.0",
+    "fallback_used": false
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "schema_version": "1",
+  "request_id": "fx-unavailable",
+  "outcome": "unavailable",
+  "question": "celtics games yesterday",
+  "interpretation": {
+    "intent": "game_search",
+    "detected_type": "games",
+    "items": [
+      {
+        "field": "team",
+        "value": "Boston Celtics",
+        "detail": null,
+        "expression": "celtics",
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": 1610612738,
+        "player_id": null,
+        "spoiler": false
+      },
+      {
+        "field": "date",
+        "value": "Yesterday",
+        "detail": "Sun, Feb 8, 2026 · ET",
+        "expression": "yesterday",
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      }
+    ],
+    "reference_time": "2026-02-09T10:15:00-05:00",
+    "timezone": "America/New_York",
+    "dates": {
+      "start": "2026-02-08",
+      "end": "2026-02-08"
+    },
+    "season": "2025-26"
+  },
+  "result": null,
+  "clarification": null,
+  "notice": {
+    "code": "service_unavailable",
+    "title": "NBA data isn't responding",
+    "message": "We understood the question, but NBA.com data couldn't be loaded. Try again in a minute.",
+    "retryable": true,
+    "retry_after_seconds": 30,
+    "unsupported_reason": null,
+    "diagnostics_recorded": false
+  },
+  "links": [],
+  "suggestions": [],
+  "sources": [],
+  "interpreter": {
+    "model_called": true,
+    "cache_hit": false,
+    "adapter": "jev",
+    "model": "jev-1.13.0",
+    "fallback_used": false
+  }
+}

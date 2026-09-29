@@ -1,0 +1,158 @@
+{
+  "schema_version": "1",
+  "request_id": "fx-player-stat",
+  "outcome": "answer",
+  "question": "how many points did harden score on march 9 2026",
+  "interpretation": {
+    "intent": "boxscore_stat",
+    "detected_type": "player_stat",
+    "items": [
+      {
+        "field": "player",
+        "value": "James Harden",
+        "detail": "CLE",
+        "expression": "harden",
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": 1610612739,
+        "player_id": 201935,
+        "spoiler": false
+      },
+      {
+        "field": "game",
+        "value": "PHI @ CLE",
+        "detail": "Mon, Mar 9, 2026",
+        "expression": null,
+        "origin": "inferred",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      },
+      {
+        "field": "stat",
+        "value": "Points",
+        "detail": null,
+        "expression": null,
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      }
+    ],
+    "reference_time": "2026-03-10T09:00:00-04:00",
+    "timezone": "America/New_York",
+    "dates": {
+      "start": "2026-03-09",
+      "end": "2026-03-09"
+    },
+    "season": "2025-26"
+  },
+  "result": {
+    "kind": "boxscore_stat",
+    "scope": "player",
+    "stat": "points",
+    "aggregation": "total",
+    "game": {
+      "game_id": "0022500912",
+      "date": "2026-03-09",
+      "away": {
+        "team_id": 1610612755,
+        "tricode": "PHI",
+        "name": "Philadelphia 76ers"
+      },
+      "home": {
+        "team_id": 1610612739,
+        "tricode": "CLE",
+        "name": "Cleveland Cavaliers"
+      },
+      "season": "2025-26",
+      "season_type": "regular_season",
+      "round": null,
+      "game_number": null,
+      "final_score": {
+        "value": {
+          "away": 104,
+          "home": 112,
+          "periods": 4
+        },
+        "spoiler": true
+      }
+    },
+    "player_line": {
+      "player": {
+        "player_id": 201935,
+        "name": "James Harden"
+      },
+      "team": {
+        "team_id": 1610612739,
+        "tricode": "CLE",
+        "name": "Cleveland Cavaliers"
+      },
+      "status": "played",
+      "values": [
+        {
+          "value": {
+            "stat": "points",
+            "value": 21,
+            "display": "21",
+            "made": null,
+            "attempted": null
+          },
+          "spoiler": true
+        }
+      ]
+    },
+    "team_lines": [],
+    "leaders": []
+  },
+  "clarification": null,
+  "notice": null,
+  "links": [
+    {
+      "kind": "boxscore",
+      "label": "Open boxscore",
+      "href": "/games/0022500912/boxscore?date=2026-03-09",
+      "external": false,
+      "spoiler": false
+    },
+    {
+      "kind": "scores_date",
+      "label": "Game details",
+      "href": "/?date=2026-03-09",
+      "external": false,
+      "spoiler": false
+    }
+  ],
+  "suggestions": [
+    {
+      "question": "How many assists did James Harden have on March 9, 2026?",
+      "category": "stats",
+      "spoiler": false
+    },
+    {
+      "question": "Cavaliers games from March 9 to March 15, 2026",
+      "category": "games",
+      "spoiler": false
+    }
+  ],
+  "sources": [
+    {
+      "name": "nba_live",
+      "label": "NBA.com",
+      "fetched_at": "2026-09-29T16:00:00Z",
+      "complete": true
+    }
+  ],
+  "interpreter": {
+    "model_called": true,
+    "cache_hit": false,
+    "adapter": "jev",
+    "model": "jev-1.13.0",
+    "fallback_used": false
+  }
+}

@@ -1,0 +1,183 @@
+{
+  "schema_version": "1",
+  "request_id": "fx-stat-leaders",
+  "outcome": "answer",
+  "question": "who led in assists in game 4 of the 2025 finals",
+  "interpretation": {
+    "intent": "boxscore_stat",
+    "detected_type": "stat_leaders",
+    "items": [
+      {
+        "field": "round",
+        "value": "2025 NBA Finals",
+        "detail": null,
+        "expression": "2025 finals",
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      },
+      {
+        "field": "game_number",
+        "value": "Game 4",
+        "detail": null,
+        "expression": null,
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      },
+      {
+        "field": "game",
+        "value": "OKC @ IND",
+        "detail": "Fri, Jun 13, 2025",
+        "expression": null,
+        "origin": "inferred",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      },
+      {
+        "field": "stat",
+        "value": "Assists",
+        "detail": null,
+        "expression": null,
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      }
+    ],
+    "reference_time": "2026-09-29T12:00:00-04:00",
+    "timezone": "America/New_York",
+    "dates": null,
+    "season": "2024-25"
+  },
+  "result": {
+    "kind": "boxscore_stat",
+    "scope": "leaders",
+    "stat": "assists",
+    "aggregation": "total",
+    "game": {
+      "game_id": "0042400404",
+      "date": "2025-06-13",
+      "away": {
+        "team_id": 1610612760,
+        "tricode": "OKC",
+        "name": "Oklahoma City Thunder"
+      },
+      "home": {
+        "team_id": 1610612754,
+        "tricode": "IND",
+        "name": "Indiana Pacers"
+      },
+      "season": "2024-25",
+      "season_type": "playoffs",
+      "round": "finals",
+      "game_number": 4,
+      "final_score": {
+        "value": {
+          "away": 111,
+          "home": 104,
+          "periods": 4
+        },
+        "spoiler": true
+      }
+    },
+    "player_line": null,
+    "team_lines": [],
+    "leaders": [
+      {
+        "rank": 1,
+        "player": {
+          "value": {
+            "player_id": 1628983,
+            "name": "Shai Gilgeous-Alexander"
+          },
+          "spoiler": true
+        },
+        "team": {
+          "value": {
+            "team_id": 1610612760,
+            "tricode": "OKC",
+            "name": "Oklahoma City Thunder"
+          },
+          "spoiler": true
+        },
+        "value": {
+          "value": {
+            "stat": "assists",
+            "value": 8,
+            "display": "8",
+            "made": null,
+            "attempted": null
+          },
+          "spoiler": true
+        }
+      },
+      {
+        "rank": 2,
+        "player": {
+          "value": {
+            "player_id": 1630169,
+            "name": "Tyrese Haliburton"
+          },
+          "spoiler": true
+        },
+        "team": {
+          "value": {
+            "team_id": 1610612754,
+            "tricode": "IND",
+            "name": "Indiana Pacers"
+          },
+          "spoiler": true
+        },
+        "value": {
+          "value": {
+            "stat": "assists",
+            "value": 6,
+            "display": "6",
+            "made": null,
+            "attempted": null
+          },
+          "spoiler": true
+        }
+      }
+    ]
+  },
+  "clarification": null,
+  "notice": null,
+  "links": [
+    {
+      "kind": "boxscore",
+      "label": "Open boxscore",
+      "href": "/games/0042400404/boxscore?date=2025-06-13",
+      "external": false,
+      "spoiler": false
+    }
+  ],
+  "suggestions": [],
+  "sources": [
+    {
+      "name": "nba_live",
+      "label": "NBA.com",
+      "fetched_at": "2026-09-29T16:00:00Z",
+      "complete": true
+    }
+  ],
+  "interpreter": {
+    "model_called": true,
+    "cache_hit": false,
+    "adapter": "jev",
+    "model": "jev-1.13.0",
+    "fallback_used": false
+  }
+}

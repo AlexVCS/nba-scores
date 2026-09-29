@@ -1,0 +1,146 @@
+"""Normalized application request: the only thing Python executes.
+
+Every interpreter adapter's output is normalized and validated into one of
+these models before any data tool runs. All entities carry authoritative IDs
+and all dates are resolved calendar dates in America/New_York.
+
+Frozen contract (docs/ask-contract.md). Coordinate before changing.
+"""
+
+from __future__ import annotations
+
+import datetime as dt
+from typing import Annotated, Literal, Union
+
+from pydantic import Field, TypeAdapter, model_validator
+
+from .common import (
+    Aggregation,
+    Conference,
+    ContractModel,
+    DateRange,
+    PlayerRef,
+    PlayoffRound,
+    Season,
+    Stat,
+    StatScope,
+    TeamRef,
+)
+
+AppRoute = Literal["scores", "boxscore", "playoffs", "series", "other"]
+
+
+class AskContext(ContractModel):
+    """App context for one request. ``reference_time`` is assigned by the
+    server (never the client) and is timezone-aware America/New_York; relative
+    dates resolve against it and it is part of relative-parse cache keys."""
+
+    reference_time: dt.datetime
+    route: AppRoute | None = None
+    view_date: dt.date | None = None
+    game_id: str | None = Field(default=None, pattern=r"^\d{10}$")
+    playoff_season: Season | None = None
+
+    @model_validator(mode="after")
+    def _aware(self) -> AskContext:
+        if self.reference_time.tzinfo is None:
+            raise ValueError("reference_time must be timezone-aware")
+        return self
+
+
+class GameSearchRequest(ContractModel):
+    """Games on one date or up to seven consecutive days, optionally by team."""
+
+    intent: Literal["game_search"] = "game_search"
+    dates: DateRange
+    teams: list[TeamRef] = Field(default_factory=list, max_length=2)
+
+
+class StatSelection(ContractModel):
+    stat: Stat
+    aggregation: Aggregation = "total"
+
+
+class GameSelector(ContractModel):
+    """Identifies exactly one game. Valid forms:
+
+    - ``game_id``
+    - ``date`` (plus optional teams; a player alone is enough for player scope)
+    - ``season`` + ``game_number`` + (``round`` or two ``teams``)
+    """
+
+    game_id: str | None = Field(default=None, pattern=r"^\d{10}$")
+    date: dt.date | None = None
+    teams: list[TeamRef] = Field(default_factory=list, max_length=2)
+    season: Season | None = None
+    round: PlayoffRound | None = None
+    conference: Conference | None = None
+    game_number: int | None = Field(default=None, ge=1, le=7)
+
+    @model_validator(mode="after")
+    def _one_game(self) -> GameSelector:
+        if self.game_id or self.date:
+            return self
+        if self.season and self.game_number and (self.round or len(self.teams) == 2):
+            return self
+        raise ValueError("selector needs game_id, date, or season+game_number+(round or two teams)")
+
+
+class BoxscoreStatRequest(ContractModel):
+    """One statistic (or a full line) from one game's boxscore."""
+
+    intent: Literal["boxscore_stat"] = "boxscore_stat"
+    scope: StatScope
+    stat: StatSelection
+    game: GameSelector
+    player: PlayerRef | None = None
+    team: TeamRef | None = None
+
+    @model_validator(mode="after")
+    def _scope_fields(self) -> BoxscoreStatRequest:
+        if self.scope == "player" and self.player is None:
+            raise ValueError("player scope needs player")
+        if self.scope != "player" and self.player is not None:
+            raise ValueError("only player scope takes a player")
+        if self.scope == "team" and self.team is None and len(self.game.teams) == 0:
+            raise ValueError("team scope needs a team")
+        if self.scope == "leaders" and self.stat.stat == "stat_line":
+            raise ValueError("leaders need one statistic")
+        if self.stat.aggregation != "total":
+            raise ValueError("single-game statistics are totals; per_game is unsupported")
+        return self
+
+
+class PlayoffSeriesRequest(ContractModel):
+    intent: Literal["playoff_series"] = "playoff_series"
+    season: Season
+    teams: list[TeamRef] = Field(default_factory=list, max_length=2)
+    round: PlayoffRound | None = None
+    conference: Conference | None = None
+
+    @model_validator(mode="after")
+    def _identifies_series(self) -> PlayoffSeriesRequest:
+        if len(self.teams) == 2:
+            return self
+        if len(self.teams) == 1 and self.round:
+            return self
+        if self.round == "finals":
+            return self
+        if self.round == "conference_finals" and self.conference:
+            return self
+        raise ValueError("series needs two teams, one team + round, the finals, or conference + conference_finals")
+
+
+class PostseasonSummaryRequest(ContractModel):
+    """A whole postseason (team=None) or one team's postseason."""
+
+    intent: Literal["postseason_summary"] = "postseason_summary"
+    season: Season
+    team: TeamRef | None = None
+
+
+AskRequest = Annotated[
+    Union[GameSearchRequest, BoxscoreStatRequest, PlayoffSeriesRequest, PostseasonSummaryRequest],
+    Field(discriminator="intent"),
+]
+ASK_REQUEST_ADAPTER: TypeAdapter[AskRequest] = TypeAdapter(AskRequest)

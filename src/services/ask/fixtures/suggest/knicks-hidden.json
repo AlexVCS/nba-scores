@@ -1,0 +1,25 @@
+{
+  "query": "knicks",
+  "games": [
+    {
+      "game_id": "0022500801",
+      "date": "2026-02-08",
+      "away": {"team_id": 1610612752, "tricode": "NYK", "name": "New York Knicks"},
+      "home": {"team_id": 1610612738, "tricode": "BOS", "name": "Boston Celtics"},
+      "label": "NYK @ BOS · Sun, Feb 8",
+      "href": "/games/0022500801/boxscore?date=2026-02-08"
+    }
+  ],
+  "entities": [
+    {
+      "kind": "team",
+      "label": "New York Knicks",
+      "player_id": null,
+      "team": {"team_id": 1610612752, "tricode": "NYK", "name": "New York Knicks"}
+    }
+  ],
+  "questions": [
+    {"question": "Knicks games from February 2 to February 8, 2026", "category": "games", "spoiler": false},
+    {"question": "How many points did Jalen Brunson score on February 8, 2026?", "category": "stats", "spoiler": false}
+  ]
+}

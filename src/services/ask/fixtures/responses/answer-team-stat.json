@@ -1,0 +1,137 @@
+{
+  "schema_version": "1",
+  "request_id": "fx-team-stat",
+  "outcome": "answer",
+  "question": "how many rebounds did the cavs have on march 9 2026",
+  "interpretation": {
+    "intent": "boxscore_stat",
+    "detected_type": "team_stat",
+    "items": [
+      {
+        "field": "team",
+        "value": "Cleveland Cavaliers",
+        "detail": null,
+        "expression": "cavs",
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": 1610612739,
+        "player_id": null,
+        "spoiler": false
+      },
+      {
+        "field": "game",
+        "value": "PHI @ CLE",
+        "detail": "Mon, Mar 9, 2026",
+        "expression": null,
+        "origin": "inferred",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      },
+      {
+        "field": "stat",
+        "value": "Rebounds",
+        "detail": null,
+        "expression": null,
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      }
+    ],
+    "reference_time": "2026-03-10T09:00:00-04:00",
+    "timezone": "America/New_York",
+    "dates": {
+      "start": "2026-03-09",
+      "end": "2026-03-09"
+    },
+    "season": "2025-26"
+  },
+  "result": {
+    "kind": "boxscore_stat",
+    "scope": "team",
+    "stat": "rebounds",
+    "aggregation": "total",
+    "game": {
+      "game_id": "0022500912",
+      "date": "2026-03-09",
+      "away": {
+        "team_id": 1610612755,
+        "tricode": "PHI",
+        "name": "Philadelphia 76ers"
+      },
+      "home": {
+        "team_id": 1610612739,
+        "tricode": "CLE",
+        "name": "Cleveland Cavaliers"
+      },
+      "season": "2025-26",
+      "season_type": "regular_season",
+      "round": null,
+      "game_number": null,
+      "final_score": {
+        "value": {
+          "away": 104,
+          "home": 112,
+          "periods": 4
+        },
+        "spoiler": true
+      }
+    },
+    "player_line": null,
+    "team_lines": [
+      {
+        "team": {
+          "team_id": 1610612739,
+          "tricode": "CLE",
+          "name": "Cleveland Cavaliers"
+        },
+        "values": [
+          {
+            "value": {
+              "stat": "rebounds",
+              "value": 47,
+              "display": "47",
+              "made": null,
+              "attempted": null
+            },
+            "spoiler": true
+          }
+        ]
+      }
+    ],
+    "leaders": []
+  },
+  "clarification": null,
+  "notice": null,
+  "links": [
+    {
+      "kind": "boxscore",
+      "label": "Open boxscore",
+      "href": "/games/0022500912/boxscore?date=2026-03-09",
+      "external": false,
+      "spoiler": false
+    }
+  ],
+  "suggestions": [],
+  "sources": [
+    {
+      "name": "nba_live",
+      "label": "NBA.com",
+      "fetched_at": "2026-09-29T16:00:00Z",
+      "complete": true
+    }
+  ],
+  "interpreter": {
+    "model_called": true,
+    "cache_hit": false,
+    "adapter": "jev",
+    "model": "jev-1.13.0",
+    "fallback_used": false
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": "1",
+  "request_id": "fx-budget",
+  "outcome": "budget_exhausted",
+  "question": "how many assists did brunson have yesterday",
+  "interpretation": null,
+  "result": null,
+  "clarification": null,
+  "notice": {
+    "code": "budget_exhausted",
+    "title": "Ask is paused for today",
+    "message": "Ask has reached its daily limit for reading questions. Scores, boxscores, and playoffs still work.",
+    "retryable": false,
+    "retry_after_seconds": null,
+    "unsupported_reason": null,
+    "diagnostics_recorded": false
+  },
+  "links": [],
+  "suggestions": [],
+  "sources": [],
+  "interpreter": {
+    "model_called": false,
+    "cache_hit": false,
+    "adapter": null,
+    "model": null,
+    "fallback_used": false
+  }
+}

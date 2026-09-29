@@ -1,0 +1,39 @@
+{
+  "schema_version": "1",
+  "request_id": "fx-unsupported",
+  "outcome": "unsupported",
+  "question": "who has the most career points",
+  "interpretation": null,
+  "result": null,
+  "clarification": null,
+  "notice": {
+    "code": "unsupported",
+    "title": "Can't answer that one yet",
+    "message": "Career totals and all-time comparisons aren't supported. Ask about games in one week, a player's stats in one game, or a playoff series.",
+    "retryable": false,
+    "retry_after_seconds": null,
+    "unsupported_reason": "career_stats",
+    "diagnostics_recorded": true
+  },
+  "links": [],
+  "suggestions": [
+    {
+      "question": "How many points did James Harden score on March 9, 2026?",
+      "category": "stats",
+      "spoiler": false
+    },
+    {
+      "question": "Did the Pistons beat the Magic in the 2026 first round?",
+      "category": "series",
+      "spoiler": false
+    }
+  ],
+  "sources": [],
+  "interpreter": {
+    "model_called": false,
+    "cache_hit": false,
+    "adapter": null,
+    "model": null,
+    "fallback_used": false
+  }
+}
