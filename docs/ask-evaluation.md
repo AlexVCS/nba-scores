@@ -582,3 +582,41 @@ fields, clarify and unsupported labels, and boxscore team roles.
 
 The Luna-only replay is not comparable: when Jev called a case unsupported, the
 cascade never recorded Luna on it (15 cases).
+
+### Recalibration after the external review (2026-09-29)
+
+An external review of `cdc6c68` found three defects, all reproduced and fixed with
+regression tests (`server/tests/ask/test_review_fixes.py`, `test_location.py`):
+
+1. A selection from a truncated candidate list ("Jalen" has 18 matches, and 8 are
+   offered) was executed. The normalizer now asks for clarification instead.
+2. A sentence-initial capital ("How …") disabled lowercase names ("lebron"). The
+   casing check now ignores sentence-initial capitals, acronyms, and team names.
+   Fuzzy one-word matches still need a capital, or an all-lowercase question.
+3. The venue filter ignored history ("games in Brooklyn" in 2005). Each city now
+   carries dated team tenures (ADR 0011).
+
+The venue filter adds a `location` field. When the lookup finds no "in <city>",
+the field is absent by construction and no model is asked (`LOOKUP_DECIDED`).
+
+The trace was re-recorded on the fixed code for an estimated $0.050. Replay results:
+
+| Jev accept_min | Correct | Guesses | Finished by Jev / Luna |
+| ---: | ---: | ---: | ---: |
+| 0.8 | 184/203 | 2 | 120 / 83 |
+| **0.85** | **188/203** | **1** | **103 / 100** |
+| 0.9 | 188/203 | 1 | 92 / 111 |
+| 0.95 | 188/203 | 1 | 65 / 138 |
+
+The default is now **0.85**: same accuracy as 0.9, with more traffic kept on Jev.
+The one remaining guess is `release-two-029`, the `game.teams` scoring
+convention; the answer itself is correct. Remaining failures:
+
+- 4 unsupported answers where the label expects a clarification: missing page
+  context, and "Dwight Schrute".
+- 4 unneeded team clarifications on two-team stat questions: the known
+  target-team schema gap (`nba-scores-kzc.1`).
+- 2 season clarifications and 2 date clarifications.
+
+These are exposed cases, used for tuning. Next step: freeze this configuration and
+run a new unseen set written by someone who has not seen these cases.

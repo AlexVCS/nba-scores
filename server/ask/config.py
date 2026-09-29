@@ -70,7 +70,7 @@ class AskConfig:
     laya_model: str = "laya"
     laya_accept_min: float = 0.9
     jev_model: str = "jev-1.13.0"
-    jev_accept_min: float = 0.9
+    jev_accept_min: float = 0.85
     veto_min: float = 0.5
     typesafe_api_key: str | None = field(default=None, repr=False)
 
@@ -102,7 +102,7 @@ class AskConfig:
             laya_model=os.environ.get("LAYA_MODEL", "laya").strip(),
             laya_accept_min=_number("ASK_LAYA_ACCEPT_MIN", 0.9),
             jev_model=os.environ.get("ASK_JEV_MODEL", "jev-1.13.0").strip(),
-            jev_accept_min=_number("ASK_JEV_ACCEPT_MIN", 0.9),
+            jev_accept_min=_number("ASK_JEV_ACCEPT_MIN", 0.85),
             veto_min=_number("ASK_VETO_MIN", 0.5),
             typesafe_api_key=_api_key("TYPESAFE_API_KEY"),
         )

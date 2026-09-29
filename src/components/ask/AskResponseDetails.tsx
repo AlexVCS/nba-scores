@@ -1,6 +1,8 @@
 import type {AskInterpreterInfo} from "@/services/ask/types";
 
-const TIER_LABELS: Record<string, string> = {laya: "Laya", jev: "Jev", luna: "Luna", veto: "Tiers disagreed"};
+const TIER_LABELS: Record<string, string> = {
+  lookup: "Lookup", laya: "Laya", jev: "Jev", luna: "Luna", veto: "Tiers disagreed",
+};
 
 interface AskResponseDetailsProps {
   interpreter: AskInterpreterInfo;

@@ -41,6 +41,10 @@ from server.ask.protocols import InterpreterAdapter
 # Any field that still carries a confidence after merging was not decided by a tier.
 CASCADE_POLICY_THRESHOLDS = PolicyThresholds(accept_min=1.0, clarify_min=0.0)
 
+# Fields that exist only when a fixed lookup pattern fires ("in <city>"). With no
+# candidate the field is absent by construction; no model is asked to confirm it.
+LOOKUP_DECIDED = {"location": "location"}
+
 
 @dataclass(frozen=True)
 class Tier:
@@ -169,6 +173,10 @@ class TieredAdapter:
         calls = 0
         tokens_in = 0
         merge = _Merge()
+        for name, candidate_field in LOOKUP_DECIDED.items():
+            if request.candidates.sets[candidate_field].status == "not_mentioned":
+                merge.decided[name] = FieldInterpretation(field=name, status="absent")
+                merge.decided_by[name] = "lookup"
         extracted_date = None
         last: InterpreterOutput | None = None
 

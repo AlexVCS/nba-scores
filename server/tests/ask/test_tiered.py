@@ -95,7 +95,7 @@ def test_confident_first_tier_stops_the_cascade():
     luna = Fake("luna")
     out = cascade(jev, luna).interpret(REQUEST)
     assert luna.calls == 0
-    assert out.metadata.field_tiers == {"intent": "jev", "date": "jev", "teams": "jev", "location": "jev"}
+    assert out.metadata.field_tiers == {"intent": "jev", "date": "jev", "teams": "jev", "location": "lookup"}
     assert (out.metadata.model, out.metadata.resolved_model) == ("jev-model+luna-model", "jev-model")
     assert out.metadata.usage.cost_usd == pytest.approx(0.0001)
     assert decide(out).action == "accept"
@@ -105,7 +105,7 @@ def test_uncertain_field_escalates_and_keeps_confident_reads():
     laya = Fake("laya", sel("intent", "game_search"), sel("date", "date:0"), sel("teams", CLE.id, confidence=0.5))
     jev = Fake("jev", sel("intent", "game_search", confidence=0.6), sel("teams", CLE.id))
     out = cascade(laya, jev).interpret(REQUEST)
-    assert out.metadata.field_tiers == {"intent": "laya", "date": "laya", "teams": "jev"}
+    assert out.metadata.field_tiers == {"intent": "laya", "date": "laya", "teams": "jev", "location": "lookup"}
     assert out.metadata.usage.provider_calls == 2
     assert decide(out).action == "accept"
 
@@ -162,7 +162,7 @@ def test_unavailable_tier_is_skipped():
     laya = Fake("laya", outcome="unavailable", error="connection_error")
     jev = Fake("jev", sel("intent", "game_search"), sel("date", "date:0"), absent("teams"))
     out = cascade(laya, jev).interpret(REQUEST)
-    assert out.metadata.field_tiers == {"intent": "jev", "date": "jev", "teams": "jev"}
+    assert out.metadata.field_tiers == {"intent": "jev", "date": "jev", "teams": "jev", "location": "lookup"}
     assert decide(out).action == "accept"
 
 
@@ -237,5 +237,5 @@ def test_daily_budget_prices_a_cascade_by_its_tiers(tmp_path):
 def test_merged_output_keeps_only_fields_the_intent_uses():
     jev = Fake("jev", sel("intent", "game_search"), sel("date", "date:0"), absent("teams"), sel("stat", "points"))
     out = cascade(jev).interpret(REQUEST)
-    assert {f.field for f in out.fields} == {"intent", "date", "teams"}
+    assert {f.field for f in out.fields} == {"intent", "date", "teams", "location"}
     assert "stat" not in out.metadata.field_tiers
