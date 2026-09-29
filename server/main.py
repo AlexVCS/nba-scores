@@ -5,6 +5,7 @@ from datetime import date as calendar_date, datetime, timezone
 import requests
 from fastapi import Depends, FastAPI, Header, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from server.ask.router import router as ask_router
 from requests.exceptions import RequestException
 from server.services import nba_stats_client
 from server.services.game_data import get_boxscore_with_stat_events
@@ -40,6 +41,7 @@ from .services.playoffs import (
 
 logger = logging.getLogger(__name__)
 app = FastAPI()
+app.include_router(ask_router)
 
 app.add_middleware(
     CORSMiddleware,
