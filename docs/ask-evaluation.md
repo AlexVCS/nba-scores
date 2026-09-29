@@ -449,3 +449,30 @@ requests of unknown usage. No held-out run was recorded. The saved reports remai
 - `ask-seed.json`
 
 They describe that deleted parser and cannot be compared with the adapters above.
+
+
+## First independent release attempt, September 29
+
+The selected interpreter and candidate lookup were frozen before the private
+release questions were opened. Initial label serialization mistakes invalidated
+the first scoring run. An independent label audit corrected the action names,
+explicit season/conference labels, and candidate value formats. The original
+invalid-label report and the [audit trail](verification/ask-release-label-audit.json)
+remain available. No interpreter or candidate changes were made between those
+runs. Evaluation scoring now compares authoritative entity IDs and request
+parameters, retaining full display fields for review.
+
+The [audited 80-question run](verification/ask-release-2026-09-29.json) scored
+75/80 overall, with 65/67 complete requests, 6/9 clarifications, 4/4 unsupported
+requests, three schema-valid guesses, and zero service failures. Median latency
+was 2.234 seconds, p95 was 3.700 seconds, and estimated provider usage was
+$0.009333. This fails the zero-guess and clarification gates, so production
+remains disabled. The failures broadened underspecified series or conference
+finals requests into whole-postseason summaries, or treated missing game
+selection as unsupported. Corrections require another independent unseen set.
+
+[Candidate lookup](verification/ask-candidates-release-2026-09-29.json) passed
+all 175 gold values across 83 questions, with 2/2 no-match cases and 2/2
+ambiguities preserved. Warm p95 was 0.264 ms. These labels are now exposed and
+are stored under `server/tests/ask/fixtures/` for regression use, not future
+release evidence.

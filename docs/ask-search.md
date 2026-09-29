@@ -45,8 +45,8 @@ could reveal advancement.
 
 ## Operations
 
-`ASK_ENABLED=1` enables the endpoint for internal testing after the release
-gate. The default model is `gpt-6-luna` at low reasoning effort. A daily
+`ASK_ENABLED=1` enables the endpoint for local development testing. Production
+enablement requires the separate release gates. The default model is `gpt-6-luna` at low reasoning effort. A daily
 `$1` list-price guard reserves estimated cost before a provider call and
 settles reported usage afterward. If the provider call's cost is unknown,
 the reservation stays charged. The ledger is shared through `ASK_STATE_DIR`

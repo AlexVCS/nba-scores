@@ -1,0 +1,1819 @@
+{
+  "comment": "Independently authored unseen release evaluation labels.",
+  "cases": [
+    {
+      "id": "release-001",
+      "question": "What NBA games were played on March 3, 2025?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "game_search"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "2025-03-03",
+            "end": "2025-03-03"
+          },
+          "teams": []
+        }
+      }
+    },
+    {
+      "id": "release-002",
+      "question": "Show the Knicks schedule for December 25, 2024",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "game_search"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "2024-12-25",
+            "end": "2024-12-25"
+          },
+          "teams": [
+            {
+              "team_id": 1610612752,
+              "tricode": "NYK",
+              "name": "New York Knicks"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "release-003",
+      "question": "Games on October 22, 2024",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "game_search"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "2024-10-22",
+            "end": "2024-10-22"
+          },
+          "teams": []
+        }
+      }
+    },
+    {
+      "id": "release-004",
+      "question": "Did Boston play on January 5, 2023?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "game_search"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "2023-01-05",
+            "end": "2023-01-05"
+          },
+          "teams": [
+            {
+              "team_id": 1610612738,
+              "tricode": "BOS",
+              "name": "Boston Celtics"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "release-005",
+      "question": "Show Golden State games on February 1, 2020",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "game_search"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "2020-02-01",
+            "end": "2020-02-01"
+          },
+          "teams": [
+            {
+              "team_id": 1610612744,
+              "tricode": "GSW",
+              "name": "Golden State Warriors"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "release-006",
+      "question": "Chicago Bulls games on April 9, 2019",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "game_search"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "2019-04-09",
+            "end": "2019-04-09"
+          },
+          "teams": [
+            {
+              "team_id": 1610612741,
+              "tricode": "CHI",
+              "name": "Chicago Bulls"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "release-007",
+      "question": "Miami games on November 17, 2018",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "game_search"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "2018-11-17",
+            "end": "2018-11-17"
+          },
+          "teams": [
+            {
+              "team_id": 1610612748,
+              "tricode": "MIA",
+              "name": "Miami Heat"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "release-008",
+      "question": "76ers games on March 10, 2022",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "game_search"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "2022-03-10",
+            "end": "2022-03-10"
+          },
+          "teams": [
+            {
+              "team_id": 1610612755,
+              "tricode": "PHI",
+              "name": "Philadelphia 76ers"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "release-009",
+      "question": "Denver Nuggets games on May 1, 2023",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "game_search"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "2023-05-01",
+            "end": "2023-05-01"
+          },
+          "teams": [
+            {
+              "team_id": 1610612743,
+              "tricode": "DEN",
+              "name": "Denver Nuggets"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "release-010",
+      "question": "Dallas games on June 12, 2011",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "game_search"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "2011-06-12",
+            "end": "2011-06-12"
+          },
+          "teams": [
+            {
+              "team_id": 1610612742,
+              "tricode": "DAL",
+              "name": "Dallas Mavericks"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "release-011",
+      "question": "Show games on March 3",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "game_search",
+        "clarification"
+      ],
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "date",
+        "clarify_reason": "year_required"
+      }
+    },
+    {
+      "id": "release-012",
+      "question": "Games from March 1 through March 12, 2025",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "game_search",
+        "clarification"
+      ],
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "date",
+        "clarify_reason": "range_too_long"
+      }
+    },
+    {
+      "id": "release-013",
+      "question": "What games were on yesterday?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "game_search",
+        "relative_date"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "2026-03-17",
+            "end": "2026-03-17"
+          },
+          "teams": []
+        }
+      }
+    },
+    {
+      "id": "release-014",
+      "question": "Games last night?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "game_search",
+        "relative_date"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "2026-03-17",
+            "end": "2026-03-17"
+          },
+          "teams": []
+        }
+      }
+    },
+    {
+      "id": "release-015",
+      "question": "How many points did LeBron James score on March 5, 2024?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "boxscore_stat",
+        "boxscore_stat"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "player",
+          "stat": {
+            "stat": "points",
+            "aggregation": "total"
+          },
+          "game": {
+            "date": "2024-03-05",
+            "teams": []
+          },
+          "player": {
+            "player_id": 2544,
+            "name": "LeBron James"
+          }
+        }
+      }
+    },
+    {
+      "id": "release-016",
+      "question": "Stephen Curry rebounds on January 20, 2022",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "boxscore_stat",
+        "boxscore_stat"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "player",
+          "stat": {
+            "stat": "rebounds",
+            "aggregation": "total"
+          },
+          "game": {
+            "date": "2022-01-20",
+            "teams": []
+          },
+          "player": {
+            "player_id": 201939,
+            "name": "Stephen Curry"
+          }
+        }
+      }
+    },
+    {
+      "id": "release-017",
+      "question": "Jayson Tatum assists on April 17, 2022",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "boxscore_stat",
+        "boxscore_stat"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "player",
+          "stat": {
+            "stat": "assists",
+            "aggregation": "total"
+          },
+          "game": {
+            "date": "2022-04-17",
+            "teams": []
+          },
+          "player": {
+            "player_id": 1628369,
+            "name": "Jayson Tatum"
+          }
+        }
+      }
+    },
+    {
+      "id": "release-018",
+      "question": "Nikola Jokic blocks on February 23, 2023",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "boxscore_stat",
+        "boxscore_stat"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "player",
+          "stat": {
+            "stat": "blocks",
+            "aggregation": "total"
+          },
+          "game": {
+            "date": "2023-02-23",
+            "teams": []
+          },
+          "player": {
+            "player_id": 203999,
+            "name": "Nikola Jokic"
+          }
+        }
+      }
+    },
+    {
+      "id": "release-019",
+      "question": "Michael Jordan full box score on June 12, 1997",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "boxscore_stat",
+        "historical_player"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "player",
+          "stat": {
+            "stat": "stat_line",
+            "aggregation": "total"
+          },
+          "game": {
+            "date": "1997-06-12",
+            "teams": []
+          },
+          "player": {
+            "player_id": 893,
+            "name": "Michael Jordan"
+          }
+        }
+      }
+    },
+    {
+      "id": "release-020",
+      "question": "Kobe Bryant minutes on January 22, 2006",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "boxscore_stat",
+        "historical_player"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "player",
+          "stat": {
+            "stat": "minutes",
+            "aggregation": "total"
+          },
+          "game": {
+            "date": "2006-01-22",
+            "teams": []
+          },
+          "player": {
+            "player_id": 977,
+            "name": "Kobe Bryant"
+          }
+        }
+      }
+    },
+    {
+      "id": "release-021",
+      "question": "Celtics team points on January 25, 2024",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "boxscore_stat",
+        "boxscore_stat"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "team",
+          "stat": {
+            "stat": "points",
+            "aggregation": "total"
+          },
+          "game": {
+            "date": "2024-01-25",
+            "teams": [
+              {
+                "team_id": 1610612738,
+                "tricode": "BOS",
+                "name": "Boston Celtics"
+              }
+            ]
+          },
+          "team": {
+            "team_id": 1610612738,
+            "tricode": "BOS",
+            "name": "Boston Celtics"
+          }
+        }
+      }
+    },
+    {
+      "id": "release-022",
+      "question": "Who led in rebounds on February 12, 2023?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "boxscore_stat",
+        "boxscore_stat"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "leaders",
+          "stat": {
+            "stat": "rebounds",
+            "aggregation": "total"
+          },
+          "game": {
+            "date": "2023-02-12",
+            "teams": []
+          }
+        }
+      }
+    },
+    {
+      "id": "release-023",
+      "question": "Knicks full team line on April 10, 2024",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "boxscore_stat",
+        "boxscore_stat"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "team",
+          "stat": {
+            "stat": "stat_line",
+            "aggregation": "total"
+          },
+          "game": {
+            "date": "2024-04-10",
+            "teams": [
+              {
+                "team_id": 1610612752,
+                "tricode": "NYK",
+                "name": "New York Knicks"
+              }
+            ]
+          },
+          "team": {
+            "team_id": 1610612752,
+            "tricode": "NYK",
+            "name": "New York Knicks"
+          }
+        }
+      }
+    },
+    {
+      "id": "release-024",
+      "question": "Who had the most assists on May 7, 2019?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "boxscore_stat",
+        "boxscore_stat"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "leaders",
+          "stat": {
+            "stat": "assists",
+            "aggregation": "total"
+          },
+          "game": {
+            "date": "2019-05-07",
+            "teams": []
+          }
+        }
+      }
+    },
+    {
+      "id": "release-025",
+      "question": "Warriors team turnovers on March 15, 2022",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "boxscore_stat",
+        "boxscore_stat"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "team",
+          "stat": {
+            "stat": "turnovers",
+            "aggregation": "total"
+          },
+          "game": {
+            "date": "2022-03-15",
+            "teams": [
+              {
+                "team_id": 1610612744,
+                "tricode": "GSW",
+                "name": "Golden State Warriors"
+              }
+            ]
+          },
+          "team": {
+            "team_id": 1610612744,
+            "tricode": "GSW",
+            "name": "Golden State Warriors"
+          }
+        }
+      }
+    },
+    {
+      "id": "release-026",
+      "question": "Who scored most points on November 3, 2015?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "boxscore_stat",
+        "boxscore_stat"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "leaders",
+          "stat": {
+            "stat": "points",
+            "aggregation": "total"
+          },
+          "game": {
+            "date": "2015-11-03",
+            "teams": []
+          }
+        }
+      }
+    },
+    {
+      "id": "release-027",
+      "question": "How many points did Jalen score on March 3, 2025?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "boxscore_stat",
+        "clarification"
+      ],
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "player",
+        "clarify_reason": "ambiguous"
+      }
+    },
+    {
+      "id": "release-028",
+      "question": "How did LeBron do on March 3?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "boxscore_stat",
+        "clarification"
+      ],
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "date",
+        "clarify_reason": "year_required"
+      }
+    },
+    {
+      "id": "release-029",
+      "question": "What was LeBron James\u2019s points average over his last 5 games?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "boxscore_stat",
+        "unsupported"
+      ],
+      "expected": {
+        "action": "unsupported",
+        "unsupported_reason": "multi_game_average"
+      }
+    },
+    {
+      "id": "release-030",
+      "question": "Who led in field goal percentage on December 8, 2024?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "boxscore_stat",
+        "unsupported"
+      ],
+      "expected": {
+        "action": "unsupported",
+        "unsupported_reason": "unsupported_leader_stat"
+      }
+    },
+    {
+      "id": "release-031",
+      "question": "Who had the best full stat line in the Knicks game on April 2, 2024?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "boxscore_stat",
+        "unsupported"
+      ],
+      "expected": {
+        "action": "unsupported",
+        "unsupported_reason": "unsupported_leader_stat"
+      }
+    },
+    {
+      "id": "release-032",
+      "question": "Who led the game in three-point percentage on March 2, 2024?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "boxscore_stat",
+        "unsupported"
+      ],
+      "expected": {
+        "action": "unsupported",
+        "unsupported_reason": "unsupported_leader_stat"
+      }
+    },
+    {
+      "id": "release-033",
+      "question": "Celtics vs Lakers 2024 Finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "playoff_series",
+        "playoff_series"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "2023-24",
+          "teams": [
+            {
+              "team_id": 1610612738,
+              "tricode": "BOS",
+              "name": "Boston Celtics"
+            },
+            {
+              "team_id": 1610612747,
+              "tricode": "LAL",
+              "name": "Los Angeles Lakers"
+            }
+          ],
+          "round": "finals"
+        }
+      }
+    },
+    {
+      "id": "release-034",
+      "question": "Bulls vs Jazz 1998 Finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "playoff_series",
+        "historical"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "1997-98",
+          "teams": [
+            {
+              "team_id": 1610612741,
+              "tricode": "CHI",
+              "name": "Chicago Bulls"
+            },
+            {
+              "team_id": 1610612762,
+              "tricode": "UTA",
+              "name": "Utah Jazz"
+            }
+          ],
+          "round": "finals"
+        }
+      }
+    },
+    {
+      "id": "release-035",
+      "question": "Warriors vs Cavaliers 2016 Finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "playoff_series",
+        "playoff_series"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "2015-16",
+          "teams": [
+            {
+              "team_id": 1610612744,
+              "tricode": "GSW",
+              "name": "Golden State Warriors"
+            },
+            {
+              "team_id": 1610612739,
+              "tricode": "CLE",
+              "name": "Cleveland Cavaliers"
+            }
+          ],
+          "round": "finals"
+        }
+      }
+    },
+    {
+      "id": "release-036",
+      "question": "Heat vs Spurs 2013 Finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "playoff_series",
+        "playoff_series"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "2012-13",
+          "teams": [
+            {
+              "team_id": 1610612748,
+              "tricode": "MIA",
+              "name": "Miami Heat"
+            },
+            {
+              "team_id": 1610612759,
+              "tricode": "SAS",
+              "name": "San Antonio Spurs"
+            }
+          ],
+          "round": "finals"
+        }
+      }
+    },
+    {
+      "id": "release-037",
+      "question": "Raptors vs Warriors 2019 Finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "playoff_series",
+        "playoff_series"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "2018-19",
+          "teams": [
+            {
+              "team_id": 1610612761,
+              "tricode": "TOR",
+              "name": "Toronto Raptors"
+            },
+            {
+              "team_id": 1610612744,
+              "tricode": "GSW",
+              "name": "Golden State Warriors"
+            }
+          ],
+          "round": "finals"
+        }
+      }
+    },
+    {
+      "id": "release-038",
+      "question": "Mavericks vs Heat 2011 Finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "playoff_series",
+        "playoff_series"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "2010-11",
+          "teams": [
+            {
+              "team_id": 1610612742,
+              "tricode": "DAL",
+              "name": "Dallas Mavericks"
+            },
+            {
+              "team_id": 1610612748,
+              "tricode": "MIA",
+              "name": "Miami Heat"
+            }
+          ],
+          "round": "finals"
+        }
+      }
+    },
+    {
+      "id": "release-039",
+      "question": "Lakers vs Celtics 2008 Finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "playoff_series",
+        "historical"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "2007-08",
+          "teams": [
+            {
+              "team_id": 1610612747,
+              "tricode": "LAL",
+              "name": "Los Angeles Lakers"
+            },
+            {
+              "team_id": 1610612738,
+              "tricode": "BOS",
+              "name": "Boston Celtics"
+            }
+          ],
+          "round": "finals"
+        }
+      }
+    },
+    {
+      "id": "release-040",
+      "question": "Nuggets vs Heat 2023 Finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "playoff_series",
+        "playoff_series"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "2022-23",
+          "teams": [
+            {
+              "team_id": 1610612743,
+              "tricode": "DEN",
+              "name": "Denver Nuggets"
+            },
+            {
+              "team_id": 1610612748,
+              "tricode": "MIA",
+              "name": "Miami Heat"
+            }
+          ],
+          "round": "finals"
+        }
+      }
+    },
+    {
+      "id": "release-041",
+      "question": "Knicks 2025 playoff series",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "playoff_series",
+        "playoff_series"
+      ],
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "round",
+        "clarify_reason": "missing"
+      }
+    },
+    {
+      "id": "release-042",
+      "question": "Suns 2021 Western Conference Finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "playoff_series",
+        "playoff_series"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "2020-21",
+          "teams": [
+            {
+              "team_id": 1610612756,
+              "tricode": "PHX",
+              "name": "Phoenix Suns"
+            }
+          ],
+          "round": "conference_finals",
+          "conference": "west"
+        }
+      }
+    },
+    {
+      "id": "release-043",
+      "question": "Celtics 2024 Eastern Conference Semifinals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "playoff_series",
+        "playoff_series"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "2023-24",
+          "teams": [
+            {
+              "team_id": 1610612738,
+              "tricode": "BOS",
+              "name": "Boston Celtics"
+            }
+          ],
+          "round": "conference_semifinals",
+          "conference": "east"
+        }
+      }
+    },
+    {
+      "id": "release-044",
+      "question": "76ers vs Celtics 2023 playoffs",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "playoff_series",
+        "playoff_series"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "2022-23",
+          "teams": [
+            {
+              "team_id": 1610612755,
+              "tricode": "PHI",
+              "name": "Philadelphia 76ers"
+            },
+            {
+              "team_id": 1610612738,
+              "tricode": "BOS",
+              "name": "Boston Celtics"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "release-045",
+      "question": "Bucks 2021 first round",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "playoff_series",
+        "playoff_series"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "2020-21",
+          "teams": [
+            {
+              "team_id": 1610612749,
+              "tricode": "MIL",
+              "name": "Milwaukee Bucks"
+            }
+          ],
+          "round": "first_round"
+        }
+      }
+    },
+    {
+      "id": "release-046",
+      "question": "Lakers 2020 Western Conference Finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "playoff_series",
+        "playoff_series"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "2019-20",
+          "teams": [
+            {
+              "team_id": 1610612747,
+              "tricode": "LAL",
+              "name": "Los Angeles Lakers"
+            }
+          ],
+          "round": "conference_finals",
+          "conference": "west"
+        }
+      }
+    },
+    {
+      "id": "release-047",
+      "question": "Heat 2023 Eastern Conference Finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "playoff_series",
+        "playoff_series"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "2022-23",
+          "teams": [
+            {
+              "team_id": 1610612748,
+              "tricode": "MIA",
+              "name": "Miami Heat"
+            }
+          ],
+          "round": "conference_finals",
+          "conference": "east"
+        }
+      }
+    },
+    {
+      "id": "release-048",
+      "question": "Thunder vs Spurs 2016 Western Conference Finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "playoff_series",
+        "playoff_series"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "2015-16",
+          "teams": [
+            {
+              "team_id": 1610612760,
+              "tricode": "OKC",
+              "name": "Oklahoma City Thunder"
+            },
+            {
+              "team_id": 1610612759,
+              "tricode": "SAS",
+              "name": "San Antonio Spurs"
+            }
+          ],
+          "round": "conference_finals",
+          "conference": "west"
+        }
+      }
+    },
+    {
+      "id": "release-049",
+      "question": "Pistons 2004 Finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "playoff_series",
+        "historical"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "2003-04",
+          "teams": [
+            {
+              "team_id": 1610612765,
+              "tricode": "DET",
+              "name": "Detroit Pistons"
+            }
+          ],
+          "round": "finals"
+        }
+      }
+    },
+    {
+      "id": "release-050",
+      "question": "Cavaliers 2018 Eastern Conference Finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "playoff_series",
+        "playoff_series"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "2017-18",
+          "teams": [
+            {
+              "team_id": 1610612739,
+              "tricode": "CLE",
+              "name": "Cleveland Cavaliers"
+            }
+          ],
+          "round": "conference_finals",
+          "conference": "east"
+        }
+      }
+    },
+    {
+      "id": "release-051",
+      "question": "Warriors 2022 first round",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "playoff_series",
+        "playoff_series"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "2021-22",
+          "teams": [
+            {
+              "team_id": 1610612744,
+              "tricode": "GSW",
+              "name": "Golden State Warriors"
+            }
+          ],
+          "round": "first_round"
+        }
+      }
+    },
+    {
+      "id": "release-052",
+      "question": "Celtics 2022 postseason conference finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "playoff_series",
+        "playoff_series"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "2021-22",
+          "teams": [
+            {
+              "team_id": 1610612738,
+              "tricode": "BOS",
+              "name": "Boston Celtics"
+            }
+          ],
+          "round": "conference_finals"
+        }
+      }
+    },
+    {
+      "id": "release-053",
+      "question": "Show the 2024 playoff series",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "playoff_series",
+        "clarification"
+      ],
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "round",
+        "clarify_reason": "missing"
+      }
+    },
+    {
+      "id": "release-054",
+      "question": "Show the 2024 playoff series for Boston",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "playoff_series",
+        "clarification"
+      ],
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "round",
+        "clarify_reason": "missing"
+      }
+    },
+    {
+      "id": "release-055",
+      "question": "Show the 2024 conference finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "playoff_series",
+        "clarification"
+      ],
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "teams",
+        "clarify_reason": "missing"
+      }
+    },
+    {
+      "id": "release-056",
+      "question": "Show the 2024 playoff series between Boston and the Lakers",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "playoff_series",
+        "clarification"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "2023-24",
+          "teams": [
+            {
+              "team_id": 1610612738,
+              "name": "Boston Celtics",
+              "tricode": "BOS"
+            },
+            {
+              "team_id": 1610612747,
+              "name": "Los Angeles Lakers",
+              "tricode": "LAL"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "release-057",
+      "question": "How did the Celtics do in the 2024 postseason?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "postseason_summary",
+        "postseason_summary"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "2023-24",
+          "team": {
+            "team_id": 1610612738,
+            "tricode": "BOS",
+            "name": "Boston Celtics"
+          }
+        }
+      }
+    },
+    {
+      "id": "release-058",
+      "question": "Lakers postseason summary for 2020",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "postseason_summary",
+        "postseason_summary"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "2019-20",
+          "team": {
+            "team_id": 1610612747,
+            "tricode": "LAL",
+            "name": "Los Angeles Lakers"
+          }
+        }
+      }
+    },
+    {
+      "id": "release-059",
+      "question": "League-wide postseason summary, 2023",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "postseason_summary",
+        "postseason_summary"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "2022-23",
+          "team": null
+        }
+      }
+    },
+    {
+      "id": "release-060",
+      "question": "Warriors postseason summary for 2015",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "postseason_summary",
+        "postseason_summary"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "2014-15",
+          "team": {
+            "team_id": 1610612744,
+            "tricode": "GSW",
+            "name": "Golden State Warriors"
+          }
+        }
+      }
+    },
+    {
+      "id": "release-061",
+      "question": "Chicago Bulls postseason summary 1998",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "postseason_summary",
+        "historical"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "1997-98",
+          "team": {
+            "team_id": 1610612741,
+            "tricode": "CHI",
+            "name": "Chicago Bulls"
+          }
+        }
+      }
+    },
+    {
+      "id": "release-062",
+      "question": "Miami Heat 2012 postseason summary",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "postseason_summary",
+        "postseason_summary"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "2011-12",
+          "team": {
+            "team_id": 1610612748,
+            "tricode": "MIA",
+            "name": "Miami Heat"
+          }
+        }
+      }
+    },
+    {
+      "id": "release-063",
+      "question": "Denver postseason summary for 2023",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "postseason_summary",
+        "postseason_summary"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "2022-23",
+          "team": {
+            "team_id": 1610612743,
+            "tricode": "DEN",
+            "name": "Denver Nuggets"
+          }
+        }
+      }
+    },
+    {
+      "id": "release-064",
+      "question": "Toronto Raptors postseason summary, 2019",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "postseason_summary",
+        "postseason_summary"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "2018-19",
+          "team": {
+            "team_id": 1610612761,
+            "tricode": "TOR",
+            "name": "Toronto Raptors"
+          }
+        }
+      }
+    },
+    {
+      "id": "release-065",
+      "question": "Cleveland postseason summary for 2016",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "postseason_summary",
+        "postseason_summary"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "2015-16",
+          "team": {
+            "team_id": 1610612739,
+            "tricode": "CLE",
+            "name": "Cleveland Cavaliers"
+          }
+        }
+      }
+    },
+    {
+      "id": "release-066",
+      "question": "New York Knicks postseason summary 2025",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "postseason_summary",
+        "postseason_summary"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "2024-25",
+          "team": {
+            "team_id": 1610612752,
+            "tricode": "NYK",
+            "name": "New York Knicks"
+          }
+        }
+      }
+    },
+    {
+      "id": "release-067",
+      "question": "League postseason summary for 2024",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "postseason_summary",
+        "postseason_summary"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "2023-24",
+          "team": null
+        }
+      }
+    },
+    {
+      "id": "release-068",
+      "question": "San Antonio Spurs postseason in 2014",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "postseason_summary",
+        "postseason_summary"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "2013-14",
+          "team": {
+            "team_id": 1610612759,
+            "tricode": "SAS",
+            "name": "San Antonio Spurs"
+          }
+        }
+      }
+    },
+    {
+      "id": "release-069",
+      "question": "Dallas Mavericks postseason in 2011",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "postseason_summary",
+        "postseason_summary"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "2010-11",
+          "team": {
+            "team_id": 1610612742,
+            "tricode": "DAL",
+            "name": "Dallas Mavericks"
+          }
+        }
+      }
+    },
+    {
+      "id": "release-070",
+      "question": "Milwaukee Bucks postseason summary 2021",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "postseason_summary",
+        "postseason_summary"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "2020-21",
+          "team": {
+            "team_id": 1610612749,
+            "tricode": "MIL",
+            "name": "Milwaukee Bucks"
+          }
+        }
+      }
+    },
+    {
+      "id": "release-071",
+      "question": "Phoenix Suns postseason summary 2021",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "postseason_summary",
+        "postseason_summary"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "2020-21",
+          "team": {
+            "team_id": 1610612756,
+            "tricode": "PHX",
+            "name": "Phoenix Suns"
+          }
+        }
+      }
+    },
+    {
+      "id": "release-072",
+      "question": "Boston Celtics postseason summary in 2008",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "postseason_summary",
+        "historical"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "2007-08",
+          "team": {
+            "team_id": 1610612738,
+            "tricode": "BOS",
+            "name": "Boston Celtics"
+          }
+        }
+      }
+    },
+    {
+      "id": "release-073",
+      "question": "Philadelphia postseason summary in 2023",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "postseason_summary",
+        "postseason_summary"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "2022-23",
+          "team": {
+            "team_id": 1610612755,
+            "tricode": "PHI",
+            "name": "Philadelphia 76ers"
+          }
+        }
+      }
+    },
+    {
+      "id": "release-074",
+      "question": "Orlando postseason summary in 2009",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "postseason_summary",
+        "historical"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "2008-09",
+          "team": {
+            "team_id": 1610612753,
+            "tricode": "ORL",
+            "name": "Orlando Magic"
+          }
+        }
+      }
+    },
+    {
+      "id": "release-075",
+      "question": "Portland postseason summary in 2000",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "postseason_summary",
+        "historical"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "1999-00",
+          "team": {
+            "team_id": 1610612757,
+            "tricode": "POR",
+            "name": "Portland Trail Blazers"
+          }
+        }
+      }
+    },
+    {
+      "id": "release-076",
+      "question": "Minnesota postseason summary in 2024",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "postseason_summary",
+        "postseason_summary"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "2023-24",
+          "team": {
+            "team_id": 1610612750,
+            "tricode": "MIN",
+            "name": "Minnesota Timberwolves"
+          }
+        }
+      }
+    },
+    {
+      "id": "release-077",
+      "question": "Show the Celtics postseason summary",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "postseason_summary",
+        "clarification"
+      ],
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "season",
+        "clarify_reason": "missing"
+      }
+    },
+    {
+      "id": "release-078",
+      "question": "What games were played yesterday?",
+      "reference_time": "2026-11-02T05:30:00Z",
+      "tags": [
+        "game_search",
+        "dst_ny",
+        "ny_midnight"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "2026-11-01",
+            "end": "2026-11-01"
+          },
+          "teams": []
+        }
+      }
+    },
+    {
+      "id": "release-079",
+      "question": "Games tonight?",
+      "reference_time": "2026-11-02T02:30:00Z",
+      "tags": [
+        "game_search",
+        "dst_ny"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "2026-11-01",
+            "end": "2026-11-01"
+          },
+          "teams": []
+        }
+      }
+    },
+    {
+      "id": "release-080",
+      "question": "Games today?",
+      "reference_time": "2026-03-08T23:30:00-04:00",
+      "tags": [
+        "game_search",
+        "dst_ny"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "2026-03-08",
+            "end": "2026-03-08"
+          },
+          "teams": []
+        }
+      }
+    }
+  ],
+  "_comment": "Evaluated on 2026-09-29 and now exposed. Never reuse as an unseen release set. Labels were audited; see docs/verification/ask-release-label-audit.json."
+}

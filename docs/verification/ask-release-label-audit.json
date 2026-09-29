@@ -1,0 +1,78 @@
+{
+  "at": "2026-09-29T18:27:22.453170+00:00",
+  "reason": "Label serialization and explicit conference audit before interpreter results, no implementation changes or tuning",
+  "interpreter_changes": [
+    [
+      "release-011",
+      "clarification action serialization"
+    ],
+    [
+      "release-012",
+      "clarification action serialization"
+    ],
+    [
+      "release-027",
+      "clarification action serialization"
+    ],
+    [
+      "release-028",
+      "clarification action serialization"
+    ],
+    [
+      "release-041",
+      "clarification action serialization"
+    ],
+    [
+      "release-043",
+      "explicit conference label"
+    ],
+    [
+      "release-053",
+      "clarification action serialization"
+    ],
+    [
+      "release-054",
+      "clarification action serialization"
+    ],
+    [
+      "release-055",
+      "clarification action serialization"
+    ],
+    [
+      "release-056",
+      "clarification action serialization"
+    ],
+    [
+      "release-077",
+      "clarification action serialization"
+    ]
+  ],
+  "interpreter_sha256": "d518578b0fed29a56ea9c0c34081d6f6c6b0ce5c06d5e67f8f6fb8a4524961d8",
+  "candidate_sha256": "45fe87bf12966ab0572ebb0cf6bd5c5fc12647cd79c7a2a07f700d97afe5514e",
+  "independent_audit_at": "2026-09-29T18:32:46.109235+00:00",
+  "independent_audit_changes": [
+    [
+      "release-041",
+      "missing reason serialized"
+    ],
+    [
+      "release-052",
+      "question gives no conference; one team plus round already identifies series"
+    ],
+    [
+      "release-055",
+      "explicit2024 supplies season; conference final identity missing"
+    ],
+    [
+      "release-056",
+      "explicitseason andtwo teams valid; absence is resolver concern"
+    ]
+  ],
+  "audit_rejected_suggestion": "Keep date-only leaders as valid normalized requests: frozen GameSelector explicitly permits date with optional teams. Ambiguous actual games are resolved by basketball service, not guessed by interpretation.",
+  "candidate_audit_changes": [
+    "release028 adds explicit LeBron player2544",
+    "candidate003 removes inferred Lakers from LosAngeles and expects ambiguous team"
+  ],
+  "interpreter_v3_sha256": "7760bc24633591af09f0ccfc0c495a3e311acae41353781dc33e404ec2904928",
+  "candidate_v3_sha256": "cf121a457d4fa18989d45ebfcf2942d6c518e31b5e35ee0697b2663dc553f775"
+}
