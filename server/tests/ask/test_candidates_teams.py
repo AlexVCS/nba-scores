@@ -67,6 +67,17 @@ def test_relative_dates_date_the_team_name_too(service):
     assert team_ids(teams(service, "Hornets vs Magic tonight")) == [HORNETS, 1610612753]
 
 
+def test_long_calendar_ranges_still_date_historical_team_names(service):
+    sonics = service.lookup("Seattle SuperSonics games in March 2015", AskContext(reference_time=REF))
+    assert sonics.sets["date"].candidates[0].value.unresolved_reason == "range_too_long"
+    assert sonics.sets["team"].status == "no_candidates"
+    assert THUNDER not in team_ids(sonics.sets["team"])
+
+    hornets = service.lookup("Hornets games in March 2008", AskContext(reference_time=REF))
+    assert hornets.sets["date"].candidates[0].value.unresolved_reason == "range_too_long"
+    assert team_ids(hornets.sets["team"]) == [PELICANS]
+
+
 @pytest.mark.parametrize("question, expected", [
     ("How did the Hornets do in the 2000 playoffs?", HORNETS),
     ("Who won the Hornets first round series in 2008?", PELICANS),

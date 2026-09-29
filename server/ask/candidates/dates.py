@@ -77,6 +77,10 @@ def calendar_hit(year: int | None, month: int, day: int, label: str, *, score: f
                  source: str = "date_parser") -> Hit | None:
     if year is not None and not MIN_YEAR <= year <= 2100:
         return None
+    # DateComponents has coarse month/day bounds; values outside those bounds
+    # cannot be represented even as an invalid_date candidate.
+    if not 1 <= month <= 12 or not 1 <= day <= 31:
+        return None
     components = DateComponents(kind="calendar_date", year=year, month=month, day=day)
     try:
         dt.date(year or 2000, month, day)  # 2000 is a leap year, so Feb 29 is allowed without a year
@@ -91,6 +95,8 @@ def calendar_hit(year: int | None, month: int, day: int, label: str, *, score: f
 def range_hit(year: int | None, month: int, day: int, end_year: int | None, end_month: int, end_day: int,
               label: str, *, score: float = 1.0) -> Hit | None:
     if any(y is not None and not MIN_YEAR <= y <= 2100 for y in (year, end_year)):
+        return None
+    if not (1 <= month <= 12 and 1 <= day <= 31 and 1 <= end_month <= 12 and 1 <= end_day <= 31):
         return None
     components = DateComponents(
         kind="calendar_range", year=year, month=month, day=day,
@@ -156,6 +162,38 @@ def _month_day_range(m: re.Match, today: dt.date) -> list[Hit]:
     if y is not None and end_month < MONTHS[month]:
         end_y = y + 1
     hit = range_hit(y, MONTHS[month], day, end_y, end_month, end_day, m.group(0).strip())
+    return [hit] if hit else []
+
+
+_MONTH_RANGE_WITH_YEARS = re.compile(
+    rf"\b(?:from\s+)?(?P<start_month>{'|'.join(sorted(MONTHS, key=len, reverse=True))})\.?\s+"
+    rf"(?P<start_day>\d{{1,2}})(?:st|nd|rd|th)?(?P<start_year>,?\s+\d{{4}})?\s*"
+    rf"(?:-|to|through|until)\s*(?P<end_month>{'|'.join(sorted(MONTHS, key=len, reverse=True))})\.?\s+"
+    rf"(?P<end_day>\d{{1,2}})(?:st|nd|rd|th)?(?P<end_year>,?\s+\d{{4}})?\b"
+)
+
+
+def _month_range_with_years(m: re.Match, today: dt.date) -> list[Hit]:
+    start_month = MONTHS[m.group("start_month")]
+    start_day = int(m.group("start_day"))
+    end_month = MONTHS[m.group("end_month")]
+    end_day = int(m.group("end_day"))
+    start_year = int(m.group("start_year").replace(",", "").strip()) if m.group("start_year") else None
+    end_year = int(m.group("end_year").replace(",", "").strip()) if m.group("end_year") else start_year
+    if start_year is None and end_year is not None:
+        start_year = end_year - (1 if end_month < start_month else 0)
+    elif start_year is not None and end_year is None:
+        end_year = start_year + (1 if end_month < start_month else 0)
+    hit = range_hit(start_year, start_month, start_day, end_year, end_month, end_day, m.group(0).strip())
+    return [hit] if hit else []
+
+
+_ISO_RANGE = re.compile(r"\b(?:from\s+)?(\d{4})-(\d{1,2})-(\d{1,2})\s*(?:-|to|through|until)\s*(\d{4})-(\d{1,2})-(\d{1,2})\b")
+
+
+def _iso_range(m: re.Match, today: dt.date) -> list[Hit]:
+    hit = range_hit(int(m.group(1)), int(m.group(2)), int(m.group(3)),
+                    int(m.group(4)), int(m.group(5)), int(m.group(6)), m.group(0).strip())
     return [hit] if hit else []
 
 
@@ -274,6 +312,8 @@ def _weekday(m: re.Match, today: dt.date) -> list[Hit]:
 
 
 PATTERNS: tuple[tuple[re.Pattern, Handler], ...] = tuple((re.compile(p), h) for p, h in (
+    (_ISO_RANGE, _iso_range),
+    (_MONTH_RANGE_WITH_YEARS, _month_range_with_years),
     (rf"\b{_MONTH}\s+{_DAY}\s*(?:-|to|through|until)\s*(?:{_MONTH}\s+)?{_DAY}{_YEAR}\b", _month_day_range),
     (rf"\b{_MONTH}\s+{_DAY}{_YEAR}\b", _month_day),
     (rf"\b{_DAY}\s+(?:of\s+)?{_MONTH}{_YEAR}\b", _day_month),

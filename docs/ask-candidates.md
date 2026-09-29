@@ -174,8 +174,8 @@ Results on the development set, 2026-09-29:
 | Ambiguity kept open | 4/4 |
 | Forbidden candidates offered | 0 |
 | Candidate-set size | median 2, max 9 |
-| Warm latency | median 0.168 ms, p95 2.288 ms, max 8.132 ms (fuzzy spelling checks dominate) |
-| Index load | 109.5 ms, first call only |
+| Warm latency | median 0.128 ms, p95 1.993 ms, max 5.607 ms (fuzzy spelling checks dominate) |
+| Index load | 74.4 ms, first call only |
 
 Proposed recall target for the release evaluation: at least 95% per field, and
 at least 90% of questions with every gold value offered. Record it in #189

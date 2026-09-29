@@ -96,6 +96,13 @@ def test_close_misspelling_is_a_fuzzy_candidate(service):
     assert player_set.candidates[0].match_score < 1
 
 
+def test_fuzzy_surname_limit_does_not_hide_other_close_candidates(service):
+    player_set = players(service, "How many points did Akins score?")
+    names = {candidate.value.player.name for candidate in player_set.candidates}
+    assert {"Jim Eakins", "Chucky Atkins", "Keith Askins", "Rawle Alkins", "Henry Akin"}.issubset(names)
+    assert not player_set.truncated
+
+
 def test_candidates_carry_career_span_but_no_current_team(service):
     [jordan] = players(service, "Michael Jordan points in game 6").candidates
     assert jordan.value.first_season == "1984-85"

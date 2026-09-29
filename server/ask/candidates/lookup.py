@@ -249,7 +249,7 @@ def _context_mentions(folded: str, masked: str, question: str, context: AskConte
         pointer = _ON_SCREEN_SEASON.search(folded)
         has_season = any(mm.field == "season" for mm in mentions)
         on_playoff_page = playoff_context and context.route in ("playoffs", "series") and not has_season
-        if pointer or on_playoff_page:
+        if (pointer and not has_season) or on_playoff_page:
             season = context.playoff_season
             hit = patterns._season_hit(int(season[:4]), f"{season} (season on screen)", score=0.8, source="app_context")
             start, end = (pointer.start(), pointer.end()) if pointer else (0, 0)
@@ -330,7 +330,8 @@ def find_mentions(question: str, context: AskContext, limits: LookupLimits = DEF
 
     mentions, masked = patterns.game_number_mentions(folded, question)
     date_mentions, masked = dates.mentions(masked, question, today)
-    season_mentions, masked = patterns.season_mentions(masked, question, today, playoff_context)
+    page_season = context.playoff_season if context.route in ("playoffs", "series") else None
+    season_mentions, masked = patterns.season_mentions(masked, question, today, playoff_context, page_season)
     round_mentions, masked = patterns.round_mentions(masked, question)
     mentions += date_mentions + season_mentions + round_mentions
     context_mentions, masked = _context_mentions(folded, masked, question, context, playoff_context, mentions)

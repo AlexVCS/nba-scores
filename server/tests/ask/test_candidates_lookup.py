@@ -73,6 +73,22 @@ def test_seasons(service, question, reference_time, expected):
     assert keys(lookup(service, question, reference_time=reference_time), "season") == expected
 
 
+def test_final_score_is_not_playoff_language(service):
+    result = lookup(service, "What was the final score of the Hornets game in 2002?")
+    assert keys(result, "season") == ["2001-02", "2002-03"]
+
+
+def test_page_playoff_pointer_uses_the_page_season(service):
+    result = lookup(service, "Who won these playoffs?", reference_time=REF,
+                    route="playoffs", playoff_season="2015-16")
+    [candidate] = result.sets["season"].candidates
+    assert candidate.value.season == "2015-16"
+    assert candidate.source == "app_context"
+    explicit = lookup(service, "Who won these playoffs in 2016?", reference_time=REF,
+                      route="playoffs", playoff_season="2015-16")
+    assert keys(explicit, "season") == ["2015-16"]
+
+
 def test_invalid_season_is_not_repaired(service):
     result = lookup(service, "Summarize the 2023-25 season")
     assert result.sets["season"].status == "no_candidates"

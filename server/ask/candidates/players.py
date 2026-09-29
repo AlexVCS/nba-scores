@@ -60,12 +60,14 @@ class PlayerIndex:
     last_keys: tuple[str, ...]
     max_phrase_tokens: int
 
-    def fuzzy(self, key: str, *, full: bool, cutoff: float, limit: int = 3) -> list[tuple[int, float]]:
+    def fuzzy(self, key: str, *, full: bool, cutoff: float) -> list[tuple[int, float]]:
         """(player_id, similarity) for close spellings of ``key``."""
         pool = self.full_keys if full else self.last_keys
         table = self.full if full else self.last
         out: list[tuple[int, float]] = []
-        for close in difflib.get_close_matches(key, pool, n=limit, cutoff=cutoff):
+        # Retrieve every matching key so the caller can correctly report
+        # whether its per-mention bound truncated the candidate set.
+        for close in difflib.get_close_matches(key, pool, n=len(pool), cutoff=cutoff):
             ratio = difflib.SequenceMatcher(None, key, close).ratio()
             out.extend((i, ratio) for i in table[close] if i not in {p for p, _ in out})
         return out

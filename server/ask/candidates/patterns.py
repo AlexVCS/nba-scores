@@ -5,14 +5,15 @@ import datetime as dt
 import re
 
 from server.ask.candidates.types import Hit, Mention
-from server.ask.models.candidates import GameNumberCandidateValue, RoundCandidateValue, SeasonCandidateValue
+from server.ask.models.candidates import DateCandidateValue, GameNumberCandidateValue, RoundCandidateValue, SeasonCandidateValue
 from server.utils.season import get_nba_season
 
 FIRST_SEASON = 1946  # 1946-47, the first BAA season
 
 PLAYOFF_CONTEXT = re.compile(
-    r"\b(finals?|playoffs?|postseason|champions?|championship|champs|title|series|round|semi-?finals?|semis"
-    r"|ecf|wcf|seed|seeds|game\s*(?:#\s*)?(?:\d|one|two|three|four|five|six|seven))\b"
+    r"\b(finals|final(?!\s+(?:score|minute|seconds?|quarter|play|shot))|playoffs?|postseason|champions?"
+    r"|championship|champs|title|series|round|semi-?finals?|semis|ecf|wcf|seed|seeds"
+    r"|game\s*(?:#\s*)?(?:\d|one|two|three|four|five|six|seven))\b"
 )
 GAME_WORDS = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7}
 
@@ -90,7 +91,8 @@ _APOSTROPHE_YEAR = re.compile(r"(?<![a-z0-9])'(\d{2})\b")
 _BARE_YEAR = re.compile(r"\b(19[4-9]\d|20\d{2})\b")
 
 
-def season_mentions(folded: str, original: str, today: dt.date, playoff_context: bool) -> tuple[list[Mention], str]:
+def season_mentions(folded: str, original: str, today: dt.date, playoff_context: bool,
+                    page_season: str | None = None) -> tuple[list[Mention], str]:
     current_start = int(get_nba_season(today.year, today.month)[:4])
     offseason = today.month in (7, 8, 9)
     latest_start = current_start + 1
@@ -108,9 +110,10 @@ def season_mentions(folded: str, original: str, today: dt.date, playoff_context:
         folded = _mask(folded, m.start(), m.end())
 
     for m in _THESE_PLAYOFFS.finditer(folded):
-        hit = _season_hit(current_start, f"{season_label(current_start)} ({current_start + 1} playoffs)",
-                          score=0.9, from_year=current_start + 1)
-        out.append(_mention("season", m, original, [hit]))
+        if page_season is None:
+            hit = _season_hit(current_start, f"{season_label(current_start)} ({current_start + 1} playoffs)",
+                              score=0.9, from_year=current_start + 1)
+            out.append(_mention("season", m, original, [hit]))
         folded = _mask(folded, m.start(), m.end())
 
     for m in _RELATIVE_SEASON.finditer(folded):
@@ -155,9 +158,32 @@ def season_start_years(mentions: list[Mention]) -> frozenset[int]:
             value = hit.value
             if isinstance(value, SeasonCandidateValue):
                 years.add(int(value.season[:4]))
-            elif getattr(value, "resolved", None) is not None:
-                for day in (value.resolved.start, value.resolved.end):  # type: ignore[attr-defined]
-                    years.add(int(get_nba_season(day.year, day.month)[:4]))
+            elif isinstance(value, DateCandidateValue):
+                components = value.components
+                if components.kind.startswith("calendar_") and components.year is not None:
+                    try:
+                        start = dt.date(components.year, components.month, components.day)
+                        if components.kind == "calendar_range":
+                            if components.end_year is None:
+                                continue
+                            end = dt.date(components.end_year, components.end_month, components.end_day)
+                        else:
+                            end = start
+                    except (TypeError, ValueError):
+                        continue
+                elif value.resolved is not None:
+                    start, end = value.resolved.start, value.resolved.end
+                else:
+                    continue
+                # Calendar components remain useful for team-name dating when
+                # a valid range is too wide to resolve for a game search.
+                cursor = start
+                while cursor <= end:
+                    years.add(int(get_nba_season(cursor.year, cursor.month)[:4]))
+                    if cursor.month == 12:
+                        cursor = dt.date(cursor.year + 1, 1, 1)
+                    else:
+                        cursor = dt.date(cursor.year, cursor.month + 1, 1)
     return frozenset(years)
 
 

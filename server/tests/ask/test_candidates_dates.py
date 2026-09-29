@@ -82,6 +82,9 @@ def test_calendar_date_without_year_is_never_defaulted(service, question, month,
     ("Pistons games on 2026-02-10", ("2026-02-10", "2026-02-10")),
     ("Bucks game on the 2nd of March 2026", ("2026-03-02", "2026-03-02")),
     ("Blazers games from December 1-7, 2025", ("2025-12-01", "2025-12-07")),
+    ("Lakers games from 2025-03-01 to 2025-03-03", ("2025-03-01", "2025-03-03")),
+    ("Lakers games from March 1, 2025 to March 3, 2025", ("2025-03-01", "2025-03-03")),
+    ("Lakers games from March 1 to March 3, 2025", ("2025-03-01", "2025-03-03")),
     ("games in the past 3 days", ("2026-03-16", "2026-03-18")),
     ("games from two days ago", ("2026-03-16", "2026-03-16")),
     ("Warriors games this weekend", ("2026-03-21", "2026-03-22")),
@@ -104,6 +107,17 @@ def test_impossible_date_is_flagged_not_moved(service):
     [candidate] = dates(service, "games on February 30, 2025").candidates
     assert candidate.value.resolved is None
     assert candidate.value.unresolved_reason == "invalid_date"
+
+
+@pytest.mark.parametrize("question", [
+    "games on January 32, 2025",
+    "games from March 0-5, 2025",
+])
+def test_unrepresentable_invalid_date_components_abstain(service, question):
+    date_set = dates(service, question)
+    assert date_set.status == "no_candidates"
+    assert date_set.candidates == []
+    assert date_set.unmatched_text
 
 
 def test_no_date_language_means_not_mentioned(service):
