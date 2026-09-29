@@ -3,7 +3,7 @@ from datetime import date
 import pytest
 
 from server.ask.models.request import BoxscoreStatRequest
-from server.ask.resolvers import boxscore, games, resolve
+from server.ask.resolvers import boxscore, games, resolve, resolve_boxscore_game
 from server.ask.resolvers.errors import NotFoundError, UnavailableError, UnsupportedError
 from server.services import nba_stats_client
 from server.tests.ask.test_resolvers_support import (  # noqa: F401
@@ -213,3 +213,15 @@ def test_leaders_by_game_id(game_data):
 def test_named_team_not_in_the_game_is_not_found(game_data):
     with pytest.raises(NotFoundError):
         resolve(request(scope="team", team=team("NYK"), game={"game_id": GAME, "date": "2024-01-15"}))
+
+
+def test_numbered_game_selection_includes_scope_team(game_data, monkeypatch):
+    calls = []
+    def find(season, number, teams, round_, conference):
+        calls.append((season, number, teams, round_, conference))
+        return final_game()
+    monkeypatch.setattr("server.ask.resolvers.playoffs.find_playoff_game", find)
+    resolve_boxscore_game(request(scope="team", team=team("BOS"), game={
+        "season": "2023-24", "game_number": 1, "round": "conference_finals",
+    }))
+    assert calls == [("2023-24", 1, [tid("BOS")], "conference_finals", None)]

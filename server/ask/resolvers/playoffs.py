@@ -105,7 +105,7 @@ def _winner(season: str, series: dict) -> int | None:
     # Past postseasons are over even where a format had no fixed target
     # (the 1954 round robin); a tie still names no winner.
     others = [count for team_id, count in wins.items() if team_id != leader]
-    if _is_past_season(season) and all(count < most for count in others):
+    if target is None and _is_past_season(season) and len(wins) >= 2 and all(count < most for count in others):
         return leader
     return None
 

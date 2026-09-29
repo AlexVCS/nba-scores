@@ -47,6 +47,7 @@ from server.ask.resolvers import boxscore, games, playoffs
 from server.ask.resolvers.errors import AmbiguousError, NotFoundError
 from server.ask.resolvers.games import ResolvedGame
 from server.ask.resolvers.output import ResolverOutput, stats_source
+from server.ask.resolvers.spoiler_policy import request_spoiler_gate
 from server.ask import links
 
 
@@ -65,7 +66,7 @@ def resolve_boxscore_game(request: BoxscoreStatRequest) -> ResolvedGame:
             game = games.find_game_on_date(selector.date, team_ids)
     else:
         game = playoffs.find_playoff_game(
-            selector.season, selector.game_number, [team.team_id for team in selector.teams], selector.round, selector.conference
+            selector.season, selector.game_number, team_ids, selector.round, selector.conference
         )
     missing = [team_id for team_id in team_ids if team_id not in game.team_ids]
     if missing:
@@ -90,6 +91,16 @@ def _boxscore(request: BoxscoreStatRequest) -> ResolverOutput:
 
 def resolve(request: AskRequest) -> ResolverOutput:
     """Execute one validated request. Raises ``errors.ResolverError`` subclasses."""
+    gate = request_spoiler_gate(request)
+    try:
+        output = _resolve(request)
+    except NotFoundError as error:
+        error.spoiler_gate = gate
+        raise
+    return dataclasses.replace(output, spoiler_gate=gate)
+
+
+def _resolve(request: AskRequest) -> ResolverOutput:
     if isinstance(request, GameSearchRequest):
         return games.search_games(request.dates, [team.team_id for team in request.teams])
     if isinstance(request, BoxscoreStatRequest):

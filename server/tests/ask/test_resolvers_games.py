@@ -3,11 +3,15 @@ from datetime import date, timedelta
 import pytest
 from pydantic import ValidationError
 
-from server.ask.models.common import DateRange
+from server.ask.models.common import DateRange, TeamRef
+from server.ask.models.request import GameSearchRequest, PlayoffSeriesRequest
 from server.ask.models.response import AskResponse
-from server.ask.resolvers import games
+from server.ask.resolvers import games, resolve
+from server.ask.resolvers.spoiler_policy import HIDDEN_GAME_GATE, conditional_playoff_game, request_spoiler_gate
+from server.services.nba_schedule import SeasonSchedule, SOURCE_SCHEDULE
 from server.ask.resolvers.errors import AmbiguousError, ClarificationError, NotFoundError, UnavailableError
 from server.services import nba_stats_client
+from server.services import scoreboard as scoreboard_service
 from server.tests.ask.test_resolvers_support import FakeFinder, FakeScoreboards, clear_player_games, sb_game, tid  # noqa: F401
 
 DAY = date(2024, 1, 15)
@@ -249,3 +253,79 @@ def test_ambiguous_game_uses_shared_teams_clarification_field(boards):
     with pytest.raises(AmbiguousError) as error:
         games.find_game_on_date(DAY)
     assert error.value.field == "teams"
+
+
+def test_conditional_and_filtered_playoff_games_guard_whole_items_and_count(monkeypatch):
+    day = date(2024, 6, 15)
+    monkeypatch.setattr(nba_stats_client, "fetch_scoreboard_v3", FakeScoreboards({day.isoformat(): [
+        sb_game("0042300405", "BOS", "DAL", series_number="Game 5"),
+    ]}))
+    output = games.search_games(rng(day))
+    item = output.result.days[0].games[0]
+    assert item.spoiler and item.links[0].spoiler
+    assert output.result.total_games.spoiler and output.result.hidden_note
+    assert output.links[0].spoiler
+
+    # Even Game 1 reveals advancement when the query names a team.
+    monkeypatch.setattr(nba_stats_client, "fetch_scoreboard_v3", FakeScoreboards({"2024-06-06": [
+        sb_game("0042300401", "BOS", "DAL", series_number="Game 1"),
+    ]}))
+    filtered = games.search_games(rng(date(2024, 6, 6)), [tid("BOS")])
+    assert filtered.result.days[0].games[0].spoiler
+    assert filtered.result.total_games.spoiler
+
+
+def test_schedule_gate_is_identical_for_matching_and_missing_team_games(monkeypatch):
+    day = date(2024, 6, 15)
+    schedule = SeasonSchedule("2023-24", SOURCE_SCHEDULE, frozenset({day.isoformat()}), {
+        "0042300405": {"gameId": "0042300405", "gameDateEst": day.isoformat(), "seriesGameNumber": "Game 5"},
+    })
+    monkeypatch.setattr("server.ask.resolvers.spoiler_policy.nba_schedule.get_season_schedule", lambda *args, **kwargs: schedule)
+    request = GameSearchRequest(dates=rng(day), teams=[TeamRef(team_id=tid("BOS"), tricode="BOS", name="Boston Celtics")])
+    monkeypatch.setattr(nba_stats_client, "fetch_scoreboard_v3", FakeScoreboards({day.isoformat(): [
+        sb_game("0042300405", "BOS", "DAL", series_number="Game 5"),
+    ]}))
+    assert resolve(request).spoiler_gate == HIDDEN_GAME_GATE
+    scoreboard_service._scoreboard_cache.clear()
+    monkeypatch.setattr(nba_stats_client, "fetch_scoreboard_v3", FakeScoreboards({day.isoformat(): []}))
+    with pytest.raises(NotFoundError) as error:
+        resolve(request)
+    assert error.value.spoiler_gate == HIDDEN_GAME_GATE
+
+
+def test_historical_series_threshold_and_bubble_schedule(monkeypatch):
+    # Best of three: Game 3 is conditional; modern best of seven: Game 4 is not.
+    assert conditional_playoff_game("0047600103", 3)
+    assert not conditional_playoff_game("0042300404", 4)
+    looked_up = []
+    def schedule(season, **kwargs):
+        looked_up.append(season)
+        return SeasonSchedule(season, SOURCE_SCHEDULE, frozenset({"2020-10-09"}), {
+            "0041900405": {"gameId": "0041900405", "gameDateEst": "2020-10-09", "seriesGameNumber": "Game 5"},
+        })
+    monkeypatch.setattr("server.ask.resolvers.spoiler_policy.nba_schedule.get_season_schedule", schedule)
+    request = GameSearchRequest(dates=rng(date(2020, 10, 9)))
+    assert request_spoiler_gate(request) == HIDDEN_GAME_GATE
+    assert looked_up == ["2019-20"]
+
+
+def test_published_regular_season_schedule_does_not_gate(monkeypatch):
+    day = date(2024, 1, 15)
+    schedule = SeasonSchedule("2023-24", SOURCE_SCHEDULE, frozenset({day.isoformat()}), {
+        "0022300601": {"gameId": "0022300601", "gameDateEst": day.isoformat()},
+    })
+    monkeypatch.setattr("server.ask.resolvers.spoiler_policy.nba_schedule.get_season_schedule", lambda *args, **kwargs: schedule)
+    request = GameSearchRequest(dates=rng(day), teams=[TeamRef(team_id=tid("BOS"), tricode="BOS", name="Boston Celtics")])
+    assert request_spoiler_gate(request) is None
+
+
+def test_named_series_and_play_in_searches_are_gated_before_lookup(monkeypatch):
+    team = TeamRef(team_id=tid("BOS"), tricode="BOS", name="Boston Celtics")
+    series = PlayoffSeriesRequest(season="2023-24", teams=[team], round="finals")
+    assert request_spoiler_gate(series) == HIDDEN_GAME_GATE
+    day = date(2024, 4, 17)
+    schedule = SeasonSchedule("2023-24", SOURCE_SCHEDULE, frozenset({day.isoformat()}), {
+        "0052300101": {"gameId": "0052300101", "gameDateEst": day.isoformat()},
+    })
+    monkeypatch.setattr("server.ask.resolvers.spoiler_policy.nba_schedule.get_season_schedule", lambda *args, **kwargs: schedule)
+    assert request_spoiler_gate(GameSearchRequest(dates=rng(day), teams=[team])) == HIDDEN_GAME_GATE

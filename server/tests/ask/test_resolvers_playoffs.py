@@ -101,6 +101,13 @@ def test_undecided_current_series_is_in_progress(monkeypatch):
     assert output.sources[0].complete is False
 
 
+def test_past_series_below_known_win_target_has_no_winner():
+    series = {"wins": {BOS: 3, DAL: 1}, "targetWins": 4}
+    assert playoffs._winner(SEASON, series) is None
+    assert playoffs._winner(SEASON, {"wins": {BOS: 4, DAL: 1}, "targetWins": 4}) == BOS
+    assert playoffs._winner(SEASON, {"wins": {BOS: 3}, "targetWins": None}) is None
+
+
 def test_invalid_and_pre_history_seasons(complete_2024):
     with pytest.raises(NotFoundError) as error:
         playoffs.series_result("1945-46", round_="finals")

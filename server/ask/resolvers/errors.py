@@ -27,7 +27,7 @@ from __future__ import annotations
 from typing import Any, Literal, Mapping, Sequence
 
 from server.ask.models.interpreter import UnsupportedReason
-from server.ask.models.response import ClarifyField, ClarifyReason
+from server.ask.models.response import ClarifyField, ClarifyReason, SpoilerGate
 from server.services import nba_stats_client
 
 NotFoundCode = Literal["no_games", "no_record", "player_did_not_play"]
@@ -40,6 +40,7 @@ class ResolverError(Exception):
         self.message = message or reason
         self.spoiler = spoiler
         self.details = dict(details or {})
+        self.spoiler_gate: SpoilerGate | None = None
 
 
 class NotFoundError(ResolverError):
