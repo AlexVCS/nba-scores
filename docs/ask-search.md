@@ -43,6 +43,17 @@ Typeahead uses bounded candidate lookup and direct scoreboard matches, with
 no model call. Hidden typeahead omits postseason direct games whose presence
 could reveal advancement.
 
+## Development response details
+
+In the Vite development server, expand **Response details** beneath an Ask result
+to see the interpreter model, whether this request made a model call, and whether
+the backend reported a cache hit. The server prefers the model identifier returned
+by the provider and falls back to the requested identifier. A clarification token
+can retain the original interpreter model without a new model call or cache hit.
+Exact direct lookups report that no model was used. These details describe question
+interpretation; the answer values come from NBA data. Production builds omit the
+control through `import.meta.env.DEV`.
+
 ## Operations
 
 `ASK_ENABLED=1` enables the endpoint for local development testing. Production
