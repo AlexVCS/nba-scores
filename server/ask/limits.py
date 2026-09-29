@@ -46,16 +46,22 @@ class AskLimits:
         with self._lock:
             while self._all and now - self._all[0] >= 60:
                 self._all.popleft()
-            events = self._rates.setdefault(client, deque())
-            self._rates.move_to_end(client)
-            while events and now - events[0] >= 60:
-                events.popleft()
-            if len(events) >= self.per_client_per_minute or len(self._all) >= self.per_worker_per_minute:
+            if len(self._all) >= self.per_worker_per_minute:
                 raise AskRateLimited("Ask request rate exceeded")
+            events = self._rates.get(client)
+            if events is None:
+                while len(self._rates) >= 1024:
+                    self._rates.popitem(last=False)
+                events = deque()
+                self._rates[client] = events
+            else:
+                self._rates.move_to_end(client)
+                while events and now - events[0] >= 60:
+                    events.popleft()
+                if len(events) >= self.per_client_per_minute:
+                    raise AskRateLimited("Ask request rate exceeded")
             events.append(now)
             self._all.append(now)
-            while len(self._rates) > 1024:
-                self._rates.popitem(last=False)
 
     def run_bounded(self, work: Callable[[], T], timeout_seconds: float = 20) -> T:
         if timeout_seconds <= 0:
