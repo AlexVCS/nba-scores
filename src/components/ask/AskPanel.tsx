@@ -155,7 +155,8 @@ function AskPanel({onClose}: AskPanelProps) {
   const statusText = mode === "result"
     ? session.status === "loading" ? "Asking…"
       : session.status === "error" ? "Couldn’t reach Ask."
-        : session.response?.outcome === "needs_clarification" ? "Ask needs you to choose an option."
+        : session.response?.spoiler_gate && !controls.isRevealed("result") ? "Answer hidden. Reveal it when ready."
+          : session.response?.outcome === "needs_clarification" ? "Ask needs you to choose an option."
           : session.response?.notice?.title ?? "Answer ready."
     : mode === "typeahead" ? `${actions.length} ${actions.length === 1 ? "suggestion" : "suggestions"} available.` : "";
 

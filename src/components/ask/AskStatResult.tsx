@@ -38,8 +38,12 @@ function AskStatResult({result, controls}: AskStatResultProps) {
   const scoreRevealed = controls.isRevealed(SCORE_GROUP);
   const {game} = result;
   const score = guarded(game.final_score, scoreRevealed);
-  const matchup = `${game.away.tricode} @ ${game.home.tricode}`;
-  const context = [matchup, formatAskDate(game.date), game.round ? roundLabel(game.round) : null, game.game_number ? `Game ${game.game_number}` : null]
+  const away = guarded(game.away, revealed);
+  const home = guarded(game.home, revealed);
+  const leaders = result.leaders ? guarded(result.leaders, revealed) : undefined;
+  const matchup = away && home ? `${away.tricode} @ ${home.tricode}` : null;
+  const date = away && home ? formatAskDate(game.date) : null;
+  const context = [matchup, date, game.round ? roundLabel(game.round) : null, game.game_number ? `Game ${game.game_number}` : null]
     .filter(Boolean)
     .join(" · ");
   const statName = result.stat === "stat_line" ? "stat line" : STAT_LABELS[result.stat].toLowerCase();
@@ -51,9 +55,11 @@ function AskStatResult({result, controls}: AskStatResultProps) {
           {result.scope === "player" && result.player_line && (
             <>
               <div className={`${askCap} mb-2.5`}>{result.player_line.player.name} · {context}</div>
-              {result.player_line.status === "played"
-                ? <StatValues values={result.player_line.values} revealed={revealed} hero />
-                : <p className="text-lg font-extrabold">{result.player_line.status === "inactive" ? "Inactive" : "Did not play"}</p>}
+              {!revealed && game.season_type === "playoffs"
+                ? <AskHiddenValue width={100} />
+                : result.player_line.status === "played"
+                  ? <StatValues values={result.player_line.values} revealed={revealed} hero />
+                  : <p className="text-lg font-extrabold">{result.player_line.status === "inactive" ? "Inactive" : "Did not play"}</p>}
             </>
           )}
           {result.scope === "team" && (
@@ -62,7 +68,7 @@ function AskStatResult({result, controls}: AskStatResultProps) {
               <div className="grid gap-3">
                 {result.team_lines.map(line => (
                   <div key={line.team.team_id} className="flex items-center gap-3">
-                    <span className={askTricode}>{line.team.tricode}</span>
+                    <span className={askTricode}>{away?.team_id === line.team.team_id || home?.team_id === line.team.team_id ? line.team.tricode : <AskHiddenValue width={24} />}</span>
                     <StatValues values={line.values} revealed={revealed} hero={result.team_lines.length === 1} />
                   </div>
                 ))}
@@ -72,21 +78,18 @@ function AskStatResult({result, controls}: AskStatResultProps) {
           {result.scope === "leaders" && (
             <>
               <div className={`${askCap} mb-2.5`}>{STAT_LABELS[result.stat]} leaders · {context}</div>
-              <ol className="grid gap-2">
-                {result.leaders.map(row => {
-                  const player = guarded(row.player, revealed);
-                  const team = guarded(row.team, revealed);
-                  const value = guarded(row.value, revealed);
-                  return (
-                    <li key={row.rank} className="flex items-center gap-3 text-sm font-bold">
+              {leaders ? (
+                <ol className="grid gap-2">
+                  {leaders.map((row, index) => (
+                    <li key={`${row.rank}-${row.player.player_id}-${index}`} className="flex items-center gap-3 text-sm font-bold">
                       <span className="w-5 text-hw-muted tabular-nums">{row.rank}</span>
-                      <span className="min-w-0 flex-1">{player ? player.name : <AskHiddenValue width={120} />}</span>
-                      <span className={askTricode}>{team ? team.tricode : <AskHiddenValue width={24} />}</span>
-                      <span className="w-12 text-right text-lg font-extrabold tabular-nums">{value ? statText(value) : <AskHiddenValue width={24} />}</span>
+                      <span className="min-w-0 flex-1">{row.player.name}</span>
+                      <span className={askTricode}>{row.team.tricode}</span>
+                      <span className="w-12 text-right text-lg font-extrabold tabular-nums">{statText(row.value)}</span>
                     </li>
-                  );
-                })}
-              </ol>
+                  ))}
+                </ol>
+              ) : <AskHiddenValue width={160} />}
             </>
           )}
         </div>
@@ -98,11 +101,11 @@ function AskStatResult({result, controls}: AskStatResultProps) {
           <span className="text-sm font-bold text-hw-muted">Not final yet</span>
         ) : (
         <span className="flex items-center gap-2 text-lg font-extrabold tabular-nums">
-          <span className={askTricode}>{game.away.tricode}</span>
+          <span className={askTricode}>{away ? away.tricode : <AskHiddenValue width={24} />}</span>
           {score ? score.away : <AskHiddenValue />}
           <span className="font-medium text-hw-muted" aria-hidden="true">–</span>
           {score ? score.home : <AskHiddenValue />}
-          <span className={askTricode}>{game.home.tricode}</span>
+          <span className={askTricode}>{home ? home.tricode : <AskHiddenValue width={24} />}</span>
           {score && score.periods > 4 && (
             <span className="text-[11px] font-extrabold text-hw-muted">{score.periods === 5 ? "OT" : `${score.periods - 4}OT`}</span>
           )}

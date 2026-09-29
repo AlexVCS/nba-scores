@@ -102,6 +102,43 @@ describe("AskResult spoiler protection", () => {
     expect(containsValue(perceivableText(container), "112")).toBe(true);
   });
 
+  it("renders the same hidden gate for a played and an unplayed conditional game", async () => {
+    const user = userEvent.setup();
+    const played = renderFixture("answer-conditional-game-hidden");
+    const hiddenPlayed = within(screen.getByRole("region", {name: "Hidden answer"})).getByText(/Whether this game was played/).textContent;
+    expect(screen.queryByRole("heading", {name: "No games found"})).not.toBeInTheDocument();
+    played.unmount();
+
+    renderFixture("not-found-conditional-game-hidden");
+    expect(within(screen.getByRole("region", {name: "Hidden answer"})).getByText(/Whether this game was played/).textContent).toBe(hiddenPlayed);
+    await user.click(screen.getByRole("button", {name: "Reveal answer"}));
+    expect(screen.queryByRole("region", {name: "Hidden answer"})).not.toBeInTheDocument();
+  });
+
+  it("omits conditional games and the guarded total until revealed", async () => {
+    const user = userEvent.setup();
+    const {container} = renderFixture("answer-games-conditional");
+    const result = ASK_RESPONSE_FIXTURES["answer-games-conditional"].result;
+    if (result?.kind !== "games") throw new Error("Expected games fixture");
+    const visibleCount = result.days.flatMap(day => day.games).filter(game => !game.spoiler).length;
+    expect(container.querySelectorAll("article")).toHaveLength(visibleCount);
+    expect(perceivableText(container)).toContain(result.hidden_note);
+    expect(perceivableText(container)).not.toContain(`${result.total_games.value} games`);
+
+    await user.click(screen.getByRole("button", {name: "Reveal results"}));
+    expect(container.querySelectorAll("article")).toHaveLength(result.total_games.value);
+  });
+
+  it("hides the entire tied leaders list, including ranks and its length", async () => {
+    const user = userEvent.setup();
+    const {container} = renderFixture("answer-stat-leaders-tied");
+    expect(container.querySelector("ol")).not.toBeInTheDocument();
+    expect(perceivableText(container)).not.toContain("Chet Holmgren");
+
+    await user.click(screen.getByRole("button", {name: /Reveal blocks/}));
+    expect(perceivableText(container)).toContain("Chet Holmgren");
+  });
+
   it("omits inferred series participants, spoiler links, and spoiler suggestions until revealed", async () => {
     const user = userEvent.setup();
     const {container} = renderFixture("answer-series-inferred");
@@ -111,14 +148,14 @@ describe("AskResult spoiler protection", () => {
     expect(perceivableText(container)).not.toMatch(/Shai|OKC|Thunder/);
 
     await user.click(screen.getByRole("button", {name: "Reveal answer"}));
-    expect(screen.getByRole("link", {name: "Open series"})).toHaveAttribute("href", "/design-1/playoffs/2025/finals-okc-ind");
+    expect(screen.getByRole("link", {name: "Open series"})).toHaveAttribute("href", "/design-1/playoffs/2025/the-finals");
     expect(perceivableText(container)).toMatch(/Oklahoma City Thunder/);
   });
 
   it("echoes the teams the user named in a hidden series answer", () => {
     renderFixture("answer-series-hidden");
-    expect(screen.getByText("Detroit Pistons")).toBeInTheDocument();
-    expect(screen.getByText("Orlando Magic")).toBeInTheDocument();
+    expect(screen.getAllByText("Detroit Pistons").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Orlando Magic").length).toBeGreaterThan(0);
   });
 
   it("renders game results with the shared card and one reveal for every score", async () => {
@@ -128,7 +165,7 @@ describe("AskResult spoiler protection", () => {
     expect(cards).toHaveLength(4);
     expect(perceivableText(container)).not.toMatch(/Final\/OT/);
 
-    await user.click(screen.getByRole("button", {name: "Reveal all 4 scores"}));
+    await user.click(screen.getByRole("button", {name: "Reveal results"}));
     expect(perceivableText(container)).toMatch(/Final\/OT/);
     expect(within(cards[0] as HTMLElement).getByText("121")).toBeInTheDocument();
   });

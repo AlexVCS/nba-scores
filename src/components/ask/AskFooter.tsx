@@ -11,6 +11,7 @@ interface AskFooterProps {
 const kbd = "inline-flex items-center rounded-md border border-hw-line bg-hw-surface px-[7px] py-[5px] text-[10px] leading-none font-bold tracking-[.06em] text-hw-muted uppercase";
 
 function sourceLine(response: AskResponse | null): string {
+  if (response?.spoiler_gate) return ASK_SOURCE_COPY;
   const copy = response?.interpreter.model_called === false ? ASK_NO_MODEL_COPY : ASK_SOURCE_COPY;
   const labels = [...new Set(response?.sources.map(source => source.label) ?? [])];
   const incomplete = response?.sources.some(source => !source.complete);

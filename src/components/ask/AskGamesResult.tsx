@@ -3,7 +3,8 @@ import AskGameCard from "./AskGameCard";
 import AskLinks from "./AskLinks";
 import AskRevealButton from "./AskRevealButton";
 import {formatAskDate} from "./askFormat";
-import {RESULT_GROUP, safeGame} from "./askSpoilers";
+import {RESULT_GROUP, guarded, safeGame, withoutSpoilers} from "./askSpoilers";
+import AskHiddenValue from "./AskHiddenValue";
 import {askCap, type AskRevealControls} from "./askStyles";
 
 interface AskGamesResultProps {
@@ -13,16 +14,18 @@ interface AskGamesResultProps {
 
 function AskGamesResult({result, controls}: AskGamesResultProps) {
   const revealed = controls.isRevealed(RESULT_GROUP);
-  const count = result.total_games;
+  const count = guarded(result.total_games, revealed);
+  const games = result.days.flatMap(day => withoutSpoilers(day.games, revealed));
 
   return (
     <section aria-label="Games">
       <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-        <span className="text-[15px] font-extrabold">{count} {count === 1 ? "game" : "games"}</span>
-        <AskRevealButton group={RESULT_GROUP} controls={controls} label={count === 1 ? "score" : `all ${count} scores`} />
+        <span className="text-[15px] font-extrabold">{count === undefined ? <AskHiddenValue width={24} /> : count} {count === 1 ? "game" : "games"}</span>
+        <AskRevealButton group={RESULT_GROUP} controls={controls} label="results" />
       </div>
+      {!revealed && result.hidden_note && <p className="mb-3 text-sm text-hw-muted">{result.hidden_note}</p>}
       <ul className="grid grid-cols-2 gap-3 max-[700px]:grid-cols-1">
-        {result.days.flatMap(day => day.games).map((item, index) => (
+        {games.map((item, index) => (
           <li key={item.game.gameId} className="grid content-start gap-1.5">
             <h4 className={`${askCap} px-0.5 text-hw-ink!`}>{formatAskDate(item.date, {weekday: "short", month: "short", day: "numeric"})}</h4>
             <AskGameCard

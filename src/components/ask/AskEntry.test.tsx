@@ -161,6 +161,24 @@ describe("Ask entry and search dialog", () => {
     expect(input()).toHaveValue("How did Jalen Suggs do on February 5, 2026?");
   });
 
+  it("carries a partial resolution through two clarification choices", async () => {
+    const requester = mockRequester(query => query.resolution === "rsv_fx_two_step_1628973"
+      ? ASK_RESPONSE_FIXTURES["clarification-two-step-year"]
+      : query.resolution === "rsv_fx_two_step_1628973_2026"
+        ? ASK_RESPONSE_FIXTURES["answer-player-stat"]
+        : ASK_RESPONSE_FIXTURES["clarification-two-step-player"]);
+    const user = setup();
+    await user.keyboard("{Control>}k{/Control}");
+    await user.type(input(), "how did jalen do on march 3{Enter}");
+    await user.click(await screen.findByRole("button", {name: /Jalen Brunson/}));
+    expect(await screen.findByRole("heading", {name: "Which year?"})).toBeInTheDocument();
+    await user.click(screen.getByRole("button", {name: /March 3, 2026/}));
+    expect(await screen.findByRole("button", {name: "Reveal points"})).toBeInTheDocument();
+    expect(requester.mock.calls.map(([query]) => query.resolution)).toEqual([
+      null, "rsv_fx_two_step_1628973", "rsv_fx_two_step_1628973_2026",
+    ]);
+  });
+
   it("resets local reveals on a new question but keeps them when the dialog closes and reopens", async () => {
     mockRequester(ASK_RESPONSE_FIXTURES["answer-player-stat"]);
     const user = setup();

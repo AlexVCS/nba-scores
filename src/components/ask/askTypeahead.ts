@@ -60,7 +60,7 @@ function gameAction(game: AskSuggestGame): AskAction {
     label: `${game.away.tricode} @ ${game.home.tricode}`,
     detail: formatDate(game.date),
     meta: "Boxscore",
-    href: game.href,
+    href: game.link.href,
   };
 }
 
@@ -81,7 +81,7 @@ export function buildTypeaheadGroups({query, suggest, resultsHidden, now = new D
 
   // The server already filters with hidden=true; filter again so a stale or permissive response cannot leak.
   const games = (suggest?.games ?? [])
-    .filter(game => !resultsHidden || !isPostseasonGameId(game.game_id))
+    .filter(game => !resultsHidden || (!isPostseasonGameId(game.game_id) && !game.link.spoiler))
     .slice(0, TYPEAHEAD_GAME_LIMIT)
     .map(gameAction);
   const hasEntity = games.length > 0 || (suggest?.entities.length ?? 0) > 0;

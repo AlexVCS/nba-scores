@@ -22,8 +22,7 @@ export function withoutSpoilers<T extends {spoiler: boolean}>(items: readonly T[
  */
 export function safeGame(game: GameData, spoilers: AskGameSpoilers, revealed: boolean): GameData {
   if (revealed) return game;
-  const started = game.gameStatus === 2 || game.gameStatus === 3;
-  const statusText = spoilers.status_text && started ? (game.gameStatus === 3 ? "Final" : "Live") : game.gameStatusText;
+  const statusText = spoilers.status_text ? "Game" : game.gameStatusText;
   const team = (side: GameData["homeTeam"]) => ({
     teamName: side.teamName,
     teamTricode: side.teamTricode,
@@ -33,13 +32,13 @@ export function safeGame(game: GameData, spoilers: AskGameSpoilers, revealed: bo
   return {
     gameId: game.gameId,
     gameCode: game.gameCode,
-    gameStatus: game.gameStatus,
-    gameLabel: spoilers.series_text ? "" : game.gameLabel,
-    gameSubLabel: spoilers.series_text ? "" : game.gameSubLabel,
+    gameStatus: spoilers.status_text ? 1 : game.gameStatus,
+    gameLabel: spoilers.labels ? "" : game.gameLabel,
+    gameSubLabel: spoilers.labels ? "" : game.gameSubLabel,
     gameTimeUTC: game.gameTimeUTC,
     gameStatusText: statusText,
-    ifNecessary: spoilers.series_text ? false : game.ifNecessary,
-    seriesGameNumber: spoilers.series_text ? "" : game.seriesGameNumber,
+    ifNecessary: spoilers.labels ? false : game.ifNecessary,
+    seriesGameNumber: spoilers.labels ? "" : game.seriesGameNumber,
     seriesText: spoilers.series_text ? "" : game.seriesText,
     boxscoreAvailable: game.boxscoreAvailable,
     homeTeam: team(game.homeTeam),

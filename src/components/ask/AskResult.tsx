@@ -8,6 +8,7 @@ import AskPostseasonResult from "./AskPostseasonResult";
 import AskSeriesResult from "./AskSeriesResult";
 import AskStatResult from "./AskStatResult";
 import AskSuggestions from "./AskSuggestions";
+import AskRevealButton from "./AskRevealButton";
 import {RESULT_GROUP} from "./askSpoilers";
 import type {AskRevealControls} from "./askStyles";
 
@@ -24,6 +25,19 @@ interface AskResultProps {
 function AskResult({response, controls, onAsk, onChooseOption, onRetry, onEditQuestion}: AskResultProps) {
   const revealed = controls.isRevealed(RESULT_GROUP);
   const {result} = response;
+
+  if (response.spoiler_gate && !revealed) {
+    return (
+      <div className="grid gap-4">
+        {response.interpretation && <AskInterpretation interpretation={response.interpretation} revealed={false} onEditQuestion={onEditQuestion} />}
+        <section className="grid gap-3 rounded-[12px] border border-hw-line bg-hw-surface p-4" aria-label="Hidden answer">
+          <h3 className="text-lg font-extrabold">{response.spoiler_gate.title}</h3>
+          <p className="text-sm text-hw-muted">{response.spoiler_gate.message}</p>
+          <AskRevealButton group={RESULT_GROUP} controls={controls} label="answer" />
+        </section>
+      </div>
+    );
+  }
 
   return (
     <div className="grid gap-4">

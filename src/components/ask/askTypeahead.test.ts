@@ -9,7 +9,7 @@ const now = new Date("2026-09-29T12:00:00-04:00");
 const withPlayoffs: AskSuggestResponse = {
   ...knicks,
   games: [
-    {...knicks.games[0], game_id: "0042500101", label: "NYK vs ATL · Game 1", href: "/games/0042500101/boxscore"},
+    {...knicks.games[0], game_id: "0042500101", label: "NYK vs ATL · Game 1", link: {...knicks.games[0].link, href: "/games/0042500101/boxscore", spoiler: true}},
     ...knicks.games,
   ],
   questions: [...knicks.questions, {question: "How did the Knicks do in the 2026 playoffs?", category: "postseason", spoiler: true}],
