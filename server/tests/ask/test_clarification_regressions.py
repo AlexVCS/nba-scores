@@ -152,3 +152,28 @@ def test_year_choice_without_a_date_span_requires_edit_instead_of_dropping_const
 def test_recent_player_record_notice_does_not_claim_permanent_absence():
     result = notice("no_record", reason="recent_player_record_unverified")
     assert result.message == "No verified player record is available for that date yet."
+
+
+def _round_team_choice(tmp_path, *, with_round):
+    # A team taken from the page (app context) for a playoff round question.
+    # Offering it as a "which team?" choice would reveal that it reached that round.
+    celtics = b.team(1610612738, "BOS", "Boston Celtics", source="app_context", score=1.0)
+    finals = b.playoff_round("finals", matched="Finals")
+    season = b.season("2023-24", matched="2024")
+    fields = [selected("intent", "playoff_series"), selected("season", season.id)]
+    if with_round:
+        fields.append(selected("round", finals.id))
+    pending = PendingResolution(output=output(*fields), candidates=b.lookup_result([celtics, finals, season]),
+                                context=CONTEXT)
+    return clarification("teams", "missing", "Who won the 2024 Finals?", pending,
+                         ResolutionStore(tmp_path / "resolution.sqlite3"))
+
+
+def test_inferred_playoff_round_team_options_are_spoilers(tmp_path):
+    presented = _round_team_choice(tmp_path, with_round=True)
+    assert presented.options and all(option.spoiler for option in presented.options)
+
+
+def test_team_options_without_a_round_are_not_spoilers(tmp_path):
+    presented = _round_team_choice(tmp_path, with_round=False)
+    assert presented.options and not any(option.spoiler for option in presented.options)
