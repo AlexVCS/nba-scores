@@ -127,7 +127,7 @@ describe("Ask entry and search dialog", () => {
     const stored = JSON.parse(localStorage.getItem(ASK_RECENT_STORAGE_KEY)!);
     expect(stored).toEqual([{question: "how many points did harden score on march 9 2026", askedAt: expect.any(String)}]);
     await user.click(screen.getByRole("button", {name: "Reveal points"}));
-    expect(localStorage.getItem(ASK_RECENT_STORAGE_KEY)).not.toMatch(/21|104|112/);
+    expect(JSON.parse(localStorage.getItem(ASK_RECENT_STORAGE_KEY)!)).toEqual(stored);
 
     await user.click(screen.getByRole("button", {name: "Clear question"}));
     expect(input()).toHaveValue("");
