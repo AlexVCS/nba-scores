@@ -2,6 +2,7 @@ import datetime as dt
 
 import pytest
 
+from server.ask.candidates.locations import location_value
 from server.ask.candidates.lookup import CandidateLookupService
 from server.ask.models.interpreter import FieldInterpretation, InterpreterMetadata, InterpreterOutput
 from server.ask.models.request import AskContext
@@ -9,7 +10,6 @@ from server.ask.normalize import Normalizer
 from server.ask.resolvers import games
 from server.ask.resolvers.errors import NotFoundError
 from server.tests.ask.test_resolvers_games import DAY, boards, rng  # noqa: F401
-from server.tests.ask.test_resolvers_support import tid
 
 CONTEXT = AskContext(reference_time=dt.datetime.fromisoformat("2026-03-08T12:00:00-05:00"))
 LOOKUP = CandidateLookupService()
@@ -35,7 +35,10 @@ def test_a_city_after_in_or_at_is_a_venue_not_a_team(question, location, teams):
 def test_new_york_means_knicks_and_nets_home_games():
     result, _, _ = sets("games tonight in New York")
     location = result.by_id("location:new_york").value.location
-    assert (location.city, sorted(t.tricode for t in location.teams)) == ("New York", ["BKN", "NYK"])
+    assert (location.city, sorted(h.team.tricode for h in location.homes)) == ("New York", ["BKN", "NYK"])
+    # The Nets count only from their 2012 move to Brooklyn.
+    nets = 1610612751
+    assert location.hosts(nets, dt.date(2013, 1, 1)) and not location.hosts(nets, dt.date(2005, 1, 1))
 
 
 def test_normalizer_carries_the_location_into_game_search():
@@ -52,8 +55,22 @@ def test_normalizer_carries_the_location_into_game_search():
 
 def test_venue_filter_keeps_only_home_games(boards):  # noqa: F811
     # NYK hosts CLE on the 15th; on the 16th NYK plays at MIA.
-    result = games.search_games(rng(DAY, DAY + dt.timedelta(days=1)), home_team_ids=[tid("NYK"), 1610612751]).result
+    new_york = location_value("new_york").location
+    result = games.search_games(rng(DAY, DAY + dt.timedelta(days=1)), location=new_york).result
     assert [g.game.gameId for day in result.days for g in day.games] == ["0022300602"]
     with pytest.raises(NotFoundError) as missing:
-        games.search_games(rng(DAY + dt.timedelta(days=1)), home_team_ids=[tid("NYK")])
+        games.search_games(rng(DAY + dt.timedelta(days=1)), location=new_york)
     assert missing.value.reason == "no_games_at_location"
+
+
+def test_no_team_based_there_on_those_dates():
+    # The Nets played in New Jersey in 2005; nothing is fetched.
+    with pytest.raises(NotFoundError) as missing:
+        games.search_games(rng(dt.date(2005, 1, 1)), location=location_value("brooklyn").location)
+    assert missing.value.reason == "no_team_at_location"
+
+
+def test_former_cities_map_to_the_franchise_then():
+    seattle = location_value("seattle").location
+    thunder = 1610612760
+    assert seattle.hosts(thunder, dt.date(2005, 1, 1)) and not seattle.hosts(thunder, dt.date(2009, 1, 1))

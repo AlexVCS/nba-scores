@@ -153,14 +153,31 @@ class TeamRef(ContractModel):
     name: str = Field(min_length=1, max_length=80)
 
 
-class GameLocation(ContractModel):
-    """Where games are played (ADR 0011): a city and the teams whose home arena is in it.
+class HomeTenure(ContractModel):
+    """A team's home arena was in the city from ``start`` to ``end`` (inclusive; None = present)."""
 
-    Game search keeps games whose home team is one of ``teams``.
+    team: TeamRef
+    start: date
+    end: date | None = None
+
+
+class GameLocation(ContractModel):
+    """Where games are played (ADR 0011): a city and which teams were based there, when.
+
+    Game search keeps a game only if its home team had a tenure in this city on the
+    game's date, so "games in Brooklyn" in 2005 matches nothing (the Nets were in
+    New Jersey).
     """
 
     city: str = Field(min_length=1, max_length=40)
-    teams: list[TeamRef] = Field(min_length=1, max_length=2)
+    homes: list[HomeTenure] = Field(min_length=1, max_length=4)
+
+    def hosts(self, team_id: int, day: date) -> bool:
+        return any(h.team.team_id == team_id and h.start <= day and (h.end is None or day <= h.end)
+                   for h in self.homes)
+
+    def any_tenure(self, start: date, end: date) -> bool:
+        return any(h.start <= end and (h.end is None or start <= h.end) for h in self.homes)
 
 
 

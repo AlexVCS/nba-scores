@@ -150,16 +150,24 @@
           "teams": [],
           "location": {
             "city": "New York",
-            "teams": [
+            "homes": [
               {
-                "team_id": 1610612752,
-                "tricode": "NYK",
-                "name": "New York Knicks"
+                "team": {
+                  "team_id": 1610612752,
+                  "tricode": "NYK",
+                  "name": "New York Knicks"
+                },
+                "start": "1946-07-01",
+                "end": null
               },
               {
-                "team_id": 1610612751,
-                "tricode": "BKN",
-                "name": "Brooklyn Nets"
+                "team": {
+                  "team_id": 1610612751,
+                  "tricode": "BKN",
+                  "name": "Brooklyn Nets"
+                },
+                "start": "2012-07-01",
+                "end": null
               }
             ]
           }

@@ -31,8 +31,12 @@ guesses. Two of them were label questions that needed a product decision:
   venue question.
 - `location` is a new candidate and interpreter field (a Choice for Jev and Laya, a
   schema field for Luna), used by game search only.
-- City-to-team mapping covers current franchises only. Historical venues, such as
-  Seattle before 2008 or New Jersey before 2012, produce no location candidate.
+- Each city lists which current franchises were based there and when: the Nets in
+  New Jersey from 1977 to 2012 and in Brooklyn since, the SuperSonics in Seattle until
+  2008, and the Lakers at the Inglewood Forum from 1967 to 1999. A game matches only
+  if its home team was based in the city on that date. "Games in Brooklyn on
+  January 1, 2005" answers that no NBA team played home games there then. Defunct
+  franchises are not covered. Tenure boundaries fall at season boundaries (July 1).
 - Labels `release-two-006` and `release-two-056` were changed to match. Both sets
   were already exposed, so no unseen evidence is affected.
 - Candidate sets gain a field. That changes trace keys, so the calibration trace
