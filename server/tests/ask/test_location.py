@@ -54,5 +54,6 @@ def test_venue_filter_keeps_only_home_games(boards):  # noqa: F811
     # NYK hosts CLE on the 15th; on the 16th NYK plays at MIA.
     result = games.search_games(rng(DAY, DAY + dt.timedelta(days=1)), home_team_ids=[tid("NYK"), 1610612751]).result
     assert [g.game.gameId for day in result.days for g in day.games] == ["0022300602"]
-    with pytest.raises(NotFoundError):
+    with pytest.raises(NotFoundError) as missing:
         games.search_games(rng(DAY + dt.timedelta(days=1)), home_team_ids=[tid("NYK")])
+    assert missing.value.reason == "no_games_at_location"

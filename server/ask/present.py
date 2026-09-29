@@ -83,6 +83,8 @@ def notice(code: str, *, reason: str = "", retry_after: int | None = None,
     title, message = copy[code]
     if reason == "before_records":
         message = "NBA and BAA records begin on November 1, 1946."
+    elif reason == "no_games_at_location":
+        message = "No games were played there on those dates."
     elif code == "no_record" and reason == "recent_player_record_unverified":
         message = "No verified player record is available for that date yet."
     return Notice(code=code, title=title, message=message, retryable=code in {

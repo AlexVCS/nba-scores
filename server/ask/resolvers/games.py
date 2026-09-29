@@ -203,7 +203,7 @@ def search_games(dates: DateRange, team_ids: Sequence[int] = (),
     if not found:
         raise NotFoundError(
             "no_games",
-            "no_matching_games",
+            "no_games_at_location" if hosts else "no_matching_games",
             details={"start": dates.start.isoformat(), "end": dates.end.isoformat(), "teamIds": sorted(wanted),
                      **({"homeTeamIds": sorted(hosts)} if hosts else {})},
         )
