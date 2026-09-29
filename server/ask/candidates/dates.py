@@ -179,7 +179,7 @@ def _month_range_with_years(m: re.Match, today: dt.date) -> list[Hit]:
     end_month = MONTHS[m.group("end_month")]
     end_day = int(m.group("end_day"))
     start_year = int(m.group("start_year").replace(",", "").strip()) if m.group("start_year") else None
-    end_year = int(m.group("end_year").replace(",", "").strip()) if m.group("end_year") else start_year
+    end_year = int(m.group("end_year").replace(",", "").strip()) if m.group("end_year") else None
     if start_year is None and end_year is not None:
         start_year = end_year - (1 if end_month < start_month else 0)
     elif start_year is not None and end_year is None:
