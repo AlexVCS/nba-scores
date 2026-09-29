@@ -200,3 +200,24 @@ def test_budget_exhaustion_prevents_provider_call(tmp_path):
     response = coordinator.answer(AskQuery(question="Any games today?"))
     assert response.outcome == "budget_exhausted"
     assert response.interpreter.model_called is False and adapter.calls == 0
+
+
+def test_response_reports_resolved_model_for_live_and_cached_interpretation(tmp_path):
+    interpreted = output(outcome="unsupported", reason="other")
+    interpreted = interpreted.model_copy(update={"metadata": interpreted.metadata.model_copy(
+        update={"resolved_model": "gpt-6-luna-resolved-test"})})
+    coordinator, _, adapter = pipeline(tmp_path, b.lookup_result([]), interpreted)
+    query = AskQuery(question="Explain basketball history")
+    first = coordinator.answer(query)
+    cached = coordinator.answer(query)
+    assert first.interpreter.model == cached.interpreter.model == "gpt-6-luna-resolved-test"
+    assert first.interpreter.model_called is True
+    assert cached.interpreter.model_called is False
+    assert cached.interpreter.cache_hit is True
+    assert adapter.calls == 1
+
+
+def test_response_model_falls_back_to_requested_identifier(tmp_path):
+    coordinator, _, _ = pipeline(tmp_path, b.lookup_result([]), output(outcome="unsupported", reason="other"))
+    response = coordinator.answer(AskQuery(question="Explain basketball history"))
+    assert response.interpreter.model == "gpt-6-luna"

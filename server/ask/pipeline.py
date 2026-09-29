@@ -71,9 +71,14 @@ class AskPipeline:
                           playoff_season=client.playoff_season if client else None)
 
     @staticmethod
-    def _info(*, called: bool = False, hit: bool = False, adapter=None) -> InterpreterInfo:
-        return InterpreterInfo(model_called=called, cache_hit=hit,
-                               adapter=adapter.name if adapter else None, model=adapter.model if adapter else None)
+    def _info(*, called: bool = False, hit: bool = False, adapter=None,
+              output: InterpreterOutput | None = None) -> InterpreterInfo:
+        metadata = output.metadata if output is not None else None
+        return InterpreterInfo(
+            model_called=called, cache_hit=hit,
+            adapter=metadata.adapter if metadata else adapter.name if adapter else None,
+            model=(metadata.resolved_model or metadata.model) if metadata else adapter.model if adapter else None,
+        )
 
     @staticmethod
     def _response(question: str, outcome: str, info: InterpreterInfo, **kwargs) -> AskResponse:
@@ -190,7 +195,7 @@ class AskPipeline:
         pending = self.resolutions.read(query.resolution, question, context) if query.resolution else None
         if pending is not None:
             # Continue against server-stored candidates and original reference time.
-            return self._from_pending(question, pending, self._info())
+            return self._from_pending(question, pending, self._info(output=pending.output))
         direct = self._exact(question, context)
         if direct is not None:
             return self._execute(question, direct, interpretation(None, None, context, direct), self._info())
@@ -212,7 +217,7 @@ class AskPipeline:
                                      remaining_ms=max(0, int((deadline - time.monotonic()) * 1000)))
                 decision = self.policy.decide(state)
                 info = self._info(called=any_call,
-                                  hit=cache_hit, adapter=self._adapter())
+                                  hit=cache_hit, adapter=self._adapter(), output=output)
                 if decision.action == "accept":
                     return self._execute(question, normalized.request,
                                          interpretation(output, candidates, context, normalized.request), info)
