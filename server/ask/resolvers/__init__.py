@@ -35,6 +35,7 @@ Request types:
 from __future__ import annotations
 
 import dataclasses
+from typing import Callable
 
 from server.ask.models.request import (
     AskRequest,
@@ -48,7 +49,7 @@ from server.ask.resolvers.errors import AmbiguousError, ClarificationError, NotF
 from server.ask.resolvers.games import ResolvedGame
 from server.ask.resolvers.output import ResolverOutput, stats_source
 from server.ask.resolvers.spoiler_policy import request_spoiler_gate
-from server.ask import links
+from server.ask import links, tools
 
 
 def resolve_boxscore_game(request: BoxscoreStatRequest) -> ResolvedGame:
@@ -135,18 +136,34 @@ def resolve(request: AskRequest) -> ResolverOutput:
     return dataclasses.replace(output, spoiler_gate=gate)
 
 
+def _search_games(request: GameSearchRequest) -> ResolverOutput:
+    return games.search_games(request.dates, [team.team_id for team in request.teams], request.location)
+
+
+def _series(request: PlayoffSeriesRequest) -> ResolverOutput:
+    return playoffs.series_result(request.season, [team.team_id for team in request.teams], request.round, request.conference)
+
+
+def _postseason(request: PostseasonSummaryRequest) -> ResolverOutput:
+    if request.team is None:
+        return playoffs.league_postseason(request.season)
+    return playoffs.team_postseason(request.season, request.team)
+
+
+# Executor per registered tool (`server.ask.tools`); `test_tools.py` checks coverage.
+EXECUTORS: dict[str, Callable[..., ResolverOutput]] = {
+    "game_search": _search_games,
+    "boxscore_stat": _boxscore,
+    "playoff_series": _series,
+    "postseason_summary": _postseason,
+}
+
+
 def _resolve(request: AskRequest) -> ResolverOutput:
-    if isinstance(request, GameSearchRequest):
-        return games.search_games(request.dates, [team.team_id for team in request.teams], request.location)
-    if isinstance(request, BoxscoreStatRequest):
-        return _boxscore(request)
-    if isinstance(request, PlayoffSeriesRequest):
-        return playoffs.series_result(request.season, [team.team_id for team in request.teams], request.round, request.conference)
-    if isinstance(request, PostseasonSummaryRequest):
-        if request.team is None:
-            return playoffs.league_postseason(request.season)
-        return playoffs.team_postseason(request.season, request.team)
-    raise TypeError(f"Unsupported request {type(request).__name__}")
+    tool = tools.route(getattr(request, "intent", ""))
+    if tool is None or not isinstance(request, tool.request_model):
+        raise TypeError(f"Unsupported request {type(request).__name__}")
+    return EXECUTORS[tool.name](request)
 
 
-__all__ = ["AmbiguousError", "NotFoundError", "ResolverOutput", "resolve", "resolve_boxscore_game"]
+__all__ = ["EXECUTORS", "AmbiguousError", "NotFoundError", "ResolverOutput", "resolve", "resolve_boxscore_game"]
