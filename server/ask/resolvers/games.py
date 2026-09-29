@@ -276,7 +276,8 @@ def find_player_game(player_id: int, day: dt.date) -> tuple[ResolvedGame, TeamRe
             # LeagueGameFinder can lag games still on the recent scoreboard.
             # Without a dated player record, none of those games is known to
             # be this player's; avoid claiming they did not play.
-            raise UnavailableError("recent_player_game_unverified")
+            raise NotFoundError("no_record", "recent_player_record_unverified",
+                                details={"playerId": player_id, "date": day.isoformat()})
         raise NotFoundError(
             "player_did_not_play", "no_player_game_on_date", details={"playerId": player_id, "date": day.isoformat()}
         )

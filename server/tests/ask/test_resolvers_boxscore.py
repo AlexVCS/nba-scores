@@ -222,6 +222,10 @@ def test_gated_leaders_without_teams_clarify_before_game_lookup(monkeypatch):
         with pytest.raises(ClarificationError) as error:
             resolve(request(scope="leaders", game=selector))
         assert (error.value.field, error.value.clarify_reason) == ("teams", "missing")
+    with pytest.raises(ClarificationError) as error:
+        resolve(request(scope="player", player={"player_id": TATUM, "name": "Jayson Tatum"},
+                        game={"season": "2023-24", "round": "conference_finals", "game_number": 1}))
+    assert (error.value.field, error.value.clarify_reason) == ("teams", "missing")
 
 
 @pytest.mark.parametrize("games_on_date", [1, 2])
@@ -245,6 +249,10 @@ def test_known_finals_and_named_team_do_not_get_preemptive_clarification(game_da
     monkeypatch.setattr("server.ask.resolvers.playoffs.find_playoff_game", lambda *args: final_game())
     finals = resolve(request(scope="leaders", game={"season": "2023-24", "round": "finals", "game_number": 1}))
     assert finals.result.leaders.value
+    conference_finals = resolve(request(scope="leaders", game={
+        "season": "2023-24", "round": "conference_finals", "conference": "west", "game_number": 1,
+    }))
+    assert conference_finals.result.leaders.value
     named = resolve(request(scope="leaders", game={"date": "2024-01-15", "teams": [team("BOS")]}))
     assert named.result.leaders.value
 

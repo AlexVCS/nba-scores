@@ -117,9 +117,13 @@ def resolve(request: AskRequest) -> ResolverOutput:
     if gate and isinstance(request, BoxscoreStatRequest):
         selector = request.game
         named_teams = bool(selector.teams or request.team)
-        unique_finals = bool(selector.season and selector.game_number and selector.round == "finals")
-        if (request.scope in ("leaders", "team") and not named_teams and not selector.game_id
-                and not unique_finals and (selector.date or selector.round)):
+        unique_series = bool(selector.season and selector.game_number and (
+            selector.round == "finals" or
+            (selector.round == "conference_finals" and selector.conference)
+        ))
+        ambiguous_round = bool(selector.round and not selector.date and not unique_series)
+        ambiguous_date = bool(selector.date and request.scope in ("leaders", "team") and not unique_series)
+        if not named_teams and not selector.game_id and (ambiguous_round or ambiguous_date):
             # A lookup-dependent clarification would reveal whether a
             # conditional playoff game took place on this date or in this round.
             raise ClarificationError("teams", "missing", "hidden_game_needs_teams")
