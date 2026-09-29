@@ -476,3 +476,28 @@ all 175 gold values across 83 questions, with 2/2 no-match cases and 2/2
 ambiguities preserved. Warm p95 was 0.264 ms. These labels are now exposed and
 are stored under `server/tests/ask/fixtures/` for regression use, not future
 release evidence.
+
+
+## Second independent release attempt, September 29
+
+A separate author prepared 80 questions and a separate reviewer audited the labels
+before any provider call. Interpreter commit `b4e0229` and candidate commit
+`cf3737b` were frozen for this run. The input SHA-256 was
+`cf6008f5694814cf9d1671e7ff08a6c2f779760c4f06b3e6569193c8250cc0a3`.
+
+The [unaltered report](verification/ask-release-two-2026-09-29.json) scored
+64/80 overall: 38/48 complete requests, 15/20 clarifications, and 11/12 unsupported
+requests. It recorded seven schema-valid guesses and one invalid-output service
+failure. Median latency was 2.376 seconds, p95 was 3.762 seconds, and estimated
+provider usage was $0.023149. This fails the release gates. Production remains
+disabled. The questions are now exposed regression material under
+`server/tests/ask/fixtures/eval/release-two-2026-09-29-exposed.json`.
+
+Triage found missing boxscore-page game context, lost target-team selection when
+both opponents are named, a split calendar range, and an unrecognized hyphenated
+round. It also found label concerns: case 029 omits a named team from the game
+selector, case 062 requires one particular field when either round or teams can
+start clarification, and case 056 expects a missing-stat clarification despite
+the documented default to a full stat line. The raw report and labels remain
+unchanged. These concerns do not erase the confirmed failures or establish a
+passing release. Any corrected implementation needs another unseen release set.
