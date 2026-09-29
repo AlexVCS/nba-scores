@@ -23,7 +23,7 @@ function AskResponseDetails({interpreter}: AskResponseDetailsProps) {
         <dd className="font-semibold text-hw-ink">{cacheHit ? "Yes" : "No"}</dd>
         {reportedModel ? (
           <>
-            <dt>Interpreter model</dt>
+            <dt>Interpreted by</dt>
             <dd className="break-all font-semibold text-hw-ink">{model ?? "Not reported"}</dd>
             {adapter && <><dt>Adapter</dt><dd className="break-all font-semibold text-hw-ink">{adapter}</dd></>}
             {decisions.length > 0 && (

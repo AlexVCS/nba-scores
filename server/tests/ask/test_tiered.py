@@ -95,6 +95,7 @@ def test_confident_first_tier_stops_the_cascade():
     out = cascade(jev, luna).interpret(REQUEST)
     assert luna.calls == 0
     assert out.metadata.field_tiers == {"intent": "jev", "date": "jev", "teams": "jev"}
+    assert (out.metadata.model, out.metadata.resolved_model) == ("jev-model+luna-model", "jev-model")
     assert out.metadata.usage.cost_usd == pytest.approx(0.0001)
     assert decide(out).action == "accept"
 
@@ -113,6 +114,7 @@ def test_final_tier_fills_what_system_one_tiers_could_not():
     luna = Fake("luna", sel("intent", "game_search", confidence=None), sel("teams", CLE.id, confidence=None))
     out = cascade(jev, luna).interpret(REQUEST)
     assert out.metadata.field_tiers["teams"] == "luna"
+    assert out.metadata.resolved_model == "jev-model+luna-model"
     assert decide(out).action == "accept"
 
 

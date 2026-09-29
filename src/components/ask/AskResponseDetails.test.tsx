@@ -73,7 +73,7 @@ describe("Ask response details", () => {
     await userEvent.setup().click(screen.getByText("Response details"));
 
     expect(screen.getByText("No model used for this response")).toBeInTheDocument();
-    expect(screen.queryByText("Interpreter model")).not.toBeInTheDocument();
+    expect(screen.queryByText("Interpreted by")).not.toBeInTheDocument();
   });
 
   it("omits response details outside development", () => {

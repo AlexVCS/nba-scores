@@ -61,6 +61,8 @@ class _Merge:
     # accepted (vetoes any tier) or merely reached `veto_min` (vetoes only the final tier).
     vetoers: dict[str, list[tuple[FieldInterpretation, bool]]] = field(default_factory=dict)
     vetoed: set[str] = field(default_factory=set)
+    # Models that actually made a provider call, in cascade order.
+    called: list[str] = field(default_factory=list)
 
 
 def _confident(tier: Tier, read: FieldInterpretation) -> bool:
@@ -181,6 +183,8 @@ class TieredAdapter:
             output = tier.adapter.interpret(attempt)
             usage = output.metadata.usage
             calls += usage.provider_calls
+            if usage.provider_calls:
+                merge.called.append(output.metadata.resolved_model or tier.adapter.model)
             tokens_in += usage.input_tokens or 0
             if usage.provider_calls:
                 if usage.cost_usd is None:
@@ -215,7 +219,8 @@ class TieredAdapter:
                   merge: _Merge) -> InterpreterMetadata:
         return InterpreterMetadata(
             adapter="cascade", provider="cascade", model=self.model,
-            resolved_model=None,
+            # The models this request actually called; `model` is the configured cascade.
+            resolved_model="+".join(merge.called)[:80] or None,
             latency_ms=int((time.perf_counter() - started) * 1000),
             usage=InterpreterUsage(input_tokens=tokens_in or None, provider_calls=calls,
                                    cost_usd=cost if calls else None),
