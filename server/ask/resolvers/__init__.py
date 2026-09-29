@@ -44,7 +44,7 @@ from server.ask.models.request import (
     PostseasonSummaryRequest,
 )
 from server.ask.resolvers import boxscore, games, playoffs
-from server.ask.resolvers.errors import AmbiguousError, NotFoundError
+from server.ask.resolvers.errors import AmbiguousError, ClarificationError, NotFoundError
 from server.ask.resolvers.games import ResolvedGame
 from server.ask.resolvers.output import ResolverOutput, stats_source
 from server.ask.resolvers.spoiler_policy import request_spoiler_gate
@@ -59,6 +59,10 @@ def resolve_boxscore_game(request: BoxscoreStatRequest) -> ResolvedGame:
         team_ids.append(request.team.team_id)
     if selector.game_id:
         game = games.get_game(selector.game_id, selector.date)
+    elif selector.season and selector.game_number and (selector.round or len(team_ids) == 2):
+        game = playoffs.find_playoff_game(
+            selector.season, selector.game_number, team_ids, selector.round, selector.conference
+        )
     elif selector.date:
         if request.scope == "player" and not team_ids:
             game, _ = games.find_player_game(request.player.player_id, selector.date)
@@ -68,6 +72,24 @@ def resolve_boxscore_game(request: BoxscoreStatRequest) -> ResolvedGame:
         game = playoffs.find_playoff_game(
             selector.season, selector.game_number, team_ids, selector.round, selector.conference
         )
+    # GameSelector permits a date together with playoff details. Both describe
+    # the same game; neither can be discarded merely because one located it.
+    if selector.date and game.date != selector.date:
+        raise NotFoundError("no_games", "date_not_matching_game", details={"date": selector.date.isoformat()})
+    if selector.date and selector.season and games.season_for_game_id(game.game_id) != selector.season:
+        raise NotFoundError("no_games", "season_not_matching_game", details={"season": selector.season})
+    if selector.date and selector.round:
+        if game.round is None:
+            raise ClarificationError("round", "missing", "round_unverifiable")
+        if game.round != selector.round:
+            raise NotFoundError("no_games", "round_not_matching_game", details={"round": selector.round})
+    if selector.date and selector.game_number:
+        if game.game_number is None:
+            raise ClarificationError("game_number", "missing", "game_number_unverifiable")
+        if game.game_number != selector.game_number:
+            raise NotFoundError("no_games", "game_number_not_matching_game", details={"gameNumber": selector.game_number})
+    if selector.date and selector.conference and not (selector.season and selector.game_number and (selector.round or len(team_ids) == 2)):
+        raise ClarificationError("teams", "missing", "conference_unverifiable")
     missing = [team_id for team_id in team_ids if team_id not in game.team_ids]
     if missing:
         raise NotFoundError("no_games", "team_not_in_game", details={"gameId": game.game_id, "teamIds": missing})

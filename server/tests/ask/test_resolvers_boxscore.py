@@ -1,10 +1,11 @@
+from dataclasses import replace
 from datetime import date
 
 import pytest
 
 from server.ask.models.request import BoxscoreStatRequest
 from server.ask.resolvers import boxscore, games, resolve, resolve_boxscore_game
-from server.ask.resolvers.errors import NotFoundError, UnavailableError, UnsupportedError
+from server.ask.resolvers.errors import ClarificationError, NotFoundError, UnavailableError, UnsupportedError
 from server.services import nba_stats_client
 from server.tests.ask.test_resolvers_support import (  # noqa: F401
     FakeBoxscores,
@@ -225,3 +226,27 @@ def test_numbered_game_selection_includes_scope_team(game_data, monkeypatch):
         "season": "2023-24", "game_number": 1, "round": "conference_finals",
     }))
     assert calls == [("2023-24", 1, [tid("BOS")], "conference_finals", None)]
+
+
+def test_date_and_playoff_game_must_identify_the_same_game(game_data, monkeypatch):
+    playoff_game = replace(final_game(), round="finals", game_number=1)
+    monkeypatch.setattr("server.ask.resolvers.playoffs.find_playoff_game", lambda *args: playoff_game)
+    base = {"season": "2023-24", "round": "finals", "game_number": 1}
+    matched = request(scope="leaders", game={**base, "date": "2024-01-15"})
+    assert resolve_boxscore_game(matched).game_id == GAME
+
+    conflict = request(scope="leaders", game={**base, "date": "2024-01-16"})
+    with pytest.raises(NotFoundError) as error:
+        resolve_boxscore_game(conflict)
+    assert error.value.reason == "date_not_matching_game"
+
+
+def test_dated_game_rejects_conflicting_selected_season_or_game_number(game_data):
+    for detail, value, reason in [
+        ("season", "2022-23", "season_not_matching_game"),
+        ("game_number", 2, "game_number_unverifiable"),
+    ]:
+        chosen = request(scope="leaders", game={"date": "2024-01-15", "teams": [team("BOS")], detail: value})
+        with pytest.raises((NotFoundError, ClarificationError)) as error:
+            resolve_boxscore_game(chosen)
+        assert error.value.reason == reason

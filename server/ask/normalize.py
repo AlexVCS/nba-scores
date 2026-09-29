@@ -286,22 +286,31 @@ class Normalizer:
         season_ids = self._optional(output, "season")
         round_ids = self._optional(output, "round")
         number_ids = self._optional(output, "game_number")
+        season = self._value(candidates, season_ids[0]).season if season_ids else None
+        round_value = self._value(candidates, round_ids[0]) if round_ids else None
+        number = self._value(candidates, number_ids[0]).game_number if number_ids else None
         if dates is not None:
             if dates.start != dates.end:
                 raise _Clarify("date", "ambiguous")  # a boxscore needs one day
-            return GameSelector(date=dates.start, teams=teams)
+            # The date may conflict with an explicitly named playoff game. Keep
+            # every constraint so the resolver can verify them before answering.
+            return GameSelector(
+                date=dates.start, teams=teams, season=season,
+                round=round_value.round if round_value else None,
+                conference=round_value.conference if round_value else None,
+                game_number=number,
+            )
         if not (season_ids or number_ids or round_ids):
             raise _Clarify("date", "missing")
         if not season_ids:
             raise _Clarify("season", "missing")
         if not number_ids:
             raise _Clarify("game_number", "missing")
-        round_value = self._value(candidates, round_ids[0]) if round_ids else None
         if round_value is None and len(teams) != 2:
             raise _Clarify("round" if len(teams) < 2 else "teams", "missing")
         return GameSelector(
-            season=self._value(candidates, season_ids[0]).season,
-            game_number=self._value(candidates, number_ids[0]).game_number,
+            season=season,
+            game_number=number,
             round=round_value.round if round_value else None,
             conference=round_value.conference if round_value else None,
             teams=teams,

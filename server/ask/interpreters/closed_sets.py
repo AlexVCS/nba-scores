@@ -26,19 +26,23 @@ INTENTS: dict[str, str] = {
         "make the request unsupported."
     ),
     "boxscore_stat": (
-        "Statistics from one specific game's box score: one player's line or statistic, "
-        "one team's totals, or who led the game in a statistic (e.g. 'How many points did "
+        "Statistics from one game's box score, selected by date, teams, player, or "
+        "playoff game: one player's line or statistic, one team's totals, or who "
+        "led the game in a statistic (e.g. 'How many points did "
         "Tatum score in game 4 of the 2024 Finals?', 'Who had the most assists last night "
         "in Knicks vs Heat?'). An unknown player or team name still has this intent; "
         "its entity field must be no_matching_candidate."
     ),
     "playoff_series": (
-        "The result or status of one playoff series (e.g. 'Who won the 2023 Finals?', "
-        "'Celtics vs Heat 2022 series')."
+        "The result or status of one playoff series or a specified playoff round, "
+        "even if its teams or round need clarification (e.g. 'Who won the 2023 "
+        "Finals?', 'Celtics vs Heat 2022 series', '2024 conference finals')."
     ),
     "postseason_summary": (
-        "A whole postseason, or one team's run through one postseason (e.g. '2016 playoffs', "
-        "'How did the Nuggets do in the 2023 playoffs?')."
+        "A whole postseason tournament, or one team's overall run through it "
+        "(e.g. '2016 playoffs', 'How did the Nuggets do in the 2023 playoffs?'). "
+        "A request for a particular series belongs to playoff_series even when "
+        "the requested series is underspecified."
     ),
     UNSUPPORTED_INTENT: (
         "Anything else: career or season-long statistics, season leaders, standings or "

@@ -64,6 +64,30 @@ def test_player_stat_by_playoff_game():
     assert result.request.player.player_id == 1628369
 
 
+def test_date_does_not_discard_named_playoff_game_constraints():
+    game_day = b.date(2, "June 9, 2024", DateComponents(kind="calendar_date", year=2024, month=6, day=9),
+                      start=dt.date(2024, 6, 9), end=dt.date(2024, 6, 9))
+    result = normalize(output(
+        sel("intent", "boxscore_stat"), sel("stat_scope", "player"), sel("stat", "points"),
+        sel("player", TATUM.id), sel("date", game_day.id), sel("season", SEASON.id),
+        sel("round", FINALS.id), sel("game_number", b.game_number(1).id),
+    ), b.lookup_result([TATUM, game_day, SEASON, FINALS, b.game_number(1)]))
+    assert result.status == "valid"
+    assert (result.request.game.date, result.request.game.season, result.request.game.round,
+            result.request.game.game_number) == (dt.date(2024, 6, 9), "2023-24", "finals", 1)
+
+
+def test_dated_leader_with_no_team_remains_a_supported_boxscore_request():
+    game_day = b.date(2, "February 12, 2023", DateComponents(kind="calendar_date", year=2023, month=2, day=12),
+                      start=dt.date(2023, 2, 12), end=dt.date(2023, 2, 12))
+    result = normalize(output(sel("intent", "boxscore_stat"), sel("stat_scope", "leaders"),
+                              sel("stat", "rebounds"), sel("date", game_day.id)),
+                       b.lookup_result([game_day]))
+    assert result.status == "valid"
+    assert result.request.game.date == dt.date(2023, 2, 12)
+    assert result.request.game.teams == []
+
+
 def test_missing_stat_means_full_line_for_player_scope_but_not_leaders():
     candidates = b.lookup_result([TATUM, SEASON, FINALS, GAME_4])
     base = [sel("intent", "boxscore_stat"), sel("player", TATUM.id), sel("season", SEASON.id),
@@ -145,6 +169,20 @@ def test_series_and_postseason():
     result = normalize(output(sel("intent", "postseason_summary"), sel("season", season.id), sel("teams", den.id)),
                        b.lookup_result([season, den]))
     assert result.request.team.tricode == "DEN"
+
+
+def test_specific_series_with_missing_details_clarifies_instead_of_widening_scope():
+    season = b.season("2023-24", from_year=2024)
+    cases = [
+        (output(sel("intent", "playoff_series"), sel("season", season.id)), "round"),
+        (output(sel("intent", "playoff_series"), sel("season", season.id), sel("teams", BOS.id)), "round"),
+        (output(sel("intent", "playoff_series"), sel("season", season.id),
+                sel("round", b.playoff_round("conference_finals").id)), "teams"),
+    ]
+    candidates = b.lookup_result([season, BOS, FINALS, b.playoff_round("conference_finals")])
+    for interpreted, field in cases:
+        result = normalize(interpreted, candidates)
+        assert (result.status, result.clarify_field) == ("needs_clarification", field)
 
 
 def test_unsupported_and_unreliable_outputs():
