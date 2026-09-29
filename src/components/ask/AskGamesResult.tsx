@@ -10,7 +10,7 @@ interface AskGamesResultProps {
 }
 
 function AskGamesResult({result, resultsHidden}: AskGamesResultProps) {
-  const count = result.total_games.value;
+  const count = result.total_games;
   const games = result.days.flatMap(day => day.games);
 
   return (

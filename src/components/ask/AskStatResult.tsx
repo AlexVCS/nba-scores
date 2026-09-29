@@ -1,4 +1,4 @@
-import type {AskBoxscoreStatResult, AskStatValue, Guarded} from "@/services/ask/types";
+import type {AskBoxscoreStatResult, AskStatValue} from "@/services/ask/types";
 import {STAT_LABELS, formatAskDate, roundLabel} from "./askFormat";
 import {askCap, askCard, askTricode} from "./askStyles";
 
@@ -6,10 +6,10 @@ interface AskStatResultProps {
   result: AskBoxscoreStatResult;
 }
 
-function StatValues({values, hero}: {values: Guarded<AskStatValue>[]; hero: boolean}) {
+function StatValues({values, hero}: {values: AskStatValue[]; hero: boolean}) {
   return (
     <dl className={hero && values.length === 1 ? "" : "grid grid-cols-[repeat(auto-fill,minmax(96px,1fr))] gap-3"}>
-      {values.map(({value}) => (
+      {values.map(value => (
         <div key={value.stat} className="flex flex-col-reverse">
           <dt className={hero && values.length === 1 ? "text-[17px] font-bold text-hw-muted" : `${askCap} mt-1`}>{STAT_LABELS[value.stat]}</dt>
           <dd className={hero && values.length === 1 ? "text-[56px] leading-[.9] font-extrabold tracking-[-.02em] tabular-nums" : "text-xl font-extrabold tabular-nums"}>
@@ -23,9 +23,7 @@ function StatValues({values, hero}: {values: Guarded<AskStatValue>[]; hero: bool
 
 function AskStatResult({result}: AskStatResultProps) {
   const {game} = result;
-  const score = game.final_score.value;
-  const away = game.away.value;
-  const home = game.home.value;
+  const {final_score: score, away, home} = game;
   const context = [
     `${away.tricode} @ ${home.tricode}`,
     formatAskDate(game.date),
@@ -61,7 +59,7 @@ function AskStatResult({result}: AskStatResultProps) {
           <>
             <div className={`${askCap} mb-2.5`}>{STAT_LABELS[result.stat]} leaders · {context}</div>
             <ol className="grid gap-2">
-              {result.leaders.value.map((row, index) => (
+              {result.leaders.map((row, index) => (
                 <li key={`${row.rank}-${row.player.player_id}-${index}`} className="flex items-center gap-3 text-sm font-bold">
                   <span className="w-5 text-hw-muted tabular-nums">{row.rank}</span>
                   <span className="min-w-0 flex-1">{row.player.name}</span>

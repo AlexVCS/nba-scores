@@ -45,69 +45,32 @@
     "teams": [
       {
         "team": {
-          "value": {
-            "team_id": 1610612760,
-            "tricode": "OKC",
-            "name": "Oklahoma City Thunder"
-          },
-          "spoiler": true
+          "team_id": 1610612760,
+          "tricode": "OKC",
+          "name": "Oklahoma City Thunder"
         },
-        "seed": {
-          "value": 1,
-          "spoiler": true
-        },
-        "wins": {
-          "value": 4,
-          "spoiler": true
-        },
-        "won_series": {
-          "value": true,
-          "spoiler": true
-        }
+        "seed": 1,
+        "wins": 4,
+        "won_series": true
       },
       {
         "team": {
-          "value": {
-            "team_id": 1610612754,
-            "tricode": "IND",
-            "name": "Indiana Pacers"
-          },
-          "spoiler": true
+          "team_id": 1610612754,
+          "tricode": "IND",
+          "name": "Indiana Pacers"
         },
-        "seed": {
-          "value": 4,
-          "spoiler": true
-        },
-        "wins": {
-          "value": 3,
-          "spoiler": true
-        },
-        "won_series": {
-          "value": false,
-          "spoiler": true
-        }
+        "seed": 4,
+        "wins": 3,
+        "won_series": false
       }
     ],
-    "status": {
-      "value": "complete",
-      "spoiler": true
-    },
-    "games_played": {
-      "value": 7,
-      "spoiler": true
-    },
-    "summary": {
-      "value": "OKC won 4-3",
-      "spoiler": true
-    },
-    "games": {
-      "value": [],
-      "spoiler": true
-    }
+    "status": "complete",
+    "games_played": 7,
+    "summary": "OKC won 4-3",
+    "games": []
   },
   "clarification": null,
   "notice": null,
-  "spoiler_gate": null,
   "links": [
     {
       "kind": "playoff_bracket",
@@ -121,7 +84,7 @@
       "label": "Open series",
       "href": "/playoffs/2025/the-finals",
       "external": false,
-      "spoiler": true
+      "spoiler": false
     }
   ],
   "suggestions": [

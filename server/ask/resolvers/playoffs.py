@@ -37,7 +37,6 @@ from server.ask.resolvers import data
 from server.ask.resolvers.errors import AmbiguousError, NotFoundError
 from server.ask.resolvers.games import ResolvedGame, get_scoreboard_game, int_or_none, team_ref, validate_team_ids
 from server.ask.resolvers.output import ResolverOutput, stats_source
-from server.ask.spoilers import game_spoilers, guard, open_value
 from server.services import playoffs as playoffs_service
 
 logger = logging.getLogger(__name__)
@@ -136,7 +135,7 @@ def _game_item(game: dict) -> GameResultItem:
         awayTeam=side(game["awayTeam"]),
     )
     item_links = [links.boxscore_link(payload.gameId, day)] if payload.boxscoreAvailable else []
-    return GameResultItem(date=day, game=payload, spoilers=game_spoilers(3), links=item_links)
+    return GameResultItem(date=day, game=payload, links=item_links)
 
 
 def _select_series(
@@ -156,9 +155,8 @@ def _select_series(
         and (conference_ is None or conference(series) == conference_)
     ]
     if not matches:
-        # For a named team, "no such series" reveals an earlier elimination.
         raise NotFoundError(
-            "no_record", "no_matching_series", spoiler=bool(ids),
+            "no_record", "no_matching_series",
             details={"season": season, "teamIds": list(ids), "round": round_, "conference": conference_},
         )
     if len(matches) > 1:
@@ -196,8 +194,7 @@ def series_result(
     conference_: Conference | None = None,
 ) -> ResolverOutput[PlayoffSeriesResult]:
     """One series, chosen by season plus two teams, a team and round, the
-    finals, or a conference and round. Teams the caller did not name are
-    protected because they reveal advancement."""
+    finals, or a conference and round."""
     payload = _payload(season)
     series = _select_series(season, payload, team_ids, round_, conference_)
     mapped_round = contract_round(season, series)
@@ -211,10 +208,10 @@ def series_result(
     games = _series_games(series)
     rows = [
         SeriesTeamRow(
-            team=guard(refs[team_id], spoiler=team_id not in named),
-            seed=open_value(None),  # the playoffs payload carries no seeds
-            wins=guard(wins.get(team_id, 0)),
-            won_series=guard(None if winner is None else winner == team_id),
+            team=refs[team_id],
+            seed=None,  # the playoffs payload carries no seeds
+            wins=wins.get(team_id, 0),
+            won_series=None if winner is None else winner == team_id,
         )
         for team_id in order
     ]
@@ -224,14 +221,13 @@ def series_result(
         round=mapped_round,
         conference=conference(series),
         teams=rows,
-        status=guard(status),
-        games_played=guard(len(games)),
-        summary=guard(_summary(series, winner, refs)),
-        games=guard([_game_item(game) for game in games]),
+        status=status,
+        games_played=len(games),
+        summary=_summary(series, winner, refs),
+        games=[_game_item(game) for game in games],
     )
+    # The series page is the series that was asked about, so it is not a spoiler.
     link = links.series_link(season, series)
-    if link is not None and not set(refs) <= set(named):
-        link = link.model_copy(update={"spoiler": True})
     return ResolverOutput(
         result,
         tuple(filter(None, (link, links.bracket_link(season)))),
@@ -248,7 +244,7 @@ def find_playoff_game(
 ) -> ResolvedGame:
     """Game ``game_number`` of one series, verified on its date's scoreboard.
 
-    A game the series never reached is ``no_record`` with ``spoiler=True``.
+    A game the series never reached is ``no_record``.
     """
     if isinstance(game_number, bool) or not isinstance(game_number, int) or not 1 <= game_number <= 7:
         raise ValueError("Game number must be 1-7")
@@ -257,15 +253,12 @@ def find_playoff_game(
     games = _series_games(series)
     if game_number > len(games):
         raise NotFoundError(
-            "no_record", "series_game_not_played", spoiler=True,
+            "no_record", "series_game_not_played",
             details={"season": season, "seriesKey": series.get("seriesKey"), "gameNumber": game_number},
         )
     chosen = games[game_number - 1]
     game = get_scoreboard_game(str(chosen["gameId"]), dt.date.fromisoformat(str(chosen["date"])[:10]))
-    inferred = not set(_team_ids(series)) <= set(team_ids)
-    return dataclasses.replace(
-        game, round=contract_round(season, series), game_number=game_number, participants_inferred=inferred, named_team_ids=tuple(team_ids)
-    )
+    return dataclasses.replace(game, round=contract_round(season, series), game_number=game_number)
 
 
 def league_postseason(season: str) -> ResolverOutput[PostseasonSummaryResult]:
@@ -298,13 +291,13 @@ def league_postseason(season: str) -> ResolverOutput[PostseasonSummaryResult]:
     result = PostseasonSummaryResult(
         season=season,
         team=None,
-        finish=open_value(None),
-        record=open_value(None),
-        series_won=open_value(None),
-        rounds=open_value([]),
-        champion=guard(champion),
-        runner_up=guard(runner_up),
-        series=guard(rows),
+        finish=None,
+        record=None,
+        series_won=None,
+        rounds=[],
+        champion=champion,
+        runner_up=runner_up,
+        series=rows,
     )
     complete = champion is not None and all_decided
     return ResolverOutput(result, (links.bracket_link(season),), (stats_source(complete),))
@@ -361,13 +354,13 @@ def team_postseason(season: str, team: TeamRef) -> ResolverOutput[PostseasonSumm
         team=recorded or team,
         # Team scope is protected throughout: even "did not qualify" and an
         # empty rounds list reveal how the season ended.
-        finish=guard(finish),
-        record=guard(WinLoss(wins=wins, losses=losses) if team_series else None),
-        series_won=guard(series_won if team_series else None),
-        rounds=guard(rounds),
-        champion=open_value(None),
-        runner_up=open_value(None),
-        series=open_value([]),
+        finish=finish,
+        record=WinLoss(wins=wins, losses=losses) if team_series else None,
+        series_won=series_won if team_series else None,
+        rounds=rounds,
+        champion=None,
+        runner_up=None,
+        series=[],
     )
     complete = finish not in (None, "in_progress")
     return ResolverOutput(result, (links.bracket_link(season),), (stats_source(complete),))

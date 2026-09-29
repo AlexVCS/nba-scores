@@ -9,20 +9,18 @@ interface AskSeriesResultProps {
 }
 
 function AskSeriesResult({result}: AskSeriesResultProps) {
-  const games = result.games.value;
+  const {games} = result;
 
   return (
     <div className="grid gap-3">
       <div className={askCard}>
         <div className="border-b border-hw-line px-3.5 pt-3.5 pb-3">
           <div className={askCap}>{roundLabel(result.round, result.conference)} · {playoffYear(result.season)}</div>
-          <div className="mt-2 text-[17px] leading-tight font-extrabold">{result.summary.value}</div>
+          <div className="mt-2 text-[17px] leading-tight font-extrabold">{result.summary}</div>
         </div>
         <ul>
           {result.teams.map((row, index) => {
-            const team = row.team.value;
-            const seed = row.seed.value;
-            const won = row.won_series.value;
+            const {team, seed, won_series: won} = row;
             return (
               <li key={index} className="flex items-center gap-3 border-t border-hw-line px-3.5 py-3.5 first:border-t-0">
                 <span className="grid h-10 w-12 place-items-center">
@@ -33,13 +31,13 @@ function AskSeriesResult({result}: AskSeriesResultProps) {
                   {seed != null && <span className="ml-2 text-[10px] font-bold text-hw-muted">Seed {seed}</span>}
                   {won === true && <span className="sr-only"> (won the series)</span>}
                 </span>
-                <span className="text-xl font-extrabold tabular-nums">{row.wins.value}</span>
+                <span className="text-xl font-extrabold tabular-nums">{row.wins}</span>
               </li>
             );
           })}
           <li className="flex items-center border-t border-hw-line bg-hw-surface-muted px-3.5 py-3.5">
             <span className={`${askCap} flex-1`}>Games played</span>
-            <span className="text-base font-extrabold tabular-nums">{result.games_played.value}</span>
+            <span className="text-base font-extrabold tabular-nums">{result.games_played}</span>
           </li>
         </ul>
       </div>

@@ -14,10 +14,7 @@ function AskPostseasonResult({result, resultsHidden}: AskPostseasonResultProps) 
   const year = playoffYear(result.season);
 
   if (result.team) {
-    const finish = result.finish.value;
-    const record = result.record.value;
-    const seriesWon = result.series_won.value;
-    const rounds = result.rounds.value;
+    const {finish, record, series_won: seriesWon, rounds} = result;
     return (
       <div className="grid gap-3">
         <div className={askCard}>
@@ -60,9 +57,7 @@ function AskPostseasonResult({result, resultsHidden}: AskPostseasonResultProps) 
     );
   }
 
-  const champion = result.champion.value;
-  const runnerUp = result.runner_up.value;
-  const series = result.series.value;
+  const {champion, runner_up: runnerUp, series} = result;
   return (
     <div className="grid gap-3">
       <div className={askCard}>

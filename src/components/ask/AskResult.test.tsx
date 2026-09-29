@@ -54,7 +54,7 @@ describe("AskResult: asking is consent (ADR 0006)", () => {
   it("shows percentage display instead of made-attempted", () => {
     const response = structuredClone(ASK_RESPONSE_FIXTURES["answer-player-stat"]);
     if (response.result?.kind !== "boxscore_stat" || !response.result.player_line) throw new Error("Expected player stat");
-    response.result.player_line.values[0].value = {stat: "field_goal_percentage", value: 0.5, display: "50.0%", made: 5, attempted: 10};
+    response.result.player_line.values[0] = {stat: "field_goal_percentage", value: 0.5, display: "50.0%", made: 5, attempted: 10};
     response.result.stat = "field_goal_percentage";
     renderResponse(response);
     expect(screen.getByText("50.0%")).toBeInTheDocument();
@@ -64,7 +64,7 @@ describe("AskResult: asking is consent (ADR 0006)", () => {
   it("says a game is not final yet instead of showing a score", () => {
     const response = structuredClone(ASK_RESPONSE_FIXTURES["answer-player-stat"]);
     if (response.result?.kind !== "boxscore_stat") throw new Error("Expected boxscore stat");
-    response.result.game.final_score.value = null;
+    response.result.game.final_score = null;
     renderResponse(response);
     expect(screen.getByText("Not final yet")).toBeInTheDocument();
   });
@@ -91,7 +91,7 @@ describe("AskResult: asking is consent (ADR 0006)", () => {
   });
 
   it("answers a conditional game directly, whether or not it was played", () => {
-    renderFixture("answer-conditional-game-hidden");
+    renderFixture("answer-conditional-game");
     expect(screen.getByRole("region", {name: "How Ask read your question"})).toBeInTheDocument();
     expect(screen.queryByText(/Whether this game was played/)).not.toBeInTheDocument();
   });

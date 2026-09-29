@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import json
 from datetime import date, datetime
-from typing import Annotated, Generic, Literal, TypeVar
+from typing import Annotated, Literal
 from zoneinfo import ZoneInfo
 
 from pydantic import AfterValidator, BaseModel, ConfigDict, Field, StringConstraints, model_validator
@@ -252,17 +252,3 @@ class DateComponents(ContractModel):
             if self.kind == "calendar_range" and (self.end_month is None or self.end_day is None):
                 raise ValueError("calendar ranges need end_month and end_day")
         return self
-
-
-T = TypeVar("T")
-
-
-class Guarded(ContractModel, Generic[T]):
-    """A value that may be a spoiler.
-
-    When ``spoiler`` is true and results are hidden, the UI must omit ``value``
-    from the DOM and accessibility text (not merely hide it visually).
-    """
-
-    value: T
-    spoiler: bool

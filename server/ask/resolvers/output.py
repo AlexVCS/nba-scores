@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Generic, TypeVar
 
-from server.ask.models.response import SourceMetadata, SpoilerGate, VerifiedLink
+from server.ask.models.response import SourceMetadata, VerifiedLink
 
 R = TypeVar("R")
 
@@ -23,7 +23,6 @@ class ResolverOutput(Generic[R]):
     result: R
     links: tuple[VerifiedLink, ...]
     sources: tuple[SourceMetadata, ...]
-    spoiler_gate: SpoilerGate | None = None
 
 
 def stats_source(complete: bool) -> SourceMetadata:

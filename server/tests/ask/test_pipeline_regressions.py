@@ -99,7 +99,7 @@ def test_first_exact_answer_populates_empty_answer_cache(tmp_path, monkeypatch):
 
     def resolve(request):
         calls.append(request)
-        return ResolverOutput(known.result, tuple(known.links), tuple(known.sources), known.spoiler_gate)
+        return ResolverOutput(known.result, tuple(known.links), tuple(known.sources))
 
     monkeypatch.setattr("server.ask.pipeline.resolve", resolve)
     query = AskQuery(question="Games on 2026-09-29?")
@@ -131,7 +131,7 @@ def test_first_token_answer_populates_empty_answer_cache(tmp_path, monkeypatch):
 
     def resolve(request):
         calls.append(request)
-        return ResolverOutput(known.result, tuple(known.links), tuple(known.sources), known.spoiler_gate)
+        return ResolverOutput(known.result, tuple(known.links), tuple(known.sources))
 
     monkeypatch.setattr("server.ask.pipeline.resolve", resolve)
     query = AskQuery(question=question, resolution=token)

@@ -61,32 +61,23 @@
       "game_id": "0022500912",
       "date": "2026-03-09",
       "away": {
-        "value": {
-          "team_id": 1610612755,
-          "tricode": "PHI",
-          "name": "Philadelphia 76ers"
-        },
-        "spoiler": false
+        "team_id": 1610612755,
+        "tricode": "PHI",
+        "name": "Philadelphia 76ers"
       },
       "home": {
-        "value": {
-          "team_id": 1610612739,
-          "tricode": "CLE",
-          "name": "Cleveland Cavaliers"
-        },
-        "spoiler": false
+        "team_id": 1610612739,
+        "tricode": "CLE",
+        "name": "Cleveland Cavaliers"
       },
       "season": "2025-26",
       "season_type": "regular_season",
       "round": null,
       "game_number": null,
       "final_score": {
-        "value": {
-          "away": 104,
-          "home": 112,
-          "periods": 4
-        },
-        "spoiler": true
+        "away": 104,
+        "home": 112,
+        "periods": 4
       }
     },
     "player_line": null,
@@ -99,14 +90,11 @@
         },
         "values": [
           {
-            "value": {
-              "stat": "rebounds",
-              "value": 47,
-              "display": "47",
-              "made": null,
-              "attempted": null
-            },
-            "spoiler": true
+            "stat": "rebounds",
+            "value": 47,
+            "display": "47",
+            "made": null,
+            "attempted": null
           }
         ]
       }
@@ -115,7 +103,6 @@
   },
   "clarification": null,
   "notice": null,
-  "spoiler_gate": null,
   "links": [
     {
       "kind": "boxscore",

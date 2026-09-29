@@ -4,8 +4,11 @@
 // Keys are snake_case except the embedded scoreboard `game` payload, which is
 // the unchanged GameData shape used by GameCard.
 //
-// Spoilers: `Guarded<T>` values and anything with `spoiler: true` must be
-// omitted from the DOM and accessibility text while results are hidden.
+// Spoilers (ADR 0006): asking is consent, so results and notices are shown as
+// soon as they arrive. `spoiler: true` marks what the user did not ask for
+// (interpretation chips beside a clarification, clarification options, links,
+// suggestions); omit those from the DOM and accessibility text while results
+// are hidden.
 
 import type {GameData} from "@/helpers/helpers";
 
@@ -66,11 +69,6 @@ export type AskUnsupportedReason =
   | "not_basketball"
   | "other";
 
-export interface Guarded<T> {
-  value: T;
-  spoiler: boolean;
-}
-
 export interface AskTeamRef {
   team_id: number;
   tricode: string;
@@ -125,6 +123,7 @@ export interface AskVerifiedLink {
   /** Internal hrefs are design-agnostic app paths; prefix the active design. */
   href: string;
   external: boolean;
+  /** Would reveal a result the user did not ask for; omit while results are hidden. */
   spoiler: boolean;
 }
 
@@ -185,22 +184,11 @@ export interface AskInterpretation {
 
 // ---------------------------------------------------------------- results
 
-export interface AskGameSpoilers {
-  score: boolean;
-  status_text: boolean;
-  series_text: boolean;
-  /** gameLabel, gameSubLabel, seriesGameNumber, ifNecessary ("Game 7", round names). */
-  labels: boolean;
-}
-
 export interface AskGameResultItem {
   date: IsoDate;
   /** Unchanged scoreboard payload; may carry extra scoreboard keys. */
   game: GameData;
-  spoilers: AskGameSpoilers;
   links: AskVerifiedLink[];
-  /** The game's existence reveals a result (e.g. a possible Game 5-7): omit the whole item while hidden. */
-  spoiler: boolean;
 }
 
 export interface AskGameDay {
@@ -213,9 +201,7 @@ export interface AskGamesResult {
   dates: AskDateRange;
   teams: AskTeamRef[];
   days: AskGameDay[];
-  total_games: Guarded<number>;
-  /** Neutral copy to show while hidden when some games are spoilers. */
-  hidden_note: string | null;
+  total_games: number;
 }
 
 export interface AskStatValue {
@@ -235,25 +221,26 @@ export interface AskFinalScore {
 export interface AskGameContext {
   game_id: string;
   date: IsoDate;
-  away: Guarded<AskTeamRef>;
-  home: Guarded<AskTeamRef>;
+  away: AskTeamRef;
+  home: AskTeamRef;
   season: Season;
   season_type: "regular_season" | "playoffs" | "play_in" | "preseason" | "all_star" | "nba_cup_final";
   round: PlayoffRound | null;
   game_number: number | null;
-  final_score: Guarded<AskFinalScore | null>;
+  /** Null for games not finished. */
+  final_score: AskFinalScore | null;
 }
 
 export interface AskPlayerStatLine {
   player: AskPlayerRef;
   team: AskTeamRef;
   status: "played" | "did_not_play" | "inactive";
-  values: Guarded<AskStatValue>[];
+  values: AskStatValue[];
 }
 
 export interface AskTeamStatLine {
   team: AskTeamRef;
-  values: Guarded<AskStatValue>[];
+  values: AskStatValue[];
 }
 
 export interface AskLeaderRow {
@@ -272,17 +259,17 @@ export interface AskBoxscoreStatResult {
   game: AskGameContext;
   player_line: AskPlayerStatLine | null;
   team_lines: AskTeamStatLine[];
-  /** Leaders scope only; guarded as a whole (ranks and length reveal ties). */
-  leaders: Guarded<AskLeaderRow[]> | null;
+  /** Leaders scope only. */
+  leaders: AskLeaderRow[] | null;
 }
 
 export type AskSeriesStatus = "not_started" | "in_progress" | "complete";
 
 export interface AskSeriesTeamRow {
-  team: Guarded<AskTeamRef>;
-  seed: Guarded<number | null>;
-  wins: Guarded<number>;
-  won_series: Guarded<boolean | null>;
+  team: AskTeamRef;
+  seed: number | null;
+  wins: number;
+  won_series: boolean | null;
 }
 
 export interface AskPlayoffSeriesResult {
@@ -291,10 +278,10 @@ export interface AskPlayoffSeriesResult {
   round: PlayoffRound;
   conference: Conference | null;
   teams: [AskSeriesTeamRow, AskSeriesTeamRow];
-  status: Guarded<AskSeriesStatus>;
-  games_played: Guarded<number>;
-  summary: Guarded<string>;
-  games: Guarded<AskGameResultItem[]>;
+  status: AskSeriesStatus;
+  games_played: number;
+  summary: string;
+  games: AskGameResultItem[];
 }
 
 export interface AskWinLoss {
@@ -340,13 +327,13 @@ export interface AskPostseasonSummaryResult {
   kind: "postseason_summary";
   season: Season;
   team: AskTeamRef | null;
-  finish: Guarded<AskPostseasonFinish | null>;
-  record: Guarded<AskWinLoss | null>;
-  series_won: Guarded<number | null>;
-  rounds: Guarded<AskPostseasonRoundRow[]>;
-  champion: Guarded<AskTeamRef | null>;
-  runner_up: Guarded<AskTeamRef | null>;
-  series: Guarded<AskPostseasonSeriesRow[]>;
+  finish: AskPostseasonFinish | null;
+  record: AskWinLoss | null;
+  series_won: number | null;
+  rounds: AskPostseasonRoundRow[];
+  champion: AskTeamRef | null;
+  runner_up: AskTeamRef | null;
+  series: AskPostseasonSeriesRow[];
 }
 
 export type AskResult =
@@ -381,6 +368,7 @@ export interface AskClarificationOption {
   question: string;
   /** Send back as AskQuery.resolution; may lead to another clarification. */
   resolution: string;
+  /** Reveals a result; options are not answers, so omit while results are hidden unless the user shows them. */
   spoiler: boolean;
 }
 
@@ -413,22 +401,12 @@ export interface AskNotice {
   diagnostics_recorded: boolean;
 }
 
-/**
- * Neutral hidden-state copy for questions whose every outcome reveals a result.
- * While hidden, render only this, non-spoiler interpretation items, and a reveal
- * control; do not render or branch on outcome, result, notice, links, or suggestions.
- */
-export interface AskSpoilerGate {
-  title: string;
-  message: string;
-}
-
 export type AskSuggestionCategory = "games" | "stats" | "series" | "postseason";
 
 export interface AskSuggestion {
   question: string;
   category: AskSuggestionCategory;
-  /** Drop while results are hidden. */
+  /** Reveals a result; suggestions are never requested, so drop while results are hidden. */
   spoiler: boolean;
 }
 
@@ -443,7 +421,6 @@ export interface AskResponse {
   result: AskResult | null;
   clarification: AskClarification | null;
   notice: AskNotice | null;
-  spoiler_gate: AskSpoilerGate | null;
   links: AskVerifiedLink[];
   suggestions: AskSuggestion[];
   sources: AskSourceMetadata[];

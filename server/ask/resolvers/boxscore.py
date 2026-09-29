@@ -27,7 +27,6 @@ from server.ask.resolvers.stats import (
     stat_defs,
     stat_value,
 )
-from server.ask.spoilers import guard
 
 MAX_LEADERS = 10
 
@@ -96,7 +95,7 @@ def player_stat(game: ResolvedGame, player_id: int, stat: Stat, aggregation: Agg
             if _played(player):
                 line = PlayerStatLine(
                     player=ref, team=team, status="played",
-                    values=[guard(value) for value in _values(player.get("statistics"), definitions, game)],
+                    values=_values(player.get("statistics"), definitions, game),
                 )
             else:
                 inactive = str(player.get("status") or "").upper() == "INACTIVE"
@@ -116,7 +115,7 @@ def team_stat(
         raise NotFoundError("no_record", "team_not_in_game", details={"teamIds": missing, "gameId": game.game_id})
     boxscore = _boxscore(game)
     lines = [
-        TeamStatLine(team=team, values=[guard(value) for value in _values(side.get("statistics"), definitions, game)])
+        TeamStatLine(team=team, values=_values(side.get("statistics"), definitions, game))
         for team, side in _sides(boxscore, game)
         if not team_ids or team.team_id in team_ids
     ]
@@ -168,5 +167,5 @@ def stat_leaders(
         previous = leaders[-1] if leaders else None
         tied = previous is not None and previous.value.value == value.value
         leaders.append(LeaderRow(rank=previous.rank if tied else index + 1, player=ref, team=team, value=value))
-    return _result(game, "leaders", stat, leaders=guard(leaders))
+    return _result(game, "leaders", stat, leaders=leaders)
 
