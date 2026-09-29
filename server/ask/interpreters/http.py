@@ -113,7 +113,12 @@ def _post_json(
                     body.extend(chunk)
                 if deadline is not None and time.monotonic() >= deadline:
                     raise ProviderError("deadline_exceeded")
-                response = httpx.Response(response.status_code, headers=response.headers, content=bytes(body))
+                # iter_bytes() has already decoded gzip/deflate. Rebuilding with
+                # Content-Encoding would make httpx decode the body a second time.
+                decoded_headers = response.headers.copy()
+                decoded_headers.pop("content-encoding", None)
+                decoded_headers.pop("content-length", None)
+                response = httpx.Response(response.status_code, headers=decoded_headers, content=bytes(body))
         except httpx.TimeoutException as exc:
             raise ProviderError("timeout", f"after {remaining:.1f}s") from exc
         except httpx.HTTPError as exc:
