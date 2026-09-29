@@ -73,7 +73,13 @@
           "team_wins": 4,
           "opponent_wins": 2,
           "won": true,
-          "series_href": "/playoffs/2026/east-first-round-nyk-atl"
+          "series_link": {
+            "kind": "playoff_series",
+            "label": "Open series",
+            "href": "/playoffs/2026/east-conference-first-round-3",
+            "external": false,
+            "spoiler": true
+          }
         },
         {
           "round": "conference_semifinals",
@@ -86,7 +92,7 @@
           "team_wins": 4,
           "opponent_wins": 0,
           "won": true,
-          "series_href": null
+          "series_link": null
         },
         {
           "round": "conference_finals",
@@ -99,7 +105,7 @@
           "team_wins": 4,
           "opponent_wins": 0,
           "won": true,
-          "series_href": null
+          "series_link": null
         },
         {
           "round": "finals",
@@ -112,7 +118,7 @@
           "team_wins": 4,
           "opponent_wins": 1,
           "won": true,
-          "series_href": null
+          "series_link": null
         }
       ],
       "spoiler": true
@@ -132,6 +138,7 @@
   },
   "clarification": null,
   "notice": null,
+  "spoiler_gate": null,
   "links": [
     {
       "kind": "playoff_bracket",

@@ -107,6 +107,7 @@
   },
   "clarification": null,
   "notice": null,
+  "spoiler_gate": null,
   "links": [
     {
       "kind": "playoff_bracket",
@@ -118,7 +119,7 @@
     {
       "kind": "playoff_series",
       "label": "Open series",
-      "href": "/playoffs/2025/finals-okc-ind",
+      "href": "/playoffs/2025/the-finals",
       "external": false,
       "spoiler": true
     }

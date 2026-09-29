@@ -15,6 +15,7 @@
     "unsupported_reason": "career_stats",
     "diagnostics_recorded": true
   },
+  "spoiler_gate": null,
   "links": [],
   "suggestions": [
     {
@@ -25,7 +26,7 @@
     {
       "question": "Did the Pistons beat the Magic in the 2026 first round?",
       "category": "series",
-      "spoiler": false
+      "spoiler": true
     }
   ],
   "sources": [],

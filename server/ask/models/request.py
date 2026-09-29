@@ -15,10 +15,12 @@ from typing import Annotated, Literal, Union
 from pydantic import Field, TypeAdapter, model_validator
 
 from .common import (
+    NON_LEADER_STATS,
     Aggregation,
     Conference,
     ContractModel,
     DateRange,
+    NewYorkDateTime,
     PlayerRef,
     PlayoffRound,
     Season,
@@ -32,20 +34,16 @@ AppRoute = Literal["scores", "boxscore", "playoffs", "series", "other"]
 
 class AskContext(ContractModel):
     """App context for one request. ``reference_time`` is assigned by the
-    server (never the client) and is timezone-aware America/New_York; relative
-    dates resolve against it and it is part of relative-parse cache keys."""
+    server (never the client). It must be timezone-aware and is converted to
+    America/New_York on validation, so ``reference_time.date()`` is the New York
+    calendar date. Relative dates resolve against it, and that date is part of
+    relative-parse cache keys."""
 
-    reference_time: dt.datetime
+    reference_time: NewYorkDateTime
     route: AppRoute | None = None
     view_date: dt.date | None = None
     game_id: str | None = Field(default=None, pattern=r"^\d{10}$")
     playoff_season: Season | None = None
-
-    @model_validator(mode="after")
-    def _aware(self) -> AskContext:
-        if self.reference_time.tzinfo is None:
-            raise ValueError("reference_time must be timezone-aware")
-        return self
 
 
 class GameSearchRequest(ContractModel):
@@ -104,8 +102,8 @@ class BoxscoreStatRequest(ContractModel):
             raise ValueError("only player scope takes a player")
         if self.scope == "team" and self.team is None and len(self.game.teams) == 0:
             raise ValueError("team scope needs a team")
-        if self.scope == "leaders" and self.stat.stat == "stat_line":
-            raise ValueError("leaders need one statistic")
+        if self.scope == "leaders" and self.stat.stat in NON_LEADER_STATS:
+            raise ValueError(f"no leader ranking rule for {self.stat.stat} (unsupported_leader_stat)")
         if self.stat.aggregation != "total":
             raise ValueError("single-game statistics are totals; per_game is unsupported")
         return self

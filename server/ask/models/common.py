@@ -5,24 +5,63 @@ Frozen contract (docs/ask-contract.md). Coordinate before changing.
 
 from __future__ import annotations
 
-from datetime import date
+import json
+from datetime import date, datetime
 from typing import Annotated, Generic, Literal, TypeVar
+from zoneinfo import ZoneInfo
 
 from pydantic import AfterValidator, BaseModel, ConfigDict, Field, StringConstraints, model_validator
 
 SCHEMA_VERSION = "1"
 NEW_YORK_TZ = "America/New_York"
+NEW_YORK = ZoneInfo(NEW_YORK_TZ)
 MAX_GAME_SEARCH_DAYS = 7
+# Upper bound for relative day counts in date language ("past 30 days"). Counts
+# above MAX_GAME_SEARCH_DAYS are representable so normalization can answer
+# them with a ``range_too_long`` clarification; DateRange enforces the limit.
+MAX_RELATIVE_DAY_COUNT = 366
 MAX_QUESTION_LENGTH = 300
 
 
 class ContractModel(BaseModel):
-    """Strict, immutable base for contract models (unknown keys are errors)."""
+    """Strict base for contract models (unknown keys are errors).
+
+    Models are *shallowly* frozen: attributes cannot be reassigned, but nested
+    lists and dicts are ordinary mutable containers, so models are not
+    hashable. Use ``canonical_json`` for cache keys, never ``hash()``.
+    """
 
     model_config = ConfigDict(extra="forbid", frozen=True)
 
 
+def canonical_json(model: BaseModel) -> str:
+    """Canonical serialization for cache keys: JSON mode, keys sorted, no
+    whitespace. Equal models give equal strings. Hash the result if needed."""
+
+    return json.dumps(model.model_dump(mode="json"), sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+
+
+def to_new_york(value: datetime) -> datetime:
+    """Require a timezone-aware datetime and convert it to America/New_York."""
+
+    if value.tzinfo is None or value.utcoffset() is None:
+        raise ValueError("datetime must be timezone-aware")
+    return value.astimezone(NEW_YORK)
+
+
+# Timezone-aware datetime normalized to America/New_York, so ``.date()`` is
+# the New York calendar date (e.g. 2026-02-09T02:00Z becomes Feb 8, 21:00 EST).
+NewYorkDateTime = Annotated[datetime, AfterValidator(to_new_york)]
+
+
 Intent = Literal["game_search", "boxscore_stat", "playoff_series", "postseason_summary"]
+
+# Fields that a clarification can ask about. Shared by normalization
+# (NormalizationResult.clarify_field), the cascade (ClarifyDecision.field), and
+# HTTP (Clarification.field). "teams" covers one team or a matchup.
+# "aggregation" is never clarified: per_game is unsupported (multi_game_average).
+ClarifyField = Literal["intent", "stat_scope", "stat", "player", "teams", "date", "season", "round", "game_number"]
+ClarifyReason = Literal["ambiguous", "missing", "no_matching_candidate", "year_required", "range_too_long"]
 
 # Scope of a boxscore_stat request: one player, team totals, or game leaders.
 StatScope = Literal["player", "team", "leaders"]
@@ -68,6 +107,14 @@ StatKey = Literal[
     "free_throw_percentage",
     "plus_minus",
 ]
+
+# Stats that have no ranking rule for game leaders (percentages need a
+# qualification threshold; stat_line is not one number). Normalization reports
+# these as unsupported ("unsupported_leader_stat") before any data call.
+# Made/attempted stats (field_goals, three_pointers, free_throws) rank by made.
+NON_LEADER_STATS: frozenset[str] = frozenset(
+    {"stat_line", "field_goal_percentage", "three_point_percentage", "free_throw_percentage"}
+)
 
 # Total vs per-game. Single-game requests are always "total"; "per_game" exists
 # so a question that asks for an average is represented explicitly (and then
@@ -155,7 +202,8 @@ class DateComponents(ContractModel):
     end_day: int | None = Field(default=None, ge=1, le=31)
     relative: RelativeDate | None = None
     weekday: Weekday | None = None
-    count: int | None = Field(default=None, ge=1, le=MAX_GAME_SEARCH_DAYS)
+    # Not capped at seven: "past 10 days" must reach range_too_long clarification.
+    count: int | None = Field(default=None, ge=1, le=MAX_RELATIVE_DAY_COUNT)
 
     @model_validator(mode="after")
     def _check_kind(self) -> DateComponents:

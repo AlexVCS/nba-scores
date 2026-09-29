@@ -16,8 +16,8 @@ from typing import Literal
 
 from pydantic import Field, model_validator
 
-from .candidates import CandidateLookupResult
-from .common import ContractModel, DateComponents
+from .candidates import CandidateField, CandidateLookupResult
+from .common import ClarifyField, ClarifyReason, ContractModel, DateComponents
 from .request import AskContext, AskRequest
 
 AdapterName = Literal["jev", "openai_responses"]
@@ -39,6 +39,17 @@ InterpreterField = Literal[
     "game_number",
 ]
 CANDIDATE_BACKED_FIELDS: frozenset[str] = frozenset({"player", "teams", "date", "season", "round", "game_number"})
+
+# Interpreter field -> candidate set it selects from. The only renamed field is
+# "teams" (an interpreter may select two) -> the "team" candidate set.
+INTERPRETER_TO_CANDIDATE_FIELD: dict[str, CandidateField] = {
+    "player": "player",
+    "teams": "team",
+    "date": "date",
+    "season": "season",
+    "round": "round",
+    "game_number": "game_number",
+}
 
 FieldStatus = Literal[
     "selected",  # exactly the value(s) in `selected`
@@ -65,6 +76,7 @@ UnsupportedReason = Literal[
     "standings",
     "reference_question",  # glossary/biography (#202)
     "multi_game_average",  # per-game averages across games
+    "unsupported_leader_stat",  # leaders by a percentage or full stat line (no ranking rule)
     "not_basketball",
     "other",
 ]
@@ -155,8 +167,8 @@ class NormalizationResult(ContractModel):
     status: Literal["valid", "needs_clarification", "unsupported", "invalid"]
     request: AskRequest | None = None
     # needs_clarification: which field, and why.
-    clarify_field: InterpreterField | None = None
-    clarify_reason: Literal["ambiguous", "missing", "no_matching_candidate", "year_required", "range_too_long"] | None = None
+    clarify_field: ClarifyField | None = None
+    clarify_reason: ClarifyReason | None = None
     unsupported_reason: UnsupportedReason | None = None
     # invalid: adapter produced something Python rejects (unknown candidate
     # ID, impossible combination). Never executed; feeds the cascade policy.
@@ -166,8 +178,8 @@ class NormalizationResult(ContractModel):
     def _shape(self) -> NormalizationResult:
         if (self.status == "valid") != (self.request is not None):
             raise ValueError("request is required iff status is valid")
-        if self.status == "needs_clarification" and self.clarify_field is None:
-            raise ValueError("needs_clarification needs clarify_field")
+        if (self.status == "needs_clarification") != (self.clarify_field is not None and self.clarify_reason is not None):
+            raise ValueError("clarify_field and clarify_reason are required iff status is needs_clarification")
         if self.status == "unsupported" and self.unsupported_reason is None:
             raise ValueError("unsupported needs unsupported_reason")
         return self

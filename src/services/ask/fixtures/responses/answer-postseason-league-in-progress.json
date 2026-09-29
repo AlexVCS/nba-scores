@@ -1,0 +1,378 @@
+{
+  "schema_version": "1",
+  "request_id": "fx-postseason-league-live",
+  "outcome": "answer",
+  "question": "summarize the 2026 playoffs",
+  "interpretation": {
+    "intent": "postseason_summary",
+    "detected_type": "postseason",
+    "items": [
+      {
+        "field": "season",
+        "value": "2026 Playoffs",
+        "detail": null,
+        "expression": "2026 playoffs",
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      }
+    ],
+    "reference_time": "2026-05-10T12:00:00-04:00",
+    "timezone": "America/New_York",
+    "dates": null,
+    "season": "2025-26"
+  },
+  "result": {
+    "kind": "postseason_summary",
+    "season": "2025-26",
+    "team": null,
+    "finish": {
+      "value": null,
+      "spoiler": false
+    },
+    "record": {
+      "value": null,
+      "spoiler": false
+    },
+    "series_won": {
+      "value": null,
+      "spoiler": false
+    },
+    "rounds": {
+      "value": [],
+      "spoiler": false
+    },
+    "champion": {
+      "value": null,
+      "spoiler": true
+    },
+    "runner_up": {
+      "value": null,
+      "spoiler": true
+    },
+    "series": {
+      "value": [
+        {
+          "round": "first_round",
+          "conference": "east",
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612765,
+                "tricode": "DET",
+                "name": "Detroit Pistons"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612753,
+                "tricode": "ORL",
+                "name": "Orlando Magic"
+              },
+              "wins": 2
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612765
+        },
+        {
+          "round": "first_round",
+          "conference": "east",
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612752,
+                "tricode": "NYK",
+                "name": "New York Knicks"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612737,
+                "tricode": "ATL",
+                "name": "Atlanta Hawks"
+              },
+              "wins": 2
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612752
+        },
+        {
+          "round": "first_round",
+          "conference": "east",
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612739,
+                "tricode": "CLE",
+                "name": "Cleveland Cavaliers"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612761,
+                "tricode": "TOR",
+                "name": "Toronto Raptors"
+              },
+              "wins": 1
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612739
+        },
+        {
+          "round": "first_round",
+          "conference": "east",
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612755,
+                "tricode": "PHI",
+                "name": "Philadelphia 76ers"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612738,
+                "tricode": "BOS",
+                "name": "Boston Celtics"
+              },
+              "wins": 3
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612755
+        },
+        {
+          "round": "first_round",
+          "conference": "west",
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612760,
+                "tricode": "OKC",
+                "name": "Oklahoma City Thunder"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612763,
+                "tricode": "MEM",
+                "name": "Memphis Grizzlies"
+              },
+              "wins": 0
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612760
+        },
+        {
+          "round": "first_round",
+          "conference": "west",
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612759,
+                "tricode": "SAS",
+                "name": "San Antonio Spurs"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612757,
+                "tricode": "POR",
+                "name": "Portland Trail Blazers"
+              },
+              "wins": 1
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612759
+        },
+        {
+          "round": "first_round",
+          "conference": "west",
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612743,
+                "tricode": "DEN",
+                "name": "Denver Nuggets"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612746,
+                "tricode": "LAC",
+                "name": "LA Clippers"
+              },
+              "wins": 3
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612743
+        },
+        {
+          "round": "first_round",
+          "conference": "west",
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612745,
+                "tricode": "HOU",
+                "name": "Houston Rockets"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612747,
+                "tricode": "LAL",
+                "name": "Los Angeles Lakers"
+              },
+              "wins": 2
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612745
+        },
+        {
+          "round": "conference_semifinals",
+          "conference": "east",
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612752,
+                "tricode": "NYK",
+                "name": "New York Knicks"
+              },
+              "wins": 3
+            },
+            {
+              "team": {
+                "team_id": 1610612755,
+                "tricode": "PHI",
+                "name": "Philadelphia 76ers"
+              },
+              "wins": 0
+            }
+          ],
+          "status": "in_progress",
+          "winner_team_id": null
+        },
+        {
+          "round": "conference_semifinals",
+          "conference": "east",
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612765,
+                "tricode": "DET",
+                "name": "Detroit Pistons"
+              },
+              "wins": 2
+            },
+            {
+              "team": {
+                "team_id": 1610612739,
+                "tricode": "CLE",
+                "name": "Cleveland Cavaliers"
+              },
+              "wins": 2
+            }
+          ],
+          "status": "in_progress",
+          "winner_team_id": null
+        },
+        {
+          "round": "conference_semifinals",
+          "conference": "west",
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612760,
+                "tricode": "OKC",
+                "name": "Oklahoma City Thunder"
+              },
+              "wins": 2
+            },
+            {
+              "team": {
+                "team_id": 1610612745,
+                "tricode": "HOU",
+                "name": "Houston Rockets"
+              },
+              "wins": 1
+            }
+          ],
+          "status": "in_progress",
+          "winner_team_id": null
+        },
+        {
+          "round": "conference_semifinals",
+          "conference": "west",
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612759,
+                "tricode": "SAS",
+                "name": "San Antonio Spurs"
+              },
+              "wins": 1
+            },
+            {
+              "team": {
+                "team_id": 1610612743,
+                "tricode": "DEN",
+                "name": "Denver Nuggets"
+              },
+              "wins": 1
+            }
+          ],
+          "status": "in_progress",
+          "winner_team_id": null
+        }
+      ],
+      "spoiler": true
+    }
+  },
+  "clarification": null,
+  "notice": null,
+  "spoiler_gate": null,
+  "links": [
+    {
+      "kind": "playoff_bracket",
+      "label": "Open 2026 bracket",
+      "href": "/playoffs?season=2025-26",
+      "external": false,
+      "spoiler": false
+    }
+  ],
+  "suggestions": [],
+  "sources": [
+    {
+      "name": "nba_stats",
+      "label": "NBA.com",
+      "fetched_at": "2026-05-10T16:00:00Z",
+      "complete": false
+    }
+  ],
+  "interpreter": {
+    "model_called": true,
+    "cache_hit": false,
+    "adapter": "jev",
+    "model": "jev-1.13.0",
+    "fallback_used": false
+  }
+}

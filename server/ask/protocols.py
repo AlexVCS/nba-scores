@@ -10,15 +10,14 @@ Frozen contract (docs/ask-contract.md). Coordinate before changing.
 
 from __future__ import annotations
 
-from typing import Literal, Protocol, runtime_checkable
+from typing import Annotated, Literal, Protocol, Union, runtime_checkable
 
-from pydantic import Field
+from pydantic import Field, TypeAdapter
 
 from .models.candidates import CandidateField, CandidateLookupResult, CandidateSet
-from .models.common import ContractModel
+from .models.common import ClarifyField, ClarifyReason, ContractModel
 from .models.interpreter import (
     AdapterName,
-    InterpreterField,
     InterpreterInput,
     InterpreterOutput,
     NormalizationResult,
@@ -85,18 +84,62 @@ class CascadeState(ContractModel):
     remaining_ms: int = Field(ge=0)
 
 
-class CascadeDecision(ContractModel):
-    action: Literal[
-        "accept",  # execute attempts[-1].normalization.request
-        "fallback",  # run `adapter` once more on the original question
-        "expand_candidates",  # expand `field`, then re-run the last adapter
-        "clarify",  # ask the user about `field`
-        "unsupported",
-        "fail",  # report unavailable; never execute guessed parameters
-    ]
-    adapter: AdapterName | None = None
-    field: InterpreterField | None = None
-    reason: str = Field(max_length=120)
+class _Decision(ContractModel):
+    reason: str = Field(max_length=120)  # for logs and evaluation, not user copy
+
+
+class AcceptDecision(_Decision):
+    """Execute ``attempts[-1].normalization.request``."""
+
+    action: Literal["accept"] = "accept"
+
+
+class FallbackDecision(_Decision):
+    """Run ``adapter`` once more on the original question."""
+
+    action: Literal["fallback"] = "fallback"
+    adapter: AdapterName
+
+
+class ExpandCandidatesDecision(_Decision):
+    """Expand one candidate set with ``CandidateLookup.expand``, then re-run the
+    last adapter. Interpreter field "teams" maps to candidate field "team"
+    (``INTERPRETER_TO_CANDIDATE_FIELD``)."""
+
+    action: Literal["expand_candidates"] = "expand_candidates"
+    field: CandidateField
+
+
+class ClarifyDecision(_Decision):
+    """Ask the user; becomes the HTTP ``Clarification`` with the same field."""
+
+    action: Literal["clarify"] = "clarify"
+    field: ClarifyField
+    clarify_reason: ClarifyReason
+
+
+class UnsupportedDecision(_Decision):
+    action: Literal["unsupported"] = "unsupported"
+
+
+class FailDecision(_Decision):
+    """Report unavailable; never execute guessed parameters."""
+
+    action: Literal["fail"] = "fail"
+
+
+CascadeDecision = Annotated[
+    Union[
+        AcceptDecision,
+        FallbackDecision,
+        ExpandCandidatesDecision,
+        ClarifyDecision,
+        UnsupportedDecision,
+        FailDecision,
+    ],
+    Field(discriminator="action"),
+]
+CASCADE_DECISION_ADAPTER: TypeAdapter[CascadeDecision] = TypeAdapter(CascadeDecision)
 
 
 @runtime_checkable

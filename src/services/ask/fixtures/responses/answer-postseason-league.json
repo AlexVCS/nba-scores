@@ -66,242 +66,362 @@
         {
           "round": "first_round",
           "conference": "east",
-          "winner": {
-            "team_id": 1610612738,
-            "tricode": "BOS",
-            "name": "Boston Celtics"
-          },
-          "loser": {
-            "team_id": 1610612748,
-            "tricode": "MIA",
-            "name": "Miami Heat"
-          },
-          "winner_wins": 4,
-          "loser_wins": 1
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612738,
+                "tricode": "BOS",
+                "name": "Boston Celtics"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612748,
+                "tricode": "MIA",
+                "name": "Miami Heat"
+              },
+              "wins": 1
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612738
         },
         {
           "round": "first_round",
           "conference": "east",
-          "winner": {
-            "team_id": 1610612752,
-            "tricode": "NYK",
-            "name": "New York Knicks"
-          },
-          "loser": {
-            "team_id": 1610612755,
-            "tricode": "PHI",
-            "name": "Philadelphia 76ers"
-          },
-          "winner_wins": 4,
-          "loser_wins": 2
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612752,
+                "tricode": "NYK",
+                "name": "New York Knicks"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612755,
+                "tricode": "PHI",
+                "name": "Philadelphia 76ers"
+              },
+              "wins": 2
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612752
         },
         {
           "round": "first_round",
           "conference": "east",
-          "winner": {
-            "team_id": 1610612754,
-            "tricode": "IND",
-            "name": "Indiana Pacers"
-          },
-          "loser": {
-            "team_id": 1610612749,
-            "tricode": "MIL",
-            "name": "Milwaukee Bucks"
-          },
-          "winner_wins": 4,
-          "loser_wins": 2
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612754,
+                "tricode": "IND",
+                "name": "Indiana Pacers"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612749,
+                "tricode": "MIL",
+                "name": "Milwaukee Bucks"
+              },
+              "wins": 2
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612754
         },
         {
           "round": "first_round",
           "conference": "east",
-          "winner": {
-            "team_id": 1610612739,
-            "tricode": "CLE",
-            "name": "Cleveland Cavaliers"
-          },
-          "loser": {
-            "team_id": 1610612753,
-            "tricode": "ORL",
-            "name": "Orlando Magic"
-          },
-          "winner_wins": 4,
-          "loser_wins": 3
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612739,
+                "tricode": "CLE",
+                "name": "Cleveland Cavaliers"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612753,
+                "tricode": "ORL",
+                "name": "Orlando Magic"
+              },
+              "wins": 3
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612739
         },
         {
           "round": "first_round",
           "conference": "west",
-          "winner": {
-            "team_id": 1610612760,
-            "tricode": "OKC",
-            "name": "Oklahoma City Thunder"
-          },
-          "loser": {
-            "team_id": 1610612740,
-            "tricode": "NOP",
-            "name": "New Orleans Pelicans"
-          },
-          "winner_wins": 4,
-          "loser_wins": 0
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612760,
+                "tricode": "OKC",
+                "name": "Oklahoma City Thunder"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612740,
+                "tricode": "NOP",
+                "name": "New Orleans Pelicans"
+              },
+              "wins": 0
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612760
         },
         {
           "round": "first_round",
           "conference": "west",
-          "winner": {
-            "team_id": 1610612743,
-            "tricode": "DEN",
-            "name": "Denver Nuggets"
-          },
-          "loser": {
-            "team_id": 1610612747,
-            "tricode": "LAL",
-            "name": "Los Angeles Lakers"
-          },
-          "winner_wins": 4,
-          "loser_wins": 1
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612743,
+                "tricode": "DEN",
+                "name": "Denver Nuggets"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612747,
+                "tricode": "LAL",
+                "name": "Los Angeles Lakers"
+              },
+              "wins": 1
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612743
         },
         {
           "round": "first_round",
           "conference": "west",
-          "winner": {
-            "team_id": 1610612750,
-            "tricode": "MIN",
-            "name": "Minnesota Timberwolves"
-          },
-          "loser": {
-            "team_id": 1610612756,
-            "tricode": "PHX",
-            "name": "Phoenix Suns"
-          },
-          "winner_wins": 4,
-          "loser_wins": 0
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612750,
+                "tricode": "MIN",
+                "name": "Minnesota Timberwolves"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612756,
+                "tricode": "PHX",
+                "name": "Phoenix Suns"
+              },
+              "wins": 0
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612750
         },
         {
           "round": "first_round",
           "conference": "west",
-          "winner": {
-            "team_id": 1610612742,
-            "tricode": "DAL",
-            "name": "Dallas Mavericks"
-          },
-          "loser": {
-            "team_id": 1610612746,
-            "tricode": "LAC",
-            "name": "LA Clippers"
-          },
-          "winner_wins": 4,
-          "loser_wins": 2
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612742,
+                "tricode": "DAL",
+                "name": "Dallas Mavericks"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612746,
+                "tricode": "LAC",
+                "name": "LA Clippers"
+              },
+              "wins": 2
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612742
         },
         {
           "round": "conference_semifinals",
           "conference": "east",
-          "winner": {
-            "team_id": 1610612738,
-            "tricode": "BOS",
-            "name": "Boston Celtics"
-          },
-          "loser": {
-            "team_id": 1610612739,
-            "tricode": "CLE",
-            "name": "Cleveland Cavaliers"
-          },
-          "winner_wins": 4,
-          "loser_wins": 1
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612738,
+                "tricode": "BOS",
+                "name": "Boston Celtics"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612739,
+                "tricode": "CLE",
+                "name": "Cleveland Cavaliers"
+              },
+              "wins": 1
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612738
         },
         {
           "round": "conference_semifinals",
           "conference": "east",
-          "winner": {
-            "team_id": 1610612754,
-            "tricode": "IND",
-            "name": "Indiana Pacers"
-          },
-          "loser": {
-            "team_id": 1610612752,
-            "tricode": "NYK",
-            "name": "New York Knicks"
-          },
-          "winner_wins": 4,
-          "loser_wins": 3
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612754,
+                "tricode": "IND",
+                "name": "Indiana Pacers"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612752,
+                "tricode": "NYK",
+                "name": "New York Knicks"
+              },
+              "wins": 3
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612754
         },
         {
           "round": "conference_semifinals",
           "conference": "west",
-          "winner": {
-            "team_id": 1610612750,
-            "tricode": "MIN",
-            "name": "Minnesota Timberwolves"
-          },
-          "loser": {
-            "team_id": 1610612743,
-            "tricode": "DEN",
-            "name": "Denver Nuggets"
-          },
-          "winner_wins": 4,
-          "loser_wins": 3
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612750,
+                "tricode": "MIN",
+                "name": "Minnesota Timberwolves"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612743,
+                "tricode": "DEN",
+                "name": "Denver Nuggets"
+              },
+              "wins": 3
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612750
         },
         {
           "round": "conference_semifinals",
           "conference": "west",
-          "winner": {
-            "team_id": 1610612742,
-            "tricode": "DAL",
-            "name": "Dallas Mavericks"
-          },
-          "loser": {
-            "team_id": 1610612760,
-            "tricode": "OKC",
-            "name": "Oklahoma City Thunder"
-          },
-          "winner_wins": 4,
-          "loser_wins": 2
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612742,
+                "tricode": "DAL",
+                "name": "Dallas Mavericks"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612760,
+                "tricode": "OKC",
+                "name": "Oklahoma City Thunder"
+              },
+              "wins": 2
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612742
         },
         {
           "round": "conference_finals",
           "conference": "east",
-          "winner": {
-            "team_id": 1610612738,
-            "tricode": "BOS",
-            "name": "Boston Celtics"
-          },
-          "loser": {
-            "team_id": 1610612754,
-            "tricode": "IND",
-            "name": "Indiana Pacers"
-          },
-          "winner_wins": 4,
-          "loser_wins": 0
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612738,
+                "tricode": "BOS",
+                "name": "Boston Celtics"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612754,
+                "tricode": "IND",
+                "name": "Indiana Pacers"
+              },
+              "wins": 0
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612738
         },
         {
           "round": "conference_finals",
           "conference": "west",
-          "winner": {
-            "team_id": 1610612742,
-            "tricode": "DAL",
-            "name": "Dallas Mavericks"
-          },
-          "loser": {
-            "team_id": 1610612750,
-            "tricode": "MIN",
-            "name": "Minnesota Timberwolves"
-          },
-          "winner_wins": 4,
-          "loser_wins": 1
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612742,
+                "tricode": "DAL",
+                "name": "Dallas Mavericks"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612750,
+                "tricode": "MIN",
+                "name": "Minnesota Timberwolves"
+              },
+              "wins": 1
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612742
         },
         {
           "round": "finals",
           "conference": null,
-          "winner": {
-            "team_id": 1610612738,
-            "tricode": "BOS",
-            "name": "Boston Celtics"
-          },
-          "loser": {
-            "team_id": 1610612742,
-            "tricode": "DAL",
-            "name": "Dallas Mavericks"
-          },
-          "winner_wins": 4,
-          "loser_wins": 1
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612738,
+                "tricode": "BOS",
+                "name": "Boston Celtics"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612742,
+                "tricode": "DAL",
+                "name": "Dallas Mavericks"
+              },
+              "wins": 1
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612738
         }
       ],
       "spoiler": true
@@ -309,6 +429,7 @@
   },
   "clarification": null,
   "notice": null,
+  "spoiler_gate": null,
   "links": [
     {
       "kind": "playoff_bracket",

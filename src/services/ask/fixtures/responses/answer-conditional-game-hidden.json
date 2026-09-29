@@ -1,8 +1,8 @@
 {
   "schema_version": "1",
-  "request_id": "fx-stat-leaders",
+  "request_id": "fx-conditional-game",
   "outcome": "answer",
-  "question": "who led in assists in game 4 of the 2025 finals",
+  "question": "who scored the most points in game 7 of the 2025 finals",
   "interpretation": {
     "intent": "boxscore_stat",
     "detected_type": "stat_leaders",
@@ -21,9 +21,9 @@
       },
       {
         "field": "game_number",
-        "value": "Game 4",
+        "value": "Game 7",
         "detail": null,
-        "expression": null,
+        "expression": "game 7",
         "origin": "question",
         "status": "resolved",
         "match_count": null,
@@ -33,8 +33,8 @@
       },
       {
         "field": "game",
-        "value": "OKC @ IND",
-        "detail": "Fri, Jun 13, 2025",
+        "value": "IND @ OKC",
+        "detail": "Sun, Jun 22, 2025",
         "expression": null,
         "origin": "inferred",
         "status": "resolved",
@@ -45,7 +45,7 @@
       },
       {
         "field": "stat",
-        "value": "Assists",
+        "value": "Points",
         "detail": null,
         "expression": null,
         "origin": "question",
@@ -64,20 +64,12 @@
   "result": {
     "kind": "boxscore_stat",
     "scope": "leaders",
-    "stat": "assists",
+    "stat": "points",
     "aggregation": "total",
     "game": {
-      "game_id": "0042400404",
-      "date": "2025-06-13",
+      "game_id": "0042400407",
+      "date": "2025-06-22",
       "away": {
-        "value": {
-          "team_id": 1610612760,
-          "tricode": "OKC",
-          "name": "Oklahoma City Thunder"
-        },
-        "spoiler": true
-      },
-      "home": {
         "value": {
           "team_id": 1610612754,
           "tricode": "IND",
@@ -85,14 +77,22 @@
         },
         "spoiler": true
       },
+      "home": {
+        "value": {
+          "team_id": 1610612760,
+          "tricode": "OKC",
+          "name": "Oklahoma City Thunder"
+        },
+        "spoiler": true
+      },
       "season": "2024-25",
       "season_type": "playoffs",
       "round": "finals",
-      "game_number": 4,
+      "game_number": 7,
       "final_score": {
         "value": {
-          "away": 111,
-          "home": 104,
+          "away": 91,
+          "home": 103,
           "periods": 4
         },
         "spoiler": true
@@ -114,28 +114,9 @@
             "name": "Oklahoma City Thunder"
           },
           "value": {
-            "stat": "assists",
-            "value": 8,
-            "display": "8",
-            "made": null,
-            "attempted": null
-          }
-        },
-        {
-          "rank": 2,
-          "player": {
-            "player_id": 1630169,
-            "name": "Tyrese Haliburton"
-          },
-          "team": {
-            "team_id": 1610612754,
-            "tricode": "IND",
-            "name": "Indiana Pacers"
-          },
-          "value": {
-            "stat": "assists",
-            "value": 6,
-            "display": "6",
+            "stat": "points",
+            "value": 29,
+            "display": "29",
             "made": null,
             "attempted": null
           }
@@ -146,14 +127,17 @@
   },
   "clarification": null,
   "notice": null,
-  "spoiler_gate": null,
+  "spoiler_gate": {
+    "title": "Results hidden",
+    "message": "Whether this game was played would reveal how the series went. Show results to see the answer."
+  },
   "links": [
     {
       "kind": "boxscore",
       "label": "Open boxscore",
-      "href": "/games/0042400404/boxscore?date=2025-06-13",
+      "href": "/games/0042400407/boxscore?date=2025-06-22",
       "external": false,
-      "spoiler": false
+      "spoiler": true
     }
   ],
   "suggestions": [],

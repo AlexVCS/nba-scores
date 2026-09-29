@@ -62,6 +62,7 @@ export type AskUnsupportedReason =
   | "standings"
   | "reference_question"
   | "multi_game_average"
+  | "unsupported_leader_stat"
   | "not_basketball"
   | "other";
 
@@ -98,7 +99,12 @@ export interface AskClientContext {
 export interface AskQuery {
   question: string;
   context?: AskClientContext | null;
-  /** Opaque token from a ClarificationOption; executes with zero model calls. */
+  /**
+   * Opaque token from a ClarificationOption. Zero model calls: the reply is the
+   * answer, or the next clarification when fields remain (a token can hold a
+   * partial resolution). Expired or invalid tokens are ignored and `question`
+   * is handled as a new question.
+   */
   resolution?: string | null;
 }
 
@@ -112,6 +118,7 @@ export type AskLinkKind =
   | "nba_game"
   | "nba_stat_event";
 
+/** The only URL-bearing type: every link in a response uses it. */
 export interface AskVerifiedLink {
   kind: AskLinkKind;
   label: string;
@@ -180,6 +187,8 @@ export interface AskGameSpoilers {
   score: boolean;
   status_text: boolean;
   series_text: boolean;
+  /** gameLabel, gameSubLabel, seriesGameNumber, ifNecessary ("Game 7", round names). */
+  labels: boolean;
 }
 
 export interface AskGameResultItem {
@@ -188,6 +197,8 @@ export interface AskGameResultItem {
   game: GameData;
   spoilers: AskGameSpoilers;
   links: AskVerifiedLink[];
+  /** The game's existence reveals a result (e.g. a possible Game 5-7): omit the whole item while hidden. */
+  spoiler: boolean;
 }
 
 export interface AskGameDay {
@@ -200,7 +211,9 @@ export interface AskGamesResult {
   dates: AskDateRange;
   teams: AskTeamRef[];
   days: AskGameDay[];
-  total_games: number;
+  total_games: Guarded<number>;
+  /** Neutral copy to show while hidden when some games are spoilers. */
+  hidden_note: string | null;
 }
 
 export interface AskStatValue {
@@ -220,8 +233,8 @@ export interface AskFinalScore {
 export interface AskGameContext {
   game_id: string;
   date: IsoDate;
-  away: AskTeamRef;
-  home: AskTeamRef;
+  away: Guarded<AskTeamRef>;
+  home: Guarded<AskTeamRef>;
   season: Season;
   season_type: "regular_season" | "playoffs" | "play_in" | "preseason" | "all_star" | "nba_cup_final";
   round: PlayoffRound | null;
@@ -242,10 +255,11 @@ export interface AskTeamStatLine {
 }
 
 export interface AskLeaderRow {
+  /** Ties share a rank. */
   rank: number;
-  player: Guarded<AskPlayerRef>;
-  team: Guarded<AskTeamRef>;
-  value: Guarded<AskStatValue>;
+  player: AskPlayerRef;
+  team: AskTeamRef;
+  value: AskStatValue;
 }
 
 export interface AskBoxscoreStatResult {
@@ -256,8 +270,11 @@ export interface AskBoxscoreStatResult {
   game: AskGameContext;
   player_line: AskPlayerStatLine | null;
   team_lines: AskTeamStatLine[];
-  leaders: AskLeaderRow[];
+  /** Leaders scope only; guarded as a whole (ranks and length reveal ties). */
+  leaders: Guarded<AskLeaderRow[]> | null;
 }
+
+export type AskSeriesStatus = "not_started" | "in_progress" | "complete";
 
 export interface AskSeriesTeamRow {
   team: Guarded<AskTeamRef>;
@@ -272,7 +289,7 @@ export interface AskPlayoffSeriesResult {
   round: PlayoffRound;
   conference: Conference | null;
   teams: [AskSeriesTeamRow, AskSeriesTeamRow];
-  status: Guarded<"not_started" | "in_progress" | "complete">;
+  status: Guarded<AskSeriesStatus>;
   games_played: Guarded<number>;
   summary: Guarded<string>;
   games: Guarded<AskGameResultItem[]>;
@@ -300,16 +317,21 @@ export interface AskPostseasonRoundRow {
   team_wins: number;
   opponent_wins: number;
   won: boolean | null;
-  series_href: string | null;
+  series_link: AskVerifiedLink | null;
+}
+
+export interface AskSeriesParticipant {
+  team: AskTeamRef;
+  wins: number;
 }
 
 export interface AskPostseasonSeriesRow {
   round: PlayoffRound;
   conference: Conference | null;
-  winner: AskTeamRef | null;
-  loser: AskTeamRef | null;
-  winner_wins: number;
-  loser_wins: number;
+  teams: [AskSeriesParticipant, AskSeriesParticipant];
+  status: AskSeriesStatus;
+  /** Set iff status is "complete". */
+  winner_team_id: number | null;
 }
 
 export interface AskPostseasonSummaryResult {
@@ -334,15 +356,15 @@ export type AskResult =
 // ---------------------------------------------------------------- clarification, notices
 
 export type AskClarifyField =
+  | "intent"
+  | "stat_scope"
+  | "stat"
   | "player"
-  | "team"
   | "teams"
   | "date"
   | "season"
   | "round"
-  | "game_number"
-  | "stat"
-  | "intent";
+  | "game_number";
 export type AskClarifyReason = "ambiguous" | "missing" | "no_matching_candidate" | "year_required" | "range_too_long";
 
 export interface AskClarificationOption {
@@ -354,7 +376,7 @@ export interface AskClarificationOption {
   player_id: number | null;
   /** Standalone rewritten question, for the input and recent history. */
   question: string;
-  /** Send back as AskQuery.resolution. */
+  /** Send back as AskQuery.resolution; may lead to another clarification. */
   resolution: string;
   spoiler: boolean;
 }
@@ -388,6 +410,16 @@ export interface AskNotice {
   diagnostics_recorded: boolean;
 }
 
+/**
+ * Neutral hidden-state copy for questions whose every outcome reveals a result.
+ * While hidden, render only this, non-spoiler interpretation items, and a reveal
+ * control; do not render or branch on outcome, result, notice, links, or suggestions.
+ */
+export interface AskSpoilerGate {
+  title: string;
+  message: string;
+}
+
 export type AskSuggestionCategory = "games" | "stats" | "series" | "postseason";
 
 export interface AskSuggestion {
@@ -408,6 +440,7 @@ export interface AskResponse {
   result: AskResult | null;
   clarification: AskClarification | null;
   notice: AskNotice | null;
+  spoiler_gate: AskSpoilerGate | null;
   links: AskVerifiedLink[];
   suggestions: AskSuggestion[];
   sources: AskSourceMetadata[];
@@ -422,7 +455,7 @@ export interface AskSuggestGame {
   away: AskTeamRef;
   home: AskTeamRef;
   label: string;
-  href: string;
+  link: AskVerifiedLink;
 }
 
 export interface AskSuggestEntity {

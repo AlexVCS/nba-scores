@@ -24,11 +24,14 @@ from .common import (
     NEW_YORK_TZ,
     SCHEMA_VERSION,
     Aggregation,
+    ClarifyField,
+    ClarifyReason,
     Conference,
     ContractModel,
     DateRange,
     Guarded,
     Intent,
+    NewYorkDateTime,
     PlayerRef,
     PlayoffRound,
     Season,
@@ -57,9 +60,15 @@ class ClientContext(ContractModel):
 class AskQuery(ContractModel):
     """``POST /ask`` body.
 
-    ``resolution`` is the opaque token from a ClarificationOption. When set,
-    the server executes that already-validated request with zero model calls
-    (``question`` still carries the option's standalone question for history).
+    ``resolution`` is the opaque token from a ClarificationOption. It refers to
+    server-validated resolution state, which may be partial. With a valid
+    token the server makes zero model calls: if every required field is now
+    resolved it executes the request, otherwise it returns the next
+    ``needs_clarification`` (whose options carry new tokens that include the
+    earlier choices). An expired or invalid token (bad signature, unknown,
+    issued for another question) is ignored: the server handles ``question``
+    as a new question, which may call a model. ``question`` is always the
+    option's standalone rewritten question, so this fallback is safe.
     """
 
     model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
@@ -80,18 +89,25 @@ DetectedType = Literal["games", "player_stat", "team_stat", "stat_leaders", "ser
 
 LinkKind = Literal["boxscore", "scores_date", "playoff_series", "playoff_bracket", "nba_game", "nba_stat_event"]
 
+# Series slugs follow src/utils/seriesSlug.ts: "the-finals", or
+# "{slugify(bracketGroupId)}-{first-round|semifinal|final|round-N}-{bracketOrder+1}",
+# e.g. "east-conference-first-round-1". Team-based slugs are not routes.
+SERIES_SLUG_PATTERN = r"(the-finals|[a-z0-9]+(-[a-z0-9]+)*-(first-round|semifinal|final|round-\d+)-\d+)"
 INTERNAL_LINK_PATTERN = (
     r"^/(\?date=\d{4}-\d{2}-\d{2}"
     r"|games/\d{10}/boxscore(\?date=\d{4}-\d{2}-\d{2})?"
     r"|playoffs(\?season=\d{4}-\d{2})?"
-    r"|playoffs/\d{4}/[a-z0-9-]+)$"
+    r"|playoffs/\d{4}/" + SERIES_SLUG_PATTERN + r")$"
 )
 EXTERNAL_LINK_PREFIX = "https://www.nba.com/"
 
 
 class VerifiedLink(ContractModel):
     """A link Python built from verified IDs. Internal ``href``s are
-    design-agnostic app paths; the UI adds the active design prefix."""
+    design-agnostic app paths; the UI adds the active design prefix.
+
+    This is the only URL-bearing type in the contract: every link anywhere in
+    a response uses it, so one allowlist applies everywhere."""
 
     kind: LinkKind
     label: str = Field(min_length=1, max_length=80)
@@ -145,7 +161,8 @@ class InterpretationItem(ContractModel):
     match_count: int | None = Field(default=None, ge=2)  # ambiguous: "4 matches"
     team_id: int | None = None
     player_id: int | None = None
-    # True when the item reveals a result (e.g. inferred series participants).
+    # True when the item reveals a result: any participant or game the server
+    # inferred for a postseason question (e.g. the teams in "the 2025 Finals").
     spoiler: bool = False
 
 
@@ -153,7 +170,7 @@ class Interpretation(ContractModel):
     intent: Intent | None = None
     detected_type: DetectedType | None = None
     items: list[InterpretationItem] = Field(default_factory=list, max_length=8)
-    reference_time: dt.datetime  # server "now" in America/New_York
+    reference_time: NewYorkDateTime  # server "now", normalized to America/New_York
     timezone: Literal["America/New_York"] = NEW_YORK_TZ
     dates: DateRange | None = None
     season: Season | None = None
@@ -200,13 +217,21 @@ class GameSpoilers(ContractModel):
     score: bool = True  # scores, winner, leaders
     status_text: bool = True  # "Final/OT" reveals overtime
     series_text: bool = True  # "NYK leads 2-1"
+    # gameLabel, gameSubLabel, seriesGameNumber, ifNecessary: "Game 7" reveals
+    # series length and a round label can reveal advancement.
+    labels: bool = True
 
 
 class GameResultItem(ContractModel):
-    date: dt.date  # America/New_York game date
+    date: dt.date  # America/New_York game date; matches game.gameTimeUTC in New York
     game: ScoreboardGame
     spoilers: GameSpoilers = Field(default_factory=GameSpoilers)
     links: list[VerifiedLink] = Field(default_factory=list, max_length=4)
+    # The game's existence reveals a result the user did not supply: a
+    # conditional playoff game (e.g. Games 5-7 of a best-of-seven), or a later
+    # round in a search filtered by team. While hidden the UI omits the whole
+    # item, and a day left empty is omitted too.
+    spoiler: bool = False
 
 
 class GameDay(ContractModel):
@@ -219,7 +244,21 @@ class GamesResult(ContractModel):
     dates: DateRange
     teams: list[TeamRef] = Field(default_factory=list, max_length=2)
     days: list[GameDay] = Field(min_length=1, max_length=7)
-    total_games: int = Field(ge=1)
+    # Guarded whenever any item is a spoiler (the count reveals hidden games).
+    total_games: Guarded[int]
+    # Neutral copy shown while hidden, e.g. "Possible Games 5-7 stay hidden
+    # until you show results." Decided from the schedule and question, never
+    # from which games were played. Required when any item is a spoiler.
+    hidden_note: str | None = Field(default=None, max_length=200)
+
+    @model_validator(mode="after")
+    def _guard_counts(self) -> GamesResult:
+        items = [item for day in self.days for item in day.games]
+        if self.total_games.value != len(items) or not items:
+            raise ValueError("total_games must equal the number of games (at least one)")
+        if any(item.spoiler for item in items) and not (self.total_games.spoiler and self.hidden_note):
+            raise ValueError("spoiler games need a guarded total_games and a hidden_note")
+        return self
 
 
 class StatValue(ContractModel):
@@ -239,8 +278,10 @@ class FinalScore(ContractModel):
 class GameContext(ContractModel):
     game_id: str = Field(pattern=r"^\d{10}$")
     date: dt.date
-    away: TeamRef
-    home: TeamRef
+    # Spoiler when the user did not name the team and the game is a playoff
+    # game (participants reveal who advanced).
+    away: Guarded[TeamRef]
+    home: Guarded[TeamRef]
     season: Season
     season_type: Literal["regular_season", "playoffs", "play_in", "preseason", "all_star", "nba_cup_final"]
     round: PlayoffRound | None = None
@@ -262,9 +303,9 @@ class TeamStatLine(ContractModel):
 
 class LeaderRow(ContractModel):
     rank: int = Field(ge=1)  # ties share a rank
-    player: Guarded[PlayerRef]
-    team: Guarded[TeamRef]
-    value: Guarded[StatValue]
+    player: PlayerRef
+    team: TeamRef
+    value: StatValue
 
 
 class BoxscoreStatResult(ContractModel):
@@ -275,7 +316,9 @@ class BoxscoreStatResult(ContractModel):
     game: GameContext
     player_line: PlayerStatLine | None = None
     team_lines: list[TeamStatLine] = Field(default_factory=list, max_length=2)
-    leaders: list[LeaderRow] = Field(default_factory=list, max_length=10)
+    # Leaders scope only. Guarded as a whole: names, values, ranks, and the
+    # list length all reveal results (a shared rank reveals a tie).
+    leaders: Guarded[list[LeaderRow]] | None = None
 
     @model_validator(mode="after")
     def _scope_payload(self) -> BoxscoreStatResult:
@@ -283,8 +326,10 @@ class BoxscoreStatResult(ContractModel):
             raise ValueError("player scope needs player_line")
         if self.scope == "team" and not self.team_lines:
             raise ValueError("team scope needs team_lines")
-        if self.scope == "leaders" and not self.leaders:
-            raise ValueError("leaders scope needs leaders")
+        if (self.scope == "leaders") != (self.leaders is not None):
+            raise ValueError("leaders is required iff scope is leaders")
+        if self.leaders is not None and not (1 <= len(self.leaders.value) <= 10):
+            raise ValueError("leaders holds 1-10 rows")
         return self
 
 
@@ -302,7 +347,7 @@ class PlayoffSeriesResult(ContractModel):
     round: PlayoffRound
     conference: Conference | None = None
     teams: list[SeriesTeamRow] = Field(min_length=2, max_length=2)
-    status: Guarded[Literal["not_started", "in_progress", "complete"]]
+    status: Guarded[SeriesStatus]
     games_played: Guarded[int]
     summary: Guarded[str]  # "DET won 4-2"
     games: Guarded[list[GameResultItem]]  # count reveals series length
@@ -325,6 +370,9 @@ PostseasonFinish = Literal[
 ]
 
 
+SeriesStatus = Literal["not_started", "in_progress", "complete"]
+
+
 class PostseasonRoundRow(ContractModel):
     round: PlayoffRound
     conference: Conference | None = None
@@ -332,18 +380,30 @@ class PostseasonRoundRow(ContractModel):
     team_wins: int = Field(ge=0, le=4)
     opponent_wins: int = Field(ge=0, le=4)
     won: bool | None  # None while undecided
-    series_href: str | None = None
+    series_link: VerifiedLink | None = None
+
+
+class SeriesParticipant(ContractModel):
+    team: TeamRef
+    wins: int = Field(ge=0, le=4)
 
 
 class PostseasonSeriesRow(ContractModel):
-    """League-wide summary row: one series."""
+    """League-wide summary row: one series, finished or not."""
 
     round: PlayoffRound
     conference: Conference | None = None
-    winner: TeamRef | None
-    loser: TeamRef | None
-    winner_wins: int = Field(ge=0, le=4)
-    loser_wins: int = Field(ge=0, le=4)
+    teams: list[SeriesParticipant] = Field(min_length=2, max_length=2)
+    status: SeriesStatus
+    winner_team_id: int | None = None  # set iff status is complete
+
+    @model_validator(mode="after")
+    def _winner(self) -> PostseasonSeriesRow:
+        if (self.status == "complete") != (self.winner_team_id is not None):
+            raise ValueError("winner_team_id is required iff status is complete")
+        if self.winner_team_id is not None and self.winner_team_id not in {p.team.team_id for p in self.teams}:
+            raise ValueError("winner_team_id must be one of the two teams")
+        return self
 
 
 class PostseasonSummaryResult(ContractModel):
@@ -374,8 +434,6 @@ AskResult = Annotated[
 # Clarification, notices, suggestions
 # --------------------------------------------------------------------------
 
-ClarifyField = Literal["player", "team", "teams", "date", "season", "round", "game_number", "stat", "intent"]
-ClarifyReason = Literal["ambiguous", "missing", "no_matching_candidate", "year_required", "range_too_long"]
 MAX_CLARIFICATION_OPTIONS = 9  # number shortcuts 1-9
 
 
@@ -388,7 +446,8 @@ class ClarificationOption(ContractModel):
     player_id: int | None = None
     # Standalone rewritten question (for the input box and recent history).
     question: str = Field(min_length=1, max_length=MAX_QUESTION_LENGTH)
-    # Opaque server token; send back as AskQuery.resolution. Zero model calls.
+    # Opaque server token; send back as AskQuery.resolution. Zero model calls:
+    # the reply is the answer, or the next clarification if fields remain.
     resolution: str = Field(min_length=1, max_length=512)
     spoiler: bool = False
 
@@ -425,6 +484,21 @@ class Notice(ContractModel):
     diagnostics_recorded: bool = False
 
 
+class SpoilerGate(ContractModel):
+    """Neutral hidden-state copy for a question whose every possible outcome
+    reveals a result: a conditional game ("game 7 of the 2024 Finals"), or an
+    absence that reveals elimination ("Knicks games last week" in May).
+
+    The server decides from the question and schedule, never from the
+    outcome, and sends the same gate for an answer and for not_found. While
+    hidden the UI renders only this copy, the interpretation items with
+    ``spoiler: false``, and a reveal control; it must not render or branch on
+    ``outcome``, ``result``, ``notice``, ``links``, or ``suggestions``."""
+
+    title: str = Field(min_length=1, max_length=80)  # "Results hidden"
+    message: str = Field(min_length=1, max_length=300)
+
+
 SuggestionCategory = Literal["games", "stats", "series", "postseason"]
 
 
@@ -451,6 +525,7 @@ class AskResponse(ContractModel):
     result: AskResult | None = None
     clarification: Clarification | None = None
     notice: Notice | None = None
+    spoiler_gate: SpoilerGate | None = None
     links: list[VerifiedLink] = Field(default_factory=list, max_length=6)
     suggestions: list[Suggestion] = Field(default_factory=list, max_length=4)
     sources: list[SourceMetadata] = Field(default_factory=list, max_length=4)
@@ -478,6 +553,8 @@ class AskResponse(ContractModel):
                 raise ValueError("result kind does not match interpretation intent")
         if o == "unsupported" and (self.notice is None or self.notice.unsupported_reason is None):
             raise ValueError("unsupported needs notice.unsupported_reason")
+        if self.spoiler_gate is not None and o not in ("answer", "not_found"):
+            raise ValueError("spoiler_gate applies only to answer and not_found")
         return self
 
 
@@ -494,7 +571,7 @@ class SuggestGame(ContractModel):
     away: TeamRef
     home: TeamRef
     label: str = Field(max_length=120)  # "NYK @ BOS · Sun, Feb 23"
-    href: str = Field(pattern=INTERNAL_LINK_PATTERN)
+    link: VerifiedLink
 
 
 class SuggestEntity(ContractModel):

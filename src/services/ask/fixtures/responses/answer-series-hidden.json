@@ -8,14 +8,26 @@
     "detected_type": "series",
     "items": [
       {
-        "field": "series",
-        "value": "DET vs ORL",
-        "detail": null,
-        "expression": "pistons, magic",
+        "field": "team",
+        "value": "Detroit Pistons",
+        "detail": "DET",
+        "expression": "pistons",
         "origin": "question",
         "status": "resolved",
         "match_count": null,
-        "team_id": null,
+        "team_id": 1610612765,
+        "player_id": null,
+        "spoiler": false
+      },
+      {
+        "field": "team",
+        "value": "Orlando Magic",
+        "detail": "ORL",
+        "expression": "magic",
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": 1610612753,
         "player_id": null,
         "spoiler": false
       },
@@ -110,7 +122,7 @@
             "gameStatus": 3,
             "gameLabel": "East First Round",
             "gameSubLabel": "",
-            "gameTimeUTC": "2026-04-19T00:30:00Z",
+            "gameTimeUTC": "2026-04-20T00:30:00Z",
             "gameStatusText": "Final",
             "ifNecessary": false,
             "seriesGameNumber": "Game 1",
@@ -135,7 +147,8 @@
           "spoilers": {
             "score": true,
             "status_text": true,
-            "series_text": true
+            "series_text": true,
+            "labels": true
           },
           "links": [
             {
@@ -145,7 +158,8 @@
               "external": false,
               "spoiler": false
             }
-          ]
+          ],
+          "spoiler": false
         },
         {
           "date": "2026-04-22",
@@ -155,7 +169,7 @@
             "gameStatus": 3,
             "gameLabel": "East First Round",
             "gameSubLabel": "",
-            "gameTimeUTC": "2026-04-22T00:30:00Z",
+            "gameTimeUTC": "2026-04-23T00:30:00Z",
             "gameStatusText": "Final",
             "ifNecessary": false,
             "seriesGameNumber": "Game 2",
@@ -180,7 +194,8 @@
           "spoilers": {
             "score": true,
             "status_text": true,
-            "series_text": true
+            "series_text": true,
+            "labels": true
           },
           "links": [
             {
@@ -190,7 +205,8 @@
               "external": false,
               "spoiler": false
             }
-          ]
+          ],
+          "spoiler": false
         }
       ],
       "spoiler": true
@@ -198,11 +214,12 @@
   },
   "clarification": null,
   "notice": null,
+  "spoiler_gate": null,
   "links": [
     {
       "kind": "playoff_series",
       "label": "Open series",
-      "href": "/playoffs/2026/east-first-round-det-orl",
+      "href": "/playoffs/2026/east-conference-first-round-1",
       "external": false,
       "spoiler": false
     }
