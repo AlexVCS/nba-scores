@@ -34,15 +34,18 @@ INTENTS: dict[str, str] = {
         "its entity field must be no_matching_candidate."
     ),
     "playoff_series": (
-        "The result or status of one playoff series or a specified playoff round, "
-        "even if its teams or round need clarification (e.g. 'Who won the 2023 "
-        "Finals?', 'Celtics vs Heat 2022 series', '2024 conference finals')."
+        "A request framed as a playoff series, matchup, or particular round. "
+        "It stays this intent when only a season or one team is given; the missing "
+        "round or opponent requires clarification. 'Series' alone, singular or "
+        "plural, does not ask for every series (e.g. 'Who won the Finals?', "
+        "'a team's playoff series', 'conference finals')."
     ),
     "postseason_summary": (
-        "A whole postseason tournament, or one team's overall run through it "
-        "(e.g. '2016 playoffs', 'How did the Nuggets do in the 2023 playoffs?'). "
-        "A request for a particular series belongs to playoff_series even when "
-        "the requested series is underspecified."
+        "An explicitly whole postseason tournament, all/every series, or one "
+        "team's overall playoff run (e.g. '2016 playoffs', 'Show every 2024 "
+        "playoff series', 'How did the Nuggets do in the 2023 playoffs?'). "
+        "One named team does not imply whole-run scope when the request is "
+        "framed as a series."
     ),
     UNSUPPORTED_INTENT: (
         "Anything else: career or season-long statistics, season leaders, standings or "

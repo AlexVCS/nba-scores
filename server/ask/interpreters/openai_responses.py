@@ -72,11 +72,15 @@ Field rules (every field has a status and a list of IDs/values):
   player or teams field no_matching_candidate so the app can ask the user.
 - A game-search date range longer than seven days is still game_search. Select the
   date candidate even if its range is unresolved; Python asks the user to narrow it.
-- Choose playoff_series when the user asks about a particular series, matchup, or
-  round, even if its participants or round are missing. Leave those fields absent
-  so Python can clarify. Choose postseason_summary only when the user asks about
-  the whole playoff tournament or a team's overall run through it. Do not widen
-  a specific series request into a postseason summary to satisfy required fields.
+- Choose playoff_series when the request is framed as a series, matchup, or
+  particular round, even if it says only a season or one team and does not yet
+  identify which series. Singular or plural "series" alone does not mean all
+  rounds; leave the unspecified round or opponent absent for clarification.
+  Naming one team does not turn a series request into that team's whole run.
+  Choose postseason_summary when the user explicitly asks for the whole
+  tournament, all/every series, or a team's overall playoff run (for example,
+  "how did they do in the playoffs?"). Do not widen an underspecified series
+  request into a postseason summary just to satisfy required fields.
 - A leader question tied to one date or game is boxscore_stat with stat_scope
   "leaders", even without a team. Several games on that date are resolved from
   data and may require a teams clarification. Reserve season_leaders for a
