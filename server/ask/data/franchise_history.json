@@ -1,0 +1,95 @@
+{
+  "_comment": "Dated NBA franchise name records keyed by current NBA team ID. first_season/last_season are season start years (1967 = 1967-68); last_season null means the name is in use today. Only franchises that still exist are listed. Defunct franchises (for example the 1947-1955 Baltimore Bullets) are intentionally absent so they can never resolve to a current franchise. The 1988-2002 Charlotte Hornets history belongs to the Charlotte franchise (NBA reassignment, 2014). Source: NBA.com franchise histories.",
+  "franchises": [
+    {"team_id": 1610612737, "names": [
+      {"city": "Tri-Cities", "nickname": "Blackhawks", "abbreviation": "TRI", "first_season": 1949, "last_season": 1950},
+      {"city": "Milwaukee", "nickname": "Hawks", "abbreviation": "MLH", "first_season": 1951, "last_season": 1954},
+      {"city": "St. Louis", "nickname": "Hawks", "abbreviation": "STL", "first_season": 1955, "last_season": 1967},
+      {"city": "Atlanta", "nickname": "Hawks", "abbreviation": "ATL", "first_season": 1968, "last_season": null}]},
+    {"team_id": 1610612738, "names": [
+      {"city": "Boston", "nickname": "Celtics", "abbreviation": "BOS", "first_season": 1946, "last_season": null}]},
+    {"team_id": 1610612739, "names": [
+      {"city": "Cleveland", "nickname": "Cavaliers", "abbreviation": "CLE", "first_season": 1970, "last_season": null}]},
+    {"team_id": 1610612740, "names": [
+      {"city": "New Orleans", "nickname": "Hornets", "abbreviation": "NOH", "first_season": 2002, "last_season": 2004},
+      {"city": "New Orleans/Oklahoma City", "nickname": "Hornets", "abbreviation": "NOK", "first_season": 2005, "last_season": 2006},
+      {"city": "New Orleans", "nickname": "Hornets", "abbreviation": "NOH", "first_season": 2007, "last_season": 2012},
+      {"city": "New Orleans", "nickname": "Pelicans", "abbreviation": "NOP", "first_season": 2013, "last_season": null}]},
+    {"team_id": 1610612741, "names": [
+      {"city": "Chicago", "nickname": "Bulls", "abbreviation": "CHI", "first_season": 1966, "last_season": null}]},
+    {"team_id": 1610612742, "names": [
+      {"city": "Dallas", "nickname": "Mavericks", "abbreviation": "DAL", "first_season": 1980, "last_season": null}]},
+    {"team_id": 1610612743, "names": [
+      {"city": "Denver", "nickname": "Nuggets", "abbreviation": "DEN", "first_season": 1976, "last_season": null}]},
+    {"team_id": 1610612744, "names": [
+      {"city": "Philadelphia", "nickname": "Warriors", "abbreviation": "PHW", "first_season": 1946, "last_season": 1961},
+      {"city": "San Francisco", "nickname": "Warriors", "abbreviation": "SFW", "first_season": 1962, "last_season": 1970},
+      {"city": "Golden State", "nickname": "Warriors", "abbreviation": "GSW", "first_season": 1971, "last_season": null}]},
+    {"team_id": 1610612745, "names": [
+      {"city": "San Diego", "nickname": "Rockets", "abbreviation": "SDR", "first_season": 1967, "last_season": 1970},
+      {"city": "Houston", "nickname": "Rockets", "abbreviation": "HOU", "first_season": 1971, "last_season": null}]},
+    {"team_id": 1610612746, "names": [
+      {"city": "Buffalo", "nickname": "Braves", "abbreviation": "BUF", "first_season": 1970, "last_season": 1977},
+      {"city": "San Diego", "nickname": "Clippers", "abbreviation": "SDC", "first_season": 1978, "last_season": 1983},
+      {"city": "Los Angeles", "nickname": "Clippers", "abbreviation": "LAC", "first_season": 1984, "last_season": null}]},
+    {"team_id": 1610612747, "names": [
+      {"city": "Minneapolis", "nickname": "Lakers", "abbreviation": "MNL", "first_season": 1948, "last_season": 1959},
+      {"city": "Los Angeles", "nickname": "Lakers", "abbreviation": "LAL", "first_season": 1960, "last_season": null}]},
+    {"team_id": 1610612748, "names": [
+      {"city": "Miami", "nickname": "Heat", "abbreviation": "MIA", "first_season": 1988, "last_season": null}]},
+    {"team_id": 1610612749, "names": [
+      {"city": "Milwaukee", "nickname": "Bucks", "abbreviation": "MIL", "first_season": 1968, "last_season": null}]},
+    {"team_id": 1610612750, "names": [
+      {"city": "Minnesota", "nickname": "Timberwolves", "abbreviation": "MIN", "first_season": 1989, "last_season": null}]},
+    {"team_id": 1610612751, "names": [
+      {"city": "New York", "nickname": "Nets", "abbreviation": "NYN", "first_season": 1976, "last_season": 1976},
+      {"city": "New Jersey", "nickname": "Nets", "abbreviation": "NJN", "first_season": 1977, "last_season": 2011},
+      {"city": "Brooklyn", "nickname": "Nets", "abbreviation": "BKN", "first_season": 2012, "last_season": null}]},
+    {"team_id": 1610612752, "names": [
+      {"city": "New York", "nickname": "Knicks", "abbreviation": "NYK", "first_season": 1946, "last_season": null}]},
+    {"team_id": 1610612753, "names": [
+      {"city": "Orlando", "nickname": "Magic", "abbreviation": "ORL", "first_season": 1989, "last_season": null}]},
+    {"team_id": 1610612754, "names": [
+      {"city": "Indiana", "nickname": "Pacers", "abbreviation": "IND", "first_season": 1976, "last_season": null}]},
+    {"team_id": 1610612755, "names": [
+      {"city": "Syracuse", "nickname": "Nationals", "abbreviation": "SYR", "first_season": 1949, "last_season": 1962},
+      {"city": "Philadelphia", "nickname": "76ers", "abbreviation": "PHI", "first_season": 1963, "last_season": null}]},
+    {"team_id": 1610612756, "names": [
+      {"city": "Phoenix", "nickname": "Suns", "abbreviation": "PHX", "first_season": 1968, "last_season": null}]},
+    {"team_id": 1610612757, "names": [
+      {"city": "Portland", "nickname": "Trail Blazers", "abbreviation": "POR", "first_season": 1970, "last_season": null}]},
+    {"team_id": 1610612758, "names": [
+      {"city": "Rochester", "nickname": "Royals", "abbreviation": "ROC", "first_season": 1948, "last_season": 1956},
+      {"city": "Cincinnati", "nickname": "Royals", "abbreviation": "CIN", "first_season": 1957, "last_season": 1971},
+      {"city": "Kansas City-Omaha", "nickname": "Kings", "abbreviation": "KCO", "first_season": 1972, "last_season": 1974},
+      {"city": "Kansas City", "nickname": "Kings", "abbreviation": "KCK", "first_season": 1975, "last_season": 1984},
+      {"city": "Sacramento", "nickname": "Kings", "abbreviation": "SAC", "first_season": 1985, "last_season": null}]},
+    {"team_id": 1610612759, "names": [
+      {"city": "San Antonio", "nickname": "Spurs", "abbreviation": "SAS", "first_season": 1976, "last_season": null}]},
+    {"team_id": 1610612760, "names": [
+      {"city": "Seattle", "nickname": "SuperSonics", "abbreviation": "SEA", "first_season": 1967, "last_season": 2007},
+      {"city": "Oklahoma City", "nickname": "Thunder", "abbreviation": "OKC", "first_season": 2008, "last_season": null}]},
+    {"team_id": 1610612761, "names": [
+      {"city": "Toronto", "nickname": "Raptors", "abbreviation": "TOR", "first_season": 1995, "last_season": null}]},
+    {"team_id": 1610612762, "names": [
+      {"city": "New Orleans", "nickname": "Jazz", "abbreviation": "NOJ", "first_season": 1974, "last_season": 1978},
+      {"city": "Utah", "nickname": "Jazz", "abbreviation": "UTA", "first_season": 1979, "last_season": null}]},
+    {"team_id": 1610612763, "names": [
+      {"city": "Vancouver", "nickname": "Grizzlies", "abbreviation": "VAN", "first_season": 1995, "last_season": 2000},
+      {"city": "Memphis", "nickname": "Grizzlies", "abbreviation": "MEM", "first_season": 2001, "last_season": null}]},
+    {"team_id": 1610612764, "names": [
+      {"city": "Chicago", "nickname": "Packers", "abbreviation": "CHP", "first_season": 1961, "last_season": 1961},
+      {"city": "Chicago", "nickname": "Zephyrs", "abbreviation": "CHZ", "first_season": 1962, "last_season": 1962},
+      {"city": "Baltimore", "nickname": "Bullets", "abbreviation": "BAL", "first_season": 1963, "last_season": 1972},
+      {"city": "Capital", "nickname": "Bullets", "abbreviation": "CAP", "first_season": 1973, "last_season": 1973},
+      {"city": "Washington", "nickname": "Bullets", "abbreviation": "WSB", "first_season": 1974, "last_season": 1996},
+      {"city": "Washington", "nickname": "Wizards", "abbreviation": "WAS", "first_season": 1997, "last_season": null}]},
+    {"team_id": 1610612765, "names": [
+      {"city": "Fort Wayne", "nickname": "Pistons", "abbreviation": "FTW", "first_season": 1948, "last_season": 1956},
+      {"city": "Detroit", "nickname": "Pistons", "abbreviation": "DET", "first_season": 1957, "last_season": null}]},
+    {"team_id": 1610612766, "names": [
+      {"city": "Charlotte", "nickname": "Hornets", "abbreviation": "CHH", "first_season": 1988, "last_season": 2001},
+      {"city": "Charlotte", "nickname": "Bobcats", "abbreviation": "CHA", "first_season": 2004, "last_season": 2013},
+      {"city": "Charlotte", "nickname": "Hornets", "abbreviation": "CHA", "first_season": 2014, "last_season": null}]}
+  ]
+}
