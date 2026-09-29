@@ -289,6 +289,11 @@ class Normalizer:
         season = self._value(candidates, season_ids[0]).season if season_ids else None
         round_value = self._value(candidates, round_ids[0]) if round_ids else None
         number = self._value(candidates, number_ids[0]).game_number if number_ids else None
+        # Page context identifies the game only when the question supplies no
+        # game selector of its own. Keep named teams so the resolver verifies
+        # that they participated in the contextual game.
+        if dates is None and not (season_ids or round_ids or number_ids) and context.game_id:
+            return GameSelector(game_id=context.game_id, teams=teams)
         if dates is not None:
             if dates.start != dates.end:
                 raise _Clarify("date", "ambiguous")  # a boxscore needs one day

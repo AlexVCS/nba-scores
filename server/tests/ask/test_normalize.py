@@ -77,6 +77,50 @@ def test_date_does_not_discard_named_playoff_game_constraints():
             result.request.game.game_number) == (dt.date(2024, 6, 9), "2023-24", "finals", 1)
 
 
+def test_boxscore_page_game_is_used_without_an_explicit_selector():
+    context = CONTEXT.model_copy(update={"route": "boxscore", "game_id": "0022400001"})
+    result = Normalizer().normalize(output(
+        sel("intent", "boxscore_stat"), sel("stat_scope", "player"),
+        sel("stat", "rebounds"), sel("player", TATUM.id),
+    ), b.lookup_result([TATUM]), context)
+    assert result.status == "valid"
+    assert result.request.game.game_id == "0022400001"
+
+
+def test_context_game_keeps_named_team_for_participant_verification():
+    context = CONTEXT.model_copy(update={"route": "boxscore", "game_id": "0022400001"})
+    result = Normalizer().normalize(output(
+        sel("intent", "boxscore_stat"), sel("stat_scope", "team"),
+        sel("stat", "rebounds"), sel("teams", CLE.id),
+    ), b.lookup_result([CLE]), context)
+    assert result.status == "valid"
+    assert result.request.game.game_id == "0022400001"
+    assert result.request.game.teams == [CLE.value.team]
+
+
+def test_explicit_game_selection_takes_priority_over_context_game():
+    context = CONTEXT.model_copy(update={"route": "boxscore", "game_id": "0022400001"})
+    game_day = b.date(2, "June 9, 2024", DateComponents(kind="calendar_date", year=2024, month=6, day=9),
+                      start=dt.date(2024, 6, 9), end=dt.date(2024, 6, 9))
+    cases = [
+        (output(sel("intent", "boxscore_stat"), sel("stat_scope", "player"), sel("player", TATUM.id),
+                sel("date", game_day.id)), b.lookup_result([TATUM, game_day]), "valid", "date"),
+        (output(sel("intent", "boxscore_stat"), sel("stat_scope", "player"), sel("player", TATUM.id),
+                sel("season", SEASON.id), sel("round", FINALS.id), sel("game_number", GAME_4.id)),
+         b.lookup_result([TATUM, SEASON, FINALS, GAME_4]), "valid", "season"),
+        (output(sel("intent", "boxscore_stat"), sel("stat_scope", "player"), sel("player", TATUM.id),
+                sel("round", FINALS.id)), b.lookup_result([TATUM, FINALS]), "needs_clarification", "season"),
+    ]
+    for interpreted, candidates, status, field in cases:
+        result = Normalizer().normalize(interpreted, candidates, context)
+        assert result.status == status
+        if status == "valid":
+            assert result.request.game.game_id is None
+            assert getattr(result.request.game, field) is not None
+        else:
+            assert result.clarify_field == field
+
+
 def test_dated_leader_with_no_team_remains_a_supported_boxscore_request():
     game_day = b.date(2, "February 12, 2023", DateComponents(kind="calendar_date", year=2023, month=2, day=12),
                       start=dt.date(2023, 2, 12), end=dt.date(2023, 2, 12))
