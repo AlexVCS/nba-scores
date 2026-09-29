@@ -15,6 +15,8 @@ The code is the source of truth; this document summarizes it.
 | Interpreter input/output, normalization result | `server/ask/models/interpreter.py` |
 | HTTP request/response (`POST /ask`, `GET /ask/suggest`) | `server/ask/models/response.py` |
 | Protocols (lookup, adapter, normalizer, cascade policy) | `server/ask/protocols.py` |
+| Tool registry and router options | `server/ask/tools.py` |
+| Cascade factory shared by the pipeline and the release evaluation | `server/ask/interpreters/factory.py` |
 | TypeScript mirror of the HTTP contract | `src/services/ask/types.ts` |
 | Fixture responses | `src/services/ask/fixtures/{responses,suggest}/*.json` |
 | Fixture loader for the UI | `src/services/ask/fixtures/index.ts` |
@@ -33,7 +35,7 @@ does not re-export anything.
 question + ClientContext
   -> [#201] resolution token / exact match / cache hit?  -> execute, zero model calls
   -> [#200] CandidateLookup.lookup()                      -> CandidateLookupResult
-  -> [#199] InterpreterAdapter.interpret()                -> InterpreterOutput
+  -> [#199] InterpreterAdapter.interpret()                -> InterpreterOutput (router Choice: a tool or unsupported)
   -> [#199] RequestNormalizer.normalize()                 -> NormalizationResult (AskRequest | clarify | unsupported | invalid)
   -> [#199] CascadePolicy.decide()                        -> accept | fallback | expand_candidates | clarify | unsupported | fail
   -> [#201] resolvers/calculators on AskRequest           -> AskResponse
@@ -43,6 +45,21 @@ question + ClientContext
 Every call is synchronous. The endpoint runs them in FastAPI's threadpool, as
 the existing NBA services do. None of these components may depend on an HTTP
 request object, so scripts and evaluations can call them directly.
+
+### Tools and the router
+
+Each intent is a registered tool (`server/ask/tools.py`, ADR 0001): a typed request
+model, the interpreter fields it reads, and a router description. The router is the
+`intent` Choice every interpreter answers, over the registered tools plus
+`unsupported`, in registry order. Interpreter prompts, the normalizer's
+`RELEVANT_FIELDS`, and the closed-set `INTENTS` options are all derived from the
+registry, and resolvers execute a validated request through `EXECUTORS`, keyed by
+tool name. `server/tests/ask/test_tools.py` fails unless the contract's `Intent`
+enum, the normalizer's builders, and the executors cover exactly the registered
+tools. A later family (ADR 0004) registers a tool here. Until it passes its gate,
+it stays unregistered, and the router reads it as `unsupported` (ADR 0010). The
+four stage 1 tools are the four intents below, with unchanged descriptions, so
+prompts and parse-cache keys are unchanged.
 
 ## 1. Normalized application request (`request.py`)
 
@@ -140,6 +157,16 @@ All adapters return `InterpreterOutput`:
 - `extracted_date` is optional. Only extraction-capable adapters (OpenAI) set
   it, and only when the date candidate set had no match. Python validates it,
   and it never overrides a selected date candidate.
+- For the cascade (`adapter="cascade"`), `metadata.field_tiers` maps each field
+  to the tier that decided it (`lookup`, `laya`, `jev`, `luna`, or `veto`).
+  `metadata.field_decisions` lists a `FieldDecision` per reported field:
+  `decided_by` (`None` when no tier decided the field), `confidence` (the deciding
+  read's native confidence, or the best pending read's confidence when undecided;
+  `None` for lookup, vetoes, and Luna), `outcome` (`accepted`, `escalated`,
+  `vetoed`, or `undecided`), and `reads`. `reads` lists each tier's read in order,
+  as `TierRead {tier, status, confidence, action}`, where `action` is `accepted`,
+  `escalated`, `vetoed`, or `unused`. An unsupported read has status
+  `unsupported`. The decisions carry no candidate values or question text.
 - `metadata` records the adapter, provider, pinned `model`, the provider-reported
   `resolved_model`, latency, and usage (tokens, calls, list-price cost). It
   holds no prompts or raw output.
@@ -346,7 +373,13 @@ Slugs are positional, so they do not name the teams. Do not use the
 - `sources` describe the data used: the source `name` and `label`, `fetched_at`,
   and `complete` (false while games or series are still in progress).
 - `interpreter` supports source-aware copy: `model_called`, `cache_hit`,
-  `adapter`, `model`, and `fallback_used`.
+  `adapter`, `model`, and `fallback_used`. It also has two development-only
+  detail fields, which a server fills only when it runs with `ASK_DEV=1`:
+  - `field_tiers` is the metadata map above. It is always `{}` in production.
+  - `field_decisions` is the per-field `FieldDecision` list above. It is omitted
+    from the JSON when empty, so production responses never have the key.
+    `src/services/ask/types.ts` does not mirror it yet. The key is optional and
+    additive, and the fixtures do not change.
 
 ### Spoiler rules
 

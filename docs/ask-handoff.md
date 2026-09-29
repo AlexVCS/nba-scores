@@ -18,6 +18,47 @@ and they take precedence over the earlier text below where the two conflict:
 - Next step is stage 1 of ADR 0010: the tool registry and router over the
   existing four intents, with Jev wired into the production adapter factory.
 
+## Stage 1 backend (branch `ask-stage1-cascade`)
+
+This branch implements the backend half of ADR 0010 step 1. It made no provider
+calls and ran no live evaluation. Production enablement is still off
+(`ASK_ENABLED`, `VITE_ASK_ENABLED`).
+
+- **Tool registry and router.** `server/ask/tools.py` registers the four intents
+  as `AskTool`s, each with a request model, the fields it reads, and a router
+  description. The router options (`closed_sets.INTENTS`), the normalizer's
+  `RELEVANT_FIELDS` and builders, and the resolver `EXECUTORS` all key off the
+  registry. `test_tools.py` checks that every layer covers every tool. The
+  descriptions and their order are unchanged, so the OpenAI instructions hash,
+  the Jev questions, and the parse-cache keys are identical.
+- **One cascade factory.** `server/ask/interpreters/factory.py` builds the
+  cascade (`build_cascade`) and its policy (`build_policy`) for both the live
+  pipeline and `scripts/ask/release.py`. `config.FROZEN_CASCADE` holds the
+  frozen settings: Jev `jev-1.13.0` at accept 0.85, then `gpt-6-luna` at low
+  effort, veto 0.5, a 20 s deadline, and no Laya. The `AskConfig` defaults equal
+  it. The existing `ASK_*` variables can still override it, but the factory
+  logs a warning naming each setting that differs.
+  - A missing `TYPESAFE_API_KEY` builds a Luna-only cascade, with a warning.
+  - A Jev call that fails is skipped by `TieredAdapter`, as in evaluation.
+  - Laya is built only when `ASK_DEV=1` *and* `LAYA_BASE_URL` is set (ADR 0007).
+- **Per-field diagnostics.** `InterpreterMetadata.field_decisions` records, for
+  each field:
+  - the deciding tier
+  - its confidence
+  - the outcome (`accepted`, `escalated`, `vetoed`, or `undecided`)
+  - every tier's read, with its action
+
+  The pipeline logs them on each interpretation at INFO (`ask cascade ...`).
+  The log line has enumerated metadata only: no question text, candidate
+  values, or keys. Responses carry `field_tiers` and `field_decisions` only
+  when the server runs with `ASK_DEV=1`. Production sends `field_tiers: {}`
+  and omits `field_decisions`. The dev preview backend now needs `ASK_DEV=1`
+  to show the "Decided by" row.
+- **Frontend follow-up.** `src/services/ask/types.ts` and `AskResponseDetails`
+  do not show `field_decisions` yet. This branch stayed out of `src/`.
+- **Release runner.** `release.py` still pins `FROZEN_COMMIT` `6cdae70`, so it
+  can't run from this branch until a new frozen commit is designated.
+
 GitHub issues were updated to match: #189 (parent), #199 (cascade), #200
 (lookup), #201 (tool registry and router), #202 (glossary only), #204 (leaders),
 #205 (UI), and new #207 (player season stats and team records), #208 (game-log
@@ -124,10 +165,8 @@ freeze both configurations, then compare on a new independent unseen set.
 The paired exposed 80-case comparison is recorded in
 `docs/verification/ask-jev-luna-regression-2026-09-29.json`. Jev scored 48/80 with
 zero guesses and a 173 ms median; Luna scored 67/80 with four guesses and a
-2,402 ms median. Neither passed. The production adapter factory currently
-instantiates OpenAI only; wiring Jev into the live pipeline requires code, not
-just changing `ASK_PARSER_MODEL`. This is implementation debt from the premature
-selection, not a model capability limitation. Do not launch more provider calls until checking the
+2,402 ms median. Neither passed. The live pipeline now builds the Jev, then
+Luna cascade through the shared factory (see "Stage 1 backend" above). Do not launch more provider calls until checking the
 remaining original $3 evaluation authorization and existing reports. Provider
 keys remain in the original workspace's server/.env; never print them.
 
