@@ -116,12 +116,6 @@ def _rewrite(question: str, candidate: Candidate) -> str | None:
     return rewritten if len(rewritten) <= MAX_QUESTION_LENGTH else None
 
 
-def _canonical_date_question(date_range: DateRange) -> str:
-    if date_range.start == date_range.end:
-        return f"Games on {date_range.start.isoformat()}?"
-    return f"Games from {date_range.start.isoformat()} to {date_range.end.isoformat()}?"
-
-
 def _candidate_options(field: str, reason: str, pending: PendingResolution) -> Iterable[Candidate]:
     lookup_field = "team" if field == "teams" else field
     if lookup_field not in pending.candidates.sets or reason == "no_matching_candidate":
@@ -171,24 +165,17 @@ def clarification(field: str, reason: str, question: str, pending: PendingResolu
             else:
                 continue
             expression = candidate.matched_text if candidate else None
-            if candidate and candidate.value.resolved and candidate.value.resolved.start.year != candidate.value.resolved.end.year:
+            match = re.search(re.escape(expression), question, re.IGNORECASE) if expression else None
+            if match is None:
+                # Without a known date span, a standalone games rewrite could
+                # silently discard the requested player, team, or stat.
+                continue
+            if candidate.value.resolved.start.year != candidate.value.resolved.end.year:
                 replacement = (f"{candidate.value.resolved.start.isoformat()} to "
                                f"{candidate.value.resolved.end.isoformat()}")
-                if expression and expression in question:
-                    rewritten = question.replace(expression, replacement, 1)
-                else:
-                    rewritten = _canonical_date_question(candidate.value.resolved)
-            elif candidate and expression and expression in question:
-                rewritten = question.replace(expression, f"{expression}, {year}", 1)
-            elif candidate and candidate.value.resolved:
-                rewritten = _canonical_date_question(candidate.value.resolved)
-            elif chosen.output.extracted_date is not None:
-                # Without a candidate span, retaining the original yearless
-                # phrase could create a second, contradictory date mention.
-                resolved_date = resolve_components(chosen.output.extracted_date, reference_date(chosen.context))
-                rewritten = _canonical_date_question(resolved_date)
             else:
-                continue
+                replacement = f"{expression}, {year}"
+            rewritten = question[:match.start()] + replacement + question[match.end():]
             if len(rewritten) > MAX_QUESTION_LENGTH:
                 overlong_rewrite = True
                 continue

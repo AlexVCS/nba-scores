@@ -110,7 +110,7 @@ def test_selected_unusable_date_is_not_offered_again(tmp_path):
 
 
 def test_cross_year_date_choice_rewrites_and_replays_the_exact_range(tmp_path):
-    question = "games between December 28 and January 3"
+    question = "Knicks games between December 28 and January 3"
     lookup = CandidateLookupService()
     initial = lookup.lookup(question, CONTEXT)
     candidate = initial.sets["date"].candidates[0]
@@ -123,6 +123,7 @@ def test_cross_year_date_choice_rewrites_and_replays_the_exact_range(tmp_path):
     result = clarification("date", "year_required", question, pending, store)
     choice = next(option for option in result.options if option.id == "year:2025")
     assert "2025-12-28 to 2026-01-03" in choice.question
+    assert choice.question.startswith("Knicks games ")
 
     reparsed = lookup.lookup(choice.question, CONTEXT).sets["date"].candidates
     [fresh_range] = [item.value.resolved for item in reparsed if item.value.resolved is not None]
@@ -134,8 +135,8 @@ def test_cross_year_date_choice_rewrites_and_replays_the_exact_range(tmp_path):
     assert (fresh_range.start, fresh_range.end) == (dt.date(2025, 12, 28), dt.date(2026, 1, 3))
 
 
-def test_extracted_cross_year_date_choice_uses_standalone_resolved_range(tmp_path):
-    question = "show games for the range"
+def test_year_choice_without_a_date_span_requires_edit_instead_of_dropping_constraints(tmp_path):
+    question = "Knicks games for the range"
     components = DateComponents(kind="calendar_range", month=12, day=28, end_month=1, end_day=3)
     pending = PendingResolution(
         output=InterpreterOutput(outcome="interpreted", fields=[selected("intent", "game_search")],
@@ -144,13 +145,8 @@ def test_extracted_cross_year_date_choice_uses_standalone_resolved_range(tmp_pat
     )
     result = clarification("date", "year_required", question, pending,
                           ResolutionStore(tmp_path / "resolution.sqlite3"))
-    choice = next(option for option in result.options if option.id == "year:2025")
-    assert choice.question == "Games from 2025-12-28 to 2026-01-03?"
-    assert "range" not in choice.question
-    lookup = CandidateLookupService()
-    [candidate] = lookup.lookup(choice.question, CONTEXT).sets["date"].candidates
-    assert candidate.value.resolved.start == dt.date(2025, 12, 28)
-    assert candidate.value.resolved.end == dt.date(2026, 1, 3)
+    assert result.options == []
+    assert "Edit your question" in result.hint
 
 
 def test_recent_player_record_notice_does_not_claim_permanent_absence():
