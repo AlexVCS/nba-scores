@@ -32,14 +32,14 @@ def _integer(name: str, default: int, *, minimum: int = 1) -> int:
     return value
 
 
-def _api_key() -> str | None:
-    if os.environ.get("OPENAI_API_KEY"):
-        return os.environ["OPENAI_API_KEY"]
+def _api_key(key: str = "OPENAI_API_KEY") -> str | None:
+    if os.environ.get(key):
+        return os.environ[key]
     path = _SERVER_DIR / ".env"
     try:
         for line in path.read_text(encoding="utf-8").splitlines():
             name, separator, value = line.partition("=")
-            if separator and name.strip().removeprefix("export ").strip() == "OPENAI_API_KEY":
+            if separator and name.strip().removeprefix("export ").strip() == key:
                 return value.strip().strip("\"'") or None
     except FileNotFoundError:
         pass
@@ -63,6 +63,16 @@ class AskConfig:
     per_worker_per_minute: int = 60
     max_in_flight: int = 2
     api_key: str | None = field(default=None, repr=False)
+    # Interpreter cascade (ADR 0002): Laya, then Jev, then Luna (`primary_model`).
+    # A tier without its URL or key is skipped. Laya stays unset in production until
+    # promoted (ADR 0007). Accept thresholds are UNCALIBRATED placeholders until #199.
+    laya_base_url: str | None = None
+    laya_model: str = "laya"
+    laya_accept_min: float = 0.9
+    jev_model: str = "jev-1.13.0"
+    jev_accept_min: float = 0.9
+    veto_min: float = 0.5
+    typesafe_api_key: str | None = field(default=None, repr=False)
 
     @classmethod
     def from_env(cls) -> AskConfig:
@@ -88,4 +98,11 @@ class AskConfig:
             per_worker_per_minute=_integer("ASK_WORKER_RATE_PER_MINUTE", 60),
             max_in_flight=_integer("ASK_MAX_IN_FLIGHT", 2),
             api_key=_api_key(),
+            laya_base_url=os.environ.get("LAYA_BASE_URL", "").strip() or None,
+            laya_model=os.environ.get("LAYA_MODEL", "laya").strip(),
+            laya_accept_min=_number("ASK_LAYA_ACCEPT_MIN", 0.9),
+            jev_model=os.environ.get("ASK_JEV_MODEL", "jev-1.13.0").strip(),
+            jev_accept_min=_number("ASK_JEV_ACCEPT_MIN", 0.9),
+            veto_min=_number("ASK_VETO_MIN", 0.5),
+            typesafe_api_key=_api_key("TYPESAFE_API_KEY"),
         )

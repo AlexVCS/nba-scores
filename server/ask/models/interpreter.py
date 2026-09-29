@@ -20,7 +20,7 @@ from .candidates import CandidateField, CandidateLookupResult
 from .common import ClarifyField, ClarifyReason, ContractModel, DateComponents
 from .request import AskContext, AskRequest
 
-AdapterName = Literal["jev", "openai_responses"]
+AdapterName = Literal["laya", "jev", "openai_responses", "cascade"]
 
 # Fields an interpreter fills. Candidate-backed fields ("player", "teams",
 # "date", "season", "round", "game_number") select candidate IDs; closed-set
@@ -124,6 +124,8 @@ class InterpreterMetadata(ContractModel):
     resolved_model: str | None = Field(default=None, max_length=80)  # version the provider reports
     latency_ms: int = Field(ge=0)
     usage: InterpreterUsage = Field(default_factory=InterpreterUsage)
+    # Cascade only: interpreter field -> tier ("laya", "jev", "luna") that decided it.
+    field_tiers: dict[InterpreterField, str] = Field(default_factory=dict)
 
 
 class InterpreterInput(ContractModel):

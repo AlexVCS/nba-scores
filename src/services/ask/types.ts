@@ -50,7 +50,7 @@ export type AskAggregation = "total" | "per_game";
 export type PlayoffRound = "first_round" | "conference_semifinals" | "conference_finals" | "finals";
 export type Conference = "east" | "west";
 export type AskAppRoute = "scores" | "boxscore" | "playoffs" | "series" | "other";
-export type AskAdapterName = "jev" | "openai_responses";
+export type AskAdapterName = "laya" | "jev" | "openai_responses" | "cascade";
 export type AskUnsupportedReason =
   | "career_stats"
   | "season_stats"
@@ -141,6 +141,7 @@ export interface AskInterpreterInfo {
   adapter: AskAdapterName | null;
   model: string | null;
   fallback_used: boolean;
+  field_tiers?: Record<string, string>;
 }
 
 // ---------------------------------------------------------------- interpretation

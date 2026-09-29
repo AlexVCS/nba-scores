@@ -284,7 +284,7 @@ class JevAdapter:
 
     def _metadata(self, started: float, resolved: str | None = None, usage: InterpreterUsage | None = None):
         return InterpreterMetadata(
-            adapter="jev",
+            adapter=self.name,
             provider=self.provider,
             model=self.model,
             resolved_model=resolved,

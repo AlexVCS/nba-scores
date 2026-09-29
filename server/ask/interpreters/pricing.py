@@ -26,7 +26,13 @@ PRICES: dict[str, Price] = {
 }
 
 
+# Laya runs locally (ADR 0007), so every Laya checkpoint is free.
+LAYA_PRICE = Price(input=0.0, output=0.0)
+
+
 def price_for(model: str) -> Price:
+    if model.startswith("laya"):
+        return LAYA_PRICE
     try:
         return PRICES[model]
     except KeyError:

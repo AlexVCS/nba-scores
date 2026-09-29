@@ -140,6 +140,8 @@ class InterpreterInfo(ContractModel):
     adapter: AdapterName | None = None
     model: str | None = Field(default=None, max_length=80)
     fallback_used: bool = False
+    # Cascade only: interpreter field -> tier that decided it (ADR 0002).
+    field_tiers: dict[str, str] = Field(default_factory=dict)
 
 
 # --------------------------------------------------------------------------

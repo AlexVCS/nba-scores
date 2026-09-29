@@ -373,6 +373,7 @@
     "cache_hit": false,
     "adapter": "jev",
     "model": "jev-1.13.0",
-    "fallback_used": false
+    "fallback_used": false,
+    "field_tiers": {}
   }
 }
