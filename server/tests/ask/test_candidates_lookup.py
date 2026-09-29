@@ -235,3 +235,9 @@ def test_in_era_or_team_worded_names_stay_teams(service):
     assert worded.sets["player"].status == "not_mentioned"
     multiword = lookup(service, "Seattle SuperSonics games on Jan 3, 2020")
     assert multiword.sets["player"].status == "not_mentioned"
+
+
+def test_dismissed_page_date_is_not_offered(service):
+    result = lookup(service, "Ignore the date on my screen and list yesterday's games",
+                    route="scores", view_date=dt.date(2023, 1, 9))
+    assert [c.source for c in result.sets["date"].candidates] == ["date_parser"]

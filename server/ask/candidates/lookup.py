@@ -266,6 +266,10 @@ _THAT_DAY = re.compile(
     r"(?![a-z])"
     r"|\b(?:the\s+)?(?:selected|shown|displayed|open|on-?screen)\s+(?:day|date)\b"
 )
+_DISMISSED = re.compile(
+    r"\b(?:forget|ignore|disregard|skip|not|never\s+mind|instead\s+of|rather\s+than|other\s+than|besides)"
+    r"(?:\s+about)?\s+$"
+)
 _ON_SCREEN_SEASON = re.compile(r"\b(?:this|that|these|those)\s+(?:series|bracket|playoffs?|postseason)\b")
 
 
@@ -274,6 +278,10 @@ def _context_mentions(folded: str, masked: str, question: str, context: AskConte
     """Candidates from the page the user is on, only when the question points at it."""
     out = []
     for m in _THAT_DAY.finditer(masked):
+        if _DISMISSED.search(folded[:m.start()]):
+            # "Forget the date on this page": the user sets the page aside.
+            masked = patterns._mask(masked, m.start(), m.end())
+            continue
         hits = []
         if context.view_date is not None:
             d = context.view_date
