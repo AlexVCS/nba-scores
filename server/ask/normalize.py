@@ -101,7 +101,9 @@ def resolve_components(parts: DateComponents, today: dt.date) -> DateRange | str
             if parts.kind == "calendar_date":
                 end = start
             else:
-                end_year = parts.end_year if parts.end_year is not None else start_year
+                end_year = parts.end_year if parts.end_year is not None else start_year + (
+                    1 if parts.year is not None and parts.end_month < parts.month else 0
+                )
                 end = dt.date(end_year, parts.end_month, parts.end_day)
     except (TypeError, ValueError):
         return "invalid_date"
@@ -194,6 +196,8 @@ class Normalizer:
             return f.selected
         if f.status == "absent":
             return []
+        if name == "aggregation":
+            raise _Invalid(f"aggregation: unresolved {f.status} value")
         # The user said something we cannot pin down: dropping it would change the question.
         raise _Clarify(name, f.status)
 

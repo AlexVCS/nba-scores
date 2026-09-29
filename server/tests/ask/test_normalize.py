@@ -171,6 +171,17 @@ def test_per_game_is_unsupported_not_answered_as_total():
     assert result.status == "unsupported" and result.unsupported_reason == "multi_game_average"
 
 
+@pytest.mark.parametrize("status", ["ambiguous", "no_matching_candidate"])
+def test_unresolved_aggregation_returns_invalid_without_defaulting(status):
+    aggregation = FieldInterpretation(field="aggregation", status=status,
+                                      alternatives=["total", "per_game"] if status == "ambiguous" else [])
+    result = normalize(output(sel("intent", "boxscore_stat"), sel("stat_scope", "player"),
+                              sel("stat", "points"), sel("player", TATUM.id), aggregation),
+                       b.lookup_result([TATUM]))
+    assert result.status == "invalid"
+    assert result.errors and "aggregation" in result.errors[0]
+
+
 @pytest.mark.parametrize("stat", ["field_goal_percentage", "three_point_percentage", "free_throw_percentage", "stat_line"])
 def test_leader_stat_without_ranking_rule_is_unsupported(stat):
     result = normalize(output(sel("intent", "boxscore_stat"), sel("stat_scope", "leaders"),
@@ -283,6 +294,11 @@ def test_calendar_resolution_edge_cases():
     assert resolve_components(long, TUESDAY) == "range_too_long"
     impossible = DateComponents(kind="calendar_date", year=2025, month=2, day=30)
     assert resolve_components(impossible, TUESDAY) == "invalid_date"
+
+
+def test_calendar_range_year_choice_rolls_end_year_at_new_year():
+    rng = DateComponents(kind="calendar_range", year=2025, month=12, day=28, end_month=1, end_day=3)
+    assert resolve_components(rng, TUESDAY) == DateRange(start=dt.date(2025, 12, 28), end=dt.date(2026, 1, 3))
 
 
 def test_reference_time_is_converted_to_new_york():

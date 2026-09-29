@@ -14,7 +14,7 @@ from pathlib import Path
 from server.ask.models.candidates import CandidateLookupResult, DateCandidateValue
 from server.ask.models.interpreter import FieldInterpretation, InterpreterOutput
 from server.ask.models.request import AskContext
-from server.ask.normalize import resolve_components
+from server.ask.normalize import reference_date, resolve_components
 
 
 def _digest(value: str) -> str:
@@ -113,7 +113,7 @@ def choose(pending: PendingResolution, field: str, candidate_id: str | None = No
                 if candidate.value.kind != "date" or candidate.value.components.year is not None:
                     raise ValueError("Date does not need a year")
                 parts = candidate.value.components.model_copy(update={"year": year})
-                resolved = resolve_components(parts, pending.context.reference_time.date())
+                resolved = resolve_components(parts, reference_date(pending.context))
                 value = DateCandidateValue(components=parts, resolved=resolved if not isinstance(resolved, str) else None,
                                            unresolved_reason=resolved if isinstance(resolved, str) else None)
                 amended.append(candidate.model_copy(update={"value": value}))

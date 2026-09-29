@@ -13,6 +13,7 @@ from server.ask.models.request import AskContext, AskRequest, BoxscoreStatReques
 from server.ask.models.response import (
     Clarification, ClarificationOption, Interpretation, InterpretationItem, Notice, Suggestion,
 )
+from server.ask.normalize import reference_date, resolve_components
 from server.ask.resolution import PendingResolution, ResolutionStore, choose
 
 
@@ -118,9 +119,24 @@ def _candidate_options(field: str, reason: str, pending: PendingResolution) -> I
     if lookup_field not in pending.candidates.sets or reason == "no_matching_candidate":
         return []
     field_result = pending.output.get_field(field)
-    ids = field_result.alternatives if field_result and field_result.status == "ambiguous" else []
+    if field_result and field_result.status == "ambiguous":
+        ids = field_result.alternatives
+    elif field_result is None or field_result.status == "absent":
+        ids = []
+    else:
+        return []
     source = pending.candidates.sets[lookup_field].candidates
-    return [candidate for candidate in source if not ids or candidate.id in ids][:9]
+    if field == "teams" and field_result and field_result.status == "ambiguous":
+        alternative_spans = {candidate.span for candidate in source if candidate.id in ids}
+        all_spans = {candidate.span for candidate in source}
+        # The field schema cannot say whether another named team is a positive
+        # participant, a correction, or a negation. Token choices are safe only
+        # when this is one ambiguous mention and no other team mention exists.
+        if len(alternative_spans) != 1 or None in alternative_spans or all_spans != alternative_spans:
+            return []
+    selected_ids = set(field_result.selected if field_result and field_result.status == "selected" else [])
+    return [candidate for candidate in source if candidate.id not in selected_ids
+            and (not ids or candidate.id in ids)][:9]
 
 
 def clarification(field: str, reason: str, question: str, pending: PendingResolution,
@@ -137,6 +153,15 @@ def clarification(field: str, reason: str, question: str, pending: PendingResolu
                 continue
             candidate = next((c for c in chosen.candidates.sets["date"].candidates
                               if c.id in (pending.output.get_field("date").selected if pending.output.get_field("date") else [])), None)
+            if candidate is not None:
+                if candidate.value.resolved is None:
+                    continue
+            elif chosen.output.extracted_date is not None:
+                resolved_date = resolve_components(chosen.output.extracted_date, reference_date(chosen.context))
+                if not isinstance(resolved_date, DateRange):
+                    continue
+            else:
+                continue
             expression = candidate.matched_text if candidate else None
             if expression and expression in question:
                 rewritten = question.replace(expression, f"{expression}, {year}", 1)
@@ -171,4 +196,20 @@ def clarification(field: str, reason: str, question: str, pending: PendingResolu
         prompt = "Which year?"
     hint = ("Shorten your question, then add a more specific name or date." if overlong_rewrite
             else "Edit your question to include a more specific name or date.") if not options else None
+    if not options and field == "teams" and reason == "ambiguous":
+        scope = pending.output.get_field("stat_scope")
+        if scope and scope.status == "selected" and scope.selected == ["team"]:
+            hint = "Edit your question to name the team whose stat you want."
+        else:
+            hint = "Edit your question to make clear which teams you mean."
+    if not options and field == "date" and reason in {"year_required", "range_too_long", "ambiguous"}:
+        intent = pending.output.get_field("intent")
+        if intent and intent.status == "selected" and intent.selected == ["boxscore_stat"]:
+            prompt = "Which game date?"
+            hint = ("Shorten your question, then name one game date." if overlong_rewrite
+                    else "Edit your question to name one game date.")
+        else:
+            prompt = "Choose a specific game date"
+            hint = ("Shorten your question, then name one date or a range of up to seven days." if overlong_rewrite
+                    else "Edit your question to name one date or a range of up to seven days.")
     return Clarification(field=field, reason=reason, prompt=prompt, options=options[:9], hint=hint)
