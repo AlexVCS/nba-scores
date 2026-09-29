@@ -52,6 +52,27 @@ beforeEach(() => {
   vi.mocked(getLastMatchups).mockResolvedValue({games: []});
 });
 
+describe("stat event links", () => {
+  it("exposes the boxscore's statEvents and defaults to null when absent", async () => {
+    const statEvents = {season: "2025-26", seasonType: "Regular Season", endRange: 28800, measures: {FGM: 3, AST: 1}};
+    vi.mocked(getBoxScores).mockResolvedValue({game, statEvents});
+    const first = setup();
+    const {result, unmount} = renderHook(useBoxscorePage, {wrapper: first.wrapper});
+    await waitFor(() => expect(result.current.game).toBeDefined());
+    expect(result.current.statEvents).toEqual(statEvents);
+    unmount();
+    first.client.clear();
+
+    vi.mocked(getBoxScores).mockResolvedValue({game});
+    const second = setup();
+    const view = renderHook(useBoxscorePage, {wrapper: second.wrapper});
+    await waitFor(() => expect(view.result.current.game).toBeDefined());
+    expect(view.result.current.statEvents).toBeNull();
+    view.unmount();
+    second.client.clear();
+  });
+});
+
 describe("optional inactive players", () => {
   it("returns scores while pending, then merges by team without changing the cache", async () => {
     let resolve!: (value: InactivePlayersResponse) => void;

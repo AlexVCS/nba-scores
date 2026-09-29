@@ -7,6 +7,7 @@ import {useResultsVisibility} from "@/hooks/useResultsVisibility";
 import {isValidDateParam} from "@/helpers/dateParam";
 import type {GameData, GameSummaryData, GameSummaryTeam, Player} from "@/helpers/helpers";
 import type {GameDetails, InactivePlayer} from "@/services/nbaService";
+import type {StatEvents} from "@/helpers/statEventUrl";
 import {getBoxScores, getGameDetails, getGameSummary, getInactivePlayers, getLastMatchups} from "@/services/nbaService";
 
 // Team-level totals from the box score endpoint. Every field beyond `points`
@@ -55,6 +56,8 @@ export interface DesignBoxscoreGame {
 
 interface BoxscoreResponse {
   game?: DesignBoxscoreGame;
+  // Linkable NBA.com event-page measures for this game, or null when none.
+  statEvents?: StatEvents | null;
 }
 
 const buildSummaryTeam = (team: DesignBoxscoreTeam): GameSummaryTeam => ({
@@ -219,6 +222,7 @@ export function useBoxscorePage() {
     scoresVisible,
     reveal: () => setVisit({...visit, revealed: true}),
     game,
+    statEvents: boxscoreGame ? boxscoreQuery.data?.statEvents ?? null : null,
     lastMatchups: isPregame ? lastMatchupsQuery.data?.games ?? [] : [],
     lastMatchupsLoading: isPregame && lastMatchupsQuery.isLoading,
     summary: loadResults ? summaryQuery.data ?? fallbackSummary : null,

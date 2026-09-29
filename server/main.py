@@ -7,6 +7,7 @@ from fastapi import Depends, FastAPI, Header, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from requests.exceptions import RequestException
 from server.services import nba_stats_client
+from server.services.game_data import get_boxscore_with_stat_events
 from server.services.game_details import fetch_game_details
 from server.services.last_matchups import fetch_last_matchups
 from server.services.nba_stats_client import (
@@ -26,7 +27,6 @@ from .services.nba_schedule import (
 )
 from .models.schemas import GameDaysResponse, RecentGameDaysResponse
 from .services.game_summary import (
-    fetch_boxscoretraditional,
     fetch_inactive_players,
     fetch_bref_line_score,
     fetch_game_summary,
@@ -137,7 +137,8 @@ def get_last_matchups(
 @app.get("/games/{game_id}/boxscore")
 def get_game_boxscore(game_id: str):
     try:
-        return {"game": fetch_boxscoretraditional(game_id)}
+        game, stat_events = get_boxscore_with_stat_events(game_id)
+        return {"game": game, "statEvents": stat_events}
     except (UpstreamUnavailableError, UpstreamBadResponseError) as e:
         raise_upstream_http(e)
     except ValueError as e:

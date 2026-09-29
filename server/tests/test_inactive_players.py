@@ -16,7 +16,7 @@ def test_boxscore_does_not_request_inactive_players(monkeypatch):
                         lambda _: {"boxScoreTraditional": game})
     optional = Mock(side_effect=AssertionError("Optional lookup must not run"))
     monkeypatch.setattr(nba_stats_client, "fetch_boxscore_summary", optional)
-    assert main.get_game_boxscore("123") == {"game": game}
+    assert main.get_game_boxscore("123") == {"game": game, "statEvents": None}
     optional.assert_not_called()
 
 

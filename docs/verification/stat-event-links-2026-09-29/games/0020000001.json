@@ -1,0 +1,28 @@
+{
+  "gameId": "0020000001",
+  "retrievedAt": "2026-09-29",
+  "source": "https://www.nba.com/game/0020000001/box-score",
+  "observed": true,
+  "note": "2000-01 regular season, before shot charts; no links.",
+  "cellRule": "Measures under linked render as links when the value is positive; zero values and measures under unlinked stay plain text. Team totals use the same URL without PlayerID.",
+  "summaryInputs": {
+    "whStatus": 1,
+    "videoAvailableFlag": 0,
+    "overtimePeriods": 0
+  },
+  "statEvents": null,
+  "cells": {
+    "player": {
+      "linked": [],
+      "unlinked": ["MIN", "FGM", "FGA", "FG_PCT", "FG3M", "FG3A", "FG3_PCT", "FTM", "FTA", "FT_PCT", "OREB", "DREB", "REB", "AST", "STL", "BLK", "TOV", "PF", "PTS", "PLUS_MINUS"]
+    },
+    "team": {
+      "linked": [],
+      "unlinked": ["FGM", "FGA", "FG_PCT", "FG3M", "FG3A", "FG3_PCT", "FTM", "FTA", "FT_PCT", "OREB", "DREB", "REB", "AST", "STL", "BLK", "TOV", "PF", "PTS", "PLUS_MINUS"]
+    }
+  },
+  "urls": {
+    "player": [],
+    "team": []
+  }
+}

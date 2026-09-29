@@ -1,10 +1,12 @@
-import {useState} from "react";
+import {Fragment, useState} from "react";
 import type {CSSProperties} from "react";
 import {ChevronDown, ExternalLink} from "lucide-react";
 import PlayerHeadshot from "@/components/PlayerHeadshot";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import type {Player, PlayerStatistics} from "@/helpers/helpers";
 import {firstNameInitial, formatMinutesPlayed, formatPlayerNameLink} from "@/helpers/helpers";
+import type {StatEventMeasure, StatEvents} from "@/helpers/statEventUrl";
+import {statEventLabel, statEventUrl} from "@/helpers/statEventUrl";
 import type {DesignBoxscoreTeam, DesignTeamStatistics} from "../../hooks/useBoxscorePage";
 import {getActiveBoxscorePlayers} from "../../shared/inactivePlayerUtils";
 
@@ -19,10 +21,20 @@ type StatLine = Pick<
   | "freeThrowsMade" | "freeThrowsAttempted"
 >;
 
+// A value NBA.com can open as an event page. Shooting columns carry two parts
+// (made and attempted) that link separately around a plain dash.
+interface StatPart {
+  measure: StatEventMeasure;
+  value: (line: StatLine) => number;
+}
+
 interface FacetColumn {
   label: string;
   value: (line: StatLine) => string | number;
+  parts?: StatPart[];
 }
+
+const part = (measure: StatEventMeasure, value: (line: StatLine) => number): StatPart => ({measure, value});
 
 const playerName = (player: Player) => `${player.firstName} ${player.familyName}`;
 const shortPlayerName = (player: Player) => firstNameInitial(playerName(player));
@@ -67,16 +79,24 @@ const FACETS: Array<{id: Facet; label: string; columns: FacetColumn[]}> = [
     columns: [
       {label: "MIN", value: (s) => formatMinutesPlayed(s.minutes)},
       {label: "PTS", value: (s) => s.points},
-      {label: "REB", value: (s) => s.reboundsTotal},
-      {label: "AST", value: (s) => s.assists},
+      {label: "REB", value: (s) => s.reboundsTotal, parts: [part("REB", (s) => s.reboundsTotal)]},
+      {label: "AST", value: (s) => s.assists, parts: [part("AST", (s) => s.assists)]},
     ],
   },
   {
     id: "shooting",
     label: "Shooting",
     columns: [
-      {label: "FG", value: (s) => shots(s.fieldGoalsMade, s.fieldGoalsAttempted)},
-      {label: "3PT", value: (s) => shots(s.threePointersMade, s.threePointersAttempted)},
+      {
+        label: "FG",
+        value: (s) => shots(s.fieldGoalsMade, s.fieldGoalsAttempted),
+        parts: [part("FGM", (s) => s.fieldGoalsMade), part("FGA", (s) => s.fieldGoalsAttempted)],
+      },
+      {
+        label: "3PT",
+        value: (s) => shots(s.threePointersMade, s.threePointersAttempted),
+        parts: [part("FG3M", (s) => s.threePointersMade), part("FG3A", (s) => s.threePointersAttempted)],
+      },
       {label: "FT", value: (s) => shots(s.freeThrowsMade, s.freeThrowsAttempted)},
       {label: "PTS", value: (s) => s.points},
     ],
@@ -85,9 +105,9 @@ const FACETS: Array<{id: Facet; label: string; columns: FacetColumn[]}> = [
     id: "hustle",
     label: "Hustle",
     columns: [
-      {label: "STL", value: (s) => s.steals},
-      {label: "BLK", value: (s) => s.blocks},
-      {label: "TO", value: (s) => s.turnovers},
+      {label: "STL", value: (s) => s.steals, parts: [part("STL", (s) => s.steals)]},
+      {label: "BLK", value: (s) => s.blocks, parts: [part("BLK", (s) => s.blocks)]},
+      {label: "TO", value: (s) => s.turnovers, parts: [part("TOV", (s) => s.turnovers)]},
       {label: "+/-", value: (s) => signed(s.plusMinusPoints)},
     ],
   },
@@ -106,31 +126,112 @@ const WIDE_LEDGER_QUERY = "(min-width: 768px)";
 
 // Counters the collapsed row may already show, keyed by that row's column label.
 // The sheet only repeats a number when the current row layout hides it.
-const COUNTERS: Array<{column: string; label: string; value: (player: Player) => string | number}> = [
+interface Counter {
+  column?: string;
+  label: string;
+  value: (player: Player) => string | number;
+  measure?: StatEventMeasure;
+}
+
+const COUNTERS: Counter[] = [
   {column: "MIN", label: "Minutes", value: (p) => formatMinutesPlayed(p.statistics.minutes)},
   {column: "PTS", label: "Points", value: (p) => p.statistics.points},
-  {column: "AST", label: "Assists", value: (p) => p.statistics.assists},
-  {column: "STL", label: "Steals", value: (p) => p.statistics.steals},
-  {column: "BLK", label: "Blocks", value: (p) => p.statistics.blocks},
-  {column: "TO", label: "Turnovers", value: (p) => p.statistics.turnovers},
+  {column: "AST", label: "Assists", value: (p) => p.statistics.assists, measure: "AST"},
+  {column: "STL", label: "Steals", value: (p) => p.statistics.steals, measure: "STL"},
+  {column: "BLK", label: "Blocks", value: (p) => p.statistics.blocks, measure: "BLK"},
+  {column: "TO", label: "Turnovers", value: (p) => p.statistics.turnovers, measure: "TOV"},
   {column: "+/-", label: "Plus/minus", value: (p) => signed(p.statistics.plusMinusPoints)},
 ];
 
 const colLabel = "text-[8px] leading-none font-bold tracking-[.1em] text-hw-muted uppercase";
 
-function HardwoodStatSheet({player, shownColumns}: {player: Player; shownColumns: Set<string>}) {
+// Who a stat link points at: a player (with PlayerID) or a team total (without).
+interface StatLinkTarget {
+  gameId?: string;
+  statEvents?: StatEvents | null;
+  teamId: number;
+  subject: string;
+  personId?: number;
+}
+
+// Dotted accent underline from the ledger mockup. The links sit above the row's
+// full-width expansion button, so they opt back into pointer events.
+const statLinkClass =
+  "pointer-events-auto relative z-10 rounded-[3px] underline decoration-hw-accent decoration-dotted decoration-2 underline-offset-4 transition-colors duration-[120ms] hover:text-hw-accent-ink hover:decoration-solid focus-visible:bg-hw-accent focus-visible:text-hw-accent-contrast focus-visible:decoration-hw-accent-contrast focus-visible:outline-none motion-reduce:transition-none";
+
+// Ledger stat cells clip horizontally so a link's enlarged tap target (below)
+// never crosses into the neighbouring column: grid cells don't overlap, so
+// neither can targets in different columns. overflow-y stays visible, so the
+// vertical growth is kept. Chromium and WebKit ignore
+// overflow-clip-margin with single-axis clip, so an outside focus outline
+// would be cut off at the cell edge; the links show focus as a filled
+// highlight inside their own box instead.
+const statCellClass = "grid justify-items-end gap-[3px] overflow-x-clip";
+
+// Where a link sits: "made" is left of a shooting dash, "attempted" right of
+// it; "trailing" is a lone value flush against a ledger cell's right edge;
+// "single" is a lone value with room on both sides (the expanded sheet).
+type StatLinkEdge = "single" | "trailing" | "made" | "attempted";
+
+// Tap targets (WCAG 2.5.8): a single digit renders roughly 7x14px, so an
+// invisible ::after grows the hit area to at least 24x24 CSS px without moving
+// the text. min(0px, ...) only extends a side when the value is narrower or
+// shorter than 24px. In "4-8" the two links sit a dash apart, so their inner
+// sides reach only 0.12em into the dash (a hyphen is ~0.3em or wider), leaving
+// the dash's midpoint as a neutral strip; the full extra width goes outward.
+// Ledger values are right-aligned in clipped cells, so a trailing value grows
+// leftward only. A right-hand "attempted" value is boxed in by the dash and the
+// cell edge, so in the ledger it stays roughly its own width (plus 0.12em);
+// the column, not the target, is the limit there.
+const statTapTarget: Record<StatLinkEdge, string> = {
+  single: "after:inset-x-[min(0px,calc(50%_-_12px))]",
+  trailing: "after:right-0 after:left-[min(0px,calc(100%_-_24px))]",
+  made: "after:-right-[0.12em] after:left-[min(0px,calc(100%_+_0.12em_-_24px))]",
+  attempted: "after:-left-[0.12em] after:right-[min(0px,calc(100%_+_0.12em_-_24px))]",
+};
+const statTapTargetBase = "after:absolute after:inset-y-[min(0px,calc(50%_-_12px))] after:content-['']";
+
+function StatValue({value, measure, target, edge = "single"}: {value: number; measure: StatEventMeasure; target: StatLinkTarget; edge?: StatLinkEdge}) {
+  const {gameId, statEvents, teamId, personId, subject} = target;
+  const href = gameId ? statEventUrl({statEvents, gameId, teamId, personId, measure, value}) : null;
+  if (!href) return <>{value}</>;
+  return (
+    <a className={`${statLinkClass} ${statTapTargetBase} ${statTapTarget[edge]}`} href={href} target="_blank" rel="noopener noreferrer" aria-label={statEventLabel(subject, measure)}>
+      {value}
+    </a>
+  );
+}
+
+const partEdge = (index: number, count: number): StatLinkEdge => (count < 2 ? "trailing" : index === 0 ? "made" : "attempted");
+
+function ColumnValue({column, line, target}: {column: FacetColumn; line: StatLine; target: StatLinkTarget}) {
+  if (!column.parts) return <>{column.value(line)}</>;
+  const count = column.parts.length;
+  return (
+    <>
+      {column.parts.map((stat, index) => (
+        <Fragment key={stat.measure}>
+          {index > 0 && "-"}
+          <StatValue value={stat.value(line)} measure={stat.measure} target={target} edge={partEdge(index, count)} />
+        </Fragment>
+      ))}
+    </>
+  );
+}
+
+function HardwoodStatSheet({player, shownColumns, target}: {player: Player; shownColumns: Set<string>; target: StatLinkTarget}) {
   const s = player.statistics;
-  const shooting = [
-    {label: "Field goals", made: s.fieldGoalsMade, attempted: s.fieldGoalsAttempted, percentage: s.fieldGoalsPercentage},
-    {label: "Three pointers", made: s.threePointersMade, attempted: s.threePointersAttempted, percentage: s.threePointersPercentage},
+  const shooting: Array<{label: string; made: number; attempted: number; percentage: number; measures?: [StatEventMeasure, StatEventMeasure]}> = [
+    {label: "Field goals", made: s.fieldGoalsMade, attempted: s.fieldGoalsAttempted, percentage: s.fieldGoalsPercentage, measures: ["FGM", "FGA"]},
+    {label: "Three pointers", made: s.threePointersMade, attempted: s.threePointersAttempted, percentage: s.threePointersPercentage, measures: ["FG3M", "FG3A"]},
     {label: "Free throws", made: s.freeThrowsMade, attempted: s.freeThrowsAttempted, percentage: s.freeThrowsPercentage},
   ];
   // Rebound splits and fouls never appear in the row, so they always lead the grid.
-  const counters = [
-    {label: "Off boards", value: () => s.reboundsOffensive},
-    {label: "Def boards", value: () => s.reboundsDefensive},
+  const counters: Counter[] = [
+    {label: "Off boards", value: () => s.reboundsOffensive, measure: "OREB"},
+    {label: "Def boards", value: () => s.reboundsDefensive, measure: "DREB"},
     {label: "Fouls", value: () => s.foulsPersonal},
-    ...COUNTERS.filter((counter) => !shownColumns.has(counter.column)),
+    ...COUNTERS.filter((counter) => !counter.column || !shownColumns.has(counter.column)),
   ];
 
   return (
@@ -140,7 +241,13 @@ function HardwoodStatSheet({player, shownColumns}: {player: Player; shownColumns
           <div key={row.label} className="grid grid-cols-[74px_auto_minmax(0,1fr)_34px] items-center gap-2 min-[700px]:grid-cols-[92px_auto_minmax(0,1fr)_38px] min-[700px]:gap-2.5">
             <dt className="text-[10px] font-semibold tracking-[.04em] text-hw-muted uppercase">{row.label}</dt>
             <dd className="contents">
-              <strong className="min-w-11 text-right text-xs font-bold tabular-nums">{shots(row.made, row.attempted)}</strong>
+              <strong className="min-w-11 text-right text-xs font-bold tabular-nums">
+                {row.measures ? (
+                  <>
+                    <StatValue value={row.made} measure={row.measures[0]} target={target} edge="made" />-<StatValue value={row.attempted} measure={row.measures[1]} target={target} edge="attempted" />
+                  </>
+                ) : shots(row.made, row.attempted)}
+              </strong>
               <span
                 className="relative h-1 overflow-hidden rounded-full bg-hw-ink/12 after:absolute after:inset-0 after:w-(--fill) after:origin-left after:rounded-full after:bg-hw-accent after:animate-hw-fill motion-reduce:after:animate-none"
                 style={{"--fill": `${Math.min(row.percentage, 1) * 100}%`} as CSSProperties}
@@ -155,7 +262,9 @@ function HardwoodStatSheet({player, shownColumns}: {player: Player; shownColumns
         {counters.map((counter) => (
           <div key={counter.label} className="grid flex-[1_1_96px] justify-items-center gap-1 bg-hw-surface-muted px-2 py-[9px] text-center">
             <dt className={colLabel}>{counter.label}</dt>
-            <dd className="m-0 text-sm leading-none font-bold tabular-nums">{counter.value(player)}</dd>
+            <dd className="m-0 text-sm leading-none font-bold tabular-nums">
+              {counter.measure ? <StatValue value={Number(counter.value(player))} measure={counter.measure} target={target} /> : counter.value(player)}
+            </dd>
           </div>
         ))}
       </dl>
@@ -174,6 +283,9 @@ function HardwoodStatSheet({player, shownColumns}: {player: Player; shownColumns
 interface HardwoodScorersBookProps {
   team: DesignBoxscoreTeam;
   comparison?: boolean;
+  gameId?: string;
+  // From the boxscore response; null or absent keeps every stat plain text.
+  statEvents?: StatEvents | null;
 }
 
 // Row tracks: [headshot] [name] [stat columns] [chevron]. The mobile facet always
@@ -186,7 +298,7 @@ const rowTracks = {
   comparison: "grid-cols-[28px_minmax(82px,1.9fr)_repeat(11,minmax(max-content,1fr))_12px]",
 };
 
-function HardwoodScorersBook({team, comparison = false}: HardwoodScorersBookProps) {
+function HardwoodScorersBook({team, comparison = false, gameId, statEvents = null}: HardwoodScorersBookProps) {
   const [facetId, setFacetId] = useState<Facet>("line");
   const [expanded, setExpanded] = useState<Set<number>>(new Set());
   const isWide = useMediaQuery(WIDE_LEDGER_QUERY);
@@ -199,6 +311,8 @@ function HardwoodScorersBook({team, comparison = false}: HardwoodScorersBookProp
   const benched = availablePlayers.filter((player) => !didPlay(player));
   const tracks = comparison ? rowTracks.comparison : rowTracks.stacked;
   const totals = teamTotals(team);
+  const teamTarget: StatLinkTarget = {gameId, statEvents, teamId: team.teamId, subject: `${team.teamCity} ${team.teamName}`};
+  const playerTarget = (player: Player): StatLinkTarget => ({...teamTarget, subject: playerName(player), personId: player.personId});
   const headshot = comparison
     ? "[&_figure]:contents [&_img]:block [&_img]:h-9 [&_img]:w-7 [&_img]:max-w-none [&_img]:object-contain"
     : "[&_figure]:contents [&_img]:block [&_img]:h-8 [&_img]:w-11 [&_img]:max-w-none [&_img]:object-contain max-[420px]:[&_img]:hidden min-[768px]:max-[1279px]:[&_img]:w-9";
@@ -253,33 +367,42 @@ function HardwoodScorersBook({team, comparison = false}: HardwoodScorersBookProp
         <ul className="m-0 flex flex-1 list-none flex-col p-0">
           {active.map((player) => {
             const isOpen = expanded.has(player.personId);
+            const target = playerTarget(player);
             return (
               <li key={player.personId} className={`border-b border-hw-line last:border-b-0 ${isOpen ? "bg-hw-surface-muted shadow-[inset_3px_0_0_var(--hw-accent)]" : ""}`}>
-                <button
-                  type="button"
-                  className={`group grid w-full cursor-pointer items-center border-0 bg-transparent text-left text-hw-ink transition-colors duration-[120ms] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-hw-accent-ink active:bg-hw-surface-muted motion-reduce:transition-none [@media(hover:hover)]:hover:bg-hw-surface-muted ${tracks} ${headshot} ${comparison ? "min-h-11 gap-1 px-[7px] py-1" : "min-h-[54px] gap-[9px] px-3 py-1.5 max-[700px]:gap-[7px] max-[700px]:px-2.5 min-[768px]:max-[1279px]:min-h-11 min-[768px]:max-[1279px]:gap-[3px] min-[768px]:max-[1279px]:px-2 min-[768px]:max-[1279px]:py-1"}`}
-                  aria-expanded={isOpen}
-                  aria-controls={`hw-sheet-${player.personId}`}
-                  onClick={() => toggle(player.personId)}
-                >
-                  <PlayerHeadshot player={player} className="block" />
-                  <span className={`flex min-w-0 items-baseline ${comparison ? "gap-1" : "gap-1.5"}`}>
+                {/* The expansion button stretches under the whole row so the row still
+                    toggles on any plain cell; stat links are siblings layered above it. */}
+                <div className={`group relative grid cursor-pointer items-center text-left text-hw-ink transition-colors duration-[120ms] has-[>button:active]:bg-hw-surface-muted motion-reduce:transition-none [@media(hover:hover)]:has-[>button:hover]:bg-hw-surface-muted ${tracks} ${headshot} ${comparison ? "min-h-11 gap-1 px-[7px] py-1" : "min-h-[54px] gap-[9px] px-3 py-1.5 max-[700px]:gap-[7px] max-[700px]:px-2.5 min-[768px]:max-[1279px]:min-h-11 min-[768px]:max-[1279px]:gap-[3px] min-[768px]:max-[1279px]:px-2 min-[768px]:max-[1279px]:py-1"}`}>
+                  <button
+                    type="button"
+                    className="absolute inset-0 cursor-pointer border-0 bg-transparent p-0 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-hw-accent-ink"
+                    aria-expanded={isOpen}
+                    aria-controls={`hw-sheet-${player.personId}`}
+                    onClick={() => toggle(player.personId)}
+                  >
                     <span className="sr-only">{playerName(player)}</span>
-                    <span className={`overflow-hidden font-extrabold text-ellipsis whitespace-nowrap underline decoration-hw-line underline-offset-3 transition-colors duration-[120ms] group-hover:text-hw-accent-ink group-hover:decoration-hw-accent group-aria-expanded:text-hw-accent-ink group-aria-expanded:decoration-hw-accent motion-reduce:transition-none ${comparison ? "text-[11px]" : "text-[13px]"} ${longName}`} aria-hidden="true">{playerName(player)}</span>
-                    <span className={`overflow-hidden font-extrabold text-ellipsis whitespace-nowrap underline decoration-hw-line underline-offset-3 transition-colors duration-[120ms] group-hover:text-hw-accent-ink group-hover:decoration-hw-accent group-aria-expanded:text-hw-accent-ink group-aria-expanded:decoration-hw-accent motion-reduce:transition-none ${comparison ? "text-[11px]" : "text-[13px]"} ${shortName}`} aria-hidden="true">{shortPlayerName(player)}</span>
+                  </button>
+                  <span className="pointer-events-none contents" aria-hidden="true">
+                    <PlayerHeadshot player={player} className="block" />
+                  </span>
+                  <span className={`pointer-events-none flex min-w-0 items-baseline ${comparison ? "gap-1" : "gap-1.5"}`} aria-hidden="true">
+                    <span className={`overflow-hidden font-extrabold text-ellipsis whitespace-nowrap underline underline-offset-3 transition-colors duration-[120ms] group-has-[>button:hover]:text-hw-accent-ink group-has-[>button:hover]:decoration-hw-accent group-has-[>button:focus-visible]:text-hw-accent-ink group-has-[>button:focus-visible]:decoration-hw-accent motion-reduce:transition-none ${isOpen ? "text-hw-accent-ink decoration-hw-accent" : "decoration-hw-line"} ${comparison ? "text-[11px]" : "text-[13px]"} ${longName}`}>{playerName(player)}</span>
+                    <span className={`overflow-hidden font-extrabold text-ellipsis whitespace-nowrap underline underline-offset-3 transition-colors duration-[120ms] group-has-[>button:hover]:text-hw-accent-ink group-has-[>button:hover]:decoration-hw-accent group-has-[>button:focus-visible]:text-hw-accent-ink group-has-[>button:focus-visible]:decoration-hw-accent motion-reduce:transition-none ${isOpen ? "text-hw-accent-ink decoration-hw-accent" : "decoration-hw-line"} ${comparison ? "text-[11px]" : "text-[13px]"} ${shortName}`}>{shortPlayerName(player)}</span>
                     {player.position && <small className="text-[8px] leading-none font-medium text-hw-muted">{player.position}</small>}
                   </span>
                   {columns.map((column) => (
-                    <span key={column.label} className="grid justify-items-end gap-[3px]">
+                    <span key={column.label} className={`${statCellClass} pointer-events-none`}>
                       {!wide && <small className={colLabel}>{column.label}</small>}
-                      <strong className={`leading-none font-bold tabular-nums whitespace-nowrap ${comparison ? "text-[10px]" : "text-[13px] min-[768px]:max-[1279px]:text-[11px]"}`}>{column.value(player.statistics)}</strong>
+                      <strong className={`leading-none font-bold tabular-nums whitespace-nowrap ${comparison ? "text-[10px]" : "text-[13px] min-[768px]:max-[1279px]:text-[11px]"}`}>
+                        <ColumnValue column={column} line={player.statistics} target={target} />
+                      </strong>
                     </span>
                   ))}
-                  <ChevronDown aria-hidden="true" className={`shrink-0 justify-self-end text-hw-muted transition-transform duration-[180ms] group-aria-expanded:rotate-180 group-aria-expanded:text-hw-accent-ink motion-reduce:transition-none ${comparison ? "w-3" : "w-[15px]"}`} />
-                </button>
+                  <ChevronDown aria-hidden="true" className={`pointer-events-none shrink-0 justify-self-end transition-transform duration-[180ms] motion-reduce:transition-none group-has-[>button:hover]:text-hw-accent-ink group-has-[>button:focus-visible]:text-hw-accent-ink ${isOpen ? "rotate-180 text-hw-accent-ink" : "text-hw-muted"} ${comparison ? "w-3" : "w-[15px]"}`} />
+                </div>
                 {isOpen && (
                   <div id={`hw-sheet-${player.personId}`} className="animate-hw-unfold px-3 pt-1.5 pb-3 max-[700px]:px-2.5 motion-reduce:animate-none">
-                    <HardwoodStatSheet player={player} shownColumns={shownColumns} />
+                    <HardwoodStatSheet player={player} shownColumns={shownColumns} target={target} />
                   </div>
                 )}
               </li>
@@ -311,11 +434,13 @@ function HardwoodScorersBook({team, comparison = false}: HardwoodScorersBookProp
             const isPoints = column.label === "PTS";
             const isUnavailable = column.label === "+/-" && !Number.isFinite(totals.plusMinusPoints);
             return (
-              <span key={column.label} className="grid justify-items-end gap-[3px]">
+              <span key={column.label} className={statCellClass}>
                 {isMinutes ? null : isUnavailable ? (
                   <strong className={`leading-none font-bold text-hw-muted ${comparison ? "text-[10px]" : "text-[13px] min-[768px]:max-[1279px]:text-[11px]"}`} aria-label="Not totaled">—</strong>
                 ) : (
-                  <strong className={`leading-none font-extrabold tabular-nums whitespace-nowrap ${comparison ? "text-[11px]" : "text-sm min-[768px]:max-[1279px]:text-[11px]"} ${isPoints ? "dark:text-hw-accent" : ""}`}>{column.value(totals)}</strong>
+                  <strong className={`leading-none font-extrabold tabular-nums whitespace-nowrap ${comparison ? "text-[11px]" : "text-sm min-[768px]:max-[1279px]:text-[11px]"} ${isPoints ? "dark:text-hw-accent" : ""}`}>
+                    <ColumnValue column={column} line={totals} target={teamTarget} />
+                  </strong>
                 )}
               </span>
             );

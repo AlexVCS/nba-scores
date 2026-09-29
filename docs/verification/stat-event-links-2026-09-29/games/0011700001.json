@@ -1,0 +1,91 @@
+{
+  "gameId": "0011700001",
+  "retrievedAt": "2026-09-29",
+  "source": "https://www.nba.com/game/0011700001/box-score",
+  "observed": true,
+  "note": "2017-18 preseason with videoAvailableFlag=0, shot chart only.",
+  "cellRule": "Measures under linked render as links when the value is positive; zero values and measures under unlinked stay plain text. Team totals use the same URL without PlayerID.",
+  "summaryInputs": {
+    "whStatus": 1,
+    "videoAvailableFlag": 0,
+    "overtimePeriods": 0
+  },
+  "statEvents": {
+    "season": "2017-18",
+    "seasonType": "Pre Season",
+    "endRange": 28800,
+    "measures": {"FGM": 2, "FGA": 2, "FG3M": 2, "FG3A": 2}
+  },
+  "cells": {
+    "player": {
+      "linked": ["FGM", "FGA", "FG3M", "FG3A"],
+      "unlinked": ["MIN", "FG_PCT", "FG3_PCT", "FTM", "FTA", "FT_PCT", "OREB", "DREB", "REB", "AST", "STL", "BLK", "TOV", "PF", "PTS", "PLUS_MINUS"]
+    },
+    "team": {
+      "linked": ["FGM", "FGA", "FG3M", "FG3A"],
+      "unlinked": ["FG_PCT", "FG3_PCT", "FTM", "FTA", "FT_PCT", "OREB", "DREB", "REB", "AST", "STL", "BLK", "TOV", "PF", "PTS", "PLUS_MINUS"]
+    }
+  },
+  "urls": {
+    "player": [
+      {
+        "teamId": 1610612743,
+        "personId": 200794,
+        "name": "Paul Millsap",
+        "measure": "FGM",
+        "value": 7,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FGM&EndPeriod=0&EndRange=28800&GameID=0011700001&PlayerID=200794&RangeType=0&Season=2017-18&SeasonType=Pre%20Season&StartPeriod=0&StartRange=0&TeamID=1610612743&flag=2&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612743,
+        "personId": 200794,
+        "name": "Paul Millsap",
+        "measure": "FGA",
+        "value": 11,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FGA&EndPeriod=0&EndRange=28800&GameID=0011700001&PlayerID=200794&RangeType=0&Season=2017-18&SeasonType=Pre%20Season&StartPeriod=0&StartRange=0&TeamID=1610612743&flag=2&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612743,
+        "personId": 200794,
+        "name": "Paul Millsap",
+        "measure": "FG3M",
+        "value": 4,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FG3M&EndPeriod=0&EndRange=28800&GameID=0011700001&PlayerID=200794&RangeType=0&Season=2017-18&SeasonType=Pre%20Season&StartPeriod=0&StartRange=0&TeamID=1610612743&flag=2&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612743,
+        "personId": 200794,
+        "name": "Paul Millsap",
+        "measure": "FG3A",
+        "value": 6,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FG3A&EndPeriod=0&EndRange=28800&GameID=0011700001&PlayerID=200794&RangeType=0&Season=2017-18&SeasonType=Pre%20Season&StartPeriod=0&StartRange=0&TeamID=1610612743&flag=2&sct=plot&section=game"
+      }
+    ],
+    "team": [
+      {
+        "teamId": 1610612743,
+        "measure": "FGM",
+        "value": 36,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FGM&EndPeriod=0&EndRange=28800&GameID=0011700001&RangeType=0&Season=2017-18&SeasonType=Pre%20Season&StartPeriod=0&StartRange=0&TeamID=1610612743&flag=2&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612743,
+        "measure": "FGA",
+        "value": 81,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FGA&EndPeriod=0&EndRange=28800&GameID=0011700001&RangeType=0&Season=2017-18&SeasonType=Pre%20Season&StartPeriod=0&StartRange=0&TeamID=1610612743&flag=2&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612743,
+        "measure": "FG3M",
+        "value": 13,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FG3M&EndPeriod=0&EndRange=28800&GameID=0011700001&RangeType=0&Season=2017-18&SeasonType=Pre%20Season&StartPeriod=0&StartRange=0&TeamID=1610612743&flag=2&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612743,
+        "measure": "FG3A",
+        "value": 28,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FG3A&EndPeriod=0&EndRange=28800&GameID=0011700001&RangeType=0&Season=2017-18&SeasonType=Pre%20Season&StartPeriod=0&StartRange=0&TeamID=1610612743&flag=2&sct=plot&section=game"
+      }
+    ]
+  }
+}

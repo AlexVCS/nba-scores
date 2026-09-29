@@ -1,0 +1,181 @@
+{
+  "gameId": "0021400001",
+  "retrievedAt": "2026-09-29",
+  "source": "https://www.nba.com/game/0021400001/box-score",
+  "observed": true,
+  "note": "2014-15 regular season, first video season.",
+  "cellRule": "Measures under linked render as links when the value is positive; zero values and measures under unlinked stay plain text. Team totals use the same URL without PlayerID.",
+  "summaryInputs": {
+    "whStatus": 1,
+    "videoAvailableFlag": 1,
+    "overtimePeriods": 0
+  },
+  "statEvents": {
+    "season": "2014-15",
+    "seasonType": "Regular Season",
+    "endRange": 28800,
+    "measures": {"FGM": 3, "FGA": 3, "FG3M": 3, "FG3A": 3, "OREB": 1, "DREB": 1, "REB": 1, "AST": 1, "STL": 1, "BLK": 1, "TOV": 1}
+  },
+  "cells": {
+    "player": {
+      "linked": ["FGM", "FGA", "FG3M", "FG3A", "OREB", "DREB", "REB", "AST", "STL", "BLK", "TOV"],
+      "unlinked": ["MIN", "FG_PCT", "FG3_PCT", "FTM", "FTA", "FT_PCT", "PF", "PTS", "PLUS_MINUS"]
+    },
+    "team": {
+      "linked": ["FGM", "FGA", "FG3M", "FG3A", "OREB", "DREB", "REB", "AST", "STL", "BLK", "TOV"],
+      "unlinked": ["FG_PCT", "FG3_PCT", "FTM", "FTA", "FT_PCT", "PF", "PTS", "PLUS_MINUS"]
+    }
+  },
+  "urls": {
+    "player": [
+      {
+        "teamId": 1610612753,
+        "personId": 203932,
+        "name": "Aaron Gordon",
+        "measure": "FGM",
+        "value": 5,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FGM&EndPeriod=0&EndRange=28800&GameID=0021400001&PlayerID=203932&RangeType=0&Season=2014-15&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612753&flag=3&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612753,
+        "personId": 203932,
+        "name": "Aaron Gordon",
+        "measure": "FGA",
+        "value": 8,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FGA&EndPeriod=0&EndRange=28800&GameID=0021400001&PlayerID=203932&RangeType=0&Season=2014-15&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612753&flag=3&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612753,
+        "personId": 203932,
+        "name": "Aaron Gordon",
+        "measure": "FG3M",
+        "value": 1,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FG3M&EndPeriod=0&EndRange=28800&GameID=0021400001&PlayerID=203932&RangeType=0&Season=2014-15&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612753&flag=3&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612753,
+        "personId": 203932,
+        "name": "Aaron Gordon",
+        "measure": "FG3A",
+        "value": 2,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FG3A&EndPeriod=0&EndRange=28800&GameID=0021400001&PlayerID=203932&RangeType=0&Season=2014-15&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612753&flag=3&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612753,
+        "personId": 203932,
+        "name": "Aaron Gordon",
+        "measure": "OREB",
+        "value": 2,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=OREB&EndPeriod=0&EndRange=28800&GameID=0021400001&PlayerID=203932&RangeType=0&Season=2014-15&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612753&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612753,
+        "personId": 203932,
+        "name": "Aaron Gordon",
+        "measure": "DREB",
+        "value": 1,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=DREB&EndPeriod=0&EndRange=28800&GameID=0021400001&PlayerID=203932&RangeType=0&Season=2014-15&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612753&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612753,
+        "personId": 203932,
+        "name": "Aaron Gordon",
+        "measure": "REB",
+        "value": 3,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=REB&EndPeriod=0&EndRange=28800&GameID=0021400001&PlayerID=203932&RangeType=0&Season=2014-15&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612753&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612753,
+        "personId": 203932,
+        "name": "Aaron Gordon",
+        "measure": "STL",
+        "value": 1,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=STL&EndPeriod=0&EndRange=28800&GameID=0021400001&PlayerID=203932&RangeType=0&Season=2014-15&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612753&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612753,
+        "personId": 203932,
+        "name": "Aaron Gordon",
+        "measure": "BLK",
+        "value": 1,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=BLK&EndPeriod=0&EndRange=28800&GameID=0021400001&PlayerID=203932&RangeType=0&Season=2014-15&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612753&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612753,
+        "personId": 203932,
+        "name": "Aaron Gordon",
+        "measure": "TOV",
+        "value": 3,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=TOV&EndPeriod=0&EndRange=28800&GameID=0021400001&PlayerID=203932&RangeType=0&Season=2014-15&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612753&flag=1&sct=plot&section=game"
+      }
+    ],
+    "team": [
+      {
+        "teamId": 1610612753,
+        "measure": "FGM",
+        "value": 32,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FGM&EndPeriod=0&EndRange=28800&GameID=0021400001&RangeType=0&Season=2014-15&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612753&flag=3&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612753,
+        "measure": "FGA",
+        "value": 84,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FGA&EndPeriod=0&EndRange=28800&GameID=0021400001&RangeType=0&Season=2014-15&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612753&flag=3&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612753,
+        "measure": "FG3M",
+        "value": 4,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FG3M&EndPeriod=0&EndRange=28800&GameID=0021400001&RangeType=0&Season=2014-15&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612753&flag=3&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612753,
+        "measure": "FG3A",
+        "value": 11,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FG3A&EndPeriod=0&EndRange=28800&GameID=0021400001&RangeType=0&Season=2014-15&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612753&flag=3&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612753,
+        "measure": "OREB",
+        "value": 16,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=OREB&EndPeriod=0&EndRange=28800&GameID=0021400001&RangeType=0&Season=2014-15&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612753&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612753,
+        "measure": "DREB",
+        "value": 40,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=DREB&EndPeriod=0&EndRange=28800&GameID=0021400001&RangeType=0&Season=2014-15&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612753&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612753,
+        "measure": "REB",
+        "value": 56,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=REB&EndPeriod=0&EndRange=28800&GameID=0021400001&RangeType=0&Season=2014-15&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612753&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612753,
+        "measure": "AST",
+        "value": 17,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=AST&EndPeriod=0&EndRange=28800&GameID=0021400001&RangeType=0&Season=2014-15&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612753&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612753,
+        "measure": "STL",
+        "value": 5,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=STL&EndPeriod=0&EndRange=28800&GameID=0021400001&RangeType=0&Season=2014-15&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612753&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612753,
+        "measure": "BLK",
+        "value": 9,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=BLK&EndPeriod=0&EndRange=28800&GameID=0021400001&RangeType=0&Season=2014-15&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612753&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612753,
+        "measure": "TOV",
+        "value": 18,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=TOV&EndPeriod=0&EndRange=28800&GameID=0021400001&RangeType=0&Season=2014-15&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612753&flag=1&sct=plot&section=game"
+      }
+    ]
+  }
+}

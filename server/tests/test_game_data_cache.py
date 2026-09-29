@@ -36,9 +36,19 @@ def summary(status=3, tipoff=TIPOFF, game_id=GAME_ID):
         "gameTimeUTC": tipoff.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "gameEt": tipoff.strftime("%Y-%m-%dT%H:%M:%SZ"),
         "period": 4,
+        "whStatus": 1,
+        "videoAvailableFlag": 1,
         "homeTeam": team(HOME, "TOR", 100),
         "awayTeam": team(AWAY, "MIA", 96),
     }
+
+
+STAT_EVENTS = {
+    "season": "2025-26",
+    "seasonType": "Regular Season",
+    "endRange": 28800,
+    "measures": {"FGM": 3, "FGA": 3, "FG3M": 3, "FG3A": 3, "OREB": 1, "DREB": 1, "REB": 1, "AST": 1, "STL": 1, "BLK": 1, "TOV": 1},
+}
 
 
 def endpoint(game):
@@ -340,7 +350,7 @@ def test_boxscore_route_reuses_entry_until_expiry(upstream, clock):
     second = client.get(f"/games/{GAME_ID}/boxscore")
 
     assert first.status_code == second.status_code == 200
-    assert first.json() == second.json() == {"game": boxscore()["boxScoreTraditional"]}
+    assert first.json() == second.json() == {"game": boxscore()["boxScoreTraditional"], "statEvents": STAT_EVENTS}
     assert upstream.box.call_count == 1
     assert game_data._boxscore_cache.expires_in(GAME_ID) == 1
     clock[0] += 1
@@ -524,6 +534,122 @@ def test_caches_are_bounded_and_evict_oldest_entries(upstream):
     assert all(cache.get(game_ids[0]) is None and cache.get(game_ids[-1]) for cache in caches)
 
 
+# Stat event links read only the boxscore entry
+
+LIFETIME_LOOKUP = {"timeout": 2, "retries": 0}
+
+
+def test_warm_boxscore_serves_stat_events_without_upstream_calls(upstream, clock):
+    client = TestClient(main.app)
+    first = client.get(f"/games/{GAME_ID}/boxscore").json()
+    clock[0] += game_data.RECENT_FINAL_TTL_SECONDS - 1
+    second = client.get(f"/games/{GAME_ID}/boxscore").json()
+    assert first["statEvents"] == second["statEvents"] == STAT_EVENTS
+    assert (upstream.v3.call_count, upstream.box.call_count) == (1, 1)
+    upstream.v2.assert_not_called()
+
+
+def test_expired_boxscore_refreshes_stat_events_with_its_own_summary_lookup(upstream, clock):
+    game = summary()
+    upstream.v3.side_effect = lambda *_, **__: endpoint(game)
+    client = TestClient(main.app)
+    client.get(f"/games/{GAME_ID}/boxscore")
+    game.update(videoAvailableFlag=0, period=5)
+    clock[0] += game_data.RECENT_FINAL_TTL_SECONDS
+    refreshed = client.get(f"/games/{GAME_ID}/boxscore").json()["statEvents"]
+
+    assert refreshed == {**STAT_EVENTS, "endRange": 31800, "measures": {"FGM": 2, "FGA": 2, "FG3M": 2, "FG3A": 2}}
+    assert [c.kwargs for c in upstream.v3.call_args_list] == [LIFETIME_LOOKUP, LIFETIME_LOOKUP]
+    assert upstream.box.call_count == 2
+    upstream.v2.assert_not_called()
+
+
+@pytest.mark.parametrize("response", [
+    lambda *_, **__: endpoint(None),
+    lambda *_, **__: endpoint({}),
+    lambda *_, **__: SimpleNamespace(get_dict=lambda: {}),
+    unavailable(),
+], ids=["missing", "empty_game", "empty_payload", "failed"])
+def test_unusable_summary_gives_null_stat_events_and_still_serves_the_boxscore(upstream, response):
+    upstream.v3.side_effect = response
+    result = TestClient(main.app).get(f"/games/{GAME_ID}/boxscore")
+    assert result.status_code == 200
+    assert result.json() == {"game": boxscore()["boxScoreTraditional"], "statEvents": None}
+    # Only the refresh's own lifetime lookup runs: no strict retry and no V2 fallback.
+    assert [c.kwargs for c in upstream.v3.call_args_list] == [LIFETIME_LOOKUP]
+    upstream.v2.assert_not_called()
+
+
+SHOTS_ONLY = {**STAT_EVENTS, "measures": {"FGM": 2, "FGA": 2, "FG3M": 2, "FG3A": 2}}
+
+
+@pytest.mark.parametrize("change, expected", [
+    ({"videoAvailableFlag": "Infinity"}, SHOTS_ONLY),
+    ({"videoAvailableFlag": float("inf")}, SHOTS_ONLY),
+    ({"videoAvailableFlag": 1.9}, SHOTS_ONLY),
+    ({"videoAvailableFlag": {"flag": 1}}, SHOTS_ONLY),
+    ({"videoAvailableFlag": "1"}, STAT_EVENTS),
+    ({"whStatus": "1"}, None),
+    ({"whStatus": 1.9}, None),
+    ({"whStatus": "Infinity"}, None),
+    ({"whStatus": 1.0}, STAT_EVENTS),
+    ({"period": "Infinity"}, None),
+    ({"period": 5.5}, None),
+    ({"period": None, "homeTeam": {"teamId": HOME, "periods": [{"period": "x"}]}}, None),
+    ({"period": None, "homeTeam": {"teamId": HOME, "periods": ["5"]}}, None),
+    ({"period": None, "homeTeam": {"teamId": HOME, "periods": 5}}, None),
+    ({"homeTeam": "TOR"}, None),
+    ({"awayTeam": None}, None),
+    ({"gameStatus": "Infinity"}, STAT_EVENTS),
+], ids=["infinity_string_video_flag", "infinity_video_flag", "fractional_video_flag", "object_video_flag", "string_video_flag",
+        "string_wh_status", "fractional_wh_status", "infinity_wh_status", "float_wh_status", "infinity_period", "fractional_period",
+        "malformed_period_row", "non_dict_period_row", "non_list_period_rows", "non_dict_home_team", "missing_away_team",
+        "infinity_game_status"])
+def test_malformed_summary_values_never_fail_the_boxscore(upstream, change, expected):
+    upstream.v3.side_effect = lambda game_id, **_: endpoint({**summary(game_id=game_id), **change})
+    result = TestClient(main.app).get(f"/games/{GAME_ID}/boxscore")
+    assert result.status_code == 200
+    assert result.json() == {"game": boxscore()["boxScoreTraditional"], "statEvents": expected}
+
+
+def test_malformed_stat_inputs_keep_the_summary_lifetime(upstream, clock):
+    upstream.v3.side_effect = lambda game_id, **_: endpoint({**summary(game_id=game_id), "period": "Infinity"})
+    client = TestClient(main.app)
+    client.get(f"/games/{GAME_ID}/boxscore")
+    clock[0] += game_data.RECENT_FINAL_TTL_SECONDS - 1
+    assert client.get(f"/games/{GAME_ID}/boxscore").json()["statEvents"] is None
+    assert (upstream.v3.call_count, upstream.box.call_count) == (1, 1)
+
+
+def test_warm_boxscore_without_summary_stays_null_without_new_lookups(upstream, clock):
+    upstream.v3.side_effect = unavailable()
+    client = TestClient(main.app)
+    client.get(f"/games/{GAME_ID}/boxscore")
+    upstream.v3.side_effect = lambda game_id, **_: endpoint(summary(game_id=game_id))
+    clock[0] += game_data.UNKNOWN_TTL_SECONDS - 1
+    assert client.get(f"/games/{GAME_ID}/boxscore").json()["statEvents"] is None
+    assert (upstream.v3.call_count, upstream.box.call_count) == (1, 1)
+    upstream.v2.assert_not_called()
+
+
+def test_stat_events_ignore_a_summary_cached_outside_the_refresh(upstream, monkeypatch):
+    game_summary.fetch_game_summary(GAME_ID)
+    upstream.v3.side_effect = unavailable()
+    for name in ("get_game_context", "get_summary_v2", "_summary_metadata"):
+        monkeypatch.setattr(game_data, name, Mock(side_effect=AssertionError(f"{name} must not run")))
+    assert main.get_game_boxscore(GAME_ID)["statEvents"] is None
+    assert [c.kwargs for c in upstream.v3.call_args_list] == [{}, LIFETIME_LOOKUP]
+
+
+def test_stat_event_inputs_share_the_boxscore_entry_lifetime(upstream, clock):
+    upstream.v3.side_effect = [endpoint({**summary(2), "videoAvailableFlag": 0}), endpoint(summary(3))]
+    client = TestClient(main.app)
+    assert client.get(f"/games/{GAME_ID}/boxscore").json()["statEvents"]["measures"]["FGM"] == 2
+    clock[0] += game_data.ACTIVE_TTL_SECONDS
+    assert client.get(f"/games/{GAME_ID}/boxscore").json()["statEvents"] == STAT_EVENTS
+    assert (upstream.v3.call_count, upstream.box.call_count) == (2, 2)
+
+
 # Game context
 
 def test_context_reports_metadata_and_boxscore_membership(upstream):
@@ -605,4 +731,4 @@ def test_boxscore_mutations_do_not_leak_into_context_or_route(upstream):
     game_data.get_boxscore(GAME_ID)["homeTeam"]["players"].clear()
     main.get_game_boxscore(GAME_ID)["game"]["awayTeam"]["teamId"] = None
     assert game_data.get_game_context(GAME_ID)["homeTeam"]["playerIds"] == [1, 2]
-    assert main.get_game_boxscore(GAME_ID) == {"game": boxscore()["boxScoreTraditional"]}
+    assert main.get_game_boxscore(GAME_ID) == {"game": boxscore()["boxScoreTraditional"], "statEvents": STAT_EVENTS}

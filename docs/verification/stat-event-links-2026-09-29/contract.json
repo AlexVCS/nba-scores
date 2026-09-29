@@ -1,0 +1,30 @@
+{
+  "description": "Shared backend/frontend contract for issue #187. The boxscore route returns {game, statEvents}; the frontend builds URLs from statEvents plus gameId, teamId and personId. Observed on nba.com box score for 0022500868 on 2026-09-29.",
+  "gameId": "0022500868",
+  "summaryInputs": {"whStatus": 1, "videoAvailableFlag": 1, "overtimePeriods": 0},
+  "statEvents": {
+    "season": "2025-26",
+    "seasonType": "Regular Season",
+    "endRange": 28800,
+    "measures": {"FGM": 3, "FGA": 3, "FG3M": 3, "FG3A": 3, "OREB": 1, "DREB": 1, "REB": 1, "AST": 1, "STL": 1, "BLK": 1, "TOV": 1}
+  },
+  "urls": {
+    "player": {
+      "teamId": 1610612759,
+      "personId": 1630577,
+      "measure": "FGM",
+      "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FGM&EndPeriod=0&EndRange=28800&GameID=0022500868&PlayerID=1630577&RangeType=0&Season=2025-26&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612759&flag=3&sct=plot&section=game"
+    },
+    "playerNonShot": {
+      "teamId": 1610612759,
+      "personId": 1630577,
+      "measure": "AST",
+      "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=AST&EndPeriod=0&EndRange=28800&GameID=0022500868&PlayerID=1630577&RangeType=0&Season=2025-26&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612759&flag=1&sct=plot&section=game"
+    },
+    "team": {
+      "teamId": 1610612759,
+      "measure": "FGM",
+      "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FGM&EndPeriod=0&EndRange=28800&GameID=0022500868&RangeType=0&Season=2025-26&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612759&flag=3&sct=plot&section=game"
+    }
+  }
+}
