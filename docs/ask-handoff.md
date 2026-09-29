@@ -18,8 +18,14 @@ and they take precedence over the earlier text below where the two conflict:
 - Next step is stage 1 of ADR 0010: the tool registry and router over the
   existing four intents, with Jev wired into the production adapter factory.
 
-#189 and its child issues have not been updated to match yet. Do that before
-implementation.
+GitHub issues were updated to match: #189 (parent), #199 (cascade), #200
+(lookup), #201 (tool registry and router), #202 (glossary only), #204 (leaders),
+#205 (UI), and new #207 (player season stats and team records), #208 (game-log
+index and records), and #209 (Laya). Pre-edit bodies were saved at
+`/tmp/ask-issues-before.md`.
+
+The user authorized **$1** of live evaluation spend for this round (Jev and Luna).
+Every run uses the spend guard and reports its estimated cost.
 
 
 Work on branch `ask/reviewed-components` in `/private/tmp/ask-reviewed-components`.
