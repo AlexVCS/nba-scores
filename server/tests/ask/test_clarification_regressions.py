@@ -1,11 +1,12 @@
 import datetime as dt
 
 from server.ask.eval import builders as b
+from server.ask.candidates import CandidateLookupService
 from server.ask.models.common import DateComponents
 from server.ask.models.interpreter import FieldInterpretation, InterpreterMetadata, InterpreterOutput
 from server.ask.models.request import AskContext
 from server.ask.normalize import Normalizer
-from server.ask.present import clarification
+from server.ask.present import clarification, notice
 from server.ask.resolution import PendingResolution, ResolutionStore, choose
 
 CONTEXT = AskContext(reference_time=dt.datetime.fromisoformat("2026-09-29T12:00:00-04:00"))
@@ -106,3 +107,52 @@ def test_selected_unusable_date_is_not_offered_again(tmp_path):
                           ResolutionStore(tmp_path / "resolution.sqlite3"))
     assert result.options == []
     assert result.hint
+
+
+def test_cross_year_date_choice_rewrites_and_replays_the_exact_range(tmp_path):
+    question = "games between December 28 and January 3"
+    lookup = CandidateLookupService()
+    initial = lookup.lookup(question, CONTEXT)
+    candidate = initial.sets["date"].candidates[0]
+    pending = PendingResolution(
+        output=output(selected("intent", "game_search"), selected("date", candidate.id)),
+        candidates=initial, context=CONTEXT,
+    )
+    store = ResolutionStore(tmp_path / "resolution.sqlite3")
+
+    result = clarification("date", "year_required", question, pending, store)
+    choice = next(option for option in result.options if option.id == "year:2025")
+    assert "2025-12-28 to 2026-01-03" in choice.question
+
+    reparsed = lookup.lookup(choice.question, CONTEXT).sets["date"].candidates
+    [fresh_range] = [item.value.resolved for item in reparsed if item.value.resolved is not None]
+    replayed = store.read(choice.resolution, choice.question, CONTEXT)
+    assert replayed is not None
+    selected_id = replayed.output.get_field("date").selected[0]
+    token_range = replayed.candidates.by_id(selected_id).value.resolved
+    assert fresh_range == token_range
+    assert (fresh_range.start, fresh_range.end) == (dt.date(2025, 12, 28), dt.date(2026, 1, 3))
+
+
+def test_extracted_cross_year_date_choice_uses_standalone_resolved_range(tmp_path):
+    question = "show games for the range"
+    components = DateComponents(kind="calendar_range", month=12, day=28, end_month=1, end_day=3)
+    pending = PendingResolution(
+        output=InterpreterOutput(outcome="interpreted", fields=[selected("intent", "game_search")],
+                                 extracted_date=components, metadata=META),
+        candidates=b.lookup_result([]), context=CONTEXT,
+    )
+    result = clarification("date", "year_required", question, pending,
+                          ResolutionStore(tmp_path / "resolution.sqlite3"))
+    choice = next(option for option in result.options if option.id == "year:2025")
+    assert choice.question == "Games from 2025-12-28 to 2026-01-03?"
+    assert "range" not in choice.question
+    lookup = CandidateLookupService()
+    [candidate] = lookup.lookup(choice.question, CONTEXT).sets["date"].candidates
+    assert candidate.value.resolved.start == dt.date(2025, 12, 28)
+    assert candidate.value.resolved.end == dt.date(2026, 1, 3)
+
+
+def test_recent_player_record_notice_does_not_claim_permanent_absence():
+    result = notice("no_record", reason="recent_player_record_unverified")
+    assert result.message == "No verified player record is available for that date yet."

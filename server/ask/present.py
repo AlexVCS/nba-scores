@@ -82,6 +82,8 @@ def notice(code: str, *, reason: str = "", retry_after: int | None = None,
     title, message = copy[code]
     if reason == "before_records":
         message = "NBA and BAA records begin on November 1, 1946."
+    elif code == "no_record" and reason == "recent_player_record_unverified":
+        message = "No verified player record is available for that date yet."
     return Notice(code=code, title=title, message=message, retryable=code in {
         "service_unavailable", "interpreter_unavailable", "rate_limited"},
         retry_after_seconds=retry_after, unsupported_reason=unsupported_reason,
@@ -112,6 +114,12 @@ def _rewrite(question: str, candidate: Candidate) -> str | None:
             return rewritten if len(rewritten) <= MAX_QUESTION_LENGTH else None
     rewritten = f"{question.rstrip(' ?')} {label}?"
     return rewritten if len(rewritten) <= MAX_QUESTION_LENGTH else None
+
+
+def _canonical_date_question(date_range: DateRange) -> str:
+    if date_range.start == date_range.end:
+        return f"Games on {date_range.start.isoformat()}?"
+    return f"Games from {date_range.start.isoformat()} to {date_range.end.isoformat()}?"
 
 
 def _candidate_options(field: str, reason: str, pending: PendingResolution) -> Iterable[Candidate]:
@@ -163,10 +171,24 @@ def clarification(field: str, reason: str, question: str, pending: PendingResolu
             else:
                 continue
             expression = candidate.matched_text if candidate else None
-            if expression and expression in question:
+            if candidate and candidate.value.resolved and candidate.value.resolved.start.year != candidate.value.resolved.end.year:
+                replacement = (f"{candidate.value.resolved.start.isoformat()} to "
+                               f"{candidate.value.resolved.end.isoformat()}")
+                if expression and expression in question:
+                    rewritten = question.replace(expression, replacement, 1)
+                else:
+                    rewritten = _canonical_date_question(candidate.value.resolved)
+            elif candidate and expression and expression in question:
                 rewritten = question.replace(expression, f"{expression}, {year}", 1)
+            elif candidate and candidate.value.resolved:
+                rewritten = _canonical_date_question(candidate.value.resolved)
+            elif chosen.output.extracted_date is not None:
+                # Without a candidate span, retaining the original yearless
+                # phrase could create a second, contradictory date mention.
+                resolved_date = resolve_components(chosen.output.extracted_date, reference_date(chosen.context))
+                rewritten = _canonical_date_question(resolved_date)
             else:
-                rewritten = f"{question.rstrip(' ?')} in {year}?"
+                continue
             if len(rewritten) > MAX_QUESTION_LENGTH:
                 overlong_rewrite = True
                 continue
