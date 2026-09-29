@@ -11,9 +11,7 @@ question; the adapter keeps a field from the first tier that reads it confidentl
 
 Vetoes (ADR 0002 consequence, needed for the zero-guess gate): when a later confident
 read selects different values, reads the field as absent, or reads it as ambiguous,
-after an earlier tier accepted a selection, the field is not executed. An `unsupported`
-outcome is a read of the intent: after an earlier tier accepted an intent, it contests
-the intent (the user is asked) instead of ending the cascade. The final tier,
+after an earlier tier accepted a selection, the field is not executed. The final tier,
 which reports no confidence, is also vetoed by an earlier selection that reached
 `veto_min`. Two different selections, or a selection and an ambiguous read, become
 `ambiguous` with both tiers' options; selected versus absent keeps a sub-threshold
@@ -198,26 +196,6 @@ class TieredAdapter:
                 merge.vetoers.setdefault(read.field, []).append((read, accepted))
 
     @staticmethod
-    def _contests_intent(merge: _Merge, tier: Tier, output: InterpreterOutput) -> bool | None:
-        """An `unsupported` outcome is a read of the intent like any other.
-
-        None: no earlier tier accepted an intent, so the request is unsupported.
-        True: a confident unsupported read disagrees with an accepted intent, so the
-        intent is contested and the user is asked.
-        False: it disagrees but is not confident, so it decides nothing.
-
-        Only accepted intents contest it. A sub-threshold selection that reached
-        `veto_min` vetoes the final tier's selections so they are not executed; an
-        unsupported outcome executes nothing, so there is nothing to guard.
-        """
-        if not any(accepted for _, accepted in merge.vetoers.get("intent", [])):
-            return None
-        if tier.accept_min is None:
-            return True
-        confidence = output.unsupported_confidence
-        return confidence is not None and confidence >= tier.accept_min
-
-    @staticmethod
     def _unfounded_no_match(merge: _Merge, name: str, candidates: CandidateLookupResult) -> bool:
         """An earlier tier's `no_matching_candidate` claims the question names a value
         lookup missed. When lookup found no text for the field at all and a later tier
@@ -314,14 +292,9 @@ class TieredAdapter:
                 continue
             last = output
             if output.outcome == "unsupported":
-                contested = self._contests_intent(merge, tier, output)
-                if contested is None:
-                    merge.decided_by = {"intent": tier.name}
-                    return self._result(output.model_copy(update={"fields": []}), started, calls, tokens_in,
-                                        spent if cost_known else None, merge)
-                if contested:
-                    merge.vetoed.add("intent")
-                continue
+                merge.decided_by = {"intent": tier.name}
+                return self._result(output.model_copy(update={"fields": []}), started, calls, tokens_in,
+                                    spent if cost_known else None, merge)
             self._absorb(merge, tier, output, request.candidates)
             if output.extracted_date is not None and "date" not in merge.decided:
                 extracted_date = output.extracted_date

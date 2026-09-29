@@ -674,12 +674,12 @@ fresh unseen set.
   name no team used in the requested season stays open to exact player names
   ("Magic" in 1987).
 - Cascade: a later confident `absent` read replaces an earlier
-  `no_matching_candidate` when lookup found no text for the field. An
-  `unsupported` outcome after an accepted intent contests the intent instead of
-  ending the cascade. Jev's unsupported outcomes keep their confidence.
+  `no_matching_candidate` when lookup found no text for the field. Jev's
+  unsupported outcomes keep their confidence. A later `unsupported` outcome still
+  ends the cascade after an accepted intent: it executes nothing, and contesting
+  it would have turned two correct unsupported answers in the recorded traces
+  into clarifications without fixing any.
 - Normalizer: with an ambiguous intent, a field unclear under every intent
   option is asked about first.
 - Unverified live: Jev's new `target_team` question and Luna's `target_team`
-  schema and prompt rule. On the recorded exposed traces, the unsupported veto
-  turns two correct unsupported answers and one wrong one into intent
-  clarifications.
+  schema and prompt rule.
