@@ -187,3 +187,24 @@ def test_on_screen_wording_without_a_page_date_offers_nothing(service):
     result = lookup(service, "Any Suns games on the day I have open?")
     assert result.sets["date"].status == "no_candidates"
     assert lookup(service, "What date is it today?").sets["date"].candidates[0].source != "app_context"
+
+
+@pytest.mark.parametrize(("question", "number"), [
+    ("Kawhi's steals in the fourth game of the 2019 Finals", 4),
+    ("Show Nash's assists from the 2nd game of the 2006 West semifinals", 2),
+    ("What did Pierce score in the seventh Finals game of 2010?", 7),
+])
+def test_ordinal_game_numbers_in_playoff_questions(service, question, number):
+    result = lookup(service, question)
+    [candidate] = result.sets["game_number"].candidates
+    assert candidate.value.game_number == number
+
+
+def test_ordinal_games_outside_playoff_wording_are_not_series_games(service):
+    result = lookup(service, "Knicks first game of the 2019 season")
+    assert result.sets["game_number"].status == "not_mentioned"
+
+
+def test_ordinal_beyond_seven_is_reported_not_offered(service):
+    result = lookup(service, "the ninth game of the 1999 Finals")
+    assert result.sets["game_number"].status == "no_candidates"

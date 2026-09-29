@@ -41,12 +41,30 @@ _GAME_NUMBER = re.compile(r"\bgame\s*(?:#\s*|no\.?\s*|number\s+)?(\d{1,2}|one|tw
 _G_NUMBER = re.compile(r"\bg([1-9])\b")
 
 
-def game_number_mentions(folded: str, original: str) -> tuple[list[Mention], str]:
+_ORDINALS = {
+    "first": 1, "second": 2, "third": 3, "fourth": 4, "fifth": 5, "sixth": 6, "seventh": 7,
+    "eighth": 8, "ninth": 9, "1st": 1, "2nd": 2, "3rd": 3, "4th": 4, "5th": 5, "6th": 6, "7th": 7,
+    "8th": 8, "9th": 9,
+}
+# "the sixth game", "the 4th Finals game". Ordinals number games in many sequences
+# ("first game of the season"), so they count only in a question with playoff wording.
+_ORDINAL_GAME = re.compile(
+    r"\b(" + "|".join(_ORDINALS) + r")\s+(?:(?:finals|series)\s+)?game\b"
+)
+
+
+def _number(raw: str) -> int:
+    if raw.isdigit():
+        return int(raw)
+    return GAME_WORDS.get(raw) or _ORDINALS[raw]
+
+
+def game_number_mentions(folded: str, original: str, playoff_context: bool = False) -> tuple[list[Mention], str]:
     out = []
-    for pattern in (_GAME_NUMBER, _G_NUMBER):
+    patterns = (_GAME_NUMBER, _G_NUMBER, _ORDINAL_GAME) if playoff_context else (_GAME_NUMBER, _G_NUMBER)
+    for pattern in patterns:
         for m in pattern.finditer(folded):
-            raw = m.group(1)
-            number = int(raw) if raw.isdigit() else GAME_WORDS[raw]
+            number = _number(m.group(1))
             if 1 <= number <= 7:
                 hits = [Hit(field="game_number", key=str(number), label=f"Game {number}", source="pattern",
                             score=1.0, value=GameNumberCandidateValue(game_number=number))]

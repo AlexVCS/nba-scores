@@ -354,7 +354,7 @@ def find_mentions(question: str, context: AskContext, limits: LookupLimits = DEF
     folded = fold(question)
     playoff_context = bool(patterns.PLAYOFF_CONTEXT.search(folded))
 
-    mentions, masked = patterns.game_number_mentions(folded, question)
+    mentions, masked = patterns.game_number_mentions(folded, question, playoff_context)
     date_mentions, masked = dates.mentions(masked, question, today)
     page_season = context.playoff_season if context.route in ("playoffs", "series") else None
     season_mentions, masked = patterns.season_mentions(masked, question, today, playoff_context, page_season)
