@@ -42,7 +42,9 @@ def absent(field, confidence=0.95):
 
 
 class Fake:
-    def __init__(self, name, *fields, outcome="interpreted", reason=None, cost=0.0, error=None):
+    def __init__(self, name, *fields, outcome="interpreted", reason=None, cost=0.0, error=None,
+                 unsupported_confidence=None):
+        self.unsupported_confidence = unsupported_confidence
         self.name = "openai_responses" if name == "luna" else name
         self.model = f"{name}-model"
         self.fields = list(fields)
@@ -64,7 +66,7 @@ class Fake:
                                                                   usage=InterpreterUsage(provider_calls=1, cost_usd=self.cost)))
         return InterpreterOutput(
             outcome=self.outcome, fields=[] if self.outcome == "unsupported" else self.fields,
-            unsupported_reason=self.reason,
+            unsupported_reason=self.reason, unsupported_confidence=self.unsupported_confidence,
             metadata=InterpreterMetadata(adapter=self.name, provider="x", model=self.model, latency_ms=1,
                                          usage=InterpreterUsage(provider_calls=1, cost_usd=self.cost)),
         )
@@ -416,3 +418,40 @@ def test_undecided_target_team_is_clarified_as_teams():
                          fallback_enabled=False, remaining_budget_usd=1, remaining_ms=20_000)
     decision = POLICY.decide(state)
     assert (decision.action, decision.field) == ("clarify", "teams")
+
+
+def test_final_tier_unsupported_contests_an_accepted_intent():
+    jev = Fake("jev", sel("intent", "game_search"), sel("teams", CLE.id), sel("date", "date:0", confidence=0.4))
+    luna = Fake("luna", outcome="unsupported", reason="historical_comparison")
+    out = cascade(jev, luna).interpret(REQUEST)
+    assert out.outcome == "interpreted" and out.metadata.field_tiers["intent"] == "veto"
+    assert out.get_field("intent").confidence <= 0.5
+    decision = decide(out)
+    assert decision.action == "clarify"
+
+
+def test_final_tier_unsupported_stands_without_a_competing_intent():
+    jev = Fake("jev", sel("intent", "game_search", confidence=0.3), sel("date", "date:0", confidence=0.4))
+    luna = Fake("luna", outcome="unsupported", reason="standings")
+    out = cascade(jev, luna).interpret(REQUEST)
+    assert (out.outcome, out.unsupported_reason, out.metadata.field_tiers) == (
+        "unsupported", "standings", {"intent": "luna"})
+
+
+def test_middle_tier_unsupported_needs_its_own_accept_confidence_to_contest():
+    laya = Fake("laya", sel("intent", "game_search"), sel("date", "date:0"), sel("teams", CLE.id, confidence=0.5))
+    unsure = Fake("jev", outcome="unsupported", reason="other", unsupported_confidence=0.7)
+    luna = Fake("luna", sel("intent", "game_search", confidence=None), sel("teams", CLE.id, confidence=None))
+    out = cascade(laya, unsure, luna).interpret(REQUEST)
+    assert luna.calls == 1 and out.metadata.field_tiers["intent"] == "laya"
+    assert decide(out).action == "accept"
+
+    sure = Fake("jev", outcome="unsupported", reason="other", unsupported_confidence=0.95)
+    out = cascade(laya, sure, Fake("luna")).interpret(REQUEST)
+    assert out.metadata.field_tiers["intent"] == "veto"
+
+
+def test_unsupported_outcome_keeps_the_tier_confidence():
+    jev = Fake("jev", outcome="unsupported", reason="prediction", unsupported_confidence=0.72)
+    out = cascade(jev, Fake("luna")).interpret(REQUEST)
+    assert (out.outcome, out.unsupported_confidence) == ("unsupported", 0.72)

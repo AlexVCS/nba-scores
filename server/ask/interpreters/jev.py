@@ -242,7 +242,8 @@ def decode(response: dict[str, Any], team_ids: dict[str, str], t: JevThresholds)
         top_intent, top_p = intent_ranked[0]
         if top_intent == cs.UNSUPPORTED_INTENT and top_p >= t.unsupported_min:
             reason = _ranked(answers["unsupported_reason"])[0][0]
-            return {"outcome": "unsupported", "fields": [], "unsupported_reason": reason}
+            return {"outcome": "unsupported", "fields": [], "unsupported_reason": reason,
+                    "unsupported_confidence": _clamp(top_p)}
 
         fields = []
         if top_intent != cs.UNSUPPORTED_INTENT:

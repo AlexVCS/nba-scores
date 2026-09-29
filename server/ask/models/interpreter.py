@@ -151,6 +151,9 @@ class InterpreterOutput(ContractModel):
     # At most one entry per field. Missing fields are treated as "absent".
     fields: list[FieldInterpretation] = Field(default_factory=list, max_length=12)
     unsupported_reason: UnsupportedReason | None = None
+    # outcome == "unsupported" only: the adapter's confidence that the request is out of
+    # scope (Jev's "unsupported" intent probability). None when the adapter has none.
+    unsupported_confidence: float | None = Field(default=None, ge=0, le=1)
     # Only for adapters that extract dates directly (OpenAI) when the date
     # candidate set had no match. Python validates it; it never overrides a
     # selected date candidate.
@@ -165,6 +168,8 @@ class InterpreterOutput(ContractModel):
             raise ValueError("at most one interpretation per field")
         if (self.outcome == "unsupported") != (self.unsupported_reason is not None):
             raise ValueError("unsupported_reason is required iff outcome is unsupported")
+        if self.unsupported_confidence is not None and self.outcome != "unsupported":
+            raise ValueError("unsupported_confidence is only for unsupported outcomes")
         if self.outcome == "unavailable" and self.fields:
             raise ValueError("unavailable outputs carry no fields")
         return self
