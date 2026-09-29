@@ -326,7 +326,7 @@ failure into a different intent. Both OpenAI models also called the 28-day
 
 The second pass used 42 labels, lookup commit `5742a1c`, and the revised prompt.
 It included both Luna versions. The full case report is
-[`ask-interpreter-eval.json`](verification/ask-interpreter-eval.json). The
+[`ask-interpreter-eval-prereview.json`](verification/ask-interpreter-eval-prereview.json). The
 estimated spend was $0.089040, with no candidate errors or budget stop. No
 original label changed after the first pass. Six new cases cover invalid day
 numbers, historical team names, an unsupported leader percentage, and a page
@@ -352,6 +352,17 @@ The subsequent `cf3737b` lookup fix inferred the end year in a range crossing
 New Year. `dev-cross-year-range` is a 43rd label added after this run; its
 lookup candidate resolves to December 30, 2025 through January 2, 2026. The
 next run must include it.
+
+### Failed transport rerun
+
+A 43-case rerun after the interpreter review fixes produced `connection_error`
+for every provider request. Its [raw report](verification/ask-interpreter-eval-transport-failure.json)
+is retained, but its accuracy numbers say nothing about model quality. The
+spend guard charged $1.428937 in conservative reservations because the adapter
+could not read usage from those responses. Actual billing for those requests
+is unknown. A local reproduction points to response decoding in the HTTP
+helper. No architecture decision uses this run; a fixed transport needs a
+bounded rerun within the remaining authorized budget.
 
 ## Prototype fixture audit
 
