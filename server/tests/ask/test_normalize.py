@@ -323,3 +323,25 @@ def test_canonical_request_ignores_team_order():
     a = normalize(output(sel("intent", "game_search"), sel("date", "date:0"), sel("teams", CLE.id, BOS.id)), candidates)
     c = normalize(output(sel("intent", "game_search"), sel("date", "date:0"), sel("teams", BOS.id, CLE.id)), candidates)
     assert canonical_request(a.request) == canonical_request(c.request)
+
+
+def ambiguous(field, *values):
+    return FieldInterpretation(field=field, status="ambiguous", alternatives=list(values))
+
+
+def test_field_unclear_under_every_intent_is_asked_before_the_intent():
+    candidates = b.lookup_result([CLE, BOS, SEASON])
+    result = normalize(output(
+        ambiguous("intent", "playoff_series", "postseason_summary"), sel("season", SEASON.id),
+        ambiguous("teams", CLE.id, BOS.id),
+    ), candidates)
+    assert (result.status, result.clarify_field, result.clarify_reason) == ("needs_clarification", "teams", "ambiguous")
+
+
+def test_intent_is_asked_first_when_the_unclear_field_matters_to_only_one_reading():
+    candidates = b.lookup_result([TATUM, SEASON], unmatched={"player": ["Tatumm"]})
+    result = normalize(output(
+        ambiguous("intent", "boxscore_stat", "postseason_summary"), sel("season", SEASON.id),
+        FieldInterpretation(field="player", status="no_matching_candidate"),
+    ), candidates)
+    assert (result.clarify_field, result.clarify_reason) == ("intent", "ambiguous")
