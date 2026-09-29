@@ -183,6 +183,16 @@ def test_player_without_a_game_that_day_did_not_play(boards, monkeypatch, clear_
     assert error.value.code == "player_did_not_play"
 
 
+@pytest.mark.parametrize("days_after", [0, 1])
+def test_recent_empty_player_log_does_not_claim_did_not_play(boards, monkeypatch, clear_player_games, days_after):
+    monkeypatch.setattr(games, "nba_today", lambda: DAY + timedelta(days=days_after))
+    monkeypatch.setattr(nba_stats_client, "fetch_league_game_finder", FakeFinder())
+    with pytest.raises(UnavailableError) as error:
+        games.find_player_game(PLAYER, DAY)
+    assert error.value.reason == "recent_player_game_unverified"
+    assert boards.calls == [DAY.isoformat()]
+
+
 def test_player_rows_that_disagree_with_the_scoreboard_are_not_trusted(boards, monkeypatch, clear_player_games):
     rows = {(str(PLAYER), "01/15/2024"): [finder_row("0022300609", "BOS")]}
     monkeypatch.setattr(nba_stats_client, "fetch_league_game_finder", FakeFinder(rows))

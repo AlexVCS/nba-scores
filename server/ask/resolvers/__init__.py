@@ -114,6 +114,15 @@ def _boxscore(request: BoxscoreStatRequest) -> ResolverOutput:
 def resolve(request: AskRequest) -> ResolverOutput:
     """Execute one validated request. Raises ``errors.ResolverError`` subclasses."""
     gate = request_spoiler_gate(request)
+    if gate and isinstance(request, BoxscoreStatRequest):
+        selector = request.game
+        named_teams = bool(selector.teams or request.team)
+        unique_finals = selector.round == "finals"
+        if (request.scope in ("leaders", "team") and not named_teams and not selector.game_id
+                and not unique_finals and (selector.date or selector.round)):
+            # A lookup-dependent clarification would reveal whether a
+            # conditional playoff game took place on this date or in this round.
+            raise ClarificationError("teams", "missing", "hidden_game_needs_teams")
     try:
         output = _resolve(request)
     except NotFoundError as error:

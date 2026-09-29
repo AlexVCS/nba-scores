@@ -6,6 +6,7 @@ import pytest
 from server.ask.models.request import BoxscoreStatRequest
 from server.ask.resolvers import boxscore, games, resolve, resolve_boxscore_game
 from server.ask.resolvers.errors import ClarificationError, NotFoundError, UnavailableError, UnsupportedError
+from server.ask.resolvers.spoiler_policy import HIDDEN_GAME_GATE
 from server.services import nba_stats_client
 from server.tests.ask.test_resolvers_support import (  # noqa: F401
     FakeBoxscores,
@@ -209,6 +210,27 @@ def test_leaders_by_game_id(game_data):
     output = resolve(request(scope="leaders", game={"game_id": GAME, "date": "2024-01-15"}))
     assert output.result.leaders.value[0].rank == 1
     assert_fits_answer(output, "boxscore_stat")
+
+
+def test_gated_leaders_without_teams_clarify_before_game_lookup(monkeypatch):
+    monkeypatch.setattr("server.ask.resolvers.request_spoiler_gate", lambda _request: HIDDEN_GAME_GATE)
+    monkeypatch.setattr(games, "find_game_on_date", lambda *args: pytest.fail("game lookup disclosed schedule"))
+    monkeypatch.setattr("server.ask.resolvers.playoffs.find_playoff_game",
+                        lambda *args: pytest.fail("series lookup disclosed participants"))
+    for selector in ({"date": "2024-05-15"},
+                     {"season": "2023-24", "round": "conference_semifinals", "game_number": 5}):
+        with pytest.raises(ClarificationError) as error:
+            resolve(request(scope="leaders", game=selector))
+        assert (error.value.field, error.value.clarify_reason) == ("teams", "missing")
+
+
+def test_known_finals_and_named_team_do_not_get_preemptive_clarification(game_data, monkeypatch):
+    monkeypatch.setattr("server.ask.resolvers.request_spoiler_gate", lambda _request: HIDDEN_GAME_GATE)
+    monkeypatch.setattr("server.ask.resolvers.playoffs.find_playoff_game", lambda *args: final_game())
+    finals = resolve(request(scope="leaders", game={"season": "2023-24", "round": "finals", "game_number": 1}))
+    assert finals.result.leaders.value
+    named = resolve(request(scope="leaders", game={"date": "2024-01-15", "teams": [team("BOS")]}))
+    assert named.result.leaders.value
 
 
 def test_named_team_not_in_the_game_is_not_found(game_data):
