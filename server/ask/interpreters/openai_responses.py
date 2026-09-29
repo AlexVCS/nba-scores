@@ -34,6 +34,7 @@ from server.ask.models.interpreter import (
     InterpreterOutput,
     InterpreterUsage,
 )
+from server.ask.models.request import AskContext
 
 logger = logging.getLogger(__name__)
 
@@ -93,6 +94,9 @@ Field rules (every field has a status and a list of IDs/values):
 - stat_scope, stat, aggregation matter only for one game's box score. Use stat "stat_line"
   when no particular statistic is named, and aggregation "per_game" when the question
   asks for an average across games.
+- `page_game` true means the user is viewing one game's box score, so "this game"
+  or "here" means that game, not an earlier answer. Leave date, season, round, and
+  game_number absent; the app supplies the game.
 - If the request is outside the intents above, set intent "unsupported" and a reason.
 {date_rule}"""
 
@@ -158,7 +162,8 @@ def build_schema(candidates: CandidateLookupResult) -> dict[str, Any]:
     return {"type": "object", "additionalProperties": False, "required": list(properties), "properties": properties}
 
 
-def candidate_context(question: str, candidates: CandidateLookupResult) -> dict[str, Any]:
+def candidate_context(question: str, candidates: CandidateLookupResult,
+                      context: AskContext | None = None) -> dict[str, Any]:
     listing: dict[str, Any] = {}
     for name, cand_field in CANDIDATE_FIELDS.items():
         cset = candidates.sets[cand_field]
@@ -175,6 +180,7 @@ def candidate_context(question: str, candidates: CandidateLookupResult) -> dict[
         listing[name] = entries
     return {
         "question": question,
+        "page_game": bool(context and context.route == "boxscore" and context.game_id),
         "candidates": listing,
         "options": {
             "stat_scope": cs.STAT_SCOPES,
@@ -285,7 +291,7 @@ class OpenAIResponsesAdapter:
             "model": self.config.model,
             "input": [
                 {"role": "developer", "content": instructions},
-                {"role": "user", "content": json.dumps(candidate_context(request.question, candidates))},
+                {"role": "user", "content": json.dumps(candidate_context(request.question, candidates, request.context))},
             ],
             "text": {
                 "format": {

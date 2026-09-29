@@ -9,6 +9,9 @@ Rules:
   `year_required` / `range_too_long` clarification. The year is never defaulted.
 - A boxscore request with `aggregation="per_game"` is unsupported (`multi_game_average`).
 - `extracted_date` is used only when the date candidate set had no candidates.
+- A relevant field read as absent takes the page's value when lookup offered exactly
+  one candidate for it and that candidate came from the app context. Lookup offers
+  page candidates only when the question points at the page.
 """
 
 from __future__ import annotations
@@ -156,7 +159,7 @@ class Normalizer:
         try:
             self._check_values(output, candidates)
             self._check_truncation(output, candidates)
-            return self._build(output, candidates, context)
+            return self._build(_with_page_context(output, candidates), candidates, context)
         except _Clarify as c:
             return NormalizationResult(status="needs_clarification", clarify_field=c.field, clarify_reason=c.reason)
         except _Invalid as exc:
@@ -365,6 +368,21 @@ class Normalizer:
         if len(teams) > 1:
             raise _Clarify("teams", "ambiguous")
         return PostseasonSummaryRequest(season=season, team=teams[0] if teams else None)
+
+
+def _with_page_context(output: InterpreterOutput, candidates: CandidateLookupResult) -> InterpreterOutput:
+    """Fill absent relevant fields from a lone app-context candidate ("the season shown here")."""
+    fields = {f.field: f for f in output.fields}
+    filled = False
+    for name in relevant_fields(output) & CANDIDATE_SET_FOR.keys():
+        read = fields.get(name)
+        if read is not None and read.status != "absent":
+            continue
+        offered = candidates.sets[CANDIDATE_SET_FOR[name]].candidates
+        if len(offered) == 1 and offered[0].source == "app_context":
+            fields[name] = FieldInterpretation(field=name, status="selected", selected=[offered[0].id])
+            filled = True
+    return output.model_copy(update={"fields": list(fields.values())}) if filled else output
 
 
 def relevant_fields(output: InterpreterOutput) -> frozenset[str]:

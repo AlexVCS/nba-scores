@@ -240,7 +240,11 @@ def _looks_like_full_name(players: PlayerIndex, scan: _Scan, i: int) -> bool:
 
 # --- app context -----------------------------------------------------------
 
-_THAT_DAY = re.compile(r"\b(?:that|this|the\s+same)\s+(?:day|date|night)\b|\bon\s+this\s+date\b")
+_THAT_DAY = re.compile(
+    r"\b(?:that|this|the\s+same)\s+(?:day|date|night)\b|\bon\s+this\s+date\b"
+    r"|\b(?:the\s+)?(?:day|date)\s+(?:selected|shown)(?:\s+(?:on\s+(?:this|the)\s+(?:page|screen)|here))?\b"
+    r"|\b(?:the\s+)?(?:selected|shown)\s+(?:day|date)\b"
+)
 _ON_SCREEN_SEASON = re.compile(r"\b(?:this|that|these|those)\s+(?:series|bracket|playoffs?|postseason)\b")
 
 

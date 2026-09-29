@@ -202,8 +202,11 @@ _ROUNDS: tuple[tuple[re.Pattern, str, float, str | None], ...] = tuple(
     (re.compile(p), key, score, note) for p, key, score, note in (
         (rf"\b{_CONF}{_CONF_WORD}\s+(?:finals?|championship)\b", "conference_finals", 1.0, None),
         (r"\b(ecf|wcf)\b", "conference_finals", 1.0, None),
+        (rf"\bconf(?:erence|\.)?\s+(?:finals?|championship)\s+(?:in|of|for)\s+the\s+{_CONF}\b",
+         "conference_finals", 1.0, None),
         (r"\bconf(?:erence|\.)?\s+(?:finals?|championship)\b", "conference_finals", 1.0, None),
         (rf"\b{_CONF}{_CONF_WORD}\s+{_SEMIS}\b", "conference_semifinals", 1.0, None),
+        (rf"\bconf(?:erence|\.)?\s+{_SEMIS}\s+(?:in|of|for)\s+the\s+{_CONF}\b", "conference_semifinals", 1.0, None),
         (rf"\bconf(?:erence|\.)?\s+{_SEMIS}\b", "conference_semifinals", 1.0, None),
         (r"\bdivision\s+finals?\b", "conference_finals", 0.7, None),
         (rf"\bdivision\s+{_SEMIS}\b", "conference_semifinals", 0.7, None),
