@@ -229,3 +229,21 @@ def test_long_clarification_does_not_issue_truncated_question(tmp_path, case):
     assert response.outcome == "needs_clarification"
     assert response.clarification.options == []
     assert "Shorten your question" in response.clarification.hint
+
+
+@pytest.mark.parametrize("total_seconds, max_interpreter_ms", [(20, 15000), (4, 3000)])
+def test_interpretation_leaves_time_for_nba_resolution(tmp_path, total_seconds, max_interpreter_ms):
+    deadlines = []
+
+    class CapturingAdapter(Adapter):
+        def interpret(self, request):
+            deadlines.append(request.deadline_ms)
+            return super().interpret(request)
+
+    coordinator = pipeline(tmp_path, Lookup(b.lookup_result([])), CapturingAdapter(),
+                           deadline_seconds=total_seconds)
+    response = coordinator.answer(AskQuery(question="Explain basketball history"))
+    assert response.outcome == "unsupported"
+    assert len(deadlines) == 1
+    assert 0 < deadlines[0] <= max_interpreter_ms
+    assert coordinator.config.deadline_seconds == total_seconds

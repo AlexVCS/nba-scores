@@ -188,7 +188,10 @@ class AskPipeline:
     def answer(self, query: AskQuery) -> AskResponse:
         from server.ask.budget import BudgetExhausted, BudgetUnavailable
 
-        deadline = time.monotonic() + self.config.deadline_seconds
+        # Leave time for verified NBA retrieval after interpretation. The HTTP
+        # boundary retains its full deadline and occupied-worker accounting.
+        resolver_reserve = min(5.0, self.config.deadline_seconds / 4)
+        deadline = time.monotonic() + self.config.deadline_seconds - resolver_reserve
         question, context = query.question, self._context(query)
         if not self.config.enabled:
             return self.disabled(question)
