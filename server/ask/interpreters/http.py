@@ -7,11 +7,16 @@ so tests can inject `httpx.MockTransport` and no provider SDK is required.
 from __future__ import annotations
 
 import time
-from typing import Any
+import threading
+from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeout
+from typing import Any, Callable
 
 import httpx
 
 RETRYABLE_STATUS = frozenset({429, 500, 502, 503, 529})
+_MAX_IN_FLIGHT = 4
+_HTTP_WORKERS = ThreadPoolExecutor(max_workers=_MAX_IN_FLIGHT, thread_name_prefix="ask-provider-http")
+_HTTP_SLOTS = threading.BoundedSemaphore(_MAX_IN_FLIGHT)
 
 
 class ProviderError(Exception):
@@ -53,11 +58,42 @@ def post_json(
     max_retries: int = 1,
     backoff_s: float = 0.5,
     deadline: float | None = None,
+    on_attempt: Callable[[], None] | None = None,
 ) -> dict[str, Any]:
     """POST JSON and return the decoded object. `deadline` is a time.monotonic() value.
 
     Never includes request headers in raised errors, so keys cannot leak into logs.
     """
+    if deadline is None:
+        return _post_json(client, url, api_key, payload, timeout_s=timeout_s,
+                          max_retries=max_retries, backoff_s=backoff_s, on_attempt=on_attempt)
+    remaining = deadline - time.monotonic()
+    if remaining <= 0 or not _HTTP_SLOTS.acquire(timeout=remaining):
+        raise ProviderError("deadline_exceeded")
+    future = _HTTP_WORKERS.submit(
+        _post_json, client, url, api_key, payload, timeout_s=timeout_s,
+        max_retries=max_retries, backoff_s=backoff_s, deadline=deadline, on_attempt=on_attempt,
+    )
+    future.add_done_callback(lambda _: _HTTP_SLOTS.release())
+    try:
+        return future.result(timeout=max(0, deadline - time.monotonic()))
+    except FutureTimeout as exc:
+        future.cancel()
+        raise ProviderError("deadline_exceeded") from exc
+
+
+def _post_json(
+    client: httpx.Client,
+    url: str,
+    api_key: str,
+    payload: dict[str, Any],
+    *,
+    timeout_s: float,
+    max_retries: int,
+    backoff_s: float,
+    deadline: float | None = None,
+    on_attempt: Callable[[], None] | None = None,
+) -> dict[str, Any]:
     headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
     attempt = 0
     while True:
@@ -67,7 +103,17 @@ def post_json(
             if remaining <= 0.05:
                 raise ProviderError("deadline_exceeded")
         try:
-            response = client.post(url, json=payload, headers=headers, timeout=remaining)
+            if on_attempt is not None:
+                on_attempt()
+            with client.stream("POST", url, json=payload, headers=headers, timeout=remaining) as response:
+                body = bytearray()
+                for chunk in response.iter_bytes():
+                    if deadline is not None and time.monotonic() >= deadline:
+                        raise ProviderError("deadline_exceeded")
+                    body.extend(chunk)
+                if deadline is not None and time.monotonic() >= deadline:
+                    raise ProviderError("deadline_exceeded")
+                response = httpx.Response(response.status_code, headers=response.headers, content=bytes(body))
         except httpx.TimeoutException as exc:
             raise ProviderError("timeout", f"after {remaining:.1f}s") from exc
         except httpx.HTTPError as exc:
@@ -87,6 +133,8 @@ def post_json(
             raise ProviderError("invalid_response", "not JSON") from exc
         if not isinstance(data, dict):
             raise ProviderError("invalid_response", "not a JSON object")
+        if deadline is not None and time.monotonic() >= deadline:
+            raise ProviderError("deadline_exceeded")
         return data
 
 

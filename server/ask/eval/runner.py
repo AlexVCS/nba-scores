@@ -60,7 +60,7 @@ class DriveResult:
     attempts: list[CascadeAttempt]
     expanded_fields: list[str]
     latency_ms: int
-    cost_usd: float
+    cost_usd: float | None
     fallback_used: bool
     budget_blocked: bool = False
 
@@ -107,6 +107,7 @@ def drive(
 ) -> DriveResult:
     normalizer = normalizer or Normalizer()
     started = time.perf_counter()
+    cached_latency_ms = cached_primary.metadata.latency_ms if cached_primary is not None else 0
     attempts: list[CascadeAttempt] = []
     expanded: list[str] = []
     adapter = config.primary
@@ -114,7 +115,7 @@ def drive(
     decision: CascadeDecision = FailDecision(reason="no attempts")
 
     for index in range(MAX_ATTEMPTS):
-        elapsed = int((time.perf_counter() - started) * 1000)
+        elapsed = cached_latency_ms + int((time.perf_counter() - started) * 1000)
         remaining_ms = max(0, deadline_ms - elapsed)
         if index == 0 and cached_primary is not None:
             output = cached_primary
@@ -129,7 +130,7 @@ def drive(
             normalizer.normalize(output, candidates, context) if output.outcome == "interpreted" else None
         )
         attempts.append(CascadeAttempt(output=output, normalization=normalization))
-        elapsed = int((time.perf_counter() - started) * 1000)
+        elapsed = cached_latency_ms + int((time.perf_counter() - started) * 1000)
         state = CascadeState(
             attempts=attempts, candidates=candidates, expanded_fields=expanded,
             fallback_enabled=config.fallback_enabled and config.fallback is not None,
@@ -167,9 +168,12 @@ def drive(
         request=request,
         attempts=attempts,
         expanded_fields=expanded,
-        latency_ms=int((time.perf_counter() - started) * 1000)
-        + (cached_primary.metadata.latency_ms if cached_primary is not None else 0),
-        cost_usd=sum(a.output.metadata.usage.cost_usd or 0.0 for a in attempts),
+        latency_ms=int((time.perf_counter() - started) * 1000) + cached_latency_ms,
+        cost_usd=(
+            None if any(a.output.metadata.usage.provider_calls > 0
+                        and a.output.metadata.usage.cost_usd is None for a in attempts)
+            else sum(a.output.metadata.usage.cost_usd or 0.0 for a in attempts)
+        ),
         fallback_used=fallback_model is not None and any(a.output.metadata.model == fallback_model for a in attempts),
         budget_blocked=budget_blocked,
     )
@@ -234,7 +238,7 @@ class CaseScore:
     guess: bool
     failure: str | None
     latency_ms: int
-    cost_usd: float
+    cost_usd: float | None
     fallback_used: bool
     first_outcome: str
     resolved_models: list[str]
@@ -286,7 +290,7 @@ def score(case: LabeledCase, config: str, result: DriveResult) -> CaseScore:
         guess=guess,
         failure=failure,
         latency_ms=result.latency_ms,
-        cost_usd=round(result.cost_usd, 8),
+        cost_usd=round(result.cost_usd, 8) if result.cost_usd is not None else None,
         fallback_used=result.fallback_used,
         first_outcome=outputs[0].outcome if outputs else "none",
         resolved_models=sorted({o.metadata.resolved_model for o in outputs if o.metadata.resolved_model}),
@@ -319,7 +323,7 @@ def summarize(cases: dict[str, LabeledCase], scores: list[CaseScore]) -> dict[st
     clarified = [s for s in scores if s.action == "clarify"]
     unsupported = [s for s in scores if s.action == "unsupported"]
     latencies = [s.latency_ms for s in scores]
-    total_cost = sum(s.cost_usd for s in scores)
+    total_cost = None if any(s.cost_usd is None for s in scores) else sum(s.cost_usd for s in scores)
     return {
         "cases": n,
         "complete_request_accuracy": round(correct / n, 4) if n else None,
@@ -339,8 +343,9 @@ def summarize(cases: dict[str, LabeledCase], scores: list[CaseScore]) -> dict[st
             "false": sum(cases[s.case_id].action != "unsupported" for s in unsupported),
         },
         "latency_ms": {"median": statistics.median(latencies) if latencies else None, "p95": percentile(latencies, 95)},
-        "total_cost_usd": round(total_cost, 6),
-        "cost_per_successful_answer_usd": round(total_cost / correct, 6) if correct else None,
+        "total_cost_usd": round(total_cost, 6) if total_cost is not None else None,
+        "cost_per_successful_answer_usd": round(total_cost / correct, 6)
+        if correct and total_cost is not None else None,
         "fallback_rate": round(sum(s.fallback_used for s in scores) / n, 4) if n else None,
         "resolved_models": sorted({m for s in scores for m in s.resolved_models}),
         "failures": {k: sum(s.failure == k for s in scores) for k in sorted({s.failure for s in scores if s.failure})},

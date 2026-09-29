@@ -169,6 +169,39 @@ def test_unavailable_primary_uses_fallback_only_when_enabled():
     assert drive(cascade, case.question, case.context, case.candidates, guard=SpendGuard(1)).decision.action == "fail"
 
 
+def test_cached_primary_latency_reduces_fallback_deadline():
+    primary = FakeAdapter("jev", "jev-1.13.0", {"Cavs games last week": "unavailable"})
+    luna = FakeAdapter("openai_responses", "gpt-6-luna", GOOD)
+    cached = InterpreterOutput(
+        outcome="unavailable", error_code="timeout",
+        metadata=InterpreterMetadata(adapter="jev", provider="fake", model="jev-1.13.0",
+                                     latency_ms=29_000, usage=InterpreterUsage(provider_calls=1, cost_usd=0.001)),
+    )
+    case = BY_ID["smoke-games-last-week"]
+    outcome = drive(configs(primary, luna)[1], case.question, case.context, case.candidates,
+                    guard=SpendGuard(1), deadline_ms=30_000, cached_primary=cached)
+    assert outcome.decision.action == "fail"
+    assert primary.calls == luna.calls == 0
+    assert outcome.latency_ms >= 29_000
+
+
+def test_unknown_provider_cost_retains_full_reservation():
+    class UnknownCost(FakeAdapter):
+        def interpret(self, request):
+            output = super().interpret(request)
+            return output.model_copy(update={"metadata": output.metadata.model_copy(update={
+                "usage": InterpreterUsage(provider_calls=1, cost_usd=None)
+            })})
+
+    primary = UnknownCost("jev", "jev-1.13.0", GOOD, cost=0.4)
+    case = BY_ID["smoke-games-last-week"]
+    guard = SpendGuard(0.5)
+    outcome = drive(configs(primary, None)[0], case.question, case.context, case.candidates, guard=guard)
+    assert guard.spent_usd == pytest.approx(0.4)
+    assert guard.remaining_usd == pytest.approx(0.1)
+    assert outcome.cost_usd is None
+
+
 def test_expansion_without_lookup_becomes_clarification():
     script = {"Did the Sonics play last night?": [
         sel("intent", "game_search", confidence=0.9), sel("date", "date:0", confidence=0.9),

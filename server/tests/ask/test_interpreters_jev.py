@@ -5,6 +5,7 @@ import pytest
 
 from server.ask.eval import builders as b
 from server.ask.interpreters import closed_sets as cs
+from server.ask.interpreters.http import ProviderError
 from server.ask.interpreters.jev import JevAdapter, JevThresholds, build_questions, decode
 from server.ask.models.common import DateComponents
 from server.ask.models.interpreter import InterpreterInput
@@ -123,6 +124,36 @@ def test_decode_team_count_disagreement_is_ambiguous():
     fields = {f.field: f for f in decode({"answers": answers}, team_ids, JevThresholds())["fields"]}
     assert fields["teams"].status == "ambiguous"
     assert set(fields["teams"].alternatives) == {"team:1610612747", "team:1610612746"}
+
+
+@pytest.mark.parametrize("count", ["1", "2", "3+"])
+def test_team_count_cannot_silently_drop_unselected_teams(count):
+    candidates = b.lookup_result([CLE, LAST_WEEK])
+    questions, team_ids = build_questions(candidates)
+    answers = fake_answers(
+        questions, picks={"intent": ("game_search", 0.95), "date": ("date:0", 0.9),
+                          "team_count": (count, 0.95)}, nouls={"team_0": 0.02},
+    )
+    with pytest.raises(ProviderError, match="inconsistent_team_count"):
+        decode({"answers": answers}, team_ids, JevThresholds())
+
+
+def test_missing_usage_keeps_cost_unknown_and_retries_counted():
+    seen = 0
+    def handler(request):
+        nonlocal seen
+        seen += 1
+        if seen == 1:
+            return httpx.Response(503, json={"error": {"type": "overloaded"}})
+        body = json.loads(request.content)
+        answers = fake_answers(body["questions"], picks={"intent": ("game_search", 0.95)})
+        return httpx.Response(200, json={"model": "jev-1.13.0", "answers": answers})
+
+    output = _adapter(handler).interpret(request_for("q", b.lookup_result([])))
+    assert seen == 2
+    assert output.metadata.usage.provider_calls == 2
+    assert output.metadata.usage.input_tokens is None
+    assert output.metadata.usage.cost_usd is None
 
 
 def test_decode_unsupported_and_unreliable():

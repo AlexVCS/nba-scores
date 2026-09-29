@@ -202,10 +202,12 @@ def decide_teams(answers: dict[str, Any], team_ids: dict[str, str], t: JevThresh
         return FieldInterpretation(field="teams", status="no_matching_candidate", confidence=_clamp(unlisted))
     count_ranked = _ranked(answers.get("team_count", {}))
     count, count_p = count_ranked[0] if count_ranked else (None, 0.0)
-    count_disagrees = (
-        count in ("0", "1", "2") and count_p >= t.count_min and int(count) < len(selected)
+    count_disagrees = count_p >= t.count_min and (
+        count == "3+" or (count in ("0", "1", "2") and int(count) != len(selected))
     )
     if len(selected) > 2 or count_disagrees:
+        if len(plausible) < 2:
+            raise ProviderError("inconsistent_team_count")
         return FieldInterpretation(
             field="teams", status="ambiguous", alternatives=plausible[:12], confidence=confidence
         )
@@ -278,7 +280,7 @@ class JevAdapter:
 
     def estimate_cost(self, request: InterpreterInput) -> float:
         payload, _ = self.build_payload(request)
-        return estimate_max_cost(self.model, len(json.dumps(payload)), 0)
+        return 2 * estimate_max_cost(self.model, len(json.dumps(payload)), 0)
 
     def _metadata(self, started: float, resolved: str | None = None, usage: InterpreterUsage | None = None):
         return InterpreterMetadata(
@@ -297,30 +299,39 @@ class JevAdapter:
             payload, team_ids = self.build_payload(request)
         except ValueError:
             return InterpreterOutput(outcome="unavailable", error_code="too_many_options", metadata=self._metadata(started))
-        if estimate_max_cost(self.model, len(json.dumps(payload)), 0) > request.max_cost_usd:
+        if 2 * estimate_max_cost(self.model, len(json.dumps(payload)), 0) > request.max_cost_usd:
             return InterpreterOutput(outcome="unavailable", error_code="budget_exceeded", metadata=self._metadata(started))
 
-        usage = InterpreterUsage(provider_calls=1)
+        calls = 0
+        def record_attempt() -> None:
+            nonlocal calls
+            calls += 1
+
+        usage = InterpreterUsage(provider_calls=0)
         resolved = None
         try:
             response = post_json(
-                self._client, self.url, self.api_key, payload, timeout_s=self.timeout_s, deadline=deadline
+                self._client, self.url, self.api_key, payload, timeout_s=self.timeout_s, deadline=deadline,
+                on_attempt=record_attempt,
             )
             resolved = response.get("model")
             logger.info("jev requested=%s resolved=%s", self.model, resolved)
             if resolved != self.model:
                 logger.warning("Jev resolved model %s differs from pinned %s", resolved, self.model)
             raw_usage = response.get("usage") or {}
-            input_tokens = int(raw_usage.get("input_tokens") or 0)
-            output_tokens = int(raw_usage.get("output_tokens") or 0)
+            input_tokens = int(raw_usage["input_tokens"]) if raw_usage.get("input_tokens") is not None else None
+            output_tokens = int(raw_usage["output_tokens"]) if raw_usage.get("output_tokens") is not None else None
             usage = InterpreterUsage(
                 input_tokens=input_tokens,
                 output_tokens=output_tokens,
-                provider_calls=1,
-                cost_usd=cost_usd(self.model, input_tokens, output_tokens),
+                provider_calls=calls,
+                cost_usd=cost_usd(self.model, input_tokens, output_tokens)
+                if calls == 1 and input_tokens is not None and output_tokens is not None else None,
             )
             decoded = decode(response, team_ids, self.thresholds)
         except ProviderError as exc:
+            if usage.provider_calls != calls:
+                usage = InterpreterUsage(provider_calls=calls)
             logger.info("jev unavailable: %s", exc)
             return InterpreterOutput(
                 outcome="unavailable", error_code=exc.code, metadata=self._metadata(started, resolved, usage)

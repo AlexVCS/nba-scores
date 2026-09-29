@@ -116,6 +116,32 @@ def test_extracted_date_is_kept_and_date_field_dropped():
     assert output.get_field("date") is None
 
 
+@pytest.mark.parametrize("month,day", [(2, 32), (0, 1)])
+def test_invalid_extracted_date_requests_date_clarification(month, day):
+    output_json = blank_output(extracted_date={
+        "kind": "calendar_date", "year": 2026, "month": month, "day": day,
+        "end_year": None, "end_month": None, "end_day": None,
+        "relative": None, "weekday": None, "count": None,
+    })
+    output = adapter(lambda r: httpx.Response(200, json=responses_body(output_json))).interpret(
+        request_for("games on invalid date", b.lookup_result([]))
+    )
+    assert output.outcome == "interpreted"
+    assert output.extracted_date is None
+    assert output.get_field("date").status == "no_matching_candidate"
+
+
+def test_missing_usage_keeps_cost_unknown():
+    body = responses_body(blank_output())
+    del body["usage"]
+    output = adapter(lambda r: httpx.Response(200, json=body)).interpret(
+        request_for("q", b.lookup_result([]))
+    )
+    assert output.metadata.usage.provider_calls == 1
+    assert output.metadata.usage.input_tokens is None
+    assert output.metadata.usage.cost_usd is None
+
+
 def test_unknown_ids_or_bad_shapes_are_unreliable_not_guesses():
     bad_id = blank_output(player={"status": "selected", "values": ["player:999"]})
     output = adapter(lambda r: httpx.Response(200, json=responses_body(bad_id))).interpret(

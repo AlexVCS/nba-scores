@@ -191,11 +191,18 @@ def decode(output: dict[str, Any], candidates: CandidateLookupResult) -> dict[st
     for name, options in CLOSED_FIELDS.items():
         fields.append(_field(name, output[name], set(options)))
     extracted = None
+    invalid_extracted_date = False
     if may_extract_date(candidates) and output.get("extracted_date") is not None:
-        extracted = DateComponents.model_validate(output["extracted_date"])
+        try:
+            extracted = DateComponents.model_validate(output["extracted_date"])
+        except ValidationError:
+            invalid_extracted_date = True
     for name, cand_field in CANDIDATE_FIELDS.items():
         if name == "date" and extracted is not None:
             continue  # the extracted date stands in for the (empty) date candidate set
+        if name == "date" and invalid_extracted_date:
+            fields.append(FieldInterpretation(field="date", status="no_matching_candidate"))
+            continue
         allowed = {c.id for c in candidates.sets[cand_field].candidates}
         fields.append(_field(name, output[name], allowed))
     return {"outcome": "interpreted", "fields": fields, "unsupported_reason": None, "extracted_date": extracted}
@@ -279,7 +286,7 @@ class OpenAIResponsesAdapter:
 
     def estimate_cost(self, request: InterpreterInput) -> float:
         payload = self.build_payload(request)
-        return estimate_max_cost(self.config.model, len(json.dumps(payload)), self.config.max_output_tokens)
+        return 2 * estimate_max_cost(self.config.model, len(json.dumps(payload)), self.config.max_output_tokens)
 
     def _metadata(self, started: float, resolved: str | None = None, usage: InterpreterUsage | None = None):
         return InterpreterMetadata(
@@ -295,32 +302,41 @@ class OpenAIResponsesAdapter:
         started = time.perf_counter()
         deadline = time.monotonic() + request.deadline_ms / 1000
         payload = self.build_payload(request)
-        estimate = estimate_max_cost(self.config.model, len(json.dumps(payload)), self.config.max_output_tokens)
+        estimate = 2 * estimate_max_cost(self.config.model, len(json.dumps(payload)), self.config.max_output_tokens)
         if estimate > request.max_cost_usd:
             return InterpreterOutput(outcome="unavailable", error_code="budget_exceeded", metadata=self._metadata(started))
 
-        usage = InterpreterUsage(provider_calls=1)
+        calls = 0
+        def record_attempt() -> None:
+            nonlocal calls
+            calls += 1
+
+        usage = InterpreterUsage(provider_calls=0)
         resolved = None
         try:
             response = post_json(
                 self._client, self.url, self.api_key, payload,
-                timeout_s=self.config.timeout_s, deadline=deadline,
+                timeout_s=self.config.timeout_s, deadline=deadline, on_attempt=record_attempt,
             )
             resolved = response.get("model")
             logger.info("openai requested=%s resolved=%s", self.config.model, resolved)
             raw_usage = response.get("usage") or {}
-            input_tokens = int(raw_usage.get("input_tokens") or 0)
-            output_tokens = int(raw_usage.get("output_tokens") or 0)
-            cached = int((raw_usage.get("input_tokens_details") or {}).get("cached_tokens") or 0)
+            input_tokens = int(raw_usage["input_tokens"]) if raw_usage.get("input_tokens") is not None else None
+            output_tokens = int(raw_usage["output_tokens"]) if raw_usage.get("output_tokens") is not None else None
+            raw_cached = (raw_usage.get("input_tokens_details") or {}).get("cached_tokens")
+            cached = int(raw_cached) if raw_cached is not None else None
             usage = InterpreterUsage(
                 input_tokens=input_tokens,
                 output_tokens=output_tokens,
                 cached_input_tokens=cached,
-                provider_calls=1,
-                cost_usd=cost_usd(self.config.model, input_tokens, output_tokens, cached),
+                provider_calls=calls,
+                cost_usd=cost_usd(self.config.model, input_tokens, output_tokens, cached or 0)
+                if calls == 1 and input_tokens is not None and output_tokens is not None else None,
             )
             text = extract_output_text(response)
         except ProviderError as exc:
+            if usage.provider_calls != calls:
+                usage = InterpreterUsage(provider_calls=calls)
             logger.info("openai unavailable: %s", exc)
             return InterpreterOutput(
                 outcome="unavailable", error_code=exc.code, metadata=self._metadata(started, resolved, usage)

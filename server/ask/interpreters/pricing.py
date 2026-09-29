@@ -44,9 +44,9 @@ def cost_usd(model: str, input_tokens: int, output_tokens: int, cached_input_tok
 
 
 def estimate_max_cost(model: str, prompt_chars: int, max_output_tokens: int) -> float:
-    """Conservative upper bound: ~1 token per 2 characters plus the full output allowance."""
+    """Reserve for one token per serialized character, overhead, and full output."""
     price = price_for(model)
-    input_tokens = prompt_chars // 2 + 64
+    input_tokens = prompt_chars + 1024
     return (input_tokens * price.input + max_output_tokens * price.output) / 1_000_000
 
 
