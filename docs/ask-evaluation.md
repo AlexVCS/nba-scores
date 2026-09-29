@@ -387,7 +387,7 @@ For the gate, we recomputed complete-request accuracy on the 26 cases labeled
 | GPT-6 Luna | 26/26 | 11/12 | 5/5 | 0 | 0 | 2,143 ms | 3,582 ms | $0.000120 |
 | Jev → GPT-6 Luna | 22/26 | 11/12 | 5/5 | 0 | 0 | 192 ms | 2,526 ms | $0.000142 |
 
-GPT-6 Luna passed every development gate. Its only miss was `dev-073`, an
+The configured GPT-6 Luna pipeline passed every development gate in this run. Its only miss was `dev-073`, an
 unknown Seattle Pilots team in a single-game stat question: it returned
 `unsupported/not_basketball` where the label calls for a team clarification.
 Jev and the cascade failed the complete-request gate, despite lower median
@@ -398,11 +398,20 @@ answer ($0.000649 versus $0.000301). GPT-5.6 Luna and gpt-4.1-mini were not
 rerun after the transport fix; that earlier result is background, not a gate
 claim for the final 43 cases.
 
-Use GPT-6 Luna alone for the pipeline. The provider currently resolves its
-undated `gpt-6-luna` ID to the same undated ID, so log the evaluation date and
-resolved model and rerun the release set if it changes. Keep the endpoint
-disabled until the unseen 75–100 question release set passes the same gates
-with a separate budget and a current lookup snapshot.
+GPT-6 Luna was selected provisionally for the local development pipeline. This
+is not a settled production model choice. The Jev adapter and cascade still use
+uncalibrated confidence thresholds; Luna reports no field confidence and does
+not face those vetoes. Jev also has no missing-date extraction path equivalent
+to Luna's. These results compare configured implementations, not intrinsic
+model ability. The report does not retain field probabilities, so it cannot
+attribute Jev's ten unnecessary clarifications to particular thresholds.
+
+Before choosing a production architecture, diagnose both implementations on
+shared development questions, calibrate Jev thresholds on exposed data, freeze
+both configurations, and compare them on a new unseen set. The later independent
+Luna release failures below reinforce that the original choice was provisional.
+Keep production disabled until the frozen release gates pass. Record the
+provider-resolved model and evaluation date for every comparison.
 
 ## Prototype fixture audit
 
