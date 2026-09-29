@@ -62,8 +62,13 @@ class PolicyThresholds:
     max_expansions: int = 1
 
 
+# Interpreter fields the user is asked about under another name.
+CLARIFY_AS = {"target_team": "teams"}
+
+
 def _clarify(field: str, reason: str, why: str) -> CascadeDecision:
     """Clarify when the field is one the user can be asked about; otherwise fail."""
+    field = CLARIFY_AS.get(field, field)
     if field in CLARIFIABLE:
         return ClarifyDecision(field=field, clarify_reason=reason, reason=why[:120])
     return FailDecision(reason=f"cannot clarify {field}: {why}"[:120])
@@ -127,6 +132,7 @@ class ThresholdCascadePolicy:
                 return _clarify(norm.clarify_field, norm.clarify_reason, why)
             if norm is not None and norm.status == "valid":
                 field, _ = self._weakest(attempt)
+                field = CLARIFY_AS.get(field, field) if field is not None else None
                 if field is not None and field in CLARIFIABLE:
                     return _clarify(field, "ambiguous", why)
         return FailDecision(reason=why[:120])

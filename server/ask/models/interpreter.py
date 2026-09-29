@@ -23,9 +23,13 @@ from .request import AskContext, AskRequest
 AdapterName = Literal["laya", "jev", "openai_responses", "cascade"]
 
 # Fields an interpreter fills. Candidate-backed fields ("player", "teams",
-# "date", "season", "round", "game_number") select candidate IDs; closed-set
-# fields ("intent", "stat_scope", "stat", "aggregation") select literal values
-# from the enums in common.py.
+# "target_team", "date", "season", "round", "game_number") select candidate IDs;
+# closed-set fields ("intent", "stat_scope", "stat", "aggregation") select literal
+# values from the enums in common.py.
+#
+# "teams" lists every team the question names, opponents included (a matchup).
+# "target_team" is the one team whose own statistics a team-scope boxscore question
+# asks for; it is never inferred from the order of "teams".
 InterpreterField = Literal[
     "intent",
     "stat_scope",
@@ -33,6 +37,7 @@ InterpreterField = Literal[
     "aggregation",
     "player",
     "teams",
+    "target_team",
     "date",
     "season",
     "round",
@@ -40,14 +45,15 @@ InterpreterField = Literal[
     "location",
 ]
 CANDIDATE_BACKED_FIELDS: frozenset[str] = frozenset(
-    {"player", "teams", "date", "season", "round", "game_number", "location"}
+    {"player", "teams", "target_team", "date", "season", "round", "game_number", "location"}
 )
 
-# Interpreter field -> candidate set it selects from. The only renamed field is
-# "teams" (an interpreter may select two) -> the "team" candidate set.
+# Interpreter field -> candidate set it selects from. "teams" (an interpreter may
+# select two) and "target_team" (one) both select from the "team" candidate set.
 INTERPRETER_TO_CANDIDATE_FIELD: dict[str, CandidateField] = {
     "player": "player",
     "teams": "team",
+    "target_team": "team",
     "date": "date",
     "season": "season",
     "round": "round",
@@ -143,7 +149,7 @@ class InterpreterInput(ContractModel):
 class InterpreterOutput(ContractModel):
     outcome: InterpreterOutcome
     # At most one entry per field. Missing fields are treated as "absent".
-    fields: list[FieldInterpretation] = Field(default_factory=list, max_length=11)
+    fields: list[FieldInterpretation] = Field(default_factory=list, max_length=12)
     unsupported_reason: UnsupportedReason | None = None
     # Only for adapters that extract dates directly (OpenAI) when the date
     # candidate set had no match. Python validates it; it never overrides a

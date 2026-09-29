@@ -56,9 +56,10 @@ from server.utils.season import get_nba_season
 # Any field that still carries a confidence after merging was not decided by a tier.
 CASCADE_POLICY_THRESHOLDS = PolicyThresholds(accept_min=1.0, clarify_min=0.0)
 
-# Fields that exist only when a fixed lookup pattern fires ("in <city>"). With no
-# candidate the field is absent by construction; no model is asked to confirm it.
-LOOKUP_DECIDED = {"location": "location"}
+# Fields that exist only when lookup found text for them ("in <city>"; a target team
+# needs a team name). With nothing mentioned the field is absent by construction; no
+# model is asked to confirm it.
+LOOKUP_DECIDED = {"location": "location", "target_team": "team"}
 
 
 @dataclass(frozen=True)
@@ -210,8 +211,9 @@ class TieredAdapter:
     @staticmethod
     def _needed(merge: _Merge) -> frozenset[str]:
         intent = merge.decided.get("intent")
+        scope = merge.decided.get("stat_scope") if intent else None
         probe = InterpreterOutput(
-            outcome="interpreted", fields=[intent] if intent else [],
+            outcome="interpreted", fields=[read for read in (intent, scope) if read is not None],
             metadata=InterpreterMetadata(adapter="cascade", provider="cascade", model="probe", latency_ms=0),
         )
         return relevant_fields(probe)

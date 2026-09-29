@@ -650,3 +650,13 @@ See the [full evaluation and audit](verification/ask-unseen-2026-09-29.md).
 The set is now exposed. It measures interpretations, not retrieval or rendered
 answers, and cannot establish the incomplete tier precision gate. Production
 remains disabled; fixes require another unseen set.
+
+## Target team field (nba-scores-kzc.1)
+
+Interpreter output now has a `target_team` field, separate from `teams`, for the
+team whose statistics a team-scope boxscore question asks for (see
+`docs/ask-contract.md`). Jev gets its own Choice for it. Luna's schema and prompt
+gained one rule that has not been checked live. The field oracle
+(`trace.expected_fields`) scores `target_team` for team-scope accept labels. The
+exposed two-team cases (release-two 019-022) are not release evidence for this
+change; only a fresh unseen set is.

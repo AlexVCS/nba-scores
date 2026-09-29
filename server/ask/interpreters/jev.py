@@ -11,6 +11,8 @@ sends the question as state and asks one request of speculative closed-set quest
   `__none__` (not mentioned) and `__other__` (mentioned, but no listed candidate fits).
 * teams: one Noul per team candidate, one Noul for "a team not in the list", and a
   team-count Choice as a consistency check.
+* target team: a Choice over the team candidates for whose statistics a team-scope
+  question asks, separate from the teams it names.
 
 Field confidence is the probability of the chosen option (Choice) or, for teams, the
 least decisive team Noul. The adapter only decides `ambiguous` vs `selected`; whether a
@@ -154,6 +156,14 @@ def build_questions(candidates: CandidateLookupResult) -> tuple[dict[str, Any], 
         "The question names a team that is not in the list.",
         "Every team the question names is in the list, or it names no team.",
     )
+    target: dict[str, str | None] = {c.id: _describe(c) for c in teams}
+    target[cs.NONE_OPTION] = "The question does not ask for one particular team's own statistics."
+    target[cs.OTHER_OPTION] = "The question asks for one team's statistics, but that team is not listed."
+    q["target_team"] = _choice(
+        "If the `question` asks for one team's own box score statistics, whose statistics are they? "
+        "A team named only as the opponent or to identify the game is not the answer.",
+        target,
+    )
     team_ids: dict[str, str] = {}
     for index, team in enumerate(teams):
         qid = f"team_{index}"
@@ -244,6 +254,7 @@ def decode(response: dict[str, Any], team_ids: dict[str, str], t: JevThresholds)
         for field_name, (qid, _) in CANDIDATE_CHOICES.items():
             fields.append(decide_choice(field_name, answers[qid], t))
         fields.append(decide_teams(answers, team_ids, t))
+        fields.append(decide_choice("target_team", answers["target_team"], t))
     except (KeyError, IndexError, TypeError, ValueError) as exc:
         raise ProviderError("invalid_response", f"{type(exc).__name__}: {exc}") from exc
 

@@ -50,6 +50,7 @@ from server.ask.models.request import (
 CANDIDATE_SET_FOR = {
     "player": "player",
     "teams": "team",
+    "target_team": "team",
     "date": "date",
     "season": "season",
     "round": "round",
@@ -68,7 +69,8 @@ CLOSED_VALUES = {
 RELEVANT_FIELDS: dict[str, frozenset[str]] = {
     "game_search": frozenset({"date", "teams", "location"}),
     "boxscore_stat": frozenset(
-        {"stat_scope", "stat", "aggregation", "player", "teams", "date", "season", "round", "game_number"}
+        {"stat_scope", "stat", "aggregation", "player", "teams", "target_team", "date", "season", "round",
+         "game_number"}
     ),
     "playoff_series": frozenset({"season", "teams", "round"}),
     "postseason_summary": frozenset({"season", "teams"}),
@@ -309,13 +311,7 @@ class Normalizer:
             player = self._value(candidates, self._require(output, "player")[0]).player
         team = None
         if scope == "team":
-            if not teams:
-                raise _Clarify("teams", "missing")
-            if len(teams) > 1:
-                # The interpreter identifies matchup participants but has no
-                # field for which team's stat the user requested.
-                raise _Clarify("teams", "ambiguous")
-            team = teams[0]
+            team, teams = self._target_team(output, candidates, teams)
 
         game = self._game_selector(output, candidates, context, teams)
         return BoxscoreStatRequest(
@@ -325,6 +321,30 @@ class Normalizer:
             player=player,
             team=team,
         )
+
+    def _target_team(self, output, candidates, teams):
+        """The team whose statistics a team-scope question asks for, and the game's teams.
+
+        `target_team` names it explicitly; `teams` lists every team named, opponents
+        included. Without a target, one named team is the target and two are ambiguous:
+        the order of `teams` never says which one the user meant.
+        """
+        f = self._field(output, "target_team")
+        if f.status in ("ambiguous", "no_matching_candidate"):
+            raise _Clarify("teams", f.status)
+        if f.status == "selected":
+            target = self._value(candidates, f.selected[0]).team
+            if not teams:
+                return target, [target]
+            if target not in teams:
+                # The target must be one of the teams the question names.
+                raise _Clarify("teams", "ambiguous")
+            return target, teams
+        if not teams:
+            raise _Clarify("teams", "missing")
+        if len(teams) > 1:
+            raise _Clarify("teams", "ambiguous")
+        return teams[0], teams
 
     def _game_selector(self, output, candidates, context, teams) -> GameSelector:
         dates = self._dates(output, candidates, context, required=False)
@@ -410,7 +430,12 @@ def relevant_fields(output: InterpreterOutput) -> frozenset[str]:
     intent = output.get_field("intent")
     if intent is None or intent.status != "selected":
         return frozenset({"intent"})
-    return RELEVANT_FIELDS[intent.selected[0]] | {"intent"}
+    fields = RELEVANT_FIELDS[intent.selected[0]] | {"intent"}
+    scope = output.get_field("stat_scope")
+    if scope is not None and scope.status == "selected" and scope.selected != ["team"]:
+        # Only a team-scope question has a target team.
+        fields -= {"target_team"}
+    return fields
 
 
 def canonical_request(request: Any) -> dict[str, Any]:
