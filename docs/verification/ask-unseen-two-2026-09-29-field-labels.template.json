@@ -1,0 +1,385 @@
+{
+ "schema": "ask-tier-gate-field-labels/1",
+ "fixture": "server/tests/ask/fixtures/eval/unseen-two-2026-09-29.json",
+ "fixture_sha256": "fa3e001b816baf38967fd88c837b6228f2336af811749f06499cd4b59c1cf040",
+ "labeler": {
+  "name": "",
+  "labeled_at": "",
+  "isolation_statement": ""
+ },
+ "fields_by_intent": {
+  "game_search": [
+   "teams",
+   "date",
+   "location"
+  ],
+  "boxscore_stat": [
+   "stat_scope",
+   "stat",
+   "aggregation",
+   "player",
+   "teams",
+   "date",
+   "season",
+   "round",
+   "game_number"
+  ],
+  "playoff_series": [
+   "teams",
+   "season",
+   "round"
+  ],
+  "postseason_summary": [
+   "teams",
+   "season"
+  ],
+  "unsupported": []
+ },
+ "cases": [
+  {
+   "case_id": "unseen-two-game_search-19",
+   "question": "I would like the Toronto Raptors game list.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-two-game_search-20",
+   "question": "Show the Suns games on September 14.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-two-game_search-21",
+   "question": "Show the Los Angeles team's games on November 20, 2023.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-two-game_search-22",
+   "question": "For March 6, 2020, show the New York or Brooklyn team; I cannot remember which one.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-two-game_search-23",
+   "question": "Can I see the Pacers schedule?",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-06",
+   "question": "How many turnovers did the Brooklyn Nets have on April 27, 2013?",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "player",
+   "fixed_intent": "boxscore_stat",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {
+    "player": null
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-07",
+   "question": "What was Boston's field-goal percentage in this game?",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {
+    "route": "boxscore",
+    "game_id": "0042300405"
+   },
+   "label_scope": "player",
+   "fixed_intent": "boxscore_stat",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {
+    "player": null
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-09",
+   "question": "Who led Game 5 of the 2024 NBA Finals in steals?",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "player",
+   "fixed_intent": "boxscore_stat",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {
+    "player": null
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-10",
+   "question": "New Jersey Nets free-throw percentage on June 15, 2003?",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "player",
+   "fixed_intent": "boxscore_stat",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {
+    "player": null
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-12",
+   "question": "How many points did Morris score on December 12, 2018?",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-13",
+   "question": "Pull up Green's assists for December 12, 2018.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-14",
+   "question": "What was Williams's rebound total on December 12, 2018?",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-15",
+   "question": "How many threes did Curry make on December 12, 2018?",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-16",
+   "question": "Show Brown's minutes for December 12, 2018.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-17",
+   "question": "Holiday's steals on December 12, 2018, please.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-18",
+   "question": "How many blocks did Lopez get on December 12, 2018?",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-19",
+   "question": "What were Johnson's turnovers on December 12, 2018?",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-20",
+   "question": "Show Young's field goals on December 12, 2018.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-21",
+   "question": "What was Jones's plus-minus on December 12, 2018?",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-22",
+   "question": "Get Murray's full boxscore line for December 12, 2018.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-two-boxscore_stat-23",
+   "question": "How many free throws did Chris make on December 12, 2018?",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-two-playoff_series-19",
+   "question": "I want to revisit the Pacers against the Pistons playoff series.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-two-playoff_series-20",
+   "question": "Open the Mavericks' playoff series from 2022.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-two-playoff_series-21",
+   "question": "Show a first-round series from the 2024 playoffs.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-two-playoff_series-22",
+   "question": "Open the Los Angeles team's first-round series from 2021.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-two-playoff_series-25",
+   "question": "What was LeBron James's per-game scoring average in the 2016 Finals series?",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-two-postseason_summary-19",
+   "question": "Give me a recap of an entire NBA postseason.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-two-postseason_summary-20",
+   "question": "Recap the Nuggets' whole playoff run.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-two-postseason_summary-21",
+   "question": "Summarize the Los Angeles team's complete 2021 postseason.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-two-postseason_summary-22",
+   "question": "Recap Boston or Miami in the 2020 playoffs; I have not decided which team.",
+   "reference_time": "2024-07-10T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  }
+ ]
+}
