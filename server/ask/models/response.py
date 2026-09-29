@@ -40,7 +40,7 @@ from .common import (
     StatScope,
     TeamRef,
 )
-from .interpreter import AdapterName, UnsupportedReason
+from .interpreter import AdapterName, FieldDecision, UnsupportedReason
 from .request import AppRoute
 
 # --------------------------------------------------------------------------
@@ -142,6 +142,10 @@ class InterpreterInfo(ContractModel):
     fallback_used: bool = False
     # Cascade only: interpreter field -> tier that decided it (ADR 0002).
     field_tiers: dict[str, str] = Field(default_factory=dict)
+    # Development servers only (`ASK_DEV=1`): per-field tier, confidence, and outcome.
+    # Omitted from the JSON when empty, so production responses never carry the key.
+    field_decisions: list[FieldDecision] = Field(default_factory=list, max_length=12,
+                                                 exclude_if=lambda value: not value)
 
 
 # --------------------------------------------------------------------------

@@ -5,6 +5,7 @@ from __future__ import annotations
 import datetime as dt
 import hashlib
 import json
+import logging
 import re
 import time
 import uuid
@@ -30,6 +31,8 @@ from server.ask.resolution import PendingResolution, ResolutionStore
 from server.ask.resolvers import resolve
 from server.ask.resolvers.errors import AmbiguousError, ClarificationError, NotFoundError, UnavailableError, UnsupportedError
 
+
+logger = logging.getLogger(__name__)
 
 _EXACT_DATE = re.compile(r"^(?:games|scores)(?: on| for)? (\d{4}-\d{2}-\d{2})\??$", re.IGNORECASE)
 _EXACT_LEADERS = re.compile(r"^(?:who led in|leaders? in|most) (points|rebounds|assists|steals|blocks)\??$", re.IGNORECASE)
@@ -76,12 +79,16 @@ class AskPipeline:
         metadata = output.metadata if output is not None else None
         field_tiers = dict(metadata.field_tiers) if metadata else {}
         first = adapter.tiers[0].name if isinstance(adapter, TieredAdapter) else None
+        # Per-field tier details are development-only (ADR 0010); production responses
+        # carry neither the tiers nor the confidences.
+        details = self.config.dev and metadata is not None
         return InterpreterInfo(
             model_called=called, cache_hit=hit,
             adapter=metadata.adapter if metadata else adapter.name if adapter else None,
             model=(metadata.resolved_model or metadata.model) if metadata else adapter.model if adapter else None,
             fallback_used=first is not None and any(tier not in (first, "veto") for tier in field_tiers.values()),
-            field_tiers=field_tiers,
+            field_tiers=field_tiers if details else {},
+            field_decisions=list(metadata.field_decisions) if details else [],
         )
 
     @staticmethod
@@ -220,6 +227,7 @@ class AskPipeline:
             for _ in range(3):
                 output, hit = self._interpret(question, context, candidates, deadline)
                 cache_hit = cache_hit or hit
+                _log_decisions(output, hit)
                 any_call = any_call or (not hit and output.metadata.usage.provider_calls > 0)
                 normalized = self.normalizer.normalize(output, candidates, context) if output.outcome == "interpreted" else None
                 attempts.append(CascadeAttempt(output=output, normalization=normalized))
@@ -286,6 +294,17 @@ class AskPipeline:
                                                            stat=None, missing_fields=(), reason=reason))
         except Exception:
             return False
+
+
+def _log_decisions(output: InterpreterOutput, cache_hit: bool) -> None:
+    """Log per-field tier decisions (ADRs 0009, 0010). Enumerated metadata only: never
+    the question, candidate values, provider text, or keys."""
+    metadata = output.metadata
+    if not metadata.field_decisions and not metadata.field_tiers:
+        return
+    decisions = [decision.model_dump(mode="json") for decision in metadata.field_decisions]
+    logger.info("ask cascade outcome=%s cache_hit=%s models=%s decisions=%s", output.outcome, cache_hit,
+                metadata.resolved_model or metadata.model, json.dumps(decisions, separators=(",", ":")))
 
 
 __all__ = ["AskPipeline", "build_cascade"]
