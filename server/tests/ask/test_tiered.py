@@ -1,4 +1,6 @@
 import datetime as dt
+import json
+from pathlib import Path
 
 import pytest
 
@@ -6,6 +8,7 @@ from server.ask.config import AskConfig
 from server.ask.eval import builders as b
 from server.ask.interpreters.cascade import ThresholdCascadePolicy
 from server.ask.interpreters.tiered import CASCADE_POLICY_THRESHOLDS, Tier, TieredAdapter
+from server.ask.models.candidates import CandidateLookupResult
 from server.ask.models.common import DateComponents
 from server.ask.models.interpreter import (
     FieldInterpretation,
@@ -152,33 +155,72 @@ def test_confident_jev_ambiguity_vetoes_an_accepted_laya_selection():
     assert decide(out).action == "clarify"
 
 
-def test_bare_surname_with_several_players_is_clarified_not_guessed():
-    # Unseen case 082: Jev picked Stephen Curry at 1.0 from six Currys; Luna read the
-    # player as ambiguous. The merge must ask which Curry instead of keeping Jev's pick.
-    from server.ask.candidates import CandidateLookupService
+FROZEN_UNSEEN = Path(__file__).resolve().parents[3] / "docs" / "verification" / "ask-unseen-2026-09-29.jsonl"
 
-    question = "How many points did Curry score on January 15, 2025?"
-    candidates = CandidateLookupService().lookup(question, CONTEXT)
-    currys = [c.id for c in candidates.sets["player"].candidates]
-    assert {"player:201939", "player:203552"} <= set(currys)
-    request = REQUEST.model_copy(update={"question": question, "candidates": candidates})
-    shared = [sel("intent", "boxscore_stat"), sel("stat_scope", "player"), sel("stat", "points"),
-              sel("aggregation", "total"), sel("date", "date:0"), absent("round"), absent("game_number"),
-              absent("teams")]
-    jev = Fake("jev", *(r.model_copy(update={"confidence": 1.0}) for r in shared),
-               sel("player", "player:201939", confidence=1.0),
-               FieldInterpretation(field="season", status="no_matching_candidate", confidence=0.69))
-    luna = Fake("luna", *(r.model_copy(update={"confidence": None}) for r in shared), absent("season", confidence=None),
-                FieldInterpretation(field="player", status="ambiguous", alternatives=currys))
-    out = cascade(jev, luna, thresholds=(0.85,)).interpret(request)
-    player = out.get_field("player")
-    assert (player.status, player.alternatives) == ("ambiguous", currys)
-    assert out.metadata.field_tiers["player"] == "veto"
+
+class Replay:
+    """Returns one tier's recorded output from the frozen unseen run."""
+
+    def __init__(self, name, recorded):
+        self.name = name
+        self.model = recorded["metadata"]["model"]
+        self.output = InterpreterOutput.model_validate(recorded)
+
+    def estimate_cost(self, request):
+        return 0.0
+
+    def interpret(self, request):
+        return self.output
+
+
+def replay(case_id):
+    record = next(json.loads(line) for line in FROZEN_UNSEEN.read_text().splitlines()
+                  if json.loads(line)["case_id"] == f"unseen-2026-09-29-{case_id}")
+    candidates = CandidateLookupResult.model_validate(record["candidates"])
+    tiers = [Tier(t["tier"], Replay(t["tier"], t["output"]), None if t["tier"] == "luna" else 0.85)
+             for t in record["tier_outputs"]]
+    request = REQUEST.model_copy(update={"candidates": candidates})
+    out = TieredAdapter(tiers).interpret(request)
     norm = Normalizer().normalize(out, candidates, CONTEXT)
     state = CascadeState(attempts=[CascadeAttempt(output=out, normalization=norm)], candidates=candidates,
                          fallback_enabled=False, remaining_budget_usd=1, remaining_ms=20_000)
-    decision = POLICY.decide(state)
+    return out, norm, POLICY.decide(state)
+
+
+def test_bare_surname_with_several_players_is_clarified_not_guessed():
+    # Unseen case 082, "How many points did Curry score on January 15, 2025?": Jev picked
+    # Stephen Curry at 1.0; Luna read the player as ambiguous. Seth Curry was also active
+    # in 2024-25, so the merge must ask which Curry instead of keeping Jev's pick.
+    out, _, decision = replay("082")
+    player = out.get_field("player")
+    assert player.status == "ambiguous"
+    assert {"player:201939", "player:203552"} <= set(player.alternatives)
+    # Eddy, JamesOn, Michael and Dell Curry all retired before 2024-25.
+    assert set(player.alternatives) == {"player:201939", "player:203552"}
     assert (decision.action, decision.field) == ("clarify", "player")
+
+
+@pytest.mark.parametrize(("case_id", "player_id"), [
+    ("002", 893),  # MJ, 1998 Finals: MJ Walker debuted in 2021-22.
+    ("026", 406),  # Shaq, 2001 Finals: Shaq Buchanan played only in 2021-22.
+])
+def test_ambiguity_with_only_out_of_era_players_keeps_the_accepted_pick(case_id, player_id):
+    out, norm, decision = replay(case_id)
+    assert out.metadata.field_tiers["player"] == "jev"
+    assert decision.action == "accept"
+    assert norm.request.player.player_id == player_id
+
+
+def test_era_filter_keeps_alternatives_when_the_season_is_unknown():
+    mj = b.player(893, "Michael Jordan", first="1984-85", last="2002-03")
+    walker = b.player(1630640, "MJ Walker", first="2021-22", last="2021-22")
+    candidates = b.lookup_result([mj, walker])
+    request = REQUEST.model_copy(update={"question": "MJ points", "candidates": candidates})
+    jev = Fake("jev", sel("intent", "boxscore_stat"), sel("player", mj.id), sel("date", "date:0", confidence=0.3))
+    luna = Fake("luna", sel("intent", "boxscore_stat", confidence=None), absent("date", confidence=None),
+                FieldInterpretation(field="player", status="ambiguous", alternatives=[mj.id, walker.id]))
+    out = cascade(jev, luna).interpret(request)
+    assert (out.get_field("player").status, out.metadata.field_tiers["player"]) == ("ambiguous", "veto")
 
 
 def test_luna_dropping_a_leaning_selection_is_clarified_not_executed():

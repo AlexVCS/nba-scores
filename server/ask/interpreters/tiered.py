@@ -16,7 +16,9 @@ which reports no confidence, is also vetoed by an earlier selection that reached
 `veto_min`. Two different selections, or a selection and an ambiguous read, become
 `ambiguous` with both tiers' options; selected versus absent keeps a sub-threshold
 confidence so the policy clarifies it. The user is asked instead of either tier's
-answer being trusted.
+answer being trusted. An ambiguous read's options first drop players whose careers
+miss the decided date/season (kept when either is unknown); if pruning leaves none but
+the earlier selection, there is nothing to ask and the earlier read stands.
 
 The merged output drops confidence from decided fields and keeps it on undecided ones.
 Paired with `CASCADE_POLICY_THRESHOLDS` (accept_min=1.0), the cascade policy then
@@ -29,6 +31,12 @@ import time
 from dataclasses import dataclass, field
 
 from server.ask.interpreters.cascade import PolicyThresholds
+from server.ask.models.candidates import (
+    CandidateLookupResult,
+    DateCandidateValue,
+    PlayerCandidateValue,
+    SeasonCandidateValue,
+)
 from server.ask.models.interpreter import (
     FieldInterpretation,
     InterpreterInput,
@@ -38,6 +46,7 @@ from server.ask.models.interpreter import (
 )
 from server.ask.normalize import relevant_fields
 from server.ask.protocols import InterpreterAdapter
+from server.utils.season import get_nba_season
 
 # Any field that still carries a confidence after merging was not decided by a tier.
 CASCADE_POLICY_THRESHOLDS = PolicyThresholds(accept_min=1.0, clarify_min=0.0)
@@ -66,7 +75,8 @@ class _Merge:
     # accepted (vetoes any tier) or merely reached `veto_min` (vetoes only the final tier).
     vetoers: dict[str, list[tuple[FieldInterpretation, bool]]] = field(default_factory=dict)
     vetoed: set[str] = field(default_factory=set)
-    # Options from later ambiguous reads that vetoed an earlier selection.
+    # Options from later ambiguous reads that would veto an earlier selection; they veto
+    # only if a plausible option besides the earlier selection survives `_era_filter`.
     vetoing_options: dict[str, list[str]] = field(default_factory=dict)
     # Models that actually made a provider call, in cascade order.
     called: list[str] = field(default_factory=list)
@@ -80,6 +90,45 @@ def _confident(tier: Tier, read: FieldInterpretation) -> bool:
 
 def _same(a: list[str], b: list[str]) -> bool:
     return sorted(a) == sorted(b)
+
+
+def _season_years(merge: _Merge, candidates: CandidateLookupResult) -> set[int] | None:
+    """Season start years of the decided date/season, or None if any is unknown."""
+    years: set[int] = set()
+    for name in ("date", "season"):
+        read = merge.decided.get(name)
+        if read is None or read.status == "absent":
+            continue
+        if read.status != "selected" or name in merge.vetoed or name in merge.vetoing_options:
+            return None
+        for candidate_id in read.selected:
+            candidate = candidates.by_id(candidate_id)
+            value = candidate.value if candidate else None
+            if isinstance(value, SeasonCandidateValue):
+                years.add(int(value.season[:4]))
+            elif isinstance(value, DateCandidateValue) and value.resolved is not None:
+                for day in (value.resolved.start, value.resolved.end):
+                    years.add(int(get_nba_season(day.year, day.month)[:4]))
+            else:
+                return None
+    return years or None
+
+
+def _era_filter(options: list[str], years: set[int] | None, candidates: CandidateLookupResult) -> list[str]:
+    """Drop player options whose known career misses every requested season."""
+    if years is None:
+        return options
+    kept = []
+    for option in options:
+        candidate = candidates.by_id(option)
+        value = candidate.value if candidate else None
+        if isinstance(value, PlayerCandidateValue) and value.first_season is not None:
+            first = int(value.first_season[:4])
+            last = int(value.last_season[:4]) if value.last_season is not None else None
+            if not any(first <= y and (last is None or y <= last) for y in years):
+                continue
+        kept.append(option)
+    return kept
 
 
 class TieredAdapter:
@@ -112,10 +161,11 @@ class TieredAdapter:
                 for earlier, accepted in merge.vetoers.get(name, []):
                     if not accepted and tier.accept_min is not None:
                         continue
-                    if read.status != "selected" or not _same(earlier.selected, read.selected):
+                    if read.status == "ambiguous":
+                        options = merge.vetoing_options.setdefault(name, [])
+                        options.extend(v for v in read.alternatives if v not in options)
+                    elif read.status != "selected" or not _same(earlier.selected, read.selected):
                         merge.vetoed.add(name)
-                        if read.status == "ambiguous":
-                            merge.vetoing_options[name] = read.alternatives
             if name in merge.decided:
                 continue
             if confident:
@@ -147,7 +197,14 @@ class TieredAdapter:
     def _complete(self, merge: _Merge) -> bool:
         return "intent" in merge.decided and self._needed(merge) <= merge.decided.keys()
 
-    def _fields(self, merge: _Merge) -> list[FieldInterpretation]:
+    def _fields(self, merge: _Merge, candidates: CandidateLookupResult) -> list[FieldInterpretation]:
+        years = _season_years(merge, candidates)
+        for name, options in list(merge.vetoing_options.items()):
+            earlier = {v for read, _ in merge.vetoers[name] for v in read.selected}
+            merge.vetoing_options[name] = _era_filter(options, years, candidates)
+            # An ambiguous read naming no other option still vetoes: only pruning may lift it.
+            if not set(options) - earlier or set(merge.vetoing_options[name]) - earlier:
+                merge.vetoed.add(name)
         fields = {**merge.pending, **merge.decided}
         for name in merge.vetoed & self._needed(merge):
             reads = [read for read, _ in merge.vetoers[name]]
@@ -225,7 +282,7 @@ class TieredAdapter:
                                             metadata=self._metadata(started, calls, tokens_in,
                                                                     spent if cost_known else None, merge))
             return unavailable
-        fields = self._fields(merge)
+        fields = self._fields(merge, request.candidates)
         outcome = "interpreted" if "intent" in merge.decided else "unreliable"
         merged = InterpreterOutput(outcome=outcome, fields=fields, extracted_date=extracted_date,
                                    metadata=last.metadata)
