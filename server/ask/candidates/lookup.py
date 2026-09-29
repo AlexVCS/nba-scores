@@ -20,7 +20,7 @@ import time
 from dataclasses import dataclass
 from zoneinfo import ZoneInfo
 
-from server.ask.candidates import dates, patterns
+from server.ask.candidates import dates, locations, patterns
 from server.ask.candidates.aliases import alias_version
 from server.ask.candidates.players import PlayerIndex, get_player_index, season_label
 from server.ask.candidates.teams import TeamIndex, get_team_index, resolve_phrase
@@ -333,7 +333,8 @@ def find_mentions(question: str, context: AskContext, limits: LookupLimits = DEF
     page_season = context.playoff_season if context.route in ("playoffs", "series") else None
     season_mentions, masked = patterns.season_mentions(masked, question, today, playoff_context, page_season)
     round_mentions, masked = patterns.round_mentions(masked, question)
-    mentions += date_mentions + season_mentions + round_mentions
+    location_mentions, masked = locations.mentions(masked, question)
+    mentions += date_mentions + season_mentions + round_mentions + location_mentions
     context_mentions, masked = _context_mentions(folded, masked, question, context, playoff_context, mentions)
     mentions += context_mentions
     seasons = patterns.season_start_years(mentions)

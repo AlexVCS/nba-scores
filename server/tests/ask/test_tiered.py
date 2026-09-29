@@ -90,11 +90,12 @@ def test_tiered_adapter_satisfies_protocol():
 
 
 def test_confident_first_tier_stops_the_cascade():
-    jev = Fake("jev", sel("intent", "game_search"), sel("date", "date:0"), sel("teams", CLE.id), cost=0.0001)
+    jev = Fake("jev", sel("intent", "game_search"), sel("date", "date:0"), sel("teams", CLE.id), absent("location"),
+               cost=0.0001)
     luna = Fake("luna")
     out = cascade(jev, luna).interpret(REQUEST)
     assert luna.calls == 0
-    assert out.metadata.field_tiers == {"intent": "jev", "date": "jev", "teams": "jev"}
+    assert out.metadata.field_tiers == {"intent": "jev", "date": "jev", "teams": "jev", "location": "jev"}
     assert (out.metadata.model, out.metadata.resolved_model) == ("jev-model+luna-model", "jev-model")
     assert out.metadata.usage.cost_usd == pytest.approx(0.0001)
     assert decide(out).action == "accept"

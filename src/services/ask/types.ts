@@ -157,7 +157,8 @@ export type AskInterpretationField =
   | "season"
   | "round"
   | "series"
-  | "game_number";
+  | "game_number"
+  | "location";
 
 export interface AskInterpretationItem {
   field: AskInterpretationField;
@@ -365,7 +366,8 @@ export type AskClarifyField =
   | "date"
   | "season"
   | "round"
-  | "game_number";
+  | "game_number"
+  | "location";
 export type AskClarifyReason = "ambiguous" | "missing" | "no_matching_candidate" | "year_required" | "range_too_long";
 
 export interface AskClarificationOption {

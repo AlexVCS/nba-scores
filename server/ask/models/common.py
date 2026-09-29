@@ -60,7 +60,9 @@ Intent = Literal["game_search", "boxscore_stat", "playoff_series", "postseason_s
 # (NormalizationResult.clarify_field), the cascade (ClarifyDecision.field), and
 # HTTP (Clarification.field). "teams" covers one team or a matchup.
 # "aggregation" is never clarified: per_game is unsupported (multi_game_average).
-ClarifyField = Literal["intent", "stat_scope", "stat", "player", "teams", "date", "season", "round", "game_number"]
+ClarifyField = Literal[
+    "intent", "stat_scope", "stat", "player", "teams", "date", "season", "round", "game_number", "location"
+]
 ClarifyReason = Literal["ambiguous", "missing", "no_matching_candidate", "year_required", "range_too_long"]
 
 # Scope of a boxscore_stat request: one player, team totals, or game leaders.
@@ -149,6 +151,17 @@ class TeamRef(ContractModel):
     team_id: int = Field(ge=1)
     tricode: str = Field(min_length=2, max_length=4)
     name: str = Field(min_length=1, max_length=80)
+
+
+class GameLocation(ContractModel):
+    """Where games are played (ADR 0011): a city and the teams whose home arena is in it.
+
+    Game search keeps games whose home team is one of ``teams``.
+    """
+
+    city: str = Field(min_length=1, max_length=40)
+    teams: list[TeamRef] = Field(min_length=1, max_length=2)
+
 
 
 class PlayerRef(ContractModel):

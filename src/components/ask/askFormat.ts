@@ -29,6 +29,7 @@ export const FIELD_LABELS: Record<AskInterpretationField, string> = {
   round: "Round",
   series: "Series",
   game_number: "Game",
+  location: "Location",
 };
 
 export const STAT_LABELS: Record<AskStat, string> = {

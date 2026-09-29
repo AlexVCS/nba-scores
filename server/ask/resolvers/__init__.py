@@ -137,7 +137,8 @@ def resolve(request: AskRequest) -> ResolverOutput:
 
 def _resolve(request: AskRequest) -> ResolverOutput:
     if isinstance(request, GameSearchRequest):
-        return games.search_games(request.dates, [team.team_id for team in request.teams])
+        hosts = [team.team_id for team in request.location.teams] if request.location else []
+        return games.search_games(request.dates, [team.team_id for team in request.teams], hosts)
     if isinstance(request, BoxscoreStatRequest):
         return _boxscore(request)
     if isinstance(request, PlayoffSeriesRequest):

@@ -13,7 +13,7 @@ from typing import Callable
 from server.ask.interpreters import closed_sets as cs
 
 _OPERATIONS = frozenset({"ask", "game_search", "boxscore_stat", "playoff_series", "postseason_summary", "unknown"})
-_FIELDS = frozenset({"intent", "stat_scope", "stat", "player", "teams", "date", "season", "round", "game_number"})
+_FIELDS = frozenset({"intent", "stat_scope", "stat", "player", "teams", "date", "season", "round", "game_number", "location"})
 
 
 @dataclass(frozen=True)

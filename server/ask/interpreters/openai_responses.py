@@ -50,6 +50,7 @@ CANDIDATE_FIELDS = {
     "season": "season",
     "round": "round",
     "game_number": "game_number",
+    "location": "location",
 }
 CLOSED_FIELDS = {"stat_scope": cs.STAT_SCOPES, "stat": cs.STATS, "aggregation": cs.AGGREGATIONS}
 PLACEHOLDER_ID = "__none__"
@@ -70,6 +71,10 @@ Field rules (every field has a status and a list of IDs/values):
 - Classify the request type separately from entity lookup. An unknown person or team
   in a one-game NBA stat or NBA game search is still a supported intent. Mark its
   player or teams field no_matching_candidate so the app can ask the user.
+- location: select a city candidate only when the question asks for games played
+  there ("games in New York"). A city used as a team name ("Boston's game",
+  "New York beat Miami") is a team, not a location. Location applies to
+  game_search only.
 - A game-search date range longer than seven days is still game_search. Select the
   date candidate even if its range is unresolved; Python asks the user to narrow it.
 - Choose playoff_series when the request is framed as a series, matchup, or

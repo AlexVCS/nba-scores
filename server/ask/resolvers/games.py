@@ -174,9 +174,11 @@ def game_result_item(game: ResolvedGame) -> GameResultItem:
     return GameResultItem(date=game.date, game=payload, spoilers=game_spoilers(game.status), links=item_links, spoiler=protected)
 
 
-def search_games(dates: DateRange, team_ids: Sequence[int] = ()) -> ResolverOutput[GamesResult]:
+def search_games(dates: DateRange, team_ids: Sequence[int] = (),
+                 home_team_ids: Sequence[int] = ()) -> ResolverOutput[GamesResult]:
     """Games on one date or up to seven consecutive days (``DateRange`` enforces
-    the limit), optionally only those in which every listed team played.
+    the limit), optionally only those in which every listed team played, and only
+    those hosted by one of ``home_team_ids`` (a venue filter, ADR 0011).
 
     One day's scoreboard failing makes the whole search ``unavailable`` rather
     than a silently partial answer.
@@ -186,13 +188,15 @@ def search_games(dates: DateRange, team_ids: Sequence[int] = ()) -> ResolverOutp
         raise ClarificationError("date", "range_too_long", "range_too_long")
     _check_day(dates.end)
     wanted = set(validate_team_ids(team_ids))
+    hosts = set(validate_team_ids(home_team_ids))
     game_days: list[GameDay] = []
     found: list[ResolvedGame] = []
     for offset in range(days):
         day = dates.start + dt.timedelta(days=offset)
         if day < FIRST_RECORDED_DATE:
             continue
-        matches = [dataclasses.replace(game, named_team_ids=tuple(wanted)) for game in _day_games(day) if wanted <= set(game.team_ids)]
+        matches = [dataclasses.replace(game, named_team_ids=tuple(wanted)) for game in _day_games(day)
+                   if wanted <= set(game.team_ids) and (not hosts or game.home.team_id in hosts)]
         if matches:
             found.extend(matches)
             game_days.append(GameDay(date=day, games=[game_result_item(game) for game in matches]))
@@ -200,7 +204,8 @@ def search_games(dates: DateRange, team_ids: Sequence[int] = ()) -> ResolverOutp
         raise NotFoundError(
             "no_games",
             "no_matching_games",
-            details={"start": dates.start.isoformat(), "end": dates.end.isoformat(), "teamIds": sorted(wanted)},
+            details={"start": dates.start.isoformat(), "end": dates.end.isoformat(), "teamIds": sorted(wanted),
+                     **({"homeTeamIds": sorted(hosts)} if hosts else {})},
         )
     teams = []
     for team_id in team_ids:

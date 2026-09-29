@@ -149,7 +149,8 @@ class InterpreterInfo(ContractModel):
 # --------------------------------------------------------------------------
 
 InterpretationField = Literal[
-    "player", "team", "teams", "game", "date", "dates", "stat", "season", "round", "series", "game_number"
+    "player", "team", "teams", "game", "date", "dates", "stat", "season", "round", "series", "game_number",
+    "location",
 ]
 
 

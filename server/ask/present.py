@@ -23,6 +23,7 @@ _TYPE = {
 _FIELD_LABEL = {
     "intent": "kind of question", "stat_scope": "stat scope", "stat": "statistic", "player": "player",
     "teams": "team", "date": "date", "season": "season", "round": "round", "game_number": "game number",
+    "location": "location",
 }
 
 
@@ -35,7 +36,7 @@ def interpretation(output: InterpreterOutput | None, candidates: CandidateLookup
     items: list[InterpretationItem] = []
     if output is not None and candidates is not None:
         for field in output.fields:
-            if field.field not in ("player", "teams", "date", "season", "round", "game_number"):
+            if field.field not in ("player", "teams", "date", "season", "round", "game_number", "location"):
                 if field.field == "stat" and field.status == "selected":
                     items.append(InterpretationItem(field="stat", value=field.selected[0].replace("_", " ").title(), origin="question"))
                 continue

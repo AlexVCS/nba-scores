@@ -49,6 +49,7 @@ CANDIDATE_SET_FOR = {
     "season": "season",
     "round": "round",
     "game_number": "game_number",
+    "location": "location",
 }
 CLOSED_VALUES = {
     "intent": set(get_args(Intent)),
@@ -60,7 +61,7 @@ CLOSED_VALUES = {
 # Fields each intent reads. A field outside this set is ignored, so a stray value on an
 # irrelevant field never changes the request (and never blocks it).
 RELEVANT_FIELDS: dict[str, frozenset[str]] = {
-    "game_search": frozenset({"date", "teams"}),
+    "game_search": frozenset({"date", "teams", "location"}),
     "boxscore_stat": frozenset(
         {"stat_scope", "stat", "aggregation", "player", "teams", "date", "season", "round", "game_number"}
     ),
@@ -250,7 +251,9 @@ class Normalizer:
     def _game_search(self, output, candidates, context):
         dates = self._dates(output, candidates, context, required=True)
         teams = self._teams(candidates, self._optional(output, "teams"))
-        return GameSearchRequest(dates=dates, teams=teams)
+        location_ids = self._optional(output, "location")
+        location = self._value(candidates, location_ids[0]).location if location_ids else None
+        return GameSearchRequest(dates=dates, teams=teams, location=location)
 
     def _boxscore(self, output, candidates, context):
         aggregation = self._optional(output, "aggregation")
