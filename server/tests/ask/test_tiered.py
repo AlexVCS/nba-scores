@@ -331,3 +331,43 @@ def test_merged_output_keeps_only_fields_the_intent_uses():
     out = cascade(jev).interpret(REQUEST)
     assert {f.field for f in out.fields} == {"intent", "date", "teams", "location"}
     assert "stat" not in out.metadata.field_tiers
+
+
+def no_match(field, confidence=0.95):
+    return FieldInterpretation(field=field, status="no_matching_candidate", confidence=confidence)
+
+
+def _team_stat_reads(season_read, *, teams_confidence):
+    return [sel("intent", "boxscore_stat"), sel("stat_scope", "team"), sel("stat", "points"),
+            sel("aggregation", "total"), absent("player"), sel("date", "date:0"), season_read,
+            absent("round"), absent("game_number"), sel("teams", CLE.id, confidence=teams_confidence)]
+
+
+def _stat_request(candidates):
+    return REQUEST.model_copy(update={"question": "cleveland points last week", "candidates": candidates})
+
+
+def test_later_absent_read_replaces_an_uncorroborated_no_match():
+    one_day = b.date(0, "sep 21", DateComponents(kind="calendar_date", year=2026, month=9, day=21),
+                     start=dt.date(2026, 9, 21))
+    request = _stat_request(b.lookup_result([CLE, one_day]))  # lookup saw no season text
+    jev = Fake("jev", *_team_stat_reads(no_match("season"), teams_confidence=0.5))
+    luna = Fake("luna", *[r.model_copy(update={"confidence": None})
+                          for r in _team_stat_reads(absent("season"), teams_confidence=None)])
+    out = cascade(jev, luna).interpret(request)
+    assert out.get_field("season").status == "absent"
+    assert out.metadata.field_tiers["season"] == "luna"
+    norm = Normalizer().normalize(out, request.candidates, CONTEXT)
+    assert norm.status == "valid"
+
+
+def test_no_match_backed_by_unmatched_lookup_text_survives_a_later_absent_read():
+    one_day = b.date(0, "sep 21", DateComponents(kind="calendar_date", year=2026, month=9, day=21),
+                     start=dt.date(2026, 9, 21))
+    request = _stat_request(b.lookup_result([CLE, one_day], unmatched={"season": ["2199"]}))
+    jev = Fake("jev", *_team_stat_reads(no_match("season"), teams_confidence=0.5))
+    luna = Fake("luna", *[r.model_copy(update={"confidence": None})
+                          for r in _team_stat_reads(absent("season"), teams_confidence=None)])
+    out = cascade(jev, luna).interpret(request)
+    assert out.get_field("season").status == "no_matching_candidate"
+    assert out.metadata.field_tiers["season"] == "jev"

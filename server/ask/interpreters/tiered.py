@@ -20,6 +20,10 @@ answer being trusted. An ambiguous read's options first drop players whose caree
 miss the decided date/season (kept when either is unknown); if pruning leaves none but
 the earlier selection, there is nothing to ask and the earlier read stands.
 
+An earlier `no_matching_candidate` read claims the question names something lookup
+missed. If lookup found no text for that field and a later tier confidently reads it as
+absent, the later read replaces it; a claim backed by unmatched lookup text stands.
+
 The merged output drops confidence from decided fields and keeps it on undecided ones.
 Paired with `CASCADE_POLICY_THRESHOLDS` (accept_min=1.0), the cascade policy then
 clarifies any field no tier decided and never executes a low-confidence read.
@@ -38,6 +42,7 @@ from server.ask.models.candidates import (
     SeasonCandidateValue,
 )
 from server.ask.models.interpreter import (
+    INTERPRETER_TO_CANDIDATE_FIELD,
     FieldInterpretation,
     InterpreterInput,
     InterpreterMetadata,
@@ -153,7 +158,8 @@ class TieredAdapter:
 
     # -- merging ------------------------------------------------------------------
 
-    def _absorb(self, merge: _Merge, tier: Tier, output: InterpreterOutput) -> None:
+    def _absorb(self, merge: _Merge, tier: Tier, output: InterpreterOutput,
+                candidates: CandidateLookupResult) -> None:
         for read in output.fields:
             name = read.field
             confident = _confident(tier, read)
@@ -167,6 +173,9 @@ class TieredAdapter:
                     elif read.status != "selected" or not _same(earlier.selected, read.selected):
                         merge.vetoed.add(name)
             if name in merge.decided:
+                if confident and read.status == "absent" and self._unfounded_no_match(merge, name, candidates):
+                    merge.decided[name] = read.model_copy(update={"confidence": None})
+                    merge.decided_by[name] = tier.name
                 continue
             if confident:
                 merge.decided[name] = read.model_copy(update={"confidence": None})
@@ -184,6 +193,19 @@ class TieredAdapter:
             accepted = _confident(tier, read)
             if accepted or (read.confidence is not None and read.confidence >= self.veto_min):
                 merge.vetoers.setdefault(read.field, []).append((read, accepted))
+
+    @staticmethod
+    def _unfounded_no_match(merge: _Merge, name: str, candidates: CandidateLookupResult) -> bool:
+        """An earlier tier's `no_matching_candidate` claims the question names a value
+        lookup missed. When lookup found no text for the field at all and a later tier
+        confidently reads it as absent, nothing corroborates the claim, so the later
+        `absent` read replaces it. Page context and the normalizer then decide the field
+        instead of the user being asked about a detail they never gave."""
+        earlier = merge.decided[name]
+        if earlier.status != "no_matching_candidate" or merge.decided_by.get(name) == "lookup":
+            return False
+        candidate_field = INTERPRETER_TO_CANDIDATE_FIELD.get(name)
+        return candidate_field is not None and candidates.sets[candidate_field].status == "not_mentioned"
 
     @staticmethod
     def _needed(merge: _Merge) -> frozenset[str]:
@@ -271,7 +293,7 @@ class TieredAdapter:
                 merge.decided_by = {"intent": tier.name}
                 return self._result(output.model_copy(update={"fields": []}), started, calls, tokens_in,
                                     spent if cost_known else None, merge)
-            self._absorb(merge, tier, output)
+            self._absorb(merge, tier, output, request.candidates)
             if output.extracted_date is not None and "date" not in merge.decided:
                 extracted_date = output.extracted_date
             if self._complete(merge):
