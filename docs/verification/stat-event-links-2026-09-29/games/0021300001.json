@@ -1,0 +1,91 @@
+{
+  "gameId": "0021300001",
+  "retrievedAt": "2026-09-29",
+  "source": "https://www.nba.com/game/0021300001/box-score",
+  "observed": true,
+  "note": "2013-14 regular season, shot chart only despite videoAvailableFlag=1.",
+  "cellRule": "Measures under linked render as links when the value is positive; zero values and measures under unlinked stay plain text. Team totals use the same URL without PlayerID.",
+  "summaryInputs": {
+    "whStatus": 1,
+    "videoAvailableFlag": 1,
+    "overtimePeriods": 0
+  },
+  "statEvents": {
+    "season": "2013-14",
+    "seasonType": "Regular Season",
+    "endRange": 28800,
+    "measures": {"FGM": 2, "FGA": 2, "FG3M": 2, "FG3A": 2}
+  },
+  "cells": {
+    "player": {
+      "linked": ["FGM", "FGA", "FG3M", "FG3A"],
+      "unlinked": ["MIN", "FG_PCT", "FG3_PCT", "FTM", "FTA", "FT_PCT", "OREB", "DREB", "REB", "AST", "STL", "BLK", "TOV", "PF", "PTS", "PLUS_MINUS"]
+    },
+    "team": {
+      "linked": ["FGM", "FGA", "FG3M", "FG3A"],
+      "unlinked": ["FG_PCT", "FG3_PCT", "FTM", "FTA", "FT_PCT", "OREB", "DREB", "REB", "AST", "STL", "BLK", "TOV", "PF", "PTS", "PLUS_MINUS"]
+    }
+  },
+  "urls": {
+    "player": [
+      {
+        "teamId": 1610612753,
+        "personId": 2749,
+        "name": "Jameer Nelson",
+        "measure": "FGM",
+        "value": 4,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FGM&EndPeriod=0&EndRange=28800&GameID=0021300001&PlayerID=2749&RangeType=0&Season=2013-14&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612753&flag=2&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612753,
+        "personId": 2749,
+        "name": "Jameer Nelson",
+        "measure": "FGA",
+        "value": 13,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FGA&EndPeriod=0&EndRange=28800&GameID=0021300001&PlayerID=2749&RangeType=0&Season=2013-14&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612753&flag=2&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612753,
+        "personId": 2749,
+        "name": "Jameer Nelson",
+        "measure": "FG3M",
+        "value": 3,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FG3M&EndPeriod=0&EndRange=28800&GameID=0021300001&PlayerID=2749&RangeType=0&Season=2013-14&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612753&flag=2&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612753,
+        "personId": 2749,
+        "name": "Jameer Nelson",
+        "measure": "FG3A",
+        "value": 7,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FG3A&EndPeriod=0&EndRange=28800&GameID=0021300001&PlayerID=2749&RangeType=0&Season=2013-14&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612753&flag=2&sct=plot&section=game"
+      }
+    ],
+    "team": [
+      {
+        "teamId": 1610612753,
+        "measure": "FGM",
+        "value": 36,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FGM&EndPeriod=0&EndRange=28800&GameID=0021300001&RangeType=0&Season=2013-14&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612753&flag=2&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612753,
+        "measure": "FGA",
+        "value": 93,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FGA&EndPeriod=0&EndRange=28800&GameID=0021300001&RangeType=0&Season=2013-14&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612753&flag=2&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612753,
+        "measure": "FG3M",
+        "value": 9,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FG3M&EndPeriod=0&EndRange=28800&GameID=0021300001&RangeType=0&Season=2013-14&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612753&flag=2&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612753,
+        "measure": "FG3A",
+        "value": 19,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FG3A&EndPeriod=0&EndRange=28800&GameID=0021300001&RangeType=0&Season=2013-14&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612753&flag=2&sct=plot&section=game"
+      }
+    ]
+  }
+}

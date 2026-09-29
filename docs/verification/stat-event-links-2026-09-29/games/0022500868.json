@@ -1,0 +1,189 @@
+{
+  "gameId": "0022500868",
+  "retrievedAt": "2026-09-29",
+  "source": "https://www.nba.com/game/0022500868/box-score",
+  "observed": true,
+  "note": "2025-26 regular season, video and shot chart.",
+  "cellRule": "Measures under linked render as links when the value is positive; zero values and measures under unlinked stay plain text. Team totals use the same URL without PlayerID.",
+  "summaryInputs": {
+    "whStatus": 1,
+    "videoAvailableFlag": 1,
+    "overtimePeriods": 0
+  },
+  "statEvents": {
+    "season": "2025-26",
+    "seasonType": "Regular Season",
+    "endRange": 28800,
+    "measures": {"FGM": 3, "FGA": 3, "FG3M": 3, "FG3A": 3, "OREB": 1, "DREB": 1, "REB": 1, "AST": 1, "STL": 1, "BLK": 1, "TOV": 1}
+  },
+  "cells": {
+    "player": {
+      "linked": ["FGM", "FGA", "FG3M", "FG3A", "OREB", "DREB", "REB", "AST", "STL", "BLK", "TOV"],
+      "unlinked": ["MIN", "FG_PCT", "FG3_PCT", "FTM", "FTA", "FT_PCT", "PF", "PTS", "PLUS_MINUS"]
+    },
+    "team": {
+      "linked": ["FGM", "FGA", "FG3M", "FG3A", "OREB", "DREB", "REB", "AST", "STL", "BLK", "TOV"],
+      "unlinked": ["FG_PCT", "FG3_PCT", "FTM", "FTA", "FT_PCT", "PF", "PTS", "PLUS_MINUS"]
+    }
+  },
+  "urls": {
+    "player": [
+      {
+        "teamId": 1610612759,
+        "personId": 1630577,
+        "name": "Julian Champagnie",
+        "measure": "FGM",
+        "value": 1,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FGM&EndPeriod=0&EndRange=28800&GameID=0022500868&PlayerID=1630577&RangeType=0&Season=2025-26&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612759&flag=3&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612759,
+        "personId": 1630577,
+        "name": "Julian Champagnie",
+        "measure": "FGA",
+        "value": 4,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FGA&EndPeriod=0&EndRange=28800&GameID=0022500868&PlayerID=1630577&RangeType=0&Season=2025-26&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612759&flag=3&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612759,
+        "personId": 1630577,
+        "name": "Julian Champagnie",
+        "measure": "FG3M",
+        "value": 1,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FG3M&EndPeriod=0&EndRange=28800&GameID=0022500868&PlayerID=1630577&RangeType=0&Season=2025-26&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612759&flag=3&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612759,
+        "personId": 1630577,
+        "name": "Julian Champagnie",
+        "measure": "FG3A",
+        "value": 3,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FG3A&EndPeriod=0&EndRange=28800&GameID=0022500868&PlayerID=1630577&RangeType=0&Season=2025-26&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612759&flag=3&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612759,
+        "personId": 1630577,
+        "name": "Julian Champagnie",
+        "measure": "OREB",
+        "value": 1,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=OREB&EndPeriod=0&EndRange=28800&GameID=0022500868&PlayerID=1630577&RangeType=0&Season=2025-26&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612759&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612759,
+        "personId": 1630577,
+        "name": "Julian Champagnie",
+        "measure": "DREB",
+        "value": 3,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=DREB&EndPeriod=0&EndRange=28800&GameID=0022500868&PlayerID=1630577&RangeType=0&Season=2025-26&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612759&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612759,
+        "personId": 1630577,
+        "name": "Julian Champagnie",
+        "measure": "REB",
+        "value": 4,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=REB&EndPeriod=0&EndRange=28800&GameID=0022500868&PlayerID=1630577&RangeType=0&Season=2025-26&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612759&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612759,
+        "personId": 1630577,
+        "name": "Julian Champagnie",
+        "measure": "AST",
+        "value": 1,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=AST&EndPeriod=0&EndRange=28800&GameID=0022500868&PlayerID=1630577&RangeType=0&Season=2025-26&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612759&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612759,
+        "personId": 1630577,
+        "name": "Julian Champagnie",
+        "measure": "STL",
+        "value": 1,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=STL&EndPeriod=0&EndRange=28800&GameID=0022500868&PlayerID=1630577&RangeType=0&Season=2025-26&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612759&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612759,
+        "personId": 1630577,
+        "name": "Julian Champagnie",
+        "measure": "BLK",
+        "value": 1,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=BLK&EndPeriod=0&EndRange=28800&GameID=0022500868&PlayerID=1630577&RangeType=0&Season=2025-26&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612759&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612759,
+        "personId": 1630577,
+        "name": "Julian Champagnie",
+        "measure": "TOV",
+        "value": 1,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=TOV&EndPeriod=0&EndRange=28800&GameID=0022500868&PlayerID=1630577&RangeType=0&Season=2025-26&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612759&flag=1&sct=plot&section=game"
+      }
+    ],
+    "team": [
+      {
+        "teamId": 1610612759,
+        "measure": "FGM",
+        "value": 32,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FGM&EndPeriod=0&EndRange=28800&GameID=0022500868&RangeType=0&Season=2025-26&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612759&flag=3&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612759,
+        "measure": "FGA",
+        "value": 77,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FGA&EndPeriod=0&EndRange=28800&GameID=0022500868&RangeType=0&Season=2025-26&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612759&flag=3&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612759,
+        "measure": "FG3M",
+        "value": 9,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FG3M&EndPeriod=0&EndRange=28800&GameID=0022500868&RangeType=0&Season=2025-26&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612759&flag=3&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612759,
+        "measure": "FG3A",
+        "value": 34,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FG3A&EndPeriod=0&EndRange=28800&GameID=0022500868&RangeType=0&Season=2025-26&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612759&flag=3&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612759,
+        "measure": "OREB",
+        "value": 10,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=OREB&EndPeriod=0&EndRange=28800&GameID=0022500868&RangeType=0&Season=2025-26&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612759&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612759,
+        "measure": "DREB",
+        "value": 31,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=DREB&EndPeriod=0&EndRange=28800&GameID=0022500868&RangeType=0&Season=2025-26&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612759&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612759,
+        "measure": "REB",
+        "value": 41,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=REB&EndPeriod=0&EndRange=28800&GameID=0022500868&RangeType=0&Season=2025-26&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612759&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612759,
+        "measure": "AST",
+        "value": 25,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=AST&EndPeriod=0&EndRange=28800&GameID=0022500868&RangeType=0&Season=2025-26&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612759&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612759,
+        "measure": "STL",
+        "value": 7,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=STL&EndPeriod=0&EndRange=28800&GameID=0022500868&RangeType=0&Season=2025-26&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612759&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612759,
+        "measure": "BLK",
+        "value": 5,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=BLK&EndPeriod=0&EndRange=28800&GameID=0022500868&RangeType=0&Season=2025-26&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612759&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612759,
+        "measure": "TOV",
+        "value": 22,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=TOV&EndPeriod=0&EndRange=28800&GameID=0022500868&RangeType=0&Season=2025-26&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612759&flag=1&sct=plot&section=game"
+      }
+    ]
+  }
+}

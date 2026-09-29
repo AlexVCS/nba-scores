@@ -1,0 +1,181 @@
+{
+  "gameId": "0012500001",
+  "retrievedAt": "2026-09-29",
+  "source": "https://www.nba.com/game/0012500001/box-score",
+  "observed": true,
+  "note": "2025-26 preseason, video and shot chart.",
+  "cellRule": "Measures under linked render as links when the value is positive; zero values and measures under unlinked stay plain text. Team totals use the same URL without PlayerID.",
+  "summaryInputs": {
+    "whStatus": 1,
+    "videoAvailableFlag": 1,
+    "overtimePeriods": 0
+  },
+  "statEvents": {
+    "season": "2025-26",
+    "seasonType": "Pre Season",
+    "endRange": 28800,
+    "measures": {"FGM": 3, "FGA": 3, "FG3M": 3, "FG3A": 3, "OREB": 1, "DREB": 1, "REB": 1, "AST": 1, "STL": 1, "BLK": 1, "TOV": 1}
+  },
+  "cells": {
+    "player": {
+      "linked": ["FGM", "FGA", "FG3M", "FG3A", "OREB", "DREB", "REB", "AST", "STL", "BLK", "TOV"],
+      "unlinked": ["MIN", "FG_PCT", "FG3_PCT", "FTM", "FTA", "FT_PCT", "PF", "PTS", "PLUS_MINUS"]
+    },
+    "team": {
+      "linked": ["FGM", "FGA", "FG3M", "FG3A", "OREB", "DREB", "REB", "AST", "STL", "BLK", "TOV"],
+      "unlinked": ["FG_PCT", "FG3_PCT", "FTM", "FTA", "FT_PCT", "PF", "PTS", "PLUS_MINUS"]
+    }
+  },
+  "urls": {
+    "player": [
+      {
+        "teamId": 1610612756,
+        "personId": 1626164,
+        "name": "Devin Booker",
+        "measure": "FGM",
+        "value": 8,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FGM&EndPeriod=0&EndRange=28800&GameID=0012500001&PlayerID=1626164&RangeType=0&Season=2025-26&SeasonType=Pre%20Season&StartPeriod=0&StartRange=0&TeamID=1610612756&flag=3&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612756,
+        "personId": 1626164,
+        "name": "Devin Booker",
+        "measure": "FGA",
+        "value": 19,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FGA&EndPeriod=0&EndRange=28800&GameID=0012500001&PlayerID=1626164&RangeType=0&Season=2025-26&SeasonType=Pre%20Season&StartPeriod=0&StartRange=0&TeamID=1610612756&flag=3&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612756,
+        "personId": 1626164,
+        "name": "Devin Booker",
+        "measure": "FG3M",
+        "value": 2,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FG3M&EndPeriod=0&EndRange=28800&GameID=0012500001&PlayerID=1626164&RangeType=0&Season=2025-26&SeasonType=Pre%20Season&StartPeriod=0&StartRange=0&TeamID=1610612756&flag=3&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612756,
+        "personId": 1626164,
+        "name": "Devin Booker",
+        "measure": "FG3A",
+        "value": 6,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FG3A&EndPeriod=0&EndRange=28800&GameID=0012500001&PlayerID=1626164&RangeType=0&Season=2025-26&SeasonType=Pre%20Season&StartPeriod=0&StartRange=0&TeamID=1610612756&flag=3&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612756,
+        "personId": 1626164,
+        "name": "Devin Booker",
+        "measure": "OREB",
+        "value": 1,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=OREB&EndPeriod=0&EndRange=28800&GameID=0012500001&PlayerID=1626164&RangeType=0&Season=2025-26&SeasonType=Pre%20Season&StartPeriod=0&StartRange=0&TeamID=1610612756&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612756,
+        "personId": 1626164,
+        "name": "Devin Booker",
+        "measure": "DREB",
+        "value": 1,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=DREB&EndPeriod=0&EndRange=28800&GameID=0012500001&PlayerID=1626164&RangeType=0&Season=2025-26&SeasonType=Pre%20Season&StartPeriod=0&StartRange=0&TeamID=1610612756&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612756,
+        "personId": 1626164,
+        "name": "Devin Booker",
+        "measure": "REB",
+        "value": 2,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=REB&EndPeriod=0&EndRange=28800&GameID=0012500001&PlayerID=1626164&RangeType=0&Season=2025-26&SeasonType=Pre%20Season&StartPeriod=0&StartRange=0&TeamID=1610612756&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612756,
+        "personId": 1626164,
+        "name": "Devin Booker",
+        "measure": "AST",
+        "value": 7,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=AST&EndPeriod=0&EndRange=28800&GameID=0012500001&PlayerID=1626164&RangeType=0&Season=2025-26&SeasonType=Pre%20Season&StartPeriod=0&StartRange=0&TeamID=1610612756&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612756,
+        "personId": 1626164,
+        "name": "Devin Booker",
+        "measure": "BLK",
+        "value": 1,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=BLK&EndPeriod=0&EndRange=28800&GameID=0012500001&PlayerID=1626164&RangeType=0&Season=2025-26&SeasonType=Pre%20Season&StartPeriod=0&StartRange=0&TeamID=1610612756&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612756,
+        "personId": 1626164,
+        "name": "Devin Booker",
+        "measure": "TOV",
+        "value": 1,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=TOV&EndPeriod=0&EndRange=28800&GameID=0012500001&PlayerID=1626164&RangeType=0&Season=2025-26&SeasonType=Pre%20Season&StartPeriod=0&StartRange=0&TeamID=1610612756&flag=1&sct=plot&section=game"
+      }
+    ],
+    "team": [
+      {
+        "teamId": 1610612756,
+        "measure": "FGM",
+        "value": 38,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FGM&EndPeriod=0&EndRange=28800&GameID=0012500001&RangeType=0&Season=2025-26&SeasonType=Pre%20Season&StartPeriod=0&StartRange=0&TeamID=1610612756&flag=3&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612756,
+        "measure": "FGA",
+        "value": 90,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FGA&EndPeriod=0&EndRange=28800&GameID=0012500001&RangeType=0&Season=2025-26&SeasonType=Pre%20Season&StartPeriod=0&StartRange=0&TeamID=1610612756&flag=3&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612756,
+        "measure": "FG3M",
+        "value": 13,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FG3M&EndPeriod=0&EndRange=28800&GameID=0012500001&RangeType=0&Season=2025-26&SeasonType=Pre%20Season&StartPeriod=0&StartRange=0&TeamID=1610612756&flag=3&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612756,
+        "measure": "FG3A",
+        "value": 41,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FG3A&EndPeriod=0&EndRange=28800&GameID=0012500001&RangeType=0&Season=2025-26&SeasonType=Pre%20Season&StartPeriod=0&StartRange=0&TeamID=1610612756&flag=3&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612756,
+        "measure": "OREB",
+        "value": 10,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=OREB&EndPeriod=0&EndRange=28800&GameID=0012500001&RangeType=0&Season=2025-26&SeasonType=Pre%20Season&StartPeriod=0&StartRange=0&TeamID=1610612756&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612756,
+        "measure": "DREB",
+        "value": 40,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=DREB&EndPeriod=0&EndRange=28800&GameID=0012500001&RangeType=0&Season=2025-26&SeasonType=Pre%20Season&StartPeriod=0&StartRange=0&TeamID=1610612756&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612756,
+        "measure": "REB",
+        "value": 50,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=REB&EndPeriod=0&EndRange=28800&GameID=0012500001&RangeType=0&Season=2025-26&SeasonType=Pre%20Season&StartPeriod=0&StartRange=0&TeamID=1610612756&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612756,
+        "measure": "AST",
+        "value": 29,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=AST&EndPeriod=0&EndRange=28800&GameID=0012500001&RangeType=0&Season=2025-26&SeasonType=Pre%20Season&StartPeriod=0&StartRange=0&TeamID=1610612756&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612756,
+        "measure": "STL",
+        "value": 9,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=STL&EndPeriod=0&EndRange=28800&GameID=0012500001&RangeType=0&Season=2025-26&SeasonType=Pre%20Season&StartPeriod=0&StartRange=0&TeamID=1610612756&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612756,
+        "measure": "BLK",
+        "value": 5,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=BLK&EndPeriod=0&EndRange=28800&GameID=0012500001&RangeType=0&Season=2025-26&SeasonType=Pre%20Season&StartPeriod=0&StartRange=0&TeamID=1610612756&flag=1&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612756,
+        "measure": "TOV",
+        "value": 16,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=TOV&EndPeriod=0&EndRange=28800&GameID=0012500001&RangeType=0&Season=2025-26&SeasonType=Pre%20Season&StartPeriod=0&StartRange=0&TeamID=1610612756&flag=1&sct=plot&section=game"
+      }
+    ]
+  }
+}

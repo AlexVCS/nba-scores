@@ -15,6 +15,7 @@ import pandas as pd
 from server.services import nba_stats_client
 from server.utils.boxscore_availability import is_valid_nba_game_id
 from server.utils.season import NBA_TIMEZONE, nba_now
+from server.utils.stat_events import stat_events
 from server.utils.ttl_cache import TTLCache
 
 logger = logging.getLogger(__name__)
@@ -40,6 +41,8 @@ V2_REQUIRED_COLUMNS = {
 # fetch, so it uses a short, single-attempt policy.
 LIFETIME_LOOKUP_TIMEOUT_SECONDS = 2
 
+REGULATION_PERIODS = 4
+
 
 @dataclass(frozen=True)
 class GameMetadata:
@@ -50,10 +53,20 @@ class GameMetadata:
 
 
 @dataclass(frozen=True)
+class StatEventInputs:
+    # Kept raw: stat_events applies NBA.com's strict and coerced comparisons.
+    wh_status: object
+    video_available_flag: object
+    overtime_periods: int
+
+
+@dataclass(frozen=True)
 class _Boxscore:
     game: dict
-    # Summary metadata fetched during the refresh that produced this entry.
+    # Summary metadata and stat-link inputs fetched during the refresh that
+    # produced this entry.
     metadata: GameMetadata | None
+    stat_event_inputs: StatEventInputs | None
 
 
 # Every reader receives its own deep copy so callers cannot alter shared entries.
@@ -68,7 +81,7 @@ def _number(value) -> int | None:
         return None
     try:
         return int(float(value))
-    except (TypeError, ValueError):
+    except (TypeError, ValueError, OverflowError):
         return None
 
 
@@ -104,6 +117,39 @@ def v3_metadata(game: dict) -> GameMetadata:
     if game_date is None and moment is not None:
         game_date = moment.astimezone(NBA_TIMEZONE).date().isoformat()
     return GameMetadata(_number(game.get("gameStatus")), str(game.get("gameStatusText") or "").strip(), game_date, moment)
+
+
+def _period(value) -> int:
+    # Only whole numbers count: rounding a malformed period could shorten
+    # EndRange and drop overtime events from the linked pages.
+    if isinstance(value, int) and not isinstance(value, bool):
+        return value
+    if isinstance(value, float) and value.is_integer():
+        return int(value)
+    raise ValueError(f"malformed period {value!r}")
+
+
+def _overtime_periods(game: dict) -> int:
+    # ``period`` is the game's latest period, the value NBA.com's period
+    # options are built from. Team period rows cover summaries without it. A
+    # malformed value in either raises rather than guessing a period count.
+    period = game.get("period")
+    period = None if period is None else _period(period)
+    if period is None or period < 1:
+        period = 0
+        for side in ("homeTeam", "awayTeam"):
+            team = game.get(side)
+            rows = [] if team is None else team.get("periods") or []
+            if not isinstance(rows, list):
+                raise ValueError(f"malformed {side} periods")
+            for row in rows:
+                period = max(period, _period(row.get("period")))
+    return max(period - REGULATION_PERIODS, 0)
+
+
+def v3_stat_event_inputs(game: dict) -> StatEventInputs:
+    """Return a summary's stat-link inputs; raises on a malformed period count."""
+    return StatEventInputs(game.get("whStatus"), game.get("videoAvailableFlag"), _overtime_periods(game))
 
 
 def v2_metadata(frames: dict) -> GameMetadata | None:
@@ -238,7 +284,7 @@ def _fetch_boxscore(game_id: str) -> dict:
     return game
 
 
-def _refreshed_metadata(game_id: str) -> GameMetadata | None:
+def _refreshed_summary(game_id: str) -> dict | None:
     # Only metadata fetched for this refresh, or joined in flight, may extend a
     # boxscore's lifetime: a cached summary can predate the final buzzer. A
     # failed lookup only shortens the lifetime; it never fails the boxscore.
@@ -249,25 +295,54 @@ def _refreshed_metadata(game_id: str) -> GameMetadata | None:
     except Exception as exc:
         logger.info("Boxscore lifetime metadata unavailable for %s: %s", game_id, exc)
         return None
-    return v3_metadata(game) if game else None
+    return game
 
 
 def _load_boxscore(game_id: str) -> _Boxscore:
     # Fetch metadata first so a game reported final is never paired with a
-    # boxscore captured before it ended.
-    metadata = _refreshed_metadata(game_id)
-    return _Boxscore(_fetch_boxscore(game_id), metadata)
+    # boxscore captured before it ended. Stat-link inputs come from the same
+    # summary, so they share the entry's lifetime.
+    summary = _refreshed_summary(game_id)
+    if not summary:
+        return _Boxscore(_fetch_boxscore(game_id), None, None)
+    return _Boxscore(_fetch_boxscore(game_id), v3_metadata(summary), _stat_event_inputs(game_id, summary))
 
 
-def get_boxscore(game_id: str) -> dict:
-    """Return a caller-owned BoxScoreTraditionalV3 game."""
+def _stat_event_inputs(game_id: str, summary: dict) -> StatEventInputs | None:
+    # Stat links are optional: malformed inputs leave them null, never the boxscore.
+    try:
+        return v3_stat_event_inputs(summary)
+    except Exception as exc:
+        logger.info("Stat event inputs unusable for %s: %s", game_id, exc)
+        return None
+
+
+def _boxscore_entry(game_id: str) -> _Boxscore:
     if not is_valid_nba_game_id(game_id):
-        return _fetch_boxscore(game_id)
+        return _Boxscore(_fetch_boxscore(game_id), None, None)
     return _boxscore_cache.get_or_load(
         game_id,
         lambda: _load_boxscore(game_id),
         lambda entry: metadata_ttl(entry.metadata),
-    ).game
+    )
+
+
+def get_boxscore(game_id: str) -> dict:
+    """Return a caller-owned BoxScoreTraditionalV3 game."""
+    return _boxscore_entry(game_id).game
+
+
+def get_boxscore_with_stat_events(game_id: str) -> tuple[dict, dict | None]:
+    """Return a caller-owned boxscore and its NBA.com stat-link parameters.
+
+    Both come from one cached entry, so this never makes a summary request of
+    its own. Stat events are None without a usable summary from that refresh.
+    """
+    entry = _boxscore_entry(game_id)
+    inputs = entry.stat_event_inputs
+    if inputs is None:
+        return entry.game, None
+    return entry.game, stat_events(game_id, inputs.wh_status, inputs.video_available_flag, inputs.overtime_periods)
 
 
 def _summary_metadata(game_id: str) -> GameMetadata:

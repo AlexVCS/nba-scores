@@ -469,10 +469,6 @@ def fetch_inactive_players(game_id: str):
     return {"teams": teams}
 
 
-def fetch_boxscoretraditional(game_id: str):
-    return game_data.get_boxscore(game_id)
-
-
 def build_v3_periods(team):
     periods = []
     for raw_period in team.get("periods") or []:

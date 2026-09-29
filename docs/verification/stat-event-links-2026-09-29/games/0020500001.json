@@ -1,0 +1,91 @@
+{
+  "gameId": "0020500001",
+  "retrievedAt": "2026-09-29",
+  "source": "https://www.nba.com/game/0020500001/box-score",
+  "observed": true,
+  "note": "2005-06 regular season overtime game, shot chart only; EndRange 31800.",
+  "cellRule": "Measures under linked render as links when the value is positive; zero values and measures under unlinked stay plain text. Team totals use the same URL without PlayerID.",
+  "summaryInputs": {
+    "whStatus": 1,
+    "videoAvailableFlag": 0,
+    "overtimePeriods": 1
+  },
+  "statEvents": {
+    "season": "2005-06",
+    "seasonType": "Regular Season",
+    "endRange": 31800,
+    "measures": {"FGM": 2, "FGA": 2, "FG3M": 2, "FG3A": 2}
+  },
+  "cells": {
+    "player": {
+      "linked": ["FGM", "FGA", "FG3M", "FG3A"],
+      "unlinked": ["MIN", "FG_PCT", "FG3_PCT", "FTM", "FTA", "FT_PCT", "OREB", "DREB", "REB", "AST", "STL", "BLK", "TOV", "PF", "PTS", "PLUS_MINUS"]
+    },
+    "team": {
+      "linked": ["FGM", "FGA", "FG3M", "FG3A"],
+      "unlinked": ["FG_PCT", "FG3_PCT", "FTM", "FTA", "FT_PCT", "OREB", "DREB", "REB", "AST", "STL", "BLK", "TOV", "PF", "PTS", "PLUS_MINUS"]
+    }
+  },
+  "urls": {
+    "player": [
+      {
+        "teamId": 1610612749,
+        "personId": 389,
+        "name": "Toni Kukoc",
+        "measure": "FGM",
+        "value": 4,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FGM&EndPeriod=0&EndRange=31800&GameID=0020500001&PlayerID=389&RangeType=0&Season=2005-06&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612749&flag=2&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612749,
+        "personId": 389,
+        "name": "Toni Kukoc",
+        "measure": "FGA",
+        "value": 7,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FGA&EndPeriod=0&EndRange=31800&GameID=0020500001&PlayerID=389&RangeType=0&Season=2005-06&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612749&flag=2&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612749,
+        "personId": 389,
+        "name": "Toni Kukoc",
+        "measure": "FG3M",
+        "value": 1,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FG3M&EndPeriod=0&EndRange=31800&GameID=0020500001&PlayerID=389&RangeType=0&Season=2005-06&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612749&flag=2&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612749,
+        "personId": 389,
+        "name": "Toni Kukoc",
+        "measure": "FG3A",
+        "value": 3,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FG3A&EndPeriod=0&EndRange=31800&GameID=0020500001&PlayerID=389&RangeType=0&Season=2005-06&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612749&flag=2&sct=plot&section=game"
+      }
+    ],
+    "team": [
+      {
+        "teamId": 1610612749,
+        "measure": "FGM",
+        "value": 42,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FGM&EndPeriod=0&EndRange=31800&GameID=0020500001&RangeType=0&Season=2005-06&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612749&flag=2&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612749,
+        "measure": "FGA",
+        "value": 85,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FGA&EndPeriod=0&EndRange=31800&GameID=0020500001&RangeType=0&Season=2005-06&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612749&flag=2&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612749,
+        "measure": "FG3M",
+        "value": 6,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FG3M&EndPeriod=0&EndRange=31800&GameID=0020500001&RangeType=0&Season=2005-06&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612749&flag=2&sct=plot&section=game"
+      },
+      {
+        "teamId": 1610612749,
+        "measure": "FG3A",
+        "value": 13,
+        "url": "https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=FG3A&EndPeriod=0&EndRange=31800&GameID=0020500001&RangeType=0&Season=2005-06&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1610612749&flag=2&sct=plot&section=game"
+      }
+    ]
+  }
+}

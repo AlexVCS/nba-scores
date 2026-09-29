@@ -125,7 +125,7 @@ function BoxscorePage() {
                 ))}
               </div>
               <div className="mx-auto mt-1 mb-8 w-[min(1180px,calc(100%_-_32px))] min-[1280px]:hidden">
-                <HardwoodScorersBook key={activeTeam.teamId} team={activeTeam} />
+                <HardwoodScorersBook key={activeTeam.teamId} team={activeTeam} gameId={state.gameId} statEvents={state.statEvents} />
               </div>
               <div className="hidden min-[1280px]:block">
                 <div className="mx-auto mt-[26px] mb-[18px] flex w-[min(1180px,calc(100%_-_32px))] items-center justify-center border-y border-hw-line py-3">
@@ -139,13 +139,13 @@ function BoxscorePage() {
                 </div>
                 {isComparing ? (
                   <div className="mx-auto mb-8 grid w-[min(1760px,calc(100%_-_32px))] grid-cols-2 items-stretch gap-3">
-                    <HardwoodScorersBook team={game.awayTeam} comparison />
-                    <HardwoodScorersBook team={game.homeTeam} comparison />
+                    <HardwoodScorersBook team={game.awayTeam} gameId={state.gameId} statEvents={state.statEvents} comparison />
+                    <HardwoodScorersBook team={game.homeTeam} gameId={state.gameId} statEvents={state.statEvents} comparison />
                   </div>
                 ) : (
                   <div className="mx-auto mb-8 grid w-[min(1180px,calc(100%_-_32px))] gap-12">
-                    <HardwoodScorersBook team={game.awayTeam} />
-                    <HardwoodScorersBook team={game.homeTeam} />
+                    <HardwoodScorersBook team={game.awayTeam} gameId={state.gameId} statEvents={state.statEvents} />
+                    <HardwoodScorersBook team={game.homeTeam} gameId={state.gameId} statEvents={state.statEvents} />
                   </div>
                 )}
               </div>

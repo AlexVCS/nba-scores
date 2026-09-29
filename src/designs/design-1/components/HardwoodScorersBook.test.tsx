@@ -1,6 +1,7 @@
-import {render, screen} from "@testing-library/react";
+import {render, screen, within} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import {afterEach, describe, expect, it, vi} from "vitest";
+import type {StatEvents} from "@/helpers/statEventUrl";
 import type {DesignBoxscoreTeam} from "../../hooks/useBoxscorePage";
 import HardwoodScorersBook from "./HardwoodScorersBook";
 
@@ -93,6 +94,16 @@ const stubWideViewport = () =>
     dispatchEvent: vi.fn(),
   }));
 
+const statEvents: StatEvents = {
+  season: "2025-26",
+  seasonType: "Regular Season",
+  endRange: 28800,
+  measures: {FGM: 3, FGA: 3, FG3M: 3, FG3A: 3, OREB: 1, DREB: 1, REB: 1, AST: 1, STL: 1, BLK: 1, TOV: 1},
+};
+
+const playerUrl = (measure: string, flag: number) =>
+  `https://www.nba.com/stats/events/?CFID=&CFPARAMS=&ContextMeasure=${measure}&EndPeriod=0&EndRange=28800&GameID=0022500868&PlayerID=2&RangeType=0&Season=2025-26&SeasonType=Regular%20Season&StartPeriod=0&StartRange=0&TeamID=1&flag=${flag}&sct=plot&section=game`;
+
 describe("hardwood scorer's book", () => {
   afterEach(() => {
     vi.unstubAllGlobals();
@@ -109,7 +120,7 @@ describe("hardwood scorer's book", () => {
 
     await user.click(screen.getByRole("button", {name: "Shooting"}));
     expect(screen.getAllByText("FG")).not.toHaveLength(0);
-    expect(screen.getByRole("button", {name: /Test Player/})).toHaveTextContent("5-10");
+    expect(screen.getAllByRole("listitem")[0]).toHaveTextContent("5-10");
 
     await user.click(screen.getByRole("button", {name: "Hustle"}));
     expect(screen.getAllByText("+/-")).not.toHaveLength(0);
@@ -244,5 +255,107 @@ describe("hardwood scorer's book", () => {
     expect(heading).toBeInTheDocument();
     expect(heading.parentElement).toHaveClass("max-[700px]:h-[60px]");
     expect(screen.getByText("CLE")).toBeInTheDocument();
+  });
+
+  describe("NBA.com stat event links", () => {
+    const playerRow = () => screen.getAllByRole("listitem")[0];
+
+    it("links each positive listed stat in the wide row, splitting made and attempted", () => {
+      stubWideViewport();
+      render(<HardwoodScorersBook team={team} gameId="0022500868" statEvents={statEvents} />);
+
+      const made = screen.getByRole("link", {name: "View Test Player's field goals made on NBA.com, opens in new tab"});
+      expect(made).toHaveAttribute("href", playerUrl("FGM", 3));
+      expect(made).toHaveTextContent(/^5$/);
+      expect(made).toHaveAttribute("target", "_blank");
+      expect(made).toHaveAttribute("rel", "noopener noreferrer");
+      const attempted = screen.getByRole("link", {name: "View Test Player's field goals attempted on NBA.com, opens in new tab"});
+      expect(attempted).toHaveTextContent(/^10$/);
+      expect(attempted.parentElement).toHaveTextContent("5-10");
+      expect(screen.getByRole("link", {name: /Test Player's turnovers/})).toHaveAttribute("href", playerUrl("TOV", 1));
+      for (const name of ["three-pointers made", "three-pointers attempted", "rebounds", "assists", "steals", "blocks"]) {
+        expect(within(playerRow()).getByRole("link", {name: new RegExp(`Test Player's ${name} on`)})).toBeInTheDocument();
+      }
+      // Free throws, points, minutes and plus/minus are never linked.
+      expect(within(playerRow()).getAllByRole("link")).toHaveLength(9);
+      expect(screen.queryByRole("link", {name: /Bench Guy/})).not.toBeInTheDocument();
+    });
+
+    it("keeps zero values and measures missing from statEvents as plain text", () => {
+      stubWideViewport();
+      const partial: StatEvents = {...statEvents, measures: {FGM: 2, FGA: 2, FG3M: 2, FG3A: 2}};
+      const noThrees: DesignBoxscoreTeam = {
+        ...team,
+        players: [{...team.players[0], statistics: {...team.players[0].statistics, threePointersMade: 0}}, team.players[1]],
+      };
+      render(<HardwoodScorersBook team={noThrees} gameId="0022500868" statEvents={partial} />);
+
+      const links = within(playerRow()).getAllByRole("link").map((link) => link.getAttribute("aria-label"));
+      expect(links).toEqual([
+        "View Test Player's field goals made on NBA.com, opens in new tab",
+        "View Test Player's field goals attempted on NBA.com, opens in new tab",
+        "View Test Player's three-pointers attempted on NBA.com, opens in new tab",
+      ]);
+      expect(playerRow()).toHaveTextContent("0-4");
+    });
+
+    it("renders no links when the game has no statEvents", () => {
+      stubWideViewport();
+      render(<HardwoodScorersBook team={team} gameId="0022500868" statEvents={null} />);
+
+      expect(screen.queryByRole("link", {name: /on NBA.com/})).not.toBeInTheDocument();
+      expect(playerRow()).toHaveTextContent("5-10");
+    });
+
+    it("links team totals without a PlayerID", () => {
+      stubWideViewport();
+      render(<HardwoodScorersBook team={team} gameId="0022500868" statEvents={statEvents} />);
+
+      const totals = screen.getByLabelText("Cleveland Cavaliers totals");
+      const made = within(totals).getByRole("link", {name: "View Cleveland Cavaliers' field goals made on NBA.com, opens in new tab"});
+      expect(made).toHaveAttribute("href", playerUrl("FGM", 3).replace("PlayerID=2&", ""));
+      expect(within(totals).getAllByRole("link")).toHaveLength(9);
+      for (const link of within(totals).getAllByRole("link")) expect(link.getAttribute("href")).not.toContain("PlayerID");
+    });
+
+    it("links the expanded sheet's shooting splits and counters, including rebound splits", async () => {
+      const user = userEvent.setup();
+      render(<HardwoodScorersBook team={team} gameId="0022500868" statEvents={statEvents} />);
+
+      await user.click(screen.getByRole("button", {name: /Test Player/}));
+      const sheet = document.getElementById("hw-sheet-2")!;
+      const labels = within(sheet).getAllByRole("link", {name: /on NBA.com/}).map((link) => link.getAttribute("aria-label"));
+      for (const name of ["field goals made", "field goals attempted", "three-pointers made", "three-pointers attempted", "offensive rebounds", "defensive rebounds", "steals", "blocks", "turnovers"]) {
+        expect(labels).toContain(`View Test Player's ${name} on NBA.com, opens in new tab`);
+      }
+      expect(within(sheet).getByRole("link", {name: /offensive rebounds/})).toHaveAttribute("href", playerUrl("OREB", 1));
+      expect(within(sheet).getByRole("link", {name: /defensive rebounds/})).toHaveAttribute("href", playerUrl("DREB", 1));
+      // The line facet already shows assists in the row, so the sheet does not repeat them.
+      expect(labels).not.toContain("View Test Player's assists on NBA.com, opens in new tab");
+      expect(sheet).toHaveTextContent("3-4");
+    });
+
+    it.each([
+      ["mobile", false, false],
+      ["desktop", true, false],
+      ["comparison", false, true],
+    ])("toggles the row independently of stat links in the %s layout", async (_layout, isWide, comparison) => {
+      if (isWide) stubWideViewport();
+      const user = userEvent.setup();
+      render(<HardwoodScorersBook team={team} gameId="0022500868" statEvents={statEvents} comparison={comparison} />);
+
+      const row = screen.getByRole("button", {name: /Test Player/});
+      const link = within(playerRow()).getByRole("link", {name: /Test Player's assists/});
+      expect(row).not.toContainElement(link);
+      await user.click(link);
+      expect(row).toHaveAttribute("aria-expanded", "false");
+
+      await user.click(row);
+      expect(row).toHaveAttribute("aria-expanded", "true");
+      await user.click(within(playerRow()).getByRole("link", {name: /Test Player's assists/}));
+      expect(row).toHaveAttribute("aria-expanded", "true");
+      await user.click(row);
+      expect(row).toHaveAttribute("aria-expanded", "false");
+    });
   });
 });
