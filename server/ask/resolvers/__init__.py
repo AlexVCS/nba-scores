@@ -117,7 +117,7 @@ def resolve(request: AskRequest) -> ResolverOutput:
     if gate and isinstance(request, BoxscoreStatRequest):
         selector = request.game
         named_teams = bool(selector.teams or request.team)
-        unique_finals = selector.round == "finals"
+        unique_finals = bool(selector.season and selector.game_number and selector.round == "finals")
         if (request.scope in ("leaders", "team") and not named_teams and not selector.game_id
                 and not unique_finals and (selector.date or selector.round)):
             # A lookup-dependent clarification would reveal whether a

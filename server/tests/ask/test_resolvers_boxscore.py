@@ -224,6 +224,22 @@ def test_gated_leaders_without_teams_clarify_before_game_lookup(monkeypatch):
         assert (error.value.field, error.value.clarify_reason) == ("teams", "missing")
 
 
+@pytest.mark.parametrize("games_on_date", [1, 2])
+def test_finals_date_without_game_number_clarifies_independent_of_results(monkeypatch, games_on_date):
+    monkeypatch.setattr("server.ask.resolvers.request_spoiler_gate", lambda _request: HIDDEN_GAME_GATE)
+    calls = []
+    def lookup(*args):
+        calls.append(games_on_date)
+        if games_on_date == 2:
+            raise AssertionError("multiple game result reached")
+        return None
+    monkeypatch.setattr(games, "find_game_on_date", lookup)
+    with pytest.raises(ClarificationError) as error:
+        resolve(request(scope="leaders", game={"date": "2024-05-15", "round": "finals"}))
+    assert (error.value.field, error.value.clarify_reason) == ("teams", "missing")
+    assert calls == []
+
+
 def test_known_finals_and_named_team_do_not_get_preemptive_clarification(game_data, monkeypatch):
     monkeypatch.setattr("server.ask.resolvers.request_spoiler_gate", lambda _request: HIDDEN_GAME_GATE)
     monkeypatch.setattr("server.ask.resolvers.playoffs.find_playoff_game", lambda *args: final_game())

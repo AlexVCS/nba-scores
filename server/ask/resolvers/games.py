@@ -271,7 +271,8 @@ def find_player_game(player_id: int, day: dt.date) -> tuple[ResolvedGame, TeamRe
     rows = data.player_games_on(player_id, day)
     game_ids = sorted({row[0] for row in rows})
     if not game_ids:
-        if day in (nba_today(), nba_today() - dt.timedelta(days=1)) and _day_games(day):
+        today = nba_today()
+        if day in (today, today - dt.timedelta(days=1)) and _day_games(day):
             # LeagueGameFinder can lag games still on the recent scoreboard.
             # Without a dated player record, none of those games is known to
             # be this player's; avoid claiming they did not play.
