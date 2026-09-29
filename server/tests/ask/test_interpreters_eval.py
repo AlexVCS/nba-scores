@@ -1,4 +1,5 @@
 import json
+from copy import deepcopy
 from pathlib import Path
 
 import pytest
@@ -92,6 +93,24 @@ def test_fixture_cases_are_labeled_and_hand_built():
     assert all(c.candidates.alias_version == "hand-built" for c in CASES)
 
 
+@pytest.mark.parametrize("expected, message", [
+    ({"action": "needs_clarification", "clarify_field": "date"}, "unknown expected action"),
+    ({"action": "fail"}, "unknown expected action"),
+    ({"action": "accept"}, "request is required only"),
+    ({"action": "clarify"}, "clarify_field is required only"),
+    ({"action": "clarify", "clarify_field": "aggregation"}, "unknown clarify_field"),
+    ({"action": "clarify", "clarify_field": "date", "clarify_reason": "made_up"}, "invalid clarify_reason"),
+    ({"action": "unsupported"}, "unsupported_reason is required only"),
+    ({"action": "unsupported", "unsupported_reason": "other", "request": {}}, "request is required only"),
+    ({"action": "clarify", "clarify_field": "date", "request": {}}, "request is required only"),
+])
+def test_invalid_labels_fail_before_evaluation(expected, message):
+    raw = json.loads(FIXTURE.read_text())["cases"][0]
+    raw["expected"] = expected
+    with pytest.raises(ValueError, match=message):
+        LabeledCase.from_json(raw)
+
+
 def test_drive_accepts_and_scores_exact_request():
     primary = FakeAdapter("jev", "jev-1.13.0", GOOD)
     case = BY_ID["smoke-games-last-week"]
@@ -123,6 +142,7 @@ def test_run_reports_accuracy_guesses_fallback_and_shared_primary_calls():
     assert cascade["cost_per_successful_answer_usd"] == pytest.approx((4 * 0.001 + 0.01) / 4)
     assert doc["spend"]["spent_usd"] == pytest.approx(4 * 0.001 + 0.01)
     assert "gpt-6-luna-resolved" in cascade["resolved_models"]
+    assert doc["cases"]["jev"][0]["actual_request"]["intent"] == "game_search"
 
 
 def test_schema_valid_guess_counts_as_failure():
@@ -137,6 +157,49 @@ def test_schema_valid_guess_counts_as_failure():
     score = result.scores["jev"][0]
     assert score.action == "accept" and not score.correct and score.guess
     assert score.failure == "schema_valid_guess"
+
+
+@pytest.mark.parametrize("case_id, fields, entity_path, id_key", [
+    ("smoke-games-last-week", GOOD["Cavs games last week"], ("teams", 0), "team_id"),
+    ("smoke-player-stat-finals", [
+        sel("intent", "boxscore_stat"), sel("stat_scope", "player"), sel("stat", "points"),
+        sel("player", "player:1628369"), sel("season", "season:2023-24"),
+        sel("round", "round:finals"), sel("game_number", "game_number:4"),
+    ], ("player",), "player_id"),
+])
+def test_score_uses_entity_ids_not_display_labels(case_id, fields, entity_path, id_key):
+    raw = next(deepcopy(c) for c in json.loads(FIXTURE.read_text())["cases"] if c["id"] == case_id)
+    entity = raw["expected"]["request"]
+    for key in entity_path:
+        entity = entity[key]
+    entity["name"] = "Accented display name"
+    if id_key == "team_id":
+        entity["tricode"] = "ALT"
+
+    adapter = FakeAdapter("jev", "jev-1.13.0", {raw["question"]: fields})
+    cfg = configs(adapter, None)[0]
+    case = LabeledCase.from_json(raw)
+    result = run([case], embedded_candidates, [cfg], SpendGuard(1))
+    scored = result.scores["jev"][0]
+    assert scored.correct and not scored.guess
+    assert scored.actual_request is not None
+    assert scored.actual_request != raw["expected"]["request"]
+
+    entity[id_key] += 1
+    wrong_id = LabeledCase.from_json(raw)
+    result = run([wrong_id], embedded_candidates, [cfg], SpendGuard(1))
+    scored = result.scores["jev"][0]
+    assert not scored.correct and scored.guess and scored.failure == "wrong_request"
+    assert scored.actual_request is not None
+
+    entity[id_key] -= 1
+    if id_key == "team_id":
+        raw["expected"]["request"]["dates"]["start"] = "2026-09-22"
+    else:
+        raw["expected"]["request"]["stat"]["stat"] = "rebounds"
+    wrong_parameter = LabeledCase.from_json(raw)
+    result = run([wrong_parameter], embedded_candidates, [cfg], SpendGuard(1))
+    assert result.scores["jev"][0].failure == "wrong_request"
 
 
 def test_wrong_unsupported_reason_counts_as_failure():

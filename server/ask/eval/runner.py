@@ -17,11 +17,12 @@ import math
 import statistics
 import time
 from dataclasses import asdict, dataclass, field
-from typing import Any, Callable, Protocol
+from typing import Any, Callable, Protocol, get_args
 
 from server.ask.interpreters.pricing import SpendCapExceeded, SpendGuard
 from server.ask.models.candidates import CandidateLookupResult, CandidateSet
-from server.ask.models.interpreter import InterpreterInput, InterpreterOutput
+from server.ask.models.common import ClarifyField, ClarifyReason
+from server.ask.models.interpreter import InterpreterInput, InterpreterOutput, UnsupportedReason
 from server.ask.models.request import ASK_REQUEST_ADAPTER, AskContext
 from server.ask.normalize import Normalizer, canonical_request
 from server.ask.protocols import (
@@ -35,6 +36,10 @@ from server.ask.protocols import (
 )
 
 MAX_ATTEMPTS = 4
+LABELED_ACTIONS = frozenset({"accept", "clarify", "unsupported"})
+CLARIFY_FIELDS = frozenset(get_args(ClarifyField))
+CLARIFY_REASONS = frozenset(get_args(ClarifyReason))
+UNSUPPORTED_REASONS = frozenset(get_args(UnsupportedReason))
 
 # Expand one candidate field: (question, context, candidate field, previous set) -> set.
 Expander = Callable[[str, AskContext, str, CandidateSet], CandidateSet]
@@ -187,9 +192,10 @@ class LabeledCase:
     id: str
     question: str
     context: AskContext
-    action: str  # accept | clarify | unsupported | fail
+    action: str  # accept | clarify | unsupported
     request: Any | None = None
     clarify_field: str | None = None
+    clarify_reason: str | None = None
     unsupported_reason: str | None = None
     also_accept: frozenset[str] = frozenset()
     tags: tuple[str, ...] = ()
@@ -199,21 +205,40 @@ class LabeledCase:
     @classmethod
     def from_json(cls, data: dict[str, Any]) -> LabeledCase:
         expected = data["expected"]
+        case_id = data["id"]
+        action = expected["action"]
+        if action not in LABELED_ACTIONS:
+            raise ValueError(f"{case_id}: unknown expected action {action!r}")
+        if (action == "accept") != (expected.get("request") is not None):
+            raise ValueError(f"{case_id}: request is required only for accept labels")
+        if (action == "clarify") != (expected.get("clarify_field") is not None):
+            raise ValueError(f"{case_id}: clarify_field is required only for clarify labels")
+        if action == "clarify" and expected["clarify_field"] not in CLARIFY_FIELDS:
+            raise ValueError(f"{case_id}: unknown clarify_field {expected['clarify_field']!r}")
+        if expected.get("clarify_reason") is not None:
+            if action != "clarify" or expected["clarify_reason"] not in CLARIFY_REASONS:
+                raise ValueError(f"{case_id}: invalid clarify_reason {expected['clarify_reason']!r}")
+        if (action == "unsupported") != (expected.get("unsupported_reason") is not None):
+            raise ValueError(f"{case_id}: unsupported_reason is required only for unsupported labels")
+        if action == "unsupported" and expected["unsupported_reason"] not in UNSUPPORTED_REASONS:
+            raise ValueError(f"{case_id}: unknown unsupported_reason {expected['unsupported_reason']!r}")
+        also_accept = frozenset(expected.get("also_accept", []))
+        if also_accept - LABELED_ACTIONS or "accept" in also_accept:
+            raise ValueError(f"{case_id}: invalid also_accept actions")
         context = AskContext.model_validate(
             {"reference_time": data["reference_time"], **(data.get("context") or {})}
         )
-        request = ASK_REQUEST_ADAPTER.validate_python(expected["request"]) if expected.get("request") else None
-        if expected["action"] == "accept" and request is None:
-            raise ValueError(f"{data['id']}: accept labels need a request")
+        request = ASK_REQUEST_ADAPTER.validate_python(expected["request"]) if action == "accept" else None
         return cls(
-            id=data["id"],
+            id=case_id,
             question=data["question"],
             context=context,
-            action=expected["action"],
+            action=action,
             request=request,
             clarify_field=expected.get("clarify_field"),
+            clarify_reason=expected.get("clarify_reason"),
             unsupported_reason=expected.get("unsupported_reason"),
-            also_accept=frozenset(expected.get("also_accept", [])),
+            also_accept=also_accept,
             tags=tuple(data.get("tags", [])),
             candidates=CandidateLookupResult.model_validate(data["candidates"]) if data.get("candidates") else None,
         )
@@ -245,6 +270,33 @@ class CaseScore:
     error_codes: list[str]
     clarify_field: str | None = None
     unsupported_reason: str | None = None
+    actual_request: dict[str, Any] | None = None
+
+
+def scored_request(request: Any) -> dict[str, Any]:
+    """Compare IDs and request parameters, ignoring required entity display fields.
+
+    TeamRef and PlayerRef require names (and team tricodes) in the request
+    schema. Lookup supplies those values; the interpreter selects the ID.
+    The full actual request stays in CaseScore so display errors remain visible.
+    """
+    data = canonical_request(request)
+
+    def strip_display(value: Any) -> None:
+        if isinstance(value, dict):
+            if "team_id" in value:
+                value.pop("name", None)
+                value.pop("tricode", None)
+            elif "player_id" in value:
+                value.pop("name", None)
+            for child in value.values():
+                strip_display(child)
+        elif isinstance(value, list):
+            for child in value:
+                strip_display(child)
+
+    strip_display(data)
+    return data
 
 
 def score(case: LabeledCase, config: str, result: DriveResult) -> CaseScore:
@@ -252,7 +304,7 @@ def score(case: LabeledCase, config: str, result: DriveResult) -> CaseScore:
     failure = None
     guess = False
     if case.action == "accept":
-        correct = action == "accept" and canonical_request(result.request) == canonical_request(case.request)
+        correct = action == "accept" and scored_request(result.request) == scored_request(case.request)
         if not correct:
             if action == "accept":
                 guess, failure = True, "wrong_request"
@@ -301,6 +353,7 @@ def score(case: LabeledCase, config: str, result: DriveResult) -> CaseScore:
                   if a.normalization is not None and a.normalization.status == "unsupported"),
                  outputs_reason(result.attempts)) if action == "unsupported" else None
         ),
+        actual_request=result.request.model_dump(mode="json") if action == "accept" and result.request else None,
     )
 
 
