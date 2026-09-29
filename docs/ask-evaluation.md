@@ -510,3 +510,28 @@ start clarification, and case 056 expects a missing-stat clarification despite
 the documented default to a full stat line. The raw report and labels remain
 unchanged. These concerns do not erase the confirmed failures or establish a
 passing release. Any corrected implementation needs another unseen release set.
+
+
+## Paired exposed-set comparison after shared fixes
+
+The user challenged the provisional Luna choice because Jev had not received
+comparable calibration work. We ran both configured implementations against the
+same exposed second-release 80 questions at commit `80b5570`. This is a regression
+comparison, not unseen evidence. Original labels and their documented concerns
+were retained. The [raw report](verification/ask-jev-luna-regression-2026-09-29.json)
+records $0.017794 in estimated usage under a $0.20 guard.
+
+| Current implementation | Overall | Complete | Clarify | Unsupported | Guesses | Failures | Median | p95 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Jev 1.13.0 | 48/80 | 22/48 | 15/20 | 11/12 | 0 | 1 | 173 ms | 228 ms |
+| GPT-6 Luna | 67/80 | 41/48 | 14/20 | 12/12 | 4 | 0 | 2,402 ms | 3,836 ms |
+
+Jev had zero schema-valid guesses and was much faster, but requested many
+unnecessary clarifications. Luna accepted more correct requests but made four
+schema-valid guesses. Neither passes the release gates. Jev's adapter still
+uses uncalibrated intent, no-match and team-count thresholds, plus cascade
+confidence thresholds; Luna has no confidence veto. The report does not store
+the field probabilities needed to separate extraction errors from policy vetoes.
+A production model recommendation therefore remains open. Record those details,
+calibrate on development data, and freeze both implementations before a fresh
+unseen comparison. No additional provider runs are required for this handoff.

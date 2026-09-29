@@ -247,3 +247,25 @@ def test_interpretation_leaves_time_for_nba_resolution(tmp_path, total_seconds, 
     assert len(deadlines) == 1
     assert 0 < deadlines[0] <= max_interpreter_ms
     assert coordinator.config.deadline_seconds == total_seconds
+
+
+def test_invalid_normalization_is_not_replayed_from_parse_cache(tmp_path):
+    class RecoveringAdapter(Adapter):
+        def interpret(self, request):
+            output = super().interpret(request)
+            if self.calls == 1:
+                return output.model_copy(update={"outcome": "interpreted", "unsupported_reason": None,
+                    "fields": [
+                        FieldInterpretation(field="intent", status="selected", selected=["boxscore_stat"]),
+                        FieldInterpretation(field="aggregation", status="ambiguous", alternatives=["total", "per_game"]),
+                    ]})
+            return output
+
+    adapter = RecoveringAdapter()
+    coordinator = pipeline(tmp_path, Lookup(b.lookup_result([])), adapter)
+    query = AskQuery(question="Explain basketball history")
+    assert coordinator.answer(query).outcome == "unavailable"
+    assert coordinator.answer(query).outcome == "unsupported"
+    assert adapter.calls == 2
+    assert coordinator.answer(query).interpreter.cache_hit is True
+    assert adapter.calls == 2

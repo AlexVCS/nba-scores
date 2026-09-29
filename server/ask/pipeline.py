@@ -143,6 +143,10 @@ class AskPipeline:
                 actual = usage.cost_usd if usage.provider_calls else 0.0
                 self.budget.settle(reservation, actual)
             ttl = self.config.parse_ttl_seconds if output.outcome in {"interpreted", "unsupported"} else 0
+            if output.outcome == "interpreted" and self.normalizer.normalize(output, candidates, context).status == "invalid":
+                # A retry must be able to recover from a structurally valid
+                # provider response that cannot form a valid request.
+                ttl = 0
             return CacheValue(output, ttl)
 
         if self.cache is None:
