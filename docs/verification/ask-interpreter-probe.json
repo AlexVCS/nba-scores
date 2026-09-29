@@ -1,0 +1,1910 @@
+{
+ "purpose": "Live access probe for #199: confirms provider access, resolved model IDs, and response shapes. Hand-built candidates; not an accuracy measurement.",
+ "generated_at": "2026-09-29T17:25:16+00:00",
+ "providers": {
+  "jev": {
+   "adapter": "jev",
+   "model": "jev-1.13.0",
+   "reasoning_effort": null
+  },
+  "gpt-4.1-mini": {
+   "adapter": "openai_responses",
+   "model": "gpt-4.1-mini-2025-04-14",
+   "reasoning_effort": null
+  },
+  "gpt-6-luna": {
+   "adapter": "openai_responses",
+   "model": "gpt-6-luna",
+   "reasoning_effort": "low"
+  },
+  "gpt-5.6-luna": {
+   "adapter": "openai_responses",
+   "model": "gpt-5.6-luna",
+   "reasoning_effort": "low"
+  }
+ },
+ "spend": {
+  "cap_usd": 0.4,
+  "spent_usd": 0.005563,
+  "note": "List-price estimate from reported token usage, not a billing record."
+ },
+ "results": [
+  {
+   "config": "jev",
+   "case_id": "smoke-games-last-week",
+   "question": "Cavs games last week",
+   "expected_action": "accept",
+   "decision": {
+    "action": "accept",
+    "adapter": null,
+    "field": null,
+    "reason": "complete request"
+   },
+   "request": {
+    "intent": "game_search",
+    "dates": {
+     "start": "2026-09-21",
+     "end": "2026-09-27"
+    },
+    "teams": [
+     {
+      "team_id": 1610612739,
+      "tricode": "CLE",
+      "name": "Cleveland Cavaliers"
+     }
+    ]
+   },
+   "output": {
+    "outcome": "interpreted",
+    "fields": [
+     {
+      "field": "intent",
+      "status": "selected",
+      "selected": [
+       "game_search"
+      ],
+      "alternatives": [],
+      "confidence": 1.0,
+      "mention": null
+     },
+     {
+      "field": "stat_scope",
+      "status": "selected",
+      "selected": [
+       "team"
+      ],
+      "alternatives": [],
+      "confidence": 0.91,
+      "mention": null
+     },
+     {
+      "field": "stat",
+      "status": "selected",
+      "selected": [
+       "stat_line"
+      ],
+      "alternatives": [],
+      "confidence": 0.99,
+      "mention": null
+     },
+     {
+      "field": "aggregation",
+      "status": "ambiguous",
+      "selected": [],
+      "alternatives": [
+       "per_game",
+       "total"
+      ],
+      "confidence": 0.57,
+      "mention": null
+     },
+     {
+      "field": "player",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": 1.0,
+      "mention": null
+     },
+     {
+      "field": "date",
+      "status": "selected",
+      "selected": [
+       "date:0"
+      ],
+      "alternatives": [],
+      "confidence": 0.82,
+      "mention": null
+     },
+     {
+      "field": "season",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": 0.99,
+      "mention": null
+     },
+     {
+      "field": "round",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": 1.0,
+      "mention": null
+     },
+     {
+      "field": "game_number",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": 1.0,
+      "mention": null
+     },
+     {
+      "field": "teams",
+      "status": "selected",
+      "selected": [
+       "team:1610612739"
+      ],
+      "alternatives": [],
+      "confidence": 0.97,
+      "mention": null
+     }
+    ],
+    "unsupported_reason": null,
+    "extracted_date": null,
+    "error_code": null,
+    "metadata": {
+     "adapter": "jev",
+     "provider": "typesafe",
+     "model": "jev-1.13.0",
+     "resolved_model": "jev-1.13.0",
+     "latency_ms": 415,
+     "usage": {
+      "input_tokens": 2210,
+      "output_tokens": 686,
+      "cached_input_tokens": null,
+      "provider_calls": 1,
+      "cost_usd": 9.282000000000001e-05
+     }
+    }
+   },
+   "normalization": {
+    "status": "valid",
+    "request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2026-09-21",
+      "end": "2026-09-27"
+     },
+     "teams": [
+      {
+       "team_id": 1610612739,
+       "tricode": "CLE",
+       "name": "Cleveland Cavaliers"
+      }
+     ]
+    },
+    "clarify_field": null,
+    "clarify_reason": null,
+    "unsupported_reason": null,
+    "errors": []
+   }
+  },
+  {
+   "config": "jev",
+   "case_id": "smoke-player-stat-finals",
+   "question": "How many points did Tatum score in game 4 of the 2024 Finals?",
+   "expected_action": "accept",
+   "decision": {
+    "action": "accept",
+    "adapter": null,
+    "field": null,
+    "reason": "complete request"
+   },
+   "request": {
+    "intent": "boxscore_stat",
+    "scope": "player",
+    "stat": {
+     "stat": "points",
+     "aggregation": "total"
+    },
+    "game": {
+     "game_id": null,
+     "date": null,
+     "teams": [],
+     "season": "2023-24",
+     "round": "finals",
+     "conference": null,
+     "game_number": 4
+    },
+    "player": {
+     "player_id": 1628369,
+     "name": "Jayson Tatum"
+    },
+    "team": null
+   },
+   "output": {
+    "outcome": "interpreted",
+    "fields": [
+     {
+      "field": "intent",
+      "status": "selected",
+      "selected": [
+       "boxscore_stat"
+      ],
+      "alternatives": [],
+      "confidence": 1.0,
+      "mention": null
+     },
+     {
+      "field": "stat_scope",
+      "status": "selected",
+      "selected": [
+       "player"
+      ],
+      "alternatives": [],
+      "confidence": 1.0,
+      "mention": null
+     },
+     {
+      "field": "stat",
+      "status": "selected",
+      "selected": [
+       "points"
+      ],
+      "alternatives": [],
+      "confidence": 1.0,
+      "mention": null
+     },
+     {
+      "field": "aggregation",
+      "status": "selected",
+      "selected": [
+       "total"
+      ],
+      "alternatives": [],
+      "confidence": 1.0,
+      "mention": null
+     },
+     {
+      "field": "player",
+      "status": "selected",
+      "selected": [
+       "player:1628369"
+      ],
+      "alternatives": [],
+      "confidence": 1.0,
+      "mention": null
+     },
+     {
+      "field": "date",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": 0.71,
+      "mention": null
+     },
+     {
+      "field": "season",
+      "status": "selected",
+      "selected": [
+       "season:2023-24"
+      ],
+      "alternatives": [],
+      "confidence": 1.0,
+      "mention": null
+     },
+     {
+      "field": "round",
+      "status": "selected",
+      "selected": [
+       "round:finals"
+      ],
+      "alternatives": [],
+      "confidence": 1.0,
+      "mention": null
+     },
+     {
+      "field": "game_number",
+      "status": "selected",
+      "selected": [
+       "game_number:4"
+      ],
+      "alternatives": [],
+      "confidence": 1.0,
+      "mention": null
+     },
+     {
+      "field": "teams",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": 0.73,
+      "mention": null
+     }
+    ],
+    "unsupported_reason": null,
+    "extracted_date": null,
+    "error_code": null,
+    "metadata": {
+     "adapter": "jev",
+     "provider": "typesafe",
+     "model": "jev-1.13.0",
+     "resolved_model": "jev-1.13.0",
+     "latency_ms": 152,
+     "usage": {
+      "input_tokens": 2229,
+      "output_tokens": 718,
+      "cached_input_tokens": null,
+      "provider_calls": 1,
+      "cost_usd": 9.361800000000001e-05
+     }
+    }
+   },
+   "normalization": {
+    "status": "valid",
+    "request": {
+     "intent": "boxscore_stat",
+     "scope": "player",
+     "stat": {
+      "stat": "points",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": null,
+      "date": null,
+      "teams": [],
+      "season": "2023-24",
+      "round": "finals",
+      "conference": null,
+      "game_number": 4
+     },
+     "player": {
+      "player_id": 1628369,
+      "name": "Jayson Tatum"
+     },
+     "team": null
+    },
+    "clarify_field": null,
+    "clarify_reason": null,
+    "unsupported_reason": null,
+    "errors": []
+   }
+  },
+  {
+   "config": "jev",
+   "case_id": "smoke-year-required",
+   "question": "Lakers vs Celtics on January 23",
+   "expected_action": "clarify",
+   "decision": {
+    "action": "clarify",
+    "adapter": null,
+    "field": "date",
+    "reason": "year_required date"
+   },
+   "request": null,
+   "output": {
+    "outcome": "interpreted",
+    "fields": [
+     {
+      "field": "intent",
+      "status": "selected",
+      "selected": [
+       "game_search"
+      ],
+      "alternatives": [],
+      "confidence": 0.99,
+      "mention": null
+     },
+     {
+      "field": "stat_scope",
+      "status": "selected",
+      "selected": [
+       "team"
+      ],
+      "alternatives": [],
+      "confidence": 0.79,
+      "mention": null
+     },
+     {
+      "field": "stat",
+      "status": "selected",
+      "selected": [
+       "stat_line"
+      ],
+      "alternatives": [],
+      "confidence": 0.99,
+      "mention": null
+     },
+     {
+      "field": "aggregation",
+      "status": "selected",
+      "selected": [
+       "total"
+      ],
+      "alternatives": [],
+      "confidence": 1.0,
+      "mention": null
+     },
+     {
+      "field": "player",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": 1.0,
+      "mention": null
+     },
+     {
+      "field": "date",
+      "status": "selected",
+      "selected": [
+       "date:0"
+      ],
+      "alternatives": [],
+      "confidence": 1.0,
+      "mention": null
+     },
+     {
+      "field": "season",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": 0.94,
+      "mention": null
+     },
+     {
+      "field": "round",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": 1.0,
+      "mention": null
+     },
+     {
+      "field": "game_number",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": 1.0,
+      "mention": null
+     },
+     {
+      "field": "teams",
+      "status": "selected",
+      "selected": [
+       "team:1610612747",
+       "team:1610612738"
+      ],
+      "alternatives": [],
+      "confidence": 0.97,
+      "mention": null
+     }
+    ],
+    "unsupported_reason": null,
+    "extracted_date": null,
+    "error_code": null,
+    "metadata": {
+     "adapter": "jev",
+     "provider": "typesafe",
+     "model": "jev-1.13.0",
+     "resolved_model": "jev-1.13.0",
+     "latency_ms": 171,
+     "usage": {
+      "input_tokens": 2283,
+      "output_tokens": 703,
+      "cached_input_tokens": null,
+      "provider_calls": 1,
+      "cost_usd": 9.588600000000001e-05
+     }
+    }
+   },
+   "normalization": {
+    "status": "needs_clarification",
+    "request": null,
+    "clarify_field": "date",
+    "clarify_reason": "year_required",
+    "unsupported_reason": null,
+    "errors": []
+   }
+  },
+  {
+   "config": "gpt-4.1-mini",
+   "case_id": "smoke-games-last-week",
+   "question": "Cavs games last week",
+   "expected_action": "accept",
+   "decision": {
+    "action": "accept",
+    "adapter": null,
+    "field": null,
+    "reason": "complete request"
+   },
+   "request": {
+    "intent": "game_search",
+    "dates": {
+     "start": "2026-09-21",
+     "end": "2026-09-27"
+    },
+    "teams": [
+     {
+      "team_id": 1610612739,
+      "tricode": "CLE",
+      "name": "Cleveland Cavaliers"
+     }
+    ]
+   },
+   "output": {
+    "outcome": "interpreted",
+    "fields": [
+     {
+      "field": "intent",
+      "status": "selected",
+      "selected": [
+       "game_search"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "stat_scope",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "stat",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "aggregation",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "player",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "teams",
+      "status": "selected",
+      "selected": [
+       "team:1610612739"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "date",
+      "status": "selected",
+      "selected": [
+       "date:0"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "season",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "round",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "game_number",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     }
+    ],
+    "unsupported_reason": null,
+    "extracted_date": null,
+    "error_code": null,
+    "metadata": {
+     "adapter": "openai_responses",
+     "provider": "openai",
+     "model": "gpt-4.1-mini-2025-04-14",
+     "resolved_model": "gpt-4.1-mini-2025-04-14",
+     "latency_ms": 3647,
+     "usage": {
+      "input_tokens": 1696,
+      "output_tokens": 132,
+      "cached_input_tokens": 0,
+      "provider_calls": 1,
+      "cost_usd": 0.0008896000000000002
+     }
+    }
+   },
+   "normalization": {
+    "status": "valid",
+    "request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2026-09-21",
+      "end": "2026-09-27"
+     },
+     "teams": [
+      {
+       "team_id": 1610612739,
+       "tricode": "CLE",
+       "name": "Cleveland Cavaliers"
+      }
+     ]
+    },
+    "clarify_field": null,
+    "clarify_reason": null,
+    "unsupported_reason": null,
+    "errors": []
+   }
+  },
+  {
+   "config": "gpt-4.1-mini",
+   "case_id": "smoke-player-stat-finals",
+   "question": "How many points did Tatum score in game 4 of the 2024 Finals?",
+   "expected_action": "accept",
+   "decision": {
+    "action": "accept",
+    "adapter": null,
+    "field": null,
+    "reason": "complete request"
+   },
+   "request": {
+    "intent": "boxscore_stat",
+    "scope": "player",
+    "stat": {
+     "stat": "points",
+     "aggregation": "total"
+    },
+    "game": {
+     "game_id": null,
+     "date": null,
+     "teams": [],
+     "season": "2023-24",
+     "round": "finals",
+     "conference": null,
+     "game_number": 4
+    },
+    "player": {
+     "player_id": 1628369,
+     "name": "Jayson Tatum"
+    },
+    "team": null
+   },
+   "output": {
+    "outcome": "interpreted",
+    "fields": [
+     {
+      "field": "intent",
+      "status": "selected",
+      "selected": [
+       "boxscore_stat"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "stat_scope",
+      "status": "selected",
+      "selected": [
+       "player"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "stat",
+      "status": "selected",
+      "selected": [
+       "points"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "aggregation",
+      "status": "selected",
+      "selected": [
+       "total"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "player",
+      "status": "selected",
+      "selected": [
+       "player:1628369"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "teams",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "date",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "season",
+      "status": "selected",
+      "selected": [
+       "season:2023-24"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "round",
+      "status": "selected",
+      "selected": [
+       "round:finals"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "game_number",
+      "status": "selected",
+      "selected": [
+       "game_number:4"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     }
+    ],
+    "unsupported_reason": null,
+    "extracted_date": null,
+    "error_code": null,
+    "metadata": {
+     "adapter": "openai_responses",
+     "provider": "openai",
+     "model": "gpt-4.1-mini-2025-04-14",
+     "resolved_model": "gpt-4.1-mini-2025-04-14",
+     "latency_ms": 2941,
+     "usage": {
+      "input_tokens": 1982,
+      "output_tokens": 135,
+      "cached_input_tokens": 0,
+      "provider_calls": 1,
+      "cost_usd": 0.0010088
+     }
+    }
+   },
+   "normalization": {
+    "status": "valid",
+    "request": {
+     "intent": "boxscore_stat",
+     "scope": "player",
+     "stat": {
+      "stat": "points",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": null,
+      "date": null,
+      "teams": [],
+      "season": "2023-24",
+      "round": "finals",
+      "conference": null,
+      "game_number": 4
+     },
+     "player": {
+      "player_id": 1628369,
+      "name": "Jayson Tatum"
+     },
+     "team": null
+    },
+    "clarify_field": null,
+    "clarify_reason": null,
+    "unsupported_reason": null,
+    "errors": []
+   }
+  },
+  {
+   "config": "gpt-4.1-mini",
+   "case_id": "smoke-year-required",
+   "question": "Lakers vs Celtics on January 23",
+   "expected_action": "clarify",
+   "decision": {
+    "action": "clarify",
+    "adapter": null,
+    "field": "date",
+    "reason": "year_required date"
+   },
+   "request": null,
+   "output": {
+    "outcome": "interpreted",
+    "fields": [
+     {
+      "field": "intent",
+      "status": "selected",
+      "selected": [
+       "game_search"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "stat_scope",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "stat",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "aggregation",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "player",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "teams",
+      "status": "selected",
+      "selected": [
+       "team:1610612747",
+       "team:1610612738"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "date",
+      "status": "selected",
+      "selected": [
+       "date:0"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "season",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "round",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "game_number",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     }
+    ],
+    "unsupported_reason": null,
+    "extracted_date": null,
+    "error_code": null,
+    "metadata": {
+     "adapter": "openai_responses",
+     "provider": "openai",
+     "model": "gpt-4.1-mini-2025-04-14",
+     "resolved_model": "gpt-4.1-mini-2025-04-14",
+     "latency_ms": 2693,
+     "usage": {
+      "input_tokens": 1719,
+      "output_tokens": 126,
+      "cached_input_tokens": 0,
+      "provider_calls": 1,
+      "cost_usd": 0.0008892
+     }
+    }
+   },
+   "normalization": {
+    "status": "needs_clarification",
+    "request": null,
+    "clarify_field": "date",
+    "clarify_reason": "year_required",
+    "unsupported_reason": null,
+    "errors": []
+   }
+  },
+  {
+   "config": "gpt-6-luna",
+   "case_id": "smoke-games-last-week",
+   "question": "Cavs games last week",
+   "expected_action": "accept",
+   "decision": {
+    "action": "accept",
+    "adapter": null,
+    "field": null,
+    "reason": "complete request"
+   },
+   "request": {
+    "intent": "game_search",
+    "dates": {
+     "start": "2026-09-21",
+     "end": "2026-09-27"
+    },
+    "teams": [
+     {
+      "team_id": 1610612739,
+      "tricode": "CLE",
+      "name": "Cleveland Cavaliers"
+     }
+    ]
+   },
+   "output": {
+    "outcome": "interpreted",
+    "fields": [
+     {
+      "field": "intent",
+      "status": "selected",
+      "selected": [
+       "game_search"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "stat_scope",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "stat",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "aggregation",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "player",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "teams",
+      "status": "selected",
+      "selected": [
+       "team:1610612739"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "date",
+      "status": "selected",
+      "selected": [
+       "date:0"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "season",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "round",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "game_number",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     }
+    ],
+    "unsupported_reason": null,
+    "extracted_date": null,
+    "error_code": null,
+    "metadata": {
+     "adapter": "openai_responses",
+     "provider": "openai",
+     "model": "gpt-6-luna",
+     "resolved_model": "gpt-6-luna",
+     "latency_ms": 2858,
+     "usage": {
+      "input_tokens": 1694,
+      "output_tokens": 165,
+      "cached_input_tokens": 0,
+      "provider_calls": 1,
+      "cost_usd": 0.0002519
+     }
+    }
+   },
+   "normalization": {
+    "status": "valid",
+    "request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2026-09-21",
+      "end": "2026-09-27"
+     },
+     "teams": [
+      {
+       "team_id": 1610612739,
+       "tricode": "CLE",
+       "name": "Cleveland Cavaliers"
+      }
+     ]
+    },
+    "clarify_field": null,
+    "clarify_reason": null,
+    "unsupported_reason": null,
+    "errors": []
+   }
+  },
+  {
+   "config": "gpt-6-luna",
+   "case_id": "smoke-player-stat-finals",
+   "question": "How many points did Tatum score in game 4 of the 2024 Finals?",
+   "expected_action": "accept",
+   "decision": {
+    "action": "accept",
+    "adapter": null,
+    "field": null,
+    "reason": "complete request"
+   },
+   "request": {
+    "intent": "boxscore_stat",
+    "scope": "player",
+    "stat": {
+     "stat": "points",
+     "aggregation": "total"
+    },
+    "game": {
+     "game_id": null,
+     "date": null,
+     "teams": [],
+     "season": "2023-24",
+     "round": "finals",
+     "conference": null,
+     "game_number": 4
+    },
+    "player": {
+     "player_id": 1628369,
+     "name": "Jayson Tatum"
+    },
+    "team": null
+   },
+   "output": {
+    "outcome": "interpreted",
+    "fields": [
+     {
+      "field": "intent",
+      "status": "selected",
+      "selected": [
+       "boxscore_stat"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "stat_scope",
+      "status": "selected",
+      "selected": [
+       "player"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "stat",
+      "status": "selected",
+      "selected": [
+       "points"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "aggregation",
+      "status": "selected",
+      "selected": [
+       "total"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "player",
+      "status": "selected",
+      "selected": [
+       "player:1628369"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "teams",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "date",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "season",
+      "status": "selected",
+      "selected": [
+       "season:2023-24"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "round",
+      "status": "selected",
+      "selected": [
+       "round:finals"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "game_number",
+      "status": "selected",
+      "selected": [
+       "game_number:4"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     }
+    ],
+    "unsupported_reason": null,
+    "extracted_date": null,
+    "error_code": null,
+    "metadata": {
+     "adapter": "openai_responses",
+     "provider": "openai",
+     "model": "gpt-6-luna",
+     "resolved_model": "gpt-6-luna",
+     "latency_ms": 4026,
+     "usage": {
+      "input_tokens": 1980,
+      "output_tokens": 193,
+      "cached_input_tokens": 0,
+      "provider_calls": 1,
+      "cost_usd": 0.0002945
+     }
+    }
+   },
+   "normalization": {
+    "status": "valid",
+    "request": {
+     "intent": "boxscore_stat",
+     "scope": "player",
+     "stat": {
+      "stat": "points",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": null,
+      "date": null,
+      "teams": [],
+      "season": "2023-24",
+      "round": "finals",
+      "conference": null,
+      "game_number": 4
+     },
+     "player": {
+      "player_id": 1628369,
+      "name": "Jayson Tatum"
+     },
+     "team": null
+    },
+    "clarify_field": null,
+    "clarify_reason": null,
+    "unsupported_reason": null,
+    "errors": []
+   }
+  },
+  {
+   "config": "gpt-6-luna",
+   "case_id": "smoke-year-required",
+   "question": "Lakers vs Celtics on January 23",
+   "expected_action": "clarify",
+   "decision": {
+    "action": "clarify",
+    "adapter": null,
+    "field": "date",
+    "reason": "year_required date"
+   },
+   "request": null,
+   "output": {
+    "outcome": "interpreted",
+    "fields": [
+     {
+      "field": "intent",
+      "status": "selected",
+      "selected": [
+       "game_search"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "stat_scope",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "stat",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "aggregation",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "player",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "teams",
+      "status": "selected",
+      "selected": [
+       "team:1610612747",
+       "team:1610612738"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "date",
+      "status": "selected",
+      "selected": [
+       "date:0"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "season",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "round",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "game_number",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     }
+    ],
+    "unsupported_reason": null,
+    "extracted_date": null,
+    "error_code": null,
+    "metadata": {
+     "adapter": "openai_responses",
+     "provider": "openai",
+     "model": "gpt-6-luna",
+     "resolved_model": "gpt-6-luna",
+     "latency_ms": 2202,
+     "usage": {
+      "input_tokens": 1717,
+      "output_tokens": 179,
+      "cached_input_tokens": 0,
+      "provider_calls": 1,
+      "cost_usd": 0.00026120000000000006
+     }
+    }
+   },
+   "normalization": {
+    "status": "needs_clarification",
+    "request": null,
+    "clarify_field": "date",
+    "clarify_reason": "year_required",
+    "unsupported_reason": null,
+    "errors": []
+   }
+  },
+  {
+   "config": "gpt-5.6-luna",
+   "case_id": "smoke-games-last-week",
+   "question": "Cavs games last week",
+   "expected_action": "accept",
+   "decision": {
+    "action": "accept",
+    "adapter": null,
+    "field": null,
+    "reason": "complete request"
+   },
+   "request": {
+    "intent": "game_search",
+    "dates": {
+     "start": "2026-09-21",
+     "end": "2026-09-27"
+    },
+    "teams": [
+     {
+      "team_id": 1610612739,
+      "tricode": "CLE",
+      "name": "Cleveland Cavaliers"
+     }
+    ]
+   },
+   "output": {
+    "outcome": "interpreted",
+    "fields": [
+     {
+      "field": "intent",
+      "status": "selected",
+      "selected": [
+       "game_search"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "stat_scope",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "stat",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "aggregation",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "player",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "teams",
+      "status": "selected",
+      "selected": [
+       "team:1610612739"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "date",
+      "status": "selected",
+      "selected": [
+       "date:0"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "season",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "round",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "game_number",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     }
+    ],
+    "unsupported_reason": null,
+    "extracted_date": null,
+    "error_code": null,
+    "metadata": {
+     "adapter": "openai_responses",
+     "provider": "openai",
+     "model": "gpt-5.6-luna",
+     "resolved_model": "gpt-5.6-luna",
+     "latency_ms": 2198,
+     "usage": {
+      "input_tokens": 1694,
+      "output_tokens": 187,
+      "cached_input_tokens": 0,
+      "provider_calls": 1,
+      "cost_usd": 0.0005632
+     }
+    }
+   },
+   "normalization": {
+    "status": "valid",
+    "request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2026-09-21",
+      "end": "2026-09-27"
+     },
+     "teams": [
+      {
+       "team_id": 1610612739,
+       "tricode": "CLE",
+       "name": "Cleveland Cavaliers"
+      }
+     ]
+    },
+    "clarify_field": null,
+    "clarify_reason": null,
+    "unsupported_reason": null,
+    "errors": []
+   }
+  },
+  {
+   "config": "gpt-5.6-luna",
+   "case_id": "smoke-player-stat-finals",
+   "question": "How many points did Tatum score in game 4 of the 2024 Finals?",
+   "expected_action": "accept",
+   "decision": {
+    "action": "accept",
+    "adapter": null,
+    "field": null,
+    "reason": "complete request"
+   },
+   "request": {
+    "intent": "boxscore_stat",
+    "scope": "player",
+    "stat": {
+     "stat": "points",
+     "aggregation": "total"
+    },
+    "game": {
+     "game_id": null,
+     "date": null,
+     "teams": [],
+     "season": "2023-24",
+     "round": "finals",
+     "conference": null,
+     "game_number": 4
+    },
+    "player": {
+     "player_id": 1628369,
+     "name": "Jayson Tatum"
+    },
+    "team": null
+   },
+   "output": {
+    "outcome": "interpreted",
+    "fields": [
+     {
+      "field": "intent",
+      "status": "selected",
+      "selected": [
+       "boxscore_stat"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "stat_scope",
+      "status": "selected",
+      "selected": [
+       "player"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "stat",
+      "status": "selected",
+      "selected": [
+       "points"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "aggregation",
+      "status": "selected",
+      "selected": [
+       "total"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "player",
+      "status": "selected",
+      "selected": [
+       "player:1628369"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "teams",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "date",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "season",
+      "status": "selected",
+      "selected": [
+       "season:2023-24"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "round",
+      "status": "selected",
+      "selected": [
+       "round:finals"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "game_number",
+      "status": "selected",
+      "selected": [
+       "game_number:4"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     }
+    ],
+    "unsupported_reason": null,
+    "extracted_date": null,
+    "error_code": null,
+    "metadata": {
+     "adapter": "openai_responses",
+     "provider": "openai",
+     "model": "gpt-5.6-luna",
+     "resolved_model": "gpt-5.6-luna",
+     "latency_ms": 2917,
+     "usage": {
+      "input_tokens": 1980,
+      "output_tokens": 184,
+      "cached_input_tokens": 0,
+      "provider_calls": 1,
+      "cost_usd": 0.0006167999999999999
+     }
+    }
+   },
+   "normalization": {
+    "status": "valid",
+    "request": {
+     "intent": "boxscore_stat",
+     "scope": "player",
+     "stat": {
+      "stat": "points",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": null,
+      "date": null,
+      "teams": [],
+      "season": "2023-24",
+      "round": "finals",
+      "conference": null,
+      "game_number": 4
+     },
+     "player": {
+      "player_id": 1628369,
+      "name": "Jayson Tatum"
+     },
+     "team": null
+    },
+    "clarify_field": null,
+    "clarify_reason": null,
+    "unsupported_reason": null,
+    "errors": []
+   }
+  },
+  {
+   "config": "gpt-5.6-luna",
+   "case_id": "smoke-year-required",
+   "question": "Lakers vs Celtics on January 23",
+   "expected_action": "clarify",
+   "decision": {
+    "action": "clarify",
+    "adapter": null,
+    "field": "date",
+    "reason": "year_required date"
+   },
+   "request": null,
+   "output": {
+    "outcome": "interpreted",
+    "fields": [
+     {
+      "field": "intent",
+      "status": "selected",
+      "selected": [
+       "game_search"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "stat_scope",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "stat",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "aggregation",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "player",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "teams",
+      "status": "selected",
+      "selected": [
+       "team:1610612747",
+       "team:1610612738"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "date",
+      "status": "selected",
+      "selected": [
+       "date:0"
+      ],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "season",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "round",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     },
+     {
+      "field": "game_number",
+      "status": "absent",
+      "selected": [],
+      "alternatives": [],
+      "confidence": null,
+      "mention": null
+     }
+    ],
+    "unsupported_reason": null,
+    "extracted_date": null,
+    "error_code": null,
+    "metadata": {
+     "adapter": "openai_responses",
+     "provider": "openai",
+     "model": "gpt-5.6-luna",
+     "resolved_model": "gpt-5.6-luna",
+     "latency_ms": 2057,
+     "usage": {
+      "input_tokens": 1717,
+      "output_tokens": 135,
+      "cached_input_tokens": 0,
+      "provider_calls": 1,
+      "cost_usd": 0.0005054
+     }
+    }
+   },
+   "normalization": {
+    "status": "needs_clarification",
+    "request": null,
+    "clarify_field": "date",
+    "clarify_reason": "year_required",
+    "unsupported_reason": null,
+    "errors": []
+   }
+  }
+ ]
+}
