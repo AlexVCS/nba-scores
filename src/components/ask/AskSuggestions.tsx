@@ -5,7 +5,7 @@ import {askCap} from "./askStyles";
 
 interface AskSuggestionsProps {
   suggestions: AskSuggestion[];
-  revealed: boolean;
+  resultsHidden: boolean;
   title: string;
   variant: "chips" | "list";
   onAsk: (question: string, options: {remember: boolean}) => void;
@@ -18,9 +18,9 @@ const CATEGORY_LABELS: Record<AskSuggestion["category"], string> = {
   postseason: "Postseason",
 };
 
-/** Standalone follow-up questions. Spoiler suggestions are dropped while hidden and never saved to recents. */
-function AskSuggestions({suggestions, revealed, title, variant, onAsk}: AskSuggestionsProps) {
-  const visible = withoutSpoilers(suggestions, revealed);
+/** Standalone follow-up questions. Suggestions were not asked for, so spoiler ones are dropped while results are hidden and never saved to recents. */
+function AskSuggestions({suggestions, resultsHidden, title, variant, onAsk}: AskSuggestionsProps) {
+  const visible = withoutSpoilers(suggestions, !resultsHidden);
   if (visible.length === 0) return null;
   const titleId = `ask-suggestions-${variant}`;
 

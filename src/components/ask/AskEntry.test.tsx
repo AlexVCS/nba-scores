@@ -107,14 +107,21 @@ describe("Ask entry and search dialog", () => {
     await waitFor(() => expect(screen.getByRole("region", {name: "How Ask read your question"})).toBeInTheDocument());
   });
 
-  it("does not call the Ask endpoint while typing", async () => {
+  it("never asks or renders an answer before submission: typing only reaches typeahead", async () => {
     const requester = mockRequester(ASK_RESPONSE_FIXTURES["answer-player-stat"]);
     const user = setup();
     await user.keyboard("{Control>}k{/Control}");
-    await user.type(input(), "who won the 2024 finals");
+    await user.type(input(), "how many points did harden score on march 9 2026");
+    // Let the debounced typeahead lookup run and settle.
+    await waitFor(() => expect(vi.mocked(fetch).mock.calls.some(([url]) => String(url).includes("/ask/suggest"))).toBe(true));
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent(/suggestions? available/));
+
     expect(requester).not.toHaveBeenCalled();
     const calls = vi.mocked(fetch).mock.calls.map(([url]) => String(url));
     expect(calls.every(url => url.includes("/ask/suggest"))).toBe(true);
+    expect(screen.queryByRole("region", {name: "How Ask read your question"})).not.toBeInTheDocument();
+    expect(screen.queryByText("21")).not.toBeInTheDocument();
+    expect(screen.getByRole("status")).not.toHaveTextContent("Answer ready.");
   });
 
   it("stores only the question in size-limited recent history, and clears it", async () => {
@@ -122,12 +129,10 @@ describe("Ask entry and search dialog", () => {
     const user = setup();
     await user.keyboard("{Control>}k{/Control}");
     await user.type(input(), "how many points did harden score on march 9 2026{Enter}");
-    await waitFor(() => expect(screen.getByRole("button", {name: "Reveal points"})).toBeInTheDocument());
+    expect(await screen.findByRole("region", {name: "How Ask read your question"})).toBeInTheDocument();
 
     const stored = JSON.parse(localStorage.getItem(ASK_RECENT_STORAGE_KEY)!);
     expect(stored).toEqual([{question: "how many points did harden score on march 9 2026", askedAt: expect.any(String)}]);
-    await user.click(screen.getByRole("button", {name: "Reveal points"}));
-    expect(JSON.parse(localStorage.getItem(ASK_RECENT_STORAGE_KEY)!)).toEqual(stored);
 
     await user.click(screen.getByRole("button", {name: "Clear question"}));
     expect(input()).toHaveValue("");
@@ -197,7 +202,7 @@ describe("Ask entry and search dialog", () => {
     await user.click(await screen.findByRole("button", {name: /Jalen Brunson/}));
     expect(await screen.findByRole("heading", {name: "Which year?"})).toBeInTheDocument();
     await user.click(screen.getByRole("button", {name: /March 3, 2026/}));
-    expect(await screen.findByRole("button", {name: "Reveal points"})).toBeInTheDocument();
+    expect(await screen.findByRole("region", {name: "How Ask read your question"})).toBeInTheDocument();
     expect(requester.mock.calls.map(([query]) => query.resolution)).toEqual([
       null, "rsv_fx_two_step_1628973", "rsv_fx_two_step_1628973_2026",
     ]);
@@ -237,22 +242,44 @@ describe("Ask entry and search dialog", () => {
     expect(input()).toHaveAttribute("maxLength", "300");
   });
 
-  it("resets local reveals on a new question but keeps them when the dialog closes and reopens", async () => {
+  it("shows the answer as soon as it arrives and announces it, with results hidden", async () => {
     mockRequester(ASK_RESPONSE_FIXTURES["answer-player-stat"]);
     const user = setup();
     await user.keyboard("{Control>}k{/Control}");
     await user.type(input(), "how many points did harden score on march 9 2026{Enter}");
-    await user.click(await screen.findByRole("button", {name: "Reveal points"}));
-    expect(screen.getByRole("button", {name: "Hide points"})).toBeInTheDocument();
+
+    const answer = await screen.findByRole("region", {name: "How Ask read your question"});
+    expect(answer).toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveTextContent("Answer ready.");
+    expect(screen.getByText("21")).toBeInTheDocument();
+    expect(screen.queryByRole("button", {name: /^(Reveal|Hide) /})).not.toBeInTheDocument();
 
     await user.keyboard("{Escape}");
     await user.keyboard("{Control>}k{/Control}");
     expect(input()).toHaveValue("how many points did harden score on march 9 2026");
-    expect(screen.getByRole("button", {name: "Hide points"})).toBeInTheDocument();
+    expect(screen.getByText("21")).toBeInTheDocument();
+  });
+
+  it("announces a clarification and a notice in the live status region", async () => {
+    mockRequester(query => query.question.includes("jalen")
+      ? ASK_RESPONSE_FIXTURES["clarification-which-jalen"]
+      : ASK_RESPONSE_FIXTURES["unsupported-career-stats"]);
+    const user = setup();
+    await user.keyboard("{Control>}k{/Control}");
+    await user.type(input(), "how did jalen do last night{Enter}");
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Ask needs you to choose an option."));
 
     await user.clear(input());
-    await user.type(input(), "how many points did harden score on march 10 2026{Enter}");
-    expect(await screen.findByRole("button", {name: "Reveal points"})).toBeInTheDocument();
+    await user.type(input(), "lebron career points{Enter}");
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Can't answer that one yet"));
+  });
+
+  it("tells people before they ask that answers show immediately", async () => {
+    const user = setup();
+    await user.keyboard("{Control>}k{/Control}");
+    expect(input()).toHaveAccessibleDescription("Answers show as soon as you ask, even when results are hidden.");
+    await user.type(input(), "knicks");
+    expect(input()).toHaveAccessibleDescription("Answers show as soon as you ask, even when results are hidden.");
   });
 
   it("shows a retry state when Ask cannot be reached", async () => {
@@ -266,8 +293,10 @@ describe("Ask entry and search dialog", () => {
     await user.type(input(), "how many points did harden score on march 9 2026{Enter}");
     expect(await screen.findByRole("heading", {name: "Couldn’t reach Ask"})).toBeInTheDocument();
 
+    expect(screen.getByRole("status")).toHaveTextContent("Couldn’t reach Ask.");
+
     fail = false;
     await user.click(screen.getByRole("button", {name: "Try again"}));
-    expect(await screen.findByRole("button", {name: "Reveal points"})).toBeInTheDocument();
+    expect(await screen.findByRole("region", {name: "How Ask read your question"})).toBeInTheDocument();
   });
 });

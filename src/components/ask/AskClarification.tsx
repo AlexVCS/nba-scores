@@ -6,15 +6,16 @@ import {askCap, askTricode} from "./askStyles";
 
 interface AskClarificationProps {
   clarification: AskClarificationData;
-  revealed: boolean;
+  /** Options are not answers: spoiler options stay out while results are hidden, unless the user shows them. */
+  resultsHidden: boolean;
   onChoose: (option: AskClarificationOption) => void;
   onEditQuestion: () => void;
 }
 
-function AskClarification({clarification, revealed, onChoose, onEditQuestion}: AskClarificationProps) {
+function AskClarification({clarification, resultsHidden, onChoose, onEditQuestion}: AskClarificationProps) {
   const [revealedClarification, setRevealedClarification] = useState<AskClarificationData | null>(null);
   const optionsRevealed = revealedClarification === clarification;
-  const options = withoutSpoilers(clarification.options, revealed || optionsRevealed);
+  const options = withoutSpoilers(clarification.options, !resultsHidden || optionsRevealed);
   const shortcutCount = Math.min(options.length, 9);
 
   useEffect(() => {
@@ -66,7 +67,7 @@ function AskClarification({clarification, revealed, onChoose, onEditQuestion}: A
           ))}
         </ul>
       )}
-      {!revealed && !optionsRevealed && clarification.options.some(option => option.spoiler) && (
+      {resultsHidden && !optionsRevealed && clarification.options.some(option => option.spoiler) && (
         <button
           type="button"
           className="min-h-8 w-fit cursor-pointer font-bold text-hw-accent-ink underline underline-offset-3 focus-visible:outline-2 focus-visible:outline-hw-accent"

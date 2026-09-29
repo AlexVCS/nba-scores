@@ -1,5 +1,5 @@
 // In-memory Ask session. Lives outside React so closing the dialog or moving between pages keeps the
-// current question and answer. Nothing here is persisted, and local reveals never reach storage.
+// current question and answer. Nothing here is persisted.
 import {postAsk} from "@/services/ask/askService";
 import type {AskClientContext, AskQuery, AskResponse} from "@/services/ask/types";
 
@@ -17,8 +17,6 @@ export interface AskSessionState {
   submission: AskSubmission | null;
   status: "idle" | "loading" | "success" | "error";
   response: AskResponse | null;
-  /** Reveal groups opened for the current submission only; reset by every new question. */
-  revealedGroups: readonly string[];
 }
 
 const INITIAL_STATE: AskSessionState = {
@@ -26,7 +24,6 @@ const INITIAL_STATE: AskSessionState = {
   submission: null,
   status: "idle",
   response: null,
-  revealedGroups: [],
 };
 
 let state = INITIAL_STATE;
@@ -65,7 +62,7 @@ export const askSession = {
     const abort = new AbortController();
     controller = abort;
     const submission: AskSubmission = {id: nextId++, question: trimmed, resolution, context};
-    setState({query: trimmed, submission, status: "loading", response: null, revealedGroups: []});
+    setState({query: trimmed, submission, status: "loading", response: null});
 
     requester({question: trimmed, context, resolution}, abort.signal)
       .then(response => {
@@ -81,14 +78,6 @@ export const askSession = {
   retry() {
     const current = state.submission;
     if (current) askSession.submit(current.question, {resolution: current.resolution, context: current.context});
-  },
-
-  reveal(group: string) {
-    if (!state.revealedGroups.includes(group)) setState({revealedGroups: [...state.revealedGroups, group]});
-  },
-
-  hide(group: string) {
-    setState({revealedGroups: state.revealedGroups.filter(item => item !== group)});
   },
 
   /** Test seam: swap the transport. */

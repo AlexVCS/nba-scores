@@ -7,15 +7,18 @@ import {askButton, askPrimaryButton} from "./askStyles";
 
 interface AskLinksProps {
   links: AskVerifiedLink[];
-  revealed: boolean;
+  resultsHidden: boolean;
   label?: string;
   compact?: boolean;
 }
 
-/** Server-verified links. Spoiler links are left out entirely while hidden; internal paths get the design prefix. */
-function AskLinks({links, revealed, label = "Related pages", compact = false}: AskLinksProps) {
+/**
+ * Server-verified links. A link flagged as a spoiler would reveal a result the user did not ask for, so it is
+ * left out entirely while results are hidden. Internal paths get the design prefix.
+ */
+function AskLinks({links, resultsHidden, label = "Related pages", compact = false}: AskLinksProps) {
   const {pathname} = useLocation();
-  const visible = withoutSpoilers(links, revealed);
+  const visible = withoutSpoilers(links, !resultsHidden);
   if (visible.length === 0) return null;
 
   return (

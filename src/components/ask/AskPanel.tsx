@@ -14,7 +14,6 @@ import AskSearchField from "./AskSearchField";
 import {ASK_DIAGNOSTICS_COPY, ASK_EXAMPLES, ASK_PROVIDER_COPY, ASK_RECENT_COPY, ASK_SCOPE_COPY} from "./askCopy";
 import {askClientContext, withDesignPrefix} from "./askRouting";
 import {askSession} from "./askSessionStore";
-import type {AskRevealControls} from "./askStyles";
 import {askOptionId, type AskAction, type AskActionGroup} from "./askTypeahead";
 
 interface AskPanelProps {
@@ -64,6 +63,7 @@ function AskPanel({onClose}: AskPanelProps) {
   const location = useLocation();
   const inputRef = useRef<HTMLInputElement>(null);
   const listboxId = useId();
+  const consentId = useId();
   const [recents, setRecents] = useState(readRecentSearches);
   const [activeId, setActiveId] = useState<string | null>(null);
 
@@ -121,13 +121,6 @@ function AskPanel({onClose}: AskPanelProps) {
     inputRef.current?.select();
   }, []);
 
-  const controls: AskRevealControls = useMemo(() => ({
-    showAllResults,
-    isRevealed: (group: string) => showAllResults || session.revealedGroups.includes(group),
-    reveal: askSession.reveal,
-    hide: askSession.hide,
-  }), [showAllResults, session.revealedGroups]);
-
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.nativeEvent.isComposing) return;
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
@@ -155,8 +148,7 @@ function AskPanel({onClose}: AskPanelProps) {
   const statusText = mode === "result"
     ? session.status === "loading" ? "Asking…"
       : session.status === "error" ? "Couldn’t reach Ask."
-        : session.response?.spoiler_gate && !controls.isRevealed("result") ? "Answer hidden. Reveal it when ready."
-          : session.response?.outcome === "needs_clarification" ? "Ask needs you to choose an option."
+        : session.response?.outcome === "needs_clarification" ? "Ask needs you to choose an option."
           : session.response?.notice?.title ?? "Answer ready."
     : mode === "typeahead" ? `${actions.length} ${actions.length === 1 ? "suggestion" : "suggestions"} available.` : "";
 
@@ -179,6 +171,7 @@ function AskPanel({onClose}: AskPanelProps) {
         listboxId={listboxId}
         isExpanded={groups.length > 0}
         activeDescendant={active ? askOptionId(listboxId, active.id) : undefined}
+        describedBy={mode === "result" ? undefined : consentId}
       />
       <span className="sr-only" role="status" aria-live="polite">{statusText}</span>
       <div
@@ -188,7 +181,7 @@ function AskPanel({onClose}: AskPanelProps) {
         {mode === "result" ? (
           <AskResultArea
             session={session}
-            controls={controls}
+            resultsHidden={!showAllResults}
             onAsk={(question, {remember}) => ask(question, {remember})}
             onChooseOption={chooseOption}
             onRetry={askSession.retry}
@@ -227,7 +220,7 @@ function AskPanel({onClose}: AskPanelProps) {
           </div>
         )}
       </div>
-      <AskFooter mode={mode} resultsHidden={!showAllResults} response={session.response} />
+      <AskFooter mode={mode} response={session.response} consentId={consentId} />
     </>
   );
 }

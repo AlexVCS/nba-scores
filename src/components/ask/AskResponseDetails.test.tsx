@@ -6,7 +6,7 @@ import type {AskResponse} from "@/services/ask/types";
 import AskFooter from "./AskFooter";
 
 function renderFooter(response: AskResponse) {
-  return render(<AskFooter mode="result" resultsHidden response={response} />);
+  return render(<AskFooter mode="result" response={response} />);
 }
 
 describe("Ask response details", () => {

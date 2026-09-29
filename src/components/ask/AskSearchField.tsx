@@ -13,9 +13,11 @@ interface AskSearchFieldProps {
   listboxId: string;
   isExpanded: boolean;
   activeDescendant?: string;
+  /** Id of text read after the field's name, such as the note that answers show as soon as you ask. */
+  describedBy?: string;
 }
 
-function AskSearchField({inputRef, value, onChange, onKeyDown, onClear, onClose, listboxId, isExpanded, activeDescendant}: AskSearchFieldProps) {
+function AskSearchField({inputRef, value, onChange, onKeyDown, onClear, onClose, listboxId, isExpanded, activeDescendant, describedBy}: AskSearchFieldProps) {
   return (
     <div className="flex flex-none items-center gap-3 border-b-4 border-hw-accent px-5 py-4 max-[700px]:px-3.5 max-[700px]:pt-3 max-[700px]:pb-2.5">
       <div className="flex min-h-10 min-w-0 flex-1 items-center gap-3 max-[700px]:gap-2 max-[700px]:rounded-[10px] max-[700px]:border max-[700px]:border-hw-line max-[700px]:bg-hw-surface-muted max-[700px]:px-2.5">
@@ -29,6 +31,7 @@ function AskSearchField({inputRef, value, onChange, onKeyDown, onClear, onClose,
           aria-expanded={isExpanded}
           aria-controls={isExpanded ? listboxId : undefined}
           aria-activedescendant={activeDescendant}
+          aria-describedby={describedBy}
           autoComplete="off"
           autoCorrect="off"
           spellCheck={false}
