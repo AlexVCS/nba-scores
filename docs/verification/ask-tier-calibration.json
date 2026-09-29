@@ -1,0 +1,1379 @@
+{
+ "purpose": "Offline cascade calibration from recorded outputs (#199, ADR 0009). Exposed cases only; not gate evidence.",
+ "generated_at": "2026-09-29T20:10:21+00:00",
+ "trace": "docs/verification/ask-tier-trace.json",
+ "cases_files": [
+  "server/tests/ask/fixtures/eval/dev.json",
+  "server/tests/ask/fixtures/eval/release-2026-09-29-exposed.json",
+  "server/tests/ask/fixtures/eval/release-two-2026-09-29-exposed.json"
+ ],
+ "precision_min": 0.98,
+ "tier_calibration": {
+  "jev": {
+   "chosen": {
+    "threshold": 0.5,
+    "scored_fields": 552,
+    "accepted": 552,
+    "coverage": 1.0,
+    "precision": 0.9982,
+    "errors": [
+     "dev-page-playoffs:season"
+    ]
+   },
+   "curve": [
+    {
+     "threshold": 0.5,
+     "scored_fields": 552,
+     "accepted": 552,
+     "coverage": 1.0,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.51,
+     "scored_fields": 552,
+     "accepted": 552,
+     "coverage": 1.0,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.52,
+     "scored_fields": 552,
+     "accepted": 552,
+     "coverage": 1.0,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.53,
+     "scored_fields": 552,
+     "accepted": 552,
+     "coverage": 1.0,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.54,
+     "scored_fields": 552,
+     "accepted": 552,
+     "coverage": 1.0,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.55,
+     "scored_fields": 552,
+     "accepted": 552,
+     "coverage": 1.0,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.56,
+     "scored_fields": 552,
+     "accepted": 552,
+     "coverage": 1.0,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.57,
+     "scored_fields": 552,
+     "accepted": 552,
+     "coverage": 1.0,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.58,
+     "scored_fields": 552,
+     "accepted": 552,
+     "coverage": 1.0,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.59,
+     "scored_fields": 552,
+     "accepted": 551,
+     "coverage": 0.9982,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.6,
+     "scored_fields": 552,
+     "accepted": 550,
+     "coverage": 0.9964,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.61,
+     "scored_fields": 552,
+     "accepted": 547,
+     "coverage": 0.9909,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.62,
+     "scored_fields": 552,
+     "accepted": 545,
+     "coverage": 0.9873,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.63,
+     "scored_fields": 552,
+     "accepted": 544,
+     "coverage": 0.9855,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.64,
+     "scored_fields": 552,
+     "accepted": 542,
+     "coverage": 0.9819,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.65,
+     "scored_fields": 552,
+     "accepted": 540,
+     "coverage": 0.9783,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.66,
+     "scored_fields": 552,
+     "accepted": 540,
+     "coverage": 0.9783,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.67,
+     "scored_fields": 552,
+     "accepted": 538,
+     "coverage": 0.9746,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.68,
+     "scored_fields": 552,
+     "accepted": 535,
+     "coverage": 0.9692,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.69,
+     "scored_fields": 552,
+     "accepted": 535,
+     "coverage": 0.9692,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.7,
+     "scored_fields": 552,
+     "accepted": 533,
+     "coverage": 0.9656,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.71,
+     "scored_fields": 552,
+     "accepted": 533,
+     "coverage": 0.9656,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.72,
+     "scored_fields": 552,
+     "accepted": 533,
+     "coverage": 0.9656,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.73,
+     "scored_fields": 552,
+     "accepted": 531,
+     "coverage": 0.962,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.74,
+     "scored_fields": 552,
+     "accepted": 530,
+     "coverage": 0.9601,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.75,
+     "scored_fields": 552,
+     "accepted": 530,
+     "coverage": 0.9601,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.76,
+     "scored_fields": 552,
+     "accepted": 530,
+     "coverage": 0.9601,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.77,
+     "scored_fields": 552,
+     "accepted": 529,
+     "coverage": 0.9583,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.78,
+     "scored_fields": 552,
+     "accepted": 528,
+     "coverage": 0.9565,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.79,
+     "scored_fields": 552,
+     "accepted": 528,
+     "coverage": 0.9565,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.8,
+     "scored_fields": 552,
+     "accepted": 527,
+     "coverage": 0.9547,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.81,
+     "scored_fields": 552,
+     "accepted": 525,
+     "coverage": 0.9511,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.82,
+     "scored_fields": 552,
+     "accepted": 522,
+     "coverage": 0.9457,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.83,
+     "scored_fields": 552,
+     "accepted": 519,
+     "coverage": 0.9402,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.84,
+     "scored_fields": 552,
+     "accepted": 518,
+     "coverage": 0.9384,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.85,
+     "scored_fields": 552,
+     "accepted": 516,
+     "coverage": 0.9348,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.86,
+     "scored_fields": 552,
+     "accepted": 515,
+     "coverage": 0.933,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.87,
+     "scored_fields": 552,
+     "accepted": 514,
+     "coverage": 0.9312,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.88,
+     "scored_fields": 552,
+     "accepted": 513,
+     "coverage": 0.9293,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.89,
+     "scored_fields": 552,
+     "accepted": 512,
+     "coverage": 0.9275,
+     "precision": 0.998,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.9,
+     "scored_fields": 552,
+     "accepted": 507,
+     "coverage": 0.9185,
+     "precision": 0.998,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.91,
+     "scored_fields": 552,
+     "accepted": 501,
+     "coverage": 0.9076,
+     "precision": 0.998,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.92,
+     "scored_fields": 552,
+     "accepted": 496,
+     "coverage": 0.8986,
+     "precision": 0.998,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.93,
+     "scored_fields": 552,
+     "accepted": 481,
+     "coverage": 0.8714,
+     "precision": 0.9979,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.94,
+     "scored_fields": 552,
+     "accepted": 478,
+     "coverage": 0.8659,
+     "precision": 0.9979,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.95,
+     "scored_fields": 552,
+     "accepted": 472,
+     "coverage": 0.8551,
+     "precision": 0.9979,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.96,
+     "scored_fields": 552,
+     "accepted": 468,
+     "coverage": 0.8478,
+     "precision": 0.9979,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.97,
+     "scored_fields": 552,
+     "accepted": 456,
+     "coverage": 0.8261,
+     "precision": 0.9978,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.98,
+     "scored_fields": 552,
+     "accepted": 421,
+     "coverage": 0.7627,
+     "precision": 0.9976,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.99,
+     "scored_fields": 552,
+     "accepted": 392,
+     "coverage": 0.7101,
+     "precision": 1.0,
+     "errors": []
+    }
+   ]
+  }
+ },
+ "sweep": [
+  {
+   "thresholds": {
+    "jev": 0.5,
+    "luna": null
+   },
+   "veto_min": 0.5,
+   "cases": 203,
+   "complete_request_accuracy": 0.7882,
+   "correct": 160,
+   "schema_valid_guesses": 5,
+   "service_failures": 1,
+   "clarification": {
+    "expected": 41,
+    "correct": 36,
+    "issued": 71,
+    "unneeded": 33
+   },
+   "unsupported": {
+    "expected": 21,
+    "correct": 16,
+    "issued": 18,
+    "false": 2
+   },
+   "latency_ms": {
+    "median": 0,
+    "p95": 0
+   },
+   "total_cost_usd": 0.022644,
+   "cost_per_successful_answer_usd": 0.000142,
+   "fallback_rate": 0.0,
+   "resolved_models": [
+    "jev-1.13.0",
+    "jev-1.13.0+gpt-6-luna"
+   ],
+   "failures": {
+    "expected_clarify_got_unsupported": 2,
+    "expected_unsupported_got_clarify": 2,
+    "schema_valid_guess": 3,
+    "service_failure": 1,
+    "unneeded_clarification": 31,
+    "wrong_clarify_field": 2,
+    "wrong_request": 2
+   },
+   "replay_misses": 0,
+   "tier_share": {
+    "jev": 195,
+    "luna": 8
+   }
+  },
+  {
+   "thresholds": {
+    "jev": 0.5,
+    "luna": null
+   },
+   "veto_min": 0.7,
+   "cases": 203,
+   "complete_request_accuracy": 0.7882,
+   "correct": 160,
+   "schema_valid_guesses": 5,
+   "service_failures": 1,
+   "clarification": {
+    "expected": 41,
+    "correct": 36,
+    "issued": 71,
+    "unneeded": 33
+   },
+   "unsupported": {
+    "expected": 21,
+    "correct": 16,
+    "issued": 18,
+    "false": 2
+   },
+   "latency_ms": {
+    "median": 0,
+    "p95": 0
+   },
+   "total_cost_usd": 0.022644,
+   "cost_per_successful_answer_usd": 0.000142,
+   "fallback_rate": 0.0,
+   "resolved_models": [
+    "jev-1.13.0",
+    "jev-1.13.0+gpt-6-luna"
+   ],
+   "failures": {
+    "expected_clarify_got_unsupported": 2,
+    "expected_unsupported_got_clarify": 2,
+    "schema_valid_guess": 3,
+    "service_failure": 1,
+    "unneeded_clarification": 31,
+    "wrong_clarify_field": 2,
+    "wrong_request": 2
+   },
+   "replay_misses": 0,
+   "tier_share": {
+    "jev": 195,
+    "luna": 8
+   }
+  },
+  {
+   "thresholds": {
+    "jev": 0.5,
+    "luna": null
+   },
+   "veto_min": 1.01,
+   "cases": 203,
+   "complete_request_accuracy": 0.7882,
+   "correct": 160,
+   "schema_valid_guesses": 5,
+   "service_failures": 1,
+   "clarification": {
+    "expected": 41,
+    "correct": 36,
+    "issued": 71,
+    "unneeded": 33
+   },
+   "unsupported": {
+    "expected": 21,
+    "correct": 16,
+    "issued": 18,
+    "false": 2
+   },
+   "latency_ms": {
+    "median": 0,
+    "p95": 0
+   },
+   "total_cost_usd": 0.022644,
+   "cost_per_successful_answer_usd": 0.000142,
+   "fallback_rate": 0.0,
+   "resolved_models": [
+    "jev-1.13.0",
+    "jev-1.13.0+gpt-6-luna"
+   ],
+   "failures": {
+    "expected_clarify_got_unsupported": 2,
+    "expected_unsupported_got_clarify": 2,
+    "schema_valid_guess": 3,
+    "service_failure": 1,
+    "unneeded_clarification": 31,
+    "wrong_clarify_field": 2,
+    "wrong_request": 2
+   },
+   "replay_misses": 0,
+   "tier_share": {
+    "jev": 195,
+    "luna": 8
+   }
+  },
+  {
+   "thresholds": {
+    "jev": 0.8,
+    "luna": null
+   },
+   "veto_min": 0.5,
+   "cases": 203,
+   "complete_request_accuracy": 0.8966,
+   "correct": 182,
+   "schema_valid_guesses": 4,
+   "service_failures": 0,
+   "clarification": {
+    "expected": 41,
+    "correct": 35,
+    "issued": 49,
+    "unneeded": 12
+   },
+   "unsupported": {
+    "expected": 21,
+    "correct": 20,
+    "issued": 23,
+    "false": 3
+   },
+   "latency_ms": {
+    "median": 0,
+    "p95": 0
+   },
+   "total_cost_usd": 0.042508,
+   "cost_per_successful_answer_usd": 0.000234,
+   "fallback_rate": 0.0,
+   "resolved_models": [
+    "jev-1.13.0",
+    "jev-1.13.0+gpt-6-luna"
+   ],
+   "failures": {
+    "expected_clarify_got_unsupported": 3,
+    "schema_valid_guess": 2,
+    "unneeded_clarification": 12,
+    "wrong_clarify_field": 2,
+    "wrong_request": 2
+   },
+   "replay_misses": 0,
+   "tier_share": {
+    "luna": 84,
+    "jev": 119
+   }
+  },
+  {
+   "thresholds": {
+    "jev": 0.8,
+    "luna": null
+   },
+   "veto_min": 0.7,
+   "cases": 203,
+   "complete_request_accuracy": 0.8966,
+   "correct": 182,
+   "schema_valid_guesses": 4,
+   "service_failures": 0,
+   "clarification": {
+    "expected": 41,
+    "correct": 35,
+    "issued": 49,
+    "unneeded": 12
+   },
+   "unsupported": {
+    "expected": 21,
+    "correct": 20,
+    "issued": 23,
+    "false": 3
+   },
+   "latency_ms": {
+    "median": 0,
+    "p95": 0
+   },
+   "total_cost_usd": 0.042508,
+   "cost_per_successful_answer_usd": 0.000234,
+   "fallback_rate": 0.0,
+   "resolved_models": [
+    "jev-1.13.0",
+    "jev-1.13.0+gpt-6-luna"
+   ],
+   "failures": {
+    "expected_clarify_got_unsupported": 3,
+    "schema_valid_guess": 2,
+    "unneeded_clarification": 12,
+    "wrong_clarify_field": 2,
+    "wrong_request": 2
+   },
+   "replay_misses": 0,
+   "tier_share": {
+    "luna": 84,
+    "jev": 119
+   }
+  },
+  {
+   "thresholds": {
+    "jev": 0.8,
+    "luna": null
+   },
+   "veto_min": 1.01,
+   "cases": 203,
+   "complete_request_accuracy": 0.9015,
+   "correct": 183,
+   "schema_valid_guesses": 4,
+   "service_failures": 0,
+   "clarification": {
+    "expected": 41,
+    "correct": 36,
+    "issued": 49,
+    "unneeded": 12
+   },
+   "unsupported": {
+    "expected": 21,
+    "correct": 20,
+    "issued": 23,
+    "false": 3
+   },
+   "latency_ms": {
+    "median": 0,
+    "p95": 0
+   },
+   "total_cost_usd": 0.042508,
+   "cost_per_successful_answer_usd": 0.000232,
+   "fallback_rate": 0.0,
+   "resolved_models": [
+    "jev-1.13.0",
+    "jev-1.13.0+gpt-6-luna"
+   ],
+   "failures": {
+    "expected_clarify_got_unsupported": 3,
+    "schema_valid_guess": 2,
+    "unneeded_clarification": 12,
+    "wrong_clarify_field": 1,
+    "wrong_request": 2
+   },
+   "replay_misses": 0,
+   "tier_share": {
+    "luna": 85,
+    "jev": 118
+   }
+  },
+  {
+   "thresholds": {
+    "jev": 0.85,
+    "luna": null
+   },
+   "veto_min": 0.5,
+   "cases": 203,
+   "complete_request_accuracy": 0.9212,
+   "correct": 187,
+   "schema_valid_guesses": 3,
+   "service_failures": 0,
+   "clarification": {
+    "expected": 41,
+    "correct": 35,
+    "issued": 45,
+    "unneeded": 8
+   },
+   "unsupported": {
+    "expected": 21,
+    "correct": 21,
+    "issued": 24,
+    "false": 3
+   },
+   "latency_ms": {
+    "median": 0,
+    "p95": 0
+   },
+   "total_cost_usd": 0.047028,
+   "cost_per_successful_answer_usd": 0.000251,
+   "fallback_rate": 0.0,
+   "resolved_models": [
+    "jev-1.13.0",
+    "jev-1.13.0+gpt-6-luna"
+   ],
+   "failures": {
+    "expected_clarify_got_unsupported": 3,
+    "schema_valid_guess": 1,
+    "unneeded_clarification": 8,
+    "wrong_clarify_field": 2,
+    "wrong_request": 2
+   },
+   "replay_misses": 0,
+   "tier_share": {
+    "luna": 101,
+    "jev": 102
+   }
+  },
+  {
+   "thresholds": {
+    "jev": 0.85,
+    "luna": null
+   },
+   "veto_min": 0.7,
+   "cases": 203,
+   "complete_request_accuracy": 0.9212,
+   "correct": 187,
+   "schema_valid_guesses": 3,
+   "service_failures": 0,
+   "clarification": {
+    "expected": 41,
+    "correct": 35,
+    "issued": 45,
+    "unneeded": 8
+   },
+   "unsupported": {
+    "expected": 21,
+    "correct": 21,
+    "issued": 24,
+    "false": 3
+   },
+   "latency_ms": {
+    "median": 0,
+    "p95": 0
+   },
+   "total_cost_usd": 0.047028,
+   "cost_per_successful_answer_usd": 0.000251,
+   "fallback_rate": 0.0,
+   "resolved_models": [
+    "jev-1.13.0",
+    "jev-1.13.0+gpt-6-luna"
+   ],
+   "failures": {
+    "expected_clarify_got_unsupported": 3,
+    "schema_valid_guess": 1,
+    "unneeded_clarification": 8,
+    "wrong_clarify_field": 2,
+    "wrong_request": 2
+   },
+   "replay_misses": 0,
+   "tier_share": {
+    "luna": 101,
+    "jev": 102
+   }
+  },
+  {
+   "thresholds": {
+    "jev": 0.85,
+    "luna": null
+   },
+   "veto_min": 1.01,
+   "cases": 203,
+   "complete_request_accuracy": 0.9261,
+   "correct": 188,
+   "schema_valid_guesses": 3,
+   "service_failures": 0,
+   "clarification": {
+    "expected": 41,
+    "correct": 36,
+    "issued": 45,
+    "unneeded": 8
+   },
+   "unsupported": {
+    "expected": 21,
+    "correct": 21,
+    "issued": 24,
+    "false": 3
+   },
+   "latency_ms": {
+    "median": 0,
+    "p95": 0
+   },
+   "total_cost_usd": 0.047028,
+   "cost_per_successful_answer_usd": 0.00025,
+   "fallback_rate": 0.0,
+   "resolved_models": [
+    "jev-1.13.0",
+    "jev-1.13.0+gpt-6-luna"
+   ],
+   "failures": {
+    "expected_clarify_got_unsupported": 3,
+    "schema_valid_guess": 1,
+    "unneeded_clarification": 8,
+    "wrong_clarify_field": 1,
+    "wrong_request": 2
+   },
+   "replay_misses": 0,
+   "tier_share": {
+    "luna": 102,
+    "jev": 101
+   }
+  },
+  {
+   "thresholds": {
+    "jev": 0.9,
+    "luna": null
+   },
+   "veto_min": 0.5,
+   "cases": 203,
+   "complete_request_accuracy": 0.9261,
+   "correct": 188,
+   "schema_valid_guesses": 3,
+   "service_failures": 0,
+   "clarification": {
+    "expected": 41,
+    "correct": 35,
+    "issued": 44,
+    "unneeded": 7
+   },
+   "unsupported": {
+    "expected": 21,
+    "correct": 21,
+    "issued": 24,
+    "false": 3
+   },
+   "latency_ms": {
+    "median": 0,
+    "p95": 0
+   },
+   "total_cost_usd": 0.049518,
+   "cost_per_successful_answer_usd": 0.000263,
+   "fallback_rate": 0.0,
+   "resolved_models": [
+    "jev-1.13.0",
+    "jev-1.13.0+gpt-6-luna"
+   ],
+   "failures": {
+    "expected_clarify_got_unsupported": 3,
+    "schema_valid_guess": 1,
+    "unneeded_clarification": 7,
+    "wrong_clarify_field": 2,
+    "wrong_request": 2
+   },
+   "replay_misses": 0,
+   "tier_share": {
+    "luna": 109,
+    "jev": 94
+   }
+  },
+  {
+   "thresholds": {
+    "jev": 0.9,
+    "luna": null
+   },
+   "veto_min": 0.7,
+   "cases": 203,
+   "complete_request_accuracy": 0.9261,
+   "correct": 188,
+   "schema_valid_guesses": 3,
+   "service_failures": 0,
+   "clarification": {
+    "expected": 41,
+    "correct": 35,
+    "issued": 44,
+    "unneeded": 7
+   },
+   "unsupported": {
+    "expected": 21,
+    "correct": 21,
+    "issued": 24,
+    "false": 3
+   },
+   "latency_ms": {
+    "median": 0,
+    "p95": 0
+   },
+   "total_cost_usd": 0.049518,
+   "cost_per_successful_answer_usd": 0.000263,
+   "fallback_rate": 0.0,
+   "resolved_models": [
+    "jev-1.13.0",
+    "jev-1.13.0+gpt-6-luna"
+   ],
+   "failures": {
+    "expected_clarify_got_unsupported": 3,
+    "schema_valid_guess": 1,
+    "unneeded_clarification": 7,
+    "wrong_clarify_field": 2,
+    "wrong_request": 2
+   },
+   "replay_misses": 0,
+   "tier_share": {
+    "luna": 109,
+    "jev": 94
+   }
+  },
+  {
+   "thresholds": {
+    "jev": 0.9,
+    "luna": null
+   },
+   "veto_min": 1.01,
+   "cases": 203,
+   "complete_request_accuracy": 0.931,
+   "correct": 189,
+   "schema_valid_guesses": 3,
+   "service_failures": 0,
+   "clarification": {
+    "expected": 41,
+    "correct": 36,
+    "issued": 44,
+    "unneeded": 7
+   },
+   "unsupported": {
+    "expected": 21,
+    "correct": 21,
+    "issued": 24,
+    "false": 3
+   },
+   "latency_ms": {
+    "median": 0,
+    "p95": 0
+   },
+   "total_cost_usd": 0.049518,
+   "cost_per_successful_answer_usd": 0.000262,
+   "fallback_rate": 0.0,
+   "resolved_models": [
+    "jev-1.13.0",
+    "jev-1.13.0+gpt-6-luna"
+   ],
+   "failures": {
+    "expected_clarify_got_unsupported": 3,
+    "schema_valid_guess": 1,
+    "unneeded_clarification": 7,
+    "wrong_clarify_field": 1,
+    "wrong_request": 2
+   },
+   "replay_misses": 0,
+   "tier_share": {
+    "luna": 110,
+    "jev": 93
+   }
+  },
+  {
+   "thresholds": {
+    "jev": 0.95,
+    "luna": null
+   },
+   "veto_min": 0.5,
+   "cases": 203,
+   "complete_request_accuracy": 0.9261,
+   "correct": 188,
+   "schema_valid_guesses": 3,
+   "service_failures": 0,
+   "clarification": {
+    "expected": 41,
+    "correct": 35,
+    "issued": 44,
+    "unneeded": 7
+   },
+   "unsupported": {
+    "expected": 21,
+    "correct": 21,
+    "issued": 24,
+    "false": 3
+   },
+   "latency_ms": {
+    "median": 0,
+    "p95": 0
+   },
+   "total_cost_usd": 0.057014,
+   "cost_per_successful_answer_usd": 0.000303,
+   "fallback_rate": 0.0,
+   "resolved_models": [
+    "jev-1.13.0",
+    "jev-1.13.0+gpt-6-luna"
+   ],
+   "failures": {
+    "expected_clarify_got_unsupported": 3,
+    "schema_valid_guess": 1,
+    "unneeded_clarification": 7,
+    "wrong_clarify_field": 2,
+    "wrong_request": 2
+   },
+   "replay_misses": 0,
+   "tier_share": {
+    "luna": 138,
+    "jev": 65
+   }
+  },
+  {
+   "thresholds": {
+    "jev": 0.95,
+    "luna": null
+   },
+   "veto_min": 0.7,
+   "cases": 203,
+   "complete_request_accuracy": 0.9261,
+   "correct": 188,
+   "schema_valid_guesses": 3,
+   "service_failures": 0,
+   "clarification": {
+    "expected": 41,
+    "correct": 35,
+    "issued": 44,
+    "unneeded": 7
+   },
+   "unsupported": {
+    "expected": 21,
+    "correct": 21,
+    "issued": 24,
+    "false": 3
+   },
+   "latency_ms": {
+    "median": 0,
+    "p95": 0
+   },
+   "total_cost_usd": 0.057014,
+   "cost_per_successful_answer_usd": 0.000303,
+   "fallback_rate": 0.0,
+   "resolved_models": [
+    "jev-1.13.0",
+    "jev-1.13.0+gpt-6-luna"
+   ],
+   "failures": {
+    "expected_clarify_got_unsupported": 3,
+    "schema_valid_guess": 1,
+    "unneeded_clarification": 7,
+    "wrong_clarify_field": 2,
+    "wrong_request": 2
+   },
+   "replay_misses": 0,
+   "tier_share": {
+    "luna": 138,
+    "jev": 65
+   }
+  },
+  {
+   "thresholds": {
+    "jev": 0.95,
+    "luna": null
+   },
+   "veto_min": 1.01,
+   "cases": 203,
+   "complete_request_accuracy": 0.931,
+   "correct": 189,
+   "schema_valid_guesses": 3,
+   "service_failures": 0,
+   "clarification": {
+    "expected": 41,
+    "correct": 36,
+    "issued": 44,
+    "unneeded": 7
+   },
+   "unsupported": {
+    "expected": 21,
+    "correct": 21,
+    "issued": 24,
+    "false": 3
+   },
+   "latency_ms": {
+    "median": 0,
+    "p95": 0
+   },
+   "total_cost_usd": 0.057014,
+   "cost_per_successful_answer_usd": 0.000302,
+   "fallback_rate": 0.0,
+   "resolved_models": [
+    "jev-1.13.0",
+    "jev-1.13.0+gpt-6-luna"
+   ],
+   "failures": {
+    "expected_clarify_got_unsupported": 3,
+    "schema_valid_guess": 1,
+    "unneeded_clarification": 7,
+    "wrong_clarify_field": 1,
+    "wrong_request": 2
+   },
+   "replay_misses": 0,
+   "tier_share": {
+    "luna": 138,
+    "jev": 65
+   }
+  },
+  {
+   "thresholds": {
+    "jev": 0.99,
+    "luna": null
+   },
+   "veto_min": 0.5,
+   "cases": 203,
+   "complete_request_accuracy": 0.931,
+   "correct": 189,
+   "schema_valid_guesses": 3,
+   "service_failures": 0,
+   "clarification": {
+    "expected": 41,
+    "correct": 35,
+    "issued": 43,
+    "unneeded": 6
+   },
+   "unsupported": {
+    "expected": 21,
+    "correct": 21,
+    "issued": 24,
+    "false": 3
+   },
+   "latency_ms": {
+    "median": 0,
+    "p95": 0
+   },
+   "total_cost_usd": 0.072383,
+   "cost_per_successful_answer_usd": 0.000383,
+   "fallback_rate": 0.0,
+   "resolved_models": [
+    "jev-1.13.0",
+    "jev-1.13.0+gpt-6-luna"
+   ],
+   "failures": {
+    "expected_clarify_got_unsupported": 3,
+    "schema_valid_guess": 1,
+    "unneeded_clarification": 6,
+    "wrong_clarify_field": 2,
+    "wrong_request": 2
+   },
+   "replay_misses": 0,
+   "tier_share": {
+    "luna": 188,
+    "jev": 15
+   }
+  },
+  {
+   "thresholds": {
+    "jev": 0.99,
+    "luna": null
+   },
+   "veto_min": 0.7,
+   "cases": 203,
+   "complete_request_accuracy": 0.931,
+   "correct": 189,
+   "schema_valid_guesses": 3,
+   "service_failures": 0,
+   "clarification": {
+    "expected": 41,
+    "correct": 35,
+    "issued": 43,
+    "unneeded": 6
+   },
+   "unsupported": {
+    "expected": 21,
+    "correct": 21,
+    "issued": 24,
+    "false": 3
+   },
+   "latency_ms": {
+    "median": 0,
+    "p95": 0
+   },
+   "total_cost_usd": 0.072383,
+   "cost_per_successful_answer_usd": 0.000383,
+   "fallback_rate": 0.0,
+   "resolved_models": [
+    "jev-1.13.0",
+    "jev-1.13.0+gpt-6-luna"
+   ],
+   "failures": {
+    "expected_clarify_got_unsupported": 3,
+    "schema_valid_guess": 1,
+    "unneeded_clarification": 6,
+    "wrong_clarify_field": 2,
+    "wrong_request": 2
+   },
+   "replay_misses": 0,
+   "tier_share": {
+    "luna": 188,
+    "jev": 15
+   }
+  },
+  {
+   "thresholds": {
+    "jev": 0.99,
+    "luna": null
+   },
+   "veto_min": 1.01,
+   "cases": 203,
+   "complete_request_accuracy": 0.936,
+   "correct": 190,
+   "schema_valid_guesses": 3,
+   "service_failures": 0,
+   "clarification": {
+    "expected": 41,
+    "correct": 36,
+    "issued": 43,
+    "unneeded": 6
+   },
+   "unsupported": {
+    "expected": 21,
+    "correct": 21,
+    "issued": 24,
+    "false": 3
+   },
+   "latency_ms": {
+    "median": 0,
+    "p95": 0
+   },
+   "total_cost_usd": 0.072383,
+   "cost_per_successful_answer_usd": 0.000381,
+   "fallback_rate": 0.0,
+   "resolved_models": [
+    "jev-1.13.0",
+    "jev-1.13.0+gpt-6-luna"
+   ],
+   "failures": {
+    "expected_clarify_got_unsupported": 3,
+    "schema_valid_guess": 1,
+    "unneeded_clarification": 6,
+    "wrong_clarify_field": 1,
+    "wrong_request": 2
+   },
+   "replay_misses": 0,
+   "tier_share": {
+    "luna": 188,
+    "jev": 15
+   }
+  }
+ ]
+}

@@ -535,3 +535,50 @@ the field probabilities needed to separate extraction errors from policy vetoes.
 A production model recommendation therefore remains open. Record those details,
 calibrate on development data, and freeze both implementations before a fresh
 unseen comparison. No additional provider runs are required for this handoff.
+
+## Tiered cascade calibration (2026-09-29, ADRs 0002 and 0009)
+
+`scripts/ask/evaluate.py collect` recorded Jev and GPT-6 Luna once on all 203
+exposed cases (`dev.json` plus both exposed release sets), using lookup candidates.
+It spent an estimated $0.072 of a $0.60 cap:
+[`ask-tier-trace.json`](verification/ask-tier-trace.json). `calibrate` then
+replayed the cascade offline across thresholds with no provider calls:
+[`ask-tier-calibration.json`](verification/ask-tier-calibration.json).
+
+These are **exposed** cases. They are calibration data, not gate evidence.
+
+| Jev accept_min | Correct | Guesses | Unneeded clarifications | Finished by Jev / Luna |
+| ---: | ---: | ---: | ---: | ---: |
+| 0.5 | 160/203 | 5 | | 195 / 8 |
+| 0.8 | 182/203 | 4 | 12 | 119 / 84 |
+| 0.85 | 187/203 | 3 | 8 | 102 / 101 |
+| 0.9 | 188/203 | 3 | 7 | 94 / 109 |
+| 0.95 | 188/203 | 3 | 7 | 65 / 138 |
+
+`veto_min` from 0.0 to 0.5 changed no outcome. In every remaining guess, either
+both tiers agreed on the wrong reading or Jev had no competing selection.
+**0.9** keeps accuracy at its plateau while Jev still finishes 46% of cases, so it
+remains the default.
+
+The three guesses at 0.9:
+
+- `release-two-056` ("How many did Nikola Jokic have…"): Jev was unsure of the
+  stat, and Luna chose `stat_line` instead of asking which stat. This is a real
+  guess by the final tier.
+- `release-two-006` ("games … tonight in New York"): Luna added a Knicks filter,
+  while the label expects no team filter. The label is debatable: a location is
+  not a team, and the schema has no venue filter.
+- `release-two-029` (Boston's defensive rebounds in Game 3 of the 2024 Finals):
+  every field was correct. The normalizer also adds the target team to
+  `game.teams`, which selects the same game, but the strict scorer counts it as
+  a different request. This is a scoring and normalizer convention mismatch,
+  not a wrong answer.
+
+The field-level tier oracle (`trace.field_reads`) reported 99.8% Jev precision
+even at 0.5. It scores only `selected` reads on fields that accept labels pin
+down, so it misses the errors that matter. It is too lenient to serve as the
+ADR 0009 tier gate. Before any gate run, it needs `absent` reads on optional
+fields, clarify and unsupported labels, and boxscore team roles.
+
+The Luna-only replay is not comparable: when Jev called a case unsupported, the
+cascade never recorded Luna on it (15 cases).
