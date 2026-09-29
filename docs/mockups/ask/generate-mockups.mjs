@@ -1,10 +1,21 @@
 // Mockups for #189 "Ask" natural-language search. Overlays static HTML on the live design-1 pages.
 // Needs the dev servers running (pnpm dev + uvicorn). Data below is real 2025-26 data from the local API.
 // Behaviour follows docs/ask-search.md. Patterns borrowed from Mobbin examples are noted per scene.
-import {chromium} from "playwright-core";
-const exe = process.env.HOME + "/Library/Caches/ms-playwright/chromium-1223/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing";
-const OUT = "/Users/alexcurtis-slep/Documents/projects/nba-scores/docs/mockups/ask";
-const b = await chromium.launch({executablePath: exe});
+// Setup and limitations: see README.md in this folder.
+import {createRequire} from "node:module";
+import {fileURLToPath} from "node:url";
+import path from "node:path";
+
+// playwright-core is not an app dependency. Install it anywhere and point ASK_MOCKUP_TOOLS at that folder
+// (see README.md), or install it where Node can resolve it from this file.
+const tools = process.env.ASK_MOCKUP_TOOLS;
+const require = createRequire(tools ? path.join(path.resolve(tools), "noop.js") : import.meta.url);
+const {chromium} = require("playwright-core");
+
+const OUT = process.env.ASK_MOCKUP_OUT ?? path.dirname(fileURLToPath(import.meta.url));
+const BASE_URL = process.env.ASK_MOCKUP_BASE_URL ?? "http://localhost:5173";
+// Defaults to the Chromium that `npx playwright-core install chromium` downloads; override for a local Chrome.
+const b = await chromium.launch(process.env.ASK_MOCKUP_CHROMIUM ? {executablePath: process.env.ASK_MOCKUP_CHROMIUM} : {});
 
 const I = {
   search: `<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>`,
@@ -85,7 +96,7 @@ const CSS = `
 async function open(vp, {dark = false, path = "/design-1/?date=2026-02-05"} = {}) {
   const ctx = await b.newContext({viewport: vp, deviceScaleFactor: 2});
   const p = await ctx.newPage();
-  await p.goto("http://localhost:5173" + path);
+  await p.goto(BASE_URL + path);
   await p.waitForTimeout(2500);
   const got = p.getByRole("button", {name: "Got it"}); if (await got.count()) await got.first().click();
   if (dark) { await p.getByRole("button", {name: "Switch to dark mode"}).first().click(); await p.waitForTimeout(600); }
