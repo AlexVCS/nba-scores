@@ -8,8 +8,8 @@ results are hidden. Rules applied by the resolvers:
   and length, records, finishes and advancement are always protected;
 * entities the user named are echoed unprotected; participants Python
   inferred from results (an opponent, a Finals team) are protected;
-* a value that is absent (``None``, an empty list the user asked about
-  nothing for) is not protected, because it reveals nothing.
+* an absent value is still protected when its absence reveals progress,
+  such as an undecided champion or a final score that is not yet available.
 """
 
 from __future__ import annotations

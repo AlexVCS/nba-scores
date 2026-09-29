@@ -177,7 +177,8 @@ def test_league_postseason_guards_champion_and_series(complete_2024):
     assert result.champion.spoiler and result.runner_up.spoiler and result.series.spoiler
     assert len(result.series.value) == 7
     finals = [row for row in result.series.value if row.round == "finals"][0]
-    assert (finals.winner.tricode, finals.loser.tricode, finals.winner_wins, finals.loser_wins) == ("BOS", "DAL", 4, 1)
+    assert [(row.team.tricode, row.wins) for row in finals.teams] == [("BOS", 4), ("DAL", 1)]
+    assert finals.winner_team_id == BOS and finals.status == "complete"
     assert result.team is None and result.rounds.value == [] and result.finish.value is None
     assert [link.href for link in output.links] == ["/playoffs?season=2023-24"]
     assert output.sources[0].complete is True
@@ -194,7 +195,7 @@ def test_team_postseason_for_the_champion(complete_2024):
         ("conference_finals", "IND", 4, 0, True),
         ("finals", "DAL", 4, 1, True),
     ]
-    assert rounds[0].series_href == "/playoffs/2024/east-conference-first-round-1"
+    assert rounds[0].series_link.href == "/playoffs/2024/east-conference-first-round-1"
     assert result.finish.spoiler and result.record.spoiler and result.series_won.spoiler and result.rounds.spoiler
 
 
@@ -231,3 +232,23 @@ def test_requests_dispatch_to_playoff_resolvers(complete_2024):
     assert_fits_answer(series, "playoff_series")
     assert_fits_answer(summary, "postseason_summary")
     assert_fits_answer(league, "postseason_summary")
+
+
+def test_unfinished_league_series_has_participants_without_a_winner(monkeypatch):
+    specs = PLAYOFFS_2024[:-1] + [(4, 0, "BOS", "DAL", "WWWL", 42)]
+    install_playoffs(monkeypatch, specs, current_season=SEASON)
+    output = playoffs.league_postseason(SEASON)
+    result = output.result
+    final = next(row for row in result.series.value if row.round == "finals")
+    assert final.status == "in_progress" and final.winner_team_id is None
+    assert [(row.team.tricode, row.wins) for row in final.teams] == [("BOS", 3), ("DAL", 1)]
+    assert result.champion.value is None and result.champion.spoiler
+    assert result.runner_up.value is None and result.runner_up.spoiler
+    assert not output.sources[0].complete
+
+
+def test_inferred_series_destination_is_protected(complete_2024):
+    inferred = playoffs.series_result(SEASON, [BOS], "conference_finals")
+    assert inferred.links[0].spoiler
+    named = playoffs.series_result(SEASON, [BOS, DAL])
+    assert not named.links[0].spoiler

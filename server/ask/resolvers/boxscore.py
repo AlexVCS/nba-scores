@@ -134,11 +134,11 @@ def stat_leaders(
     """
     check_aggregation(aggregation)
     if stat == "stat_line":
-        raise UnsupportedError("other", "leaders_need_one_stat")
+        raise UnsupportedError("unsupported_leader_stat", "leaders_need_one_stat")
     (definition,) = stat_defs(stat, ())
     if not definition.rankable:
         # Percentage leaders need an attempts qualifier the contract does not define.
-        raise UnsupportedError("other", "stat_not_rankable", details={"stat": stat})
+        raise UnsupportedError("unsupported_leader_stat", "stat_not_rankable", details={"stat": stat})
     if team_id is not None and team_id not in game.team_ids:
         raise NotFoundError("no_record", "team_not_in_game", details={"teamIds": [team_id], "gameId": game.game_id})
     boxscore = _boxscore(game)
@@ -166,7 +166,7 @@ def stat_leaders(
     leaders = []
     for index, (ref, team, value) in enumerate(team_leaders[:MAX_LEADERS]):
         previous = leaders[-1] if leaders else None
-        tied = previous is not None and previous.value.value.value == value.value
-        leaders.append(LeaderRow(rank=previous.rank if tied else index + 1, player=guard(ref), team=guard(team), value=guard(value)))
-    return _result(game, "leaders", stat, leaders=leaders)
+        tied = previous is not None and previous.value.value == value.value
+        leaders.append(LeaderRow(rank=previous.rank if tied else index + 1, player=ref, team=team, value=value))
+    return _result(game, "leaders", stat, leaders=guard(leaders))
 

@@ -34,6 +34,8 @@ Request types:
 
 from __future__ import annotations
 
+import dataclasses
+
 from server.ask.models.request import (
     AskRequest,
     BoxscoreStatRequest,
@@ -68,7 +70,7 @@ def resolve_boxscore_game(request: BoxscoreStatRequest) -> ResolvedGame:
     missing = [team_id for team_id in team_ids if team_id not in game.team_ids]
     if missing:
         raise NotFoundError("no_games", "team_not_in_game", details={"gameId": game.game_id, "teamIds": missing})
-    return game
+    return dataclasses.replace(game, named_team_ids=tuple(team_ids))
 
 
 def _boxscore(request: BoxscoreStatRequest) -> ResolverOutput:
@@ -81,7 +83,8 @@ def _boxscore(request: BoxscoreStatRequest) -> ResolverOutput:
         result = boxscore.team_stat(game, stat, team_ids, aggregation)
     else:
         result = boxscore.stat_leaders(game, stat, request.team.team_id if request.team else None, aggregation)
-    game_links = (links.boxscore_link(game.game_id, game.date), links.scores_link(game.date))
+    game_links = tuple(link.model_copy(update={"spoiler": game.participants_inferred and not set(game.team_ids) <= set(game.named_team_ids)})
+                       for link in (links.boxscore_link(game.game_id, game.date), links.scores_link(game.date)))
     return ResolverOutput(result, game_links, (stats_source(game.settled),))
 
 

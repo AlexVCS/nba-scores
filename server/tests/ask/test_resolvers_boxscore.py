@@ -120,16 +120,16 @@ def test_team_totals_for_one_team_or_both(game_data):
 
 def test_leaders_rank_each_teams_leaders_together_and_share_ties(game_data):
     result = boxscore.stat_leaders(final_game(), "points")
-    rows = [(row.rank, row.player.value.name, row.team.value.tricode, row.value.value.value) for row in result.leaders]
+    rows = [(row.rank, row.player.name, row.team.tricode, row.value.value) for row in result.leaders.value]
     assert rows == [(1, "Jayson Tatum", "BOS", 30), (1, "Jaylen Brown", "BOS", 30), (3, "Jimmy Butler", "MIA", 25)]
-    assert all(row.player.spoiler and row.team.spoiler and row.value.spoiler for row in result.leaders)
+    assert result.leaders.spoiler
     mia = boxscore.stat_leaders(final_game(), "assists", tid("MIA"))
-    assert [row.player.value.name for row in mia.leaders] == ["Jimmy Butler", "Bam Adebayo"]
+    assert [row.player.name for row in mia.leaders.value] == ["Jimmy Butler", "Bam Adebayo"]
 
 
 def test_minutes_leader_uses_parsed_minutes(game_data):
     result = boxscore.stat_leaders(final_game(), "minutes")
-    assert [row.player.value.name for row in result.leaders] == ["Jimmy Butler", "Jayson Tatum"]
+    assert [row.player.name for row in result.leaders.value] == ["Jimmy Butler", "Jayson Tatum"]
 
 
 def test_leaders_refuse_partial_or_unrankable_statistics(game_data):
@@ -206,7 +206,7 @@ def test_team_scope_uses_request_team_or_selector_teams(game_data):
 
 def test_leaders_by_game_id(game_data):
     output = resolve(request(scope="leaders", game={"game_id": GAME, "date": "2024-01-15"}))
-    assert output.result.leaders[0].rank == 1
+    assert output.result.leaders.value[0].rank == 1
     assert_fits_answer(output, "boxscore_stat")
 
 

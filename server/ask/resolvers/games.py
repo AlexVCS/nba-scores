@@ -107,6 +107,7 @@ class ResolvedGame:
     # True when the teams were found from results (e.g. "Game 3 of the Finals")
     # rather than named or scheduled; they reveal advancement.
     participants_inferred: bool = False
+    named_team_ids: tuple[int, ...] = ()
 
     @property
     def game_id(self) -> str:
@@ -152,7 +153,7 @@ def _day_games(day: dt.date) -> list[ResolvedGame]:
             continue
         game = {**raw, "boxscoreAvailable": is_boxscore_available_metadata(game_id, int_or_none(raw.get("gameStatus")))}
         round_, number = _playoff_details(game_id, game)
-        games.append(ResolvedGame(day, game, home, away, round_, number))
+        games.append(ResolvedGame(day, game, home, away, round_, number, game_id[2] in ("4", "5")))
     return games
 
 
@@ -197,7 +198,7 @@ def search_games(dates: DateRange, team_ids: Sequence[int] = ()) -> ResolverOutp
     for team_id in team_ids:
         ref = next(team for game in found for team in (game.home, game.away) if team.team_id == team_id)
         teams.append(ref)
-    result = GamesResult(dates=dates, teams=teams, days=game_days, total_games=len(found))
+    result = GamesResult(dates=dates, teams=teams, days=game_days, total_games=open_value(len(found)))
     day_links = tuple(links.scores_link(day.date) for day in game_days[:MAX_RESPONSE_LINKS])
     return ResolverOutput(result, day_links, (stats_source(all(game.settled for game in found)),))
 
@@ -212,7 +213,7 @@ def find_game_on_date(day: dt.date, team_ids: Sequence[int] = ()) -> ResolvedGam
     if len(games) > 1:
         # Matchups on a scheduled date are not spoilers.
         raise AmbiguousError(
-            "team",
+            "teams",
             "several_games",
             options=[{"game_id": g.game_id, "date": day.isoformat(), "home": g.home, "away": g.away} for g in games],
         )
@@ -280,11 +281,11 @@ def game_context(game: ResolvedGame) -> GameContext:
     return GameContext(
         game_id=game.game_id,
         date=game.date,
-        away=game.away,
-        home=game.home,
+        away=guard(game.away, game.participants_inferred and game.away.team_id not in game.named_team_ids),
+        home=guard(game.home, game.participants_inferred and game.home.team_id not in game.named_team_ids),
         season=season_for_game_id(game.game_id),
         season_type=SEASON_TYPES.get(game.game_id[2], "regular_season"),
         round=game.round,
         game_number=game.game_number,
-        final_score=guard(final) if final else open_value(None),
+        final_score=guard(final),
     )

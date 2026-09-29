@@ -30,6 +30,7 @@ from server.ask.models.response import (
     PostseasonSummaryResult,
     ScoreboardGame,
     SeriesTeamRow,
+    SeriesParticipant,
     WinLoss,
 )
 from server.ask.resolvers import data
@@ -229,6 +230,8 @@ def series_result(
         games=guard([_game_item(game) for game in games]),
     )
     link = links.series_link(season, series)
+    if link is not None and not set(refs) <= set(named):
+        link = link.model_copy(update={"spoiler": True})
     return ResolverOutput(
         result,
         tuple(filter(None, (link, links.bracket_link(season)))),
@@ -261,7 +264,7 @@ def find_playoff_game(
     game = get_scoreboard_game(str(chosen["gameId"]), dt.date.fromisoformat(str(chosen["date"])[:10]))
     inferred = not set(_team_ids(series)) <= set(team_ids)
     return dataclasses.replace(
-        game, round=contract_round(season, series), game_number=game_number, participants_inferred=inferred
+        game, round=contract_round(season, series), game_number=game_number, participants_inferred=inferred, named_team_ids=tuple(team_ids)
     )
 
 
@@ -283,15 +286,12 @@ def league_postseason(season: str) -> ResolverOutput[PostseasonSummaryResult]:
         all_decided = all_decided and winner_id is not None
         winner = next((ref for ref in refs if ref.team_id == winner_id), None)
         loser = next((ref for ref in refs if winner and ref.team_id != winner.team_id), None)
-        first, second = (winner, loser) if winner else (refs[0] if refs else None, refs[1] if len(refs) > 1 else None)
         rows.append(PostseasonSeriesRow(
             round=mapped,
             conference=conference(series),
-            # Undecided rows carry no teams: the contract names only winners and losers.
-            winner=winner,
-            loser=loser,
-            winner_wins=wins.get(first.team_id, 0) if first else 0,
-            loser_wins=wins.get(second.team_id, 0) if second else 0,
+            teams=[SeriesParticipant(team=ref, wins=wins.get(ref.team_id, 0)) for ref in refs],
+            status="complete" if winner_id is not None else "in_progress" if _series_games(series) else "not_started",
+            winner_team_id=winner_id,
         ))
         if mapped == "finals" and winner:
             champion, runner_up = winner, loser
@@ -302,8 +302,8 @@ def league_postseason(season: str) -> ResolverOutput[PostseasonSummaryResult]:
         record=open_value(None),
         series_won=open_value(None),
         rounds=open_value([]),
-        champion=guard(champion) if champion else open_value(None),
-        runner_up=guard(runner_up) if runner_up else open_value(None),
+        champion=guard(champion),
+        runner_up=guard(runner_up),
         series=guard(rows),
     )
     complete = champion is not None and all_decided
@@ -348,7 +348,7 @@ def team_postseason(season: str, team: TeamRef) -> ResolverOutput[PostseasonSumm
             team_wins=counts.get(team.team_id, 0),
             opponent_wins=counts.get(opponent.team_id, 0),
             won=won,
-            series_href=links.series_href(season, series),
+            series_link=links.series_link(season, series),
         ))
         if won is False:
             finish = f"lost_{mapped}"

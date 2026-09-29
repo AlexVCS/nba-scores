@@ -34,7 +34,7 @@ def boards(monkeypatch):
 def test_single_day_search_returns_contract_games_with_links_and_spoilers(boards):
     output = games.search_games(rng(DAY))
     result = output.result
-    assert result.kind == "games" and result.total_games == 2
+    assert result.kind == "games" and result.total_games.value == 2
     (day,) = result.days
     overtime = day.games[0]
     assert overtime.game.gameId == "0022300601"
@@ -125,7 +125,7 @@ def test_game_context_guards_final_score_and_reports_overtime(boards):
     assert context.final_score.spoiler is True
     assert (context.final_score.value.home, context.final_score.value.away, context.final_score.value.periods) == (120, 118, 5)
     live = games.game_context(games.get_game("0022300621", date(2024, 1, 17)))
-    assert live.final_score.value is None and live.final_score.spoiler is False
+    assert live.final_score.value is None and live.final_score.spoiler is True
 
 
 def test_playoff_game_context_reads_round_and_number_from_numbered_games(monkeypatch):
@@ -231,3 +231,21 @@ def test_games_result_fits_an_answer_response(boards):
         interpreter={"model_called": False},
     )
     assert AskResponse.model_validate_json(response.model_dump_json()) == response
+
+
+def test_playoff_context_keeps_named_team_and_guards_inferred_opponent(monkeypatch):
+    from dataclasses import replace
+
+    fake = FakeScoreboards({"2024-06-12": [sb_game("0042300403", "DAL", "BOS", series_number="Game 3")]})
+    monkeypatch.setattr(nba_stats_client, "fetch_scoreboard_v3", fake)
+    game = games.get_game("0042300403", date(2024, 6, 12))
+    unknown = games.game_context(game)
+    assert unknown.away.spoiler and unknown.home.spoiler
+    named = games.game_context(replace(game, named_team_ids=(tid("BOS"),)))
+    assert named.home.spoiler and not named.away.spoiler
+
+
+def test_ambiguous_game_uses_shared_teams_clarification_field(boards):
+    with pytest.raises(AmbiguousError) as error:
+        games.find_game_on_date(DAY)
+    assert error.value.field == "teams"
