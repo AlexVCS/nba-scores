@@ -820,6 +820,26 @@
           "season": "2015-16"
         }
       }
+    },
+    {
+      "id": "dev-cross-year-range",
+      "question": "Show games from Dec 30, 2025 to Jan 2",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "tags": [
+        "adversarial",
+        "date"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "2025-12-30",
+            "end": "2026-01-02"
+          },
+          "teams": []
+        }
+      }
     }
   ]
 }

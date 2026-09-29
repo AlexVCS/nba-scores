@@ -322,6 +322,37 @@ failure into a different intent. Both OpenAI models also called the 28-day
 `dev-014` game search unsupported, where the contract requires a
 `range_too_long` clarification. GPT-6 Luna timed out once at 20 seconds.
 
+### Expanded development pass before independent review fixes
+
+The second pass used 42 labels, lookup commit `5742a1c`, and the revised prompt.
+It included both Luna versions. The full case report is
+[`ask-interpreter-eval.json`](verification/ask-interpreter-eval.json). The
+estimated spend was $0.089040, with no candidate errors or budget stop. No
+original label changed after the first pass. Six new cases cover invalid day
+numbers, historical team names, an unsupported leader percentage, and a page
+season reference.
+
+| Configuration | Correct | Clarifications correct | Unsupported correct | Guesses | Median | p95 | Cost per correct |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Jev | 29/42 | 10/12 | 4/5 | 0 | 219 ms | 318 ms | $0.000141 |
+| gpt-4.1-mini | 35/42 | 7/12 | 4/5 | 0 | 1,681 ms | 2,687 ms | $0.001208 |
+| GPT-6 Luna | 39/42 | 9/12 | 5/5 | 0 | 2,574 ms | 5,668 ms | $0.000301 |
+| GPT-5.6 Luna | 38/42 | 9/12 | 5/5 | 0 | 2,178 ms | 4,576 ms | $0.000649 |
+| Jev → GPT-6 Luna | 35/42 | 10/12 | 5/5 | 0 | 229 ms | 3,646 ms | $0.000145 |
+
+GPT-6 Luna met the overall 90% accuracy gate but missed the clarification
+gate. It called `dev-073` (an unknown team in a game-like question)
+unsupported, and invalid dates `dev-invalid-day-32` and `dev-invalid-day-0`
+ended as `invalid_output` failures. The adapter must turn an invalid extracted
+date into a date clarification without accepting the invalid value. The
+separate review also found Jev team-count and cached-primary deadline bugs,
+so the cascade numbers here are diagnostic only. All configurations remain
+disabled until fixes and an unseen release evaluation pass the gates.
+The subsequent `cf3737b` lookup fix inferred the end year in a range crossing
+New Year. `dev-cross-year-range` is a 43rd label added after this run; its
+lookup candidate resolves to December 30, 2025 through January 2, 2026. The
+next run must include it.
+
 ## Prototype fixture audit
 
 `server/tests/fixtures/ask_seed.json` (25 questions) and `ask_heldout.json`
