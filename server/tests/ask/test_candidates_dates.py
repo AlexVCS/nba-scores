@@ -4,6 +4,7 @@ from zoneinfo import ZoneInfo
 import pytest
 
 from server.ask.candidates import CandidateLookupService
+from server.ask.candidates.dates import extract
 from server.ask.models.request import AskContext
 
 NY = ZoneInfo("America/New_York")
@@ -144,3 +145,11 @@ def test_unrepresentable_invalid_date_components_abstain(service, question):
 
 def test_no_date_language_means_not_mentioned(service):
     assert dates(service, "Who won the 2016 Finals?").status == "not_mentioned"
+
+
+@pytest.mark.parametrize("phrase", ["the most recent Tuesday", "the latest Tuesday"])
+def test_most_recent_weekday_is_the_last_one(phrase):
+    today = dt.date(2026, 9, 29)  # a Tuesday: the most recent one excludes today
+    [(_, _, hits)] = list(extract(phrase.lower(), today))
+    [hit] = hits
+    assert hit.value.resolved.start == dt.date(2026, 9, 22)

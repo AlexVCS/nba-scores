@@ -319,7 +319,7 @@ def _month_relative(m: re.Match, today: dt.date) -> list[Hit]:
 def _weekday(m: re.Match, today: dt.date) -> list[Hit]:
     qualifier, weekday = m.group(1), WEEKDAYS.index(m.group(2))
     text = m.group(0).strip()
-    if qualifier in ("last", "past", "previous"):
+    if qualifier and qualifier.split()[-1] in ("last", "past", "previous", "recent", "latest"):
         return [relative_hit("last_weekday", today, text, weekday=weekday)]
     if qualifier == "this":
         return [relative_hit("this_weekday", today, text, weekday=weekday)]
@@ -366,7 +366,7 @@ PATTERNS: tuple[tuple[re.Pattern, Handler], ...] = tuple((re.compile(p), h) for 
     (r"\bthis\s+week(?:'s)?\b", _fixed("this_week")),
     (r"\bnext\s+week(?:'s)?\b", _next_week),
     (r"\b(last|this|next)\s+month(?:'s)?\b", _month_relative),
-    (rf"\b(?:(last|past|previous|this|next|on)\s+)?{_WEEKDAY}(?:'s)?(?:\s+night)?\b", _weekday),
+    (rf"\b(?:(last|past|previous|most\s+recent|latest|this|next|on)\s+)?{_WEEKDAY}(?:'s)?(?:\s+night)?\b", _weekday),
 ))
 
 

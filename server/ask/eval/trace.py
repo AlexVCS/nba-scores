@@ -206,6 +206,8 @@ def expected_fields(case: LabeledCase) -> dict[str, Any]:
         expected["aggregation"] = {r.stat.aggregation}
         if r.player is not None:
             expected["player"] = {r.player.player_id}
+        if r.scope == "team" and r.team is not None:
+            expected["target_team"] = {r.team.team_id}
         game = r.game
         if game.date is not None:
             expected["date"] = {(game.date, game.date)}

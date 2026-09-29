@@ -331,3 +331,88 @@ def test_merged_output_keeps_only_fields_the_intent_uses():
     out = cascade(jev).interpret(REQUEST)
     assert {f.field for f in out.fields} == {"intent", "date", "teams", "location"}
     assert "stat" not in out.metadata.field_tiers
+
+
+def no_match(field, confidence=0.95):
+    return FieldInterpretation(field=field, status="no_matching_candidate", confidence=confidence)
+
+
+def _team_stat_reads(season_read, *, teams_confidence):
+    return [sel("intent", "boxscore_stat"), sel("stat_scope", "team"), sel("stat", "points"),
+            sel("aggregation", "total"), absent("player"), sel("date", "date:0"), season_read,
+            absent("round"), absent("game_number"), sel("teams", CLE.id, confidence=teams_confidence)]
+
+
+def _stat_request(candidates):
+    return REQUEST.model_copy(update={"question": "cleveland points last week", "candidates": candidates})
+
+
+def test_later_absent_read_replaces_an_uncorroborated_no_match():
+    one_day = b.date(0, "sep 21", DateComponents(kind="calendar_date", year=2026, month=9, day=21),
+                     start=dt.date(2026, 9, 21))
+    request = _stat_request(b.lookup_result([CLE, one_day]))  # lookup saw no season text
+    jev = Fake("jev", *_team_stat_reads(no_match("season"), teams_confidence=0.5))
+    luna = Fake("luna", *[r.model_copy(update={"confidence": None})
+                          for r in _team_stat_reads(absent("season"), teams_confidence=None)])
+    out = cascade(jev, luna).interpret(request)
+    assert out.get_field("season").status == "absent"
+    assert out.metadata.field_tiers["season"] == "luna"
+    norm = Normalizer().normalize(out, request.candidates, CONTEXT)
+    assert norm.status == "valid"
+
+
+def test_no_match_backed_by_unmatched_lookup_text_survives_a_later_absent_read():
+    one_day = b.date(0, "sep 21", DateComponents(kind="calendar_date", year=2026, month=9, day=21),
+                     start=dt.date(2026, 9, 21))
+    request = _stat_request(b.lookup_result([CLE, one_day], unmatched={"season": ["2199"]}))
+    jev = Fake("jev", *_team_stat_reads(no_match("season"), teams_confidence=0.5))
+    luna = Fake("luna", *[r.model_copy(update={"confidence": None})
+                          for r in _team_stat_reads(absent("season"), teams_confidence=None)])
+    out = cascade(jev, luna).interpret(request)
+    assert out.get_field("season").status == "no_matching_candidate"
+    assert out.metadata.field_tiers["season"] == "jev"
+
+
+def test_target_team_is_lookup_absent_without_team_text_and_needed_only_for_team_scope():
+    one_day = b.date(0, "sep 21", DateComponents(kind="calendar_date", year=2026, month=9, day=21),
+                     start=dt.date(2026, 9, 21))
+    player_reads = [sel("intent", "boxscore_stat"), sel("stat_scope", "player"), sel("stat", "points"),
+                    sel("aggregation", "total"), sel("player", "player:1"), sel("date", "date:0"),
+                    absent("season"), absent("round"), absent("game_number"), absent("teams")]
+    tatum = b.player(1, "Some Player")
+    request = _stat_request(b.lookup_result([tatum, one_day]))
+    jev, luna = Fake("jev", *player_reads), Fake("luna")
+    out = cascade(jev, luna).interpret(request)
+    assert luna.calls == 0 and out.get_field("target_team") is None
+
+    # Team scope: Jev unsure which named team the stat belongs to escalates to Luna.
+    request = _stat_request(b.lookup_result([CLE, BOS, one_day]))
+    team_reads = [sel("intent", "boxscore_stat"), sel("stat_scope", "team"), sel("stat", "points"),
+                  sel("aggregation", "total"), absent("player"), sel("date", "date:0"), absent("season"),
+                  absent("round"), absent("game_number"), sel("teams", CLE.id, BOS.id)]
+    jev = Fake("jev", *team_reads, sel("target_team", BOS.id, confidence=0.6))
+    luna = Fake("luna", sel("intent", "boxscore_stat", confidence=None),
+                sel("target_team", BOS.id, confidence=None))
+    out = cascade(jev, luna).interpret(request)
+    assert luna.calls == 1 and out.metadata.field_tiers["target_team"] == "luna"
+    norm = Normalizer().normalize(out, request.candidates, CONTEXT)
+    assert norm.status == "valid" and norm.request.team == BOS.value.team
+
+
+def test_undecided_target_team_is_clarified_as_teams():
+    state_output = InterpreterOutput(
+        outcome="interpreted",
+        fields=[sel("intent", "boxscore_stat", confidence=None), sel("stat_scope", "team", confidence=None),
+                sel("teams", CLE.id, BOS.id, confidence=None), sel("date", "date:0", confidence=None),
+                sel("target_team", CLE.id, confidence=0.5)],
+        metadata=InterpreterMetadata(adapter="cascade", provider="cascade", model="m", latency_ms=1),
+    )
+    one_day = b.date(0, "sep 21", DateComponents(kind="calendar_date", year=2026, month=9, day=21),
+                     start=dt.date(2026, 9, 21))
+    candidates = b.lookup_result([CLE, BOS, one_day])
+    norm = Normalizer().normalize(state_output, candidates, CONTEXT)
+    assert norm.status == "valid"  # executable, but the target read is below certainty
+    state = CascadeState(attempts=[CascadeAttempt(output=state_output, normalization=norm)], candidates=candidates,
+                         fallback_enabled=False, remaining_budget_usd=1, remaining_ms=20_000)
+    decision = POLICY.decide(state)
+    assert (decision.action, decision.field) == ("clarify", "teams")

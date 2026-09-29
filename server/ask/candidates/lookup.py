@@ -169,6 +169,7 @@ def _entity_mentions(question: str, masked: str, seasons: frozenset[int], limits
                 add("player", i, j, hits, total)
 
     # 2. Teams: full names, historical names, cities, nicknames, tricodes, aliases.
+    released: set[int] = set()
     for size in range(teams.max_phrase_tokens, 0, -1):
         for i in range(0, n_tokens - size + 1):
             j = i + size - 1
@@ -182,15 +183,24 @@ def _entity_mentions(question: str, masked: str, seasons: frozenset[int], limits
             hits, note = resolve_phrase(teams, key, seasons)
             add("team", i, j, hits[:limits.per_mention], len(hits), note)
             scan.team_tokens.update(range(i, j + 1))
+            if not hits and size == 1 and not (i > 0 and scan.tokens[i - 1].norm == "the"):
+                released.add(i)
+    # A one-word team name no team used in the requested season cannot be that team,
+    # so the word stays open to exact player names ("Magic" in 1987 is Magic Johnson).
+    # "the Magic" still reads as a team.
+    # The team mention stays too: it records the out-of-era name for the interpreter.
+    for k in released:
+        scan.consumed[k] = False
 
     # 3. Runs of name-like words that are not a known full name ("Dwight Schrute").
     k = 0
     while k < n_tokens:
-        if not scan.eligible(k):
+        if not scan.eligible(k) or k in released:
             k += 1
             continue
         run_end = k
-        while run_end + 1 < n_tokens and scan.eligible(run_end + 1) and scan.contiguous(k, run_end + 1):
+        while (run_end + 1 < n_tokens and scan.eligible(run_end + 1) and run_end + 1 not in released
+               and scan.contiguous(k, run_end + 1)):
             run_end += 1
         if 1 <= run_end - k <= 2 and _looks_like_full_name(players, scan, k):
             key = scan.key(k, run_end)
@@ -218,6 +228,8 @@ def _entity_mentions(question: str, masked: str, seasons: frozenset[int], limits
         matches += [(pid, "first_name", None, None) for pid in players.first.get(norm, ())]
         # Fuzzy one-word matches need a capital, unless the whole question is lowercase:
         # in sentence case, common words ("time" ~ "Timme") would match surnames.
+        if k in released and not matches:
+            continue  # only exact player names reclaim an out-of-era team word
         if not matches and len(norm) >= 4 and (scan.tokens[k].capitalized or not any(c.isupper() for c in question)):
             matches = [(pid, "fuzzy", sim, None) for pid, sim in players.fuzzy(norm, full=False, cutoff=limits.fuzzy_last_cutoff)]
         if matches:
@@ -240,10 +252,23 @@ def _looks_like_full_name(players: PlayerIndex, scan: _Scan, i: int) -> bool:
 
 # --- app context -----------------------------------------------------------
 
+# Words that place a day on the user's screen: "the date I have open", "the day
+# I'm looking at", "the date on my screen", "the displayed date".
+_ON_SCREEN = (
+    r"(?:(?:currently\s+)?(?:selected|shown|showing|displayed|open|in\s+view)"
+    r"|on\s+(?:this|the|my)\s+(?:page|screen)|here"
+    r"|i\s+(?:have|had|'ve\s+got)\s+(?:(?:open(?:ed)?|up|pulled\s+up|selected)\b|on\s+(?:the\s+|my\s+)?screen)"
+    r"|i(?:'m|\s+am)\s+(?:on|viewing|looking\s+at|seeing))"
+)
 _THAT_DAY = re.compile(
     r"\b(?:that|this|the\s+same)\s+(?:day|date|night)\b|\bon\s+this\s+date\b"
-    r"|\b(?:the\s+)?(?:day|date)\s+(?:selected|shown)(?:\s+(?:on\s+(?:this|the)\s+(?:page|screen)|here))?\b"
-    r"|\b(?:the\s+)?(?:selected|shown)\s+(?:day|date)\b"
+    rf"|\b(?:the\s+)?(?:day|date)\s+(?:(?:that|which)(?:\s+is|'s)?\s+)?{_ON_SCREEN}(?:\s+(?:on\s+(?:this|the|my)\s+(?:page|screen)|here))?"
+    r"(?![a-z])"
+    r"|\b(?:the\s+)?(?:selected|shown|displayed|open|on-?screen)\s+(?:day|date)\b"
+)
+_DISMISSED = re.compile(
+    r"\b(?:forget|ignore|disregard|skip|not|never\s+mind|instead\s+of|rather\s+than|other\s+than|besides)"
+    r"(?:\s+about)?\s+$"
 )
 _ON_SCREEN_SEASON = re.compile(r"\b(?:this|that|these|those)\s+(?:series|bracket|playoffs?|postseason)\b")
 
@@ -253,6 +278,10 @@ def _context_mentions(folded: str, masked: str, question: str, context: AskConte
     """Candidates from the page the user is on, only when the question points at it."""
     out = []
     for m in _THAT_DAY.finditer(masked):
+        if _DISMISSED.search(folded[:m.start()]):
+            # "Forget the date on this page": the user sets the page aside.
+            masked = patterns._mask(masked, m.start(), m.end())
+            continue
         hits = []
         if context.view_date is not None:
             d = context.view_date
@@ -345,7 +374,7 @@ def find_mentions(question: str, context: AskContext, limits: LookupLimits = DEF
     folded = fold(question)
     playoff_context = bool(patterns.PLAYOFF_CONTEXT.search(folded))
 
-    mentions, masked = patterns.game_number_mentions(folded, question)
+    mentions, masked = patterns.game_number_mentions(folded, question, playoff_context)
     date_mentions, masked = dates.mentions(masked, question, today)
     page_season = context.playoff_season if context.route in ("playoffs", "series") else None
     season_mentions, masked = patterns.season_mentions(masked, question, today, playoff_context, page_season)

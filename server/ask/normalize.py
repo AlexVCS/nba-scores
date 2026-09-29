@@ -5,6 +5,8 @@ Rules:
   closed-set values must be contract enum values. Anything else is `invalid`.
 - `ambiguous` / `no_matching_candidate` on a field the request uses, or a missing
   required field, is a clarification; never a default.
+- With an ambiguous intent, a field that needs clarifying under every intent option is
+  asked about first; otherwise the intent is.
 - A date candidate without a resolved range (or an extracted date without a year) is a
   `year_required` / `range_too_long` clarification. The year is never defaulted.
 - A boxscore request with `aggregation="per_game"` is unsupported (`multi_game_average`).
@@ -48,6 +50,7 @@ from server.ask.models.request import (
 CANDIDATE_SET_FOR = {
     "player": "player",
     "teams": "team",
+    "target_team": "team",
     "date": "date",
     "season": "season",
     "round": "round",
@@ -66,11 +69,15 @@ CLOSED_VALUES = {
 RELEVANT_FIELDS: dict[str, frozenset[str]] = {
     "game_search": frozenset({"date", "teams", "location"}),
     "boxscore_stat": frozenset(
-        {"stat_scope", "stat", "aggregation", "player", "teams", "date", "season", "round", "game_number"}
+        {"stat_scope", "stat", "aggregation", "player", "teams", "target_team", "date", "season", "round",
+         "game_number"}
     ),
     "playoff_series": frozenset({"season", "teams", "round"}),
     "postseason_summary": frozenset({"season", "teams"}),
 }
+
+# Entity fields in the order they are asked about ahead of an ambiguous intent.
+SHARED_CLARIFY_ORDER = ("teams", "player", "season", "date", "round", "game_number")
 
 WEEKDAYS = ("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday")
 
@@ -246,7 +253,23 @@ class Normalizer:
 
     # -- request building -------------------------------------------------------------
 
+    def _clarify_shared_field_first(self, output: InterpreterOutput) -> None:
+        """With the intent unresolved, first ask about a field that needs clarifying under
+        every intent still in play. Its question makes sense whatever the intent turns
+        out to be, and it concerns something the user said ("Boston or Miami"), while
+        the intent question may only reflect interpreters disagreeing."""
+        intent = self._field(output, "intent")
+        options = [v for v in intent.alternatives if v in RELEVANT_FIELDS]
+        if intent.status != "ambiguous" or not options:
+            return
+        shared = frozenset.intersection(*(RELEVANT_FIELDS[v] for v in options))
+        for name in SHARED_CLARIFY_ORDER:
+            read = output.get_field(name)
+            if name in shared and read is not None and read.status in ("ambiguous", "no_matching_candidate"):
+                raise _Clarify(name, read.status)
+
     def _build(self, output, candidates, context) -> NormalizationResult:
+        self._clarify_shared_field_first(output)
         intent = self._require(output, "intent")[0]
         builder = {
             "game_search": self._game_search,
@@ -288,13 +311,7 @@ class Normalizer:
             player = self._value(candidates, self._require(output, "player")[0]).player
         team = None
         if scope == "team":
-            if not teams:
-                raise _Clarify("teams", "missing")
-            if len(teams) > 1:
-                # The interpreter identifies matchup participants but has no
-                # field for which team's stat the user requested.
-                raise _Clarify("teams", "ambiguous")
-            team = teams[0]
+            team, teams = self._target_team(output, candidates, teams)
 
         game = self._game_selector(output, candidates, context, teams)
         return BoxscoreStatRequest(
@@ -304,6 +321,30 @@ class Normalizer:
             player=player,
             team=team,
         )
+
+    def _target_team(self, output, candidates, teams):
+        """The team whose statistics a team-scope question asks for, and the game's teams.
+
+        `target_team` names it explicitly; `teams` lists every team named, opponents
+        included. Without a target, one named team is the target and two are ambiguous:
+        the order of `teams` never says which one the user meant.
+        """
+        f = self._field(output, "target_team")
+        if f.status in ("ambiguous", "no_matching_candidate"):
+            raise _Clarify("teams", f.status)
+        if f.status == "selected":
+            target = self._value(candidates, f.selected[0]).team
+            if not teams:
+                return target, [target]
+            if target not in teams:
+                # The target must be one of the teams the question names.
+                raise _Clarify("teams", "ambiguous")
+            return target, teams
+        if not teams:
+            raise _Clarify("teams", "missing")
+        if len(teams) > 1:
+            raise _Clarify("teams", "ambiguous")
+        return teams[0], teams
 
     def _game_selector(self, output, candidates, context, teams) -> GameSelector:
         dates = self._dates(output, candidates, context, required=False)
@@ -389,7 +430,12 @@ def relevant_fields(output: InterpreterOutput) -> frozenset[str]:
     intent = output.get_field("intent")
     if intent is None or intent.status != "selected":
         return frozenset({"intent"})
-    return RELEVANT_FIELDS[intent.selected[0]] | {"intent"}
+    fields = RELEVANT_FIELDS[intent.selected[0]] | {"intent"}
+    scope = output.get_field("stat_scope")
+    if scope is not None and scope.status == "selected" and scope.selected != ["team"]:
+        # Only a team-scope question has a target team.
+        fields -= {"target_team"}
+    return fields
 
 
 def canonical_request(request: Any) -> dict[str, Any]:

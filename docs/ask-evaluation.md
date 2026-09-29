@@ -650,3 +650,36 @@ See the [full evaluation and audit](verification/ask-unseen-2026-09-29.md).
 The set is now exposed. It measures interpretations, not retrieval or rendered
 answers, and cannot establish the incomplete tier precision gate. Production
 remains disabled; fixes require another unseen set.
+
+## Target team field (nba-scores-kzc.1)
+
+Interpreter output now has a `target_team` field, separate from `teams`, for the
+team whose statistics a team-scope boxscore question asks for (see
+`docs/ask-contract.md`). Jev gets its own Choice for it. Luna's schema and prompt
+gained one rule that has not been checked live. The field oracle
+(`trace.expected_fields`) scores `target_team` for team-scope accept labels. The
+exposed two-team cases (release-two 019-022) are not release evidence for this
+change; only a fresh unseen set is.
+
+## Fixes after the second unseen run (not yet measured)
+
+These changes address misses exposed by `ask-unseen-two-2026-09-29`. They are
+covered by deterministic tests only; no provider was called. Validate them on a
+fresh unseen set.
+
+- Lookup: on-screen date wording ("the date I have open") offers the page date,
+  unless the question sets it aside; ordinal game numbers ("the sixth game") in
+  playoff questions; rounds named with playoff wording or numbers ("first
+  playoff round", "round 2"); "most recent"/"latest" weekdays; a one-word team
+  name no team used in the requested season stays open to exact player names
+  ("Magic" in 1987).
+- Cascade: a later confident `absent` read replaces an earlier
+  `no_matching_candidate` when lookup found no text for the field. Jev's
+  unsupported outcomes keep their confidence. A later `unsupported` outcome still
+  ends the cascade after an accepted intent: it executes nothing, and contesting
+  it would have turned two correct unsupported answers in the recorded traces
+  into clarifications without fixing any.
+- Normalizer: with an ambiguous intent, a field unclear under every intent
+  option is asked about first.
+- Unverified live: Jev's new `target_team` question and Luna's `target_team`
+  schema and prompt rule.

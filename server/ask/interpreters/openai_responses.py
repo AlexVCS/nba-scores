@@ -47,6 +47,7 @@ STATUSES = ["selected", "absent", "ambiguous", "no_matching_candidate"]
 CANDIDATE_FIELDS = {
     "player": "player",
     "teams": "team",
+    "target_team": "team",
     "date": "date",
     "season": "season",
     "round": "round",
@@ -76,6 +77,11 @@ Field rules (every field has a status and a list of IDs/values):
   there ("games in New York"). A city used as a team name ("Boston's game",
   "New York beat Miami") is a team, not a location. Location applies to
   game_search only.
+- teams lists every team the question names, opponents included. target_team selects,
+  from the teams candidates, the one team whose own statistics a team-scope boxscore_stat
+  question asks for ("Miami's rebounds against Boston": teams Miami and Boston,
+  target_team Miami). If the question does not say which team's statistics it wants,
+  target_team is ambiguous. For every other question target_team is absent.
 - A game-search date range longer than seven days is still game_search. Select the
   date candidate even if its range is unresolved; Python asks the user to narrow it.
 - Choose playoff_series when the request is framed as a series, matchup, or
@@ -166,6 +172,8 @@ def candidate_context(question: str, candidates: CandidateLookupResult,
                       context: AskContext | None = None) -> dict[str, Any]:
     listing: dict[str, Any] = {}
     for name, cand_field in CANDIDATE_FIELDS.items():
+        if name == "target_team":
+            continue  # selects from the `teams` listing
         cset = candidates.sets[cand_field]
         entries = []
         for c in cset.candidates:
