@@ -99,6 +99,9 @@ def test_invalid_season_is_not_repaired(service):
     ("Celtics Heat 2012 East finals", ["conference_finals.east"]),
     ("Knicks Pacers second round 2025", ["conference_semifinals"]),
     ("Hornets first round series in 2008", ["first_round"]),
+    ("Hornets first-round series in 2008", ["first_round"]),
+    ("Knicks second-round series", ["conference_semifinals"]),
+    ("Lakers third-round series", ["conference_finals"]),
     ("2014 WCF game 6", ["conference_finals.west"]),
 ])
 def test_rounds(service, question, expected):
