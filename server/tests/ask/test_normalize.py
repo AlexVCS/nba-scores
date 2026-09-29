@@ -80,6 +80,14 @@ def test_per_game_is_unsupported_not_answered_as_total():
     assert result.status == "unsupported" and result.unsupported_reason == "multi_game_average"
 
 
+@pytest.mark.parametrize("stat", ["field_goal_percentage", "three_point_percentage", "free_throw_percentage", "stat_line"])
+def test_leader_stat_without_ranking_rule_is_unsupported(stat):
+    result = normalize(output(sel("intent", "boxscore_stat"), sel("stat_scope", "leaders"),
+                              sel("stat", stat), sel("date", LAST_WEEK.id)),
+                       b.lookup_result([LAST_WEEK]))
+    assert (result.status, result.unsupported_reason) == ("unsupported", "unsupported_leader_stat")
+
+
 def test_candidate_date_without_year_requires_year():
     result = normalize(output(sel("intent", "game_search"), sel("date", JAN_23.id)), b.lookup_result([JAN_23]))
     assert (result.status, result.clarify_field, result.clarify_reason) == ("needs_clarification", "date", "year_required")

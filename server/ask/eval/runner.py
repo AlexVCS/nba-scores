@@ -25,10 +25,12 @@ from server.ask.models.interpreter import InterpreterInput, InterpreterOutput
 from server.ask.models.request import ASK_REQUEST_ADAPTER, AskContext
 from server.ask.normalize import Normalizer, canonical_request
 from server.ask.protocols import (
+    ClarifyDecision,
     CascadeAttempt,
     CascadeDecision,
     CascadePolicy,
     CascadeState,
+    FailDecision,
     InterpreterAdapter,
 )
 
@@ -109,7 +111,7 @@ def drive(
     expanded: list[str] = []
     adapter = config.primary
     budget_blocked = False
-    decision = CascadeDecision(action="fail", reason="no attempts")
+    decision: CascadeDecision = FailDecision(reason="no attempts")
 
     for index in range(MAX_ATTEMPTS):
         elapsed = int((time.perf_counter() - started) * 1000)
@@ -138,11 +140,15 @@ def drive(
             adapter = config.fallback
             continue
         if decision.action == "expand_candidates":
-            cand_field = "team" if decision.field == "teams" else decision.field
+            cand_field = decision.field
             previous = candidates.sets[cand_field]
             grown = expand(question, context, cand_field, previous) if expand else previous
             if grown == previous or len(attempts) >= MAX_ATTEMPTS:
-                decision = CascadeDecision(action="clarify", field=decision.field, reason="lookup could not expand")
+                interpreter_field = "teams" if cand_field == "team" else cand_field
+                decision = ClarifyDecision(
+                    field=interpreter_field, clarify_reason="no_matching_candidate",
+                    reason="lookup could not expand",
+                )
                 break
             candidates = CandidateLookupResult(
                 sets={**candidates.sets, cand_field: grown},
@@ -234,6 +240,7 @@ class CaseScore:
     resolved_models: list[str]
     error_codes: list[str]
     clarify_field: str | None = None
+    unsupported_reason: str | None = None
 
 
 def score(case: LabeledCase, config: str, result: DriveResult) -> CaseScore:
@@ -255,6 +262,14 @@ def score(case: LabeledCase, config: str, result: DriveResult) -> CaseScore:
         correct = action == case.action or action in case.also_accept
         if correct and action == "clarify" and case.clarify_field and result.decision.field != case.clarify_field:
             correct, failure = False, "wrong_clarify_field"
+        elif correct and action == "unsupported" and case.unsupported_reason:
+            actual_reason = next(
+                (attempt.normalization.unsupported_reason for attempt in result.attempts[::-1]
+                 if attempt.normalization is not None and attempt.normalization.status == "unsupported"),
+                outputs_reason(result.attempts),
+            )
+            if actual_reason != case.unsupported_reason:
+                correct, failure = False, "wrong_unsupported_reason"
         elif not correct:
             if action == "accept":
                 guess, failure = True, "schema_valid_guess"
@@ -276,8 +291,17 @@ def score(case: LabeledCase, config: str, result: DriveResult) -> CaseScore:
         first_outcome=outputs[0].outcome if outputs else "none",
         resolved_models=sorted({o.metadata.resolved_model for o in outputs if o.metadata.resolved_model}),
         error_codes=[o.error_code for o in outputs if o.error_code],
-        clarify_field=result.decision.field,
+        clarify_field=result.decision.field if isinstance(result.decision, ClarifyDecision) else None,
+        unsupported_reason=(
+            next((a.normalization.unsupported_reason for a in result.attempts[::-1]
+                  if a.normalization is not None and a.normalization.status == "unsupported"),
+                 outputs_reason(result.attempts)) if action == "unsupported" else None
+        ),
     )
+
+
+def outputs_reason(attempts: list[CascadeAttempt]) -> str | None:
+    return next((a.output.unsupported_reason for a in attempts[::-1] if a.output.unsupported_reason), None)
 
 
 def percentile(values: list[float], pct: float) -> float | None:

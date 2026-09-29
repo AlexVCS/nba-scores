@@ -273,6 +273,55 @@ Observations for calibration:
   Calibration should decide whether low-confidence *absent* optional fields should
   block acceptance, or only selected fields plus required absences.
 
+## Decision gates for development evaluation
+
+The development set is exposed to implementation and calibration. These gates
+screen configurations; passing them does not authorize production. A separate
+unseen release set must pass the same gates before enabling the endpoint:
+
+| Measure | Gate |
+| --- | --- |
+| Complete request accuracy | at least 90% |
+| Schema-valid guesses | zero |
+| Correct clarification field | at least 90% of clarification labels |
+| Correct unsupported reason | at least 90% of unsupported labels |
+| Service failures | zero, unless a documented provider outage invalidates the run |
+| Median interpreter latency | at most 3 seconds |
+| p95 interpreter latency | at most 10 seconds |
+| Estimated cost per correct answer | at most $0.005 |
+
+Any configuration that fails a gate remains disabled. The development report
+records the labels, resolved models, provider errors, and each wrong case so
+that a later run can check whether a proposed fix helped or only moved errors.
+
+The candidate lookup's 75 self-authored development questions informed this
+set but are not an unseen test. The two old prototype fixtures are also exposed.
+
+### First live development pass
+
+The first pass used 36 labels and lookup commit `89fd59b`, before the candidate
+edge-case fixes and before the prompt clarified unknown entities and long date
+ranges. The full case report is
+[`ask-interpreter-eval-initial.json`](verification/ask-interpreter-eval-initial.json).
+It spent an estimated $0.049015 at list prices, with no candidate errors or
+budget stop.
+
+| Configuration | Correct | Guesses | Median | p95 |
+| --- | ---: | ---: | ---: | ---: |
+| Jev | 22/36 | 0 | 195 ms | 254 ms |
+| gpt-4.1-mini | 31/36 | 0 | 1,625 ms | 2,764 ms |
+| GPT-6 Luna | 32/36 | 0 | 2,456 ms | 13,768 ms |
+| Jev → GPT-6 Luna | 30/36 | 0 | 215 ms | 3,185 ms |
+
+The same four configurations called both unknown-name questions (`dev-038`,
+`dev-073`) unsupported even though their labels require an entity
+clarification. These labels have not changed. The contract says an unknown
+candidate in an otherwise supported single-game or game-search request must
+produce `no_matching_candidate`; the model must not turn an entity lookup
+failure into a different intent. Both OpenAI models also called the 28-day
+`dev-014` game search unsupported, where the contract requires a
+`range_too_long` clarification. GPT-6 Luna timed out once at 20 seconds.
+
 ## Prototype fixture audit
 
 `server/tests/fixtures/ask_seed.json` (25 questions) and `ask_heldout.json`
@@ -280,7 +329,13 @@ Observations for calibration:
 old `AskInterpretation` schema, with raw mentions and date expressions instead of
 candidate IDs and resolved requests.
 
-AUDIT_PLACEHOLDER
+The 25 seed questions and 75 old "heldout" questions were committed with the
+prototype. Their labels are not `AskRequest`s: they describe mentions, raw date
+phrases, and an old `boxscore_stats` intent. Five of the 42 new development
+questions exactly match questions in those files (`dev-001`, `dev-002`,
+`dev-003`, `dev-025`, and `dev-062`). The old heldout file is exposed too; its
+name does not make it an unseen release set. Keep both files as historical
+evidence, and exclude every reused question from the release evaluation.
 
 Neither file may be used as the unseen release set. They can be mined for
 development questions, after relabeling them against the new contract. Any

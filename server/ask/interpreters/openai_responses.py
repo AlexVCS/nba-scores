@@ -67,6 +67,11 @@ Field rules (every field has a status and a list of IDs/values):
 - "no_matching_candidate": the question mentions it, but no listed option matches. Leave the list empty.
 - Never fill in a detail the question does not give. A missing detail is "absent".
 - A missing candidate is not evidence the user meant a different listed candidate.
+- Classify the request type separately from entity lookup. An unknown person or team
+  in a one-game NBA stat or NBA game search is still a supported intent. Mark its
+  player or teams field no_matching_candidate so the app can ask the user.
+- A game-search date range longer than seven days is still game_search. Select the
+  date candidate even if its range is unresolved; Python asks the user to narrow it.
 - stat_scope, stat, aggregation matter only for one game's box score. Use stat "stat_line"
   when no particular statistic is named, and aggregation "per_game" when the question
   asks for an average across games.

@@ -139,6 +139,16 @@ def test_schema_valid_guess_counts_as_failure():
     assert score.failure == "schema_valid_guess"
 
 
+def test_wrong_unsupported_reason_counts_as_failure():
+    primary = FakeAdapter("jev", "jev-1.13.0", {"What are LeBron's career points?": ("unsupported", "season_stats")})
+    case = BY_ID["smoke-career"]
+    result = run([case], embedded_candidates, [configs(primary, None)[0]], SpendGuard(1))
+    scored = result.scores["jev"][0]
+    assert (scored.correct, scored.failure, scored.unsupported_reason) == (
+        False, "wrong_unsupported_reason", "season_stats"
+    )
+
+
 def test_spend_cap_stops_the_run_before_overspending():
     primary = FakeAdapter("jev", "jev-1.13.0", GOOD, cost=0.4)
     cfg = configs(primary, None)[0]

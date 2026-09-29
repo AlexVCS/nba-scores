@@ -23,6 +23,7 @@ from server.ask.models.candidates import CandidateLookupResult
 from server.ask.models.common import (
     MAX_GAME_SEARCH_DAYS,
     NEW_YORK_TZ,
+    NON_LEADER_STATS,
     Aggregation,
     DateComponents,
     DateRange,
@@ -257,8 +258,8 @@ class Normalizer:
             if scope == "leaders":
                 raise _Clarify("stat", "missing")
             stat_values = ["stat_line"]
-        if scope == "leaders" and stat_values[0] == "stat_line":
-            raise _Clarify("stat", "missing")
+        if scope == "leaders" and stat_values[0] in NON_LEADER_STATS:
+            return NormalizationResult(status="unsupported", unsupported_reason="unsupported_leader_stat")
 
         teams = self._teams(candidates, self._optional(output, "teams"))
         player = None

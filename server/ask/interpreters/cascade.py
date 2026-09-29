@@ -23,10 +23,28 @@ by #201 and never reach this policy: switching models does not repair a data sou
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import get_args
 
-from server.ask.models.interpreter import AdapterName, CANDIDATE_BACKED_FIELDS
+from server.ask.models.common import ClarifyField
+from server.ask.models.interpreter import (
+    CANDIDATE_BACKED_FIELDS,
+    INTERPRETER_TO_CANDIDATE_FIELD,
+    AdapterName,
+)
 from server.ask.normalize import relevant_fields
-from server.ask.protocols import CascadeAttempt, CascadeDecision, CascadeState
+from server.ask.protocols import (
+    AcceptDecision,
+    CascadeAttempt,
+    CascadeDecision,
+    CascadeState,
+    ClarifyDecision,
+    ExpandCandidatesDecision,
+    FailDecision,
+    FallbackDecision,
+    UnsupportedDecision,
+)
+
+CLARIFIABLE = frozenset(get_args(ClarifyField))
 
 
 @dataclass(frozen=True)
@@ -42,6 +60,13 @@ class PolicyThresholds:
     min_fallback_budget_usd: float = 0.002
     min_fallback_ms: int = 3000
     max_expansions: int = 1
+
+
+def _clarify(field: str, reason: str, why: str) -> CascadeDecision:
+    """Clarify when the field is one the user can be asked about; otherwise fail."""
+    if field in CLARIFIABLE:
+        return ClarifyDecision(field=field, clarify_reason=reason, reason=why[:120])
+    return FailDecision(reason=f"cannot clarify {field}: {why}"[:120])
 
 
 class ThresholdCascadePolicy:
@@ -79,9 +104,9 @@ class ThresholdCascadePolicy:
             return "insufficient time for fallback"
         return None
 
-    def _fallback_or(self, state: CascadeState, reason: str, otherwise: CascadeDecision) -> CascadeDecision:
+    def _fallback_or(self, state: CascadeState, why: str, otherwise: CascadeDecision) -> CascadeDecision:
         if self._fallback_blocker(state) is None:
-            return CascadeDecision(action="fallback", adapter=self.fallback[0], reason=reason[:120])
+            return FallbackDecision(adapter=self.fallback[0], reason=why[:120])
         return otherwise
 
     @staticmethod
@@ -93,68 +118,62 @@ class ThresholdCascadePolicy:
             return None, None
         return min(scored, key=lambda fc: fc[1])
 
-    def _give_up(self, state: CascadeState, reason: str) -> CascadeDecision:
+    def _give_up(self, state: CascadeState, why: str) -> CascadeDecision:
         """Both paths unreliable: clarify when some attempt pinned down the unclear
         field, otherwise report failure. Never execute guessed parameters."""
         for attempt in reversed(state.attempts):
             norm = attempt.normalization
             if norm is not None and norm.status == "needs_clarification":
-                return CascadeDecision(action="clarify", field=norm.clarify_field, reason=reason[:120])
+                return _clarify(norm.clarify_field, norm.clarify_reason, why)
             if norm is not None and norm.status == "valid":
                 field, _ = self._weakest(attempt)
-                if field is not None:
-                    return CascadeDecision(action="clarify", field=field, reason=reason[:120])
-        return CascadeDecision(action="fail", reason=reason[:120])
+                if field is not None and field in CLARIFIABLE:
+                    return _clarify(field, "ambiguous", why)
+        return FailDecision(reason=why[:120])
 
     # -- policy -----------------------------------------------------------------------
 
     def decide(self, state: CascadeState) -> CascadeDecision:
         if not state.attempts:
-            return CascadeDecision(action="fail", reason="no interpreter attempts")
+            return FailDecision(reason="no interpreter attempts")
         t = self.thresholds
         last = state.attempts[-1]
         output = last.output
         norm = last.normalization
 
         if output.outcome == "unavailable":
-            return self._fallback_or(
-                state, f"interpreter unavailable ({output.error_code})",
-                self._give_up(state, f"interpreter unavailable ({output.error_code})"),
-            )
+            why = f"interpreter unavailable ({output.error_code})"
+            return self._fallback_or(state, why, self._give_up(state, why))
         if output.outcome == "unsupported":
-            return CascadeDecision(action="unsupported", reason=f"out of scope ({output.unsupported_reason})")
+            return UnsupportedDecision(reason=f"out of scope ({output.unsupported_reason})")
         if output.outcome == "unreliable" or norm is None or norm.status == "invalid":
             why = "unreliable interpretation" if output.outcome == "unreliable" else "invalid interpretation"
             return self._fallback_or(state, why, self._give_up(state, why))
         if norm.status == "unsupported":
-            return CascadeDecision(action="unsupported", reason=f"out of scope ({norm.unsupported_reason})")
+            return UnsupportedDecision(reason=f"out of scope ({norm.unsupported_reason})")
 
         if norm.status == "valid":
             field, confidence = self._weakest(last)
             if confidence is None or confidence >= t.accept_min:
-                return CascadeDecision(action="accept", reason="complete request")
-            clarify = CascadeDecision(action="clarify", field=field, reason=f"low confidence in {field}")
-            return self._fallback_or(state, f"low confidence in {field}", clarify)
+                return AcceptDecision(reason="complete request")
+            why = f"low confidence in {field}"
+            return self._fallback_or(state, why, _clarify(field, "ambiguous", why))
 
         # needs_clarification
         field = norm.clarify_field
         if norm.clarify_reason == "no_matching_candidate":
-            expanded = len(state.expanded_fields)
-            candidate_field = "team" if field == "teams" else field
-            if (
-                field in CANDIDATE_BACKED_FIELDS
-                and candidate_field not in state.expanded_fields
-                and expanded < t.max_expansions
-            ):
-                return CascadeDecision(action="expand_candidates", field=field, reason=f"no candidate for {field}")
-            return CascadeDecision(action="clarify", field=field, reason=f"no candidate for {field}")
+            if field in CANDIDATE_BACKED_FIELDS:
+                candidate_field = INTERPRETER_TO_CANDIDATE_FIELD[field]
+                if candidate_field not in state.expanded_fields and len(state.expanded_fields) < t.max_expansions:
+                    return ExpandCandidatesDecision(field=candidate_field, reason=f"no candidate for {field}")
+            return _clarify(field, "no_matching_candidate", f"no candidate for {field}")
 
         read = output.get_field(field)
         confidence = read.confidence if read is not None else None
         intent = output.get_field("intent")
         intent_confidence = intent.confidence if intent is not None else None
         shaky = [c for c in (confidence, intent_confidence) if c is not None and c < t.clarify_min]
-        clarify = CascadeDecision(action="clarify", field=field, reason=f"{norm.clarify_reason} {field}")
+        clarify = _clarify(field, norm.clarify_reason, f"{norm.clarify_reason} {field}")
         if shaky:
             return self._fallback_or(state, f"unsure whether {field} is {norm.clarify_reason}", clarify)
         return clarify

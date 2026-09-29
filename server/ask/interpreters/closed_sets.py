@@ -20,13 +20,17 @@ UNSUPPORTED_INTENT = "unsupported"
 INTENTS: dict[str, str] = {
     "game_search": (
         "Find NBA games on one date or within a span of up to seven days, optionally for "
-        "specific teams (e.g. 'Cavs games last week', 'games on Jan 23, 2025')."
+        "specific teams (e.g. 'Cavs games last week', 'games on Jan 23, 2025'). "
+        "A date range longer than seven days still has this intent; the date field "
+        "will need a range_too_long clarification. An unknown team name does not "
+        "make the request unsupported."
     ),
     "boxscore_stat": (
         "Statistics from one specific game's box score: one player's line or statistic, "
         "one team's totals, or who led the game in a statistic (e.g. 'How many points did "
         "Tatum score in game 4 of the 2024 Finals?', 'Who had the most assists last night "
-        "in Knicks vs Heat?')."
+        "in Knicks vs Heat?'). An unknown player or team name still has this intent; "
+        "its entity field must be no_matching_candidate."
     ),
     "playoff_series": (
         "The result or status of one playoff series (e.g. 'Who won the 2023 Finals?', "
@@ -55,6 +59,7 @@ UNSUPPORTED_REASONS: dict[str, str] = {
     "standings": "League or conference standings",
     "reference_question": "Definitions, rules, glossary, or biography questions",
     "multi_game_average": "Averages or per-game figures across several games",
+    "unsupported_leader_stat": "Game leaders for percentages or an entire stat line without a ranking rule",
     "not_basketball": "Not about NBA basketball",
     "other": "Some other request outside NBA games and playoff results",
 }

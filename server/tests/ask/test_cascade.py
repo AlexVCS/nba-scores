@@ -90,7 +90,7 @@ def test_no_matching_candidate_expands_once_then_clarifies():
     a = attempt(sel("intent", "game_search"), sel("date", "date:0"),
                 FieldInterpretation(field="teams", status="no_matching_candidate", confidence=0.9))
     decision = CASCADE.decide(state(a))
-    assert (decision.action, decision.field) == ("expand_candidates", "teams")
+    assert (decision.action, decision.field) == ("expand_candidates", "team")
     decision = CASCADE.decide(state(a, a, expanded=["team"]))
     assert (decision.action, decision.field) == ("clarify", "teams")
 
