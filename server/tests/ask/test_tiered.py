@@ -285,8 +285,12 @@ def test_cache_label_tracks_thresholds():
 
 
 def test_build_cascade_orders_configured_tiers():
-    config = AskConfig(api_key="sk", typesafe_api_key="ts", laya_base_url="http://laya.railway.internal/v1/systemone")
+    config = AskConfig(api_key="sk", typesafe_api_key="ts", laya_base_url="http://laya.railway.internal/v1/systemone",
+                       dev=True)
     assert [t.name for t in build_cascade(config).tiers] == ["laya", "jev", "luna"]
+    # Production never builds Laya, even with LAYA_BASE_URL set (ADR 0007).
+    production = AskConfig(api_key="sk", typesafe_api_key="ts", laya_base_url="http://laya.railway.internal/v1/systemone")
+    assert [t.name for t in build_cascade(production).tiers] == ["jev", "luna"]
     # Laya stays out of production while LAYA_BASE_URL is unset (ADR 0007).
     assert [t.name for t in build_cascade(AskConfig(api_key="sk", typesafe_api_key="ts")).tiers] == ["jev", "luna"]
     with pytest.raises(RuntimeError):
@@ -416,3 +420,4 @@ def test_undecided_target_team_is_clarified_as_teams():
                          fallback_enabled=False, remaining_budget_usd=1, remaining_ms=20_000)
     decision = POLICY.decide(state)
     assert (decision.action, decision.field) == ("clarify", "teams")
+

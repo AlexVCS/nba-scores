@@ -24,20 +24,14 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
 from server.ask.candidates.lookup import CandidateLookupService  # noqa: E402
-from server.ask.config import AskConfig  # noqa: E402
+from server.ask.config import FROZEN_CASCADE  # noqa: E402
 from server.ask.eval.runner import Configuration, drive, LabeledCase, score, summarize  # noqa: E402
-from server.ask.interpreters.cascade import ThresholdCascadePolicy  # noqa: E402
+from server.ask.interpreters.factory import build_cascade, build_policy, frozen_config  # noqa: E402
 from server.ask.interpreters.pricing import SpendGuard  # noqa: E402
-from server.ask.interpreters.tiered import CASCADE_POLICY_THRESHOLDS  # noqa: E402
-from server.ask.pipeline import build_cascade  # noqa: E402
 
 FROZEN_COMMIT = "6cdae70d2589e14c65f899555f8311b513c1c213"
-CONFIG = {
-    "jev_model": "jev-1.13.0", "jev_accept_min": 0.85,
-    "primary_model": "gpt-6-luna", "primary_reasoning_effort": "low",
-    "veto_min": 0.5, "deadline_seconds": 20.0, "laya_base_url": None,
-    "fallback_model": None,
-}
+# The production cascade settings; the live pipeline builds from the same values.
+CONFIG = dict(FROZEN_CASCADE)
 GATES = {"complete_request_accuracy_min": 0.9, "clarification_accuracy_min": 0.9,
          "unsupported_accuracy_min": 0.9, "schema_valid_guesses_max": 0,
          "p95_latency_ms_max": 4000}
@@ -135,11 +129,12 @@ def live(args) -> None:
     # Exclusive journal creation also protects against simultaneous/repeated starts.
     journal = journal_path.open("x")
     tier_records: list = []
-    adapter = build_cascade(AskConfig(**CONFIG, api_key=keys["OPENAI_API_KEY"],
-                                    typesafe_api_key=keys["TYPESAFE_API_KEY"]))
+    # Same factory, settings, and policy as the live pipeline (production: no Laya).
+    adapter = build_cascade(frozen_config(**CONFIG, api_key=keys["OPENAI_API_KEY"],
+                                          typesafe_api_key=keys["TYPESAFE_API_KEY"]))
     adapter.tiers = [replace(t, adapter=Recorder(t.adapter, t.name, tier_records)) for t in adapter.tiers]
     config = Configuration("frozen-jev-0.85->gpt-6-luna-low", adapter,
-                           ThresholdCascadePolicy(adapter.model, thresholds=CASCADE_POLICY_THRESHOLDS),
+                           build_policy(),
                            fallback_enabled=False)
     lookup = CandidateLookupService()
     guard = SpendGuard(manifest["spend_cap_usd"])

@@ -46,9 +46,27 @@ def _api_key(key: str = "OPENAI_API_KEY") -> str | None:
     return None
 
 
+# The cascade configuration the independent evaluations measured (ADRs 0002, 0007, 0009):
+# Jev at accept 0.85, then GPT-6 Luna at low effort, veto 0.5, a 20 s deadline, no Laya.
+# `AskConfig` defaults equal it. Changing any value needs a new frozen evaluation.
+FROZEN_CASCADE: dict[str, object] = {
+    "jev_model": "jev-1.13.0", "jev_accept_min": 0.85,
+    "primary_model": "gpt-6-luna", "primary_reasoning_effort": "low",
+    "veto_min": 0.5, "deadline_seconds": 20.0, "laya_base_url": None,
+    "fallback_model": None,
+}
+
+
+def _flag(name: str) -> bool:
+    return os.environ.get(name, "0").strip().lower() in ("1", "true", "yes")
+
+
 @dataclass(frozen=True)
 class AskConfig:
     enabled: bool = False
+    # Development server: responses carry per-field cascade details, and Laya may run
+    # when LAYA_BASE_URL is set. Production leaves ASK_DEV unset (ADR 0007).
+    dev: bool = False
     primary_model: str = "gpt-6-luna"
     primary_reasoning_effort: str = "low"
     fallback_model: str | None = None
@@ -65,7 +83,8 @@ class AskConfig:
     api_key: str | None = field(default=None, repr=False)
     # Interpreter cascade (ADR 0002): Laya, then Jev, then Luna (`primary_model`).
     # A tier without its URL or key is skipped. Laya stays unset in production until
-    # promoted (ADR 0007). Accept thresholds are UNCALIBRATED placeholders until #199.
+    # promoted (ADR 0007) and is never built unless `dev` is set. Jev's accept_min and
+    # veto_min are the frozen values from FROZEN_CASCADE; Laya's is uncalibrated.
     laya_base_url: str | None = None
     laya_model: str = "laya"
     laya_accept_min: float = 0.9
@@ -76,7 +95,7 @@ class AskConfig:
 
     @classmethod
     def from_env(cls) -> AskConfig:
-        enabled = os.environ.get("ASK_ENABLED", "0").strip().lower() in ("1", "true", "yes")
+        enabled = _flag("ASK_ENABLED")
         model = os.environ.get("ASK_PARSER_MODEL", "gpt-6-luna").strip()
         fallback = os.environ.get("ASK_FALLBACK_MODEL", "").strip() or None
         price_for(model)
@@ -84,6 +103,7 @@ class AskConfig:
             price_for(fallback)
         return cls(
             enabled=enabled,
+            dev=_flag("ASK_DEV"),
             primary_model=model,
             primary_reasoning_effort=os.environ.get("ASK_REASONING_EFFORT", "low").strip(),
             fallback_model=fallback,

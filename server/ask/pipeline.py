@@ -16,10 +16,9 @@ from server.ask.cache import AskCache
 from server.ask.config import AskConfig
 from server.ask.diagnostics import AskDiagnostics, DiagnosticEvent
 from server.ask.interpreters.cascade import ThresholdCascadePolicy
-from server.ask.interpreters.jev import JevAdapter
-from server.ask.interpreters.laya import LayaAdapter
-from server.ask.interpreters.openai_responses import INSTRUCTIONS, OpenAIConfig, OpenAIResponsesAdapter
-from server.ask.interpreters.tiered import CASCADE_POLICY_THRESHOLDS, Tier, TieredAdapter
+from server.ask.interpreters.factory import build_cascade, build_policy
+from server.ask.interpreters.openai_responses import INSTRUCTIONS
+from server.ask.interpreters.tiered import TieredAdapter
 from server.ask.models.common import NEW_YORK, canonical_json
 from server.ask.models.interpreter import InterpreterInput, InterpreterOutput
 from server.ask.models.request import AskContext, AskRequest, BoxscoreStatRequest, GameSearchRequest, GameSelector, StatSelection
@@ -50,8 +49,8 @@ class AskPipeline:
         self.adapter = adapter
         if policy is None:
             cascade = adapter is None or isinstance(adapter, TieredAdapter)
-            policy = ThresholdCascadePolicy(primary_model=self.config.primary_model,
-                                            thresholds=CASCADE_POLICY_THRESHOLDS if cascade else None)
+            # The same policy the release evaluation drives (`factory.build_policy`).
+            policy = build_policy() if cascade else ThresholdCascadePolicy(primary_model=self.config.primary_model)
         self.policy = policy
         self.cache = cache if cache is not None else AskCache(max_entries=self.config.cache_max_entries, version=self.config.cache_version)
         self.budget = budget if budget is not None else DailyBudget(self.config.state_dir, self.config.daily_budget_usd)
@@ -72,8 +71,7 @@ class AskPipeline:
                           game_id=client.game_id if client else None,
                           playoff_season=client.playoff_season if client else None)
 
-    @staticmethod
-    def _info(*, called: bool = False, hit: bool = False, adapter=None,
+    def _info(self, *, called: bool = False, hit: bool = False, adapter=None,
               output: InterpreterOutput | None = None) -> InterpreterInfo:
         metadata = output.metadata if output is not None else None
         field_tiers = dict(metadata.field_tiers) if metadata else {}
@@ -290,21 +288,4 @@ class AskPipeline:
             return False
 
 
-def build_cascade(config: AskConfig) -> TieredAdapter:
-    """Production cascade (ADR 0002): Laya, then Jev, then Luna. Unconfigured tiers are skipped."""
-    tiers: list[Tier] = []
-    if config.laya_base_url:
-        tiers.append(Tier("laya", LayaAdapter(url=config.laya_base_url, model=config.laya_model),
-                          config.laya_accept_min))
-    if config.typesafe_api_key:
-        tiers.append(Tier("jev", JevAdapter(config.typesafe_api_key, model=config.jev_model),
-                          config.jev_accept_min))
-    if config.api_key:
-        tiers.append(Tier("luna", OpenAIResponsesAdapter(config.api_key, OpenAIConfig(
-            model=config.primary_model, reasoning_effort=config.primary_reasoning_effort,
-            timeout_s=config.deadline_seconds,
-        )), None))
-    if not tiers:
-        raise RuntimeError("ASK_ENABLED requires LAYA_BASE_URL, TYPESAFE_API_KEY, or OPENAI_API_KEY")
-    # Without Luna, fields the last System One tier cannot decide become clarifications.
-    return TieredAdapter(tiers, veto_min=config.veto_min)
+__all__ = ["AskPipeline", "build_cascade"]
