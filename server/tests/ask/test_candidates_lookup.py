@@ -219,3 +219,19 @@ def test_ordinal_beyond_seven_is_reported_not_offered(service):
 def test_round_wording_with_playoff_modifiers(service, question, round_name):
     [candidate] = lookup(service, question).sets["round"].candidates
     assert candidate.value.round == round_name
+
+
+def test_out_of_era_team_word_stays_open_to_player_names(service):
+    result = lookup(service, "Show Magic's rebounds from May 14, 1985")
+    assert keys(result, "player") and result.sets["player"].candidates[0].value.player.player_id == 77142
+    assert result.sets["team"].status == "no_candidates"  # the dropped team name is still reported
+
+
+def test_in_era_or_team_worded_names_stay_teams(service):
+    in_era = lookup(service, "Show Magic's rebounds from May 14, 2010")
+    assert in_era.sets["player"].status == "not_mentioned"
+    assert in_era.sets["team"].candidates[0].value.team.tricode == "ORL"
+    worded = lookup(service, "How did the Magic do in the 1984 playoffs?")
+    assert worded.sets["player"].status == "not_mentioned"
+    multiword = lookup(service, "Seattle SuperSonics games on Jan 3, 2020")
+    assert multiword.sets["player"].status == "not_mentioned"

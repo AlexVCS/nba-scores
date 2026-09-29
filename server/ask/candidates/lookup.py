@@ -169,6 +169,7 @@ def _entity_mentions(question: str, masked: str, seasons: frozenset[int], limits
                 add("player", i, j, hits, total)
 
     # 2. Teams: full names, historical names, cities, nicknames, tricodes, aliases.
+    released: set[int] = set()
     for size in range(teams.max_phrase_tokens, 0, -1):
         for i in range(0, n_tokens - size + 1):
             j = i + size - 1
@@ -182,15 +183,24 @@ def _entity_mentions(question: str, masked: str, seasons: frozenset[int], limits
             hits, note = resolve_phrase(teams, key, seasons)
             add("team", i, j, hits[:limits.per_mention], len(hits), note)
             scan.team_tokens.update(range(i, j + 1))
+            if not hits and size == 1 and not (i > 0 and scan.tokens[i - 1].norm == "the"):
+                released.add(i)
+    # A one-word team name no team used in the requested season cannot be that team,
+    # so the word stays open to exact player names ("Magic" in 1987 is Magic Johnson).
+    # "the Magic" still reads as a team.
+    # The team mention stays too: it records the out-of-era name for the interpreter.
+    for k in released:
+        scan.consumed[k] = False
 
     # 3. Runs of name-like words that are not a known full name ("Dwight Schrute").
     k = 0
     while k < n_tokens:
-        if not scan.eligible(k):
+        if not scan.eligible(k) or k in released:
             k += 1
             continue
         run_end = k
-        while run_end + 1 < n_tokens and scan.eligible(run_end + 1) and scan.contiguous(k, run_end + 1):
+        while (run_end + 1 < n_tokens and scan.eligible(run_end + 1) and run_end + 1 not in released
+               and scan.contiguous(k, run_end + 1)):
             run_end += 1
         if 1 <= run_end - k <= 2 and _looks_like_full_name(players, scan, k):
             key = scan.key(k, run_end)
@@ -218,6 +228,8 @@ def _entity_mentions(question: str, masked: str, seasons: frozenset[int], limits
         matches += [(pid, "first_name", None, None) for pid in players.first.get(norm, ())]
         # Fuzzy one-word matches need a capital, unless the whole question is lowercase:
         # in sentence case, common words ("time" ~ "Timme") would match surnames.
+        if k in released and not matches:
+            continue  # only exact player names reclaim an out-of-era team word
         if not matches and len(norm) >= 4 and (scan.tokens[k].capitalized or not any(c.isupper() for c in question)):
             matches = [(pid, "fuzzy", sim, None) for pid, sim in players.fuzzy(norm, full=False, cutoff=limits.fuzzy_last_cutoff)]
         if matches:
