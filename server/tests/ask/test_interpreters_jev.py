@@ -79,7 +79,9 @@ def test_questions_offer_only_candidates_and_sentinels():
 def test_intent_options_keep_gameless_stat_questions_out_of_career_stats():
     questions, _ = build_questions(b.lookup_result([]))
     assert "without naming the game" in questions["intent"]["criteria"]["boxscore_stat"]
-    assert "whole career" in questions["unsupported_reason"]["criteria"]["career_stats"]
+    # Stage 3: whole careers are a registered tool, no longer an unsupported reason.
+    assert "whole NBA career" in questions["intent"]["criteria"]["career_stats"]
+    assert "career_stats" not in questions["unsupported_reason"]["criteria"]
 
 
 def test_decode_selects_confident_fields():

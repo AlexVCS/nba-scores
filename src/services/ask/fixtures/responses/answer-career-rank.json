@@ -1,0 +1,97 @@
+{
+  "schema_version": "1",
+  "request_id": "answer-career-rank",
+  "outcome": "answer",
+  "question": "Where does Stephen Curry rank all-time in 3-pointers made?",
+  "interpretation": {
+    "intent": "career_stats",
+    "detected_type": "career_stats",
+    "items": [
+      {
+        "field": "player",
+        "value": "Stephen Curry",
+        "detail": null,
+        "expression": null,
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": 201939,
+        "spoiler": false
+      },
+      {
+        "field": "stat",
+        "value": "Three Pointers",
+        "detail": null,
+        "expression": null,
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      }
+    ],
+    "reference_time": "2026-09-29T12:00:00-04:00",
+    "timezone": "America/New_York",
+    "dates": null,
+    "season": null
+  },
+  "result": {
+    "kind": "career_stats",
+    "view": "player_rank",
+    "season_type": "regular_season",
+    "stat": "three_pointers",
+    "aggregation": "total",
+    "player": {
+      "player_id": 201939,
+      "name": "Stephen Curry"
+    },
+    "games_played": null,
+    "values": [
+      {
+        "stat": "three_pointers",
+        "value": 4248.0,
+        "display": "4,248",
+        "made": null,
+        "attempted": null
+      }
+    ],
+    "limit": null,
+    "rows": [],
+    "omitted_tie": null,
+    "rank": 1,
+    "tied_count": null,
+    "list_size": 250,
+    "coverage_note": "This statistic was first recorded in 1979-80; earlier seasons are not included.",
+    "as_of": "2026-09-29T00:00:00Z"
+  },
+  "clarification": null,
+  "notice": null,
+  "links": [
+    {
+      "kind": "source",
+      "label": "Source: NBA.com",
+      "href": "https://www.nba.com/stats/alltime-leaders?SeasonType=Regular%20Season",
+      "external": true,
+      "spoiler": false
+    }
+  ],
+  "suggestions": [],
+  "sources": [
+    {
+      "name": "nba_stats",
+      "label": "NBA.com",
+      "fetched_at": "2026-09-29T00:00:00Z",
+      "complete": false
+    }
+  ],
+  "interpreter": {
+    "model_called": false,
+    "cache_hit": false,
+    "adapter": null,
+    "model": null,
+    "fallback_used": false,
+    "field_tiers": {}
+  }
+}

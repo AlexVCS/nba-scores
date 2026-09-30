@@ -54,7 +54,7 @@ def to_new_york(value: datetime) -> datetime:
 NewYorkDateTime = Annotated[datetime, AfterValidator(to_new_york)]
 
 
-Intent = Literal["game_search", "boxscore_stat", "playoff_series", "postseason_summary", "player_season_stats", "team_records", "season_leaders"]
+Intent = Literal["game_search", "boxscore_stat", "playoff_series", "postseason_summary", "player_season_stats", "team_records", "season_leaders", "career_stats"]
 SeasonType = Literal["regular_season", "playoffs"]
 StandingsScope = Literal["league", "east", "west"]
 
@@ -129,6 +129,12 @@ SEASON_LEADER_STATS: frozenset[str] = frozenset(
     {"points", "rebounds", "offensive_rebounds", "defensive_rebounds", "assists", "steals", "blocks",
      "turnovers", "minutes", "field_goals", "three_pointers", "free_throws"}
 ) | LEADER_PERCENTAGES
+# All-time lists are totals only (ADR 0013); stats.nba has no all-time minutes list.
+CAREER_LEADER_STATS: frozenset[str] = frozenset(
+    {"points", "rebounds", "offensive_rebounds", "defensive_rebounds", "assists", "steals", "blocks",
+     "turnovers", "field_goals", "three_pointers", "free_throws"}
+)
+CareerView = Literal["player_totals", "leaders", "player_rank"]
 DEFAULT_LEADER_LIMIT = 10
 MAX_LEADER_LIMIT = 25
 

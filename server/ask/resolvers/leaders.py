@@ -253,7 +253,14 @@ def _rows(data: seasons.SeasonData, request: SeasonLeadersRequest):
         # Ranks are competition ranks on unrounded values, so rounded values never rise.
         if not (tied or row.rank == i + 1) or row.value.value > previous.value.value or (tied and row.value.value != previous.value.value):
             raise ValueError("Leader ranks are inconsistent with values")
-    shown = [r for r in rows if r.rank <= request.limit]
+    return cut_ties(rows, request.limit)
+
+
+def cut_ties(rows, limit):
+    """Every row ranked ``limit`` or better; a tie group past the row cap is left out whole.
+
+    With limit <= 25 and competition ranks, only the last tie group can cross the cap."""
+    shown = [r for r in rows if r.rank <= limit]
     omitted = None
     if len(shown) > MAX_LEADER_ROWS:
         crossing = shown[MAX_LEADER_ROWS].rank

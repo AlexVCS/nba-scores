@@ -391,8 +391,8 @@ def test_development_cases_validate_and_accept_labels_survive_the_guard():
     cases = [LabeledCase.from_json(c) for c in json.loads((FIXTURES / "eval/stage3-dev.json").read_text())["cases"]]
     assert len(cases) >= 20 and len({c.id for c in cases}) == len(cases)
     for case in cases:
-        if case.action != "accept":
-            continue
+        if case.action != "accept" or case.request.intent != "season_leaders":
+            continue  # career accept labels are checked in test_career_tools.py
         r = case.request
         n = guard(case.question, season=f"season:{r.season}", stat=r.stat.stat, aggregation=r.stat.aggregation,
                   season_type=r.season_type)

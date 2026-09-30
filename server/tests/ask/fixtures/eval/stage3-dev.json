@@ -1,5 +1,5 @@
 {
- "scope": "Stage 3 development cases only (docs/ask-stage3.md). Labels authored alongside implementation, before any live run. Exposed development data, not unseen release evidence.",
+ "scope": "Stage 3 development cases only (docs/ask-stage3.md: season leaders and career stats). Labels authored alongside implementation, before any live run. Exposed development data, not unseen release evidence.",
  "cases": [
   {
    "id": "stage3-season_leaders-01",
@@ -458,6 +458,252 @@
    "expected": {
     "action": "unsupported",
     "unsupported_reason": "other"
+   }
+  },
+  {
+   "id": "stage3-career_stats-27",
+   "question": "LeBron James career points",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "career"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "career_stats",
+     "view": "player_totals",
+     "player": {
+      "player_id": 2544,
+      "name": "LeBron James"
+     },
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "points",
+      "aggregation": "total"
+     },
+     "limit": 10
+    }
+   }
+  },
+  {
+   "id": "stage3-career_stats-28",
+   "question": "Stephen Curry career 3-point percentage",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "career"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "career_stats",
+     "view": "player_totals",
+     "player": {
+      "player_id": 201939,
+      "name": "Stephen Curry"
+     },
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "three_point_percentage",
+      "aggregation": "total"
+     },
+     "limit": 10
+    }
+   }
+  },
+  {
+   "id": "stage3-career_stats-29",
+   "question": "Kareem Abdul-Jabbar career rebounds per game",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "career"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "career_stats",
+     "view": "player_totals",
+     "player": {
+      "player_id": 76003,
+      "name": "Kareem Abdul-Jabbar"
+     },
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "rebounds",
+      "aggregation": "per_game"
+     },
+     "limit": 10
+    }
+   }
+  },
+  {
+   "id": "stage3-career_stats-30",
+   "question": "LeBron James career playoff points",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "career"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "career_stats",
+     "view": "player_totals",
+     "player": {
+      "player_id": 2544,
+      "name": "LeBron James"
+     },
+     "season_type": "playoffs",
+     "stat": {
+      "stat": "points",
+      "aggregation": "total"
+     },
+     "limit": 10
+    }
+   }
+  },
+  {
+   "id": "stage3-career_stats-31",
+   "question": "Who has the most career assists?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "career"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "career_stats",
+     "view": "leaders",
+     "player": null,
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "assists",
+      "aggregation": "total"
+     },
+     "limit": 10
+    }
+   }
+  },
+  {
+   "id": "stage3-career_stats-32",
+   "question": "Top 5 all-time in total blocks",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "career"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "career_stats",
+     "view": "leaders",
+     "player": null,
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "blocks",
+      "aggregation": "total"
+     },
+     "limit": 5
+    }
+   }
+  },
+  {
+   "id": "stage3-career_stats-33",
+   "question": "Where does Stephen Curry rank all-time in 3-pointers made?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "career"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "career_stats",
+     "view": "player_rank",
+     "player": {
+      "player_id": 201939,
+      "name": "Stephen Curry"
+     },
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "three_pointers",
+      "aggregation": "total"
+     },
+     "limit": 10
+    }
+   }
+  },
+  {
+   "id": "stage3-career_stats-34",
+   "question": "How many points does LeBron James have?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "career",
+    "ambiguity"
+   ],
+   "expected": {
+    "action": "clarify",
+    "clarify_field": "intent"
+   }
+  },
+  {
+   "id": "stage3-career_stats-35",
+   "question": "Where does LeBron James rank all-time?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "career",
+    "ambiguity"
+   ],
+   "expected": {
+    "action": "clarify",
+    "clarify_field": "stat"
+   }
+  },
+  {
+   "id": "stage3-career_stats-36",
+   "question": "Kobe Bryant career high in points",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "career",
+    "out-of-scope"
+   ],
+   "expected": {
+    "action": "unsupported",
+    "unsupported_reason": "other"
+   }
+  },
+  {
+   "id": "stage3-career_stats-37",
+   "question": "Lakers all-time leading scorer",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "career",
+    "out-of-scope"
+   ],
+   "expected": {
+    "action": "unsupported",
+    "unsupported_reason": "other"
+   }
+  },
+  {
+   "id": "stage3-career_stats-38",
+   "question": "Who has the highest career points per game?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "career",
+    "out-of-scope"
+   ],
+   "expected": {
+    "action": "unsupported",
+    "unsupported_reason": "unsupported_leader_stat"
    }
   }
  ]

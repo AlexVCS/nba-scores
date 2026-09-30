@@ -180,7 +180,7 @@ class AskPipeline:
                 result = self.cache.get_or_load("answer", _key(
                     self.config.cache_version, "answer-1", self.lookup.alias_version,
                     readout.reference_time.date().isoformat(), canonical_json(request)), load,
-                    wait_timeout=5 if request.intent in {"player_season_stats", "team_records", "season_leaders"} else None)
+                    wait_timeout=5 if request.intent in {"player_season_stats", "team_records", "season_leaders", "career_stats"} else None)
                 output, hit = result.value, result.hit
             else:
                 output, hit = load().value, False

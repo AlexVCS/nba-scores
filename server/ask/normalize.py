@@ -29,6 +29,7 @@ from server.ask.models.candidates import CandidateLookupResult
 from server.ask.models.common import (
     MAX_GAME_SEARCH_DAYS,
     NEW_YORK_TZ,
+    CAREER_LEADER_STATS,
     LEADER_PERCENTAGES,
     NON_LEADER_STATS,
     SEASON_LEADER_STATS,
@@ -50,6 +51,7 @@ from server.ask.models.request import (
     PlayoffSeriesRequest,
     PostseasonSummaryRequest,
     StatSelection,
+    CareerStatsRequest,
     PlayerSeasonStatsRequest,
     SeasonLeadersRequest,
     TeamRecordsRequest,
@@ -226,7 +228,7 @@ class Normalizer:
             raise _Clarify("season_type", "ambiguous")
         if name == "aggregation":
             intent = self._field(output, "intent")
-            if intent.status == "selected" and intent.selected[0] in {"player_season_stats", "season_leaders"}:
+            if intent.status == "selected" and intent.selected[0] in {"player_season_stats", "season_leaders", "career_stats"}:
                 raise _Clarify("aggregation", "ambiguous")
             raise _Invalid("aggregation is unresolved")
         # The user said something we cannot pin down: dropping it would change the question.
@@ -302,6 +304,7 @@ class Normalizer:
             "player_season_stats": self._player_season,
             "team_records": self._team_records,
             "season_leaders": self._season_leaders,
+            "career_stats": self._career,
         }
 
     def _game_search(self, output, candidates, context):
@@ -471,6 +474,27 @@ class Normalizer:
         season_type = self._optional(output, "season_type") or ["regular_season"]
         return SeasonLeadersRequest(season=season, season_type=season_type[0],
                                     stat=StatSelection(stat=stat, aggregation=aggregation[0]))
+
+    def _career(self, output, candidates, context):
+        players = self._optional(output, "player")
+        player = self._value(candidates, players[0]).player if players else None
+        stat = (self._optional(output, "stat") or ["stat_line" if player else ""])[0]
+        # Career questions default to totals (ADR 0013); averages must be explicit.
+        aggregation = (self._optional(output, "aggregation") or ["total"])[0]
+        season_type = (self._optional(output, "season_type") or ["regular_season"])[0]
+        if player is not None:
+            if stat == "plus_minus":
+                return NormalizationResult(status="unsupported", unsupported_reason="other")
+            if stat in LEADER_PERCENTAGES:
+                aggregation = "total"
+            return CareerStatsRequest(view="player_totals", player=player, season_type=season_type,
+                                      stat=StatSelection(stat=stat, aggregation=aggregation))
+        if stat in ("", "stat_line"):
+            raise _Clarify("stat", "missing")  # ADR 0011: leaders questions need a statistic
+        if stat not in CAREER_LEADER_STATS or aggregation != "total":
+            # All-time per-game, percentage and minutes lists are not supported (ADR 0013).
+            return NormalizationResult(status="unsupported", unsupported_reason="unsupported_leader_stat")
+        return CareerStatsRequest(view="leaders", season_type=season_type, stat=StatSelection(stat=stat))
 
 
 def _with_page_context(output: InterpreterOutput, candidates: CandidateLookupResult) -> InterpreterOutput:

@@ -6,7 +6,7 @@ continuations. Closed tools answer full seasons, not unrepresented splits.
 import re
 
 from server.ask.candidates.text import fold
-from server.ask.models.common import MAX_LEADER_LIMIT
+from server.ask.models.common import CAREER_LEADER_STATS, MAX_LEADER_LIMIT
 from server.ask.models.interpreter import NormalizationResult
 
 _SPLIT = re.compile(
@@ -40,7 +40,7 @@ def ambiguous_season_candidates(candidates, question):
 def normalize_question(normalizer, output, candidates, context, question):
     result = normalizer.normalize(output, candidates, context)
     intent = output.get_field("intent")
-    if intent is None or intent.status != "selected" or intent.selected[0] not in {"player_season_stats", "team_records", "season_leaders"}:
+    if intent is None or intent.status != "selected" or intent.selected[0] not in {"player_season_stats", "team_records", "season_leaders", "career_stats"}:
         return result
     text = fold(question)
     # Mask known names and seasons so names such as Kevin May/De'Andre Hunter,
@@ -61,6 +61,8 @@ def normalize_question(normalizer, output, candidates, context, question):
                                for c in candidates.sets[name].candidates)
     if intent.selected == ["season_leaders"]:
         return _leaders(result, candidates, question, text, explicit_constraints)
+    if intent.selected == ["career_stats"]:
+        return _career(result, candidates, text, explicit_constraints)
     players = [c for c in candidates.sets["player"].candidates if c.source != "app_context"]
     player_mentions = {(c.span, c.matched_text) for c in players}
     player_split = bool(players) if intent.selected == ["team_records"] else len(player_mentions) > 1
@@ -117,6 +119,22 @@ _STAT_FAMILIES = (
     r"\bturnovers?\b",
     r"\bminutes\b|\bmpg\b",
 )
+# Career questions (ADR 0013): "career", "all-time", "ever" and "history" are the question.
+_CAREER_SPLIT = re.compile(
+    r"\b(?:home|away|road|division|divisional|against|versus|vs|before|after|since|until|through|between|"
+    r"january|february|march|april|may|june|july|august|september|october|november|december|"
+    r"last\s+\w+\s+games?|preseason|play[ -]?in|all[ -]?star|cup|tournament|summer\s+league|"
+    r"per\s*36|per\s*100|per\s*possessions?|per(?!\s*game)|true\s+shooting|effective\s+field|usage|efficiency|"
+    r"advanced|pace|fantasy|win\s+shares?|vorp|plus[ -]?minus|double[ -]doubles?|triple[ -]doubles?|"
+    r"lowest|fewest|least|worst|bottom|streak|seed|seeds|records?|finals|round|series|clutch|quarter|half|"
+    r"overtime|starters?|bench|back[ -]to[ -]back|without|when|in\s+(?:their\s+|his\s+)?(?:wins|losses)|"
+    r"conference|eastern|western|east|west|rookies?|sophomores?|guards?|forwards?|centers?|position|teams?|"
+    r"franchises?|active|highs?|best\s+game|in\s+(?:a|one|any|single)\s+(?:game|season)|single[ -](?:game|season)|"
+    r"game[ -]high|season[ -]high|games?\s+with|seasons?\s+with|at\s+least|or\s+more|more\s+than|less\s+than|"
+    r"fewer\s+than|compare|compared|comparison|difference|aba|abl)\b"
+)
+_CAREER_WORDING = re.compile(r"\b(?:career|all[ -]?time|ever|history|lifetime)\b")
+_RANK_WORDING = re.compile(r"\b(?:rank|ranks|ranked|ranking|stand|stands|place|lead|leads|led|leader|leading)\b")
 _NUMBER_WORDS = {w: i for i, w in enumerate(
     "zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen "
     "sixteen seventeen eighteen nineteen twenty".split())}
@@ -163,5 +181,43 @@ def _leaders(result, candidates, question, text, explicit_constraints):
         return NormalizationResult(status="needs_clarification", clarify_field="season_type", clarify_reason="ambiguous")
     if top:
         request = result.request.model_validate({**result.request.model_dump(), "limit": top})
+        return NormalizationResult(status="valid", request=request)
+    return result
+
+
+def _career(result, candidates, text, explicit_constraints):
+    named_teams = any(c.source != "app_context" for c in candidates.sets["team"].candidates)
+    seasons = any(c.source != "app_context" for c in candidates.sets["season"].candidates)
+    players = {(c.span, c.matched_text) for c in candidates.sets["player"].candidates if c.source != "app_context"}
+    families, remaining = 0, text
+    for pattern in _STAT_FAMILIES:
+        remaining, hits = re.subn(pattern, lambda m: " " * len(m.group()), remaining)
+        families += bool(hits)
+    top = _top_n(remaining)
+    numbers = re.sub(_TOP, " ", remaining)
+    if (explicit_constraints or named_teams or seasons or len(players) > 1 or families > 1 or top == 0
+            or re.search(r"\d", numbers) or _CAREER_SPLIT.search(text) or _combined_phases(text)):
+        return NormalizationResult(status="unsupported", unsupported_reason="other")
+    if not _CAREER_WORDING.search(text):
+        # "How many points does LeBron have?" could mean this season or his career.
+        return NormalizationResult(status="needs_clarification", clarify_field="intent", clarify_reason="ambiguous")
+    if result.status != "valid":
+        return result
+    request = result.request
+    if re.search(r"\b(?:playoffs?|postseason)\b", text) and request.season_type != "playoffs":
+        return NormalizationResult(status="needs_clarification", clarify_field="season_type", clarify_reason="ambiguous")
+    update = {}
+    if request.view == "player_totals" and _RANK_WORDING.search(text):
+        if request.stat.stat == "stat_line":
+            return NormalizationResult(status="needs_clarification", clarify_field="stat", clarify_reason="missing")
+        if request.stat.stat not in CAREER_LEADER_STATS or request.stat.aggregation != "total":
+            return NormalizationResult(status="unsupported", unsupported_reason="unsupported_leader_stat")
+        update["view"] = "player_rank"
+    if top:
+        if request.view != "leaders":
+            return NormalizationResult(status="unsupported", unsupported_reason="other")
+        update["limit"] = top
+    if update:
+        request = request.model_validate({**request.model_dump(), **update})
         return NormalizationResult(status="valid", request=request)
     return result

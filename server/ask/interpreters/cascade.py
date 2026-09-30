@@ -70,7 +70,7 @@ def _clarify(field: str, reason: str, why: str, output=None) -> CascadeDecision:
     """Clarify when the field is one the user can be asked about; otherwise fail."""
     field = CLARIFY_AS.get(field, field)
     intent = output.get_field("intent") if output is not None else None
-    if field == "aggregation" and (intent is None or intent.status != "selected" or intent.selected[0] not in {"player_season_stats", "season_leaders"}):
+    if field == "aggregation" and (intent is None or intent.status != "selected" or intent.selected[0] not in {"player_season_stats", "season_leaders", "career_stats"}):
         return FailDecision(reason=f"cannot clarify aggregation for this tool: {why}"[:120])
     if field in CLARIFIABLE:
         return ClarifyDecision(field=field, clarify_reason=reason, reason=why[:120])

@@ -77,11 +77,11 @@ InterpreterOutcome = Literal[
     "unavailable",  # provider error/timeout/quota; nothing interpreted
 ]
 
-LEGACY_UNSUPPORTED_REASONS = frozenset({"season_stats", "regular_season_record", "standings", "season_leaders"})
+LEGACY_UNSUPPORTED_REASONS = frozenset({"season_stats", "regular_season_record", "standings", "season_leaders", "career_stats"})
 
 UnsupportedReason = Literal[
     "season_stats", "regular_season_record", "standings",  # historical reports only; never offered by current adapters
-    "career_stats",
+    "career_stats",  # historical reports only since stage 3; never offered by current adapters
     "season_leaders",  # historical reports only since stage 3; never offered by current adapters
     "historical_comparison",
     "prediction",

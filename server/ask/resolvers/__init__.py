@@ -45,7 +45,7 @@ from server.ask.models.request import (
     PlayerSeasonStatsRequest,
     TeamRecordsRequest,
 )
-from server.ask.resolvers import boxscore, games, leaders, playoffs, seasons
+from server.ask.resolvers import boxscore, career, games, leaders, playoffs, seasons
 from server.ask.resolvers.errors import AmbiguousError, ClarificationError, NotFoundError
 from server.ask.resolvers.games import ResolvedGame
 from server.ask.resolvers.output import ResolverOutput, stats_source
@@ -157,6 +157,7 @@ EXECUTORS: dict[str, Callable[..., ResolverOutput]] = {
     "player_season_stats": seasons.player_season,
     "team_records": seasons.team_records,
     "season_leaders": leaders.season_leaders,
+    "career_stats": career.career_stats,
 }
 
 

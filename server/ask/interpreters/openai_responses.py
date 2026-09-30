@@ -101,13 +101,15 @@ Field rules (every field has a status and a list of IDs/values):
   Team regular-season records and league/conference standings use team_records.
   League-wide leaders in one season use season_leaders; select the measure only
   when the question states totals, per game or an average, otherwise leave aggregation
-  absent. Career totals and all-time, team or player-rank leaders remain unsupported.
+  absent. A player's career totals or averages, all-time leaders and a player's all-time
+  rank use career_stats; career aggregation defaults to totals, so select per_game only
+  for an explicit average. Career highs, team or franchise leaders remain unsupported.
   Never answer advanced metrics,
   division standings, home/away, opponent, month, date or other statistical splits as a whole season.
 - season_type: select playoffs only when explicitly requested, regular_season when
   specified, otherwise absent. standings_scope: east/west only when explicitly
   requested; otherwise absent. Both apply only to season tools.
-- stat and aggregation apply to boxscore_stat, player_season_stats and season_leaders. stat_scope applies only to boxscores. Use stat "stat_line"
+- stat and aggregation apply to boxscore_stat, player_season_stats, season_leaders and career_stats. stat_scope applies only to boxscores. Use stat "stat_line"
   when no particular statistic is named, and aggregation "per_game" when the question
   asks for an average across games.
 - `page_game` true means the user is viewing one game's box score, so "this game"

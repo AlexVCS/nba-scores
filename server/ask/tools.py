@@ -26,6 +26,7 @@ from server.ask.models.request import (
     GameSearchRequest,
     PlayoffSeriesRequest,
     PostseasonSummaryRequest,
+    CareerStatsRequest,
     PlayerSeasonStatsRequest,
     SeasonLeadersRequest,
     TeamRecordsRequest,
@@ -127,14 +128,24 @@ TOOLS: tuple[AskTool, ...] = (
                      "(e.g. 'Who led the league in assists per game in 2019-20?', 'top 5 in total "
                      "rebounds in 2023-24'). Missing season or statistic requires clarification. "
                      "Leaders of one game are boxscore_stat. Team, conference, position or rookie "
-                     "leaders, a player's rank, career/all-time leaders and advanced metrics are unsupported."),
+                     "leaders, a player's rank, career/all-time leaders and advanced metrics are not this tool."),
         request_model=SeasonLeadersRequest,
         fields=frozenset({"season", "stat", "aggregation", "season_type"}),
+    ),
+    AskTool(
+        name="career_stats",
+        description=("A whole NBA career: one player's career totals or career averages, the all-time "
+                     "leaders in a counting statistic, or where a player ranks all-time (e.g. 'LeBron James "
+                     "career points', 'Who has the most career assists?', 'Where does Curry rank in career "
+                     "3-pointers?'). Regular season or playoffs. Career highs, single-season or single-game "
+                     "records, franchise leaders and comparisons are unsupported."),
+        request_model=CareerStatsRequest,
+        fields=frozenset({"player", "stat", "aggregation", "season_type"}),
     ),
 )
 
 UNSUPPORTED_DESCRIPTION = (
-    "Anything else: career statistics, all-time or team leaders, unsupported statistical splits, comparisons across games or seasons, averages over several "
+    "Anything else: career highs, season or game records, team or franchise leaders, unsupported statistical splits, comparisons across games or seasons, averages over several "
     "games, predictions, follow-ups that depend on an earlier answer, glossary or "
     "biography questions, or questions not about NBA basketball."
 )
