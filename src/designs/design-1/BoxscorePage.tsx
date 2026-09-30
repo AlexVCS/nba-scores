@@ -113,7 +113,12 @@ function BoxscorePage() {
         <HardwoodLastMatchups key={state.gameId} games={state.lastMatchups} isLoading={state.lastMatchupsLoading} showScores={state.showAllResults} />
       </> : state.isHidden || state.isError || state.isUnavailable ? <GameDetailsPanel state={state} hardwood /> : state.isLoading ? <HardwoodBoxscoreSkeleton /> : (
         <>
-          {state.summary && <HardwoodGameSummary summary={state.summary} />}
+          {state.summary && (
+            <HardwoodGameSummary
+              summary={state.summary}
+              periodRetry={state.periodScoresRetryable ? {isRetrying: state.periodScoresRetrying, onRetry: state.retryPeriodScores} : undefined}
+            />
+          )}
           {game && activeTeam ? (
             <>
               <HardwoodLeaders game={game} />
