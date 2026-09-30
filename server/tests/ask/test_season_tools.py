@@ -498,3 +498,20 @@ def test_continuation_rewritten_names_do_not_hide_trailing_split():
     q='Stephen Curry rebounds at home in 2023-24'
     o=interpreted('player_season_stats',{'player':'player:201939','season':'season:2023-24','stat':'rebounds'})
     assert normalize_question(Normalizer(),o,c,CONTEXT,q).status=='unsupported'
+
+
+def test_confident_bare_year_guess_requires_season_choice(tmp_path):
+    from server.ask.present import clarification
+    from server.ask.resolution import PendingResolution, ResolutionStore
+    from server.ask.season_scope import normalize_question
+    q='Celtics record in 2008';c=CandidateLookupService().lookup(q,CONTEXT)
+    o=interpreted('team_records',{'teams':'team:1610612738','season':'season:2007-08'})
+    n=normalize_question(Normalizer(),o,c,CONTEXT,q)
+    assert n.status=='needs_clarification' and n.clarify_field=='season'
+    store=ResolutionStore(tmp_path/'year.sqlite3');pending=PendingResolution(o,c,CONTEXT)
+    options=clarification('season','ambiguous',q,pending,store).options
+    assert len(options)==2
+    for option in options:
+        chosen=store.read(option.resolution,option.question,CONTEXT)
+        n=normalize_question(Normalizer(),chosen.output,chosen.candidates,CONTEXT,option.question)
+        assert n.status=='valid' and f'season:{n.request.season}'==option.id

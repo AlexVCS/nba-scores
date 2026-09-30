@@ -98,7 +98,7 @@ def test_fixture_cases_are_labeled_and_hand_built():
     ({"action": "fail"}, "unknown expected action"),
     ({"action": "accept"}, "request is required only"),
     ({"action": "clarify"}, "clarify_field is required only"),
-    ({"action": "clarify", "clarify_field": "aggregation"}, "unknown clarify_field"),
+    ({"action": "clarify", "clarify_field": "made_up"}, "unknown clarify_field"),
     ({"action": "clarify", "clarify_field": "date", "clarify_reason": "made_up"}, "invalid clarify_reason"),
     ({"action": "unsupported"}, "unsupported_reason is required only"),
     ({"action": "unsupported", "unsupported_reason": "other", "request": {}}, "request is required only"),

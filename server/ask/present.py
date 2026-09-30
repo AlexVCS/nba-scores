@@ -16,6 +16,7 @@ from server.ask.models.response import (
 )
 from server.ask.normalize import reference_date, resolve_components
 from server.ask.resolution import PendingResolution, ResolutionStore, choose
+from server.ask.season_scope import ambiguous_season_candidates
 
 
 _TYPE = {
@@ -113,7 +114,7 @@ def suggestions(request: AskRequest) -> list[Suggestion]:
 
 def _rewrite(question: str, candidate: Candidate) -> str | None:
     value = candidate.value
-    label = value.player.name if value.kind == "player" else value.team.name if value.kind == "team" else candidate.label
+    label = value.player.name if value.kind == "player" else value.team.name if value.kind == "team" else value.season if value.kind == "season" else candidate.label
     matched = candidate.matched_text
     if matched:
         match = re.search(re.escape(matched), question, re.IGNORECASE)
@@ -124,10 +125,14 @@ def _rewrite(question: str, candidate: Candidate) -> str | None:
     return rewritten if len(rewritten) <= MAX_QUESTION_LENGTH else None
 
 
-def _candidate_options(field: str, reason: str, pending: PendingResolution) -> Iterable[Candidate]:
+def _candidate_options(field: str, reason: str, pending: PendingResolution, question: str) -> Iterable[Candidate]:
     lookup_field = "team" if field == "teams" else field
     if lookup_field not in pending.candidates.sets or reason == "no_matching_candidate":
         return []
+    if field == "season" and reason == "ambiguous":
+        year_options = ambiguous_season_candidates(pending.candidates, question)
+        if year_options:
+            return year_options[:9]
     field_result = pending.output.get_field(field)
     if field_result and field_result.status == "ambiguous":
         ids = field_result.alternatives
@@ -204,7 +209,7 @@ def clarification(field: str, reason: str, question: str, pending: PendingResolu
             options.append(ClarificationOption(id=f"year:{year}", label=str(year), question=rewritten,
                                                resolution=store.issue(rewritten, chosen)))
     else:
-        for candidate in _candidate_options(field, reason, pending):
+        for candidate in _candidate_options(field, reason, pending, question):
             try:
                 chosen = choose(pending, field, candidate_id=candidate.id)
             except ValueError:

@@ -222,7 +222,10 @@ class Normalizer:
         if name == "season_type":
             raise _Clarify("season_type", "ambiguous")
         if name == "aggregation":
-            raise _Clarify("aggregation", "ambiguous")
+            intent = self._field(output, "intent")
+            if intent.status == "selected" and intent.selected == ["player_season_stats"]:
+                raise _Clarify("aggregation", "ambiguous")
+            raise _Invalid("aggregation is unresolved")
         # The user said something we cannot pin down: dropping it would change the question.
         raise _Clarify(name, f.status)
 

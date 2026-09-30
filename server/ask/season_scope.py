@@ -22,6 +22,20 @@ _SPLIT = re.compile(
 _COMPARE = re.compile(r"\b(?:compare|compared|comparison|more\s+than|less\s+than|difference)\b")
 
 
+def ambiguous_season_candidates(candidates, question):
+    """A bare year offers two seasons; model confidence cannot resolve it."""
+    text = fold(question)
+    groups = {}
+    for candidate in candidates.sets["season"].candidates:
+        phrase = candidate.matched_text
+        if candidate.source == "app_context" or candidate.value.from_year is None or not phrase:
+            continue
+        pattern = r"(?<![a-z0-9/-])" + re.escape(fold(phrase)) + r"(?![a-z0-9]|\s*[-/]\s*\d)"
+        if re.search(pattern, text):
+            groups.setdefault((candidate.span, phrase), []).append(candidate)
+    return [candidate for group in groups.values() if len({c.value.season for c in group}) > 1 for candidate in group]
+
+
 def normalize_question(normalizer, output, candidates, context, question):
     result = normalizer.normalize(output, candidates, context)
     intent = output.get_field("intent")
@@ -49,6 +63,8 @@ def normalize_question(normalizer, output, candidates, context, question):
     player_split = bool(players) if intent.selected == ["team_records"] else len(player_mentions) > 1
     if explicit_constraints or player_split or _SPLIT.search(text) or _COMPARE.search(text):
         return NormalizationResult(status="unsupported", unsupported_reason="other")
+    if ambiguous_season_candidates(candidates, question):
+        return NormalizationResult(status="needs_clarification", clarify_field="season", clarify_reason="ambiguous")
     playoff_wording = re.search(r"\b(?:playoffs?|postseason)\b", text)
     if playoff_wording and result.status == "valid":
         if intent.selected == ["team_records"]:
