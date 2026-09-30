@@ -16,6 +16,7 @@ Ask design decisions from the 2026-09-29 interview. Vocabulary is in
 | [0009](0009-tier-and-system-gates.md) | Per-tier 98% precision and 30% coverage; system gate at 90% with zero guesses |
 | [0010](0010-build-order.md) | Cascade first, then single-fetch, leader, and index-based families |
 | [0012](0012-season-leader-qualification-and-sources.md) | Season leaders: source qualification, shared ranks, totals-only BRef fallback |
+| [0013](0013-career-stats-scope-and-sources.md) | Career stats: three views, totals-only all-time lists, stats.nba only |
 
 ## Open questions
 

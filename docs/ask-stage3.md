@@ -190,10 +190,76 @@ Stage 2. Asking is consent (ADR 0006): the table shows immediately.
   (`server/tests/ask/fixtures/season-data/nba-leaders-*.json`); no live model or
   provider calls were made.
 
-## Next: career totals, all-time leaders and rank, career highs
+## Career family: `career_stats`
 
-Not built in this stage. Planned as a separate `career_leaders` family
-following the same doc-first approach: stats.nba `AllTimeLeadersGrids` for
-all-time leaders and a player's rank, `PlayerCareerStats` career totals, and
-player profile career highs (ADR 0005 shapes 1-2), each with its own
-qualification (career per-game minimums), active/retired handling and ties.
+Built after `season_leaders` passed, following the same doc-first rule. Decisions
+are recorded in [ADR 0013](adr/0013-career-stats-scope-and-sources.md). One tool,
+three views, chosen by Python from the question and the interpreter fields:
+
+| View | When | Example | Source |
+| --- | --- | --- | --- |
+| `player_totals` | a player is named | "LeBron James career points", "Curry career 3-point percentage", "Jokic career stats" | stats.nba `PlayerCareerStats` career totals rows |
+| `leaders` | no player is named | "Who has the most career assists?", "top 5 all-time in blocks" | stats.nba `AllTimeLeadersGrids` (TopX 250) |
+| `player_rank` | a player is named with rank wording ("rank", "ranked", "where does ... stand") | "Where does Curry rank in career 3-pointers made?" | stats.nba `AllTimeLeadersGrids` (TopX 250) |
+
+### Definitions
+
+- **Career** means every NBA season the source lists, regular season by default.
+  "Playoffs"/"postseason" wording requires a playoff reading (Stage 2 guard);
+  combined regular season plus playoffs is unsupported. BAA/ABA seasons are
+  whatever stats.nba includes in NBA career totals; ABA totals are never added.
+- **Totals vs per game.** Career questions default to totals ("career points",
+  "all-time leading scorer" are totals by convention). A player's career per-game
+  average is computed from his exact career totals and games played, as in
+  Stage 2, never from rounded averages.
+- **Percentages** for a player are his career made/attempted ratio from the
+  source (`FG_PCT` etc.), shown only with positive attempts.
+- **Leaders and rank are totals only.** stats.nba's all-time per-game and
+  percentage lists do not apply the NBA's published all-time minimums (the
+  2026-09-29 probe lists Victor Wembanyama 2nd in career blocks per game after
+  two seasons, and a 2024-25 rookie 4th in career 3P%). Showing those as
+  "all-time leaders" would misstate the record, so per-game and percentage
+  leaderboards and ranks are unsupported. Minutes have no all-time list.
+- **Ties** follow the source's `*_RANK` (competition ranking), validated for
+  consistency. Every player tied at a shown rank is listed; the 50-row cap and
+  omitted-tie note are the same as season leaders. Top N: default 10, 1-25.
+- **Rank** is the player's source rank in the top 250 list. A player outside the
+  list is answered as "not in NBA.com's top 250", never with an estimated rank.
+  A tied rank says how many players share it.
+- **Partially recorded statistics.** Steals, blocks, offensive/defensive rebounds
+  (1973-74), turnovers (1977-78) and 3-pointers (1979-80) were not recorded
+  earlier. Career totals and all-time lists cover only recorded seasons and say
+  so. A player whose career began before a stat was recorded gets his source
+  total with a coverage note, but no per-game average for it (games before the
+  stat existed would dilute the average), shown as unavailable.
+- **Active players' careers change nightly.** Career and all-time data are
+  cached for one hour and carry "Data as of".
+
+### Sources
+
+stats.nba only, with no Basketball-Reference fallback (ADR 0013): BRef player
+pages need an NBA-ID-to-BRef-slug mapping that Ask does not have, and BRef's
+career leader pages are outside the allowlisted source paths and would need
+cross-career name identity. When stats.nba fails, career answers are
+unavailable.
+
+### Out of scope (unsupported)
+
+- **Career highs** ("Kobe's career high in points"). `PlayerProfileV2`'s
+  `CareerHighs` set returned only playoff games for LeBron James in the probe
+  (51 points, 2018 Finals; his 61-point regular-season high is missing), so it
+  cannot be trusted as a career high. Next: derive highs from the ADR 0005
+  game-log index.
+- Season or game records ("most points in a season/game"), counting-game
+  records, streaks (ADR 0005 index).
+- Franchise leaders ("Lakers all-time leading scorer"), active-only lists,
+  position, rookie or era lists, comparisons between players, a player's rank in
+  per-game or percentage lists, and all splits listed for season leaders.
+
+## Next
+
+- Career highs and season/game records from the ADR 0005 game-log index.
+- A verified per-era qualification table would let per-game and percentage
+  boards (season and all-time) use a fallback or official all-time minimums.
+- Independent unseen evaluation cases for both new families and a new frozen
+  release commit, per ADR 0009.
