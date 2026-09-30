@@ -12,9 +12,11 @@ A separate Opus 5.5 thread reviewed the implementation and two correction
 checkpoints. Findings and raw review text are saved with the verification
 artifacts. The final review found no implementation blockers; its remaining
 combined-phase wording recommendation was then added and regression-tested.
-Code is committed locally, with no push. Predeployment retrieval budgeting
-(**nba-scores-8ic**) and historical boxscore fallback retry/presentation
-(**nba-scores-cnm**) remain open alongside the expanded-scope release gates.
+Code is committed locally, with no push. The shared season retrieval deadline
+(**nba-scores-8ic**) is implemented on `ask/8ic-retrieval-deadline`, but its
+slow-host measurement on the production host is still pending (see
+`docs/ask-stage2.md`). Historical boxscore fallback retry/presentation
+(**nba-scores-cnm**) remains open alongside the expanded-scope release gates.
 
 
 ## 2026-09-29 design interview (read first)
