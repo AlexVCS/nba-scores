@@ -65,7 +65,7 @@ def clean_sources(monkeypatch):
 
 def test_player_per_game_uses_totals_and_completed_cache(monkeypatch):
     calls = install_nba(monkeypatch, [row()])
-    monkeypatch.setattr(seasons, "_bref_player", lambda r: pytest.fail("Fallback on valid NBA data"))
+    monkeypatch.setattr(seasons, "_bref_player", lambda r, *_: pytest.fail("Fallback on valid NBA data"))
     output = seasons.player_season(request())
     assert output.result.values[0].value == pytest.approx(976 / 79)
     assert output.result.values[0].display == "12.4"
@@ -91,7 +91,7 @@ def test_playoffs_are_separate_from_regular_season(monkeypatch):
 
 def test_wrong_player_row_falls_back_without_merging(monkeypatch):
     install_nba(monkeypatch, [row(PLAYER_ID=2544, REB=100000)])
-    monkeypatch.setattr(seasons, "_bref_player", lambda r: source_data([row(REB=79)], "basketball_reference"))
+    monkeypatch.setattr(seasons, "_bref_player", lambda r, *_: source_data([row(REB=79)], "basketball_reference"))
     result = seasons.player_season(request())
     assert result.result.values[0].value == 1
     assert result.sources[0].name == "basketball_reference"
@@ -100,16 +100,16 @@ def test_wrong_player_row_falls_back_without_merging(monkeypatch):
 @pytest.mark.parametrize("bad", [None, float("nan"), -1, True])
 def test_missing_specific_stat_triggers_fallback(monkeypatch, bad):
     install_nba(monkeypatch, [row(REB=bad)])
-    monkeypatch.setattr(seasons, "_bref_player", lambda r: source_data([row(REB=158)], "basketball_reference"))
+    monkeypatch.setattr(seasons, "_bref_player", lambda r, *_: source_data([row(REB=158)], "basketball_reference"))
     assert seasons.player_season(request()).result.values[0].value == 2
 
 
 def test_no_record_requires_successful_missing_records(monkeypatch):
     install_nba(monkeypatch, [])
-    monkeypatch.setattr(seasons, "_bref_player", lambda r: (_ for _ in ()).throw(NotFoundError("no_record", "missing")))
+    monkeypatch.setattr(seasons, "_bref_player", lambda r, *_: (_ for _ in ()).throw(NotFoundError("no_record", "missing")))
     with pytest.raises(NotFoundError):
         seasons.player_season(request())
-    monkeypatch.setattr(seasons, "_bref_player", lambda r: (_ for _ in ()).throw(requests.HTTPError("403")))
+    monkeypatch.setattr(seasons, "_bref_player", lambda r, *_: (_ for _ in ()).throw(requests.HTTPError("403")))
     with pytest.raises(UnavailableError):
         seasons.player_season(request())
 
@@ -118,7 +118,7 @@ def test_all_missing_stats_and_plus_minus_do_not_become_answers(monkeypatch):
     with pytest.raises(UnsupportedError):
         seasons.player_season(request("plus_minus"))
     install_nba(monkeypatch, [row(REB=None)])
-    monkeypatch.setattr(seasons, "_bref_player", lambda r: source_data([row(REB=None)]))
+    monkeypatch.setattr(seasons, "_bref_player", lambda r, *_: source_data([row(REB=None)]))
     with pytest.raises(NotFoundError):
         seasons.player_season(request())
 
@@ -190,7 +190,7 @@ def test_nba_team_history_validates_identity_and_record(monkeypatch):
     assert calls[0]["season_type_all_star"] == "Regular Season"
     seasons._cache.clear()
     values["TEAM_ID"] = 1
-    monkeypatch.setattr(seasons, "_bref_records", lambda r: (_ for _ in ()).throw(ValueError()))
+    monkeypatch.setattr(seasons, "_bref_records", lambda r, *_: (_ for _ in ()).throw(ValueError()))
     with pytest.raises(UnavailableError):
         seasons.team_records(TeamRecordsRequest(team=DEN, season="2023-24"))
 
@@ -487,8 +487,8 @@ def test_bref_team_stint_provider_codes(monkeypatch,team_id,tricode,bref_code):
 def test_invalid_source_link_cannot_poison_completed_cache(monkeypatch):
     install_nba(monkeypatch,[row()])
     bad=source_data([row()]);bad=seasons.SeasonData(bad.rows,bad.source,'https://evil.test/fake',bad.fetched_at,bad.complete)
-    monkeypatch.setattr(seasons,'_nba_player',lambda r:bad)
-    monkeypatch.setattr(seasons,'_bref_player',lambda r:source_data([row(REB=158)]))
+    monkeypatch.setattr(seasons,'_nba_player',lambda r, *_:bad)
+    monkeypatch.setattr(seasons,'_bref_player',lambda r, *_:source_data([row(REB=158)]))
     assert seasons.player_season(request()).result.values[0].value==2
 
 

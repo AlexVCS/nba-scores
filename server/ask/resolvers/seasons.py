@@ -4,6 +4,11 @@ NBA player career rows are season totals. Use the provider aggregate (TEAM_ID=0)
 for traded players, never a sum of rounded stint averages. Team records use the
 team history endpoint; league/conference standings use LeagueStandings. No values
 are combined across sources. Missing fields remain missing, never zero.
+
+An optional ``Deadline`` is the time left in the Ask response. It is shared by
+the NBA attempt, its retry and backoff, the fallback, and joined-cache waits.
+A step that cannot fit is skipped, and the tool reports unavailable, never a
+no-record answer. Without a deadline, the stage 2 behavior is unchanged.
 """
 from __future__ import annotations
 
@@ -25,10 +30,15 @@ from server.ask.models.response import PlayerSeasonStatsResult, TeamRecordsResul
 from server.ask.resolvers.errors import NotFoundError, UnavailableError, UnsupportedError
 from server.ask.resolvers.output import ResolverOutput
 from server.services import nba_stats_client, basketball_reference
+from server.utils.deadline import Deadline, wait_timeout
 from server.utils.ttl_cache import LoadInProgressError
 
 logger = logging.getLogger(__name__)
 _cache = AskCache(max_entries=128, version="season-1")
+NBA_TIMEOUT_SECONDS = 4
+JOIN_WAIT_SECONDS = 5
+# The fallback starts only if a Basketball-Reference request can still start.
+FALLBACK_MIN_SECONDS = basketball_reference.MIN_START_SECONDS
 COUNTS = {"points": "PTS", "rebounds": "REB", "offensive_rebounds": "OREB", "defensive_rebounds": "DREB",
           "assists": "AST", "steals": "STL", "blocks": "BLK", "turnovers": "TOV", "fouls": "PF", "minutes": "MIN"}
 SHOOTING = {"field_goals": ("FGM", "FGA"), "three_pointers": ("FG3M", "FG3A"), "free_throws": ("FTM", "FTA")}
@@ -123,11 +133,15 @@ def _cells(row):
     return {cell.get("data-stat"): cell.get_text(" ", strip=True) for cell in row.find_all(["th", "td"]) if cell.get("data-stat")}
 
 
-def _bref_player(request):
+def _timeout(deadline, seconds=NBA_TIMEOUT_SECONDS):
+    return seconds if deadline is None else max(0.001, deadline.cap(seconds))
+
+
+def _bref_player(request, deadline: Deadline | None = None):
     year = int(request.season[:4]) + 1
     league = "BAA" if year < 1950 else "NBA"
     href = f"https://www.basketball-reference.com/leagues/{league}_{year}_totals.html"
-    soup = _html_tables(_html(href, request.season))
+    soup = _html_tables(_html(href, request.season, deadline))
     _heading(soup, request.season)
     table_ids = {"totals_stats_post", "playoffs_totals"} if request.season_type == "playoffs" else {"totals_stats", "totals"}
     tables = [t for t in soup.find_all("table") if t.get("id") in table_ids]
@@ -176,15 +190,16 @@ def _bref_player(request):
     return SeasonData(tuple(rows), "basketball_reference", href, _now(), _complete(request.season))
 
 
-def _html(href, season):
+def _html(href, season, deadline: Deadline | None = None):
     return _cache.get_or_load("bref-html", href, lambda: CacheValue(
-        basketball_reference.get(href).text, 30), wait_timeout=5).value
+        basketball_reference.get(href, deadline=deadline).text, 30),
+        wait_timeout=wait_timeout(deadline, JOIN_WAIT_SECONDS)).value
 
 
-def _nba_player(request):
+def _nba_player(request, deadline: Deadline | None = None):
     endpoint = nba_stats_client._run("PlayerCareerStats", lambda: playercareerstats.PlayerCareerStats(
         player_id=request.player.player_id, per_mode36="Totals", league_id_nullable="00",
-        headers=nba_stats_client._headers(), timeout=4), retries=1)
+        headers=nba_stats_client._headers(), timeout=_timeout(deadline)), retries=1, deadline=deadline)
     table = "SeasonTotalsPostSeason" if request.season_type == "playoffs" else "SeasonTotalsRegularSeason"
     rows = _dataset(endpoint.get_dict(), table)
     matching = [r for r in rows if r.get("SEASON_ID") == request.season and str(r.get("LEAGUE_ID")) == "00"]
@@ -248,7 +263,7 @@ def _value(row, stat, games, aggregation):
     raise UnsupportedError("other", "unsupported_season_stat")
 
 
-def _load(primary, fallback, validate):
+def _load(primary, fallback, validate, deadline: Deadline | None = None):
     # Validate BEFORE caching or returning, so a missing fact triggers fallback,
     # and a malformed response never becomes a long-lived successful cache entry.
     try:
@@ -261,6 +276,10 @@ def _load(primary, fallback, validate):
     except Exception as exc:
         logger.info("ask_season_fallback reason=%s", type(exc).__name__)
         primary_missing = isinstance(exc, NotFoundError)
+    if deadline is not None and not deadline.fits(FALLBACK_MIN_SECONDS):
+        # A primary miss is not proof of absence; without fallback it is unavailable.
+        logger.info("ask_season_fallback_skipped remaining_ms=%s", int(deadline.remaining() * 1000))
+        raise UnavailableError("season_deadline_exceeded")
     try:
         data = fallback()
         validate(data)
@@ -276,7 +295,7 @@ def _load(primary, fallback, validate):
         raise UnavailableError("season_sources_unavailable") from None
 
 
-def player_season(request: PlayerSeasonStatsRequest):
+def player_season(request: PlayerSeasonStatsRequest, deadline: Deadline | None = None):
     if request.stat.stat == "plus_minus":
         raise UnsupportedError("other", "unsupported_season_stat")
     # These facts were not recorded league-wide; another source cannot fill them.
@@ -288,7 +307,8 @@ def player_season(request: PlayerSeasonStatsRequest):
             or (start < 1979 and request.stat.stat in {"three_pointers", "three_point_percentage"})):
         raise NotFoundError("no_record", "season_stat_not_recorded")
     data = _season_cached("player-season", request.model_dump_json(), lambda: _cached(
-        _load(lambda: _nba_player(request), lambda: _bref_player(request), lambda d: _valid_player(d, request)))).value
+        _load(lambda: _nba_player(request, deadline), lambda: _bref_player(request, deadline),
+              lambda d: _valid_player(d, request), deadline)), deadline).value
     games, values = _valid_player(data, request)
     missing = any(v.value is None for v in values)
     result = PlayerSeasonStatsResult(player=request.player, season=request.season, season_type=request.season_type,
@@ -304,11 +324,11 @@ def _record(team, wins, losses, conference=None, rank=None):
                          conference=conference, conference_rank=_integer(rank) if rank and _number(rank) and _number(rank) > 0 else None)
 
 
-def _nba_records(request):
+def _nba_records(request, deadline: Deadline | None = None):
     if request.team and request.standings_scope == "league":
         endpoint = nba_stats_client._run("TeamYearByYearStats", lambda: teamyearbyyearstats.TeamYearByYearStats(
             team_id=request.team.team_id, league_id="00", season_type_all_star="Regular Season",
-            headers=nba_stats_client._headers(), timeout=4), retries=1)
+            headers=nba_stats_client._headers(), timeout=_timeout(deadline)), retries=1, deadline=deadline)
         rows = [r for r in _dataset(endpoint.get_dict(), "TeamStats") if r.get("YEAR") == request.season]
         parsed = []
         for row in rows:
@@ -319,7 +339,7 @@ def _nba_records(request):
     else:
         endpoint = nba_stats_client._run("LeagueStandings", lambda: leaguestandings.LeagueStandings(
             season=request.season, season_type="Regular Season", league_id="00",
-            headers=nba_stats_client._headers(), timeout=4), retries=1)
+            headers=nba_stats_client._headers(), timeout=_timeout(deadline)), retries=1, deadline=deadline)
         rows = _dataset(endpoint.get_dict(), "Standings")
         parsed = []
         expected_id = "2" + request.season[:4]
@@ -337,11 +357,11 @@ def _nba_records(request):
                       f"https://www.nba.com/stats/teams/traditional?Season={request.season}&SeasonType=Regular%20Season", _now(), _complete(request.season))
 
 
-def _bref_records(request):
+def _bref_records(request, deadline: Deadline | None = None):
     year = int(request.season[:4]) + 1
     league = "BAA" if year < 1950 else "NBA"
     href = f"https://www.basketball-reference.com/leagues/{league}_{year}.html"
-    soup = _html_tables(_html(href, request.season))
+    soup = _html_tables(_html(href, request.season, deadline))
     _heading(soup, request.season)
     tables = []
     for side, conf in (("E", "east"), ("W", "west")):
@@ -397,17 +417,18 @@ def _valid_records(data, request):
     return sorted(rows, key=lambda r: (r.conference_rank or 999, -r.win_percentage, r.team.name))
 
 
-def team_records(request: TeamRecordsRequest):
+def team_records(request: TeamRecordsRequest, deadline: Deadline | None = None):
     data = _season_cached("team-records", request.model_dump_json(), lambda: _cached(
-        _load(lambda: _nba_records(request), lambda: _bref_records(request), lambda d: _valid_records(d, request)))).value
+        _load(lambda: _nba_records(request, deadline), lambda: _bref_records(request, deadline),
+              lambda d: _valid_records(d, request), deadline)), deadline).value
     result = TeamRecordsResult(season=request.season, team=request.team, standings_scope=request.standings_scope,
                                rows=_valid_records(data, request), as_of=data.fetched_at)
     return _output(result, data)
 
 
-def _season_cached(namespace, key, loader):
+def _season_cached(namespace, key, loader, deadline: Deadline | None = None):
     try:
-        return _cache.get_or_load(namespace, key, loader, wait_timeout=5)
+        return _cache.get_or_load(namespace, key, loader, wait_timeout=wait_timeout(deadline, JOIN_WAIT_SECONDS))
     except LoadInProgressError:
         raise UnavailableError("season_load_in_progress") from None
 
