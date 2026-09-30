@@ -585,5 +585,5 @@ def test_answer_layer_waiter_is_bounded_and_returns_service_notice(tmp_path,monk
         raise LoadInProgressError('same-answer')
     monkeypatch.setattr(coordinator.cache,'get_or_load',joined)
     readout=interpretation(None,None,CONTEXT,request())
-    response=coordinator._execute('Jokic rebounds 2023-24',request(),readout,InterpreterInfo())
+    response=coordinator._execute('Jokic rebounds 2023-24',request(),readout,InterpreterInfo(model_called=False))
     assert response.outcome=='unavailable' and response.notice.code=='service_unavailable'
