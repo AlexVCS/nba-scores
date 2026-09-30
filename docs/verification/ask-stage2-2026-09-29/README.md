@@ -71,8 +71,7 @@ keyboard/screen-reader checks still remain.
 ## Final verified state
 
 After Opus's final recommended wording guard and extra abbreviation rewrites:
-**1,348 backend tests pass**. The frontend is unchanged from the last passing
-**478 tests**, lint and build. The final Opus review is saved in
+**1,348 backend tests pass**. Final frontend checks also pass: **478 tests**, lint and build. The final Opus review is saved in
 `opus-final-review.md`; it found no implementation blockers, and its remaining
 combined-phase wording recommendation was then implemented and tested. The
 review's deployment follow-ups remain open. `development-replay-reviewed-final.json`
@@ -87,3 +86,13 @@ source link per result on desktop light and mobile dark. Hardwood's Poppins
 font is loaded; Archivo is not used by that surface. These recaptures changed no
 product styles. The temporary port5292 server was stopped; the user's existing
 port5289 preview/backend8019 were left running.
+
+The final screenshot check caught source-specific wording in the existing
+zero-model footer: it said "NBA data" even on a BRef answer. The footer now says
+"basketball data", with the actual named source still alongside it. Frontend
+tests, lint and build were rerun, and the verified screenshots recaptured.
+
+Stage 2 task **nba-scores-8k5** is closed. Deployment follow-ups remain open.
+Issue metadata was exported locally with no pull/push. Only the three Stage 2
+issue records are copied into this branch; other issue updates and original
+untracked files in the primary workspace are preserved.

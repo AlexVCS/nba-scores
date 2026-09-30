@@ -4,7 +4,7 @@ export const ASK_PLACEHOLDER = "Ask about a game, stat, or series";
 
 export const ASK_SOURCE_COPY = "AI interprets your question. Answers use NBA data.";
 
-export const ASK_NO_MODEL_COPY = "Answered straight from NBA data. No AI was needed for this one.";
+export const ASK_NO_MODEL_COPY = "Answered directly from basketball data. No AI was needed for this one.";
 
 export const ASK_RECENT_COPY = "Recent searches are saved only in this browser, never with answers.";
 
