@@ -14,7 +14,7 @@ interface AskGameCardProps {
 function AskGameCard({game, showScores, date, index}: AskGameCardProps) {
   const {pathname} = useLocation();
   if (/^\/design-1(?=\/|$)/.test(pathname)) {
-    return <HardwoodGameCard game={game} showScores={showScores} index={index} dateParam={date} />;
+    return <HardwoodGameCard game={game} showScores={showScores} index={index} dateParam={date} showTricodes={false} />;
   }
   return (
     <div className="rounded-[12px] bg-slate-50 dark:bg-neutral-950">
