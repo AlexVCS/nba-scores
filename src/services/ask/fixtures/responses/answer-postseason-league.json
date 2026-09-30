@@ -1,0 +1,458 @@
+{
+  "schema_version": "1",
+  "request_id": "fx-postseason-league",
+  "outcome": "answer",
+  "question": "summarize the 2024 playoffs",
+  "interpretation": {
+    "intent": "postseason_summary",
+    "detected_type": "postseason",
+    "items": [
+      {
+        "field": "season",
+        "value": "2024 Playoffs",
+        "detail": null,
+        "expression": "2024 playoffs",
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      }
+    ],
+    "reference_time": "2026-09-29T12:00:00-04:00",
+    "timezone": "America/New_York",
+    "dates": null,
+    "season": "2023-24"
+  },
+  "result": {
+    "kind": "postseason_summary",
+    "season": "2023-24",
+    "team": null,
+    "finish": {
+      "value": null,
+      "spoiler": false
+    },
+    "record": {
+      "value": null,
+      "spoiler": false
+    },
+    "series_won": {
+      "value": null,
+      "spoiler": false
+    },
+    "rounds": {
+      "value": [],
+      "spoiler": false
+    },
+    "champion": {
+      "value": {
+        "team_id": 1610612738,
+        "tricode": "BOS",
+        "name": "Boston Celtics"
+      },
+      "spoiler": true
+    },
+    "runner_up": {
+      "value": {
+        "team_id": 1610612742,
+        "tricode": "DAL",
+        "name": "Dallas Mavericks"
+      },
+      "spoiler": true
+    },
+    "series": {
+      "value": [
+        {
+          "round": "first_round",
+          "conference": "east",
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612738,
+                "tricode": "BOS",
+                "name": "Boston Celtics"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612748,
+                "tricode": "MIA",
+                "name": "Miami Heat"
+              },
+              "wins": 1
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612738
+        },
+        {
+          "round": "first_round",
+          "conference": "east",
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612752,
+                "tricode": "NYK",
+                "name": "New York Knicks"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612755,
+                "tricode": "PHI",
+                "name": "Philadelphia 76ers"
+              },
+              "wins": 2
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612752
+        },
+        {
+          "round": "first_round",
+          "conference": "east",
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612754,
+                "tricode": "IND",
+                "name": "Indiana Pacers"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612749,
+                "tricode": "MIL",
+                "name": "Milwaukee Bucks"
+              },
+              "wins": 2
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612754
+        },
+        {
+          "round": "first_round",
+          "conference": "east",
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612739,
+                "tricode": "CLE",
+                "name": "Cleveland Cavaliers"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612753,
+                "tricode": "ORL",
+                "name": "Orlando Magic"
+              },
+              "wins": 3
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612739
+        },
+        {
+          "round": "first_round",
+          "conference": "west",
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612760,
+                "tricode": "OKC",
+                "name": "Oklahoma City Thunder"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612740,
+                "tricode": "NOP",
+                "name": "New Orleans Pelicans"
+              },
+              "wins": 0
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612760
+        },
+        {
+          "round": "first_round",
+          "conference": "west",
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612743,
+                "tricode": "DEN",
+                "name": "Denver Nuggets"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612747,
+                "tricode": "LAL",
+                "name": "Los Angeles Lakers"
+              },
+              "wins": 1
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612743
+        },
+        {
+          "round": "first_round",
+          "conference": "west",
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612750,
+                "tricode": "MIN",
+                "name": "Minnesota Timberwolves"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612756,
+                "tricode": "PHX",
+                "name": "Phoenix Suns"
+              },
+              "wins": 0
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612750
+        },
+        {
+          "round": "first_round",
+          "conference": "west",
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612742,
+                "tricode": "DAL",
+                "name": "Dallas Mavericks"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612746,
+                "tricode": "LAC",
+                "name": "LA Clippers"
+              },
+              "wins": 2
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612742
+        },
+        {
+          "round": "conference_semifinals",
+          "conference": "east",
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612738,
+                "tricode": "BOS",
+                "name": "Boston Celtics"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612739,
+                "tricode": "CLE",
+                "name": "Cleveland Cavaliers"
+              },
+              "wins": 1
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612738
+        },
+        {
+          "round": "conference_semifinals",
+          "conference": "east",
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612754,
+                "tricode": "IND",
+                "name": "Indiana Pacers"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612752,
+                "tricode": "NYK",
+                "name": "New York Knicks"
+              },
+              "wins": 3
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612754
+        },
+        {
+          "round": "conference_semifinals",
+          "conference": "west",
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612750,
+                "tricode": "MIN",
+                "name": "Minnesota Timberwolves"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612743,
+                "tricode": "DEN",
+                "name": "Denver Nuggets"
+              },
+              "wins": 3
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612750
+        },
+        {
+          "round": "conference_semifinals",
+          "conference": "west",
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612742,
+                "tricode": "DAL",
+                "name": "Dallas Mavericks"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612760,
+                "tricode": "OKC",
+                "name": "Oklahoma City Thunder"
+              },
+              "wins": 2
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612742
+        },
+        {
+          "round": "conference_finals",
+          "conference": "east",
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612738,
+                "tricode": "BOS",
+                "name": "Boston Celtics"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612754,
+                "tricode": "IND",
+                "name": "Indiana Pacers"
+              },
+              "wins": 0
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612738
+        },
+        {
+          "round": "conference_finals",
+          "conference": "west",
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612742,
+                "tricode": "DAL",
+                "name": "Dallas Mavericks"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612750,
+                "tricode": "MIN",
+                "name": "Minnesota Timberwolves"
+              },
+              "wins": 1
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612742
+        },
+        {
+          "round": "finals",
+          "conference": null,
+          "teams": [
+            {
+              "team": {
+                "team_id": 1610612738,
+                "tricode": "BOS",
+                "name": "Boston Celtics"
+              },
+              "wins": 4
+            },
+            {
+              "team": {
+                "team_id": 1610612742,
+                "tricode": "DAL",
+                "name": "Dallas Mavericks"
+              },
+              "wins": 1
+            }
+          ],
+          "status": "complete",
+          "winner_team_id": 1610612738
+        }
+      ],
+      "spoiler": true
+    }
+  },
+  "clarification": null,
+  "notice": null,
+  "spoiler_gate": null,
+  "links": [
+    {
+      "kind": "playoff_bracket",
+      "label": "Open 2024 bracket",
+      "href": "/playoffs?season=2023-24",
+      "external": false,
+      "spoiler": false
+    }
+  ],
+  "suggestions": [],
+  "sources": [
+    {
+      "name": "nba_stats",
+      "label": "NBA.com",
+      "fetched_at": "2026-09-29T16:00:00Z",
+      "complete": true
+    }
+  ],
+  "interpreter": {
+    "model_called": true,
+    "cache_hit": false,
+    "adapter": "jev",
+    "model": "jev-1.13.0",
+    "fallback_used": false
+  }
+}
