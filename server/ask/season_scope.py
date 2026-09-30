@@ -6,6 +6,7 @@ continuations. Closed tools answer full seasons, not unrepresented splits.
 import re
 
 from server.ask.candidates.text import fold
+from server.ask.models.common import CAREER_LEADER_STATS, MAX_LEADER_LIMIT
 from server.ask.models.interpreter import NormalizationResult
 
 _SPLIT = re.compile(
@@ -39,7 +40,7 @@ def ambiguous_season_candidates(candidates, question):
 def normalize_question(normalizer, output, candidates, context, question):
     result = normalizer.normalize(output, candidates, context)
     intent = output.get_field("intent")
-    if intent is None or intent.status != "selected" or intent.selected[0] not in {"player_season_stats", "team_records"}:
+    if intent is None or intent.status != "selected" or intent.selected[0] not in {"player_season_stats", "team_records", "season_leaders", "career_stats"}:
         return result
     text = fold(question)
     # Mask known names and seasons so names such as Kevin May/De'Andre Hunter,
@@ -58,6 +59,10 @@ def normalize_question(normalizer, output, candidates, context, question):
                 text = re.sub(pattern, lambda m: " " * len(m.group()), text)
     explicit_constraints = any(c.source != "app_context" for name in ("date", "round", "game_number", "location")
                                for c in candidates.sets[name].candidates)
+    if intent.selected == ["season_leaders"]:
+        return _leaders(result, candidates, question, text, explicit_constraints)
+    if intent.selected == ["career_stats"]:
+        return _career(result, candidates, text, explicit_constraints)
     players = [c for c in candidates.sets["player"].candidates if c.source != "app_context"]
     player_mentions = {(c.span, c.matched_text) for c in players}
     player_split = bool(players) if intent.selected == ["team_records"] else len(player_mentions) > 1
@@ -66,14 +71,153 @@ def normalize_question(normalizer, output, candidates, context, question):
     if ambiguous_season_candidates(candidates, question):
         return NormalizationResult(status="needs_clarification", clarify_field="season", clarify_reason="ambiguous")
     playoff_wording = re.search(r"\b(?:playoffs?|postseason)\b", text)
-    if playoff_wording and (re.search(r"\bregular[ -]season\b", text)
-                            or re.search(r"\b(?:season|regular)\s+(?:and|&|\+)\s+(?:the\s+)?(?:playoffs?|postseason)\b", text)
-                            or re.search(r"\b(?:including|combined|plus|with)\s+(?:the\s+)?(?:playoffs?|postseason)\b", text)
-                            or re.search(r"\b(?:playoffs?|postseason)\s+(?:included|combined)\b", text)):
+    if _combined_phases(text):
         return NormalizationResult(status="unsupported", unsupported_reason="other")
     if playoff_wording and result.status == "valid":
         if intent.selected == ["team_records"]:
             return NormalizationResult(status="unsupported", unsupported_reason="other")
         if result.request.season_type != "playoffs":
             return NormalizationResult(status="needs_clarification", clarify_field="season_type", clarify_reason="ambiguous")
+    return result
+
+
+def _combined_phases(text):
+    """Regular season plus playoffs in one number is never answered."""
+    return bool(re.search(r"\b(?:playoffs?|postseason)\b", text)) and bool(
+        re.search(r"\bregular[ -]season\b", text)
+        or re.search(r"\b(?:season|regular)\s+(?:and|&|\+)\s+(?:the\s+)?(?:playoffs?|postseason)\b", text)
+        or re.search(r"\b(?:including|combined|plus|with)\s+(?:the\s+)?(?:playoffs?|postseason)\b", text)
+        or re.search(r"\b(?:playoffs?|postseason)\s+(?:included|combined)\b", text))
+
+
+# Season leaders (docs/ask-stage3.md). "best", "highest", "most", "top" and "lead" are
+# the question itself here, so the Stage 2 split list is replaced, not reused.
+_LEADER_SPLIT = re.compile(
+    r"\b(?:home|away|road|division|divisional|against|versus|vs|before|after|since|until|through|between|"
+    r"january|february|march|april|may|june|july|august|september|october|november|december|"
+    r"jan|feb|mar|apr|jun|jul|aug|sep|sept|oct|nov|dec|last\s+\w+\s+games?|"
+    r"preseason|play[ -]?in|all[ -]?star|cup|tournament|summer\s+league|per\s*36|per\s*100|per\s*possessions?|"
+    r"per\s*(?:48|40|minute)|true\s+shooting|effective\s+field|usage|efficiency|advanced|pace|fantasy|"
+    r"win\s+shares?|per(?!\s*game)|vorp|plus[ -]?minus|\+/-|fouls?|double[ -]doubles?|triple[ -]doubles?|"
+    r"lowest|fewest|least|worst|bottom|streak|seed|seeds|seeded|career|all[ -]?time|ever|history|historic(?:al)?|"
+    r"records?|finals|round|series|clutch|quarter|half|overtime|starters?|bench|back[ -]to[ -]back|"
+    r"without|when|in\s+(?:their\s+|his\s+)?(?:wins|losses)|conference|eastern|western|east|west|"
+    r"rookies?|sophomores?|guards?|forwards?|centers?|position|teams?|franchises?|"
+    r"in\s+(?:a|one|any|single)\s+game|single[ -]game|game[ -]high|season[ -]high|games?\s+with|"
+    r"at\s+least|or\s+more|more\s+than|less\s+than|fewer\s+than|compare|compared|comparison|difference)\b"
+)
+# Stat families, most specific first; each match is blanked before the next family.
+_STAT_FAMILIES = (
+    r"\b(?:3|three)[ -]?(?:point(?:ers?)?|pt|pointers?)s?(?:\s+field[ -]goals?)?(?:\s+shooting)?(?:\s+(?:percentage|pct))?|\bthrees\b|\b3s\b|\b3p%?|\bfg3m?\b",
+    r"\bfree[ -]throws?(?:\s+shooting)?(?:\s+(?:percentage|pct))?|\bft%?",
+    r"\bfield[ -]goals?(?:\s+shooting)?(?:\s+(?:percentage|pct))?|\bfg%?|\bshooting\s+percentage",
+    r"\bpoints?\b|\bscor(?:ing|er|ers|ed)\b|\bppg\b|\bpts\b",
+    r"\b(?:offensive\s+|defensive\s+)?rebound(?:s|ing|er|ers)?\b|\bboards\b|\brpg\b",
+    r"\bassists?\b|\bapg\b|\bdimes\b",
+    r"\bsteals?\b|\bspg\b",
+    r"\bblock(?:s|ed|er|ers)?\b|\bbpg\b",
+    r"\bturnovers?\b",
+    r"\bminutes\b|\bmpg\b",
+)
+# Career questions (ADR 0013): "career", "all-time", "ever" and "history" are the question.
+_CAREER_SPLIT = re.compile(
+    r"\b(?:home|away|road|division|divisional|against|versus|vs|before|after|since|until|through|between|"
+    r"january|february|march|april|may|june|july|august|september|october|november|december|"
+    r"last\s+\w+\s+games?|preseason|play[ -]?in|all[ -]?star|cup|tournament|summer\s+league|"
+    r"per\s*36|per\s*100|per\s*possessions?|per(?!\s*game)|true\s+shooting|effective\s+field|usage|efficiency|"
+    r"advanced|pace|fantasy|win\s+shares?|vorp|plus[ -]?minus|double[ -]doubles?|triple[ -]doubles?|"
+    r"lowest|fewest|least|worst|bottom|streak|seed|seeds|records?|finals|round|series|clutch|quarter|half|"
+    r"overtime|starters?|bench|back[ -]to[ -]back|without|when|in\s+(?:their\s+|his\s+)?(?:wins|losses)|"
+    r"conference|eastern|western|east|west|rookies?|sophomores?|guards?|forwards?|centers?|position|teams?|"
+    r"franchises?|active|highs?|best\s+game|in\s+(?:a|one|any|single)\s+(?:game|season)|single[ -](?:game|season)|"
+    r"game[ -]high|season[ -]high|games?\s+with|seasons?\s+with|at\s+least|or\s+more|more\s+than|less\s+than|"
+    r"fewer\s+than|compare|compared|comparison|difference|aba|abl)\b"
+)
+_CAREER_WORDING = re.compile(r"\b(?:career|all[ -]?time|ever|history|lifetime)\b")
+_RANK_WORDING = re.compile(r"\b(?:rank|ranks|ranked|ranking|stand|stands|place|lead|leads|led|leader|leading)\b")
+_NUMBER_WORDS = {w: i for i, w in enumerate(
+    "zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen "
+    "sixteen seventeen eighteen nineteen twenty".split())}
+_TOP = re.compile(r"\btop[\s-]+(\d{1,3}|twenty[\s-]+(?:one|two|three|four|five)|" + "|".join(_NUMBER_WORDS) + r")\b")
+
+
+def _top_n(text):
+    """The requested top N (None when absent), or 0 when out of range."""
+    match = _TOP.search(text)
+    if match is None:
+        return None
+    word = re.sub(r"[\s-]+", " ", match.group(1))
+    if word.isdigit():
+        n = int(word)
+    elif word.startswith("twenty "):
+        n = 20 + _NUMBER_WORDS[word.split()[1]]
+    else:
+        n = _NUMBER_WORDS[word]
+    return n if 1 <= n <= MAX_LEADER_LIMIT else 0
+
+
+def _leaders(result, candidates, question, text, explicit_constraints):
+    # Bare years ("2024") are masked too; any other number is a threshold or a count.
+    for candidate in candidates.sets["season"].candidates:
+        if candidate.matched_text:
+            pattern = r"(?<![a-z0-9])" + re.escape(fold(candidate.matched_text)) + r"(?![a-z0-9])"
+            text = re.sub(pattern, lambda m: " " * len(m.group()), text)
+    named = any(c.source != "app_context" for name in ("player", "team") for c in candidates.sets[name].candidates)
+    seasons = {(c.span, c.matched_text) for c in candidates.sets["season"].candidates if c.source != "app_context"}
+    families, remaining = 0, text
+    for pattern in _STAT_FAMILIES:
+        remaining, hits = re.subn(pattern, lambda m: " " * len(m.group()), remaining)
+        families += bool(hits)
+    top = _top_n(remaining)  # after blanking stats, so "top 3-point shooters" is not N=3
+    numbers = re.sub(_TOP, " ", remaining)
+    if (explicit_constraints or named or len(seasons) > 1 or families > 1 or top == 0
+            or re.search(r"\d", numbers) or _LEADER_SPLIT.search(text) or _combined_phases(text)):
+        return NormalizationResult(status="unsupported", unsupported_reason="other")
+    if ambiguous_season_candidates(candidates, question):
+        return NormalizationResult(status="needs_clarification", clarify_field="season", clarify_reason="ambiguous")
+    if result.status != "valid":
+        return result
+    if re.search(r"\b(?:playoffs?|postseason)\b", text) and result.request.season_type != "playoffs":
+        return NormalizationResult(status="needs_clarification", clarify_field="season_type", clarify_reason="ambiguous")
+    if top:
+        request = result.request.model_validate({**result.request.model_dump(), "limit": top})
+        return NormalizationResult(status="valid", request=request)
+    return result
+
+
+def _career(result, candidates, text, explicit_constraints):
+    named_teams = any(c.source != "app_context" for c in candidates.sets["team"].candidates)
+    seasons = any(c.source != "app_context" for c in candidates.sets["season"].candidates)
+    players = {(c.span, c.matched_text) for c in candidates.sets["player"].candidates if c.source != "app_context"}
+    families, remaining = 0, text
+    for pattern in _STAT_FAMILIES:
+        remaining, hits = re.subn(pattern, lambda m: " " * len(m.group()), remaining)
+        families += bool(hits)
+    top = _top_n(remaining)
+    numbers = re.sub(_TOP, " ", remaining)
+    if (explicit_constraints or named_teams or seasons or len(players) > 1 or families > 1 or top == 0
+            or re.search(r"\d", numbers) or _CAREER_SPLIT.search(text) or _combined_phases(text)):
+        return NormalizationResult(status="unsupported", unsupported_reason="other")
+    if not _CAREER_WORDING.search(text):
+        # "How many points does LeBron have?" could mean this season or his career.
+        return NormalizationResult(status="needs_clarification", clarify_field="intent", clarify_reason="ambiguous")
+    if result.status != "valid":
+        return result
+    request = result.request
+    if re.search(r"\b(?:playoffs?|postseason)\b", text) and request.season_type != "playoffs":
+        return NormalizationResult(status="needs_clarification", clarify_field="season_type", clarify_reason="ambiguous")
+    update = {}
+    if request.view == "player_totals" and _RANK_WORDING.search(text):
+        if request.stat.stat == "stat_line":
+            return NormalizationResult(status="needs_clarification", clarify_field="stat", clarify_reason="missing")
+        if request.stat.stat not in CAREER_LEADER_STATS or request.stat.aggregation != "total":
+            return NormalizationResult(status="unsupported", unsupported_reason="unsupported_leader_stat")
+        update["view"] = "player_rank"
+    if top:
+        if request.view != "leaders":
+            return NormalizationResult(status="unsupported", unsupported_reason="other")
+        update["limit"] = top
+    if update:
+        request = request.model_validate({**request.model_dump(), **update})
+        return NormalizationResult(status="valid", request=request)
     return result

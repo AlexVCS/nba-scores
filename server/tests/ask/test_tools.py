@@ -14,7 +14,7 @@ from server.ask.models.request import ASK_REQUEST_ADAPTER, GameSearchRequest
 from server.ask.normalize import RELEVANT_FIELDS, Normalizer
 from server.ask.resolvers import EXECUTORS, _resolve
 
-ORIGINAL_ROUTER_ORDER = ["game_search", "boxscore_stat", "playoff_series", "postseason_summary", "player_season_stats", "team_records", "unsupported"]
+ORIGINAL_ROUTER_ORDER = ["game_search", "boxscore_stat", "playoff_series", "postseason_summary", "player_season_stats", "team_records", "season_leaders", "career_stats", "unsupported"]
 
 
 def test_registry_matches_contract_intents():
@@ -34,7 +34,7 @@ def test_router_offers_every_tool_then_unsupported_in_stable_order():
 def test_route_names_a_tool_or_none():
     assert tools.route("game_search") is tools.REGISTRY["game_search"]
     assert tools.route("unsupported") is None
-    assert tools.route("season_leaders") is None
+    assert tools.route("career_leaders") is None
 
 
 def test_every_layer_covers_every_tool():

@@ -15,7 +15,13 @@ from typing import Annotated, Literal, Union
 from pydantic import Field, TypeAdapter, model_validator
 
 from .common import (
+    CAREER_LEADER_STATS,
+    DEFAULT_LEADER_LIMIT,
+    CareerView,
+    LEADER_PERCENTAGES,
+    MAX_LEADER_LIMIT,
     NON_LEADER_STATS,
+    SEASON_LEADER_STATS,
     Aggregation,
     Conference,
     ContractModel,
@@ -168,8 +174,53 @@ class TeamRecordsRequest(ContractModel):
         return self
 
 
+class SeasonLeadersRequest(ContractModel):
+    """League-wide leaders in one statistic for one season and phase (docs/ask-stage3.md).
+
+    ``limit`` is read by Python from "top N" text, never by a model (ADR 0012). Every
+    player whose rank is ``limit`` or better is returned, so ties can add rows.
+    """
+
+    intent: Literal["season_leaders"] = "season_leaders"
+    season: Season
+    season_type: SeasonType = "regular_season"
+    stat: StatSelection
+    limit: int = Field(default=DEFAULT_LEADER_LIMIT, ge=1, le=MAX_LEADER_LIMIT)
+
+    @model_validator(mode="after")
+    def _leader_stat(self):
+        if self.stat.stat not in SEASON_LEADER_STATS:
+            raise ValueError(f"no season leaderboard for {self.stat.stat} (unsupported_leader_stat)")
+        if self.stat.stat in LEADER_PERCENTAGES and self.stat.aggregation != "total":
+            raise ValueError("percentage leaders have no per-game measure")
+        return self
+
+
+class CareerStatsRequest(ContractModel):
+    """A player's career totals or averages, the all-time top N, or a player's all-time
+    rank (docs/ask-stage3.md, ADR 0013). Python picks ``view`` and ``limit``."""
+
+    intent: Literal["career_stats"] = "career_stats"
+    view: CareerView
+    player: PlayerRef | None = None
+    season_type: SeasonType = "regular_season"
+    stat: StatSelection
+    limit: int = Field(default=DEFAULT_LEADER_LIMIT, ge=1, le=MAX_LEADER_LIMIT)
+
+    @model_validator(mode="after")
+    def _view_shape(self):
+        if (self.view == "leaders") != (self.player is None):
+            raise ValueError("only the all-time leaders view has no player")
+        if self.view == "player_totals":
+            if self.stat.stat == "plus_minus":
+                raise ValueError("no career plus/minus")
+        elif self.stat.stat not in CAREER_LEADER_STATS or self.stat.aggregation != "total":
+            raise ValueError("all-time lists are totals of counting statistics only")
+        return self
+
+
 AskRequest = Annotated[
-    Union[GameSearchRequest, BoxscoreStatRequest, PlayoffSeriesRequest, PostseasonSummaryRequest, PlayerSeasonStatsRequest, TeamRecordsRequest],
+    Union[GameSearchRequest, BoxscoreStatRequest, PlayoffSeriesRequest, PostseasonSummaryRequest, PlayerSeasonStatsRequest, TeamRecordsRequest, SeasonLeadersRequest, CareerStatsRequest],
     Field(discriminator="intent"),
 ]
 ASK_REQUEST_ADAPTER: TypeAdapter[AskRequest] = TypeAdapter(AskRequest)

@@ -194,7 +194,7 @@ class AskPipeline:
                     self.config.cache_version, "answer-1", self.lookup.alias_version,
                     readout.reference_time.date().isoformat(), canonical_json(request)), load,
                     wait_timeout=wait_timeout(deadline, _SEASON_JOIN_WAIT_SECONDS
-                                              if request.intent in {"player_season_stats", "team_records"} else None))
+                                              if request.intent in {"player_season_stats", "team_records", "season_leaders", "career_stats"} else None))
                 output, hit = result.value, result.hit
             else:
                 output, hit = load().value, False

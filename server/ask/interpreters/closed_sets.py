@@ -22,8 +22,6 @@ UNSUPPORTED_INTENT = tools.UNSUPPORTED
 INTENTS: dict[str, str] = tools.router_options()
 
 UNSUPPORTED_REASONS: dict[str, str] = {
-    "career_stats": "Career totals or career averages, when the question asks about a whole career",
-    "season_leaders": "Who led the league or a season in a statistic",
     "historical_comparison": "Comparing players, teams, games, or eras",
     "prediction": "Predictions or future outcomes",
     "follow_up": "Refers to an earlier answer ('what about him?', 'and the next game?')",

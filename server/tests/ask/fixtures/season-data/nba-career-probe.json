@@ -1,0 +1,4676 @@
+{
+ "captured": "2026-09-29",
+ "note": "Trimmed stats.nba payloads captured once for Ask stage 3 career tool (docs/ask-stage3.md). TopX echoes the requested list size; row sets are excerpts.",
+ "observations": {
+  "AllTimeLeadersGrids": "TopX up to 1000 honored; ranks are competition ranks (FG3M playoffs rank 921 shared by 79 players); PerGame PTS lists Jordan 30.1 rank 1 and Chamberlain 30.1 rank 2 (unrounded); no minutes category",
+  "PlayerProfileV2 CareerHighs": "for LeBron James (2544) every CareerHighs row is a playoff game (GAME_ID 004...), PTS 51 on 2018-05-31; his 61-point regular-season high is absent. Not used for career highs.",
+  "PlayerCareerStats": "CareerTotalsRegularSeason and CareerTotalsPostSeason are single Team_ID 0 rows of totals"
+ },
+ "payloads": {
+  "atl-Totals-RegularSeason-50": {
+   "parameters": {
+    "LeagueID": "00",
+    "SeasonType": "Regular Season",
+    "PerMode": "Totals",
+    "TopX": "50"
+   },
+   "resultSets": [
+    {
+     "name": "GPLeaders",
+     "headers": [
+      "PLAYER_ID",
+      "PLAYER_NAME",
+      "GP",
+      "GP_RANK",
+      "IS_ACTIVE_FLAG"
+     ],
+     "rowSet": [
+      [
+       2544,
+       "LeBron James",
+       1622,
+       1,
+       "Y"
+      ],
+      [
+       305,
+       "Robert Parish",
+       1611,
+       2,
+       "N"
+      ],
+      [
+       76003,
+       "Kareem Abdul-Jabbar",
+       1560,
+       3,
+       "N"
+      ],
+      [
+       1713,
+       "Vince Carter",
+       1541,
+       4,
+       "N"
+      ],
+      [
+       1717,
+       "Dirk Nowitzki",
+       1522,
+       5,
+       "N"
+      ],
+      [
+       304,
+       "John Stockton",
+       1504,
+       6,
+       "N"
+      ],
+      [
+       252,
+       "Karl Malone",
+       1476,
+       7,
+       "N"
+      ],
+      [
+       708,
+       "Kevin Garnett",
+       1462,
+       8,
+       "N"
+      ],
+      [
+       788,
+       "Kevin Willis",
+       1424,
+       9,
+       "N"
+      ],
+      [
+       1891,
+       "Jason Terry",
+       1410,
+       10,
+       "N"
+      ],
+      [
+       1495,
+       "Tim Duncan",
+       1392,
+       11,
+       "N"
+      ],
+      [
+       467,
+       "Jason Kidd",
+       1391,
+       12,
+       "N"
+      ],
+      [
+       397,
+       "Reggie Miller",
+       1389,
+       13,
+       "N"
+      ],
+      [
+       361,
+       "Clifford Robinson",
+       1380,
+       14,
+       "N"
+      ],
+      [
+       101108,
+       "Chris Paul",
+       1370,
+       15,
+       "N"
+      ],
+      [
+       977,
+       "Kobe Bryant",
+       1346,
+       16,
+       "N"
+      ],
+      [
+       1718,
+       "Paul Pierce",
+       1343,
+       17,
+       "N"
+      ],
+      [
+       56,
+       "Gary Payton",
+       1335,
+       18,
+       "N"
+      ],
+      [
+       77449,
+       "Moses Malone",
+       1329,
+       19,
+       "N"
+      ],
+      [
+       2037,
+       "Jamal Crawford",
+       1327,
+       20,
+       "N"
+      ],
+      [
+       433,
+       "Buck Williams",
+       1307,
+       21,
+       "N"
+      ],
+      [
+       1889,
+       "Andre Miller",
+       1304,
+       22,
+       "N"
+      ],
+      [
+       76979,
+       "Elvin Hayes",
+       1303,
+       23,
+       "N"
+      ],
+      [
+       201566,
+       "Russell Westbrook",
+       1301,
+       24,
+       "N"
+      ],
+      [
+       951,
+       "Ray Allen",
+       1300,
+       25,
+       "N"
+      ],
+      [
+       349,
+       "Mark Jackson",
+       1296,
+       26,
+       "N"
+      ],
+      [
+       965,
+       "Derek Fisher",
+       1287,
+       27,
+       "N"
+      ],
+      [
+       64,
+       "Sam Perkins",
+       1286,
+       28,
+       "N"
+      ],
+      [
+       891,
+       "Charles Oakley",
+       1282,
+       29,
+       "N"
+      ],
+      [
+       920,
+       "A.C. Green",
+       1278,
+       30,
+       "N"
+      ]
+     ]
+    },
+    {
+     "name": "PTSLeaders",
+     "headers": [
+      "PLAYER_ID",
+      "PLAYER_NAME",
+      "PTS",
+      "PTS_RANK",
+      "IS_ACTIVE_FLAG"
+     ],
+     "rowSet": [
+      [
+       2544,
+       "LeBron James",
+       43440,
+       1,
+       "Y"
+      ],
+      [
+       76003,
+       "Kareem Abdul-Jabbar",
+       38387,
+       2,
+       "N"
+      ],
+      [
+       252,
+       "Karl Malone",
+       36928,
+       3,
+       "N"
+      ],
+      [
+       977,
+       "Kobe Bryant",
+       33643,
+       4,
+       "N"
+      ],
+      [
+       201142,
+       "Kevin Durant",
+       32597,
+       5,
+       "Y"
+      ],
+      [
+       893,
+       "Michael Jordan",
+       32292,
+       6,
+       "N"
+      ],
+      [
+       1717,
+       "Dirk Nowitzki",
+       31560,
+       7,
+       "N"
+      ],
+      [
+       76375,
+       "Wilt Chamberlain",
+       31419,
+       8,
+       "N"
+      ],
+      [
+       201935,
+       "James Harden",
+       29339,
+       9,
+       "Y"
+      ],
+      [
+       406,
+       "Shaquille O'Neal",
+       28596,
+       10,
+       "N"
+      ],
+      [
+       2546,
+       "Carmelo Anthony",
+       28289,
+       11,
+       "N"
+      ],
+      [
+       77449,
+       "Moses Malone",
+       27409,
+       12,
+       "N"
+      ],
+      [
+       76979,
+       "Elvin Hayes",
+       27313,
+       13,
+       "N"
+      ],
+      [
+       201566,
+       "Russell Westbrook",
+       27176,
+       14,
+       "N"
+      ],
+      [
+       165,
+       "Hakeem Olajuwon",
+       26946,
+       15,
+       "N"
+      ],
+      [
+       201942,
+       "DeMar DeRozan",
+       26711,
+       16,
+       "Y"
+      ],
+      [
+       600015,
+       "Oscar Robertson",
+       26710,
+       17,
+       "N"
+      ],
+      [
+       1122,
+       "Dominique Wilkins",
+       26668,
+       18,
+       "N"
+      ],
+      [
+       201939,
+       "Stephen Curry",
+       26528,
+       19,
+       "Y"
+      ],
+      [
+       1495,
+       "Tim Duncan",
+       26496,
+       20,
+       "N"
+      ],
+      [
+       1718,
+       "Paul Pierce",
+       26397,
+       21,
+       "N"
+      ],
+      [
+       76970,
+       "John Havlicek",
+       26395,
+       22,
+       "N"
+      ],
+      [
+       708,
+       "Kevin Garnett",
+       26071,
+       23,
+       "N"
+      ],
+      [
+       1713,
+       "Vince Carter",
+       25728,
+       24,
+       "N"
+      ],
+      [
+       76673,
+       "Alex English",
+       25613,
+       25,
+       "N"
+      ],
+      [
+       397,
+       "Reggie Miller",
+       25279,
+       26,
+       "N"
+      ],
+      [
+       78497,
+       "Jerry West",
+       25192,
+       27,
+       "N"
+      ],
+      [
+       121,
+       "Patrick Ewing",
+       24815,
+       28,
+       "N"
+      ],
+      [
+       951,
+       "Ray Allen",
+       24505,
+       29,
+       "N"
+      ],
+      [
+       947,
+       "Allen Iverson",
+       24368,
+       30,
+       "N"
+      ]
+     ]
+    },
+    {
+     "name": "ASTLeaders",
+     "headers": [
+      "PLAYER_ID",
+      "PLAYER_NAME",
+      "AST",
+      "AST_RANK",
+      "IS_ACTIVE_FLAG"
+     ],
+     "rowSet": [
+      [
+       304,
+       "John Stockton",
+       15806,
+       1,
+       "N"
+      ],
+      [
+       101108,
+       "Chris Paul",
+       12552,
+       2,
+       "N"
+      ],
+      [
+       467,
+       "Jason Kidd",
+       12091,
+       3,
+       "N"
+      ],
+      [
+       2544,
+       "LeBron James",
+       12016,
+       4,
+       "Y"
+      ],
+      [
+       201566,
+       "Russell Westbrook",
+       10351,
+       5,
+       "N"
+      ],
+      [
+       959,
+       "Steve Nash",
+       10335,
+       6,
+       "N"
+      ],
+      [
+       349,
+       "Mark Jackson",
+       10334,
+       7,
+       "N"
+      ],
+      [
+       77142,
+       "Magic Johnson",
+       10141,
+       8,
+       "N"
+      ],
+      [
+       600015,
+       "Oscar Robertson",
+       9887,
+       9,
+       "N"
+      ],
+      [
+       78318,
+       "Isiah Thomas",
+       9061,
+       10,
+       "N"
+      ],
+      [
+       56,
+       "Gary Payton",
+       8966,
+       11,
+       "N"
+      ],
+      [
+       201935,
+       "James Harden",
+       8873,
+       12,
+       "Y"
+      ],
+      [
+       1889,
+       "Andre Miller",
+       8524,
+       13,
+       "N"
+      ],
+      [
+       393,
+       "Rod Strickland",
+       7987,
+       14,
+       "N"
+      ],
+      [
+       200765,
+       "Rajon Rondo",
+       7584,
+       15,
+       "N"
+      ],
+      [
+       76385,
+       "Maurice Cheeks",
+       7392,
+       16,
+       "N"
+      ],
+      [
+       78530,
+       "Lenny Wilkens",
+       7211,
+       17,
+       "N"
+      ],
+      [
+       345,
+       "Terry Porter",
+       7160,
+       18,
+       "N"
+      ],
+      [
+       200768,
+       "Kyle Lowry",
+       7110,
+       19,
+       "N"
+      ],
+      [
+       896,
+       "Tim Hardaway",
+       7095,
+       20,
+       "N"
+      ],
+      [
+       2225,
+       "Tony Parker",
+       7036,
+       21,
+       "N"
+      ],
+      [
+       600003,
+       "Bob Cousy",
+       6955,
+       22,
+       "N"
+      ],
+      [
+       78003,
+       "Guy Rodgers",
+       6917,
+       23,
+       "N"
+      ],
+      [
+       101114,
+       "Deron Williams",
+       6819,
+       24,
+       "N"
+      ],
+      [
+       201144,
+       "Mike Conley",
+       6782,
+       25,
+       "Y"
+      ],
+      [
+       201950,
+       "Jrue Holiday",
+       6762,
+       26,
+       "Y"
+      ],
+      [
+       201939,
+       "Stephen Curry",
+       6743,
+       27,
+       "Y"
+      ],
+      [
+       177,
+       "Muggsy Bogues",
+       6726,
+       28,
+       "N"
+      ],
+      [
+       134,
+       "Kevin Johnson",
+       6711,
+       29,
+       "N"
+      ],
+      [
+       157,
+       "Derek Harper",
+       6577,
+       30,
+       "N"
+      ]
+     ]
+    },
+    {
+     "name": "BLKLeaders",
+     "headers": [
+      "PLAYER_ID",
+      "PLAYER_NAME",
+      "BLK",
+      "BLK_RANK",
+      "IS_ACTIVE_FLAG"
+     ],
+     "rowSet": [
+      [
+       165,
+       "Hakeem Olajuwon",
+       3830,
+       1,
+       "N"
+      ],
+      [
+       87,
+       "Dikembe Mutombo",
+       3289,
+       2,
+       "N"
+      ],
+      [
+       76003,
+       "Kareem Abdul-Jabbar",
+       3189,
+       3,
+       "N"
+      ],
+      [
+       76631,
+       "Mark Eaton",
+       3064,
+       4,
+       "N"
+      ],
+      [
+       1495,
+       "Tim Duncan",
+       3020,
+       5,
+       "N"
+      ],
+      [
+       764,
+       "David Robinson",
+       2954,
+       6,
+       "N"
+      ],
+      [
+       121,
+       "Patrick Ewing",
+       2894,
+       7,
+       "N"
+      ],
+      [
+       406,
+       "Shaquille O'Neal",
+       2732,
+       8,
+       "N"
+      ],
+      [
+       78014,
+       "Tree Rollins",
+       2542,
+       9,
+       "N"
+      ],
+      [
+       305,
+       "Robert Parish",
+       2361,
+       10,
+       "N"
+      ],
+      [
+       297,
+       "Alonzo Mourning",
+       2356,
+       11,
+       "N"
+      ],
+      [
+       948,
+       "Marcus Camby",
+       2331,
+       12,
+       "N"
+      ],
+      [
+       2730,
+       "Dwight Howard",
+       2228,
+       13,
+       "N"
+      ],
+      [
+       201572,
+       "Brook Lopez",
+       2147,
+       14,
+       "Y"
+      ],
+      [
+       1112,
+       "Ben Wallace",
+       2137,
+       15,
+       "N"
+      ],
+      [
+       762,
+       "Shawn Bradley",
+       2119,
+       16,
+       "N"
+      ],
+      [
+       76195,
+       "Manute Bol",
+       2086,
+       17,
+       "N"
+      ],
+      [
+       77149,
+       "George Johnson",
+       2082,
+       18,
+       "N"
+      ],
+      [
+       708,
+       "Kevin Garnett",
+       2037,
+       19,
+       "N"
+      ],
+      [
+       77685,
+       "Larry Nance",
+       2027,
+       20,
+       "N"
+      ],
+      [
+       689,
+       "Theo Ratliff",
+       1968,
+       21,
+       "N"
+      ],
+      [
+       2200,
+       "Pau Gasol",
+       1941,
+       22,
+       "N"
+      ],
+      [
+       203076,
+       "Anthony Davis",
+       1848,
+       23,
+       "Y"
+      ],
+      [
+       203497,
+       "Rudy Gobert",
+       1842,
+       24,
+       "Y"
+      ],
+      [
+       1882,
+       "Elton Brand",
+       1828,
+       25,
+       "N"
+      ],
+      [
+       979,
+       "Jermaine O'Neal",
+       1820,
+       26,
+       "N"
+      ],
+      [
+       76979,
+       "Elvin Hayes",
+       1771,
+       27,
+       "N"
+      ],
+      [
+       201586,
+       "Serge Ibaka",
+       1759,
+       28,
+       "N"
+      ],
+      [
+       600014,
+       "Artis Gilmore",
+       1747,
+       29,
+       "N"
+      ],
+      [
+       77449,
+       "Moses Malone",
+       1733,
+       30,
+       "N"
+      ]
+     ]
+    },
+    {
+     "name": "FG_PCTLeaders",
+     "headers": [
+      "PLAYER_ID",
+      "PLAYER_NAME",
+      "FG_PCT",
+      "FG_PCT_RANK",
+      "IS_ACTIVE_FLAG"
+     ],
+     "rowSet": [
+      [
+       1629655,
+       "Daniel Gafford",
+       0.702,
+       1,
+       "Y"
+      ],
+      [
+       201599,
+       "DeAndre Jordan",
+       0.673,
+       2,
+       "Y"
+      ],
+      [
+       203497,
+       "Rudy Gobert",
+       0.658,
+       3,
+       "Y"
+      ],
+      [
+       1631105,
+       "Jalen Duren",
+       0.652,
+       4,
+       "Y"
+      ],
+      [
+       1628386,
+       "Jarrett Allen",
+       0.641,
+       5,
+       "Y"
+      ],
+      [
+       1627751,
+       "Jakob Poeltl",
+       0.636,
+       6,
+       "Y"
+      ],
+      [
+       1629651,
+       "Nic Claxton",
+       0.622,
+       7,
+       "Y"
+      ],
+      [
+       1626149,
+       "Montrezl Harrell",
+       0.619,
+       8,
+       "N"
+      ],
+      [
+       1627826,
+       "Ivica Zubac",
+       0.614,
+       9,
+       "Y"
+      ],
+      [
+       203991,
+       "Clint Capela",
+       0.613,
+       10,
+       "Y"
+      ],
+      [
+       201148,
+       "Brandan Wright",
+       0.607,
+       11,
+       "N"
+      ],
+      [
+       203939,
+       "Dwight Powell",
+       0.606,
+       12,
+       "Y"
+      ],
+      [
+       1626158,
+       "Richaun Holmes",
+       0.605,
+       13,
+       "N"
+      ],
+      [
+       1629634,
+       "Brandon Clarke",
+       0.605,
+       13,
+       "N"
+      ],
+      [
+       600014,
+       "Artis Gilmore",
+       0.599,
+       15,
+       "N"
+      ],
+      [
+       1629028,
+       "Deandre Ayton",
+       0.599,
+       15,
+       "Y"
+      ],
+      [
+       2199,
+       "Tyson Chandler",
+       0.597,
+       17,
+       "N"
+      ],
+      [
+       203486,
+       "Mason Plumlee",
+       0.596,
+       18,
+       "N"
+      ],
+      [
+       1628392,
+       "Isaiah Hartenstein",
+       0.596,
+       18,
+       "Y"
+      ],
+      [
+       2740,
+       "Andris Biedrins",
+       0.594,
+       20,
+       "N"
+      ],
+      [
+       1629627,
+       "Zion Williamson",
+       0.591,
+       21,
+       "Y"
+      ],
+      [
+       2730,
+       "Dwight Howard",
+       0.587,
+       22,
+       "N"
+      ],
+      [
+       202355,
+       "Hassan Whiteside",
+       0.586,
+       23,
+       "N"
+      ],
+      [
+       203500,
+       "Steven Adams",
+       0.584,
+       24,
+       "Y"
+      ],
+      [
+       406,
+       "Shaquille O'Neal",
+       0.582,
+       25,
+       "N"
+      ],
+      [
+       770,
+       "Mark West",
+       0.58,
+       26,
+       "N"
+      ],
+      [
+       201580,
+       "JaVale McGee",
+       0.578,
+       27,
+       "N"
+      ],
+      [
+       1628418,
+       "Thomas Bryant",
+       0.573,
+       28,
+       "Y"
+      ],
+      [
+       1630168,
+       "Onyeka Okongwu",
+       0.573,
+       28,
+       "Y"
+      ],
+      [
+       49,
+       "Gheorghe Muresan",
+       0.573,
+       28,
+       "N"
+      ]
+     ]
+    },
+    {
+     "name": "FG3MLeaders",
+     "headers": [
+      "PLAYER_ID",
+      "PLAYER_NAME",
+      "FG3M",
+      "FG3M_RANK",
+      "IS_ACTIVE_FLAG"
+     ],
+     "rowSet": [
+      [
+       201939,
+       "Stephen Curry",
+       4248,
+       1,
+       "Y"
+      ],
+      [
+       201935,
+       "James Harden",
+       3390,
+       2,
+       "Y"
+      ],
+      [
+       951,
+       "Ray Allen",
+       2973,
+       3,
+       "N"
+      ],
+      [
+       202691,
+       "Klay Thompson",
+       2899,
+       4,
+       "Y"
+      ],
+      [
+       203081,
+       "Damian Lillard",
+       2804,
+       5,
+       "Y"
+      ],
+      [
+       2544,
+       "LeBron James",
+       2636,
+       6,
+       "Y"
+      ],
+      [
+       397,
+       "Reggie Miller",
+       2560,
+       7,
+       "N"
+      ],
+      [
+       2594,
+       "Kyle Korver",
+       2450,
+       8,
+       "N"
+      ],
+      [
+       202331,
+       "Paul George",
+       2449,
+       9,
+       "Y"
+      ],
+      [
+       201142,
+       "Kevin Durant",
+       2377,
+       10,
+       "Y"
+      ],
+      [
+       1713,
+       "Vince Carter",
+       2290,
+       11,
+       "N"
+      ],
+      [
+       1891,
+       "Jason Terry",
+       2282,
+       12,
+       "N"
+      ],
+      [
+       2037,
+       "Jamal Crawford",
+       2221,
+       13,
+       "N"
+      ],
+      [
+       200768,
+       "Kyle Lowry",
+       2209,
+       14,
+       "N"
+      ],
+      [
+       1627741,
+       "Buddy Hield",
+       2201,
+       15,
+       "Y"
+      ],
+      [
+       203468,
+       "CJ McCollum",
+       2180,
+       16,
+       "Y"
+      ],
+      [
+       1718,
+       "Paul Pierce",
+       2143,
+       17,
+       "N"
+      ],
+      [
+       201569,
+       "Eric Gordon",
+       2092,
+       18,
+       "N"
+      ],
+      [
+       203501,
+       "Tim Hardaway Jr.",
+       2068,
+       19,
+       "Y"
+      ],
+      [
+       467,
+       "Jason Kidd",
+       1988,
+       20,
+       "N"
+      ],
+      [
+       201144,
+       "Mike Conley",
+       1986,
+       21,
+       "Y"
+      ],
+      [
+       1717,
+       "Dirk Nowitzki",
+       1982,
+       22,
+       "N"
+      ],
+      [
+       2207,
+       "Joe Johnson",
+       1978,
+       23,
+       "N"
+      ],
+      [
+       200755,
+       "JJ Redick",
+       1950,
+       24,
+       "N"
+      ],
+      [
+       2747,
+       "JR Smith",
+       1930,
+       25,
+       "N"
+      ],
+      [
+       202681,
+       "Kyrie Irving",
+       1876,
+       26,
+       "Y"
+      ],
+      [
+       101108,
+       "Chris Paul",
+       1870,
+       27,
+       "N"
+      ],
+      [
+       202083,
+       "Wesley Matthews",
+       1845,
+       28,
+       "N"
+      ],
+      [
+       201587,
+       "Nicolas Batum",
+       1842,
+       29,
+       "N"
+      ],
+      [
+       1628378,
+       "Donovan Mitchell",
+       1842,
+       29,
+       "Y"
+      ]
+     ]
+    }
+   ]
+  },
+  "atl-PerGame-RegularSeason-50": {
+   "parameters": {
+    "LeagueID": "00",
+    "SeasonType": "Regular Season",
+    "PerMode": "PerGame",
+    "TopX": "50"
+   },
+   "resultSets": [
+    {
+     "name": "GPLeaders",
+     "headers": [
+      "PLAYER_ID",
+      "PLAYER_NAME",
+      "GP",
+      "GP_RANK",
+      "IS_ACTIVE_FLAG"
+     ],
+     "rowSet": [
+      [
+       2544,
+       "LeBron James",
+       1622,
+       1,
+       "Y"
+      ],
+      [
+       305,
+       "Robert Parish",
+       1611,
+       2,
+       "N"
+      ],
+      [
+       76003,
+       "Kareem Abdul-Jabbar",
+       1560,
+       3,
+       "N"
+      ],
+      [
+       1713,
+       "Vince Carter",
+       1541,
+       4,
+       "N"
+      ],
+      [
+       1717,
+       "Dirk Nowitzki",
+       1522,
+       5,
+       "N"
+      ],
+      [
+       304,
+       "John Stockton",
+       1504,
+       6,
+       "N"
+      ],
+      [
+       252,
+       "Karl Malone",
+       1476,
+       7,
+       "N"
+      ],
+      [
+       708,
+       "Kevin Garnett",
+       1462,
+       8,
+       "N"
+      ],
+      [
+       788,
+       "Kevin Willis",
+       1424,
+       9,
+       "N"
+      ],
+      [
+       1891,
+       "Jason Terry",
+       1410,
+       10,
+       "N"
+      ],
+      [
+       1495,
+       "Tim Duncan",
+       1392,
+       11,
+       "N"
+      ],
+      [
+       467,
+       "Jason Kidd",
+       1391,
+       12,
+       "N"
+      ],
+      [
+       397,
+       "Reggie Miller",
+       1389,
+       13,
+       "N"
+      ],
+      [
+       361,
+       "Clifford Robinson",
+       1380,
+       14,
+       "N"
+      ],
+      [
+       101108,
+       "Chris Paul",
+       1370,
+       15,
+       "N"
+      ],
+      [
+       977,
+       "Kobe Bryant",
+       1346,
+       16,
+       "N"
+      ],
+      [
+       1718,
+       "Paul Pierce",
+       1343,
+       17,
+       "N"
+      ],
+      [
+       56,
+       "Gary Payton",
+       1335,
+       18,
+       "N"
+      ],
+      [
+       77449,
+       "Moses Malone",
+       1329,
+       19,
+       "N"
+      ],
+      [
+       2037,
+       "Jamal Crawford",
+       1327,
+       20,
+       "N"
+      ],
+      [
+       433,
+       "Buck Williams",
+       1307,
+       21,
+       "N"
+      ],
+      [
+       1889,
+       "Andre Miller",
+       1304,
+       22,
+       "N"
+      ],
+      [
+       76979,
+       "Elvin Hayes",
+       1303,
+       23,
+       "N"
+      ],
+      [
+       201566,
+       "Russell Westbrook",
+       1301,
+       24,
+       "N"
+      ],
+      [
+       951,
+       "Ray Allen",
+       1300,
+       25,
+       "N"
+      ],
+      [
+       349,
+       "Mark Jackson",
+       1296,
+       26,
+       "N"
+      ],
+      [
+       965,
+       "Derek Fisher",
+       1287,
+       27,
+       "N"
+      ],
+      [
+       64,
+       "Sam Perkins",
+       1286,
+       28,
+       "N"
+      ],
+      [
+       891,
+       "Charles Oakley",
+       1282,
+       29,
+       "N"
+      ],
+      [
+       920,
+       "A.C. Green",
+       1278,
+       30,
+       "N"
+      ]
+     ]
+    },
+    {
+     "name": "PTSLeaders",
+     "headers": [
+      "PLAYER_ID",
+      "PLAYER_NAME",
+      "PTS",
+      "PTS_RANK",
+      "IS_ACTIVE_FLAG"
+     ],
+     "rowSet": [
+      [
+       893,
+       "Michael Jordan",
+       30.1,
+       1,
+       "N"
+      ],
+      [
+       76375,
+       "Wilt Chamberlain",
+       30.1,
+       2,
+       "N"
+      ],
+      [
+       1629029,
+       "Luka Dončić",
+       29.2,
+       3,
+       "Y"
+      ],
+      [
+       203954,
+       "Joel Embiid",
+       27.6,
+       4,
+       "Y"
+      ],
+      [
+       76127,
+       "Elgin Baylor",
+       27.4,
+       5,
+       "N"
+      ],
+      [
+       201142,
+       "Kevin Durant",
+       27.1,
+       6,
+       "Y"
+      ],
+      [
+       78497,
+       "Jerry West",
+       27.0,
+       7,
+       "N"
+      ],
+      [
+       2544,
+       "LeBron James",
+       26.8,
+       8,
+       "Y"
+      ],
+      [
+       947,
+       "Allen Iverson",
+       26.7,
+       9,
+       "N"
+      ],
+      [
+       77847,
+       "Bob Pettit",
+       26.4,
+       10,
+       "N"
+      ],
+      [
+       76804,
+       "George Gervin",
+       26.2,
+       11,
+       "N"
+      ],
+      [
+       600015,
+       "Oscar Robertson",
+       25.7,
+       12,
+       "N"
+      ],
+      [
+       1628983,
+       "Shai Gilgeous-Alexander",
+       25.3,
+       13,
+       "Y"
+      ],
+      [
+       203081,
+       "Damian Lillard",
+       25.1,
+       14,
+       "Y"
+      ],
+      [
+       1629027,
+       "Trae Young",
+       25.1,
+       15,
+       "Y"
+      ],
+      [
+       1628378,
+       "Donovan Mitchell",
+       25.1,
+       16,
+       "Y"
+      ],
+      [
+       252,
+       "Karl Malone",
+       25.0,
+       17,
+       "N"
+      ],
+      [
+       977,
+       "Kobe Bryant",
+       25.0,
+       18,
+       "N"
+      ],
+      [
+       1122,
+       "Dominique Wilkins",
+       24.8,
+       19,
+       "N"
+      ],
+      [
+       201939,
+       "Stephen Curry",
+       24.8,
+       20,
+       "Y"
+      ],
+      [
+       76003,
+       "Kareem Abdul-Jabbar",
+       24.6,
+       21,
+       "N"
+      ],
+      [
+       1626164,
+       "Devin Booker",
+       24.6,
+       22,
+       "Y"
+      ],
+      [
+       1630162,
+       "Anthony Edwards",
+       24.6,
+       23,
+       "Y"
+      ],
+      [
+       1449,
+       "Larry Bird",
+       24.3,
+       24,
+       "N"
+      ],
+      [
+       76504,
+       "Adrian Dantley",
+       24.3,
+       25,
+       "N"
+      ],
+      [
+       77459,
+       "Pete Maravich",
+       24.2,
+       26,
+       "N"
+      ],
+      [
+       203507,
+       "Giannis Antetokounmpo",
+       24.1,
+       27,
+       "Y"
+      ],
+      [
+       201935,
+       "James Harden",
+       24.0,
+       28,
+       "Y"
+      ],
+      [
+       203076,
+       "Anthony Davis",
+       24.0,
+       29,
+       "Y"
+      ],
+      [
+       406,
+       "Shaquille O'Neal",
+       23.7,
+       30,
+       "N"
+      ]
+     ]
+    },
+    {
+     "name": "ASTLeaders",
+     "headers": [
+      "PLAYER_ID",
+      "PLAYER_NAME",
+      "AST",
+      "AST_RANK",
+      "IS_ACTIVE_FLAG"
+     ],
+     "rowSet": [
+      [
+       77142,
+       "Magic Johnson",
+       11.2,
+       1,
+       "N"
+      ],
+      [
+       304,
+       "John Stockton",
+       10.5,
+       2,
+       "N"
+      ],
+      [
+       1629027,
+       "Trae Young",
+       9.8,
+       3,
+       "Y"
+      ],
+      [
+       600015,
+       "Oscar Robertson",
+       9.5,
+       4,
+       "N"
+      ],
+      [
+       78318,
+       "Isiah Thomas",
+       9.3,
+       5,
+       "N"
+      ],
+      [
+       101108,
+       "Chris Paul",
+       9.2,
+       6,
+       "N"
+      ],
+      [
+       134,
+       "Kevin Johnson",
+       9.1,
+       7,
+       "N"
+      ],
+      [
+       202322,
+       "John Wall",
+       8.9,
+       8,
+       "N"
+      ],
+      [
+       1630169,
+       "Tyrese Haliburton",
+       8.8,
+       9,
+       "Y"
+      ],
+      [
+       467,
+       "Jason Kidd",
+       8.7,
+       10,
+       "N"
+      ],
+      [
+       959,
+       "Steve Nash",
+       8.5,
+       11,
+       "N"
+      ],
+      [
+       77721,
+       "Norm Nixon",
+       8.3,
+       12,
+       "N"
+      ],
+      [
+       1629029,
+       "Luka Dončić",
+       8.2,
+       13,
+       "Y"
+      ],
+      [
+       896,
+       "Tim Hardaway",
+       8.2,
+       14,
+       "N"
+      ],
+      [
+       101114,
+       "Deron Williams",
+       8.1,
+       15,
+       "N"
+      ],
+      [
+       77876,
+       "Kevin Porter",
+       8.1,
+       16,
+       "N"
+      ],
+      [
+       349,
+       "Mark Jackson",
+       8.0,
+       17,
+       "N"
+      ],
+      [
+       201566,
+       "Russell Westbrook",
+       8.0,
+       18,
+       "N"
+      ],
+      [
+       1630595,
+       "Cade Cunningham",
+       8.0,
+       19,
+       "Y"
+      ],
+      [
+       200765,
+       "Rajon Rondo",
+       7.9,
+       20,
+       "N"
+      ],
+      [
+       78003,
+       "Guy Rodgers",
+       7.8,
+       21,
+       "N"
+      ],
+      [
+       950,
+       "Stephon Marbury",
+       7.6,
+       22,
+       "N"
+      ],
+      [
+       177,
+       "Muggsy Bogues",
+       7.6,
+       23,
+       "N"
+      ],
+      [
+       600003,
+       "Bob Cousy",
+       7.5,
+       24,
+       "N"
+      ],
+      [
+       203999,
+       "Nikola Jokić",
+       7.5,
+       25,
+       "Y"
+      ],
+      [
+       77633,
+       "Johnny Moore",
+       7.4,
+       26,
+       "N"
+      ],
+      [
+       1629630,
+       "Ja Morant",
+       7.4,
+       27,
+       "Y"
+      ],
+      [
+       2544,
+       "LeBron James",
+       7.4,
+       28,
+       "Y"
+      ],
+      [
+       76054,
+       "Nate Archibald",
+       7.4,
+       29,
+       "N"
+      ],
+      [
+       201937,
+       "Ricky Rubio",
+       7.4,
+       30,
+       "N"
+      ]
+     ]
+    },
+    {
+     "name": "BLKLeaders",
+     "headers": [
+      "PLAYER_ID",
+      "PLAYER_NAME",
+      "BLK",
+      "BLK_RANK",
+      "IS_ACTIVE_FLAG"
+     ],
+     "rowSet": [
+      [
+       76631,
+       "Mark Eaton",
+       3.50171,
+       1,
+       "N"
+      ],
+      [
+       1641705,
+       "Victor Wembanyama",
+       3.46409,
+       2,
+       "Y"
+      ],
+      [
+       76195,
+       "Manute Bol",
+       3.34295,
+       3,
+       "N"
+      ],
+      [
+       165,
+       "Hakeem Olajuwon",
+       3.0937,
+       4,
+       "N"
+      ],
+      [
+       764,
+       "David Robinson",
+       2.99291,
+       5,
+       "N"
+      ],
+      [
+       78188,
+       "Elmore Smith",
+       2.89951,
+       6,
+       "N"
+      ],
+      [
+       297,
+       "Alonzo Mourning",
+       2.81146,
+       7,
+       "N"
+      ],
+      [
+       87,
+       "Dikembe Mutombo",
+       2.75,
+       8,
+       "N"
+      ],
+      [
+       76003,
+       "Kareem Abdul-Jabbar",
+       2.57385,
+       9,
+       "N"
+      ],
+      [
+       762,
+       "Shawn Bradley",
+       2.54688,
+       10,
+       "N"
+      ],
+      [
+       77149,
+       "George Johnson",
+       2.45519,
+       11,
+       "N"
+      ],
+      [
+       121,
+       "Patrick Ewing",
+       2.44632,
+       12,
+       "N"
+      ],
+      [
+       689,
+       "Theo Ratliff",
+       2.42963,
+       13,
+       "N"
+      ],
+      [
+       948,
+       "Marcus Camby",
+       2.39568,
+       14,
+       "N"
+      ],
+      [
+       203076,
+       "Anthony Davis",
+       2.28996,
+       15,
+       "Y"
+      ],
+      [
+       406,
+       "Shaquille O'Neal",
+       2.26346,
+       16,
+       "N"
+      ],
+      [
+       202355,
+       "Hassan Whiteside",
+       2.23679,
+       17,
+       "N"
+      ],
+      [
+       78450,
+       "Bill Walton",
+       2.2094,
+       18,
+       "N"
+      ],
+      [
+       77685,
+       "Larry Nance",
+       2.20326,
+       19,
+       "N"
+      ],
+      [
+       78014,
+       "Tree Rollins",
+       2.19896,
+       20,
+       "N"
+      ],
+      [
+       1495,
+       "Tim Duncan",
+       2.16954,
+       21,
+       "N"
+      ],
+      [
+       1626167,
+       "Myles Turner",
+       2.14165,
+       22,
+       "Y"
+      ],
+      [
+       600001,
+       "Nate Thurmond",
+       2.05576,
+       23,
+       "N"
+      ],
+      [
+       203497,
+       "Rudy Gobert",
+       2.03536,
+       24,
+       "Y"
+      ],
+      [
+       76979,
+       "Elvin Hayes",
+       1.98098,
+       25,
+       "N"
+      ],
+      [
+       1112,
+       "Ben Wallace",
+       1.96415,
+       26,
+       "N"
+      ],
+      [
+       104,
+       "Benoit Benjamin",
+       1.95911,
+       27,
+       "N"
+      ],
+      [
+       600014,
+       "Artis Gilmore",
+       1.92189,
+       28,
+       "N"
+      ],
+      [
+       2746,
+       "Josh Smith",
+       1.91611,
+       29,
+       "N"
+      ],
+      [
+       201586,
+       "Serge Ibaka",
+       1.91404,
+       30,
+       "N"
+      ]
+     ]
+    },
+    {
+     "name": "FG_PCTLeaders",
+     "headers": [
+      "PLAYER_ID",
+      "PLAYER_NAME",
+      "FG_PCT",
+      "FG_PCT_RANK",
+      "IS_ACTIVE_FLAG"
+     ],
+     "rowSet": [
+      [
+       1629655,
+       "Daniel Gafford",
+       0.702,
+       1,
+       "Y"
+      ],
+      [
+       201599,
+       "DeAndre Jordan",
+       0.673,
+       2,
+       "Y"
+      ],
+      [
+       203497,
+       "Rudy Gobert",
+       0.658,
+       3,
+       "Y"
+      ],
+      [
+       1631105,
+       "Jalen Duren",
+       0.652,
+       4,
+       "Y"
+      ],
+      [
+       1628386,
+       "Jarrett Allen",
+       0.641,
+       5,
+       "Y"
+      ],
+      [
+       1627751,
+       "Jakob Poeltl",
+       0.636,
+       6,
+       "Y"
+      ],
+      [
+       1629651,
+       "Nic Claxton",
+       0.622,
+       7,
+       "Y"
+      ],
+      [
+       1626149,
+       "Montrezl Harrell",
+       0.619,
+       8,
+       "N"
+      ],
+      [
+       1627826,
+       "Ivica Zubac",
+       0.614,
+       9,
+       "Y"
+      ],
+      [
+       203991,
+       "Clint Capela",
+       0.613,
+       10,
+       "Y"
+      ],
+      [
+       201148,
+       "Brandan Wright",
+       0.607,
+       11,
+       "N"
+      ],
+      [
+       203939,
+       "Dwight Powell",
+       0.606,
+       12,
+       "Y"
+      ],
+      [
+       1626158,
+       "Richaun Holmes",
+       0.605,
+       13,
+       "N"
+      ],
+      [
+       1629634,
+       "Brandon Clarke",
+       0.605,
+       13,
+       "N"
+      ],
+      [
+       600014,
+       "Artis Gilmore",
+       0.599,
+       15,
+       "N"
+      ],
+      [
+       1629028,
+       "Deandre Ayton",
+       0.599,
+       15,
+       "Y"
+      ],
+      [
+       2199,
+       "Tyson Chandler",
+       0.597,
+       17,
+       "N"
+      ],
+      [
+       203486,
+       "Mason Plumlee",
+       0.596,
+       18,
+       "N"
+      ],
+      [
+       1628392,
+       "Isaiah Hartenstein",
+       0.596,
+       18,
+       "Y"
+      ],
+      [
+       2740,
+       "Andris Biedrins",
+       0.594,
+       20,
+       "N"
+      ],
+      [
+       1629627,
+       "Zion Williamson",
+       0.591,
+       21,
+       "Y"
+      ],
+      [
+       2730,
+       "Dwight Howard",
+       0.587,
+       22,
+       "N"
+      ],
+      [
+       202355,
+       "Hassan Whiteside",
+       0.586,
+       23,
+       "N"
+      ],
+      [
+       203500,
+       "Steven Adams",
+       0.584,
+       24,
+       "Y"
+      ],
+      [
+       406,
+       "Shaquille O'Neal",
+       0.582,
+       25,
+       "N"
+      ],
+      [
+       770,
+       "Mark West",
+       0.58,
+       26,
+       "N"
+      ],
+      [
+       201580,
+       "JaVale McGee",
+       0.578,
+       27,
+       "N"
+      ],
+      [
+       1628418,
+       "Thomas Bryant",
+       0.573,
+       28,
+       "Y"
+      ],
+      [
+       1630168,
+       "Onyeka Okongwu",
+       0.573,
+       28,
+       "Y"
+      ],
+      [
+       49,
+       "Gheorghe Muresan",
+       0.573,
+       28,
+       "N"
+      ]
+     ]
+    },
+    {
+     "name": "FG3MLeaders",
+     "headers": [
+      "PLAYER_ID",
+      "PLAYER_NAME",
+      "FG3M",
+      "FG3M_RANK",
+      "IS_ACTIVE_FLAG"
+     ],
+     "rowSet": [
+      [
+       201939,
+       "Stephen Curry",
+       3.97381,
+       1,
+       "Y"
+      ],
+      [
+       1642851,
+       "Kon Knueppel",
+       3.37037,
+       2,
+       "Y"
+      ],
+      [
+       1630163,
+       "LaMelo Ball",
+       3.22442,
+       3,
+       "Y"
+      ],
+      [
+       1629029,
+       "Luka Dončić",
+       3.1751,
+       4,
+       "Y"
+      ],
+      [
+       203081,
+       "Damian Lillard",
+       3.11556,
+       5,
+       "Y"
+      ],
+      [
+       202691,
+       "Klay Thompson",
+       3.10385,
+       6,
+       "Y"
+      ],
+      [
+       1628378,
+       "Donovan Mitchell",
+       3.02463,
+       7,
+       "Y"
+      ],
+      [
+       1630162,
+       "Anthony Edwards",
+       2.97285,
+       8,
+       "Y"
+      ],
+      [
+       1641706,
+       "Brandon Miller",
+       2.96386,
+       9,
+       "Y"
+      ],
+      [
+       1627741,
+       "Buddy Hield",
+       2.87712,
+       10,
+       "Y"
+      ],
+      [
+       1629130,
+       "Duncan Robinson",
+       2.844,
+       11,
+       "Y"
+      ],
+      [
+       201935,
+       "James Harden",
+       2.77641,
+       12,
+       "Y"
+      ],
+      [
+       1629639,
+       "Tyler Herro",
+       2.71066,
+       13,
+       "Y"
+      ],
+      [
+       1628369,
+       "Jayson Tatum",
+       2.65058,
+       14,
+       "Y"
+      ],
+      [
+       1629027,
+       "Trae Young",
+       2.61847,
+       15,
+       "Y"
+      ],
+      [
+       202331,
+       "Paul George",
+       2.59153,
+       16,
+       "Y"
+      ],
+      [
+       1630169,
+       "Tyrese Haliburton",
+       2.57057,
+       17,
+       "Y"
+      ],
+      [
+       1630530,
+       "Trey Murphy III",
+       2.56782,
+       18,
+       "Y"
+      ],
+      [
+       1629008,
+       "Michael Porter Jr.",
+       2.56675,
+       19,
+       "Y"
+      ],
+      [
+       1628374,
+       "Lauri Markkanen",
+       2.55488,
+       20,
+       "Y"
+      ],
+      [
+       203468,
+       "CJ McCollum",
+       2.52607,
+       21,
+       "Y"
+      ],
+      [
+       1627832,
+       "Fred VanVleet",
+       2.52,
+       22,
+       "Y"
+      ],
+      [
+       1627736,
+       "Malik Beasley",
+       2.51384,
+       23,
+       "N"
+      ],
+      [
+       1630224,
+       "Jalen Green",
+       2.50737,
+       24,
+       "Y"
+      ],
+      [
+       1629014,
+       "Anfernee Simons",
+       2.50676,
+       25,
+       "Y"
+      ],
+      [
+       1630217,
+       "Desmond Bane",
+       2.47848,
+       26,
+       "Y"
+      ],
+      [
+       1629673,
+       "Jordan Poole",
+       2.46341,
+       27,
+       "Y"
+      ],
+      [
+       1626156,
+       "D'Angelo Russell",
+       2.45649,
+       28,
+       "N"
+      ],
+      [
+       202681,
+       "Kyrie Irving",
+       2.40822,
+       29,
+       "Y"
+      ],
+      [
+       203992,
+       "Bogdan Bogdanović",
+       2.40684,
+       30,
+       "Y"
+      ]
+     ]
+    }
+   ]
+  },
+  "atl-Totals-Playoffs-1000": {
+   "parameters": {
+    "LeagueID": "00",
+    "SeasonType": "Playoffs",
+    "PerMode": "Totals",
+    "TopX": "1000"
+   },
+   "resultSets": [
+    {
+     "name": "GPLeaders",
+     "headers": [
+      "PLAYER_ID",
+      "PLAYER_NAME",
+      "GP",
+      "GP_RANK",
+      "IS_ACTIVE_FLAG"
+     ],
+     "rowSet": [
+      [
+       2544,
+       "LeBron James",
+       302,
+       1,
+       "Y"
+      ],
+      [
+       965,
+       "Derek Fisher",
+       259,
+       2,
+       "N"
+      ],
+      [
+       1495,
+       "Tim Duncan",
+       251,
+       3,
+       "N"
+      ],
+      [
+       109,
+       "Robert Horry",
+       244,
+       4,
+       "N"
+      ],
+      [
+       76003,
+       "Kareem Abdul-Jabbar",
+       237,
+       5,
+       "N"
+      ],
+      [
+       2225,
+       "Tony Parker",
+       226,
+       6,
+       "N"
+      ],
+      [
+       977,
+       "Kobe Bryant",
+       220,
+       7,
+       "N"
+      ],
+      [
+       1938,
+       "Manu Ginobili",
+       218,
+       8,
+       "N"
+      ],
+      [
+       406,
+       "Shaquille O'Neal",
+       216,
+       9,
+       "N"
+      ],
+      [
+       937,
+       "Scottie Pippen",
+       208,
+       10,
+       "N"
+      ],
+      [
+       201143,
+       "Al Horford",
+       197,
+       11,
+       "Y"
+      ],
+      [
+       76017,
+       "Danny Ainge",
+       193,
+       12,
+       "N"
+      ],
+      [
+       252,
+       "Karl Malone",
+       193,
+       12,
+       "N"
+      ],
+      [
+       201935,
+       "James Harden",
+       191,
+       14,
+       "Y"
+      ],
+      [
+       77142,
+       "Magic Johnson",
+       190,
+       15,
+       "N"
+      ],
+      [
+       305,
+       "Robert Parish",
+       184,
+       16,
+       "N"
+      ],
+      [
+       2,
+       "Byron Scott",
+       183,
+       17,
+       "N"
+      ],
+      [
+       304,
+       "John Stockton",
+       182,
+       18,
+       "N"
+      ],
+      [
+       77141,
+       "Dennis Johnson",
+       180,
+       19,
+       "N"
+      ],
+      [
+       893,
+       "Michael Jordan",
+       179,
+       20,
+       "N"
+      ],
+      [
+       2548,
+       "Dwyane Wade",
+       177,
+       21,
+       "N"
+      ],
+      [
+       2738,
+       "Andre Iguodala",
+       177,
+       21,
+       "N"
+      ],
+      [
+       739,
+       "Rasheed Wallace",
+       177,
+       21,
+       "N"
+      ],
+      [
+       76970,
+       "John Havlicek",
+       172,
+       24,
+       "N"
+      ],
+      [
+       201142,
+       "Kevin Durant",
+       171,
+       25,
+       "Y"
+      ],
+      [
+       951,
+       "Ray Allen",
+       171,
+       25,
+       "N"
+      ],
+      [
+       1718,
+       "Paul Pierce",
+       170,
+       27,
+       "N"
+      ],
+      [
+       270,
+       "Horace Grant",
+       170,
+       27,
+       "N"
+      ],
+      [
+       203110,
+       "Draymond Green",
+       169,
+       29,
+       "Y"
+      ],
+      [
+       23,
+       "Dennis Rodman",
+       169,
+       29,
+       "N"
+      ]
+     ]
+    },
+    {
+     "name": "PTSLeaders",
+     "headers": [
+      "PLAYER_ID",
+      "PLAYER_NAME",
+      "PTS",
+      "PTS_RANK",
+      "IS_ACTIVE_FLAG"
+     ],
+     "rowSet": [
+      [
+       2544,
+       "LeBron James",
+       8521,
+       1,
+       "Y"
+      ],
+      [
+       893,
+       "Michael Jordan",
+       5987,
+       2,
+       "N"
+      ],
+      [
+       76003,
+       "Kareem Abdul-Jabbar",
+       5762,
+       3,
+       "N"
+      ],
+      [
+       977,
+       "Kobe Bryant",
+       5640,
+       4,
+       "N"
+      ],
+      [
+       406,
+       "Shaquille O'Neal",
+       5250,
+       5,
+       "N"
+      ],
+      [
+       1495,
+       "Tim Duncan",
+       5172,
+       6,
+       "N"
+      ],
+      [
+       201142,
+       "Kevin Durant",
+       5008,
+       7,
+       "Y"
+      ],
+      [
+       252,
+       "Karl Malone",
+       4761,
+       8,
+       "N"
+      ],
+      [
+       78497,
+       "Jerry West",
+       4457,
+       9,
+       "N"
+      ],
+      [
+       201935,
+       "James Harden",
+       4240,
+       10,
+       "Y"
+      ],
+      [
+       201939,
+       "Stephen Curry",
+       4147,
+       11,
+       "Y"
+      ],
+      [
+       2225,
+       "Tony Parker",
+       4045,
+       12,
+       "N"
+      ],
+      [
+       2548,
+       "Dwyane Wade",
+       3954,
+       13,
+       "N"
+      ],
+      [
+       1449,
+       "Larry Bird",
+       3897,
+       14,
+       "N"
+      ],
+      [
+       76970,
+       "John Havlicek",
+       3776,
+       15,
+       "N"
+      ],
+      [
+       165,
+       "Hakeem Olajuwon",
+       3755,
+       16,
+       "N"
+      ],
+      [
+       77142,
+       "Magic Johnson",
+       3701,
+       17,
+       "N"
+      ],
+      [
+       1717,
+       "Dirk Nowitzki",
+       3663,
+       18,
+       "N"
+      ],
+      [
+       937,
+       "Scottie Pippen",
+       3642,
+       19,
+       "N"
+      ],
+      [
+       76127,
+       "Elgin Baylor",
+       3623,
+       20,
+       "N"
+      ],
+      [
+       76375,
+       "Wilt Chamberlain",
+       3607,
+       21,
+       "N"
+      ],
+      [
+       1450,
+       "Kevin McHale",
+       3182,
+       22,
+       "N"
+      ],
+      [
+       1718,
+       "Paul Pierce",
+       3180,
+       23,
+       "N"
+      ],
+      [
+       202695,
+       "Kawhi Leonard",
+       3133,
+       24,
+       "Y"
+      ],
+      [
+       77141,
+       "Dennis Johnson",
+       3116,
+       25,
+       "N"
+      ],
+      [
+       76681,
+       "Julius Erving",
+       3088,
+       26,
+       "N"
+      ],
+      [
+       1628369,
+       "Jayson Tatum",
+       3076,
+       27,
+       "Y"
+      ],
+      [
+       1938,
+       "Manu Ginobili",
+       3054,
+       28,
+       "N"
+      ],
+      [
+       201566,
+       "Russell Westbrook",
+       3035,
+       29,
+       "N"
+      ],
+      [
+       202691,
+       "Klay Thompson",
+       3032,
+       30,
+       "Y"
+      ]
+     ]
+    },
+    {
+     "name": "ASTLeaders",
+     "headers": [
+      "PLAYER_ID",
+      "PLAYER_NAME",
+      "AST",
+      "AST_RANK",
+      "IS_ACTIVE_FLAG"
+     ],
+     "rowSet": [
+      [
+       77142,
+       "Magic Johnson",
+       2346,
+       1,
+       "N"
+      ],
+      [
+       2544,
+       "LeBron James",
+       2168,
+       2,
+       "Y"
+      ],
+      [
+       304,
+       "John Stockton",
+       1839,
+       3,
+       "N"
+      ],
+      [
+       467,
+       "Jason Kidd",
+       1263,
+       4,
+       "N"
+      ],
+      [
+       101108,
+       "Chris Paul",
+       1233,
+       5,
+       "N"
+      ],
+      [
+       201935,
+       "James Harden",
+       1224,
+       6,
+       "Y"
+      ],
+      [
+       2225,
+       "Tony Parker",
+       1143,
+       7,
+       "N"
+      ],
+      [
+       200765,
+       "Rajon Rondo",
+       1136,
+       8,
+       "N"
+      ],
+      [
+       1449,
+       "Larry Bird",
+       1062,
+       9,
+       "N"
+      ],
+      [
+       959,
+       "Steve Nash",
+       1061,
+       10,
+       "N"
+      ],
+      [
+       937,
+       "Scottie Pippen",
+       1048,
+       11,
+       "N"
+      ],
+      [
+       977,
+       "Kobe Bryant",
+       1040,
+       12,
+       "N"
+      ],
+      [
+       893,
+       "Michael Jordan",
+       1022,
+       13,
+       "N"
+      ],
+      [
+       203110,
+       "Draymond Green",
+       1020,
+       14,
+       "Y"
+      ],
+      [
+       77141,
+       "Dennis Johnson",
+       1006,
+       15,
+       "N"
+      ],
+      [
+       78318,
+       "Isiah Thomas",
+       987,
+       16,
+       "N"
+      ],
+      [
+       78497,
+       "Jerry West",
+       970,
+       17,
+       "N"
+      ],
+      [
+       201566,
+       "Russell Westbrook",
+       955,
+       18,
+       "N"
+      ],
+      [
+       201939,
+       "Stephen Curry",
+       953,
+       19,
+       "Y"
+      ],
+      [
+       600003,
+       "Bob Cousy",
+       937,
+       20,
+       "N"
+      ],
+      [
+       134,
+       "Kevin Johnson",
+       935,
+       21,
+       "N"
+      ],
+      [
+       76385,
+       "Maurice Cheeks",
+       922,
+       22,
+       "N"
+      ],
+      [
+       349,
+       "Mark Jackson",
+       905,
+       23,
+       "N"
+      ],
+      [
+       17,
+       "Clyde Drexler",
+       891,
+       24,
+       "N"
+      ],
+      [
+       2548,
+       "Dwyane Wade",
+       870,
+       25,
+       "N"
+      ],
+      [
+       1497,
+       "Chauncey Billups",
+       831,
+       26,
+       "N"
+      ],
+      [
+       1938,
+       "Manu Ginobili",
+       827,
+       27,
+       "N"
+      ],
+      [
+       76970,
+       "John Havlicek",
+       825,
+       28,
+       "N"
+      ],
+      [
+       56,
+       "Gary Payton",
+       811,
+       29,
+       "N"
+      ],
+      [
+       78049,
+       "Bill Russell",
+       770,
+       30,
+       "N"
+      ]
+     ]
+    },
+    {
+     "name": "BLKLeaders",
+     "headers": [
+      "PLAYER_ID",
+      "PLAYER_NAME",
+      "BLK",
+      "BLK_RANK",
+      "IS_ACTIVE_FLAG"
+     ],
+     "rowSet": [
+      [
+       1495,
+       "Tim Duncan",
+       568,
+       1,
+       "N"
+      ],
+      [
+       76003,
+       "Kareem Abdul-Jabbar",
+       476,
+       2,
+       "N"
+      ],
+      [
+       165,
+       "Hakeem Olajuwon",
+       472,
+       3,
+       "N"
+      ],
+      [
+       406,
+       "Shaquille O'Neal",
+       459,
+       4,
+       "N"
+      ],
+      [
+       764,
+       "David Robinson",
+       312,
+       5,
+       "N"
+      ],
+      [
+       305,
+       "Robert Parish",
+       309,
+       6,
+       "N"
+      ],
+      [
+       121,
+       "Patrick Ewing",
+       303,
+       7,
+       "N"
+      ],
+      [
+       201586,
+       "Serge Ibaka",
+       292,
+       8,
+       "N"
+      ],
+      [
+       2544,
+       "LeBron James",
+       287,
+       9,
+       "Y"
+      ],
+      [
+       1450,
+       "Kevin McHale",
+       281,
+       10,
+       "N"
+      ],
+      [
+       87,
+       "Dikembe Mutombo",
+       251,
+       11,
+       "N"
+      ],
+      [
+       1112,
+       "Ben Wallace",
+       250,
+       12,
+       "N"
+      ],
+      [
+       2730,
+       "Dwight Howard",
+       248,
+       13,
+       "N"
+      ],
+      [
+       201143,
+       "Al Horford",
+       243,
+       14,
+       "Y"
+      ],
+      [
+       76681,
+       "Julius Erving",
+       239,
+       15,
+       "N"
+      ],
+      [
+       2200,
+       "Pau Gasol",
+       233,
+       16,
+       "N"
+      ],
+      [
+       109,
+       "Robert Horry",
+       225,
+       17,
+       "N"
+      ],
+      [
+       739,
+       "Rasheed Wallace",
+       225,
+       17,
+       "N"
+      ],
+      [
+       203110,
+       "Draymond Green",
+       225,
+       17,
+       "Y"
+      ],
+      [
+       77175,
+       "Caldwell Jones",
+       223,
+       20,
+       "N"
+      ],
+      [
+       76979,
+       "Elvin Hayes",
+       222,
+       21,
+       "N"
+      ],
+      [
+       297,
+       "Alonzo Mourning",
+       215,
+       22,
+       "N"
+      ],
+      [
+       76631,
+       "Mark Eaton",
+       210,
+       23,
+       "N"
+      ],
+      [
+       201142,
+       "Kevin Durant",
+       205,
+       24,
+       "Y"
+      ],
+      [
+       708,
+       "Kevin Garnett",
+       186,
+       25,
+       "N"
+      ],
+      [
+       937,
+       "Scottie Pippen",
+       185,
+       26,
+       "N"
+      ],
+      [
+       2548,
+       "Dwyane Wade",
+       175,
+       27,
+       "N"
+      ],
+      [
+       270,
+       "Horace Grant",
+       173,
+       28,
+       "N"
+      ],
+      [
+       979,
+       "Jermaine O'Neal",
+       167,
+       29,
+       "N"
+      ],
+      [
+       731,
+       "Greg Ostertag",
+       165,
+       30,
+       "N"
+      ]
+     ]
+    },
+    {
+     "name": "FG_PCTLeaders",
+     "headers": [
+      "PLAYER_ID",
+      "PLAYER_NAME",
+      "FG_PCT",
+      "FG_PCT_RANK",
+      "IS_ACTIVE_FLAG"
+     ],
+     "rowSet": [
+      [
+       76980,
+       "Steve Hayes",
+       1.0,
+       1,
+       "N"
+      ],
+      [
+       2415,
+       "Ryan Humphrey",
+       1.0,
+       1,
+       "N"
+      ],
+      [
+       201974,
+       "Derrick Brown",
+       1.0,
+       1,
+       "N"
+      ],
+      [
+       76575,
+       "Jackie Dinkins",
+       1.0,
+       1,
+       "N"
+      ],
+      [
+       77314,
+       "Tom Kropp",
+       1.0,
+       1,
+       "N"
+      ],
+      [
+       203895,
+       "Jordan McRae",
+       1.0,
+       1,
+       "N"
+      ],
+      [
+       1629605,
+       "Tacko Fall",
+       1.0,
+       1,
+       "Y"
+      ],
+      [
+       2211,
+       "Troy Murphy",
+       1.0,
+       1,
+       "N"
+      ],
+      [
+       1630625,
+       "Dalano Banton",
+       1.0,
+       1,
+       "N"
+      ],
+      [
+       2599,
+       "Brandon Hunter",
+       1.0,
+       1,
+       "N"
+      ],
+      [
+       78372,
+       "Al Tucker",
+       1.0,
+       1,
+       "N"
+      ],
+      [
+       2213,
+       "Kirk Haston",
+       1.0,
+       1,
+       "N"
+      ],
+      [
+       76437,
+       "Norm Cook",
+       1.0,
+       1,
+       "N"
+      ],
+      [
+       77164,
+       "Rich Johnson",
+       1.0,
+       1,
+       "N"
+      ],
+      [
+       1627098,
+       "Malcolm Delaney",
+       1.0,
+       1,
+       "N"
+      ],
+      [
+       77001,
+       "Carl Henry",
+       1.0,
+       1,
+       "N"
+      ],
+      [
+       2766,
+       "Antonio Burks",
+       1.0,
+       1,
+       "N"
+      ],
+      [
+       77370,
+       "Gary Leonard",
+       1.0,
+       1,
+       "N"
+      ],
+      [
+       1642449,
+       "Tolu Smith",
+       1.0,
+       1,
+       "Y"
+      ],
+      [
+       77053,
+       "Dave Hoppen",
+       1.0,
+       1,
+       "N"
+      ],
+      [
+       77729,
+       "Connie Norman",
+       1.0,
+       1,
+       "N"
+      ],
+      [
+       1743,
+       "Bruno Sundov",
+       1.0,
+       1,
+       "N"
+      ],
+      [
+       1642859,
+       "Jase Richardson",
+       1.0,
+       1,
+       "Y"
+      ],
+      [
+       76552,
+       "Fennis Dembo",
+       1.0,
+       1,
+       "N"
+      ],
+      [
+       1629724,
+       "Vic Law",
+       1.0,
+       1,
+       "N"
+      ],
+      [
+       200788,
+       "James Augustine",
+       1.0,
+       1,
+       "N"
+      ],
+      [
+       967,
+       "Brian Evans",
+       1.0,
+       1,
+       "N"
+      ],
+      [
+       1049,
+       "Shane Heal",
+       1.0,
+       1,
+       "N"
+      ],
+      [
+       77388,
+       "Bill Ligon",
+       1.0,
+       1,
+       "N"
+      ],
+      [
+       1630579,
+       "Jericho Sims",
+       1.0,
+       1,
+       "Y"
+      ]
+     ]
+    },
+    {
+     "name": "FG3MLeaders",
+     "headers": [
+      "PLAYER_ID",
+      "PLAYER_NAME",
+      "FG3M",
+      "FG3M_RANK",
+      "IS_ACTIVE_FLAG"
+     ],
+     "rowSet": [
+      [
+       201939,
+       "Stephen Curry",
+       650,
+       1,
+       "Y"
+      ],
+      [
+       202691,
+       "Klay Thompson",
+       501,
+       2,
+       "Y"
+      ],
+      [
+       2544,
+       "LeBron James",
+       497,
+       3,
+       "Y"
+      ],
+      [
+       201935,
+       "James Harden",
+       472,
+       4,
+       "Y"
+      ],
+      [
+       951,
+       "Ray Allen",
+       385,
+       5,
+       "N"
+      ],
+      [
+       201142,
+       "Kevin Durant",
+       367,
+       6,
+       "Y"
+      ],
+      [
+       1938,
+       "Manu Ginobili",
+       324,
+       7,
+       "N"
+      ],
+      [
+       397,
+       "Reggie Miller",
+       320,
+       8,
+       "N"
+      ],
+      [
+       201980,
+       "Danny Green",
+       315,
+       9,
+       "N"
+      ],
+      [
+       202331,
+       "Paul George",
+       311,
+       10,
+       "Y"
+      ],
+      [
+       1628369,
+       "Jayson Tatum",
+       311,
+       10,
+       "Y"
+      ],
+      [
+       2747,
+       "JR Smith",
+       294,
+       12,
+       "N"
+      ],
+      [
+       977,
+       "Kobe Bryant",
+       292,
+       13,
+       "N"
+      ],
+      [
+       965,
+       "Derek Fisher",
+       285,
+       14,
+       "N"
+      ],
+      [
+       1627759,
+       "Jaylen Brown",
+       280,
+       15,
+       "Y"
+      ],
+      [
+       1718,
+       "Paul Pierce",
+       276,
+       16,
+       "N"
+      ],
+      [
+       1497,
+       "Chauncey Billups",
+       267,
+       17,
+       "N"
+      ],
+      [
+       109,
+       "Robert Horry",
+       261,
+       18,
+       "N"
+      ],
+      [
+       2594,
+       "Kyle Korver",
+       254,
+       19,
+       "N"
+      ],
+      [
+       1628378,
+       "Donovan Mitchell",
+       250,
+       20,
+       "Y"
+      ],
+      [
+       202695,
+       "Kawhi Leonard",
+       249,
+       21,
+       "Y"
+      ],
+      [
+       101108,
+       "Chris Paul",
+       244,
+       22,
+       "N"
+      ],
+      [
+       200768,
+       "Kyle Lowry",
+       238,
+       23,
+       "N"
+      ],
+      [
+       467,
+       "Jason Kidd",
+       236,
+       24,
+       "N"
+      ],
+      [
+       203935,
+       "Marcus Smart",
+       225,
+       25,
+       "Y"
+      ],
+      [
+       202681,
+       "Kyrie Irving",
+       225,
+       25,
+       "Y"
+      ],
+      [
+       203081,
+       "Damian Lillard",
+       222,
+       27,
+       "Y"
+      ],
+      [
+       1891,
+       "Jason Terry",
+       221,
+       28,
+       "N"
+      ],
+      [
+       1627750,
+       "Jamal Murray",
+       217,
+       29,
+       "Y"
+      ],
+      [
+       203109,
+       "Jae Crowder",
+       207,
+       30,
+       "N"
+      ]
+     ]
+    }
+   ]
+  },
+  "profile-2544-highs": {
+   "resultSets": [
+    {
+     "name": "SeasonHighs",
+     "headers": [
+      "PLAYER_ID",
+      "GAME_ID",
+      "GAME_DATE",
+      "VS_TEAM_ID",
+      "VS_TEAM_CITY",
+      "VS_TEAM_NAME",
+      "VS_TEAM_ABBREVIATION",
+      "STAT",
+      "STAT_VALUE",
+      "STAT_ORDER",
+      "DATE_EST"
+     ],
+     "rowSet": [
+      [
+       2544,
+       "0042500173",
+       "APR 24 2026",
+       1610612745,
+       "Houston",
+       "Rockets",
+       "HOU",
+       "PTS",
+       29,
+       1,
+       "2026-04-24T00:00:00"
+      ],
+      [
+       2544,
+       "0042500173",
+       "APR 24 2026",
+       1610612745,
+       "Houston",
+       "Rockets",
+       "HOU",
+       "REB",
+       13,
+       2,
+       "2026-04-24T00:00:00"
+      ],
+      [
+       2544,
+       "0042500222",
+       "MAY 07 2026",
+       1610612760,
+       "Oklahoma City",
+       "Thunder",
+       "OKC",
+       "OREB",
+       1,
+       3,
+       "2026-05-07T00:00:00"
+      ],
+      [
+       2544,
+       "0042500221",
+       "MAY 05 2026",
+       1610612760,
+       "Oklahoma City",
+       "Thunder",
+       "OKC",
+       "OREB",
+       1,
+       3,
+       "2026-05-05T00:00:00"
+      ],
+      [
+       2544,
+       "0042500176",
+       "MAY 01 2026",
+       1610612745,
+       "Houston",
+       "Rockets",
+       "HOU",
+       "OREB",
+       1,
+       3,
+       "2026-05-01T00:00:00"
+      ],
+      [
+       2544,
+       "0042500172",
+       "APR 21 2026",
+       1610612745,
+       "Houston",
+       "Rockets",
+       "HOU",
+       "OREB",
+       1,
+       3,
+       "2026-04-21T00:00:00"
+      ],
+      [
+       2544,
+       "0042500173",
+       "APR 24 2026",
+       1610612745,
+       "Houston",
+       "Rockets",
+       "HOU",
+       "DREB",
+       13,
+       4,
+       "2026-04-24T00:00:00"
+      ],
+      [
+       2544,
+       "0042500171",
+       "APR 18 2026",
+       1610612745,
+       "Houston",
+       "Rockets",
+       "HOU",
+       "AST",
+       13,
+       5,
+       "2026-04-18T00:00:00"
+      ],
+      [
+       2544,
+       "0042500222",
+       "MAY 07 2026",
+       1610612760,
+       "Oklahoma City",
+       "Thunder",
+       "OKC",
+       "STL",
+       3,
+       6,
+       "2026-05-07T00:00:00"
+      ],
+      [
+       2544,
+       "0042500173",
+       "APR 24 2026",
+       1610612745,
+       "Houston",
+       "Rockets",
+       "HOU",
+       "STL",
+       3,
+       6,
+       "2026-04-24T00:00:00"
+      ],
+      [
+       2544,
+       "0042500224",
+       "MAY 11 2026",
+       1610612760,
+       "Oklahoma City",
+       "Thunder",
+       "OKC",
+       "BLK",
+       1,
+       7,
+       "2026-05-11T00:00:00"
+      ],
+      [
+       2544,
+       "0042500173",
+       "APR 24 2026",
+       1610612745,
+       "Houston",
+       "Rockets",
+       "HOU",
+       "BLK",
+       1,
+       7,
+       "2026-04-24T00:00:00"
+      ],
+      [
+       2544,
+       "0042500171",
+       "APR 18 2026",
+       1610612745,
+       "Houston",
+       "Rockets",
+       "HOU",
+       "BLK",
+       1,
+       7,
+       "2026-04-18T00:00:00"
+      ],
+      [
+       2544,
+       "0042500221",
+       "MAY 05 2026",
+       1610612760,
+       "Oklahoma City",
+       "Thunder",
+       "OKC",
+       "FGM",
+       12,
+       8,
+       "2026-05-05T00:00:00"
+      ],
+      [
+       2544,
+       "0042500176",
+       "MAY 01 2026",
+       1610612745,
+       "Houston",
+       "Rockets",
+       "HOU",
+       "FGA",
+       25,
+       9,
+       "2026-05-01T00:00:00"
+      ],
+      [
+       2544,
+       "0042500173",
+       "APR 24 2026",
+       1610612745,
+       "Houston",
+       "Rockets",
+       "HOU",
+       "FG3M",
+       4,
+       10,
+       "2026-04-24T00:00:00"
+      ],
+      [
+       2544,
+       "0042500173",
+       "APR 24 2026",
+       1610612745,
+       "Houston",
+       "Rockets",
+       "HOU",
+       "FG3A",
+       9,
+       11,
+       "2026-04-24T00:00:00"
+      ],
+      [
+       2544,
+       "0042500172",
+       "APR 21 2026",
+       1610612745,
+       "Houston",
+       "Rockets",
+       "HOU",
+       "FTM",
+       10,
+       12,
+       "2026-04-21T00:00:00"
+      ],
+      [
+       2544,
+       "0042500172",
+       "APR 21 2026",
+       1610612745,
+       "Houston",
+       "Rockets",
+       "HOU",
+       "FTA",
+       14,
+       13,
+       "2026-04-21T00:00:00"
+      ]
+     ]
+    },
+    {
+     "name": "CareerHighs",
+     "headers": [
+      "PLAYER_ID",
+      "GAME_ID",
+      "GAME_DATE",
+      "VS_TEAM_ID",
+      "VS_TEAM_CITY",
+      "VS_TEAM_NAME",
+      "VS_TEAM_ABBREVIATION",
+      "STAT",
+      "STAT_VALUE",
+      "STAT_ORDER",
+      "DATE_EST"
+     ],
+     "rowSet": [
+      [
+       2544,
+       "0041700401",
+       "MAY 31 2018",
+       1610612744,
+       "Golden State",
+       "Warriors",
+       "GSW",
+       "PTS",
+       51,
+       1,
+       "2018-05-31T00:00:00"
+      ],
+      [
+       2544,
+       "0042200154",
+       "APR 24 2023",
+       1610612763,
+       "Memphis",
+       "Grizzlies",
+       "MEM",
+       "REB",
+       20,
+       2,
+       "2023-04-24T00:00:00"
+      ],
+      [
+       2544,
+       "0041400303",
+       "MAY 24 2015",
+       1610612737,
+       "Atlanta",
+       "Hawks",
+       "ATL",
+       "OREB",
+       8,
+       3,
+       "2015-05-24T00:00:00"
+      ],
+      [
+       2544,
+       "0041200401",
+       "JUN 06 2013",
+       1610612759,
+       "San Antonio",
+       "Spurs",
+       "SAS",
+       "DREB",
+       16,
+       4,
+       "2013-06-06T00:00:00"
+      ],
+      [
+       2544,
+       "0040900206",
+       "MAY 13 2010",
+       1610612738,
+       "Boston",
+       "Celtics",
+       "BOS",
+       "DREB",
+       16,
+       4,
+       "2010-05-13T00:00:00"
+      ],
+      [
+       2544,
+       "0041900141",
+       "AUG 18 2020",
+       1610612757,
+       "Portland",
+       "Trail Blazers",
+       "POR",
+       "AST",
+       16,
+       5,
+       "2020-08-18T00:00:00"
+      ],
+      [
+       2544,
+       "0041100202",
+       "MAY 15 2012",
+       1610612754,
+       "Indiana",
+       "Pacers",
+       "IND",
+       "STL",
+       6,
+       6,
+       "2012-05-15T00:00:00"
+      ],
+      [
+       2544,
+       "0041000213",
+       "MAY 07 2011",
+       1610612738,
+       "Boston",
+       "Celtics",
+       "BOS",
+       "BLK",
+       5,
+       7,
+       "2011-05-07T00:00:00"
+      ],
+      [
+       2544,
+       "0040800301",
+       "MAY 20 2009",
+       1610612753,
+       "Orlando",
+       "Magic",
+       "ORL",
+       "FGM",
+       20,
+       8,
+       "2009-05-20T00:00:00"
+      ],
+      [
+       2544,
+       "0041400401",
+       "JUN 04 2015",
+       1610612744,
+       "Golden State",
+       "Warriors",
+       "GSW",
+       "FGA",
+       38,
+       9,
+       "2015-06-04T00:00:00"
+      ],
+      [
+       2544,
+       "0040500134",
+       "APR 30 2006",
+       1610612764,
+       "Washington",
+       "Wizards",
+       "WAS",
+       "FG3M",
+       7,
+       10,
+       "2006-04-30T00:00:00"
+      ],
+      [
+       2544,
+       "0041600214",
+       "MAY 07 2017",
+       1610612761,
+       "Toronto",
+       "Raptors",
+       "TOR",
+       "FG3A",
+       12,
+       11,
+       "2017-05-07T00:00:00"
+      ],
+      [
+       2544,
+       "0041600113",
+       "APR 20 2017",
+       1610612754,
+       "Indiana",
+       "Pacers",
+       "IND",
+       "FG3A",
+       12,
+       11,
+       "2017-04-20T00:00:00"
+      ],
+      [
+       2544,
+       "0040500134",
+       "APR 30 2006",
+       1610612764,
+       "Washington",
+       "Wizards",
+       "WAS",
+       "FG3A",
+       12,
+       11,
+       "2006-04-30T00:00:00"
+      ],
+      [
+       2544,
+       "0041100302",
+       "MAY 30 2012",
+       1610612738,
+       "Boston",
+       "Celtics",
+       "BOS",
+       "FTM",
+       18,
+       12,
+       "2012-05-30T00:00:00"
+      ],
+      [
+       2544,
+       "0040800303",
+       "MAY 24 2009",
+       1610612753,
+       "Orlando",
+       "Magic",
+       "ORL",
+       "FTM",
+       18,
+       12,
+       "2009-05-24T00:00:00"
+      ],
+      [
+       2544,
+       "0041100302",
+       "MAY 30 2012",
+       1610612738,
+       "Boston",
+       "Celtics",
+       "BOS",
+       "FTA",
+       24,
+       13,
+       "2012-05-30T00:00:00"
+      ],
+      [
+       2544,
+       "0040800303",
+       "MAY 24 2009",
+       1610612753,
+       "Orlando",
+       "Magic",
+       "ORL",
+       "FTA",
+       24,
+       13,
+       "2009-05-24T00:00:00"
+      ]
+     ]
+    }
+   ]
+  },
+  "career-2544": {
+   "resultSets": [
+    {
+     "name": "CareerTotalsRegularSeason",
+     "headers": [
+      "PLAYER_ID",
+      "LEAGUE_ID",
+      "TEAM_ID",
+      "GP",
+      "GS",
+      "MIN",
+      "FGM",
+      "FGA",
+      "FG_PCT",
+      "FG3M",
+      "FG3A",
+      "FG3_PCT",
+      "FTM",
+      "FTA",
+      "FT_PCT",
+      "OREB",
+      "DREB",
+      "REB",
+      "AST",
+      "STL",
+      "BLK",
+      "TOV",
+      "PF",
+      "PTS"
+     ],
+     "rowSet": [
+      [
+       2544,
+       "00",
+       0,
+       1622,
+       1620,
+       61028,
+       15961,
+       31502,
+       0.506666243413,
+       2636,
+       7565,
+       0.348446794448,
+       8882,
+       12051,
+       0.737034271014,
+       1842,
+       10253,
+       12095,
+       12016,
+       2417,
+       1185,
+       5650,
+       2862,
+       43440
+      ]
+     ]
+    },
+    {
+     "name": "CareerTotalsPostSeason",
+     "headers": [
+      "PLAYER_ID",
+      "LEAGUE_ID",
+      "TEAM_ID",
+      "GP",
+      "GS",
+      "MIN",
+      "FGM",
+      "FGA",
+      "FG_PCT",
+      "FG3M",
+      "FG3A",
+      "FG3_PCT",
+      "FTM",
+      "FTA",
+      "FT_PCT",
+      "OREB",
+      "DREB",
+      "REB",
+      "AST",
+      "STL",
+      "BLK",
+      "TOV",
+      "PF",
+      "PTS"
+     ],
+     "rowSet": [
+      [
+       2544,
+       "00",
+       0,
+       302,
+       302,
+       12445,
+       3055,
+       6167,
+       0.495378628182,
+       497,
+       1495,
+       0.332441471571,
+       1914,
+       2582,
+       0.741285824941,
+       446,
+       2249,
+       2695,
+       2168,
+       506,
+       287,
+       1085,
+       679,
+       8521
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

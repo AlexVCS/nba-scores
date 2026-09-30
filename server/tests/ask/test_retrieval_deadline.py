@@ -222,3 +222,15 @@ def test_cached_answer_needs_no_budget(monkeypatch, clock):
                                                                      seasons._now(), True), 60))
     output = seasons.player_season(season_request(), budget(clock, 0))
     assert output.result.games_played == 79
+
+
+def test_stage3_tools_make_no_attempt_after_the_deadline(monkeypatch, clock):
+    from server.ask.resolvers import career, leaders
+    from server.tests.ask.test_career_tools import request as career_request
+    from server.tests.ask.test_leader_tools import request as leaders_request
+    monkeypatch.setattr(leaders.leagueleaders, "LeagueLeaders", lambda **k: pytest.fail("No attempt fits"))
+    monkeypatch.setattr(career.playercareerstats, "PlayerCareerStats", lambda **k: pytest.fail("No attempt fits"))
+    with pytest.raises(UnavailableError):
+        leaders.season_leaders(leaders_request(aggregation="total"), deadline=budget(clock, 0.5))
+    with pytest.raises(UnavailableError):
+        career.career_stats(career_request(), deadline=budget(clock, 0.5))
