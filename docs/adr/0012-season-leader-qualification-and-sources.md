@@ -1,7 +1,8 @@
 # 12. Season leaders: source qualification, shared ranks, totals-only fallback
 
 Date: 2026-09-29
-Status: accepted (development; production gates unchanged)
+Status: accepted (development; production gates unchanged). Decision 5 amended by
+[ADR 0014](0014-python-reads-the-measure-and-top-n.md): N above 25 shows the top 25 with a note.
 
 ## Context
 
@@ -31,7 +32,8 @@ display precision and does not state its minimums.
    ambiguous measure is a server-validated clarification (Season totals / Per
    game). Percentages have no measure.
 5. **Top N is read by Python from "top N" text** (1-25, default 10), not by a
-   model, as ADR 0005 requires for numbers. N above 25 is unsupported.
+   model, as ADR 0005 requires for numbers. N above 25 is unsupported. (Amended by
+   ADR 0014: N above 25 shows the top 25 with a note.)
 
 ## Consequences
 

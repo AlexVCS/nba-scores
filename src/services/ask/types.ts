@@ -359,15 +359,23 @@ export interface AskPostseasonSummaryResult {
   series: AskPostseasonSeriesRow[];
 }
 
+/** The same statistics in the other measure, from the same source row (the card's toggle). */
+export interface AskMeasureValues {
+  aggregation: AskAggregation;
+  values: AskStatValue[];
+}
+
 export interface AskPlayerSeasonStatsResult {
   kind: "player_season_stats";
   player: AskPlayerRef;
   season: Season;
   season_type: "regular_season" | "playoffs";
+  /** The measure shown first; `alternate` holds the other one, null when identical (percentages). */
   aggregation: AskAggregation;
   team: AskTeamRef | null;
   games_played: number;
   values: AskStatValue[];
+  alternate: AskMeasureValues | null;
   coverage_note: string | null;
   as_of: IsoDateTime;
 }
@@ -409,6 +417,8 @@ export interface AskSeasonLeadersResult {
   aggregation: AskAggregation;
   /** Requested top N; every player ranked N or better is listed, so ties can add rows. */
   limit: number;
+  /** Set when the question asked for more than 25 and the top 25 is shown. */
+  limit_note: string | null;
   qualification: "all_players" | "source_qualified";
   qualification_note: string;
   rows: AskSeasonLeaderRow[];
@@ -435,7 +445,10 @@ export interface AskCareerStatsResult {
   player: AskPlayerRef | null;
   games_played: number | null;
   values: AskStatValue[];
+  /** player_totals: the other measure from the same source row. */
+  alternate: AskMeasureValues | null;
   limit: number | null;
+  limit_note: string | null;
   rows: AskCareerLeaderRow[];
   omitted_tie: {rank: number; count: number} | null;
   /** Null in the player_rank view means outside NBA.com's top `list_size`. */

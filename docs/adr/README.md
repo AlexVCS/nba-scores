@@ -17,6 +17,7 @@ Ask design decisions from the 2026-09-29 interview. Vocabulary is in
 | [0010](0010-build-order.md) | Cascade first, then single-fetch, leader, and index-based families |
 | [0012](0012-season-leader-qualification-and-sources.md) | Season leaders: source qualification, shared ranks, totals-only BRef fallback |
 | [0013](0013-career-stats-scope-and-sources.md) | Career stats: three views, totals-only all-time lists, stats.nba only |
+| [0014](0014-python-reads-the-measure-and-top-n.md) | Python reads the measure; unstated player measures show per game with a totals toggle; top N clamps to 25 |
 
 ## Open questions
 

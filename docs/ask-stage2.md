@@ -10,8 +10,10 @@ registry, in the order specified by ADR 0010.
 - `team_records`: one team's regular-season wins/losses or complete league or
   Eastern/Western conference standings for one season.
 
-A missing season is clarified. Ambiguous totals/per-game or season type has
-server-validated choices; uncertain standings scope offers league/east/west; explicit playoff wording cannot silently become a
+A missing season is clarified. The measure (totals or per game) is read by Python
+from the question text (ADR 0014); with none stated, a player's season shows per-game
+averages first with a totals toggle (see "Measure toggle" below). An ambiguous season
+type has server-validated choices; uncertain standings scope offers league/east/west; explicit playoff wording cannot silently become a
 regular-season answer. A bare calendar year outside playoff language
 retains both overlapping seasons. The tools do not answer division standings,
 home/away, opponent, month/date splits, advanced metrics, per-36/per-100 rates,
@@ -57,6 +59,34 @@ Each answer carries source metadata, a restricted source link and a fetch time.
 The Hardwood UI shows these answers immediately under ADR 0006. Suggestions,
 clarification choices and unrequested links keep their existing spoiler rules.
 
+## Measure toggle (ADR 0014)
+
+Live testing showed Jev confidently choosing a measure the question never stated.
+`server/ask/measure.py` now decides it from the text, for player season stats,
+season leaders and career stats. It replaces the interpreter's `aggregation` read
+before the normalizer and the cascade policy see it (diagnostics show
+`aggregation` decided by `question`).
+
+- Per-game wording: "per game", "a game"/"a night" (not "in a game"), "ppg",
+  "rpg", "apg", "spg", "bpg", "mpg", "average(s/d)". Totals wording: "total(s)",
+  "in total", "how many". "How many ... average" is per game. Both kinds together
+  are ambiguous.
+- **No measure stated** ("Kevin Durant stats 2015-16", "Jokic rebounds for Denver in
+  2023-24"): per-game averages first, no clarification. The answer also carries
+  season totals (`alternate`), and the Hardwood card shows a segmented
+  **Per game | Totals** toggle (a labelled group of `aria-pressed` buttons).
+- **Measure stated:** that measure is shown first. The toggle stays, because the
+  other measure comes from the same verified row and asking is consent (ADR 0006).
+- Both measures come from **one source row** (NBA or Basketball-Reference, never
+  both). Per game is the exact total divided by games played, shown to one decimal
+  (Python `format(value, ".1f")`, round-half-even on the binary value). It is never
+  rebuilt from rounded averages. Shooting splits show made/attempted per game
+  ("9.7/19.2") and in total ("698/1381"). Percentages are the same in both measures,
+  so a percentage-only answer is requested as `total` and has no toggle. The stat
+  line keeps its made/attempted splits; it does not add percentages.
+- Career lines (`career_stats` `player_totals`) get the same toggle, starting at
+  totals (ADR 0013).
+
 ## Verification and release boundary
 
 `server/tests/ask/test_season_tools.py` covers identity, traded players,
@@ -65,8 +95,12 @@ partial/duplicate standings, source URLs, throttling and concurrency.
 `AskSeasonResults.test.tsx` checks immediate display, season/measure context,
 record values and accessible standings rows.
 
-`server/tests/ask/fixtures/eval/stage2-dev.json` adds 21 development cases with
-labels authored before any live run. These cases are exposed development data,
+`server/tests/ask/fixtures/eval/stage2-dev.json` adds 22 development cases with
+labels authored before any live run. Case 22 ("Kevin Durant stats 2015-16") and the
+per-game relabeling of cases 4 and 6 come from live feedback on 2026-09-30 (ADR 0014).
+`server/tests/ask/test_live_feedback_measures.py` covers measure detection, the toggle
+values and the pipeline paths with fake interpreters. `AskMeasureToggle.test.tsx`
+covers the toggle. These cases are exposed development data,
 not independent unseen release evidence. Historical four-family artifacts and
 labels are preserved. Deprecated unsupported reasons remain deserializable for
 those artifacts, but current adapters do not offer them.

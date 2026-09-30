@@ -44,10 +44,14 @@ blocks and offensive/defensive rebounds from 1973-74, turnovers from 1977-78,
 
 ### Totals vs per game
 
-- Counting statistics need an explicit measure. When the interpreter reads no
-  measure ("Who led the league in points in 2022-23?"), or reads it as
-  ambiguous, Ask asks **"Which measure (season totals or per game)?"** with two
-  server-validated choices (Season totals, Per game). The answer is never
+- Counting statistics need an explicit measure, read by Python from the question
+  text, never from the interpreter (ADR 0014; live testing found Jev choosing totals at
+  0.96 for "Who led the league in assists in 2019-20?"). When the question states no
+  measure ("Who led the league in points in 2022-23?", "the most three-pointers"), or
+  states both, Ask asks **"Which measure (season totals or per game)?"** with two
+  server-validated choices (Season totals, Per game). Each choice rewrites the
+  question with its measure ("... per game?"), so the continuation answers without a
+  model call. The answer is never
   defaulted: the official NBA scoring title is per game, but "most points"
   reads as totals, and the two leaders differ in many seasons.
 - Percentages have no measure. Aggregation is always `total` for them, and a
@@ -110,8 +114,10 @@ lists them):
 
 - Default N = 10. The server reads "top N" (digits or words, 1-25) directly from
   the question text; System One models do not extract numbers (ADR 0005).
-- N above 25 is unsupported. Clarification rewrites keep the original "top N"
-  text, so the continuation keeps N.
+- N above 25 shows the top 25 with the note "Showing the top 25, the most Ask
+  lists." (ADR 0014; before, it was unsupported). Top 0 is unsupported. Clarification
+  rewrites keep the original "top N" text, so the continuation keeps N and the note:
+  "Top 30 scorers 2023-24" first asks the measure, then lists 25 with the note.
 - "Who led ..." still returns the top 10 with the leader emphasized; the leader
   alone would hide ties and near-ties.
 
@@ -165,12 +171,12 @@ clarification continuations, as in Stage 2.
   per 100 possessions, per minute; fouls; plus/minus; double-doubles.
 - More than one statistic in one question ("points and assists leaders").
 - Combined regular season and playoffs; play-in; preseason; All-Star; NBA Cup.
-- Top N above 25.
 
 ## Result
 
 `SeasonLeadersResult` (`kind: "season_leaders"`): season, season type, stat,
-aggregation, requested N, qualification text, rows (rank, player, team or null
+aggregation, requested N (at most 25), an optional `limit_note` when the question asked
+for more, qualification text, rows (rank, player, team or null
 for multiple teams, games played, value), an optional omitted-tie note, an
 optional coverage note, and `as_of`. Source link and source metadata follow
 Stage 2. Asking is consent (ADR 0006): the table shows immediately.
@@ -189,8 +195,9 @@ Stage 2. Asking is consent (ADR 0006): the table shows immediately.
   cached, views chosen by Python, clarifications and the career scope guard.
 - `src/components/ask/AskCareerResult.test.tsx`: career line, all-time table,
   rank, shared rank and outside-the-list states.
-- `server/tests/ask/fixtures/eval/stage3-dev.json`: 38 development cases (26
-  season leaders, 12 career) with labels authored before any live run.
+- `server/tests/ask/fixtures/eval/stage3-dev.json`: 42 development cases (29
+  season leaders, 13 career) with labels authored before any live run. Cases 39-42
+  and the relabeled cases 8 and 24 come from live feedback on 2026-09-30 (ADR 0014).
   **Exposed development data, not unseen release evidence.** No interpreter was
   run on them; they are checked for label validity and guard survival only.
 - The stats.nba shapes and rules above come from saved probes
@@ -225,7 +232,9 @@ three views, chosen by Python from the question and the interpreter fields:
   combined regular season plus playoffs is unsupported. BAA/ABA seasons are
   whatever stats.nba includes in NBA career totals; ABA totals are never added.
 - **Totals vs per game.** Career questions default to totals ("career points",
-  "all-time leading scorer" are totals by convention). A player's career per-game
+  "all-time leading scorer" are totals by convention). Python reads the measure from
+  the question text (ADR 0014). A player's career line also carries the other measure,
+  and the card offers the same Per game | Totals toggle as a season line. A player's career per-game
   average is computed from his exact career totals and games played, as in
   Stage 2, never from rounded averages.
 - **Percentages** for a player are his career made/attempted ratio from the
@@ -250,6 +259,23 @@ three views, chosen by Python from the question and the interpreter fields:
   stat existed would dilute the average), shown as unavailable.
 - **Active players' careers change nightly.** Career and all-time data are
   cached for one hour and carry "Data as of".
+
+### "LeBron's career points" (fixed 2026-09-30)
+
+Live testing returned "Which kind of question?" with no options. Jev had chosen
+`career_stats` (intent 1.0) with player 2544, points and totals. Root cause:
+
+1. Candidate lookup read "LeBron's career" at the start of a lowercase question as one
+   unknown full name. It found no player, so the cascade expanded the player field.
+2. The expanded, partial match for LeBron James kept the matched text "LeBron's career".
+3. The career guard masks matched player text before looking for split words. That
+   masking erased "career", so the guard found no career wording and asked for the intent.
+
+Fixes: a possessive now ends a name run in lookup, so "LeBron's" matches LeBron James
+directly. The guard reads career wording from the unmasked question. The intent
+clarification never shows the name/date hint. When the reading is a career question
+without career or season wording ("How many points does LeBron James have?"), it asks
+"Career or one season?", offers a Career totals choice and suggests naming a season.
 
 ### Sources
 

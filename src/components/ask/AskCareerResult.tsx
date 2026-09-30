@@ -1,5 +1,7 @@
 import type {AskCareerStatsResult} from "@/services/ask/types";
 import {STAT_LABELS, formatAskTimestamp} from "./askFormat";
+import {useAskMeasure} from "./askMeasure";
+import AskMeasureToggle from "./AskMeasureToggle";
 import {askCap, askCard} from "./askStyles";
 
 interface AskCareerResultProps {
@@ -19,19 +21,28 @@ function AskCareerResult({result}: AskCareerResultProps) {
   const title = result.view === "leaders" ? `All-time ${statLabel.toLowerCase()} leaders`
     : result.view === "player_rank" ? `${result.player?.name} · all-time ${statLabel.toLowerCase()}`
       : `${result.player?.name} career statistics`;
-  const single = result.values.length === 1;
+  const {measure, values, toggle, setMeasure} = useAskMeasure(result);
+  const single = values.length === 1;
 
   return (
     <section className={askCard} aria-label={title}>
       <div className="p-[18px]">
-        <h3 className="text-xl font-extrabold">{result.view === "leaders" ? title : result.player?.name}</h3>
-        <p className={`${askCap} mt-1 mb-4`}>
-          Career · {phase}{result.view === "leaders" ? ` · Top ${result.limit}` : ""}
-        </p>
+        <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h3 className="text-xl font-extrabold">{result.view === "leaders" ? title : result.player?.name}</h3>
+            <p className={`${askCap} mt-1`}>
+              Career · {phase}{result.view === "leaders" ? ` · Top ${result.limit}` : ""}
+            </p>
+          </div>
+          {result.view === "player_totals" && toggle && (
+            <AskMeasureToggle measure={measure} onChange={setMeasure} subject={`${result.player?.name} career statistics`} />
+          )}
+        </div>
+        {result.limit_note && <p className="-mt-2 mb-3 text-sm font-bold text-hw-muted">{result.limit_note}</p>}
 
         {result.view === "player_totals" && (
           <dl className={single ? "" : "grid grid-cols-[repeat(auto-fill,minmax(112px,1fr))] gap-4"}>
-            {result.values.map(value => (
+            {values.map(value => (
               <div key={value.stat} className="flex flex-col-reverse">
                 <dt className={`${askCap} mt-1`}>{STAT_LABELS[value.stat]}</dt>
                 <dd className={single ? "text-[56px] leading-tight font-extrabold tabular-nums" : "text-xl font-extrabold tabular-nums"}>
@@ -99,7 +110,7 @@ function AskCareerResult({result}: AskCareerResultProps) {
       </div>
       <div className="border-t border-hw-line bg-hw-surface-muted px-[18px] py-3 text-xs font-bold text-hw-muted">
         {result.view === "player_totals"
-          ? `${result.aggregation === "per_game" ? "Career per game" : "Career totals"} · ${result.games_played} games played`
+          ? `${values.every(value => value.stat.endsWith("percentage")) ? "Career shooting percentage" : measure === "per_game" ? "Career per game" : "Career totals"} · ${result.games_played} games played`
           : "All-time totals from NBA.com"}
         {tiedRanks.size > 0 && <span className="mt-1 block">T marks players tied at the same rank.</span>}
         <span className="mt-1 block">Data as of {formatAskTimestamp(result.as_of)}</span>

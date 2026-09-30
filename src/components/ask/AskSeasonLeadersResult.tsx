@@ -24,7 +24,8 @@ function AskSeasonLeadersResult({result}: AskSeasonLeadersResultProps) {
     <section className={askCard} aria-label={`${result.season} ${title}`}>
       <div className="p-[18px]">
         <h3 className="text-xl font-extrabold">{title}</h3>
-        <p className={`${askCap} mt-1 mb-4`}>{result.season} · {phase} · Top {result.limit}</p>
+        <p className={`${askCap} mt-1 ${result.limit_note ? "mb-2" : "mb-4"}`}>{result.season} · {phase} · Top {result.limit}</p>
+        {result.limit_note && <p className="mb-3 text-sm font-bold text-hw-muted">{result.limit_note}</p>}
         <div className="overflow-x-auto" tabIndex={0} role="region" aria-label={`${title} table, scroll horizontally if needed`}>
           <table className="w-full text-left text-xs">
             <caption className="sr-only">{result.season} {phase.toLowerCase()} {title.toLowerCase()}, top {result.limit}</caption>
