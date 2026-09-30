@@ -1,0 +1,495 @@
+{
+ "purpose": "Offline ADR 0009 tier gate from preserved traces; no provider calls, no rerun",
+ "generated_at": "2026-09-29T22:44:41.301160+00:00",
+ "inputs_sha256": {
+  "server/tests/ask/fixtures/eval/unseen-two-2026-09-29.json": "fa3e001b816baf38967fd88c837b6228f2336af811749f06499cd4b59c1cf040",
+  "docs/verification/ask-unseen-two-2026-09-29-manifest.json": "f188b8440715a4d0f15c58c92cf647dd815bf37db362febace1a29bebb47ca4e",
+  "docs/verification/ask-unseen-two-2026-09-29.jsonl": "c43d1b9c99e3fbb917d9808a27873365c38dae83b2ed08a3ab53d513b6059fd4",
+  "docs/verification/ask-unseen-two-2026-09-29.json": "30e142e3f4f81c8348008fa8e9ab58de9f09a9a4fa8e45e12c68f1b649c27a01",
+  "docs/verification/ask-unseen-two-2026-09-29-field-labels.json": "c19b3214c5d90697eab030159e55b6853cc19155b48345e08d7f419d513fd201"
+ },
+ "tier": {
+  "name": "jev",
+  "model": "jev-1.13.0",
+  "accept_min": 0.85
+ },
+ "rules": [
+  "A field is one interpreter field (intent plus the fields RELEVANT_FIELDS assigns to the gold intent) on one question. Unsupported gold intent has only the intent field.",
+  "location is excluded when its candidate set is not_mentioned: lookup decides it and no tier reads it.",
+  "Jev accepts a reading when its confidence is at least 0.85, whatever its status (selected, absent, ambiguous or no_matching_candidate), as TieredAdapter does.",
+  "A Jev 'unsupported' outcome is an accepted intent reading 'unsupported:<reason>'. The cascade accepts it at the adapter's unsupported_min (0.6) and the trace keeps no confidence.",
+  "Fields with no Jev reading (Jev unavailable, or an unsupported outcome) are not accepted.",
+  "Correctness is judged per reading against gold: selected values map through the recorded candidates to IDs/values; absent must match absent; ambiguous must match ambiguous; no_matching_candidate is correct for unlisted gold, or when no recorded candidate carries the gold value.",
+  "An absent reading on a candidate-backed field counts as the page value when the set holds exactly one app_context candidate (the normalizer fills it).",
+  "aggregation absent equals total; stat absent equals stat_line unless the gold scope is leaders (normalizer defaults). Teams compare as sets of franchise IDs; round compares round and conference.",
+  "Later-tier vetoes and overrides are ignored: the tier is scored on its own readings (ADR 0009). A later tier's unsupported outcome replaces an accepted Jev intent in the cascade; Jev's reading is still scored as accepted."
+ ],
+ "gold_inventory": {
+  "by_bucket": {
+   "mechanical": {
+    "game_search": {
+     "intent": 20,
+     "teams": 18,
+     "date": 18,
+     "location": 4
+    },
+    "boxscore_stat": {
+     "intent": 13,
+     "stat_scope": 11,
+     "stat": 11,
+     "aggregation": 11,
+     "player": 7,
+     "teams": 11,
+     "date": 11,
+     "season": 11,
+     "round": 11,
+     "game_number": 11
+    },
+    "playoff_series": {
+     "intent": 20,
+     "teams": 18,
+     "season": 18,
+     "round": 18
+    },
+    "postseason_summary": {
+     "intent": 21,
+     "teams": 18,
+     "season": 18
+    }
+   },
+   "labeled": {
+    "game_search": {
+     "intent": 5,
+     "teams": 5,
+     "date": 5
+    },
+    "boxscore_stat": {
+     "player": 16,
+     "intent": 12,
+     "stat_scope": 12,
+     "stat": 12,
+     "aggregation": 12,
+     "teams": 12,
+     "date": 12,
+     "season": 12,
+     "round": 12,
+     "game_number": 12
+    },
+    "playoff_series": {
+     "intent": 5,
+     "teams": 5,
+     "season": 5,
+     "round": 5,
+     "stat_scope": 1,
+     "stat": 1,
+     "aggregation": 1,
+     "player": 1,
+     "date": 1,
+     "game_number": 1
+    },
+    "postseason_summary": {
+     "intent": 4,
+     "teams": 4,
+     "season": 4
+    }
+   },
+   "lookup_decided": {
+    "game_search": {
+     "location": 19
+    }
+   }
+  },
+  "totals": {
+   "mechanical": 299,
+   "labeled": 177,
+   "lookup_decided": 19
+  },
+  "labeled_cases": [
+   "unseen-two-boxscore_stat-06",
+   "unseen-two-boxscore_stat-07",
+   "unseen-two-boxscore_stat-09",
+   "unseen-two-boxscore_stat-10",
+   "unseen-two-boxscore_stat-12",
+   "unseen-two-boxscore_stat-13",
+   "unseen-two-boxscore_stat-14",
+   "unseen-two-boxscore_stat-15",
+   "unseen-two-boxscore_stat-16",
+   "unseen-two-boxscore_stat-17",
+   "unseen-two-boxscore_stat-18",
+   "unseen-two-boxscore_stat-19",
+   "unseen-two-boxscore_stat-20",
+   "unseen-two-boxscore_stat-21",
+   "unseen-two-boxscore_stat-22",
+   "unseen-two-boxscore_stat-23",
+   "unseen-two-game_search-19",
+   "unseen-two-game_search-20",
+   "unseen-two-game_search-21",
+   "unseen-two-game_search-22",
+   "unseen-two-game_search-23",
+   "unseen-two-playoff_series-19",
+   "unseen-two-playoff_series-20",
+   "unseen-two-playoff_series-21",
+   "unseen-two-playoff_series-22",
+   "unseen-two-playoff_series-25",
+   "unseen-two-postseason_summary-19",
+   "unseen-two-postseason_summary-20",
+   "unseen-two-postseason_summary-21",
+   "unseen-two-postseason_summary-22"
+  ],
+  "note": "labeled counts assume each labeled case's family intent; the labeler may choose another"
+ },
+ "label_notes": {
+  "unseen-two-playoff_series-25": {
+   "intent": "The question asks a player boxscore statistic (LeBron's points) but as a per-game average across the 2016 Finals games; boxscore_stat is the request type it fits and multi_game_average is the reason that type rejects it (the fixture expects unsupported/multi_game_average)."
+  }
+ },
+ "label_warnings": [
+  "unseen-two-postseason_summary-22: clarify teams/ambiguous labeled ['value']"
+ ],
+ "tiers": {
+  "jev": {
+   "gate": {
+    "eligible": 476,
+    "accepted": 405,
+    "accepted_correct": 401,
+    "accepted_errors": 4,
+    "precision": 0.9901,
+    "coverage": 0.8508,
+    "escalated": 71,
+    "escalation_rate": 0.1492,
+    "not_accepted_not_escalated": 0,
+    "precision_min": 0.98,
+    "coverage_min": 0.3,
+    "precision_passed": true,
+    "coverage_passed": true,
+    "passed": true,
+    "error_slack": 4,
+    "precision_wilson95_lower": 0.9749,
+    "provisional": false,
+    "provisional_rule": "pass with zero error slack or coverage below 0.35"
+   },
+   "by_field": {
+    "intent": {
+     "eligible": 100,
+     "accepted": 95,
+     "accepted_correct": 93,
+     "accepted_errors": 2,
+     "precision": 0.9789,
+     "coverage": 0.95,
+     "escalated": 5,
+     "escalation_rate": 0.05,
+     "not_accepted_not_escalated": 0
+    },
+    "stat_scope": {
+     "eligible": 24,
+     "accepted": 24,
+     "accepted_correct": 24,
+     "accepted_errors": 0,
+     "precision": 1.0,
+     "coverage": 1.0,
+     "escalated": 0,
+     "escalation_rate": 0.0,
+     "not_accepted_not_escalated": 0
+    },
+    "stat": {
+     "eligible": 24,
+     "accepted": 24,
+     "accepted_correct": 24,
+     "accepted_errors": 0,
+     "precision": 1.0,
+     "coverage": 1.0,
+     "escalated": 0,
+     "escalation_rate": 0.0,
+     "not_accepted_not_escalated": 0
+    },
+    "aggregation": {
+     "eligible": 24,
+     "accepted": 24,
+     "accepted_correct": 24,
+     "accepted_errors": 0,
+     "precision": 1.0,
+     "coverage": 1.0,
+     "escalated": 0,
+     "escalation_rate": 0.0,
+     "not_accepted_not_escalated": 0
+    },
+    "player": {
+     "eligible": 24,
+     "accepted": 13,
+     "accepted_correct": 12,
+     "accepted_errors": 1,
+     "precision": 0.9231,
+     "coverage": 0.5417,
+     "escalated": 11,
+     "escalation_rate": 0.4583,
+     "not_accepted_not_escalated": 0
+    },
+    "teams": {
+     "eligible": 91,
+     "accepted": 66,
+     "accepted_correct": 66,
+     "accepted_errors": 0,
+     "precision": 1.0,
+     "coverage": 0.7253,
+     "escalated": 25,
+     "escalation_rate": 0.2747,
+     "not_accepted_not_escalated": 0
+    },
+    "date": {
+     "eligible": 47,
+     "accepted": 36,
+     "accepted_correct": 36,
+     "accepted_errors": 0,
+     "precision": 1.0,
+     "coverage": 0.766,
+     "escalated": 11,
+     "escalation_rate": 0.234,
+     "not_accepted_not_escalated": 0
+    },
+    "season": {
+     "eligible": 68,
+     "accepted": 52,
+     "accepted_correct": 51,
+     "accepted_errors": 1,
+     "precision": 0.9808,
+     "coverage": 0.7647,
+     "escalated": 16,
+     "escalation_rate": 0.2353,
+     "not_accepted_not_escalated": 0
+    },
+    "round": {
+     "eligible": 46,
+     "accepted": 44,
+     "accepted_correct": 44,
+     "accepted_errors": 0,
+     "precision": 1.0,
+     "coverage": 0.9565,
+     "escalated": 2,
+     "escalation_rate": 0.0435,
+     "not_accepted_not_escalated": 0
+    },
+    "game_number": {
+     "eligible": 24,
+     "accepted": 24,
+     "accepted_correct": 24,
+     "accepted_errors": 0,
+     "precision": 1.0,
+     "coverage": 1.0,
+     "escalated": 0,
+     "escalation_rate": 0.0,
+     "not_accepted_not_escalated": 0
+    },
+    "location": {
+     "eligible": 4,
+     "accepted": 3,
+     "accepted_correct": 3,
+     "accepted_errors": 0,
+     "precision": 1.0,
+     "coverage": 0.75,
+     "escalated": 1,
+     "escalation_rate": 0.25,
+     "not_accepted_not_escalated": 0
+    }
+   },
+   "by_family": {
+    "game_search": {
+     "eligible": 75,
+     "accepted": 63,
+     "accepted_correct": 63,
+     "accepted_errors": 0,
+     "precision": 1.0,
+     "coverage": 0.84,
+     "escalated": 12,
+     "escalation_rate": 0.16,
+     "not_accepted_not_escalated": 0
+    },
+    "boxscore_stat": {
+     "eligible": 232,
+     "accepted": 186,
+     "accepted_correct": 184,
+     "accepted_errors": 2,
+     "precision": 0.9892,
+     "coverage": 0.8017,
+     "escalated": 46,
+     "escalation_rate": 0.1983,
+     "not_accepted_not_escalated": 0
+    },
+    "playoff_series": {
+     "eligible": 100,
+     "accepted": 92,
+     "accepted_correct": 91,
+     "accepted_errors": 1,
+     "precision": 0.9891,
+     "coverage": 0.92,
+     "escalated": 8,
+     "escalation_rate": 0.08,
+     "not_accepted_not_escalated": 0
+    },
+    "postseason_summary": {
+     "eligible": 69,
+     "accepted": 64,
+     "accepted_correct": 63,
+     "accepted_errors": 1,
+     "precision": 0.9844,
+     "coverage": 0.9275,
+     "escalated": 5,
+     "escalation_rate": 0.0725,
+     "not_accepted_not_escalated": 0
+    }
+   },
+   "by_gold_source": {
+    "mechanical": {
+     "eligible": 299,
+     "accepted": 266,
+     "accepted_correct": 264,
+     "accepted_errors": 2,
+     "precision": 0.9925,
+     "coverage": 0.8896,
+     "escalated": 33,
+     "escalation_rate": 0.1104,
+     "not_accepted_not_escalated": 0
+    },
+    "labeled": {
+     "eligible": 177,
+     "accepted": 139,
+     "accepted_correct": 137,
+     "accepted_errors": 2,
+     "precision": 0.9856,
+     "coverage": 0.7853,
+     "escalated": 38,
+     "escalation_rate": 0.2147,
+     "not_accepted_not_escalated": 0
+    }
+   },
+   "accepted_field_errors": [
+    {
+     "case_id": "unseen-two-boxscore_stat-08",
+     "field": "season",
+     "source": "mechanical",
+     "reading": {
+      "status": "no_matching_candidate",
+      "selected": [],
+      "alternatives": []
+     },
+     "confidence": 0.92,
+     "gold": [
+      {
+       "status": "absent"
+      }
+     ],
+     "error_kind": "no_match_vs_absent"
+    },
+    {
+     "case_id": "unseen-two-boxscore_stat-15",
+     "field": "player",
+     "source": "labeled",
+     "reading": {
+      "status": "selected",
+      "selected": [
+       "player:201939"
+      ],
+      "alternatives": []
+     },
+     "confidence": 1.0,
+     "gold": [
+      {
+       "status": "ambiguous",
+       "alternatives": [
+        201939,
+        203552
+       ]
+      }
+     ],
+     "error_kind": "value_vs_ambiguous"
+    },
+    {
+     "case_id": "unseen-two-playoff_series-24",
+     "field": "intent",
+     "source": "mechanical",
+     "reading": {
+      "status": "selected",
+      "selected": [
+       "playoff_series"
+      ],
+      "alternatives": []
+     },
+     "confidence": 0.94,
+     "gold": [
+      {
+       "status": "value",
+       "value": "unsupported:historical_comparison"
+      }
+     ],
+     "error_kind": "value_vs_value"
+    },
+    {
+     "case_id": "unseen-two-postseason_summary-22",
+     "field": "intent",
+     "source": "labeled",
+     "reading": {
+      "status": "selected",
+      "selected": [
+       "playoff_series"
+      ],
+      "alternatives": []
+     },
+     "confidence": 0.87,
+     "gold": [
+      {
+       "status": "value",
+       "value": "postseason_summary"
+      }
+     ],
+     "error_kind": "value_vs_value"
+    }
+   ]
+  },
+  "luna": {
+   "informational": "final tier, no confidences; readings on fields Jev escalated",
+   "fields": 71,
+   "read": 69,
+   "correct": 67,
+   "by_field": {
+    "intent": {
+     "read": 5,
+     "correct": 5
+    },
+    "player": {
+     "read": 11,
+     "correct": 11
+    },
+    "teams": {
+     "read": 24,
+     "correct": 23
+    },
+    "date": {
+     "read": 10,
+     "correct": 9
+    },
+    "season": {
+     "read": 16,
+     "correct": 16
+    },
+    "round": {
+     "read": 2,
+     "correct": 2
+    },
+    "location": {
+     "read": 1,
+     "correct": 1
+    }
+   }
+  },
+  "laya": {
+   "informational": "disabled in the frozen configuration; no readings"
+  }
+ },
+ "scope_limits": [
+  "Four of the eight ADR 0004 tool families are present; championships and the other families have no questions, so per-family gate evidence covers four families only.",
+  "Laya is disabled; only Jev can be gated.",
+  "Jev 'unsupported' outcomes carry no confidence; the cascade accepts them at unsupported_min 0.6, below accept_min 0.85.",
+  "Field gold for clarification, some unsupported and non-player boxscore cases was labeled after the run by an isolated labeler; the fixture's authoring isolation does not cover those labels.",
+  "Journal and report hashes were not registered before the run; they are pinned to commit 377001f.",
+  "In the cascade, a later tier's unsupported outcome discards an accepted Jev intent without a veto, so tier-level and system-level intent credit can differ."
+ ]
+}

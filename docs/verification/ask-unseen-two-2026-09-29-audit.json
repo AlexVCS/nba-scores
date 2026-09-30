@@ -1,0 +1,331 @@
+{
+  "purpose": "Post-run audit without reruns, relabeling, or score adjustments",
+  "generated_at": "2026-09-29T22:20:49.496460+00:00",
+  "frozen_commit": "6cdae70d2589e14c65f899555f8311b513c1c213",
+  "fixture_sha256": "fa3e001b816baf38967fd88c837b6228f2336af811749f06499cd4b59c1cf040",
+  "all_frozen_hashes_match": true,
+  "label_overrides": [],
+  "summary": {
+    "cases": 100,
+    "complete_request_accuracy": 0.92,
+    "correct": 92,
+    "schema_valid_guesses": 0,
+    "service_failures": 0,
+    "clarification": {
+      "expected": 25,
+      "correct": 24,
+      "issued": 32,
+      "unneeded": 7
+    },
+    "unsupported": {
+      "expected": 10,
+      "correct": 10,
+      "issued": 10,
+      "false": 0
+    },
+    "latency_ms": {
+      "median": 234.0,
+      "p95": 3508
+    },
+    "total_cost_usd": null,
+    "cost_per_successful_answer_usd": null,
+    "fallback_rate": 0.43,
+    "resolved_models": [
+      "jev-1.13.0",
+      "jev-1.13.0+gpt-6-luna"
+    ],
+    "failures": {
+      "unneeded_clarification": 7,
+      "wrong_clarify_field": 1
+    }
+  },
+  "coverage": {
+    "game_search": {
+      "total": 25,
+      "correct": 24,
+      "wrong_accepts": 0
+    },
+    "boxscore_stat": {
+      "total": 25,
+      "correct": 20,
+      "wrong_accepts": 0
+    },
+    "playoff_series": {
+      "total": 25,
+      "correct": 24,
+      "wrong_accepts": 0
+    },
+    "postseason_summary": {
+      "total": 25,
+      "correct": 24,
+      "wrong_accepts": 0
+    },
+    "ambiguous_player": {
+      "total": 12,
+      "correct": 12,
+      "wrong_accepts": 0
+    },
+    "historical_franchise": {
+      "total": 24,
+      "correct": 24,
+      "wrong_accepts": 0
+    },
+    "nickname": {
+      "total": 24,
+      "correct": 21,
+      "wrong_accepts": 0
+    },
+    "former_home_clause": {
+      "total": 2,
+      "correct": 2,
+      "wrong_accepts": 0
+    },
+    "page_context": {
+      "total": 9,
+      "correct": 7,
+      "wrong_accepts": 0
+    }
+  },
+  "misses": [
+    {
+      "case_id": "unseen-two-game_search-15",
+      "question": "Which games are there for the date I have open?",
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "2022-12-26",
+            "end": "2022-12-26"
+          },
+          "teams": [],
+          "location": null
+        }
+      },
+      "decision": {
+        "reason": "missing date",
+        "action": "clarify",
+        "field": "date",
+        "clarify_reason": "missing"
+      },
+      "failure": "unneeded_clarification"
+    },
+    {
+      "case_id": "unseen-two-boxscore_stat-01",
+      "question": "How many assists did Magic have on June 9, 1987?",
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "player",
+          "stat": {
+            "stat": "assists",
+            "aggregation": "total"
+          },
+          "game": {
+            "date": "1987-06-09"
+          },
+          "player": {
+            "player_id": 77142,
+            "name": "Magic Johnson"
+          },
+          "team": null
+        }
+      },
+      "decision": {
+        "reason": "lookup could not expand",
+        "action": "clarify",
+        "field": "player",
+        "clarify_reason": "no_matching_candidate"
+      },
+      "failure": "unneeded_clarification"
+    },
+    {
+      "case_id": "unseen-two-boxscore_stat-02",
+      "question": "Give me The Dream's blocks in Game 7 of the 1994 NBA Finals.",
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "player",
+          "stat": {
+            "stat": "blocks",
+            "aggregation": "total"
+          },
+          "game": {
+            "season": "1993-94",
+            "round": "finals",
+            "game_number": 7
+          },
+          "player": {
+            "player_id": 165,
+            "name": "Hakeem Olajuwon"
+          },
+          "team": null
+        }
+      },
+      "decision": {
+        "reason": "low confidence in teams",
+        "action": "clarify",
+        "field": "teams",
+        "clarify_reason": "ambiguous"
+      },
+      "failure": "unneeded_clarification"
+    },
+    {
+      "case_id": "unseen-two-boxscore_stat-03",
+      "question": "What were Shaq's free throws in the sixth game of the 2000 Finals?",
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "player",
+          "stat": {
+            "stat": "free_throws",
+            "aggregation": "total"
+          },
+          "game": {
+            "season": "1999-00",
+            "round": "finals",
+            "game_number": 6
+          },
+          "player": {
+            "player_id": 406,
+            "name": "Shaquille O'Neal"
+          },
+          "team": null
+        }
+      },
+      "decision": {
+        "reason": "lookup could not expand",
+        "action": "clarify",
+        "field": "game_number",
+        "clarify_reason": "no_matching_candidate"
+      },
+      "failure": "unneeded_clarification"
+    },
+    {
+      "case_id": "unseen-two-boxscore_stat-08",
+      "question": "Forget the game open here; show Nikola Jokic's full line from June 12, 2023.",
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "player",
+          "stat": {
+            "stat": "stat_line",
+            "aggregation": "total"
+          },
+          "game": {
+            "date": "2023-06-12"
+          },
+          "player": {
+            "player_id": 203999,
+            "name": "Nikola Joki\u0107"
+          },
+          "team": null
+        }
+      },
+      "decision": {
+        "reason": "lookup could not expand",
+        "action": "clarify",
+        "field": "season",
+        "clarify_reason": "no_matching_candidate"
+      },
+      "failure": "unneeded_clarification"
+    },
+    {
+      "case_id": "unseen-two-boxscore_stat-11",
+      "question": "What plus-minus did Tim Duncan record in the sixth game of the 2003 Finals?",
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "player",
+          "stat": {
+            "stat": "plus_minus",
+            "aggregation": "total"
+          },
+          "game": {
+            "season": "2002-03",
+            "round": "finals",
+            "game_number": 6
+          },
+          "player": {
+            "player_id": 1495,
+            "name": "Tim Duncan"
+          },
+          "team": null
+        }
+      },
+      "decision": {
+        "reason": "lookup could not expand",
+        "action": "clarify",
+        "field": "game_number",
+        "clarify_reason": "no_matching_candidate"
+      },
+      "failure": "unneeded_clarification"
+    },
+    {
+      "case_id": "unseen-two-playoff_series-14",
+      "question": "Open the Lakers' first playoff round in 2020.",
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "2019-20",
+          "teams": [
+            {
+              "team_id": 1610612747,
+              "tricode": "LAL",
+              "name": "Los Angeles Lakers"
+            }
+          ],
+          "round": "first_round",
+          "conference": null
+        }
+      },
+      "decision": {
+        "reason": "lookup could not expand",
+        "action": "clarify",
+        "field": "round",
+        "clarify_reason": "no_matching_candidate"
+      },
+      "failure": "unneeded_clarification"
+    },
+    {
+      "case_id": "unseen-two-postseason_summary-22",
+      "question": "Recap Boston or Miami in the 2020 playoffs; I have not decided which team.",
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "teams",
+        "clarify_reason": "ambiguous"
+      },
+      "decision": {
+        "reason": "ambiguous intent",
+        "action": "clarify",
+        "field": "intent",
+        "clarify_reason": "ambiguous"
+      },
+      "failure": "wrong_clarify_field"
+    }
+  ],
+  "provider_errors": [
+    {
+      "case_id": "unseen-two-game_search-03",
+      "tier": "jev",
+      "error_code": "inconsistent_team_count"
+    },
+    {
+      "case_id": "unseen-two-boxscore_stat-02",
+      "tier": "luna",
+      "error_code": "deadline_exceeded"
+    },
+    {
+      "case_id": "unseen-two-postseason_summary-21",
+      "tier": "jev",
+      "error_code": "inconsistent_team_count"
+    }
+  ],
+  "remaining_release_blocker_issue": "nba-scores-kzc.3"
+}

@@ -1,0 +1,586 @@
+{
+  "purpose": "Pre-live schema, coverage and overlap audit; no candidate lookup or provider calls",
+  "generated_at": "2026-09-29T22:15:13.363550+00:00",
+  "fixture_sha256": "fa3e001b816baf38967fd88c837b6228f2336af811749f06499cd4b59c1cf040",
+  "prior_questions_examined": 450,
+  "source_question_counts": {
+    "server/tests/ask/fixtures/candidates_dev_questions.json": 75,
+    "server/tests/ask/fixtures/candidates_release_2026_09_29_exposed.json": 83,
+    "server/tests/ask/fixtures/eval/dev.json": 43,
+    "server/tests/ask/fixtures/eval/release-2026-09-29-exposed.json": 80,
+    "server/tests/ask/fixtures/eval/release-two-2026-09-29-exposed.json": 80,
+    "server/tests/ask/fixtures/eval/smoke_hand_built.json": 9,
+    "server/tests/ask/fixtures/eval/unseen-2026-09-29.json": 100,
+    "server/tests/fixtures/ask_heldout.json": 75,
+    "server/tests/fixtures/ask_seed.json": 25,
+    "docs/verification/ask-interpreter-probe.json": 12,
+    "docs/verification/ask-live-endpoint.json": 4,
+    "docs/verification/ask-player-date.json": 1,
+    "docs/verification/ask-unseen-2026-09-29-audit.json": 1
+  },
+  "exact_duplicates": [],
+  "similarity_at_least_0_9": [],
+  "nearest_prior_by_case": [
+    {
+      "case_id": "unseen-two-game_search-01",
+      "similarity": 0.4698,
+      "source": "server/tests/ask/fixtures/eval/release-two-2026-09-29-exposed.json"
+    },
+    {
+      "case_id": "unseen-two-game_search-02",
+      "similarity": 0.6981,
+      "source": "server/tests/ask/fixtures/candidates_release_2026_09_29_exposed.json"
+    },
+    {
+      "case_id": "unseen-two-game_search-03",
+      "similarity": 0.6786,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-game_search-04",
+      "similarity": 0.6667,
+      "source": "server/tests/ask/fixtures/eval/dev.json"
+    },
+    {
+      "case_id": "unseen-two-game_search-05",
+      "similarity": 0.5926,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-game_search-06",
+      "similarity": 0.6422,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-game_search-07",
+      "similarity": 0.563,
+      "source": "server/tests/ask/fixtures/eval/release-two-2026-09-29-exposed.json"
+    },
+    {
+      "case_id": "unseen-two-game_search-08",
+      "similarity": 0.7253,
+      "source": "server/tests/fixtures/ask_heldout.json"
+    },
+    {
+      "case_id": "unseen-two-game_search-09",
+      "similarity": 0.6222,
+      "source": "server/tests/ask/fixtures/candidates_release_2026_09_29_exposed.json"
+    },
+    {
+      "case_id": "unseen-two-game_search-10",
+      "similarity": 0.7671,
+      "source": "server/tests/ask/fixtures/candidates_dev_questions.json"
+    },
+    {
+      "case_id": "unseen-two-game_search-11",
+      "similarity": 0.7838,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-game_search-12",
+      "similarity": 0.6038,
+      "source": "server/tests/fixtures/ask_heldout.json"
+    },
+    {
+      "case_id": "unseen-two-game_search-13",
+      "similarity": 0.6769,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-game_search-14",
+      "similarity": 0.5567,
+      "source": "server/tests/ask/fixtures/candidates_release_2026_09_29_exposed.json"
+    },
+    {
+      "case_id": "unseen-two-game_search-15",
+      "similarity": 0.575,
+      "source": "server/tests/ask/fixtures/eval/release-two-2026-09-29-exposed.json"
+    },
+    {
+      "case_id": "unseen-two-game_search-16",
+      "similarity": 0.6197,
+      "source": "server/tests/ask/fixtures/candidates_release_2026_09_29_exposed.json"
+    },
+    {
+      "case_id": "unseen-two-game_search-17",
+      "similarity": 0.6486,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-game_search-18",
+      "similarity": 0.5684,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-game_search-19",
+      "similarity": 0.48,
+      "source": "server/tests/fixtures/ask_seed.json"
+    },
+    {
+      "case_id": "unseen-two-game_search-20",
+      "similarity": 0.6761,
+      "source": "server/tests/ask/fixtures/eval/release-two-2026-09-29-exposed.json"
+    },
+    {
+      "case_id": "unseen-two-game_search-21",
+      "similarity": 0.66,
+      "source": "server/tests/ask/fixtures/candidates_release_2026_09_29_exposed.json"
+    },
+    {
+      "case_id": "unseen-two-game_search-22",
+      "similarity": 0.4691,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-game_search-23",
+      "similarity": 0.6102,
+      "source": "server/tests/fixtures/ask_heldout.json"
+    },
+    {
+      "case_id": "unseen-two-game_search-24",
+      "similarity": 0.8227,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-game_search-25",
+      "similarity": 0.6306,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-boxscore_stat-01",
+      "similarity": 0.8713,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-boxscore_stat-02",
+      "similarity": 0.7103,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-boxscore_stat-03",
+      "similarity": 0.6667,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-boxscore_stat-04",
+      "similarity": 0.7111,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-boxscore_stat-05",
+      "similarity": 0.5323,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-boxscore_stat-06",
+      "similarity": 0.6783,
+      "source": "server/tests/fixtures/ask_seed.json"
+    },
+    {
+      "case_id": "unseen-two-boxscore_stat-07",
+      "similarity": 0.6609,
+      "source": "server/tests/fixtures/ask_heldout.json"
+    },
+    {
+      "case_id": "unseen-two-boxscore_stat-08",
+      "similarity": 0.5,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-boxscore_stat-09",
+      "similarity": 0.6757,
+      "source": "server/tests/fixtures/ask_seed.json"
+    },
+    {
+      "case_id": "unseen-two-boxscore_stat-10",
+      "similarity": 0.6545,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-boxscore_stat-11",
+      "similarity": 0.6667,
+      "source": "server/tests/fixtures/ask_heldout.json"
+    },
+    {
+      "case_id": "unseen-two-boxscore_stat-12",
+      "similarity": 0.7677,
+      "source": "server/tests/ask/fixtures/candidates_dev_questions.json"
+    },
+    {
+      "case_id": "unseen-two-boxscore_stat-13",
+      "similarity": 0.55,
+      "source": "server/tests/ask/fixtures/candidates_dev_questions.json"
+    },
+    {
+      "case_id": "unseen-two-boxscore_stat-14",
+      "similarity": 0.5714,
+      "source": "server/tests/ask/fixtures/eval/release-two-2026-09-29-exposed.json"
+    },
+    {
+      "case_id": "unseen-two-boxscore_stat-15",
+      "similarity": 0.66,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-boxscore_stat-16",
+      "similarity": 0.6512,
+      "source": "server/tests/ask/fixtures/candidates_release_2026_09_29_exposed.json"
+    },
+    {
+      "case_id": "unseen-two-boxscore_stat-17",
+      "similarity": 0.5909,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-boxscore_stat-18",
+      "similarity": 0.6504,
+      "source": "server/tests/ask/fixtures/eval/release-two-2026-09-29-exposed.json"
+    },
+    {
+      "case_id": "unseen-two-boxscore_stat-19",
+      "similarity": 0.5393,
+      "source": "server/tests/ask/fixtures/candidates_release_2026_09_29_exposed.json"
+    },
+    {
+      "case_id": "unseen-two-boxscore_stat-20",
+      "similarity": 0.6526,
+      "source": "server/tests/ask/fixtures/candidates_release_2026_09_29_exposed.json"
+    },
+    {
+      "case_id": "unseen-two-boxscore_stat-21",
+      "similarity": 0.617,
+      "source": "server/tests/ask/fixtures/eval/release-two-2026-09-29-exposed.json"
+    },
+    {
+      "case_id": "unseen-two-boxscore_stat-22",
+      "similarity": 0.5528,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-boxscore_stat-23",
+      "similarity": 0.7048,
+      "source": "server/tests/fixtures/ask_heldout.json"
+    },
+    {
+      "case_id": "unseen-two-boxscore_stat-24",
+      "similarity": 0.4818,
+      "source": "server/tests/ask/fixtures/eval/release-two-2026-09-29-exposed.json"
+    },
+    {
+      "case_id": "unseen-two-boxscore_stat-25",
+      "similarity": 0.5926,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-playoff_series-01",
+      "similarity": 0.7,
+      "source": "server/tests/ask/fixtures/eval/release-two-2026-09-29-exposed.json"
+    },
+    {
+      "case_id": "unseen-two-playoff_series-02",
+      "similarity": 0.539,
+      "source": "server/tests/ask/fixtures/candidates_release_2026_09_29_exposed.json"
+    },
+    {
+      "case_id": "unseen-two-playoff_series-03",
+      "similarity": 0.7273,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-playoff_series-04",
+      "similarity": 0.7358,
+      "source": "server/tests/ask/fixtures/candidates_dev_questions.json"
+    },
+    {
+      "case_id": "unseen-two-playoff_series-05",
+      "similarity": 0.6458,
+      "source": "server/tests/ask/fixtures/candidates_dev_questions.json"
+    },
+    {
+      "case_id": "unseen-two-playoff_series-06",
+      "similarity": 0.68,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-playoff_series-07",
+      "similarity": 0.66,
+      "source": "server/tests/ask/fixtures/eval/release-two-2026-09-29-exposed.json"
+    },
+    {
+      "case_id": "unseen-two-playoff_series-08",
+      "similarity": 0.6737,
+      "source": "server/tests/ask/fixtures/eval/release-two-2026-09-29-exposed.json"
+    },
+    {
+      "case_id": "unseen-two-playoff_series-09",
+      "similarity": 0.7033,
+      "source": "server/tests/ask/fixtures/candidates_dev_questions.json"
+    },
+    {
+      "case_id": "unseen-two-playoff_series-10",
+      "similarity": 0.7358,
+      "source": "server/tests/ask/fixtures/eval/release-two-2026-09-29-exposed.json"
+    },
+    {
+      "case_id": "unseen-two-playoff_series-11",
+      "similarity": 0.6667,
+      "source": "server/tests/ask/fixtures/eval/release-two-2026-09-29-exposed.json"
+    },
+    {
+      "case_id": "unseen-two-playoff_series-12",
+      "similarity": 0.7963,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-playoff_series-13",
+      "similarity": 0.75,
+      "source": "server/tests/ask/fixtures/candidates_dev_questions.json"
+    },
+    {
+      "case_id": "unseen-two-playoff_series-14",
+      "similarity": 0.6591,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-playoff_series-15",
+      "similarity": 0.7879,
+      "source": "server/tests/ask/fixtures/eval/release-two-2026-09-29-exposed.json"
+    },
+    {
+      "case_id": "unseen-two-playoff_series-16",
+      "similarity": 0.5378,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-playoff_series-17",
+      "similarity": 0.6667,
+      "source": "server/tests/ask/fixtures/eval/release-two-2026-09-29-exposed.json"
+    },
+    {
+      "case_id": "unseen-two-playoff_series-18",
+      "similarity": 0.7606,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-playoff_series-19",
+      "similarity": 0.5825,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-playoff_series-20",
+      "similarity": 0.7556,
+      "source": "server/tests/ask/fixtures/eval/release-two-2026-09-29-exposed.json"
+    },
+    {
+      "case_id": "unseen-two-playoff_series-21",
+      "similarity": 0.8113,
+      "source": "server/tests/ask/fixtures/eval/release-two-2026-09-29-exposed.json"
+    },
+    {
+      "case_id": "unseen-two-playoff_series-22",
+      "similarity": 0.7723,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-playoff_series-23",
+      "similarity": 0.5781,
+      "source": "server/tests/ask/fixtures/candidates_dev_questions.json"
+    },
+    {
+      "case_id": "unseen-two-playoff_series-24",
+      "similarity": 0.7205,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-playoff_series-25",
+      "similarity": 0.8254,
+      "source": "server/tests/ask/fixtures/candidates_dev_questions.json"
+    },
+    {
+      "case_id": "unseen-two-postseason_summary-01",
+      "similarity": 0.6296,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-postseason_summary-02",
+      "similarity": 0.7288,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-postseason_summary-03",
+      "similarity": 0.6567,
+      "source": "server/tests/ask/fixtures/eval/dev.json"
+    },
+    {
+      "case_id": "unseen-two-postseason_summary-04",
+      "similarity": 0.6465,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-postseason_summary-05",
+      "similarity": 0.6588,
+      "source": "server/tests/ask/fixtures/candidates_dev_questions.json"
+    },
+    {
+      "case_id": "unseen-two-postseason_summary-06",
+      "similarity": 0.708,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-postseason_summary-07",
+      "similarity": 0.6981,
+      "source": "server/tests/ask/fixtures/eval/release-two-2026-09-29-exposed.json"
+    },
+    {
+      "case_id": "unseen-two-postseason_summary-08",
+      "similarity": 0.6346,
+      "source": "server/tests/ask/fixtures/candidates_dev_questions.json"
+    },
+    {
+      "case_id": "unseen-two-postseason_summary-09",
+      "similarity": 0.5882,
+      "source": "server/tests/ask/fixtures/candidates_release_2026_09_29_exposed.json"
+    },
+    {
+      "case_id": "unseen-two-postseason_summary-10",
+      "similarity": 0.6667,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-postseason_summary-11",
+      "similarity": 0.8148,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-postseason_summary-12",
+      "similarity": 0.6769,
+      "source": "server/tests/ask/fixtures/eval/dev.json"
+    },
+    {
+      "case_id": "unseen-two-postseason_summary-13",
+      "similarity": 0.6292,
+      "source": "server/tests/ask/fixtures/eval/release-two-2026-09-29-exposed.json"
+    },
+    {
+      "case_id": "unseen-two-postseason_summary-14",
+      "similarity": 0.6329,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-postseason_summary-15",
+      "similarity": 0.7368,
+      "source": "server/tests/ask/fixtures/candidates_release_2026_09_29_exposed.json"
+    },
+    {
+      "case_id": "unseen-two-postseason_summary-16",
+      "similarity": 0.617,
+      "source": "server/tests/ask/fixtures/eval/release-two-2026-09-29-exposed.json"
+    },
+    {
+      "case_id": "unseen-two-postseason_summary-17",
+      "similarity": 0.6167,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-postseason_summary-18",
+      "similarity": 0.5882,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-postseason_summary-19",
+      "similarity": 0.7917,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-postseason_summary-20",
+      "similarity": 0.7042,
+      "source": "server/tests/ask/fixtures/eval/unseen-2026-09-29.json"
+    },
+    {
+      "case_id": "unseen-two-postseason_summary-21",
+      "similarity": 0.8077,
+      "source": "server/tests/ask/fixtures/eval/release-two-2026-09-29-exposed.json"
+    },
+    {
+      "case_id": "unseen-two-postseason_summary-22",
+      "similarity": 0.4706,
+      "source": "server/tests/ask/fixtures/eval/release-two-2026-09-29-exposed.json"
+    },
+    {
+      "case_id": "unseen-two-postseason_summary-23",
+      "similarity": 0.6154,
+      "source": "server/tests/fixtures/ask_heldout.json"
+    },
+    {
+      "case_id": "unseen-two-postseason_summary-24",
+      "similarity": 0.7395,
+      "source": "server/tests/ask/fixtures/eval/release-two-2026-09-29-exposed.json"
+    },
+    {
+      "case_id": "unseen-two-postseason_summary-25",
+      "similarity": 0.6047,
+      "source": "server/tests/fixtures/ask_heldout.json"
+    }
+  ],
+  "within_set_similarity_at_least_0_9": [],
+  "method": "Casefold, replace punctuation with spaces, collapse whitespace, compare exact text and difflib.SequenceMatcher at 0.9. Lexical screening does not prove semantic novelty. A new author with no inherited conversation supplied labels without access to old cases, implementation or outputs.",
+  "expected_actions": {
+    "accept": 65,
+    "clarify": 25,
+    "unsupported": 10
+  },
+  "family_counts": {
+    "game_search": 25,
+    "boxscore_stat": 25,
+    "playoff_series": 25,
+    "postseason_summary": 25
+  },
+  "entity_references_valid": true,
+  "label_audit": "Parent reviewed all 100 labels before provider calls. Author replaced one near-duplicate unsupported question and three questions with multiple defensible clarification fields, added two former-home clauses by replacing two accepted game-search questions, and removed redundant context reference_time values. Labels were not adapted to candidate lookup or interpreter output.",
+  "tag_counts": {
+    "accepted_player_control": 2,
+    "ambiguous_player": 12,
+    "ambiguous_team": 5,
+    "boxscore_stat": 25,
+    "career_total": 1,
+    "city_team": 3,
+    "conference": 2,
+    "conference_only": 2,
+    "contemporaneous": 12,
+    "date_range": 1,
+    "diacritic": 1,
+    "empty_result_control": 1,
+    "era_context": 15,
+    "explicit_override": 4,
+    "finals_only": 2,
+    "former_home_clause": 2,
+    "game_search": 25,
+    "historical_franchise": 24,
+    "leaders": 1,
+    "leap_day": 1,
+    "matchup": 1,
+    "nickname": 24,
+    "page_context": 9,
+    "paired_control": 2,
+    "percentage": 2,
+    "playoff_series": 25,
+    "postseason_summary": 25,
+    "relative_date": 3,
+    "relocation": 14,
+    "series_game": 6,
+    "seven_day_range": 2,
+    "shared_first_name": 1,
+    "shared_surname": 11,
+    "specific_stat": 3,
+    "team_and_location": 1,
+    "team_totals": 3,
+    "timezone_boundary": 1,
+    "two_team_series": 3,
+    "venue": 4,
+    "week_boundary": 1,
+    "whole_postseason": 4,
+    "year_boundary": 2,
+    "year_missing": 1
+  },
+  "all_100_schema_valid": true
+}

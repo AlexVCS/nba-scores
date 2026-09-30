@@ -4,6 +4,7 @@ from zoneinfo import ZoneInfo
 import pytest
 
 from server.ask.candidates import CandidateLookupService
+from server.ask.candidates.dates import extract
 from server.ask.models.request import AskContext
 
 NY = ZoneInfo("America/New_York")
@@ -120,6 +121,17 @@ def test_impossible_date_is_flagged_not_moved(service):
     assert candidate.value.unresolved_reason == "invalid_date"
 
 
+def test_leap_day_names_february_29_of_its_year(service):
+    result = service.lookup("Any NBA games on leap day in 2024?", AskContext(reference_time=WEDNESDAY))
+    assert resolved(result.sets["date"]) == [("2024-02-29", "2024-02-29")]
+    # The year belongs to the date, so it is not also offered as a season.
+    assert result.sets["season"].status == "not_mentioned"
+    [candidate] = dates(service, "games on leap day 2023").candidates
+    assert candidate.value.unresolved_reason == "invalid_date"
+    [candidate] = dates(service, "games on leap day").candidates
+    assert candidate.value.unresolved_reason == "year_required"
+
+
 @pytest.mark.parametrize("question", [
     "games on January 32, 2025",
     "games from March 0-5, 2025",
@@ -133,3 +145,11 @@ def test_unrepresentable_invalid_date_components_abstain(service, question):
 
 def test_no_date_language_means_not_mentioned(service):
     assert dates(service, "Who won the 2016 Finals?").status == "not_mentioned"
+
+
+@pytest.mark.parametrize("phrase", ["the most recent Tuesday", "the latest Tuesday"])
+def test_most_recent_weekday_is_the_last_one(phrase):
+    today = dt.date(2026, 9, 29)  # a Tuesday: the most recent one excludes today
+    [(_, _, hits)] = list(extract(phrase.lower(), today))
+    [hit] = hits
+    assert hit.value.resolved.start == dt.date(2026, 9, 22)

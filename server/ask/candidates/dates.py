@@ -265,6 +265,12 @@ def _christmas(m: re.Match, today: dt.date) -> list[Hit]:
     return [hit] if hit else []
 
 
+def _leap_day(m: re.Match, today: dt.date) -> list[Hit]:
+    # Feb 29 of a non-leap year becomes an invalid_date candidate, never a nearby day.
+    hit = calendar_hit(int(m.group(1)) if m.group(1) else None, 2, 29, m.group(0).strip())
+    return [hit] if hit else []
+
+
 def _fixed(relative: str) -> Handler:
     return lambda m, today: [relative_hit(relative, today, m.group(0).strip())]
 
@@ -313,7 +319,7 @@ def _month_relative(m: re.Match, today: dt.date) -> list[Hit]:
 def _weekday(m: re.Match, today: dt.date) -> list[Hit]:
     qualifier, weekday = m.group(1), WEEKDAYS.index(m.group(2))
     text = m.group(0).strip()
-    if qualifier in ("last", "past", "previous"):
+    if qualifier and qualifier.split()[-1] in ("last", "past", "previous", "recent", "latest"):
         return [relative_hit("last_weekday", today, text, weekday=weekday)]
     if qualifier == "this":
         return [relative_hit("this_weekday", today, text, weekday=weekday)]
@@ -345,6 +351,7 @@ PATTERNS: tuple[tuple[re.Pattern, Handler], ...] = tuple((re.compile(p), h) for 
     (rf"\b{_MONTH}\s+(?:of\s+)?(\d{{4}})\b", _month_year),
     (rf"\b(?:in|during|early|late|mid)\s+{_MONTH}(?=\s|$|[?.!,])", _month_only),
     (r"\bchristmas(?:\s+day)?(?:\s+(\d{4}))?\b", _christmas),
+    (r"\bleap\s+day(?:(?:\s+(?:in|of)|,)?\s+(\d{4}))?\b", _leap_day),
     (r"\bday\s+before\s+yesterday\b", _day_before_yesterday),
     (r"\blast\s+night\b", _fixed("last_night")),
     (r"\byesterday(?:'s)?\b", _fixed("yesterday")),
@@ -359,7 +366,7 @@ PATTERNS: tuple[tuple[re.Pattern, Handler], ...] = tuple((re.compile(p), h) for 
     (r"\bthis\s+week(?:'s)?\b", _fixed("this_week")),
     (r"\bnext\s+week(?:'s)?\b", _next_week),
     (r"\b(last|this|next)\s+month(?:'s)?\b", _month_relative),
-    (rf"\b(?:(last|past|previous|this|next|on)\s+)?{_WEEKDAY}(?:'s)?(?:\s+night)?\b", _weekday),
+    (rf"\b(?:(last|past|previous|most\s+recent|latest|this|next|on)\s+)?{_WEEKDAY}(?:'s)?(?:\s+night)?\b", _weekday),
 ))
 
 

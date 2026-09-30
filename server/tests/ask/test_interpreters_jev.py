@@ -76,6 +76,12 @@ def test_questions_offer_only_candidates_and_sentinels():
     assert not any("year" in qid or "month" in qid for qid in questions)
 
 
+def test_intent_options_keep_gameless_stat_questions_out_of_career_stats():
+    questions, _ = build_questions(b.lookup_result([]))
+    assert "without naming the game" in questions["intent"]["criteria"]["boxscore_stat"]
+    assert "whole career" in questions["unsupported_reason"]["criteria"]["career_stats"]
+
+
 def test_decode_selects_confident_fields():
     candidates = b.lookup_result([CLE, LAST_WEEK])
     questions, team_ids = build_questions(candidates)
@@ -222,3 +228,26 @@ def test_timeout_and_budget_return_unavailable():
     output = _adapter(never).interpret(request_for("q", b.lookup_result([]), max_cost=0.0))
     assert output.outcome == "unavailable" and output.error_code == "budget_exceeded"
     assert output.metadata.usage.provider_calls == 0
+
+
+def test_target_team_is_its_own_choice_over_team_candidates():
+    candidates = b.lookup_result([LAL, LAC, LAST_WEEK])
+    questions, team_ids = build_questions(candidates)
+    assert set(questions["target_team"]["criteria"]) == {LAL.id, LAC.id, cs.NONE_OPTION, cs.OTHER_OPTION}
+    answers = fake_answers(
+        questions,
+        picks={"intent": ("boxscore_stat", 0.95), "stat_scope": ("team", 0.95), "team_count": ("2", 0.9),
+               "target_team": (LAC.id, 0.9)},
+        nouls={"team_0": 0.97, "team_1": 0.97},
+    )
+    fields = {f.field: f for f in decode({"answers": answers}, team_ids, JevThresholds())["fields"]}
+    assert sorted(fields["teams"].selected) == sorted([LAL.id, LAC.id])
+    assert fields["target_team"].selected == [LAC.id]
+
+
+def test_decode_unsupported_keeps_its_confidence():
+    questions, team_ids = build_questions(b.lookup_result([]))
+    answers = fake_answers(questions, picks={"intent": (cs.UNSUPPORTED_INTENT, 0.7),
+                                             "unsupported_reason": ("standings", 0.9)})
+    decoded = decode({"answers": answers}, team_ids, JevThresholds())
+    assert (decoded["outcome"], decoded["unsupported_confidence"]) == ("unsupported", pytest.approx(0.7))

@@ -34,6 +34,7 @@ from server.ask.models.interpreter import (
     InterpreterOutput,
     InterpreterUsage,
 )
+from server.ask.models.request import AskContext
 
 logger = logging.getLogger(__name__)
 
@@ -46,6 +47,7 @@ STATUSES = ["selected", "absent", "ambiguous", "no_matching_candidate"]
 CANDIDATE_FIELDS = {
     "player": "player",
     "teams": "team",
+    "target_team": "team",
     "date": "date",
     "season": "season",
     "round": "round",
@@ -75,6 +77,11 @@ Field rules (every field has a status and a list of IDs/values):
   there ("games in New York"). A city used as a team name ("Boston's game",
   "New York beat Miami") is a team, not a location. Location applies to
   game_search only.
+- teams lists every team the question names, opponents included. target_team selects,
+  from the teams candidates, the one team whose own statistics a team-scope boxscore_stat
+  question asks for ("Miami's rebounds against Boston": teams Miami and Boston,
+  target_team Miami). If the question does not say which team's statistics it wants,
+  target_team is ambiguous. For every other question target_team is absent.
 - A game-search date range longer than seven days is still game_search. Select the
   date candidate even if its range is unresolved; Python asks the user to narrow it.
 - Choose playoff_series when the request is framed as a series, matchup, or
@@ -93,6 +100,9 @@ Field rules (every field has a status and a list of IDs/values):
 - stat_scope, stat, aggregation matter only for one game's box score. Use stat "stat_line"
   when no particular statistic is named, and aggregation "per_game" when the question
   asks for an average across games.
+- `page_game` true means the user is viewing one game's box score, so "this game"
+  or "here" means that game, not an earlier answer. Leave date, season, round, and
+  game_number absent; the app supplies the game.
 - If the request is outside the intents above, set intent "unsupported" and a reason.
 {date_rule}"""
 
@@ -158,9 +168,12 @@ def build_schema(candidates: CandidateLookupResult) -> dict[str, Any]:
     return {"type": "object", "additionalProperties": False, "required": list(properties), "properties": properties}
 
 
-def candidate_context(question: str, candidates: CandidateLookupResult) -> dict[str, Any]:
+def candidate_context(question: str, candidates: CandidateLookupResult,
+                      context: AskContext | None = None) -> dict[str, Any]:
     listing: dict[str, Any] = {}
     for name, cand_field in CANDIDATE_FIELDS.items():
+        if name == "target_team":
+            continue  # selects from the `teams` listing
         cset = candidates.sets[cand_field]
         entries = []
         for c in cset.candidates:
@@ -175,6 +188,7 @@ def candidate_context(question: str, candidates: CandidateLookupResult) -> dict[
         listing[name] = entries
     return {
         "question": question,
+        "page_game": bool(context and context.route == "boxscore" and context.game_id),
         "candidates": listing,
         "options": {
             "stat_scope": cs.STAT_SCOPES,
@@ -285,7 +299,7 @@ class OpenAIResponsesAdapter:
             "model": self.config.model,
             "input": [
                 {"role": "developer", "content": instructions},
-                {"role": "user", "content": json.dumps(candidate_context(request.question, candidates))},
+                {"role": "user", "content": json.dumps(candidate_context(request.question, candidates, request.context))},
             ],
             "text": {
                 "format": {

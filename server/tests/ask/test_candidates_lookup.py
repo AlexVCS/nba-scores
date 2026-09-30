@@ -167,3 +167,77 @@ def test_dev_set_regression():
     assert report.abstain_correct == report.abstain_total, report.misses
     assert report.ambiguous_correct == report.ambiguous_total, report.misses
     assert report.forbidden_leaks == 0, report.misses
+
+
+@pytest.mark.parametrize("question", [
+    "Any Suns games on the day I have open?",
+    "List the games for the date I'm looking at",
+    "What games were played on the date on my screen?",
+    "Show games from the displayed date",
+    "Scores for the day that is currently selected",
+])
+def test_app_context_date_from_on_screen_wording(service, question):
+    result = lookup(service, question, route="scores", view_date=dt.date(2023, 1, 9))
+    [candidate] = result.sets["date"].candidates
+    assert candidate.source == "app_context"
+    assert candidate.value.resolved.start == dt.date(2023, 1, 9)
+
+
+def test_on_screen_wording_without_a_page_date_offers_nothing(service):
+    result = lookup(service, "Any Suns games on the day I have open?")
+    assert result.sets["date"].status == "no_candidates"
+    assert lookup(service, "What date is it today?").sets["date"].candidates[0].source != "app_context"
+
+
+@pytest.mark.parametrize(("question", "number"), [
+    ("Kawhi's steals in the fourth game of the 2019 Finals", 4),
+    ("Show Nash's assists from the 2nd game of the 2006 West semifinals", 2),
+    ("What did Pierce score in the seventh Finals game of 2010?", 7),
+])
+def test_ordinal_game_numbers_in_playoff_questions(service, question, number):
+    result = lookup(service, question)
+    [candidate] = result.sets["game_number"].candidates
+    assert candidate.value.game_number == number
+
+
+def test_ordinal_games_outside_playoff_wording_are_not_series_games(service):
+    result = lookup(service, "Knicks first game of the 2019 season")
+    assert result.sets["game_number"].status == "not_mentioned"
+
+
+def test_ordinal_beyond_seven_is_reported_not_offered(service):
+    result = lookup(service, "the ninth game of the 1999 Finals")
+    assert result.sets["game_number"].status == "no_candidates"
+
+
+@pytest.mark.parametrize(("question", "round_name"), [
+    ("Open Utah's opening playoff round in 2021", "first_round"),
+    ("Pull up the Knicks' second postseason round from 2023", "conference_semifinals"),
+    ("Which series was round one for Phoenix in 2022?", "first_round"),
+    ("Show round 2 for the Sixers in 2021", "conference_semifinals"),
+])
+def test_round_wording_with_playoff_modifiers(service, question, round_name):
+    [candidate] = lookup(service, question).sets["round"].candidates
+    assert candidate.value.round == round_name
+
+
+def test_out_of_era_team_word_stays_open_to_player_names(service):
+    result = lookup(service, "Show Magic's rebounds from May 14, 1985")
+    assert keys(result, "player") and result.sets["player"].candidates[0].value.player.player_id == 77142
+    assert result.sets["team"].status == "no_candidates"  # the dropped team name is still reported
+
+
+def test_in_era_or_team_worded_names_stay_teams(service):
+    in_era = lookup(service, "Show Magic's rebounds from May 14, 2010")
+    assert in_era.sets["player"].status == "not_mentioned"
+    assert in_era.sets["team"].candidates[0].value.team.tricode == "ORL"
+    worded = lookup(service, "How did the Magic do in the 1984 playoffs?")
+    assert worded.sets["player"].status == "not_mentioned"
+    multiword = lookup(service, "Seattle SuperSonics games on Jan 3, 2020")
+    assert multiword.sets["player"].status == "not_mentioned"
+
+
+def test_dismissed_page_date_is_not_offered(service):
+    result = lookup(service, "Ignore the date on my screen and list yesterday's games",
+                    route="scores", view_date=dt.date(2023, 1, 9))
+    assert [c.source for c in result.sets["date"].candidates] == ["date_parser"]

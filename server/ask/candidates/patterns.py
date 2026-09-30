@@ -41,12 +41,30 @@ _GAME_NUMBER = re.compile(r"\bgame\s*(?:#\s*|no\.?\s*|number\s+)?(\d{1,2}|one|tw
 _G_NUMBER = re.compile(r"\bg([1-9])\b")
 
 
-def game_number_mentions(folded: str, original: str) -> tuple[list[Mention], str]:
+_ORDINALS = {
+    "first": 1, "second": 2, "third": 3, "fourth": 4, "fifth": 5, "sixth": 6, "seventh": 7,
+    "eighth": 8, "ninth": 9, "1st": 1, "2nd": 2, "3rd": 3, "4th": 4, "5th": 5, "6th": 6, "7th": 7,
+    "8th": 8, "9th": 9,
+}
+# "the sixth game", "the 4th Finals game". Ordinals number games in many sequences
+# ("first game of the season"), so they count only in a question with playoff wording.
+_ORDINAL_GAME = re.compile(
+    r"\b(" + "|".join(_ORDINALS) + r")\s+(?:(?:finals|series)\s+)?game\b"
+)
+
+
+def _number(raw: str) -> int:
+    if raw.isdigit():
+        return int(raw)
+    return GAME_WORDS.get(raw) or _ORDINALS[raw]
+
+
+def game_number_mentions(folded: str, original: str, playoff_context: bool = False) -> tuple[list[Mention], str]:
     out = []
-    for pattern in (_GAME_NUMBER, _G_NUMBER):
+    patterns = (_GAME_NUMBER, _G_NUMBER, _ORDINAL_GAME) if playoff_context else (_GAME_NUMBER, _G_NUMBER)
+    for pattern in patterns:
         for m in pattern.finditer(folded):
-            raw = m.group(1)
-            number = int(raw) if raw.isdigit() else GAME_WORDS[raw]
+            number = _number(m.group(1))
             if 1 <= number <= 7:
                 hits = [Hit(field="game_number", key=str(number), label=f"Game {number}", source="pattern",
                             score=1.0, value=GameNumberCandidateValue(game_number=number))]
@@ -192,6 +210,8 @@ def season_start_years(mentions: list[Mention]) -> frozenset[int]:
 _CONF = r"(east(?:ern)?|west(?:ern)?)"
 _CONF_WORD = r"(?:\s+conf(?:erence|\.)?)?"
 _SEMIS = r"(?:semi-?finals?|semis)"
+# "first round", "first-round", "first playoff round", "opening postseason round".
+_ROUND_WORD = r"[\s-]+(?:(?:playoff|postseason|nba)[\s-]+)?round"
 ROUND_LABELS = {
     "first_round": "First Round",
     "conference_semifinals": "Conference Semifinals",
@@ -202,14 +222,17 @@ _ROUNDS: tuple[tuple[re.Pattern, str, float, str | None], ...] = tuple(
     (re.compile(p), key, score, note) for p, key, score, note in (
         (rf"\b{_CONF}{_CONF_WORD}\s+(?:finals?|championship)\b", "conference_finals", 1.0, None),
         (r"\b(ecf|wcf)\b", "conference_finals", 1.0, None),
+        (rf"\bconf(?:erence|\.)?\s+(?:finals?|championship)\s+(?:in|of|for)\s+the\s+{_CONF}\b",
+         "conference_finals", 1.0, None),
         (r"\bconf(?:erence|\.)?\s+(?:finals?|championship)\b", "conference_finals", 1.0, None),
         (rf"\b{_CONF}{_CONF_WORD}\s+{_SEMIS}\b", "conference_semifinals", 1.0, None),
+        (rf"\bconf(?:erence|\.)?\s+{_SEMIS}\s+(?:in|of|for)\s+the\s+{_CONF}\b", "conference_semifinals", 1.0, None),
         (rf"\bconf(?:erence|\.)?\s+{_SEMIS}\b", "conference_semifinals", 1.0, None),
         (r"\bdivision\s+finals?\b", "conference_finals", 0.7, None),
         (rf"\bdivision\s+{_SEMIS}\b", "conference_semifinals", 0.7, None),
-        (r"\b(?:first|1st|opening)[\s-]+round\b", "first_round", 1.0, None),
-        (r"\b(?:second|2nd)[\s-]+round\b", "conference_semifinals", 1.0, None),
-        (r"\b(?:third|3rd)[\s-]+round\b", "conference_finals", 0.9, None),
+        (rf"\b(?:first|1st|opening){_ROUND_WORD}\b|\bround\s+(?:one|1)\b", "first_round", 1.0, None),
+        (rf"\b(?:second|2nd){_ROUND_WORD}\b|\bround\s+(?:two|2)\b", "conference_semifinals", 1.0, None),
+        (rf"\b(?:third|3rd){_ROUND_WORD}\b|\bround\s+(?:three|3)\b", "conference_finals", 0.9, None),
         (r"\bplay-?in(?:\s+tournament|\s+games?)?\b", "", 0.0, "the play-in tournament is not a playoff round"),
         (r"\bquarter-?finals?\b", "first_round", 0.6, None),
         (rf"\b{_SEMIS}\b", "conference_semifinals", 0.8, None),

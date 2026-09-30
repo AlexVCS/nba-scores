@@ -28,7 +28,8 @@ def blank_output(**overrides):
         "intent": "game_search",
         "unsupported_reason": None,
         "stat_scope": empty, "stat": empty, "aggregation": empty,
-        "player": empty, "teams": empty, "date": empty, "season": empty, "round": empty, "game_number": empty, "location": empty,
+        "player": empty, "teams": empty, "target_team": empty, "date": empty, "season": empty, "round": empty,
+        "game_number": empty, "location": empty,
     }
     data.update(overrides)
     return data
@@ -180,3 +181,19 @@ def test_budget_is_checked_before_calling():
 
     output = adapter(never, model="gpt-6-luna").interpret(request_for("q", b.lookup_result([]), max_cost=0.0))
     assert output.outcome == "unavailable" and output.error_code == "budget_exceeded"
+
+
+def test_target_team_selects_from_team_candidates_without_a_second_listing():
+    candidates = b.lookup_result([CLE, LAST_WEEK])
+    props = build_schema(candidates)["properties"]
+    assert props["target_team"]["properties"]["values"]["items"]["enum"] == ["team:1610612739"]
+    payload = adapter(lambda r: None).build_payload(request_for("q", candidates))
+    listing = json.loads(payload["input"][1]["content"])["candidates"]
+    assert "target_team" not in listing and listing["teams"]
+
+    output = adapter(lambda r: httpx.Response(200, json=responses_body(blank_output(
+        intent="boxscore_stat",
+        teams={"status": "selected", "values": ["team:1610612739"]},
+        target_team={"status": "selected", "values": ["team:1610612739"]},
+    )))).interpret(request_for("Cavs steals last week", candidates))
+    assert output.get_field("target_team").selected == ["team:1610612739"]

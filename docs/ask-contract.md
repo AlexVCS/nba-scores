@@ -115,8 +115,15 @@ All adapters return `InterpreterOutput`:
   - `unreliable`: the adapter ran but cannot answer reliably, which makes this a fallback candidate
   - `unavailable`: provider error, timeout, or quota. Carries `error_code` and no fields.
 - `fields` has at most one `FieldInterpretation` per field:
-  - Candidate-backed fields (`player`, `teams`, `date`, `season`, `round`,
-    `game_number`) select candidate IDs from the lookup.
+  - Candidate-backed fields (`player`, `teams`, `target_team`, `date`, `season`,
+    `round`, `game_number`, `location`) select candidate IDs from the lookup.
+  - `teams` lists every team the question names, opponents included.
+    `target_team` is the one team whose own statistics a team-scope
+    `boxscore_stat` question asks for, selected from the same team candidates.
+    It is relevant only for team scope. Without it, one named team is the
+    target and two named teams need a `teams` clarification; the order of
+    `teams` never decides the target. A target outside the named teams, or an
+    ambiguous or unmatched target, is also clarified as `teams`.
   - Closed-set fields (`intent`, `stat_scope`, `stat`, `aggregation`) select
     literal enum values from `common.py`.
 - Each field's `status` is one of:
@@ -180,8 +187,9 @@ missing candidate is never evidence that the user meant something else.
 - `expand(question, context, field, previous)` widens one field within the
   same limit. The cascade uses it after `no_matching_candidate`.
 - Interpreter fields and candidate fields differ only in `teams` (interpreter,
-  may select two) vs `team` (candidate set). `INTERPRETER_TO_CANDIDATE_FIELD`
-  in `interpreter.py` is the mapping.
+  may select two) and `target_team` (one), which both select from the `team`
+  candidate set. `INTERPRETER_TO_CANDIDATE_FIELD` in `interpreter.py` is the
+  mapping.
 
 Closed sets (intent, stat, scope, aggregation) are not produced by lookup.
 Adapters build them from the enums.
