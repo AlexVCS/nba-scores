@@ -34,6 +34,7 @@ SHOTS = {"FGM": ("FGM", "FGA"), "FG3M": ("FG3M", "FG3A"), "FTM": ("FTM", "FTA"),
 RECORDED_FROM = {"rebounds": 1950, "minutes": 1951, "offensive_rebounds": 1973, "defensive_rebounds": 1973,
                  "steals": 1973, "blocks": 1973, "turnovers": 1977, "three_pointers": 1979,
                  "three_point_percentage": 1979}
+LIMIT_NOTE = "Showing the top 25, the most Ask lists."
 ALL_PLAYERS_NOTE = "All players who appeared; season totals have no minimum."
 PER_GAME_NOTE = "Qualified players only, using NBA.com's per-game minimum for this season."
 PERCENT_NOTE = "Qualified shooters only, using NBA.com's made-shot minimum for this season."
@@ -288,6 +289,7 @@ def season_leaders(request: SeasonLeadersRequest, deadline: Deadline | None = No
     result = SeasonLeadersResult(
         season=request.season, season_type=request.season_type, stat=request.stat.stat,
         aggregation=request.stat.aggregation, limit=request.limit,
+        limit_note=LIMIT_NOTE if request.requested_limit else None,
         qualification="source_qualified" if qualified else "all_players",
         qualification_note=PER_GAME_NOTE if per_game else PERCENT_NOTE if qualified else ALL_PLAYERS_NOTE,
         rows=rows, omitted_tie=omitted,

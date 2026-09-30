@@ -56,6 +56,7 @@
     "stat": "points",
     "aggregation": "per_game",
     "limit": 10,
+    "limit_note": null,
     "qualification": "source_qualified",
     "qualification_note": "Qualified players only, using NBA.com's per-game minimum for this season.",
     "rows": [

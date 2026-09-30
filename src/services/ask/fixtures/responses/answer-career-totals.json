@@ -69,7 +69,20 @@
         "attempted": null
       }
     ],
+    "alternate": {
+      "aggregation": "total",
+      "values": [
+        {
+          "stat": "points",
+          "value": 43440.0,
+          "display": "43440",
+          "made": null,
+          "attempted": null
+        }
+      ]
+    },
     "limit": null,
+    "limit_note": null,
     "rows": [],
     "omitted_tie": null,
     "rank": null,

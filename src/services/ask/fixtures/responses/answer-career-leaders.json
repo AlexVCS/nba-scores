@@ -34,7 +34,9 @@
     "player": null,
     "games_played": null,
     "values": [],
+    "alternate": null,
     "limit": 10,
+    "limit_note": null,
     "rows": [
       {
         "rank": 1,

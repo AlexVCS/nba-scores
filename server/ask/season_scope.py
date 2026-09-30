@@ -6,6 +6,7 @@ continuations. Closed tools answer full seasons, not unrepresented splits.
 import re
 
 from server.ask.candidates.text import fold
+from server.ask.measure import with_stated_measure
 from server.ask.models.common import CAREER_LEADER_STATS, MAX_LEADER_LIMIT
 from server.ask.models.interpreter import NormalizationResult
 
@@ -38,11 +39,14 @@ def ambiguous_season_candidates(candidates, question):
 
 
 def normalize_question(normalizer, output, candidates, context, question):
+    # The measure comes from the question text, never from a model (server/ask/measure.py).
+    output = with_stated_measure(output, question)
     result = normalizer.normalize(output, candidates, context)
     intent = output.get_field("intent")
     if intent is None or intent.status != "selected" or intent.selected[0] not in {"player_season_stats", "team_records", "season_leaders", "career_stats"}:
         return result
     text = fold(question)
+    unmasked = text
     # Mask known names and seasons so names such as Kevin May/De'Andre Hunter,
     # or Boston's historical Division name, are never mistaken for split language.
     for name in ("player", "team", "season"):
@@ -62,7 +66,7 @@ def normalize_question(normalizer, output, candidates, context, question):
     if intent.selected == ["season_leaders"]:
         return _leaders(result, candidates, question, text, explicit_constraints)
     if intent.selected == ["career_stats"]:
-        return _career(result, candidates, text, explicit_constraints)
+        return _career(result, candidates, text, unmasked, explicit_constraints)
     players = [c for c in candidates.sets["player"].candidates if c.source != "app_context"]
     player_mentions = {(c.span, c.matched_text) for c in players}
     player_split = bool(players) if intent.selected == ["team_records"] else len(player_mentions) > 1
@@ -142,7 +146,11 @@ _TOP = re.compile(r"\btop[\s-]+(\d{1,3}|twenty[\s-]+(?:one|two|three|four|five)|
 
 
 def _top_n(text):
-    """The requested top N (None when absent), or 0 when out of range."""
+    """The requested top N as (limit, requested_above_max), or None when absent.
+
+    N above the maximum is shown as the top 25 with a note, so the second value is the
+    user's N then (None otherwise). A top 0 is (0, None), which is unsupported.
+    """
     match = _TOP.search(text)
     if match is None:
         return None
@@ -153,7 +161,14 @@ def _top_n(text):
         n = 20 + _NUMBER_WORDS[word.split()[1]]
     else:
         n = _NUMBER_WORDS[word]
-    return n if 1 <= n <= MAX_LEADER_LIMIT else 0
+    if n > MAX_LEADER_LIMIT:
+        return MAX_LEADER_LIMIT, n
+    return (n, None) if n >= 1 else (0, None)
+
+
+def _limit_update(top):
+    limit, requested = top
+    return {"limit": limit, "requested_limit": requested}
 
 
 def _leaders(result, candidates, question, text, explicit_constraints):
@@ -170,7 +185,7 @@ def _leaders(result, candidates, question, text, explicit_constraints):
         families += bool(hits)
     top = _top_n(remaining)  # after blanking stats, so "top 3-point shooters" is not N=3
     numbers = re.sub(_TOP, " ", remaining)
-    if (explicit_constraints or named or len(seasons) > 1 or families > 1 or top == 0
+    if (explicit_constraints or named or len(seasons) > 1 or families > 1 or (top and top[0] == 0)
             or re.search(r"\d", numbers) or _LEADER_SPLIT.search(text) or _combined_phases(text)):
         return NormalizationResult(status="unsupported", unsupported_reason="other")
     if ambiguous_season_candidates(candidates, question):
@@ -180,12 +195,12 @@ def _leaders(result, candidates, question, text, explicit_constraints):
     if re.search(r"\b(?:playoffs?|postseason)\b", text) and result.request.season_type != "playoffs":
         return NormalizationResult(status="needs_clarification", clarify_field="season_type", clarify_reason="ambiguous")
     if top:
-        request = result.request.model_validate({**result.request.model_dump(), "limit": top})
+        request = result.request.model_validate({**result.request.model_dump(), **_limit_update(top)})
         return NormalizationResult(status="valid", request=request)
     return result
 
 
-def _career(result, candidates, text, explicit_constraints):
+def _career(result, candidates, text, unmasked, explicit_constraints):
     named_teams = any(c.source != "app_context" for c in candidates.sets["team"].candidates)
     seasons = any(c.source != "app_context" for c in candidates.sets["season"].candidates)
     players = {(c.span, c.matched_text) for c in candidates.sets["player"].candidates if c.source != "app_context"}
@@ -195,10 +210,12 @@ def _career(result, candidates, text, explicit_constraints):
         families += bool(hits)
     top = _top_n(remaining)
     numbers = re.sub(_TOP, " ", remaining)
-    if (explicit_constraints or named_teams or seasons or len(players) > 1 or families > 1 or top == 0
+    if (explicit_constraints or named_teams or seasons or len(players) > 1 or families > 1 or (top and top[0] == 0)
             or re.search(r"\d", numbers) or _CAREER_SPLIT.search(text) or _combined_phases(text)):
         return NormalizationResult(status="unsupported", unsupported_reason="other")
-    if not _CAREER_WORDING.search(text):
+    # Career wording is read from the unmasked question: a loose player match can span
+    # it ("LeBron's career" matched as one name), and masking would then erase it.
+    if not _CAREER_WORDING.search(unmasked):
         # "How many points does LeBron have?" could mean this season or his career.
         return NormalizationResult(status="needs_clarification", clarify_field="intent", clarify_reason="ambiguous")
     if result.status != "valid":
@@ -216,7 +233,7 @@ def _career(result, candidates, text, explicit_constraints):
     if top:
         if request.view != "leaders":
             return NormalizationResult(status="unsupported", unsupported_reason="other")
-        update["limit"] = top
+        update.update(_limit_update(top))
     if update:
         request = request.model_validate({**request.model_dump(), **update})
         return NormalizationResult(status="valid", request=request)

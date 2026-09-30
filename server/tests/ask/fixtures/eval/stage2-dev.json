@@ -85,7 +85,8 @@
       "reference_time": "2026-09-29T12:00:00-04:00",
       "tags": [
         "stage2",
-        "season-stats"
+        "season-stats",
+        "relabeled-2026-09-30"
       ],
       "expected": {
         "action": "accept",
@@ -99,7 +100,7 @@
           "season_type": "regular_season",
           "stat": {
             "stat": "stat_line",
-            "aggregation": "total"
+            "aggregation": "per_game"
           },
           "team": null
         }
@@ -137,7 +138,8 @@
       "reference_time": "2026-09-29T12:00:00-04:00",
       "tags": [
         "stage2",
-        "season-stats"
+        "season-stats",
+        "relabeled-2026-09-30"
       ],
       "expected": {
         "action": "accept",
@@ -151,7 +153,7 @@
           "season_type": "regular_season",
           "stat": {
             "stat": "rebounds",
-            "aggregation": "total"
+            "aggregation": "per_game"
           },
           "team": {
             "team_id": 1610612743,
@@ -387,6 +389,33 @@
       "expected": {
         "action": "unsupported",
         "unsupported_reason": "other"
+      }
+    },
+    {
+      "id": "stage2-player_season_stats-22",
+      "question": "Kevin Durant stats 2015-16",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "tags": [
+        "stage2",
+        "season-stats",
+        "live-feedback-2026-09-30"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "player_season_stats",
+          "player": {
+            "player_id": 201142,
+            "name": "Kevin Durant"
+          },
+          "season": "2015-16",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "stat_line",
+            "aggregation": "per_game"
+          },
+          "team": null
+        }
       }
     }
   ]

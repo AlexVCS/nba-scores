@@ -338,7 +338,7 @@ def test_development_fixture_labels_and_candidate_seasons_validate():
     from server.ask.eval.runner import LabeledCase
     path=Path(__file__).parent / "fixtures/eval/stage2-dev.json"
     cases=[LabeledCase.from_json(c) for c in json.loads(path.read_text())["cases"]]
-    assert len(cases)==21
+    assert len(cases)==22
     for c in cases:
         if c.action=="accept":
             candidates=CandidateLookupService().lookup(c.question,c.context)

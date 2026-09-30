@@ -190,6 +190,18 @@ def clarification(field: str, reason: str, question: str, pending: PendingResolu
                 continue
             options.append(ClarificationOption(id=f"{field}:{value}", label=choice_label, question=rewritten,
                                                resolution=store.issue(rewritten, chosen)))
+    elif field == "intent":
+        # The career guard asks this when a named player's count has no career or season
+        # wording ("How many points does LeBron James have?"). The interpretation is
+        # already career_stats, so one choice states "career" and continues without a model.
+        intent = pending.output.get_field("intent")
+        if intent is not None and intent.status == "selected" and intent.selected == ["career_stats"]:
+            rewritten = f"{question.rstrip(' ?')}, career totals?"
+            if len(rewritten) > MAX_QUESTION_LENGTH:
+                overlong_rewrite = True
+            else:
+                options.append(ClarificationOption(id="intent:career_stats", label="Career totals", question=rewritten,
+                                                   resolution=store.issue(rewritten, pending)))
     elif field == "date" and reason == "year_required":
         today = pending.context.reference_time.year
         for year in (today, today - 1, today + 1):
@@ -249,6 +261,15 @@ def clarification(field: str, reason: str, question: str, pending: PendingResolu
         prompt = "Which year?"
     hint = ("Shorten your question, then add a more specific name or date." if overlong_rewrite
             else "Edit your question to include a more specific name or date.") if not options else None
+    if field == "intent":
+        # Never the name/date hint: the question is what kind of answer is wanted.
+        intent = pending.output.get_field("intent")
+        career = intent is not None and intent.status == "selected" and intent.selected == ["career_stats"]
+        if career:
+            prompt = "Career or one season?"
+        hint = ("Or edit your question to name a season, such as 2023-24." if career and options
+                else "Edit your question to say career or name a season, such as 2023-24." if career
+                else "Edit your question to say what you want: a game, a season, a career or standings.")
     if not options and field == "teams" and reason == "ambiguous":
         scope = pending.output.get_field("stat_scope")
         if scope and scope.status == "selected" and scope.selected == ["team"]:

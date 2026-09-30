@@ -317,7 +317,7 @@ def test_development_career_labels_survive_the_guard():
     from server.ask.eval.runner import LabeledCase, scored_request
     cases = [LabeledCase.from_json(c) for c in json.loads((FIXTURES / "eval/stage3-dev.json").read_text())["cases"]]
     career_cases = [c for c in cases if c.id.startswith("stage3-career_stats")]
-    assert len(career_cases) == 12
+    assert len(career_cases) == 13
     for case in career_cases:
         if case.action != "accept":
             continue

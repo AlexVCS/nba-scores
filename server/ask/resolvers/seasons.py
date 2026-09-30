@@ -26,7 +26,7 @@ from server.ask.candidates.teams import load_records
 from server.ask.candidates.text import name_key
 from server.ask.models.common import TeamRef
 from server.ask.models.request import PlayerSeasonStatsRequest, TeamRecordsRequest
-from server.ask.models.response import PlayerSeasonStatsResult, TeamRecordsResult, TeamRecordRow, SourceMetadata, StatValue, VerifiedLink
+from server.ask.models.response import MeasureValues, PlayerSeasonStatsResult, TeamRecordsResult, TeamRecordRow, SourceMetadata, StatValue, VerifiedLink
 from server.ask.resolvers.errors import NotFoundError, UnavailableError, UnsupportedError
 from server.ask.resolvers.output import ResolverOutput
 from server.services import nba_stats_client, basketball_reference
@@ -217,17 +217,22 @@ def _nba_player(request, deadline: Deadline | None = None):
     return SeasonData(tuple(matching), "nba_stats", f"https://www.nba.com/stats/player/{request.player.player_id}/traditional?Season={request.season}&SeasonType={'Playoffs' if request.season_type == 'playoffs' else 'Regular%20Season'}", _now(), _complete(request.season))
 
 
-def _valid_player(data, request):
-    row = data.rows[0]
-    games = _integer(row.get("GP"))
-    if games == 0:
-        raise NotFoundError("no_record", "season_player_missing")
-    row = dict(row)
+def _recorded_row(data, request):
+    """The source row with statistics not recorded that season blanked."""
+    row = dict(data.rows[0])
     start = int(request.season[:4])
     for cutoff, fields in ((1950, ("REB",)), (1951, ("MIN",)), (1973, ("STL", "BLK", "OREB", "DREB")), (1977, ("TOV",)), (1979, ("FG3M", "FG3A", "FG3_PCT"))):
         if start < cutoff:
             for field in fields:
                 row[field] = None
+    return row
+
+
+def _valid_player(data, request):
+    games = _integer(data.rows[0].get("GP"))
+    if games == 0:
+        raise NotFoundError("no_record", "season_player_missing")
+    row = _recorded_row(data, request)
     keys = LINE if request.stat.stat == "stat_line" else (request.stat.stat,)
     values = [_value(row, key, games, request.stat.aggregation) for key in keys]
     if any(v.value is None for v in values) and request.stat.stat != "stat_line":
@@ -235,6 +240,20 @@ def _valid_player(data, request):
     if not any(v.value is not None for v in values):
         raise NotFoundError("no_record", "season_stat_missing")
     return games, values
+
+
+def other_measure(row, keys, games, aggregation, value=None):
+    """The same statistics in the other measure, from the same source row.
+
+    Returns None when the other measure would be identical (percentages only).
+    Per-game values are exact totals divided by games played, shown to one decimal;
+    they are never rebuilt from rounded averages.
+    """
+    if all(key in PERCENTAGES for key in keys):
+        return None
+    other = "total" if aggregation == "per_game" else "per_game"
+    compute = value or _value
+    return MeasureValues(aggregation=other, values=[compute(row, key, games, other) for key in keys])
 
 
 def _value(row, stat, games, aggregation):
@@ -311,8 +330,11 @@ def player_season(request: PlayerSeasonStatsRequest, deadline: Deadline | None =
               lambda d: _valid_player(d, request), deadline)), deadline).value
     games, values = _valid_player(data, request)
     missing = any(v.value is None for v in values)
+    # Both measures come from the one validated row, so the toggle never mixes sources.
+    alternate = other_measure(_recorded_row(data, request), [v.stat for v in values], games, request.stat.aggregation)
     result = PlayerSeasonStatsResult(player=request.player, season=request.season, season_type=request.season_type,
                                     aggregation=request.stat.aggregation, team=request.team, games_played=games, values=values,
+                                    alternate=alternate,
                                     coverage_note="Some statistics are unavailable for this season; missing values are not zero." if missing else None,
                                     as_of=data.fetched_at)
     return _output(result, data)

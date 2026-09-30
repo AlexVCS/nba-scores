@@ -439,7 +439,12 @@ class Normalizer:
         if len(teams) > 1:
             raise _Clarify("teams", "ambiguous")
         stat = self._optional(output, "stat") or ["stat_line"]
-        aggregation = self._optional(output, "aggregation") or ["total"]
+        # No stated measure: per-game averages first; the answer carries totals too, so
+        # the card can switch without a clarification (docs/ask-stage2.md, "Measure toggle").
+        if stat[0] in LEADER_PERCENTAGES:
+            aggregation = ["total"]  # a percentage is the same in both measures
+        else:
+            aggregation = self._optional(output, "aggregation") or ["per_game"]
         season_type = self._optional(output, "season_type") or ["regular_season"]
         return PlayerSeasonStatsRequest(player=player, season=season, team=teams[0] if teams else None,
                                         stat=StatSelection(stat=stat[0], aggregation=aggregation[0]),
@@ -465,12 +470,13 @@ class Normalizer:
             raise _Clarify("stat", "missing")  # ADR 0011: leaders questions need a statistic
         if stat not in SEASON_LEADER_STATS:
             return NormalizationResult(status="unsupported", unsupported_reason="unsupported_leader_stat")
-        aggregation = self._optional(output, "aggregation")
         if stat in LEADER_PERCENTAGES:
             aggregation = ["total"]  # a percentage has no per-game measure
-        elif not aggregation:
-            # Never default: the scoring title is per game, "most points" reads as totals.
-            raise _Clarify("aggregation", "ambiguous")
+        else:
+            aggregation = self._optional(output, "aggregation")
+            if not aggregation:
+                # Never default: the scoring title is per game, "most points" reads as totals.
+                raise _Clarify("aggregation", "ambiguous")
         season_type = self._optional(output, "season_type") or ["regular_season"]
         return SeasonLeadersRequest(season=season, season_type=season_type[0],
                                     stat=StatSelection(stat=stat, aggregation=aggregation[0]))
@@ -480,7 +486,7 @@ class Normalizer:
         player = self._value(candidates, players[0]).player if players else None
         stat = (self._optional(output, "stat") or ["stat_line" if player else ""])[0]
         # Career questions default to totals (ADR 0013); averages must be explicit.
-        aggregation = (self._optional(output, "aggregation") or ["total"])[0]
+        aggregation = "total" if stat in LEADER_PERCENTAGES else (self._optional(output, "aggregation") or ["total"])[0]
         season_type = (self._optional(output, "season_type") or ["regular_season"])[0]
         if player is not None:
             if stat == "plus_minus":

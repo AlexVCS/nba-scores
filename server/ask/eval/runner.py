@@ -25,6 +25,7 @@ from server.ask.models.common import ClarifyField, ClarifyReason
 from server.ask.models.interpreter import InterpreterInput, InterpreterOutput, UnsupportedReason
 from server.ask.models.request import ASK_REQUEST_ADAPTER, AskContext
 from server.ask.normalize import Normalizer, canonical_request
+from server.ask.measure import with_stated_measure
 from server.ask.season_scope import normalize_question
 from server.ask.protocols import (
     ClarifyDecision,
@@ -132,6 +133,7 @@ def drive(
             )
             output, blocked = _call(adapter, request, guard)
             budget_blocked = budget_blocked or blocked
+        output = with_stated_measure(output, question)  # as the pipeline does
         normalization = (
             normalize_question(normalizer, output, candidates, context, question) if output.outcome == "interpreted" else None
         )

@@ -24,6 +24,7 @@ from server.ask.models.common import NEW_YORK, canonical_json
 from server.ask.models.interpreter import InterpreterInput, InterpreterOutput
 from server.ask.models.request import AskContext, AskRequest, BoxscoreStatRequest, GameSearchRequest, GameSelector, StatSelection
 from server.ask.models.response import AskQuery, AskResponse, InterpreterInfo, Notice
+from server.ask.measure import QUESTION_TIER, with_stated_measure
 from server.ask.normalize import Normalizer
 from server.ask.present import clarification, interpretation, notice, suggestions
 from server.ask.protocols import CascadeAttempt, CascadeState
@@ -93,7 +94,7 @@ class AskPipeline:
             model_called=called, cache_hit=hit,
             adapter=metadata.adapter if metadata else adapter.name if adapter else None,
             model=(metadata.resolved_model or metadata.model) if metadata else adapter.model if adapter else None,
-            fallback_used=first is not None and any(tier not in (first, "veto") for tier in field_tiers.values()),
+            fallback_used=first is not None and any(tier not in (first, "veto", QUESTION_TIER) for tier in field_tiers.values()),
             field_tiers=field_tiers if details else {},
             field_decisions=list(metadata.field_decisions) if details else [],
         )
@@ -246,6 +247,9 @@ class AskPipeline:
             expanded: list[str] = []
             for _ in range(3):
                 output, hit = self._interpret(question, context, candidates, deadline)
+                # Python reads the measure from the question; the policy and any
+                # clarification then see the same aggregation the normalizer uses.
+                output = with_stated_measure(output, question)
                 cache_hit = cache_hit or hit
                 _log_decisions(output, hit)
                 any_call = any_call or (not hit and output.metadata.usage.provider_calls > 0)

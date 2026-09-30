@@ -413,17 +413,43 @@ class PostseasonSummaryResult(ContractModel):
     series: list[PostseasonSeriesRow]  # league scope
 
 
+class MeasureValues(ContractModel):
+    """The same statistics in the other measure, computed from the same source row.
+
+    Lets the card switch between per game and totals without a second request or a
+    second source (docs/ask-stage2.md, "Measure toggle")."""
+
+    aggregation: Aggregation
+    values: list[StatValue] = Field(min_length=1, max_length=20)
+
+
+def _check_alternate(aggregation: str, values: list[StatValue], alternate: MeasureValues | None) -> None:
+    if alternate is None:
+        return
+    if alternate.aggregation == aggregation:
+        raise ValueError("the alternate measure must differ from the shown measure")
+    if [v.stat for v in alternate.values] != [v.stat for v in values]:
+        raise ValueError("both measures list the same statistics")
+
+
 class PlayerSeasonStatsResult(ContractModel):
     kind: Literal["player_season_stats"] = "player_season_stats"
     player: PlayerRef
     season: Season
     season_type: SeasonType
+    # The measure shown first; `alternate` holds the other one when it differs.
     aggregation: Aggregation
     team: TeamRef | None = None
     games_played: int = Field(ge=1)
     values: list[StatValue] = Field(min_length=1)
+    alternate: MeasureValues | None = None
     coverage_note: str | None = Field(default=None, max_length=300)
     as_of: dt.datetime
+
+    @model_validator(mode="after")
+    def _measures(self) -> PlayerSeasonStatsResult:
+        _check_alternate(self.aggregation, self.values, self.alternate)
+        return self
 
 
 class TeamRecordRow(ContractModel):
@@ -472,6 +498,8 @@ class SeasonLeadersResult(ContractModel):
     stat: StatKey
     aggregation: Aggregation
     limit: int = Field(ge=1, le=25)
+    # Set when the question asked for more than 25 ("Showing the top 25, the most Ask lists.").
+    limit_note: str | None = Field(default=None, max_length=120)
     qualification: Literal["all_players", "source_qualified"]
     qualification_note: str = Field(max_length=200)
     rows: list[SeasonLeaderRow] = Field(min_length=1, max_length=MAX_LEADER_ROWS)
@@ -515,8 +543,10 @@ class CareerStatsResult(ContractModel):
     # player_totals
     games_played: int | None = Field(default=None, ge=1)
     values: list[StatValue] = Field(default_factory=list, max_length=20)
+    alternate: MeasureValues | None = None  # player_totals: the other measure, same source row
     # leaders
     limit: int | None = Field(default=None, ge=1, le=25)
+    limit_note: str | None = Field(default=None, max_length=120)
     rows: list[CareerLeaderRow] = Field(default_factory=list, max_length=MAX_LEADER_ROWS)
     omitted_tie: OmittedTie | None = None
     # player_rank: rank None means outside the list of ``list_size`` ranks.
@@ -541,6 +571,9 @@ class CareerStatsResult(ContractModel):
             raise ValueError("a ranked player has exactly one listed value")
         if self.tied_count is not None and self.rank is None:
             raise ValueError("tied_count needs a rank")
+        if self.alternate is not None and not totals:
+            raise ValueError("only a career line has a measure toggle")
+        _check_alternate(self.aggregation, self.values, self.alternate)
         return self
 
 

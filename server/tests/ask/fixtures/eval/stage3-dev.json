@@ -161,20 +161,13 @@
    "reference_time": "2026-09-29T12:00:00-04:00",
    "tags": [
     "stage3",
-    "season-leaders"
+    "ambiguity",
+    "relabeled-2026-09-30"
    ],
    "expected": {
-    "action": "accept",
-    "request": {
-     "intent": "season_leaders",
-     "season": "2015-16",
-     "season_type": "regular_season",
-     "stat": {
-      "stat": "three_pointers",
-      "aggregation": "total"
-     },
-     "limit": 10
-    }
+    "action": "clarify",
+    "clarify_field": "aggregation",
+    "clarify_reason": "ambiguous"
    }
   },
   {
@@ -427,11 +420,22 @@
    "reference_time": "2026-09-29T12:00:00-04:00",
    "tags": [
     "stage3",
-    "out-of-scope"
+    "season-leaders",
+    "relabeled-2026-09-30"
    ],
    "expected": {
-    "action": "unsupported",
-    "unsupported_reason": "other"
+    "action": "accept",
+    "request": {
+     "intent": "season_leaders",
+     "season": "2023-24",
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "points",
+      "aggregation": "total"
+     },
+     "limit": 25,
+     "requested_limit": 50
+    }
    }
   },
   {
@@ -704,6 +708,88 @@
    "expected": {
     "action": "unsupported",
     "unsupported_reason": "unsupported_leader_stat"
+   }
+  },
+  {
+   "id": "stage3-season_leaders-39",
+   "question": "Who led the league in assists in 2019-20?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "ambiguity",
+    "live-feedback-2026-09-30"
+   ],
+   "expected": {
+    "action": "clarify",
+    "clarify_field": "aggregation",
+    "clarify_reason": "ambiguous"
+   }
+  },
+  {
+   "id": "stage3-season_leaders-40",
+   "question": "Top 30 scorers 2023-24",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "ambiguity",
+    "live-feedback-2026-09-30"
+   ],
+   "expected": {
+    "action": "clarify",
+    "clarify_field": "aggregation",
+    "clarify_reason": "ambiguous"
+   }
+  },
+  {
+   "id": "stage3-season_leaders-41",
+   "question": "Top 30 scorers 2023-24 per game?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "season-leaders",
+    "continuation",
+    "live-feedback-2026-09-30"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "season_leaders",
+     "season": "2023-24",
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "points",
+      "aggregation": "per_game"
+     },
+     "limit": 25,
+     "requested_limit": 30
+    }
+   }
+  },
+  {
+   "id": "stage3-career_stats-42",
+   "question": "LeBron's career points",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "career",
+    "live-feedback-2026-09-30"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "career_stats",
+     "view": "player_totals",
+     "player": {
+      "player_id": 2544,
+      "name": "LeBron James"
+     },
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "points",
+      "aggregation": "total"
+     },
+     "limit": 10
+    }
    }
   }
  ]

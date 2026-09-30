@@ -18,12 +18,12 @@ from server.ask.candidates.players import get_player_index
 from server.ask.models.common import PlayerRef
 from server.ask.models.request import CareerStatsRequest
 from server.ask.models.response import (
-    CAREER_LIST_SIZE, CareerLeaderRow, CareerStatsResult, SourceMetadata, StatValue, VerifiedLink,
+    CAREER_LIST_SIZE, CareerLeaderRow, CareerStatsResult, MeasureValues, SourceMetadata, StatValue, VerifiedLink,
 )
 from server.ask.resolvers import seasons
 from server.utils.deadline import Deadline, wait_timeout
 from server.ask.resolvers.errors import NotFoundError, UnavailableError
-from server.ask.resolvers.leaders import CATEGORIES, RECORDED_FROM, cut_ties
+from server.ask.resolvers.leaders import CATEGORIES, LIMIT_NOTE, RECORDED_FROM, cut_ties
 from server.ask.resolvers.output import ResolverOutput
 from server.services import nba_stats_client
 from server.utils.ttl_cache import LoadInProgressError
@@ -127,6 +127,19 @@ def _player_values(data: CareerData, request: CareerStatsRequest):
     return games, values, note
 
 
+def _other_measure(data: CareerData, request: CareerStatsRequest, values) -> MeasureValues | None:
+    """The career line in the other measure, from the same source row (the card's toggle)."""
+    if all(v.stat.endswith("percentage") for v in values):
+        return None
+    other = "total" if request.stat.aggregation == "per_game" else "per_game"
+    flipped = request.model_copy(update={"stat": request.stat.model_copy(update={"aggregation": other})})
+    try:
+        _, other_values, _ = _player_values(data, flipped)
+    except NotFoundError:
+        return None
+    return MeasureValues(aggregation=other, values=other_values)
+
+
 def _columns(stat):
     if stat in seasons.COUNTS:
         return (seasons.COUNTS[stat],)
@@ -200,7 +213,8 @@ def career_stats(request: CareerStatsRequest, deadline: Deadline | None = None):
     if request.view == "player_totals":
         data = _cached("career-player", f"{request.player.player_id}|{request.season_type}", lambda: _career_row(request, deadline), deadline)
         games, values, note = _player_values(data, request)
-        result = CareerStatsResult(**common, games_played=games, values=values, coverage_note=note, as_of=data.fetched_at)
+        result = CareerStatsResult(**common, games_played=games, values=values, alternate=_other_measure(data, request, values),
+                                   coverage_note=note, as_of=data.fetched_at)
         return _output(result, data)
     data = _cached("career-board", request.season_type, lambda: _board(request.season_type, deadline), deadline)
     rows = [r for r in data.rows if r["category"] == request.stat.stat]
@@ -208,7 +222,8 @@ def career_stats(request: CareerStatsRequest, deadline: Deadline | None = None):
         ranked = [CareerLeaderRow(rank=r["rank"], player=PlayerRef(player_id=r["player_id"], name=r["name"]),
                                   active=r["active"], value=_leader_value(request.stat.stat, r["value"])) for r in rows]
         shown, omitted = cut_ties(ranked, request.limit)
-        result = CareerStatsResult(**common, limit=request.limit, rows=shown, omitted_tie=omitted,
+        result = CareerStatsResult(**common, limit=request.limit, limit_note=LIMIT_NOTE if request.requested_limit else None,
+                                   rows=shown, omitted_tie=omitted,
                                    coverage_note=_board_note(request), as_of=data.fetched_at)
         return _output(result, data)
     mine = [r for r in rows if r["player_id"] == request.player.player_id]

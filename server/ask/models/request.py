@@ -186,6 +186,8 @@ class SeasonLeadersRequest(ContractModel):
     season_type: SeasonType = "regular_season"
     stat: StatSelection
     limit: int = Field(default=DEFAULT_LEADER_LIMIT, ge=1, le=MAX_LEADER_LIMIT)
+    # The user's "top N" when it was above the maximum and was shown as the top 25.
+    requested_limit: int | None = Field(default=None, gt=MAX_LEADER_LIMIT)
 
     @model_validator(mode="after")
     def _leader_stat(self):
@@ -206,6 +208,8 @@ class CareerStatsRequest(ContractModel):
     season_type: SeasonType = "regular_season"
     stat: StatSelection
     limit: int = Field(default=DEFAULT_LEADER_LIMIT, ge=1, le=MAX_LEADER_LIMIT)
+    # The user's "top N" when it was above the maximum and was shown as the top 25.
+    requested_limit: int | None = Field(default=None, gt=MAX_LEADER_LIMIT)
 
     @model_validator(mode="after")
     def _view_shape(self):

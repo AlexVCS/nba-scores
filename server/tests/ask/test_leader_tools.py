@@ -339,7 +339,7 @@ def test_top_n_is_read_from_text(question, limit):
 
 
 @pytest.mark.parametrize("question", [
-    "Top 30 in total rebounds in 2023-24", "Top 0 scorers in total points in 2023-24",
+    "Top 0 scorers in total points in 2023-24",
     "Who led the Lakers in points per game in 2023-24?", "Did Nikola Jokic lead the league in rebounds per game in 2023-24?",
     "Who led the league in points and assists per game in 2023-24?", "Who led the league in points per game in 2022-23 and 2023-24?",
     "Which team scored the most points in 2023-24?", "Who led the Western conference in assists per game in 2023-24?",
@@ -409,7 +409,7 @@ def test_answer_fixture_round_trips_the_contract():
 @pytest.mark.parametrize("question,stat", [
     ("Best 3-point shooting percentage in 2022-23", "three_point_percentage"),
     ("Who led the league in free throw shooting percentage in 2022-23?", "free_throw_percentage"),
-    ("Top 5 in three-point field goals made in 2022-23", "three_pointers"),
+    ("Top 5 in total three-point field goals made in 2022-23", "three_pointers"),
     ("Who led the league in offensive rebounds per game in 2022-23?", "offensive_rebounds"),
 ])
 def test_one_statistic_in_several_words_is_not_a_multi_stat_question(question, stat):
