@@ -1,5 +1,14 @@
 # Ask development handoff
 
+## Stage 2 checkpoint, September 29
+
+Player season stats and team records/standings are now implemented locally on
+`ask/reviewed-components`. See `docs/ask-stage2.md` and
+`docs/verification/ask-stage2-2026-09-29/` for scope, checks and review.
+This supersedes the "next step is stage 1" note below. Production is still off;
+the old frozen four-family gate is not release evidence for the new code.
+
+
 ## 2026-09-29 design interview (read first)
 
 A design interview after this handoff was written reset several decisions. They

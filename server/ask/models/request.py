@@ -25,6 +25,8 @@ from .common import (
     PlayerRef,
     PlayoffRound,
     Season,
+    SeasonType,
+    StandingsScope,
     Stat,
     StatScope,
     TeamRef,
@@ -140,8 +142,28 @@ class PostseasonSummaryRequest(ContractModel):
     team: TeamRef | None = None
 
 
+class PlayerSeasonStatsRequest(ContractModel):
+    """One player's season, including all stints unless a team is named."""
+
+    intent: Literal["player_season_stats"] = "player_season_stats"
+    player: PlayerRef
+    season: Season
+    season_type: SeasonType = "regular_season"
+    stat: StatSelection
+    team: TeamRef | None = None
+
+
+class TeamRecordsRequest(ContractModel):
+    """Regular-season record for one team, or the league/conference standings."""
+
+    intent: Literal["team_records"] = "team_records"
+    season: Season
+    team: TeamRef | None = None
+    standings_scope: StandingsScope = "league"
+
+
 AskRequest = Annotated[
-    Union[GameSearchRequest, BoxscoreStatRequest, PlayoffSeriesRequest, PostseasonSummaryRequest],
+    Union[GameSearchRequest, BoxscoreStatRequest, PlayoffSeriesRequest, PostseasonSummaryRequest, PlayerSeasonStatsRequest, TeamRecordsRequest],
     Field(discriminator="intent"),
 ]
 ASK_REQUEST_ADAPTER: TypeAdapter[AskRequest] = TypeAdapter(AskRequest)

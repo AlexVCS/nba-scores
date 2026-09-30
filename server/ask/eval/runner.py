@@ -12,6 +12,8 @@ unsupported outcome, is a schema-valid guess and counts as a failure.
 
 from __future__ import annotations
 
+from server.ask.season_scope import normalize_question
+
 import datetime as dt
 import math
 import statistics
@@ -132,7 +134,7 @@ def drive(
             output, blocked = _call(adapter, request, guard)
             budget_blocked = budget_blocked or blocked
         normalization = (
-            normalizer.normalize(output, candidates, context) if output.outcome == "interpreted" else None
+            normalize_question(normalizer, output, candidates, context, question) if output.outcome == "interpreted" else None
         )
         attempts.append(CascadeAttempt(output=output, normalization=normalization))
         elapsed = cached_latency_ms + int((time.perf_counter() - started) * 1000)

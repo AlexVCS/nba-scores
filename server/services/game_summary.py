@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup, Comment
+from server.services import basketball_reference
 from fastapi import HTTPException
-import requests
 
 from server.services import game_data, nba_stats_client
 
@@ -115,7 +115,7 @@ def fetch_bref_line_score(game_date_est, home_team_tricode):
         return BREF_LINE_SCORE_CACHE[cache_key]
 
     url = build_bref_boxscore_url(game_date_est, home_team_tricode)
-    response = requests.get(
+    response = basketball_reference.get(
         url, headers=BREF_REQUEST_HEADERS, timeout=BREF_REQUEST_TIMEOUT_SECONDS
     )
     response.raise_for_status()

@@ -9,8 +9,8 @@ from __future__ import annotations
 from typing import get_args
 
 from server.ask import tools
-from server.ask.models.common import Aggregation, Intent, Stat, StatScope
-from server.ask.models.interpreter import UnsupportedReason
+from server.ask.models.common import Aggregation, Intent, Stat, StatScope, SeasonType, StandingsScope
+from server.ask.models.interpreter import UnsupportedReason, LEGACY_UNSUPPORTED_REASONS
 
 # Sentinel options for candidate-backed Choices.
 NONE_OPTION = "__none__"
@@ -23,13 +23,10 @@ INTENTS: dict[str, str] = tools.router_options()
 
 UNSUPPORTED_REASONS: dict[str, str] = {
     "career_stats": "Career totals or career averages, when the question asks about a whole career",
-    "season_stats": "A player's or team's statistics over a whole season",
     "season_leaders": "Who led the league or a season in a statistic",
     "historical_comparison": "Comparing players, teams, games, or eras",
     "prediction": "Predictions or future outcomes",
     "follow_up": "Refers to an earlier answer ('what about him?', 'and the next game?')",
-    "regular_season_record": "A team's regular-season win-loss record",
-    "standings": "League or conference standings",
     "reference_question": "Definitions, rules, glossary, or biography questions",
     "multi_game_average": "Averages or per-game figures across several games",
     "unsupported_leader_stat": "Game leaders for percentages or an entire stat line without a ranking rule",
@@ -44,9 +41,12 @@ STAT_SCOPES: dict[str, str] = {
 }
 
 AGGREGATIONS: dict[str, str] = {
-    "total": "The total in a single game (the normal case)",
-    "per_game": "An average or per-game figure across several games",
+    "total": "Total over the requested game or season",
+    "per_game": "Average per game over the requested season",
 }
+
+SEASON_TYPES = {"regular_season": "NBA regular season, excluding playoffs and play-in", "playoffs": "NBA playoffs only, excluding play-in"}
+STANDINGS_SCOPES = {"league": "Whole NBA league, or no conference filter", "east": "Eastern conference only", "west": "Western conference only"}
 
 STATS: dict[str, str] = {
     "stat_line": "The full stat line, or no particular statistic named ('how did he play?')",
@@ -74,10 +74,12 @@ def check_coverage() -> None:
     """Raise if a contract enum value has no description here."""
     pairs = (
         (INTENTS, set(get_args(Intent)) | {UNSUPPORTED_INTENT}),
-        (UNSUPPORTED_REASONS, set(get_args(UnsupportedReason))),
+        (UNSUPPORTED_REASONS, set(get_args(UnsupportedReason)) - LEGACY_UNSUPPORTED_REASONS),
         (STAT_SCOPES, set(get_args(StatScope))),
         (AGGREGATIONS, set(get_args(Aggregation))),
         (STATS, set(get_args(Stat))),
+        (SEASON_TYPES, set(get_args(SeasonType))),
+        (STANDINGS_SCOPES, set(get_args(StandingsScope))),
     )
     for table, values in pairs:
         if set(table) != values:

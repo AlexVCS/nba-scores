@@ -6,10 +6,11 @@ import datetime as dt
 import re
 from typing import Iterable
 
+from server.ask import tools
 from server.ask.models.candidates import Candidate, CandidateLookupResult
 from server.ask.models.common import DateRange, MAX_QUESTION_LENGTH
 from server.ask.models.interpreter import InterpreterOutput
-from server.ask.models.request import AskContext, AskRequest, BoxscoreStatRequest, GameSearchRequest, PlayoffSeriesRequest, PostseasonSummaryRequest
+from server.ask.models.request import AskContext, AskRequest, BoxscoreStatRequest, GameSearchRequest, PlayoffSeriesRequest, PostseasonSummaryRequest, PlayerSeasonStatsRequest, TeamRecordsRequest
 from server.ask.models.response import (
     Clarification, ClarificationOption, Interpretation, InterpretationItem, Notice, Suggestion,
 )
@@ -18,7 +19,7 @@ from server.ask.resolution import PendingResolution, ResolutionStore, choose
 
 
 _TYPE = {
-    "game_search": "games", "playoff_series": "series", "postseason_summary": "postseason",
+    "game_search": "games", "playoff_series": "series", "postseason_summary": "postseason", "player_season_stats": "season_stats", "team_records": "team_records",
 }
 _FIELD_LABEL = {
     "intent": "kind of question", "stat_scope": "stat scope", "stat": "statistic", "player": "player",
@@ -37,8 +38,8 @@ def interpretation(output: InterpreterOutput | None, candidates: CandidateLookup
     if output is not None and candidates is not None:
         for field in output.fields:
             if field.field not in ("player", "teams", "date", "season", "round", "game_number", "location"):
-                if field.field == "stat" and field.status == "selected":
-                    items.append(InterpretationItem(field="stat", value=field.selected[0].replace("_", " ").title(), origin="question"))
+                if field.field in {"stat", "aggregation", "season_type", "standings_scope"} and field.status == "selected" and request is not None and field.field in tools.REGISTRY[request.intent].fields:
+                    items.append(InterpretationItem(field=field.field, value=field.selected[0].replace("_", " ").title(), origin="question"))
                 continue
             ids = field.selected if field.status == "selected" else field.alternatives if field.status == "ambiguous" else []
             for value in ids[:2]:
@@ -62,7 +63,7 @@ def interpretation(output: InterpreterOutput | None, candidates: CandidateLookup
         if request.game.date:
             dates = DateRange(start=request.game.date, end=request.game.date)
         season = request.game.season
-    elif isinstance(request, (PlayoffSeriesRequest, PostseasonSummaryRequest)):
+    elif isinstance(request, (PlayoffSeriesRequest, PostseasonSummaryRequest, PlayerSeasonStatsRequest, TeamRecordsRequest)):
         season = request.season
     return Interpretation(intent=intent, detected_type=detected, items=items[:8],
                           reference_time=context.reference_time, dates=dates, season=season)
@@ -71,9 +72,9 @@ def interpretation(output: InterpreterOutput | None, candidates: CandidateLookup
 def notice(code: str, *, reason: str = "", retry_after: int | None = None,
            unsupported_reason: str | None = None, diagnostics_recorded: bool = False) -> Notice:
     copy = {
-        "unsupported": ("Can't answer that one yet", "Ask covers games, boxscores, playoff series, and postseason results."),
+        "unsupported": ("Can't answer that one yet", "Ask covers games, boxscores, playoffs, player season stats, and regular-season records and standings. Try a full name and season such as 2023-24. Career totals, leaders and statistical splits are not supported yet."),
         "no_games": ("No games found", "No matching games were recorded for that date and team."),
-        "no_record": ("No record found", "NBA records do not have that game or series."),
+        "no_record": ("No record found", "The data sources do not have a matching record for that question."),
         "player_did_not_play": ("Player did not play", "No game was recorded for that player on the selected date."),
         "service_unavailable": ("NBA data isn't responding", "Try again in a moment."),
         "interpreter_unavailable": ("Ask couldn't read that question", "Try again or add a date, team, or playoff year."),

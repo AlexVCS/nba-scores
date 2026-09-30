@@ -1,0 +1,66 @@
+{
+  "schema_version": "1",
+  "request_id": "answer-player-season",
+  "outcome": "answer",
+  "question": "Nikola Jokic rebounds per game in 2023-24",
+  "interpretation": {
+    "intent": "player_season_stats",
+    "detected_type": "season_stats",
+    "items": [],
+    "reference_time": "2026-09-29T12:00:00-04:00",
+    "timezone": "America/New_York",
+    "dates": null,
+    "season": "2023-24"
+  },
+  "result": {
+    "kind": "player_season_stats",
+    "player": {
+      "player_id": 203999,
+      "name": "Nikola Jokic"
+    },
+    "season": "2023-24",
+    "season_type": "regular_season",
+    "aggregation": "per_game",
+    "team": null,
+    "games_played": 79,
+    "values": [
+      {
+        "stat": "rebounds",
+        "value": 12.354430379746836,
+        "display": "12.4",
+        "made": null,
+        "attempted": null
+      }
+    ],
+    "coverage_note": null,
+    "as_of": "2026-09-29T00:00:00Z"
+  },
+  "clarification": null,
+  "notice": null,
+  "links": [
+    {
+      "kind": "source",
+      "label": "Source: NBA.com",
+      "href": "https://www.nba.com/stats/teams/traditional?Season=2023-24",
+      "external": true,
+      "spoiler": false
+    }
+  ],
+  "suggestions": [],
+  "sources": [
+    {
+      "name": "nba_stats",
+      "label": "NBA.com",
+      "fetched_at": "2026-09-29T00:00:00Z",
+      "complete": true
+    }
+  ],
+  "interpreter": {
+    "model_called": false,
+    "cache_hit": false,
+    "adapter": null,
+    "model": null,
+    "fallback_used": false,
+    "field_tiers": {}
+  }
+}

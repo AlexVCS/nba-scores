@@ -63,7 +63,7 @@ class PolicyThresholds:
 
 
 # Interpreter fields the user is asked about under another name.
-CLARIFY_AS = {"target_team": "teams"}
+CLARIFY_AS = {"target_team": "teams", "season_type": "intent", "standings_scope": "intent"}
 
 
 def _clarify(field: str, reason: str, why: str) -> CascadeDecision:

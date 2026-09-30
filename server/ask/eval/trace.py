@@ -224,11 +224,18 @@ def expected_fields(case: LabeledCase) -> dict[str, Any]:
     elif r.intent == "postseason_summary":
         expected["season"] = {r.season}
         expected["teams"] = {r.team.team_id} if r.team else set()
+    elif r.intent == "player_season_stats":
+        expected.update(player={r.player.player_id}, season={r.season}, stat={r.stat.stat},
+                        aggregation={r.stat.aggregation}, season_type={r.season_type},
+                        teams={r.team.team_id} if r.team else set())
+    elif r.intent == "team_records":
+        expected.update(season={r.season}, teams={r.team.team_id} if r.team else set(),
+                        season_type={"regular_season"}, standings_scope={r.standings_scope})
     return expected
 
 
 def _values(field: str, selected: list[str], candidates: CandidateLookupResult) -> set[Any] | None:
-    if field in ("intent", "stat_scope", "stat", "aggregation"):
+    if field in ("intent", "stat_scope", "stat", "aggregation", "season_type", "standings_scope"):
         return set(selected)
     values = set()
     for cid in selected:

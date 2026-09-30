@@ -8,6 +8,8 @@ import AskPostseasonResult from "./AskPostseasonResult";
 import AskSeriesResult from "./AskSeriesResult";
 import AskStatResult from "./AskStatResult";
 import AskSuggestions from "./AskSuggestions";
+import AskSeasonStatsResult from "./AskSeasonStatsResult";
+import AskTeamRecordsResult from "./AskTeamRecordsResult";
 
 interface AskResultProps {
   response: AskResponse;
@@ -42,6 +44,9 @@ function AskResult({response, resultsHidden, onAsk, onChooseOption, onRetry, onE
       {response.outcome === "answer" && result?.kind === "boxscore_stat" && <AskStatResult result={result} />}
       {response.outcome === "answer" && result?.kind === "playoff_series" && <AskSeriesResult result={result} />}
       {response.outcome === "answer" && result?.kind === "postseason_summary" && <AskPostseasonResult result={result} resultsHidden={resultsHidden} />}
+
+      {response.outcome === "answer" && result?.kind === "player_season_stats" && <AskSeasonStatsResult result={result} />}
+      {response.outcome === "answer" && result?.kind === "team_records" && <AskTeamRecordsResult result={result} />}
 
       {response.outcome === "needs_clarification" && response.clarification && (
         <AskClarification

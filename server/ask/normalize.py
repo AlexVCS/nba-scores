@@ -36,6 +36,8 @@ from server.ask.models.common import (
     Intent,
     Stat,
     StatScope,
+    SeasonType,
+    StandingsScope,
 )
 from server.ask.models.interpreter import FieldInterpretation, InterpreterOutput, NormalizationResult
 from server.ask.models.request import (
@@ -46,6 +48,8 @@ from server.ask.models.request import (
     PlayoffSeriesRequest,
     PostseasonSummaryRequest,
     StatSelection,
+    PlayerSeasonStatsRequest,
+    TeamRecordsRequest,
 )
 
 CANDIDATE_SET_FOR = {
@@ -63,6 +67,8 @@ CLOSED_VALUES = {
     "stat_scope": set(get_args(StatScope)),
     "stat": set(get_args(Stat)),
     "aggregation": set(get_args(Aggregation)),
+    "season_type": set(get_args(SeasonType)),
+    "standings_scope": set(get_args(StandingsScope)),
 }
 
 # Fields each tool reads (`server.ask.tools`). A field outside this set is ignored, so a
@@ -211,6 +217,8 @@ class Normalizer:
             return f.selected
         if f.status == "absent":
             return []
+        if name in {"season_type", "standings_scope"}:
+            raise _Clarify("intent", "ambiguous")
         if name == "aggregation":
             raise _Invalid(f"aggregation: unresolved {f.status} value")
         # The user said something we cannot pin down: dropping it would change the question.
@@ -283,6 +291,8 @@ class Normalizer:
             "boxscore_stat": self._boxscore,
             "playoff_series": self._series,
             "postseason_summary": self._postseason,
+            "player_season_stats": self._player_season,
+            "team_records": self._team_records,
         }
 
     def _game_search(self, output, candidates, context):
@@ -409,6 +419,30 @@ class Normalizer:
         if len(teams) > 1:
             raise _Clarify("teams", "ambiguous")
         return PostseasonSummaryRequest(season=season, team=teams[0] if teams else None)
+
+    def _player_season(self, output, candidates, context):
+        player = self._value(candidates, self._require(output, "player")[0]).player
+        season = self._value(candidates, self._require(output, "season")[0]).season
+        teams = self._teams(candidates, self._optional(output, "teams"))
+        if len(teams) > 1:
+            raise _Clarify("teams", "ambiguous")
+        stat = self._optional(output, "stat") or ["stat_line"]
+        aggregation = self._optional(output, "aggregation") or ["total"]
+        season_type = self._optional(output, "season_type") or ["regular_season"]
+        return PlayerSeasonStatsRequest(player=player, season=season, team=teams[0] if teams else None,
+                                        stat=StatSelection(stat=stat[0], aggregation=aggregation[0]),
+                                        season_type=season_type[0])
+
+    def _team_records(self, output, candidates, context):
+        season = self._value(candidates, self._require(output, "season")[0]).season
+        teams = self._teams(candidates, self._optional(output, "teams"))
+        if len(teams) > 1:
+            raise _Clarify("teams", "ambiguous")
+        season_type = self._optional(output, "season_type") or ["regular_season"]
+        if season_type != ["regular_season"]:
+            return NormalizationResult(status="unsupported", unsupported_reason="other")
+        scope = self._optional(output, "standings_scope") or ["league"]
+        return TeamRecordsRequest(season=season, team=teams[0] if teams else None, standings_scope=scope[0])
 
 
 def _with_page_context(output: InterpreterOutput, candidates: CandidateLookupResult) -> InterpreterOutput:

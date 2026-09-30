@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from server.ask.season_scope import normalize_question
+
 import datetime as dt
 import hashlib
 import json
@@ -154,7 +156,7 @@ class AskPipeline:
                 actual = usage.cost_usd if usage.provider_calls else 0.0
                 self.budget.settle(reservation, actual)
             ttl = self.config.parse_ttl_seconds if output.outcome in {"interpreted", "unsupported"} else 0
-            if output.outcome == "interpreted" and self.normalizer.normalize(output, candidates, context).status == "invalid":
+            if output.outcome == "interpreted" and normalize_question(self.normalizer, output, candidates, context, question).status == "invalid":
                 # A retry must be able to recover from a structurally valid
                 # provider response that cannot form a valid request.
                 ttl = 0
@@ -229,7 +231,7 @@ class AskPipeline:
                 cache_hit = cache_hit or hit
                 _log_decisions(output, hit)
                 any_call = any_call or (not hit and output.metadata.usage.provider_calls > 0)
-                normalized = self.normalizer.normalize(output, candidates, context) if output.outcome == "interpreted" else None
+                normalized = normalize_question(self.normalizer, output, candidates, context, question) if output.outcome == "interpreted" else None
                 attempts.append(CascadeAttempt(output=output, normalization=normalized))
                 state = CascadeState(attempts=attempts, candidates=candidates, expanded_fields=expanded,
                                      fallback_enabled=False, remaining_budget_usd=self.budget.remaining_usd() if self.budget else 1,
@@ -272,7 +274,7 @@ class AskPipeline:
                                   notice=notice("interpreter_unavailable"))
 
     def _from_pending(self, question: str, pending: PendingResolution, info: InterpreterInfo) -> AskResponse:
-        normalized = self.normalizer.normalize(pending.output, pending.candidates, pending.context)
+        normalized = normalize_question(self.normalizer, pending.output, pending.candidates, pending.context, question)
         readout = interpretation(pending.output, pending.candidates, pending.context,
                                  normalized.request if normalized.status == "valid" else None)
         if normalized.status == "valid":

@@ -121,19 +121,21 @@ def build_questions(candidates: CandidateLookupResult) -> tuple[dict[str, Any], 
         "intent": _choice("What is the `question` asking for?", dict(cs.INTENTS)),
         "unsupported_reason": _choice(
             "If the `question` asks for something other than NBA games, one game's box score, "
-            "one playoff series, or one postseason, what kind of request is it?",
+            "one playoff series, one postseason, player season statistics, or regular-season records/standings, what kind of request is it?",
             dict(cs.UNSUPPORTED_REASONS),
         ),
         "stat_scope": _choice(
             "If the `question` asks about statistics from one game, whose statistics?",
             dict(cs.STAT_SCOPES),
         ),
-        "stat": _choice("Which box score statistic does the `question` ask for?", dict(cs.STATS)),
+        "stat": _choice("Which basketball statistic does the `question` ask for?", dict(cs.STATS)),
         "aggregation": _choice(
-            "Does the `question` ask for a single-game total or an average across games?",
+            "Does the `question` ask for a total or a per-game average over the selected game/season?",
             dict(cs.AGGREGATIONS),
         ),
     }
+    q["season_type"] = _choice("Does the question request regular-season or playoff statistics?", dict(cs.SEASON_TYPES))
+    q["standings_scope"] = _choice("Which conference, if any, does the standings question request?", dict(cs.STANDINGS_SCOPES))
     for field_name, (qid, cand_field) in CANDIDATE_CHOICES.items():
         noun = NOUNS[field_name]
         criteria: dict[str, str | None] = {
@@ -250,7 +252,7 @@ def decode(response: dict[str, Any], team_ids: dict[str, str], t: JevThresholds)
             fields.append(
                 FieldInterpretation(field="intent", status="selected", selected=[top_intent], confidence=_clamp(top_p))
             )
-        for name in ("stat_scope", "stat", "aggregation"):
+        for name in ("stat_scope", "stat", "aggregation", "season_type", "standings_scope"):
             fields.append(decide_choice(name, answers[name], t))
         for field_name, (qid, _) in CANDIDATE_CHOICES.items():
             fields.append(decide_choice(field_name, answers[qid], t))

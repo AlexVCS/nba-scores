@@ -54,7 +54,7 @@ CANDIDATE_FIELDS = {
     "game_number": "game_number",
     "location": "location",
 }
-CLOSED_FIELDS = {"stat_scope": cs.STAT_SCOPES, "stat": cs.STATS, "aggregation": cs.AGGREGATIONS}
+CLOSED_FIELDS = {"stat_scope": cs.STAT_SCOPES, "stat": cs.STATS, "aggregation": cs.AGGREGATIONS, "season_type": cs.SEASON_TYPES, "standings_scope": cs.STANDINGS_SCOPES}
 PLACEHOLDER_ID = "__none__"
 
 INSTRUCTIONS = """You interpret one NBA question for a basketball app. You do not answer it.
@@ -97,7 +97,14 @@ Field rules (every field has a status and a list of IDs/values):
   "leaders", even without a team. Several games on that date are resolved from
   data and may require a teams clarification. Reserve season_leaders for a
   leader across a whole season or league-wide span.
-- stat_scope, stat, aggregation matter only for one game's box score. Use stat "stat_line"
+- Season player statistics use player_season_stats, including per-game averages.
+  Team regular-season records and league/conference standings use team_records.
+  Season leaders and career totals remain unsupported. Never answer advanced metrics,
+  division standings, home/away, opponent, month, date or other statistical splits as a whole season.
+- season_type: select playoffs only when explicitly requested, regular_season when
+  specified, otherwise absent. standings_scope: east/west only when explicitly
+  requested; otherwise absent. Both apply only to season tools.
+- stat and aggregation apply to boxscore_stat and player_season_stats. stat_scope applies only to boxscores. Use stat "stat_line"
   when no particular statistic is named, and aggregation "per_game" when the question
   asks for an average across games.
 - `page_game` true means the user is viewing one game's box score, so "this game"
@@ -194,6 +201,8 @@ def candidate_context(question: str, candidates: CandidateLookupResult,
             "stat_scope": cs.STAT_SCOPES,
             "stat": cs.STATS,
             "aggregation": cs.AGGREGATIONS,
+            "season_type": cs.SEASON_TYPES,
+            "standings_scope": cs.STANDINGS_SCOPES,
             "unsupported_reason": cs.UNSUPPORTED_REASONS,
         },
     }

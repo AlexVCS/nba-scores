@@ -15,6 +15,8 @@ export const DETECTED_TYPE_LABELS: Record<AskDetectedType, string> = {
   stat_leaders: "Stat leaders",
   series: "Series",
   postseason: "Postseason",
+  season_stats: "Season stats",
+  team_records: "Records / standings",
 };
 
 export const FIELD_LABELS: Record<AskInterpretationField, string> = {
@@ -30,6 +32,9 @@ export const FIELD_LABELS: Record<AskInterpretationField, string> = {
   series: "Series",
   game_number: "Game",
   location: "Location",
+  aggregation: "Measure",
+  season_type: "Season type",
+  standings_scope: "Conference",
 };
 
 export const STAT_LABELS: Record<AskStat, string> = {

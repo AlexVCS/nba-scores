@@ -54,7 +54,9 @@ def to_new_york(value: datetime) -> datetime:
 NewYorkDateTime = Annotated[datetime, AfterValidator(to_new_york)]
 
 
-Intent = Literal["game_search", "boxscore_stat", "playoff_series", "postseason_summary"]
+Intent = Literal["game_search", "boxscore_stat", "playoff_series", "postseason_summary", "player_season_stats", "team_records"]
+SeasonType = Literal["regular_season", "playoffs"]
+StandingsScope = Literal["league", "east", "west"]
 
 # Fields that a clarification can ask about. Shared by normalization
 # (NormalizationResult.clarify_field), the cascade (ClarifyDecision.field), and

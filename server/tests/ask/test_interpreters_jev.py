@@ -248,6 +248,6 @@ def test_target_team_is_its_own_choice_over_team_candidates():
 def test_decode_unsupported_keeps_its_confidence():
     questions, team_ids = build_questions(b.lookup_result([]))
     answers = fake_answers(questions, picks={"intent": (cs.UNSUPPORTED_INTENT, 0.7),
-                                             "unsupported_reason": ("standings", 0.9)})
+                                             "unsupported_reason": ("season_leaders", 0.9)})
     decoded = decode({"answers": answers}, team_ids, JevThresholds())
     assert (decoded["outcome"], decoded["unsupported_confidence"]) == ("unsupported", pytest.approx(0.7))
