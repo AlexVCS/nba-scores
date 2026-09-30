@@ -20,7 +20,7 @@ export type IsoDate = string; // "2026-02-08" (America/New_York calendar date)
 export type IsoDateTime = string; // "2026-02-09T10:15:00-05:00"
 export type Season = string; // "2023-24"
 
-export type AskIntent = "game_search" | "boxscore_stat" | "playoff_series" | "postseason_summary" | "player_season_stats" | "team_records";
+export type AskIntent = "game_search" | "boxscore_stat" | "playoff_series" | "postseason_summary" | "player_season_stats" | "team_records" | "season_leaders";
 export type AskOutcome =
   | "answer"
   | "needs_clarification"
@@ -28,7 +28,7 @@ export type AskOutcome =
   | "not_found"
   | "unavailable"
   | "budget_exhausted";
-export type AskDetectedType = "games" | "player_stat" | "team_stat" | "stat_leaders" | "series" | "postseason" | "season_stats" | "team_records";
+export type AskDetectedType = "games" | "player_stat" | "team_stat" | "stat_leaders" | "series" | "postseason" | "season_stats" | "team_records" | "season_leaders";
 export type AskStatScope = "player" | "team" | "leaders";
 export type AskStatKey =
   | "points"
@@ -59,7 +59,7 @@ export type AskUnsupportedReason =
   | "regular_season_record"
   | "standings"
   | "career_stats"
-  | "season_leaders"
+  | "season_leaders" // Legacy responses only since stage 3.
   | "historical_comparison"
   | "prediction"
   | "follow_up"
@@ -390,13 +390,42 @@ export interface AskTeamRecordsResult {
   as_of: IsoDateTime;
 }
 
+export interface AskSeasonLeaderRow {
+  /** Competition rank on unrounded values: tied players share a rank. */
+  rank: number;
+  player: AskPlayerRef;
+  /** Null when the player had several teams, or the franchise is outside the catalog. */
+  team: AskTeamRef | null;
+  multiple_teams: boolean;
+  games_played: number;
+  value: AskStatValue;
+}
+
+export interface AskSeasonLeadersResult {
+  kind: "season_leaders";
+  season: Season;
+  season_type: "regular_season" | "playoffs";
+  stat: AskStatKey;
+  aggregation: AskAggregation;
+  /** Requested top N; every player ranked N or better is listed, so ties can add rows. */
+  limit: number;
+  qualification: "all_players" | "source_qualified";
+  qualification_note: string;
+  rows: AskSeasonLeaderRow[];
+  /** A whole tie group left out because it would pass the 50-row cap. */
+  omitted_tie: {rank: number; count: number} | null;
+  coverage_note: string | null;
+  as_of: IsoDateTime;
+}
+
 export type AskResult =
   | AskGamesResult
   | AskBoxscoreStatResult
   | AskPlayoffSeriesResult
   | AskPostseasonSummaryResult
   | AskPlayerSeasonStatsResult
-  | AskTeamRecordsResult;
+  | AskTeamRecordsResult
+  | AskSeasonLeadersResult;
 
 // ---------------------------------------------------------------- clarification, notices
 

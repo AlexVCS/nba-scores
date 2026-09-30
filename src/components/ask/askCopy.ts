@@ -15,7 +15,7 @@ export const ASK_DIAGNOSTICS_COPY = "Our server may keep limited diagnostics, su
 export const ASK_DIAGNOSTICS_NOTE = "We kept an anonymous note of the question type, not your words, to decide what to support next.";
 
 export const ASK_SCOPE_COPY =
-  "Ask about games, boxscores, playoffs, player season stats, or regular-season records and standings. Include the year or a season such as 2023-24. Career totals, season leaders, and statistical splits are not supported yet.";
+  "Ask about games, boxscores, playoffs, player season stats, regular-season records and standings, or league leaders for one season. Include the year or a season such as 2023-24. Career totals, all-time leaders, and statistical splits are not supported yet.";
 
 // Asking is consent (ADR 0006): say so before the first question, so people avoiding spoilers aren't surprised.
 export const ASK_ANSWERS_SHOWN_COPY = "Answers show as soon as you ask, even when results are hidden.";
@@ -28,4 +28,5 @@ export const ASK_EXAMPLES = [
   {label: "Series", question: "Who won the 2024 NBA Finals?"},
   {label: "Season", question: "Nikola Jokic rebounds per game in 2023-24"},
   {label: "Record", question: "Celtics regular-season record in 2007-08"},
+  {label: "Leaders", question: "Who led the NBA in assists per game in 2019-20?"},
 ] as const;
