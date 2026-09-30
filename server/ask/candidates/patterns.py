@@ -108,6 +108,36 @@ _THESE_PLAYOFFS = re.compile(r"\b(?:these|this\s+year'?s|this)\s+(?:playoffs|pos
 _APOSTROPHE_YEAR = re.compile(r"(?<![a-z0-9])'(\d{2})\b")
 _BARE_YEAR = re.compile(r"\b(19[4-9]\d|20\d{2})\b")
 
+_UNITS = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9}
+_TEENS = {"ten": 10, "eleven": 11, "twelve": 12, "thirteen": 13, "fourteen": 14, "fifteen": 15,
+          "sixteen": 16, "seventeen": 17, "eighteen": 18, "nineteen": 19}
+_TENS = {"twenty": 20, "thirty": 30, "forty": 40, "fifty": 50, "sixty": 60, "seventy": 70, "eighty": 80, "ninety": 90}
+_SEP = r"[\s-]+"
+_UNIT = "|".join(_UNITS)
+_TWO_DIGITS = (rf"(?:(?P<tens>{'|'.join(_TENS)})(?:{_SEP}(?P<tens_unit>{_UNIT}))?"
+               rf"|(?P<teen>{'|'.join(_TEENS)})|(?:oh|o){_SEP}(?P<oh_unit>{_UNIT}))")
+# "nineteen ninety-seven", "twenty twenty", "twenty oh five", "two thousand and three".
+# A following number word means a count, not a year ("two thousand five hundred").
+_WORD_YEAR = re.compile(
+    rf"\b(?:(?P<century>nineteen|twenty){_SEP}{_TWO_DIGITS}"
+    rf"|two{_SEP}thousand(?:{_SEP}and)?{_SEP}(?P<thousand_rest>{'|'.join(_TENS)}|{'|'.join(_TEENS)}|{_UNIT})"
+    rf"(?:{_SEP}(?P<thousand_unit>{_UNIT}))?)\b"
+    rf"(?!{_SEP}(?:hundred|thousand|{'|'.join(_TENS)}|{'|'.join(_TEENS)}|{_UNIT})\b)"
+)
+
+
+def _word_year(m: re.Match[str]) -> int:
+    if m.group("century"):
+        base = 1900 if m.group("century") == "nineteen" else 2000
+        if m.group("tens"):
+            return base + _TENS[m.group("tens")] + _UNITS.get(m.group("tens_unit") or "", 0)
+        if m.group("teen"):
+            return base + _TEENS[m.group("teen")]
+        return base + _UNITS[m.group("oh_unit")]
+    rest = m.group("thousand_rest") or ""
+    value = _TENS.get(rest) or _TEENS.get(rest) or _UNITS.get(rest, 0)
+    return 2000 + value + (_UNITS.get(m.group("thousand_unit") or "", 0) if rest in _TENS else 0)
+
 
 def season_mentions(folded: str, original: str, today: dt.date, playoff_context: bool,
                     page_season: str | None = None) -> tuple[list[Mention], str]:
@@ -154,6 +184,14 @@ def season_mentions(folded: str, original: str, today: dt.date, playoff_context:
         else:
             hits = [_season_hit(current_start + 1, f"{season_label(current_start + 1)} ({text})", score=0.9)]
         out.append(_mention("season", m, original, hits))
+        folded = _mask(folded, m.start(), m.end())
+
+    for m in _WORD_YEAR.finditer(folded):
+        year = _word_year(m)
+        if year > today.year + 1:
+            continue
+        hits = year_hits(year, playoff_context, latest_start)
+        out.append(_mention("season", m, original, hits, note=None if hits else "no NBA season for that year"))
         folded = _mask(folded, m.start(), m.end())
 
     for pattern, expand in ((_APOSTROPHE_YEAR, True), (_BARE_YEAR, False)):

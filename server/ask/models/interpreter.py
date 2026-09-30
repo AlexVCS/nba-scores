@@ -35,6 +35,8 @@ InterpreterField = Literal[
     "stat_scope",
     "stat",
     "aggregation",
+    "season_type",
+    "standings_scope",
     "player",
     "teams",
     "target_team",
@@ -75,15 +77,15 @@ InterpreterOutcome = Literal[
     "unavailable",  # provider error/timeout/quota; nothing interpreted
 ]
 
+LEGACY_UNSUPPORTED_REASONS = frozenset({"season_stats", "regular_season_record", "standings"})
+
 UnsupportedReason = Literal[
+    "season_stats", "regular_season_record", "standings",  # historical reports only; never offered by current adapters
     "career_stats",
-    "season_stats",
     "season_leaders",
     "historical_comparison",
     "prediction",
     "follow_up",
-    "regular_season_record",
-    "standings",
     "reference_question",  # glossary/biography (#202)
     "multi_game_average",  # per-game averages across games
     "unsupported_leader_stat",  # leaders by a percentage or full stat line (no ranking rule)
@@ -98,12 +100,12 @@ class FieldInterpretation(ContractModel):
     # status == "selected": 1 value (2 allowed only for "teams").
     selected: list[str] = Field(default_factory=list, max_length=2)
     # status == "ambiguous": the 2+ values that remain plausible.
-    alternatives: list[str] = Field(default_factory=list, max_length=12)
+    alternatives: list[str] = Field(default_factory=list, max_length=14)
     # Adapter-native confidence normalized to 0..1 (Jev score, logprob-derived,
     # etc.). None when the adapter exposes none. Used by the cascade policy;
     # thresholds are calibrated in #199, not copied from cookbooks.
     confidence: float | None = Field(default=None, ge=0, le=1)
-    mention: str | None = Field(default=None, max_length=120)  # question text for this field
+    mention: str | None = Field(default=None, max_length=140)  # question text for this field
 
     @model_validator(mode="after")
     def _status_shape(self) -> FieldInterpretation:
@@ -174,7 +176,7 @@ class InterpreterMetadata(ContractModel):
     # Cascade only: interpreter field -> tier ("laya", "jev", "luna") that decided it.
     field_tiers: dict[InterpreterField, str] = Field(default_factory=dict)
     # Cascade only: how each field was decided, tier by tier.
-    field_decisions: list[FieldDecision] = Field(default_factory=list, max_length=12)
+    field_decisions: list[FieldDecision] = Field(default_factory=list, max_length=14)
 
 
 class InterpreterInput(ContractModel):
@@ -188,7 +190,7 @@ class InterpreterInput(ContractModel):
 class InterpreterOutput(ContractModel):
     outcome: InterpreterOutcome
     # At most one entry per field. Missing fields are treated as "absent".
-    fields: list[FieldInterpretation] = Field(default_factory=list, max_length=12)
+    fields: list[FieldInterpretation] = Field(default_factory=list, max_length=14)
     unsupported_reason: UnsupportedReason | None = None
     # outcome == "unsupported" only: the adapter's confidence that the request is out of
     # scope (Jev's "unsupported" intent probability). None when the adapter has none.

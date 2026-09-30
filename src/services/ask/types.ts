@@ -20,7 +20,7 @@ export type IsoDate = string; // "2026-02-08" (America/New_York calendar date)
 export type IsoDateTime = string; // "2026-02-09T10:15:00-05:00"
 export type Season = string; // "2023-24"
 
-export type AskIntent = "game_search" | "boxscore_stat" | "playoff_series" | "postseason_summary";
+export type AskIntent = "game_search" | "boxscore_stat" | "playoff_series" | "postseason_summary" | "player_season_stats" | "team_records";
 export type AskOutcome =
   | "answer"
   | "needs_clarification"
@@ -28,7 +28,7 @@ export type AskOutcome =
   | "not_found"
   | "unavailable"
   | "budget_exhausted";
-export type AskDetectedType = "games" | "player_stat" | "team_stat" | "stat_leaders" | "series" | "postseason";
+export type AskDetectedType = "games" | "player_stat" | "team_stat" | "stat_leaders" | "series" | "postseason" | "season_stats" | "team_records";
 export type AskStatScope = "player" | "team" | "leaders";
 export type AskStatKey =
   | "points"
@@ -55,14 +55,14 @@ export type Conference = "east" | "west";
 export type AskAppRoute = "scores" | "boxscore" | "playoffs" | "series" | "other";
 export type AskAdapterName = "laya" | "jev" | "openai_responses" | "cascade";
 export type AskUnsupportedReason =
+  | "season_stats" // Legacy responses only.
+  | "regular_season_record"
+  | "standings"
   | "career_stats"
-  | "season_stats"
   | "season_leaders"
   | "historical_comparison"
   | "prediction"
   | "follow_up"
-  | "regular_season_record"
-  | "standings"
   | "reference_question"
   | "multi_game_average"
   | "unsupported_leader_stat"
@@ -114,7 +114,8 @@ export type AskLinkKind =
   | "playoff_series"
   | "playoff_bracket"
   | "nba_game"
-  | "nba_stat_event";
+  | "nba_stat_event"
+  | "source";
 
 /** The only URL-bearing type: every link in a response uses it. */
 export interface AskVerifiedLink {
@@ -176,7 +177,10 @@ export type AskInterpretationField =
   | "round"
   | "series"
   | "game_number"
-  | "location";
+  | "location"
+  | "aggregation"
+  | "season_type"
+  | "standings_scope";
 
 export interface AskInterpretationItem {
   field: AskInterpretationField;
@@ -355,11 +359,44 @@ export interface AskPostseasonSummaryResult {
   series: AskPostseasonSeriesRow[];
 }
 
+export interface AskPlayerSeasonStatsResult {
+  kind: "player_season_stats";
+  player: AskPlayerRef;
+  season: Season;
+  season_type: "regular_season" | "playoffs";
+  aggregation: AskAggregation;
+  team: AskTeamRef | null;
+  games_played: number;
+  values: AskStatValue[];
+  coverage_note: string | null;
+  as_of: IsoDateTime;
+}
+
+export interface AskTeamRecordRow {
+  team: AskTeamRef;
+  wins: number;
+  losses: number;
+  win_percentage: number;
+  conference: Conference | null;
+  conference_rank: number | null;
+}
+
+export interface AskTeamRecordsResult {
+  kind: "team_records";
+  season: Season;
+  team: AskTeamRef | null;
+  standings_scope: "league" | "east" | "west";
+  rows: AskTeamRecordRow[];
+  as_of: IsoDateTime;
+}
+
 export type AskResult =
   | AskGamesResult
   | AskBoxscoreStatResult
   | AskPlayoffSeriesResult
-  | AskPostseasonSummaryResult;
+  | AskPostseasonSummaryResult
+  | AskPlayerSeasonStatsResult
+  | AskTeamRecordsResult;
 
 // ---------------------------------------------------------------- clarification, notices
 
@@ -373,7 +410,10 @@ export type AskClarifyField =
   | "season"
   | "round"
   | "game_number"
-  | "location";
+  | "location"
+  | "aggregation"
+  | "season_type"
+  | "standings_scope";
 export type AskClarifyReason = "ambiguous" | "missing" | "no_matching_candidate" | "year_required" | "range_too_long";
 
 export interface AskClarificationOption {

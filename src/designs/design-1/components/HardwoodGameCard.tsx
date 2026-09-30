@@ -12,15 +12,17 @@ interface HardwoodGameCardProps {
   showScores: boolean;
   index: number;
   dateParam: string;
+  showTricodes?: boolean;
 }
 
 interface TeamProps {
   game: GameData;
   side: "home" | "away";
   showScore: boolean;
+  showTricode: boolean;
 }
 
-function Team({game, side, showScore}: TeamProps) {
+function Team({game, side, showScore, showTricode}: TeamProps) {
   const team = side === "home" ? game.homeTeam : game.awayTeam;
   const scoreboardTeam = team.teamId > 0 ? team.teamTricode : "TBD";
 
@@ -28,10 +30,14 @@ function Team({game, side, showScore}: TeamProps) {
     <div className="grid items-center justify-items-center text-center">
       <span className="mb-[7px] text-[8px] font-bold tracking-[.22em] text-hw-muted">{side === "home" ? "HOME" : "AWAY"}</span>
       <TeamLogos teamName={team.teamName} teamId={team.teamId} size={58} tricode={team.teamTricode} />
-      <div>
-        <strong className="mt-1.5 block text-2xl leading-none font-extrabold uppercase">{scoreboardTeam}</strong>
-        <small className="mt-[3px] block max-w-[120px] text-[9px] text-hw-muted uppercase max-[700px]:hidden">{team.teamName}</small>
-      </div>
+      {showTricode ? (
+        <div>
+          <strong className="mt-1.5 block text-2xl leading-none font-extrabold uppercase">{scoreboardTeam}</strong>
+          <small className="mt-[3px] block max-w-[120px] text-[9px] text-hw-muted uppercase max-[700px]:hidden">{team.teamName}</small>
+        </div>
+      ) : (
+        <small className="mt-1.5 block max-w-[120px] text-[9px] text-hw-muted uppercase">{team.teamName}</small>
+      )}
       {showScore && (
         <b className="mt-2 text-hw-score leading-[.9] font-extrabold tracking-[-.02em] text-hw-ink tabular-nums dark:text-hw-accent">
           {team.score}
@@ -41,7 +47,7 @@ function Team({game, side, showScore}: TeamProps) {
   );
 }
 
-function HardwoodGameCard({game, showScores, index, dateParam}: HardwoodGameCardProps) {
+function HardwoodGameCard({game, showScores, index, dateParam, showTricodes = true}: HardwoodGameCardProps) {
   const location = useLocation();
   const started = game.gameStatus === 2 || game.gameStatus === 3;
   const reveal = showScores && started;
@@ -62,9 +68,9 @@ function HardwoodGameCard({game, showScores, index, dateParam}: HardwoodGameCard
         )}
       </header>
       <div className="grid min-h-[180px] grid-cols-[1fr_auto_1fr] items-center gap-3.5 px-[18px] py-6 max-[700px]:px-2.5">
-        <Team game={game} side="away" showScore={reveal} />
+        <Team game={game} side="away" showScore={reveal} showTricode={showTricodes} />
         <span className="grid size-8 place-items-center rounded-full bg-hw-accent text-[9px] font-extrabold text-hw-accent-contrast">VS</span>
-        <Team game={game} side="home" showScore={reveal} />
+        <Team game={game} side="home" showScore={reveal} showTricode={showTricodes} />
       </div>
       <footer className="flex min-h-[42px] items-center justify-end gap-5 border-t border-hw-line px-3.5 py-2">
           {game.gameId && (

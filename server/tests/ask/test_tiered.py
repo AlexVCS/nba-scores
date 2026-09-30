@@ -498,3 +498,55 @@ def test_diagnostics_carry_no_candidate_values():
     jev = Fake("jev", sel("intent", "game_search"), sel("date", "date:0"), sel("teams", CLE.id))
     dumped = json.dumps([d.model_dump(mode="json") for d in cascade(jev).interpret(REQUEST).metadata.field_decisions])
     assert CLE.id not in dumped and "date:0" not in dumped
+
+
+@pytest.mark.parametrize('earlier,later,veto', [('regular_season',None,False),('playoffs',None,True),('regular_season','playoffs',True)])
+def test_season_type_defaults_do_not_create_false_vetoes(earlier,later,veto):
+    from server.ask.candidates.lookup import CandidateLookupService
+    q='Nikola Jokic points in 2023-24'
+    c=CandidateLookupService().lookup(q,CONTEXT)
+    shared=[sel('intent','player_season_stats'),sel('player','player:203999'),sel('season','season:2023-24'),sel('stat','points'),sel('aggregation','total'),absent('teams')]
+    # Force escalation with a low-confidence phase. The earlier read can veto Luna.
+    jev=Fake('jev',*shared,sel('season_type',earlier,confidence=.6))
+    luna=Fake('luna',*(f.model_copy(update={'confidence':None}) for f in shared),sel('season_type',later,confidence=None) if later else absent('season_type',confidence=None))
+    out=cascade(jev,luna).interpret(REQUEST.model_copy(update={'question':q,'candidates':c}))
+    assert (out.metadata.field_tiers['season_type']=='veto')==veto
+    if not veto:
+        n=Normalizer().normalize(out,c,CONTEXT)
+        assert n.status=='valid' and n.request.season_type=='regular_season'
+
+
+@pytest.mark.parametrize('intent', ['boxscore_stat','player_season_stats'])
+def test_explicit_total_and_absent_aggregation_agree_across_tiers(intent):
+    from server.ask.candidates.lookup import CandidateLookupService
+    q='Jokic points in 2023-24' if intent=='player_season_stats' else 'Jokic points on March 9, 2026'
+    c=CandidateLookupService().lookup(q,CONTEXT)
+    shared=[sel('intent',intent),sel('player','player:203999'),sel('stat','points'),absent('teams'),sel('stat_scope','player')]
+    if intent=='player_season_stats':shared.extend([sel('season','season:2023-24'),absent('season_type')])
+    else:shared.extend([sel('date',c.sets['date'].candidates[0].id),absent('season'),absent('round'),absent('game_number')])
+    jev=Fake('jev',*shared,sel('aggregation','total',confidence=.6))
+    luna=Fake('luna',*(f.model_copy(update={'confidence':None}) for f in shared),absent('aggregation',confidence=None))
+    out=cascade(jev,luna).interpret(REQUEST.model_copy(update={'question':q,'candidates':c}))
+    assert out.metadata.field_tiers['aggregation']!='veto'
+    n=Normalizer().normalize(out,c,CONTEXT)
+    assert n.status=='valid' and n.request.stat.aggregation=='total'
+
+
+def test_boxscore_measure_disagreement_does_not_offer_season_choices():
+    from server.ask.protocols import CascadeAttempt,CascadeState
+    jev=Fake('jev',sel('intent','boxscore_stat'),sel('stat_scope','player'),sel('stat','points'),sel('player','player:203999'),sel('aggregation','total',confidence=.6))
+    luna=Fake('luna',sel('aggregation','per_game',confidence=None))
+    out=cascade(jev,luna).interpret(REQUEST)
+    n=Normalizer().normalize(out,CANDIDATES,CONTEXT)
+    decision=POLICY.decide(CascadeState(attempts=[CascadeAttempt(output=out,normalization=n)],candidates=CANDIDATES,fallback_enabled=False,remaining_budget_usd=1,remaining_ms=20000))
+    assert not (decision.action=='clarify' and decision.field=='aggregation')
+
+
+def test_low_confidence_single_game_measure_fails_without_season_choices():
+    from server.ask.candidates.lookup import CandidateLookupService
+    q='Jokic points on March 9, 2026';c=CandidateLookupService().lookup(q,CONTEXT)
+    out=Fake('jev',sel('intent','boxscore_stat'),sel('stat_scope','player'),sel('player','player:203999'),sel('stat','points'),sel('date',c.sets['date'].candidates[0].id),sel('aggregation','total',confidence=.5)).interpret(REQUEST)
+    norm=Normalizer().normalize(out,c,CONTEXT)
+    assert norm.status=='valid'
+    decision=POLICY.decide(CascadeState(attempts=[CascadeAttempt(output=out,normalization=norm)],candidates=c,fallback_enabled=False,remaining_budget_usd=1,remaining_ms=20000))
+    assert decision.action=='fail'

@@ -36,6 +36,8 @@ from .common import (
     PlayerRef,
     PlayoffRound,
     Season,
+    SeasonType,
+    StandingsScope,
     Stat,
     StatKey,
     StatScope,
@@ -86,9 +88,9 @@ class AskQuery(ContractModel):
 Outcome = Literal["answer", "needs_clarification", "unsupported", "not_found", "unavailable", "budget_exhausted"]
 
 # Badge next to "Reading this as". Derived from intent (+ stat scope).
-DetectedType = Literal["games", "player_stat", "team_stat", "stat_leaders", "series", "postseason"]
+DetectedType = Literal["games", "player_stat", "team_stat", "stat_leaders", "series", "postseason", "season_stats", "team_records"]
 
-LinkKind = Literal["boxscore", "scores_date", "playoff_series", "playoff_bracket", "nba_game", "nba_stat_event"]
+LinkKind = Literal["boxscore", "scores_date", "playoff_series", "playoff_bracket", "nba_game", "nba_stat_event", "source"]
 
 # Series slugs follow src/utils/seriesSlug.ts: "the-finals", or
 # "{slugify(bracketGroupId)}-{first-round|semifinal|final|round-N}-{bracketOrder+1}",
@@ -122,8 +124,12 @@ class VerifiedLink(ContractModel):
     @model_validator(mode="after")
     def _allowlisted(self) -> VerifiedLink:
         if self.external:
-            if not self.href.startswith(EXTERNAL_LINK_PREFIX):
-                raise ValueError("external links must point to nba.com")
+            nba = self.href.startswith(EXTERNAL_LINK_PREFIX)
+            bref = self.kind == "source" and re.fullmatch(
+                r"https://www\.basketball-reference\.com/(?:leagues/(?:NBA|BAA)_\d{4}(?:_totals)?|playoffs/NBA_\d{4}_totals)\.html",
+                self.href)
+            if not (nba or bref):
+                raise ValueError("external links must point to nba.com or an allowlisted Basketball-Reference source")
         elif not re.match(INTERNAL_LINK_PATTERN, self.href):
             raise ValueError(f"internal link not allowlisted: {self.href}")
         return self
@@ -148,7 +154,7 @@ class InterpreterInfo(ContractModel):
     field_tiers: dict[str, str] = Field(default_factory=dict)
     # Development servers only (`ASK_DEV=1`): per-field tier, confidence, and outcome.
     # Omitted from the JSON when empty, so production responses never carry the key.
-    field_decisions: list[FieldDecision] = Field(default_factory=list, max_length=12,
+    field_decisions: list[FieldDecision] = Field(default_factory=list, max_length=14,
                                                  exclude_if=lambda value: not value)
 
 
@@ -158,15 +164,15 @@ class InterpreterInfo(ContractModel):
 
 InterpretationField = Literal[
     "player", "team", "teams", "game", "date", "dates", "stat", "season", "round", "series", "game_number",
-    "location",
+    "location", "aggregation", "season_type", "standings_scope",
 ]
 
 
 class InterpretationItem(ContractModel):
     field: InterpretationField
-    value: str = Field(min_length=1, max_length=120)  # "James Harden", "Last week"
-    detail: str | None = Field(default=None, max_length=120)  # "CLE", "Mon, Feb 2 – Sun, Feb 8, 2026 · ET"
-    expression: str | None = Field(default=None, max_length=120)  # the user's words, if different
+    value: str = Field(min_length=1, max_length=140)  # "James Harden", "Last week"
+    detail: str | None = Field(default=None, max_length=140)  # "CLE", "Mon, Feb 2 – Sun, Feb 8, 2026 · ET"
+    expression: str | None = Field(default=None, max_length=140)  # the user's words, if different
     origin: Literal["question", "inferred", "context"]
     status: Literal["resolved", "ambiguous"] = "resolved"
     match_count: int | None = Field(default=None, ge=2)  # ambiguous: "4 matches"
@@ -406,8 +412,39 @@ class PostseasonSummaryResult(ContractModel):
     series: list[PostseasonSeriesRow]  # league scope
 
 
+class PlayerSeasonStatsResult(ContractModel):
+    kind: Literal["player_season_stats"] = "player_season_stats"
+    player: PlayerRef
+    season: Season
+    season_type: SeasonType
+    aggregation: Aggregation
+    team: TeamRef | None = None
+    games_played: int = Field(ge=1)
+    values: list[StatValue] = Field(min_length=1)
+    coverage_note: str | None = Field(default=None, max_length=300)
+    as_of: dt.datetime
+
+
+class TeamRecordRow(ContractModel):
+    team: TeamRef
+    wins: int = Field(ge=0)
+    losses: int = Field(ge=0)
+    win_percentage: float = Field(ge=0, le=1)
+    conference: Conference | None = None
+    conference_rank: int | None = Field(default=None, ge=1)
+
+
+class TeamRecordsResult(ContractModel):
+    kind: Literal["team_records"] = "team_records"
+    season: Season
+    team: TeamRef | None = None
+    standings_scope: StandingsScope = "league"
+    rows: list[TeamRecordRow] = Field(min_length=1, max_length=40)
+    as_of: dt.datetime
+
+
 AskResult = Annotated[
-    Union[GamesResult, BoxscoreStatResult, PlayoffSeriesResult, PostseasonSummaryResult],
+    Union[GamesResult, BoxscoreStatResult, PlayoffSeriesResult, PostseasonSummaryResult, PlayerSeasonStatsResult, TeamRecordsResult],
     Field(discriminator="kind"),
 ]
 
@@ -439,7 +476,7 @@ class ClarificationOption(ContractModel):
 class Clarification(ContractModel):
     field: ClarifyField
     reason: ClarifyReason
-    prompt: str = Field(max_length=120)  # "Which Jalen?"
+    prompt: str = Field(max_length=140)  # "Which Jalen?"
     detail: str | None = Field(default=None, max_length=240)  # "Four Jalens played on Thursday, Feb 5."
     options: list[ClarificationOption] = Field(default_factory=list, max_length=MAX_CLARIFICATION_OPTIONS)
     hint: str | None = Field(default=None, max_length=300)  # "Looking for Jalen Brunson? ..."
@@ -517,6 +554,8 @@ class AskResponse(ContractModel):
                 "boxscore_stat": "boxscore_stat",
                 "playoff_series": "playoff_series",
                 "postseason_summary": "postseason_summary",
+                "player_season_stats": "player_season_stats",
+                "team_records": "team_records",
             }[self.result.kind]
             if self.interpretation.intent != expected:
                 raise ValueError("result kind does not match interpretation intent")
@@ -537,7 +576,7 @@ class SuggestGame(ContractModel):
     date: dt.date
     away: TeamRef
     home: TeamRef
-    label: str = Field(max_length=120)  # "NYK @ BOS · Sun, Feb 23"
+    label: str = Field(max_length=140)  # "NYK @ BOS · Sun, Feb 23"
     link: VerifiedLink
 
 

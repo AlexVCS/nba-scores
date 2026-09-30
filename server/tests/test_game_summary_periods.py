@@ -1,3 +1,4 @@
+import requests
 from unittest.mock import Mock
 
 import pandas as pd
@@ -166,7 +167,7 @@ def test_bref_fetch_uses_short_timeout(monkeypatch):
         calls.append({"url": url, "headers": headers, "timeout": timeout})
         return _FakeResponse(BREF_LINE_SCORE_HTML)
 
-    monkeypatch.setattr(game_summary.requests, "get", fake_get)
+    monkeypatch.setattr(game_summary.basketball_reference, "get", fake_get)
 
     game_summary.fetch_bref_line_score("1946-11-01T00:00:00", "HUS")
 
@@ -182,7 +183,7 @@ def test_bref_fetch_caches_successful_parse(monkeypatch):
         calls.append((args, kwargs))
         return _FakeResponse(BREF_LINE_SCORE_HTML)
 
-    monkeypatch.setattr(game_summary.requests, "get", fake_get)
+    monkeypatch.setattr(game_summary.basketball_reference, "get", fake_get)
 
     first = game_summary.fetch_bref_line_score("1946-11-01T00:00:00", "HUS")
     second = game_summary.fetch_bref_line_score("1946-11-01T00:00:00", "HUS")
@@ -205,7 +206,7 @@ def test_bref_fetch_caches_missing_line_score(monkeypatch):
         calls.append((args, kwargs))
         return _FakeResponse("<html></html>")
 
-    monkeypatch.setattr(game_summary.requests, "get", fake_get)
+    monkeypatch.setattr(game_summary.basketball_reference, "get", fake_get)
 
     first = game_summary.fetch_bref_line_score("1946-11-01T00:00:00", "HUS")
     second = game_summary.fetch_bref_line_score("1946-11-01T00:00:00", "HUS")
@@ -222,12 +223,12 @@ def test_bref_fetch_does_not_cache_transport_failure(monkeypatch):
     def fake_get(*args, **kwargs):
         calls.append((args, kwargs))
         if len(calls) == 1:
-            raise game_summary.requests.exceptions.Timeout("timed out")
+            raise requests.exceptions.Timeout("timed out")
         return _FakeResponse(BREF_LINE_SCORE_HTML)
 
-    monkeypatch.setattr(game_summary.requests, "get", fake_get)
+    monkeypatch.setattr(game_summary.basketball_reference, "get", fake_get)
 
-    with pytest.raises(game_summary.requests.exceptions.Timeout):
+    with pytest.raises(requests.exceptions.Timeout):
         game_summary.fetch_bref_line_score("1946-11-01T00:00:00", "HUS")
 
     result = game_summary.fetch_bref_line_score("1946-11-01T00:00:00", "HUS")

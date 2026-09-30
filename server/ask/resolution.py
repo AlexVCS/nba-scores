@@ -95,10 +95,16 @@ class ResolutionStore:
             return None
 
 
-def choose(pending: PendingResolution, field: str, candidate_id: str | None = None, year: int | None = None) -> PendingResolution:
+def choose(pending: PendingResolution, field: str, candidate_id: str | None = None, year: int | None = None, closed_value: str | None = None) -> PendingResolution:
     """Apply only a server-offered choice to a validated pending interpretation."""
     output, candidates = pending.output, pending.candidates
-    if year is not None:
+    if closed_value is not None:
+        choices = {"aggregation": {"total", "per_game"}, "season_type": {"regular_season", "playoffs"}, "standings_scope": {"league", "east", "west"}}
+        if closed_value not in choices.get(field, set()):
+            raise ValueError("Invalid closed clarification choice")
+        replacement = FieldInterpretation(field=field, status="selected", selected=[closed_value], confidence=1)
+        output = output.model_copy(update={"fields": [f for f in output.fields if f.field != field] + [replacement]})
+    elif year is not None:
         if field != "date" or not 1946 <= year <= 2100:
             raise ValueError("Invalid year choice")
         date_field = output.get_field("date")

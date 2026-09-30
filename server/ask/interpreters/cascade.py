@@ -66,9 +66,12 @@ class PolicyThresholds:
 CLARIFY_AS = {"target_team": "teams"}
 
 
-def _clarify(field: str, reason: str, why: str) -> CascadeDecision:
+def _clarify(field: str, reason: str, why: str, output=None) -> CascadeDecision:
     """Clarify when the field is one the user can be asked about; otherwise fail."""
     field = CLARIFY_AS.get(field, field)
+    intent = output.get_field("intent") if output is not None else None
+    if field == "aggregation" and (intent is None or intent.status != "selected" or intent.selected != ["player_season_stats"]):
+        return FailDecision(reason=f"cannot clarify aggregation for this tool: {why}"[:120])
     if field in CLARIFIABLE:
         return ClarifyDecision(field=field, clarify_reason=reason, reason=why[:120])
     return FailDecision(reason=f"cannot clarify {field}: {why}"[:120])
@@ -129,12 +132,12 @@ class ThresholdCascadePolicy:
         for attempt in reversed(state.attempts):
             norm = attempt.normalization
             if norm is not None and norm.status == "needs_clarification":
-                return _clarify(norm.clarify_field, norm.clarify_reason, why)
+                return _clarify(norm.clarify_field, norm.clarify_reason, why, attempt.output)
             if norm is not None and norm.status == "valid":
                 field, _ = self._weakest(attempt)
                 field = CLARIFY_AS.get(field, field) if field is not None else None
                 if field is not None and field in CLARIFIABLE:
-                    return _clarify(field, "ambiguous", why)
+                    return _clarify(field, "ambiguous", why, attempt.output)
         return FailDecision(reason=why[:120])
 
     # -- policy -----------------------------------------------------------------------
@@ -163,7 +166,7 @@ class ThresholdCascadePolicy:
             if confidence is None or confidence >= t.accept_min:
                 return AcceptDecision(reason="complete request")
             why = f"low confidence in {field}"
-            return self._fallback_or(state, why, _clarify(field, "ambiguous", why))
+            return self._fallback_or(state, why, _clarify(field, "ambiguous", why, output))
 
         # needs_clarification
         field = norm.clarify_field
@@ -172,14 +175,14 @@ class ThresholdCascadePolicy:
                 candidate_field = INTERPRETER_TO_CANDIDATE_FIELD[field]
                 if candidate_field not in state.expanded_fields and len(state.expanded_fields) < t.max_expansions:
                     return ExpandCandidatesDecision(field=candidate_field, reason=f"no candidate for {field}")
-            return _clarify(field, "no_matching_candidate", f"no candidate for {field}")
+            return _clarify(field, "no_matching_candidate", f"no candidate for {field}", output)
 
         read = output.get_field(field)
         confidence = read.confidence if read is not None else None
         intent = output.get_field("intent")
         intent_confidence = intent.confidence if intent is not None else None
         shaky = [c for c in (confidence, intent_confidence) if c is not None and c < t.clarify_min]
-        clarify = _clarify(field, norm.clarify_reason, f"{norm.clarify_reason} {field}")
+        clarify = _clarify(field, norm.clarify_reason, f"{norm.clarify_reason} {field}", output)
         if shaky:
             return self._fallback_or(state, f"unsure whether {field} is {norm.clarify_reason}", clarify)
         return clarify

@@ -1,0 +1,286 @@
+[
+  {
+    "family": "player_season_stats",
+    "outcome": "answer",
+    "source": "nba_stats",
+    "result": {
+      "kind": "player_season_stats",
+      "player": {
+        "player_id": 203999,
+        "name": "Nikola Jokic"
+      },
+      "season": "2023-24",
+      "season_type": "regular_season",
+      "aggregation": "per_game",
+      "team": null,
+      "games_played": 79,
+      "values": [
+        {
+          "stat": "rebounds",
+          "value": 12.354430379746836,
+          "display": "12.4",
+          "made": null,
+          "attempted": null
+        }
+      ],
+      "coverage_note": null,
+      "as_of": "2026-09-30T00:31:31.345415Z"
+    },
+    "duration_ms": 237
+  },
+  {
+    "family": "team_records",
+    "outcome": "answer",
+    "source": "nba_stats",
+    "result": {
+      "kind": "team_records",
+      "season": "2007-08",
+      "team": {
+        "team_id": 1610612738,
+        "tricode": "BOS",
+        "name": "Boston Celtics"
+      },
+      "standings_scope": "league",
+      "rows": [
+        {
+          "team": {
+            "team_id": 1610612738,
+            "tricode": "BOS",
+            "name": "Boston Celtics"
+          },
+          "wins": 66,
+          "losses": 16,
+          "win_percentage": 0.8048780487804879,
+          "conference": null,
+          "conference_rank": 1
+        }
+      ],
+      "as_of": "2026-09-30T00:31:31.504957Z"
+    },
+    "duration_ms": 159
+  },
+  {
+    "family": "standings",
+    "outcome": "answer",
+    "source": "basketball_reference",
+    "result": {
+      "kind": "team_records",
+      "season": "2023-24",
+      "team": null,
+      "standings_scope": "east",
+      "rows": [
+        {
+          "team": {
+            "team_id": 1610612738,
+            "tricode": "BOS",
+            "name": "Boston Celtics"
+          },
+          "wins": 64,
+          "losses": 18,
+          "win_percentage": 0.7804878048780488,
+          "conference": "east",
+          "conference_rank": null
+        },
+        {
+          "team": {
+            "team_id": 1610612752,
+            "tricode": "NYK",
+            "name": "New York Knicks"
+          },
+          "wins": 50,
+          "losses": 32,
+          "win_percentage": 0.6097560975609756,
+          "conference": "east",
+          "conference_rank": null
+        },
+        {
+          "team": {
+            "team_id": 1610612749,
+            "tricode": "MIL",
+            "name": "Milwaukee Bucks"
+          },
+          "wins": 49,
+          "losses": 33,
+          "win_percentage": 0.5975609756097561,
+          "conference": "east",
+          "conference_rank": null
+        },
+        {
+          "team": {
+            "team_id": 1610612739,
+            "tricode": "CLE",
+            "name": "Cleveland Cavaliers"
+          },
+          "wins": 48,
+          "losses": 34,
+          "win_percentage": 0.5853658536585366,
+          "conference": "east",
+          "conference_rank": null
+        },
+        {
+          "team": {
+            "team_id": 1610612754,
+            "tricode": "IND",
+            "name": "Indiana Pacers"
+          },
+          "wins": 47,
+          "losses": 35,
+          "win_percentage": 0.573170731707317,
+          "conference": "east",
+          "conference_rank": null
+        },
+        {
+          "team": {
+            "team_id": 1610612753,
+            "tricode": "ORL",
+            "name": "Orlando Magic"
+          },
+          "wins": 47,
+          "losses": 35,
+          "win_percentage": 0.573170731707317,
+          "conference": "east",
+          "conference_rank": null
+        },
+        {
+          "team": {
+            "team_id": 1610612755,
+            "tricode": "PHI",
+            "name": "Philadelphia 76ers"
+          },
+          "wins": 47,
+          "losses": 35,
+          "win_percentage": 0.573170731707317,
+          "conference": "east",
+          "conference_rank": null
+        },
+        {
+          "team": {
+            "team_id": 1610612748,
+            "tricode": "MIA",
+            "name": "Miami Heat"
+          },
+          "wins": 46,
+          "losses": 36,
+          "win_percentage": 0.5609756097560976,
+          "conference": "east",
+          "conference_rank": null
+        },
+        {
+          "team": {
+            "team_id": 1610612741,
+            "tricode": "CHI",
+            "name": "Chicago Bulls"
+          },
+          "wins": 39,
+          "losses": 43,
+          "win_percentage": 0.47560975609756095,
+          "conference": "east",
+          "conference_rank": null
+        },
+        {
+          "team": {
+            "team_id": 1610612737,
+            "tricode": "ATL",
+            "name": "Atlanta Hawks"
+          },
+          "wins": 36,
+          "losses": 46,
+          "win_percentage": 0.43902439024390244,
+          "conference": "east",
+          "conference_rank": null
+        },
+        {
+          "team": {
+            "team_id": 1610612751,
+            "tricode": "BKN",
+            "name": "Brooklyn Nets"
+          },
+          "wins": 32,
+          "losses": 50,
+          "win_percentage": 0.3902439024390244,
+          "conference": "east",
+          "conference_rank": null
+        },
+        {
+          "team": {
+            "team_id": 1610612761,
+            "tricode": "TOR",
+            "name": "Toronto Raptors"
+          },
+          "wins": 25,
+          "losses": 57,
+          "win_percentage": 0.3048780487804878,
+          "conference": "east",
+          "conference_rank": null
+        },
+        {
+          "team": {
+            "team_id": 1610612766,
+            "tricode": "CHA",
+            "name": "Charlotte Hornets"
+          },
+          "wins": 21,
+          "losses": 61,
+          "win_percentage": 0.25609756097560976,
+          "conference": "east",
+          "conference_rank": null
+        },
+        {
+          "team": {
+            "team_id": 1610612764,
+            "tricode": "WAS",
+            "name": "Washington Wizards"
+          },
+          "wins": 15,
+          "losses": 67,
+          "win_percentage": 0.18292682926829268,
+          "conference": "east",
+          "conference_rank": null
+        },
+        {
+          "team": {
+            "team_id": 1610612765,
+            "tricode": "DET",
+            "name": "Detroit Pistons"
+          },
+          "wins": 14,
+          "losses": 68,
+          "win_percentage": 0.17073170731707318,
+          "conference": "east",
+          "conference_rank": null
+        }
+      ],
+      "as_of": "2026-09-30T00:32:04.718736Z"
+    },
+    "duration_ms": 1422
+  },
+  {
+    "family": "playoff_player_season",
+    "outcome": "answer",
+    "source": "nba_stats",
+    "result": {
+      "kind": "player_season_stats",
+      "player": {
+        "player_id": 203999,
+        "name": "Nikola Jokic"
+      },
+      "season": "2023-24",
+      "season_type": "playoffs",
+      "aggregation": "per_game",
+      "team": null,
+      "games_played": 12,
+      "values": [
+        {
+          "stat": "points",
+          "value": 28.666666666666668,
+          "display": "28.7",
+          "made": null,
+          "attempted": null
+        }
+      ],
+      "coverage_note": null,
+      "as_of": "2026-09-30T00:32:04.873855Z"
+    },
+    "duration_ms": 155
+  }
+]

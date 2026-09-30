@@ -28,6 +28,8 @@ from server.ask.normalize import Normalizer
 from server.ask.present import clarification, interpretation, notice, suggestions
 from server.ask.protocols import CascadeAttempt, CascadeState
 from server.ask.resolution import PendingResolution, ResolutionStore
+from server.ask.season_scope import normalize_question
+from server.utils.ttl_cache import LoadInProgressError
 from server.ask.resolvers import resolve
 from server.ask.resolvers.errors import AmbiguousError, ClarificationError, NotFoundError, UnavailableError, UnsupportedError
 
@@ -154,7 +156,7 @@ class AskPipeline:
                 actual = usage.cost_usd if usage.provider_calls else 0.0
                 self.budget.settle(reservation, actual)
             ttl = self.config.parse_ttl_seconds if output.outcome in {"interpreted", "unsupported"} else 0
-            if output.outcome == "interpreted" and self.normalizer.normalize(output, candidates, context).status == "invalid":
+            if output.outcome == "interpreted" and normalize_question(self.normalizer, output, candidates, context, question).status == "invalid":
                 # A retry must be able to recover from a structurally valid
                 # provider response that cannot form a valid request.
                 ttl = 0
@@ -177,7 +179,8 @@ class AskPipeline:
             if self.cache is not None:
                 result = self.cache.get_or_load("answer", _key(
                     self.config.cache_version, "answer-1", self.lookup.alias_version,
-                    readout.reference_time.date().isoformat(), canonical_json(request)), load)
+                    readout.reference_time.date().isoformat(), canonical_json(request)), load,
+                    wait_timeout=5 if request.intent in {"player_season_stats", "team_records"} else None)
                 output, hit = result.value, result.hit
             else:
                 output, hit = load().value, False
@@ -196,7 +199,7 @@ class AskPipeline:
         except UnsupportedError as error:
             return self._response(question, "unsupported", info, interpretation=readout,
                                   notice=notice("unsupported", unsupported_reason=error.unsupported_reason))
-        except UnavailableError:
+        except (UnavailableError, LoadInProgressError):
             return self._response(question, "unavailable", info, interpretation=readout,
                                   notice=notice("service_unavailable"))
 
@@ -229,7 +232,7 @@ class AskPipeline:
                 cache_hit = cache_hit or hit
                 _log_decisions(output, hit)
                 any_call = any_call or (not hit and output.metadata.usage.provider_calls > 0)
-                normalized = self.normalizer.normalize(output, candidates, context) if output.outcome == "interpreted" else None
+                normalized = normalize_question(self.normalizer, output, candidates, context, question) if output.outcome == "interpreted" else None
                 attempts.append(CascadeAttempt(output=output, normalization=normalized))
                 state = CascadeState(attempts=attempts, candidates=candidates, expanded_fields=expanded,
                                      fallback_enabled=False, remaining_budget_usd=self.budget.remaining_usd() if self.budget else 1,
@@ -272,7 +275,7 @@ class AskPipeline:
                                   notice=notice("interpreter_unavailable"))
 
     def _from_pending(self, question: str, pending: PendingResolution, info: InterpreterInfo) -> AskResponse:
-        normalized = self.normalizer.normalize(pending.output, pending.candidates, pending.context)
+        normalized = normalize_question(self.normalizer, pending.output, pending.candidates, pending.context, question)
         readout = interpretation(pending.output, pending.candidates, pending.context,
                                  normalized.request if normalized.status == "valid" else None)
         if normalized.status == "valid":

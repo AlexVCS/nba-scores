@@ -73,6 +73,28 @@ def test_seasons(service, question, reference_time, expected):
     assert keys(lookup(service, question, reference_time=reference_time), "season") == expected
 
 
+@pytest.mark.parametrize("question, expected", [
+    ("Who won the nineteen ninety seven NBA Finals?", ["1996-97"]),
+    ("Bulls in the nineteen ninety-eight finals", ["1997-98"]),
+    ("Who won the twenty twenty Finals?", ["2019-20"]),
+    ("Spurs in the twenty oh five Finals", ["2004-05"]),
+    ("Pistons in the two thousand and four Finals", ["2003-04"]),
+    ("Heat in the two thousand twelve Finals", ["2011-12"]),
+    ("Warriors in the twenty seventeen Finals", ["2016-17"]),
+])
+def test_spelled_out_years(service, question, expected):
+    assert keys(lookup(service, question), "season") == expected
+
+
+@pytest.mark.parametrize("question", [
+    "Who scored twenty one points in game 7 of the 2016 Finals?",
+    "Did anyone score two thousand five hundred points in 2016?",
+    "Who reached two thousand points in 2016?",
+])
+def test_number_words_that_are_not_years(service, question):
+    assert keys(lookup(service, question), "season") in (["2015-16"], ["2015-16", "2016-17"])
+
+
 def test_final_score_is_not_playoff_language(service):
     result = lookup(service, "What was the final score of the Hornets game in 2002?")
     assert keys(result, "season") == ["2001-02", "2002-03"]

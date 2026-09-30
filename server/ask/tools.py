@@ -26,6 +26,8 @@ from server.ask.models.request import (
     GameSearchRequest,
     PlayoffSeriesRequest,
     PostseasonSummaryRequest,
+    PlayerSeasonStatsRequest,
+    TeamRecordsRequest,
 )
 
 # The router's extra option; an interpreter choosing it returns outcome="unsupported".
@@ -98,11 +100,29 @@ TOOLS: tuple[AskTool, ...] = (
         request_model=PostseasonSummaryRequest,
         fields=frozenset({"season", "teams"}),
     ),
+    AskTool(
+        name="player_season_stats",
+        description=("One player's totals or per-game averages in one NBA season, regular season "
+                     "or playoffs (e.g. 'Jokic rebounds per game in 2023-24'). A named team "
+                     "limits the answer to that stint. Missing player or season requires clarification. "
+                     "Career totals, month/date splits, advanced metrics and comparisons are unsupported."),
+        request_model=PlayerSeasonStatsRequest,
+        fields=frozenset({"player", "teams", "season", "stat", "aggregation", "season_type"}),
+    ),
+    AskTool(
+        name="team_records",
+        description=("One team's regular-season wins and losses or NBA league/conference standings "
+                     "in one season (e.g. 'Celtics record in 2007-08', '2023-24 Eastern standings'). "
+                     "Missing season requires clarification. Division, home/away, date, month and opponent "
+                     "splits, seeds, predictions and best-record/streak comparisons are unsupported. "
+                     "Playoff results use postseason_summary instead."),
+        request_model=TeamRecordsRequest,
+        fields=frozenset({"teams", "season", "standings_scope", "season_type"}),
+    ),
 )
 
 UNSUPPORTED_DESCRIPTION = (
-    "Anything else: career or season-long statistics, season leaders, standings or "
-    "regular-season records, comparisons across games or seasons, averages over several "
+    "Anything else: career statistics, season leaders, unsupported statistical splits, comparisons across games or seasons, averages over several "
     "games, predictions, follow-ups that depend on an earlier answer, glossary or "
     "biography questions, or questions not about NBA basketball."
 )

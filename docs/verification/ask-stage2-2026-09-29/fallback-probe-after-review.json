@@ -1,0 +1,96 @@
+{
+  "purpose": "Direct live BRef fallback with primary intentionally unavailable, no model calls; local host only",
+  "implementation_commit": "bbc2500e344ad795edc7b9822144f353f752bf06",
+  "probes": [
+    {
+      "phase": "regular_season",
+      "stat": "rebounds",
+      "result": {
+        "kind": "player_season_stats",
+        "player": {
+          "player_id": 203999,
+          "name": "Nikola Jokic"
+        },
+        "season": "2023-24",
+        "season_type": "regular_season",
+        "aggregation": "per_game",
+        "team": null,
+        "games_played": 79,
+        "values": [
+          {
+            "stat": "rebounds",
+            "value": 12.354430379746836,
+            "display": "12.4",
+            "made": null,
+            "attempted": null
+          }
+        ],
+        "coverage_note": null,
+        "as_of": "2026-09-30T01:06:35.288002Z"
+      },
+      "sources": [
+        {
+          "name": "basketball_reference",
+          "label": "Basketball-Reference",
+          "fetched_at": "2026-09-30T01:06:35.288002Z",
+          "complete": true
+        }
+      ],
+      "links": [
+        {
+          "kind": "source",
+          "label": "Source: Basketball-Reference",
+          "href": "https://www.basketball-reference.com/leagues/NBA_2024_totals.html",
+          "external": true,
+          "spoiler": false
+        }
+      ],
+      "duration_ms": 1091
+    },
+    {
+      "phase": "playoffs",
+      "stat": "points",
+      "result": {
+        "kind": "player_season_stats",
+        "player": {
+          "player_id": 203999,
+          "name": "Nikola Jokic"
+        },
+        "season": "2023-24",
+        "season_type": "playoffs",
+        "aggregation": "per_game",
+        "team": null,
+        "games_played": 12,
+        "values": [
+          {
+            "stat": "points",
+            "value": 28.666666666666668,
+            "display": "28.7",
+            "made": null,
+            "attempted": null
+          }
+        ],
+        "coverage_note": null,
+        "as_of": "2026-09-30T01:06:35.907336Z"
+      },
+      "sources": [
+        {
+          "name": "basketball_reference",
+          "label": "Basketball-Reference",
+          "fetched_at": "2026-09-30T01:06:35.907336Z",
+          "complete": true
+        }
+      ],
+      "links": [
+        {
+          "kind": "source",
+          "label": "Source: Basketball-Reference",
+          "href": "https://www.basketball-reference.com/leagues/NBA_2024_totals.html",
+          "external": true,
+          "spoiler": false
+        }
+      ],
+      "duration_ms": 619
+    }
+  ]
+}

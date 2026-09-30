@@ -15,6 +15,8 @@ export const DETECTED_TYPE_LABELS: Record<AskDetectedType, string> = {
   stat_leaders: "Stat leaders",
   series: "Series",
   postseason: "Postseason",
+  season_stats: "Season stats",
+  team_records: "Records / standings",
 };
 
 export const FIELD_LABELS: Record<AskInterpretationField, string> = {
@@ -30,6 +32,9 @@ export const FIELD_LABELS: Record<AskInterpretationField, string> = {
   series: "Series",
   game_number: "Game",
   location: "Location",
+  aggregation: "Measure",
+  season_type: "Season type",
+  standings_scope: "Conference",
 };
 
 export const STAT_LABELS: Record<AskStat, string> = {
@@ -86,6 +91,14 @@ export function playoffYear(season: Season): number {
 export function formatAskDate(date: string, options: Intl.DateTimeFormatOptions = {weekday: "short", month: "short", day: "numeric", year: "numeric"}): string {
   const parsed = new Date(`${date}T12:00:00`);
   return Number.isNaN(parsed.getTime()) ? date : parsed.toLocaleDateString("en-US", options);
+}
+
+/** Fetch timestamps use the same Eastern calendar as Ask's interpretation. */
+export function formatAskTimestamp(timestamp: string): string {
+  const parsed = new Date(timestamp);
+  return Number.isNaN(parsed.getTime()) ? timestamp : parsed.toLocaleDateString("en-US", {
+    timeZone: "America/New_York", weekday: "short", month: "short", day: "numeric", year: "numeric",
+  });
 }
 
 export function formatAskRange(start: string, end: string): string {

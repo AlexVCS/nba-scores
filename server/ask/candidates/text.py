@@ -81,5 +81,5 @@ under up versus vs was we week weekend were west western what whats when where w
 winners with won would year years yesterday you your will just only ever mvp team teams matchup conference conf semis semifinal semifinals ecf wcf quarterfinals opening
 january february march april may june july august september october november december
 jan feb mar apr jun jul aug sep sept oct nov dec
-monday tuesday wednesday thursday friday saturday sunday
+monday tuesday wednesday thursday friday saturday sunday standings regular average averages losses loss wins percentage pct ppg rpg apg mpg
 """.split())

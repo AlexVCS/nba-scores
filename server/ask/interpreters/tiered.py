@@ -123,6 +123,20 @@ def _same(a: list[str], b: list[str]) -> bool:
     return sorted(a) == sorted(b)
 
 
+def _equivalent(name: str, earlier: FieldInterpretation, later: FieldInterpretation) -> bool:
+    # Optional closed selectors have documented defaults. Explicit default and
+    # absent mean the same executed request, but playoffs and absent still disagree.
+    defaults = {"aggregation": "total", "season_type": "regular_season", "standings_scope": "league"}
+    def values(read):
+        if read.status == "selected":
+            return read.selected
+        if read.status == "absent" and name in defaults:
+            return [defaults[name]]
+        return None
+    a, b = values(earlier), values(later)
+    return a is not None and b is not None and _same(a, b)
+
+
 def _season_years(merge: _Merge, candidates: CandidateLookupResult) -> set[int] | None:
     """Season start years of the decided date/season, or None if any is unknown."""
     years: set[int] = set()
@@ -198,7 +212,7 @@ class TieredAdapter:
                         options = merge.vetoing_options.setdefault(name, [])
                         options.extend(v for v in read.alternatives if v not in options)
                         contested = True
-                    elif read.status != "selected" or not _same(earlier.selected, read.selected):
+                    elif not _equivalent(name, earlier, read):
                         merge.vetoed.add(name)
                         contested = True
             trail = merge.reads.setdefault(name, [])

@@ -27,7 +27,7 @@ def blank_output(**overrides):
     data = {
         "intent": "game_search",
         "unsupported_reason": None,
-        "stat_scope": empty, "stat": empty, "aggregation": empty,
+        "stat_scope": empty, "stat": empty, "aggregation": empty, "season_type": empty, "standings_scope": empty,
         "player": empty, "teams": empty, "target_team": empty, "date": empty, "season": empty, "round": empty,
         "game_number": empty, "location": empty,
     }

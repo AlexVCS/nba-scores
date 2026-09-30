@@ -35,10 +35,6 @@ function AskSeriesResult({result}: AskSeriesResultProps) {
               </li>
             );
           })}
-          <li className="flex items-center border-t border-hw-line bg-hw-surface-muted px-3.5 py-3.5">
-            <span className={`${askCap} flex-1`}>Games played</span>
-            <span className="text-base font-extrabold tabular-nums">{result.games_played}</span>
-          </li>
         </ul>
       </div>
       {games.length > 0 && (

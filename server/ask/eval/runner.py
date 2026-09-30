@@ -25,6 +25,7 @@ from server.ask.models.common import ClarifyField, ClarifyReason
 from server.ask.models.interpreter import InterpreterInput, InterpreterOutput, UnsupportedReason
 from server.ask.models.request import ASK_REQUEST_ADAPTER, AskContext
 from server.ask.normalize import Normalizer, canonical_request
+from server.ask.season_scope import normalize_question
 from server.ask.protocols import (
     ClarifyDecision,
     CascadeAttempt,
@@ -132,7 +133,7 @@ def drive(
             output, blocked = _call(adapter, request, guard)
             budget_blocked = budget_blocked or blocked
         normalization = (
-            normalizer.normalize(output, candidates, context) if output.outcome == "interpreted" else None
+            normalize_question(normalizer, output, candidates, context, question) if output.outcome == "interpreted" else None
         )
         attempts.append(CascadeAttempt(output=output, normalization=normalization))
         elapsed = cached_latency_ms + int((time.perf_counter() - started) * 1000)

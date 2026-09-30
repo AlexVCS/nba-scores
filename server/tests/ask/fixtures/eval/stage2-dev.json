@@ -1,0 +1,393 @@
+{
+  "scope": "Development cases only. Authored alongside implementation; not unseen release evidence.",
+  "cases": [
+    {
+      "id": "stage2-player_season_stats-01",
+      "question": "Nikola Jokic rebounds per game in 2023-24",
+      "reference_time": "2026-09-29T12:00:00-04:00",
+      "tags": [
+        "stage2",
+        "season-stats"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "player_season_stats",
+          "player": {
+            "player_id": 203999,
+            "name": "Nikola Jokic"
+          },
+          "season": "2023-24",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "rebounds",
+            "aggregation": "per_game"
+          },
+          "team": null
+        }
+      }
+    },
+    {
+      "id": "stage2-player_season_stats-02",
+      "question": "Jokic total assists in 2023-24",
+      "reference_time": "2026-09-29T12:00:00-04:00",
+      "tags": [
+        "stage2",
+        "season-stats"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "player_season_stats",
+          "player": {
+            "player_id": 203999,
+            "name": "Nikola Jokic"
+          },
+          "season": "2023-24",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "assists",
+            "aggregation": "total"
+          },
+          "team": null
+        }
+      }
+    },
+    {
+      "id": "stage2-player_season_stats-03",
+      "question": "Jokic field goal percentage in 2023-24",
+      "reference_time": "2026-09-29T12:00:00-04:00",
+      "tags": [
+        "stage2",
+        "season-stats"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "player_season_stats",
+          "player": {
+            "player_id": 203999,
+            "name": "Nikola Jokic"
+          },
+          "season": "2023-24",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "field_goal_percentage",
+            "aggregation": "total"
+          },
+          "team": null
+        }
+      }
+    },
+    {
+      "id": "stage2-player_season_stats-04",
+      "question": "Jokic stats in 2023-24",
+      "reference_time": "2026-09-29T12:00:00-04:00",
+      "tags": [
+        "stage2",
+        "season-stats"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "player_season_stats",
+          "player": {
+            "player_id": 203999,
+            "name": "Nikola Jokic"
+          },
+          "season": "2023-24",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "stat_line",
+            "aggregation": "total"
+          },
+          "team": null
+        }
+      }
+    },
+    {
+      "id": "stage2-player_season_stats-05",
+      "question": "Jokic points per game in the 2024 playoffs",
+      "reference_time": "2026-09-29T12:00:00-04:00",
+      "tags": [
+        "stage2",
+        "season-stats"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "player_season_stats",
+          "player": {
+            "player_id": 203999,
+            "name": "Nikola Jokic"
+          },
+          "season": "2023-24",
+          "season_type": "playoffs",
+          "stat": {
+            "stat": "points",
+            "aggregation": "per_game"
+          },
+          "team": null
+        }
+      }
+    },
+    {
+      "id": "stage2-player_season_stats-06",
+      "question": "Nikola Jokic rebounds for Denver in 2023-24",
+      "reference_time": "2026-09-29T12:00:00-04:00",
+      "tags": [
+        "stage2",
+        "season-stats"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "player_season_stats",
+          "player": {
+            "player_id": 203999,
+            "name": "Nikola Jokic"
+          },
+          "season": "2023-24",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "rebounds",
+            "aggregation": "total"
+          },
+          "team": {
+            "team_id": 1610612743,
+            "tricode": "DEN",
+            "name": "Denver Nuggets"
+          }
+        }
+      }
+    },
+    {
+      "id": "stage2-team_records-07",
+      "question": "Celtics regular-season record in 2007-08",
+      "reference_time": "2026-09-29T12:00:00-04:00",
+      "tags": [
+        "stage2",
+        "record-or-standings"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "team_records",
+          "season": "2007-08",
+          "team": {
+            "team_id": 1610612738,
+            "tricode": "BOS",
+            "name": "Boston Celtics"
+          },
+          "standings_scope": "league"
+        }
+      }
+    },
+    {
+      "id": "stage2-team_records-08",
+      "question": "Nuggets wins and losses in 2023-24",
+      "reference_time": "2026-09-29T12:00:00-04:00",
+      "tags": [
+        "stage2",
+        "record-or-standings"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "team_records",
+          "season": "2023-24",
+          "team": {
+            "team_id": 1610612743,
+            "tricode": "DEN",
+            "name": "Denver Nuggets"
+          },
+          "standings_scope": "league"
+        }
+      }
+    },
+    {
+      "id": "stage2-team_records-09",
+      "question": "NBA standings in 2023-24",
+      "reference_time": "2026-09-29T12:00:00-04:00",
+      "tags": [
+        "stage2",
+        "record-or-standings"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "team_records",
+          "season": "2023-24",
+          "team": null,
+          "standings_scope": "league"
+        }
+      }
+    },
+    {
+      "id": "stage2-team_records-10",
+      "question": "Eastern conference standings in 2023-24",
+      "reference_time": "2026-09-29T12:00:00-04:00",
+      "tags": [
+        "stage2",
+        "record-or-standings"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "team_records",
+          "season": "2023-24",
+          "team": null,
+          "standings_scope": "east"
+        }
+      }
+    },
+    {
+      "id": "stage2-team_records-11",
+      "question": "Western conference standings in 2023-24",
+      "reference_time": "2026-09-29T12:00:00-04:00",
+      "tags": [
+        "stage2",
+        "record-or-standings"
+      ],
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "team_records",
+          "season": "2023-24",
+          "team": null,
+          "standings_scope": "west"
+        }
+      }
+    },
+    {
+      "id": "stage2-player_season_stats-12",
+      "question": "Jokic rebounds per game",
+      "reference_time": "2026-09-29T12:00:00-04:00",
+      "tags": [
+        "stage2",
+        "ambiguity"
+      ],
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "season"
+      }
+    },
+    {
+      "id": "stage2-team_records-13",
+      "question": "Celtics regular-season record",
+      "reference_time": "2026-09-29T12:00:00-04:00",
+      "tags": [
+        "stage2",
+        "ambiguity"
+      ],
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "season"
+      }
+    },
+    {
+      "id": "stage2-team_records-14",
+      "question": "Celtics record in 2008",
+      "reference_time": "2026-09-29T12:00:00-04:00",
+      "tags": [
+        "stage2",
+        "ambiguity"
+      ],
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "season"
+      }
+    },
+    {
+      "id": "stage2-player_season_stats-15",
+      "question": "Curry points per game in 2023-24",
+      "reference_time": "2026-09-29T12:00:00-04:00",
+      "tags": [
+        "stage2",
+        "ambiguity"
+      ],
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "player"
+      }
+    },
+    {
+      "id": "stage2-player_season_stats-16",
+      "question": "Jokic points per 36 in 2023-24",
+      "reference_time": "2026-09-29T12:00:00-04:00",
+      "tags": [
+        "stage2",
+        "unrepresented-split"
+      ],
+      "expected": {
+        "action": "unsupported",
+        "unsupported_reason": "other"
+      }
+    },
+    {
+      "id": "stage2-team_records-17",
+      "question": "Celtics home record in 2023-24",
+      "reference_time": "2026-09-29T12:00:00-04:00",
+      "tags": [
+        "stage2",
+        "unrepresented-split"
+      ],
+      "expected": {
+        "action": "unsupported",
+        "unsupported_reason": "other"
+      }
+    },
+    {
+      "id": "stage2-team_records-18",
+      "question": "Atlantic division standings in 2023-24",
+      "reference_time": "2026-09-29T12:00:00-04:00",
+      "tags": [
+        "stage2",
+        "unrepresented-split"
+      ],
+      "expected": {
+        "action": "unsupported",
+        "unsupported_reason": "other"
+      }
+    },
+    {
+      "id": "stage2-team_records-19",
+      "question": "Celtics record against Miami in 2023-24",
+      "reference_time": "2026-09-29T12:00:00-04:00",
+      "tags": [
+        "stage2",
+        "unrepresented-split"
+      ],
+      "expected": {
+        "action": "unsupported",
+        "unsupported_reason": "other"
+      }
+    },
+    {
+      "id": "stage2-player_season_stats-20",
+      "question": "Jokic points per game in March 2024",
+      "reference_time": "2026-09-29T12:00:00-04:00",
+      "tags": [
+        "stage2",
+        "unrepresented-split"
+      ],
+      "expected": {
+        "action": "unsupported",
+        "unsupported_reason": "other"
+      }
+    },
+    {
+      "id": "stage2-team_records-21",
+      "question": "Celtics record before March 1, 2024",
+      "reference_time": "2026-09-29T12:00:00-04:00",
+      "tags": [
+        "stage2",
+        "unrepresented-split"
+      ],
+      "expected": {
+        "action": "unsupported",
+        "unsupported_reason": "other"
+      }
+    }
+  ]
+}

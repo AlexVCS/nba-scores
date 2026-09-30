@@ -55,3 +55,28 @@ def test_calibration_never_picks_a_dip_below_a_failing_threshold():
     # 0.8 has precision 2/3, 0.9 has 1/2, 0.96 has 1/1: only 0.96 and above are safe.
     chosen = tr.calibrate_tier(reads, precision_min=0.98, grid=(0.8, 0.9, 0.96))["chosen"]
     assert chosen["threshold"] == 0.96
+
+
+def test_stage2_absent_defaults_score_as_executed_request():
+    from server.ask.candidates.lookup import CandidateLookupService
+    from server.ask.models.request import TeamRecordsRequest
+    from server.tests.ask.test_tiered import absent
+    q='2023-24 NBA standings';cands=CandidateLookupService().lookup(q,CONTEXT)
+    label=LabeledCase(id='defaults',question=q,context=CONTEXT,action='accept',request=TeamRecordsRequest(season='2023-24'))
+    jev=Fake('jev',sel('intent','team_records'),sel('season','season:2023-24'),absent('teams'),absent('season_type'),absent('standings_scope'))
+    trace=tr.collect([label],lambda _:cands,{'jev':jev},SpendGuard(1))
+    reads={r.field:r for r in tr.field_reads([label],trace,'jev')}
+    assert reads['season_type'].correct and reads['standings_scope'].correct
+    east=LabeledCase(id='defaults',question=q,context=CONTEXT,action='accept',request=TeamRecordsRequest(season='2023-24',standings_scope='east'))
+    assert not next(r for r in tr.field_reads([east],trace,'jev') if r.field=='standings_scope').correct
+
+
+def test_absent_total_aggregation_is_scored_correctly():
+    from server.ask.candidates.lookup import CandidateLookupService
+    from server.ask.models.request import PlayerSeasonStatsRequest
+    from server.tests.ask.test_tiered import absent
+    q='Jokic points 2023-24';c=CandidateLookupService().lookup(q,CONTEXT)
+    label=LabeledCase(id='total-default',question=q,context=CONTEXT,action='accept',request=PlayerSeasonStatsRequest(player={'player_id':203999,'name':'Nikola Jokic'},season='2023-24',stat={'stat':'points','aggregation':'total'}))
+    jev=Fake('jev',sel('intent','player_season_stats'),sel('player','player:203999'),sel('season','season:2023-24'),sel('stat','points'),absent('aggregation'),absent('teams'),absent('season_type'))
+    trace=tr.collect([label],lambda _:c,{'jev':jev},SpendGuard(1))
+    assert next(r for r in tr.field_reads([label],trace,'jev') if r.field=='aggregation').correct

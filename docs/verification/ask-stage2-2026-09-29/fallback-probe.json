@@ -1,0 +1,13 @@
+[
+  {
+    "family": "fallback_player",
+    "outcome": "NotFoundError",
+    "reason": "season_player_missing"
+  },
+  {
+    "family": "nba_standings_after_alias_fix",
+    "outcome": "verified",
+    "source": "nba_stats",
+    "rows": 30
+  }
+]

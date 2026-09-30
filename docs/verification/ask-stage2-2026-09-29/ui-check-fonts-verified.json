@@ -1,0 +1,62 @@
+[
+  {
+    "device": "desktop",
+    "fixture": "answer-player-season",
+    "overflow": false,
+    "fonts": {
+      "archivo": false,
+      "poppins": true
+    },
+    "source": 1
+  },
+  {
+    "device": "desktop",
+    "fixture": "answer-team-record",
+    "overflow": false,
+    "fonts": {
+      "archivo": false,
+      "poppins": true
+    },
+    "source": 1
+  },
+  {
+    "device": "desktop",
+    "fixture": "answer-standings",
+    "overflow": false,
+    "fonts": {
+      "archivo": false,
+      "poppins": true
+    },
+    "source": 1
+  },
+  {
+    "device": "mobile",
+    "fixture": "answer-player-season",
+    "overflow": false,
+    "fonts": {
+      "archivo": false,
+      "poppins": true
+    },
+    "source": 1
+  },
+  {
+    "device": "mobile",
+    "fixture": "answer-team-record",
+    "overflow": false,
+    "fonts": {
+      "archivo": false,
+      "poppins": true
+    },
+    "source": 1
+  },
+  {
+    "device": "mobile",
+    "fixture": "answer-standings",
+    "overflow": false,
+    "fonts": {
+      "archivo": false,
+      "poppins": true
+    },
+    "source": 1
+  }
+]

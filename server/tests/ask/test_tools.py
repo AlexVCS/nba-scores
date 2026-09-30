@@ -14,7 +14,7 @@ from server.ask.models.request import ASK_REQUEST_ADAPTER, GameSearchRequest
 from server.ask.normalize import RELEVANT_FIELDS, Normalizer
 from server.ask.resolvers import EXECUTORS, _resolve
 
-ORIGINAL_ROUTER_ORDER = ["game_search", "boxscore_stat", "playoff_series", "postseason_summary", "unsupported"]
+ORIGINAL_ROUTER_ORDER = ["game_search", "boxscore_stat", "playoff_series", "postseason_summary", "player_season_stats", "team_records", "unsupported"]
 
 
 def test_registry_matches_contract_intents():

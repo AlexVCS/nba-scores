@@ -4,7 +4,7 @@ export const ASK_PLACEHOLDER = "Ask about a game, stat, or series";
 
 export const ASK_SOURCE_COPY = "AI interprets your question. Answers use NBA data.";
 
-export const ASK_NO_MODEL_COPY = "Answered straight from NBA data. No AI was needed for this one.";
+export const ASK_NO_MODEL_COPY = "Answered directly from basketball data. No AI was needed for this one.";
 
 export const ASK_RECENT_COPY = "Recent searches are saved only in this browser, never with answers.";
 
@@ -15,7 +15,7 @@ export const ASK_DIAGNOSTICS_COPY = "Our server may keep limited diagnostics, su
 export const ASK_DIAGNOSTICS_NOTE = "We kept an anonymous note of the question type, not your words, to decide what to support next.";
 
 export const ASK_SCOPE_COPY =
-  "Ask about games on a date or within a week, one player’s stats in one game, or a playoff series. Include the year. Career totals and all-time comparisons aren’t supported.";
+  "Ask about games, boxscores, playoffs, player season stats, or regular-season records and standings. Include the year or a season such as 2023-24. Career totals, season leaders, and statistical splits are not supported yet.";
 
 // Asking is consent (ADR 0006): say so before the first question, so people avoiding spoilers aren't surprised.
 export const ASK_ANSWERS_SHOWN_COPY = "Answers show as soon as you ask, even when results are hidden.";
@@ -26,4 +26,6 @@ export const ASK_EXAMPLES = [
   {label: "Stats", question: "How many points did James Harden score on March 9, 2026?"},
   {label: "Games", question: "Knicks games from February 2 to February 8, 2026"},
   {label: "Series", question: "Who won the 2024 NBA Finals?"},
+  {label: "Season", question: "Nikola Jokic rebounds per game in 2023-24"},
+  {label: "Record", question: "Celtics regular-season record in 2007-08"},
 ] as const;
