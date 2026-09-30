@@ -27,6 +27,7 @@ from server.ask.models.request import (
     PlayoffSeriesRequest,
     PostseasonSummaryRequest,
     PlayerSeasonStatsRequest,
+    SeasonLeadersRequest,
     TeamRecordsRequest,
 )
 
@@ -119,10 +120,21 @@ TOOLS: tuple[AskTool, ...] = (
         request_model=TeamRecordsRequest,
         fields=frozenset({"teams", "season", "standings_scope", "season_type"}),
     ),
+    AskTool(
+        name="season_leaders",
+        description=("Who led the whole NBA in one statistic in one season, regular season or "
+                     "playoffs, as season totals, per-game averages or a shooting percentage "
+                     "(e.g. 'Who led the league in assists per game in 2019-20?', 'top 5 in total "
+                     "rebounds in 2023-24'). Missing season or statistic requires clarification. "
+                     "Leaders of one game are boxscore_stat. Team, conference, position or rookie "
+                     "leaders, a player's rank, career/all-time leaders and advanced metrics are unsupported."),
+        request_model=SeasonLeadersRequest,
+        fields=frozenset({"season", "stat", "aggregation", "season_type"}),
+    ),
 )
 
 UNSUPPORTED_DESCRIPTION = (
-    "Anything else: career statistics, season leaders, unsupported statistical splits, comparisons across games or seasons, averages over several "
+    "Anything else: career statistics, all-time or team leaders, unsupported statistical splits, comparisons across games or seasons, averages over several "
     "games, predictions, follow-ups that depend on an earlier answer, glossary or "
     "biography questions, or questions not about NBA basketball."
 )

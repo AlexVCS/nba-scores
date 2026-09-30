@@ -231,6 +231,9 @@ def expected_fields(case: LabeledCase) -> dict[str, Any]:
     elif r.intent == "team_records":
         expected.update(season={r.season}, teams={r.team.team_id} if r.team else set(),
                         season_type={"regular_season"}, standings_scope={r.standings_scope})
+    elif r.intent == "season_leaders":
+        expected.update(season={r.season}, stat={r.stat.stat}, aggregation={r.stat.aggregation},
+                        season_type={r.season_type})
     return expected
 
 

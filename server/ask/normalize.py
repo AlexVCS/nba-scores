@@ -29,7 +29,9 @@ from server.ask.models.candidates import CandidateLookupResult
 from server.ask.models.common import (
     MAX_GAME_SEARCH_DAYS,
     NEW_YORK_TZ,
+    LEADER_PERCENTAGES,
     NON_LEADER_STATS,
+    SEASON_LEADER_STATS,
     Aggregation,
     DateComponents,
     DateRange,
@@ -49,6 +51,7 @@ from server.ask.models.request import (
     PostseasonSummaryRequest,
     StatSelection,
     PlayerSeasonStatsRequest,
+    SeasonLeadersRequest,
     TeamRecordsRequest,
 )
 
@@ -223,7 +226,7 @@ class Normalizer:
             raise _Clarify("season_type", "ambiguous")
         if name == "aggregation":
             intent = self._field(output, "intent")
-            if intent.status == "selected" and intent.selected == ["player_season_stats"]:
+            if intent.status == "selected" and intent.selected[0] in {"player_season_stats", "season_leaders"}:
                 raise _Clarify("aggregation", "ambiguous")
             raise _Invalid("aggregation is unresolved")
         # The user said something we cannot pin down: dropping it would change the question.
@@ -298,6 +301,7 @@ class Normalizer:
             "postseason_summary": self._postseason,
             "player_season_stats": self._player_season,
             "team_records": self._team_records,
+            "season_leaders": self._season_leaders,
         }
 
     def _game_search(self, output, candidates, context):
@@ -450,6 +454,23 @@ class Normalizer:
         if teams and scope != ["league"]:
             return NormalizationResult(status="unsupported", unsupported_reason="other")
         return TeamRecordsRequest(season=season, team=teams[0] if teams else None, standings_scope=scope[0])
+
+    def _season_leaders(self, output, candidates, context):
+        season = self._value(candidates, self._require(output, "season")[0]).season
+        stat = self._require(output, "stat")[0]
+        if stat == "stat_line":
+            raise _Clarify("stat", "missing")  # ADR 0011: leaders questions need a statistic
+        if stat not in SEASON_LEADER_STATS:
+            return NormalizationResult(status="unsupported", unsupported_reason="unsupported_leader_stat")
+        aggregation = self._optional(output, "aggregation")
+        if stat in LEADER_PERCENTAGES:
+            aggregation = ["total"]  # a percentage has no per-game measure
+        elif not aggregation:
+            # Never default: the scoring title is per game, "most points" reads as totals.
+            raise _Clarify("aggregation", "ambiguous")
+        season_type = self._optional(output, "season_type") or ["regular_season"]
+        return SeasonLeadersRequest(season=season, season_type=season_type[0],
+                                    stat=StatSelection(stat=stat, aggregation=aggregation[0]))
 
 
 def _with_page_context(output: InterpreterOutput, candidates: CandidateLookupResult) -> InterpreterOutput:

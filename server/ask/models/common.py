@@ -54,7 +54,7 @@ def to_new_york(value: datetime) -> datetime:
 NewYorkDateTime = Annotated[datetime, AfterValidator(to_new_york)]
 
 
-Intent = Literal["game_search", "boxscore_stat", "playoff_series", "postseason_summary", "player_season_stats", "team_records"]
+Intent = Literal["game_search", "boxscore_stat", "playoff_series", "postseason_summary", "player_season_stats", "team_records", "season_leaders"]
 SeasonType = Literal["regular_season", "playoffs"]
 StandingsScope = Literal["league", "east", "west"]
 
@@ -119,6 +119,18 @@ StatKey = Literal[
 NON_LEADER_STATS: frozenset[str] = frozenset(
     {"stat_line", "field_goal_percentage", "three_point_percentage", "free_throw_percentage"}
 )
+
+# Season leaderboards (docs/ask-stage3.md): stats.nba LeagueLeaders categories.
+# Percentages rank qualified shooters and have no per-game measure.
+LEADER_PERCENTAGES: frozenset[str] = frozenset(
+    {"field_goal_percentage", "three_point_percentage", "free_throw_percentage"}
+)
+SEASON_LEADER_STATS: frozenset[str] = frozenset(
+    {"points", "rebounds", "offensive_rebounds", "defensive_rebounds", "assists", "steals", "blocks",
+     "turnovers", "minutes", "field_goals", "three_pointers", "free_throws"}
+) | LEADER_PERCENTAGES
+DEFAULT_LEADER_LIMIT = 10
+MAX_LEADER_LIMIT = 25
 
 # Total vs per-game. Single-game requests are always "total"; "per_game" exists
 # so a question that asks for an average is represented explicitly (and then

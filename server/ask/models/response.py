@@ -88,7 +88,7 @@ class AskQuery(ContractModel):
 Outcome = Literal["answer", "needs_clarification", "unsupported", "not_found", "unavailable", "budget_exhausted"]
 
 # Badge next to "Reading this as". Derived from intent (+ stat scope).
-DetectedType = Literal["games", "player_stat", "team_stat", "stat_leaders", "series", "postseason", "season_stats", "team_records"]
+DetectedType = Literal["games", "player_stat", "team_stat", "stat_leaders", "series", "postseason", "season_stats", "team_records", "season_leaders"]
 
 LinkKind = Literal["boxscore", "scores_date", "playoff_series", "playoff_bracket", "nba_game", "nba_stat_event", "source"]
 
@@ -443,8 +443,56 @@ class TeamRecordsResult(ContractModel):
     as_of: dt.datetime
 
 
+class SeasonLeaderRow(ContractModel):
+    rank: int = Field(ge=1)  # competition ranking on unrounded values; ties share a rank
+    player: PlayerRef
+    # None when the player had several teams (``multiple_teams``) or the franchise is
+    # outside the catalog (defunct early teams). stats.nba lists a traded player's last team.
+    team: TeamRef | None = None
+    multiple_teams: bool = False
+    games_played: int = Field(ge=1)
+    value: StatValue
+
+
+class OmittedTie(ContractModel):
+    """A whole tie group left out because it would pass the row cap."""
+
+    rank: int = Field(ge=1)
+    count: int = Field(ge=2)
+
+
+MAX_LEADER_ROWS = 50
+
+
+class SeasonLeadersResult(ContractModel):
+    kind: Literal["season_leaders"] = "season_leaders"
+    season: Season
+    season_type: SeasonType
+    stat: StatKey
+    aggregation: Aggregation
+    limit: int = Field(ge=1, le=25)
+    qualification: Literal["all_players", "source_qualified"]
+    qualification_note: str = Field(max_length=200)
+    rows: list[SeasonLeaderRow] = Field(min_length=1, max_length=MAX_LEADER_ROWS)
+    omitted_tie: OmittedTie | None = None
+    coverage_note: str | None = Field(default=None, max_length=300)
+    as_of: dt.datetime
+
+    @model_validator(mode="after")
+    def _ranked(self) -> SeasonLeadersResult:
+        ranks = [row.rank for row in self.rows]
+        if ranks[0] != 1 or any(r > self.limit for r in ranks):
+            raise ValueError("rows must start at rank 1 and stay within the requested top N")
+        for i in range(1, len(ranks)):
+            if ranks[i] != ranks[i - 1] and ranks[i] != i + 1:
+                raise ValueError("ranks must use competition ranking")
+        if len({row.player.player_id for row in self.rows}) != len(self.rows):
+            raise ValueError("a player appears once")
+        return self
+
+
 AskResult = Annotated[
-    Union[GamesResult, BoxscoreStatResult, PlayoffSeriesResult, PostseasonSummaryResult, PlayerSeasonStatsResult, TeamRecordsResult],
+    Union[GamesResult, BoxscoreStatResult, PlayoffSeriesResult, PostseasonSummaryResult, PlayerSeasonStatsResult, TeamRecordsResult, SeasonLeadersResult],
     Field(discriminator="kind"),
 ]
 
@@ -556,6 +604,7 @@ class AskResponse(ContractModel):
                 "postseason_summary": "postseason_summary",
                 "player_season_stats": "player_season_stats",
                 "team_records": "team_records",
+                "season_leaders": "season_leaders",
             }[self.result.kind]
             if self.interpretation.intent != expected:
                 raise ValueError("result kind does not match interpretation intent")
