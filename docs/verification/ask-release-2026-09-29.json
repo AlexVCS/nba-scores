@@ -1,0 +1,2417 @@
+{
+ "purpose": "#199 interpreter comparison",
+ "cases_file": "/private/tmp/ask-release-unseen-v3.json",
+ "candidate_source": "lookup:server.ask.candidates.lookup:CandidateLookupService:b1e671a647.3f8b89d1.52b7768d",
+ "thresholds": "Audited label serialization and ID-based scoring; frozen interpreter 1e2535d and candidate cf3737b, unchanged after first invalid-label run; no prompt or model tuning.",
+ "generated_at": "2026-09-29T18:37:52+00:00",
+ "spend": {
+  "cap_usd": 0.4,
+  "spent_usd": 0.009333
+ },
+ "stopped_reason": null,
+ "candidate_errors": {},
+ "configs": {
+  "gpt-6-luna": {
+   "cases": 80,
+   "complete_request_accuracy": 0.9375,
+   "correct": 75,
+   "schema_valid_guesses": 3,
+   "service_failures": 0,
+   "clarification": {
+    "expected": 9,
+    "correct": 6,
+    "issued": 6,
+    "unneeded": 0
+   },
+   "unsupported": {
+    "expected": 4,
+    "correct": 4,
+    "issued": 6,
+    "false": 2
+   },
+   "latency_ms": {
+    "median": 2233.5,
+    "p95": 3700
+   },
+   "total_cost_usd": 0.009333,
+   "cost_per_successful_answer_usd": 0.000124,
+   "fallback_rate": 0.0,
+   "resolved_models": [
+    "gpt-6-luna"
+   ],
+   "failures": {
+    "false_unsupported": 2,
+    "schema_valid_guess": 3
+   },
+   "not_run": []
+  }
+ },
+ "cases": {
+  "gpt-6-luna": [
+   {
+    "case_id": "release-001",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2910,
+    "cost_usd": 9.788e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2025-03-03",
+      "end": "2025-03-03"
+     },
+     "teams": []
+    }
+   },
+   {
+    "case_id": "release-002",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2445,
+    "cost_usd": 9.818e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2024-12-25",
+      "end": "2024-12-25"
+     },
+     "teams": [
+      {
+       "team_id": 1610612752,
+       "tricode": "NYK",
+       "name": "New York Knicks"
+      }
+     ]
+    }
+   },
+   {
+    "case_id": "release-003",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1767,
+    "cost_usd": 8.035e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2024-10-22",
+      "end": "2024-10-22"
+     },
+     "teams": []
+    }
+   },
+   {
+    "case_id": "release-004",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1964,
+    "cost_usd": 0.00010465,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2023-01-05",
+      "end": "2023-01-05"
+     },
+     "teams": [
+      {
+       "team_id": 1610612738,
+       "tricode": "BOS",
+       "name": "Boston Celtics"
+      }
+     ]
+    }
+   },
+   {
+    "case_id": "release-005",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2218,
+    "cost_usd": 9.818e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2020-02-01",
+      "end": "2020-02-01"
+     },
+     "teams": [
+      {
+       "team_id": 1610612744,
+       "tricode": "GSW",
+       "name": "Golden State Warriors"
+      }
+     ]
+    }
+   },
+   {
+    "case_id": "release-006",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2033,
+    "cost_usd": 9.866e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2019-04-09",
+      "end": "2019-04-09"
+     },
+     "teams": [
+      {
+       "team_id": 1610612741,
+       "tricode": "CHI",
+       "name": "Chicago Bulls"
+      }
+     ]
+    }
+   },
+   {
+    "case_id": "release-007",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2014,
+    "cost_usd": 9.964e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2018-11-17",
+      "end": "2018-11-17"
+     },
+     "teams": [
+      {
+       "team_id": 1610612748,
+       "tricode": "MIA",
+       "name": "Miami Heat"
+      }
+     ]
+    }
+   },
+   {
+    "case_id": "release-008",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1976,
+    "cost_usd": 0.00010117,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2022-03-10",
+      "end": "2022-03-10"
+     },
+     "teams": [
+      {
+       "team_id": 1610612755,
+       "tricode": "PHI",
+       "name": "Philadelphia 76ers"
+      }
+     ]
+    }
+   },
+   {
+    "case_id": "release-009",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1753,
+    "cost_usd": 0.00010565,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2023-05-01",
+      "end": "2023-05-01"
+     },
+     "teams": [
+      {
+       "team_id": 1610612743,
+       "tricode": "DEN",
+       "name": "Denver Nuggets"
+      }
+     ]
+    }
+   },
+   {
+    "case_id": "release-010",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2012,
+    "cost_usd": 8.314e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2011-06-12",
+      "end": "2011-06-12"
+     },
+     "teams": [
+      {
+       "team_id": 1610612742,
+       "tricode": "DAL",
+       "name": "Dallas Mavericks"
+      }
+     ]
+    }
+   },
+   {
+    "case_id": "release-011",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2112,
+    "cost_usd": 9.848e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-012",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2088,
+    "cost_usd": 9.827e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-013",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2494,
+    "cost_usd": 0.0001007,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2026-03-17",
+      "end": "2026-03-17"
+     },
+     "teams": []
+    }
+   },
+   {
+    "case_id": "release-014",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2438,
+    "cost_usd": 9.818e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2026-03-17",
+      "end": "2026-03-17"
+     },
+     "teams": []
+    }
+   },
+   {
+    "case_id": "release-015",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 3177,
+    "cost_usd": 0.00011475,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "boxscore_stat",
+     "scope": "player",
+     "stat": {
+      "stat": "points",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": null,
+      "date": "2024-03-05",
+      "teams": [],
+      "season": null,
+      "round": null,
+      "conference": null,
+      "game_number": null
+     },
+     "player": {
+      "player_id": 2544,
+      "name": "LeBron James"
+     },
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-016",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2131,
+    "cost_usd": 0.00011669,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "boxscore_stat",
+     "scope": "player",
+     "stat": {
+      "stat": "rebounds",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": null,
+      "date": "2022-01-20",
+      "teams": [],
+      "season": null,
+      "round": null,
+      "conference": null,
+      "game_number": null
+     },
+     "player": {
+      "player_id": 201939,
+      "name": "Stephen Curry"
+     },
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-017",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2005,
+    "cost_usd": 0.00010677,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "boxscore_stat",
+     "scope": "player",
+     "stat": {
+      "stat": "assists",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": null,
+      "date": "2022-04-17",
+      "teams": [],
+      "season": null,
+      "round": null,
+      "conference": null,
+      "game_number": null
+     },
+     "player": {
+      "player_id": 1628369,
+      "name": "Jayson Tatum"
+     },
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-018",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2285,
+    "cost_usd": 0.00011528,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "boxscore_stat",
+     "scope": "player",
+     "stat": {
+      "stat": "blocks",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": null,
+      "date": "2023-02-23",
+      "teams": [],
+      "season": null,
+      "round": null,
+      "conference": null,
+      "game_number": null
+     },
+     "player": {
+      "player_id": 203999,
+      "name": "Nikola Joki\u0107"
+     },
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-019",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2217,
+    "cost_usd": 0.00010073,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "boxscore_stat",
+     "scope": "player",
+     "stat": {
+      "stat": "stat_line",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": null,
+      "date": "1997-06-12",
+      "teams": [],
+      "season": null,
+      "round": null,
+      "conference": null,
+      "game_number": null
+     },
+     "player": {
+      "player_id": 893,
+      "name": "Michael Jordan"
+     },
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-020",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2127,
+    "cost_usd": 0.00010774,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "boxscore_stat",
+     "scope": "player",
+     "stat": {
+      "stat": "minutes",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": null,
+      "date": "2006-01-22",
+      "teams": [],
+      "season": null,
+      "round": null,
+      "conference": null,
+      "game_number": null
+     },
+     "player": {
+      "player_id": 977,
+      "name": "Kobe Bryant"
+     },
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-021",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1924,
+    "cost_usd": 0.00010469,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "boxscore_stat",
+     "scope": "team",
+     "stat": {
+      "stat": "points",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": null,
+      "date": "2024-01-25",
+      "teams": [
+       {
+        "team_id": 1610612738,
+        "tricode": "BOS",
+        "name": "Boston Celtics"
+       }
+      ],
+      "season": null,
+      "round": null,
+      "conference": null,
+      "game_number": null
+     },
+     "player": null,
+     "team": {
+      "team_id": 1610612738,
+      "tricode": "BOS",
+      "name": "Boston Celtics"
+     }
+    }
+   },
+   {
+    "case_id": "release-022",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": false,
+    "guess": false,
+    "failure": "false_unsupported",
+    "latency_ms": 5403,
+    "cost_usd": 0.00022738,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "other",
+    "actual_request": null
+   },
+   {
+    "case_id": "release-023",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2488,
+    "cost_usd": 0.00011119,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "boxscore_stat",
+     "scope": "team",
+     "stat": {
+      "stat": "stat_line",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": null,
+      "date": "2024-04-10",
+      "teams": [
+       {
+        "team_id": 1610612752,
+        "tricode": "NYK",
+        "name": "New York Knicks"
+       }
+      ],
+      "season": null,
+      "round": null,
+      "conference": null,
+      "game_number": null
+     },
+     "player": null,
+     "team": {
+      "team_id": 1610612752,
+      "tricode": "NYK",
+      "name": "New York Knicks"
+     }
+    }
+   },
+   {
+    "case_id": "release-024",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2718,
+    "cost_usd": 0.00011588,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "boxscore_stat",
+     "scope": "leaders",
+     "stat": {
+      "stat": "assists",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": null,
+      "date": "2019-05-07",
+      "teams": [],
+      "season": null,
+      "round": null,
+      "conference": null,
+      "game_number": null
+     },
+     "player": null,
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-025",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 4299,
+    "cost_usd": 0.00011967,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "boxscore_stat",
+     "scope": "team",
+     "stat": {
+      "stat": "turnovers",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": null,
+      "date": "2022-03-15",
+      "teams": [
+       {
+        "team_id": 1610612744,
+        "tricode": "GSW",
+        "name": "Golden State Warriors"
+       }
+      ],
+      "season": null,
+      "round": null,
+      "conference": null,
+      "game_number": null
+     },
+     "player": null,
+     "team": {
+      "team_id": 1610612744,
+      "tricode": "GSW",
+      "name": "Golden State Warriors"
+     }
+    }
+   },
+   {
+    "case_id": "release-026",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": false,
+    "guess": false,
+    "failure": "false_unsupported",
+    "latency_ms": 3783,
+    "cost_usd": 0.00016338,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "other",
+    "actual_request": null
+   },
+   {
+    "case_id": "release-027",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1990,
+    "cost_usd": 0.00013154,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "player",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-028",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2314,
+    "cost_usd": 0.00012584,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-029",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1744,
+    "cost_usd": 8.549e-05,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "multi_game_average",
+    "actual_request": null
+   },
+   {
+    "case_id": "release-030",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 3490,
+    "cost_usd": 0.0001584,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "unsupported_leader_stat",
+    "actual_request": null
+   },
+   {
+    "case_id": "release-031",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 3993,
+    "cost_usd": 0.00015925,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "unsupported_leader_stat",
+    "actual_request": null
+   },
+   {
+    "case_id": "release-032",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 3118,
+    "cost_usd": 0.00014941,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "unsupported_leader_stat",
+    "actual_request": null
+   },
+   {
+    "case_id": "release-033",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2002,
+    "cost_usd": 0.00012077,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2023-24",
+     "teams": [
+      {
+       "team_id": 1610612738,
+       "tricode": "BOS",
+       "name": "Boston Celtics"
+      },
+      {
+       "team_id": 1610612747,
+       "tricode": "LAL",
+       "name": "Los Angeles Lakers"
+      }
+     ],
+     "round": "finals",
+     "conference": null
+    }
+   },
+   {
+    "case_id": "release-034",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2090,
+    "cost_usd": 0.00012474,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "1997-98",
+     "teams": [
+      {
+       "team_id": 1610612741,
+       "tricode": "CHI",
+       "name": "Chicago Bulls"
+      },
+      {
+       "team_id": 1610612762,
+       "tricode": "UTA",
+       "name": "Utah Jazz"
+      }
+     ],
+     "round": "finals",
+     "conference": null
+    }
+   },
+   {
+    "case_id": "release-035",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2115,
+    "cost_usd": 0.00011727,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2015-16",
+     "teams": [
+      {
+       "team_id": 1610612744,
+       "tricode": "GSW",
+       "name": "Golden State Warriors"
+      },
+      {
+       "team_id": 1610612739,
+       "tricode": "CLE",
+       "name": "Cleveland Cavaliers"
+      }
+     ],
+     "round": "finals",
+     "conference": null
+    }
+   },
+   {
+    "case_id": "release-036",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2532,
+    "cost_usd": 0.00011873,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2012-13",
+     "teams": [
+      {
+       "team_id": 1610612748,
+       "tricode": "MIA",
+       "name": "Miami Heat"
+      },
+      {
+       "team_id": 1610612759,
+       "tricode": "SAS",
+       "name": "San Antonio Spurs"
+      }
+     ],
+     "round": "finals",
+     "conference": null
+    }
+   },
+   {
+    "case_id": "release-037",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2249,
+    "cost_usd": 0.00012375,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2018-19",
+     "teams": [
+      {
+       "team_id": 1610612761,
+       "tricode": "TOR",
+       "name": "Toronto Raptors"
+      },
+      {
+       "team_id": 1610612744,
+       "tricode": "GSW",
+       "name": "Golden State Warriors"
+      }
+     ],
+     "round": "finals",
+     "conference": null
+    }
+   },
+   {
+    "case_id": "release-038",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1617,
+    "cost_usd": 9.625e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2010-11",
+     "teams": [
+      {
+       "team_id": 1610612742,
+       "tricode": "DAL",
+       "name": "Dallas Mavericks"
+      },
+      {
+       "team_id": 1610612748,
+       "tricode": "MIA",
+       "name": "Miami Heat"
+      }
+     ],
+     "round": "finals",
+     "conference": null
+    }
+   },
+   {
+    "case_id": "release-039",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2854,
+    "cost_usd": 0.00011676,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2007-08",
+     "teams": [
+      {
+       "team_id": 1610612747,
+       "tricode": "LAL",
+       "name": "Los Angeles Lakers"
+      },
+      {
+       "team_id": 1610612738,
+       "tricode": "BOS",
+       "name": "Boston Celtics"
+      }
+     ],
+     "round": "finals",
+     "conference": null
+    }
+   },
+   {
+    "case_id": "release-040",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1907,
+    "cost_usd": 0.00011775,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2022-23",
+     "teams": [
+      {
+       "team_id": 1610612743,
+       "tricode": "DEN",
+       "name": "Denver Nuggets"
+      },
+      {
+       "team_id": 1610612748,
+       "tricode": "MIA",
+       "name": "Miami Heat"
+      }
+     ],
+     "round": "finals",
+     "conference": null
+    }
+   },
+   {
+    "case_id": "release-041",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2182,
+    "cost_usd": 0.00011716,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "round",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-042",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2585,
+    "cost_usd": 0.00013699,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2020-21",
+     "teams": [
+      {
+       "team_id": 1610612756,
+       "tricode": "PHX",
+       "name": "Phoenix Suns"
+      }
+     ],
+     "round": "conference_finals",
+     "conference": "west"
+    }
+   },
+   {
+    "case_id": "release-043",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2564,
+    "cost_usd": 0.00011659,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2023-24",
+     "teams": [
+      {
+       "team_id": 1610612738,
+       "tricode": "BOS",
+       "name": "Boston Celtics"
+      }
+     ],
+     "round": "conference_semifinals",
+     "conference": "east"
+    }
+   },
+   {
+    "case_id": "release-044",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1971,
+    "cost_usd": 0.00011752,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2022-23",
+     "teams": [
+      {
+       "team_id": 1610612755,
+       "tricode": "PHI",
+       "name": "Philadelphia 76ers"
+      },
+      {
+       "team_id": 1610612738,
+       "tricode": "BOS",
+       "name": "Boston Celtics"
+      }
+     ],
+     "round": null,
+     "conference": null
+    }
+   },
+   {
+    "case_id": "release-045",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2672,
+    "cost_usd": 0.00014139,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2020-21",
+     "teams": [
+      {
+       "team_id": 1610612749,
+       "tricode": "MIL",
+       "name": "Milwaukee Bucks"
+      }
+     ],
+     "round": "first_round",
+     "conference": null
+    }
+   },
+   {
+    "case_id": "release-046",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2648,
+    "cost_usd": 0.00013,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2019-20",
+     "teams": [
+      {
+       "team_id": 1610612747,
+       "tricode": "LAL",
+       "name": "Los Angeles Lakers"
+      }
+     ],
+     "round": "conference_finals",
+     "conference": "west"
+    }
+   },
+   {
+    "case_id": "release-047",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2314,
+    "cost_usd": 0.00012547,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2022-23",
+     "teams": [
+      {
+       "team_id": 1610612748,
+       "tricode": "MIA",
+       "name": "Miami Heat"
+      }
+     ],
+     "round": "conference_finals",
+     "conference": "east"
+    }
+   },
+   {
+    "case_id": "release-048",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2341,
+    "cost_usd": 0.00014185,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2015-16",
+     "teams": [
+      {
+       "team_id": 1610612760,
+       "tricode": "OKC",
+       "name": "Oklahoma City Thunder"
+      },
+      {
+       "team_id": 1610612759,
+       "tricode": "SAS",
+       "name": "San Antonio Spurs"
+      }
+     ],
+     "round": "conference_finals",
+     "conference": "west"
+    }
+   },
+   {
+    "case_id": "release-049",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2397,
+    "cost_usd": 0.00014142,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2003-04",
+     "teams": [
+      {
+       "team_id": 1610612765,
+       "tricode": "DET",
+       "name": "Detroit Pistons"
+      }
+     ],
+     "round": "finals",
+     "conference": null
+    }
+   },
+   {
+    "case_id": "release-050",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2160,
+    "cost_usd": 0.00011152,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2017-18",
+     "teams": [
+      {
+       "team_id": 1610612739,
+       "tricode": "CLE",
+       "name": "Cleveland Cavaliers"
+      }
+     ],
+     "round": "conference_finals",
+     "conference": "east"
+    }
+   },
+   {
+    "case_id": "release-051",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2341,
+    "cost_usd": 0.00011589,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2021-22",
+     "teams": [
+      {
+       "team_id": 1610612744,
+       "tricode": "GSW",
+       "name": "Golden State Warriors"
+      }
+     ],
+     "round": "first_round",
+     "conference": null
+    }
+   },
+   {
+    "case_id": "release-052",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2866,
+    "cost_usd": 0.00015045,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2021-22",
+     "teams": [
+      {
+       "team_id": 1610612738,
+       "tricode": "BOS",
+       "name": "Boston Celtics"
+      }
+     ],
+     "round": "conference_finals",
+     "conference": null
+    }
+   },
+   {
+    "case_id": "release-053",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": false,
+    "guess": true,
+    "failure": "schema_valid_guess",
+    "latency_ms": 3700,
+    "cost_usd": 0.00016286,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2023-24",
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-054",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": false,
+    "guess": true,
+    "failure": "schema_valid_guess",
+    "latency_ms": 2685,
+    "cost_usd": 0.00015266,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2023-24",
+     "team": {
+      "team_id": 1610612738,
+      "tricode": "BOS",
+      "name": "Boston Celtics"
+     }
+    }
+   },
+   {
+    "case_id": "release-055",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": false,
+    "guess": true,
+    "failure": "schema_valid_guess",
+    "latency_ms": 2032,
+    "cost_usd": 0.00011863,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2023-24",
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-056",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2421,
+    "cost_usd": 0.00012003,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2023-24",
+     "teams": [
+      {
+       "team_id": 1610612738,
+       "tricode": "BOS",
+       "name": "Boston Celtics"
+      },
+      {
+       "team_id": 1610612747,
+       "tricode": "LAL",
+       "name": "Los Angeles Lakers"
+      }
+     ],
+     "round": null,
+     "conference": null
+    }
+   },
+   {
+    "case_id": "release-057",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 3298,
+    "cost_usd": 0.0001202,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2023-24",
+     "team": {
+      "team_id": 1610612738,
+      "tricode": "BOS",
+      "name": "Boston Celtics"
+     }
+    }
+   },
+   {
+    "case_id": "release-058",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2022,
+    "cost_usd": 0.00011767,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2019-20",
+     "team": {
+      "team_id": 1610612747,
+      "tricode": "LAL",
+      "name": "Los Angeles Lakers"
+     }
+    }
+   },
+   {
+    "case_id": "release-059",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2028,
+    "cost_usd": 0.00012237,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2022-23",
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-060",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2646,
+    "cost_usd": 0.00010967,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2014-15",
+     "team": {
+      "team_id": 1610612744,
+      "tricode": "GSW",
+      "name": "Golden State Warriors"
+     }
+    }
+   },
+   {
+    "case_id": "release-061",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2176,
+    "cost_usd": 0.00011515,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "1997-98",
+     "team": {
+      "team_id": 1610612741,
+      "tricode": "CHI",
+      "name": "Chicago Bulls"
+     }
+    }
+   },
+   {
+    "case_id": "release-062",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1579,
+    "cost_usd": 9.065e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2011-12",
+     "team": {
+      "team_id": 1610612748,
+      "tricode": "MIA",
+      "name": "Miami Heat"
+     }
+    }
+   },
+   {
+    "case_id": "release-063",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1769,
+    "cost_usd": 0.00011014,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2022-23",
+     "team": {
+      "team_id": 1610612743,
+      "tricode": "DEN",
+      "name": "Denver Nuggets"
+     }
+    }
+   },
+   {
+    "case_id": "release-064",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2045,
+    "cost_usd": 0.00011316,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2018-19",
+     "team": {
+      "team_id": 1610612761,
+      "tricode": "TOR",
+      "name": "Toronto Raptors"
+     }
+    }
+   },
+   {
+    "case_id": "release-065",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2874,
+    "cost_usd": 9.067e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2015-16",
+     "team": {
+      "team_id": 1610612739,
+      "tricode": "CLE",
+      "name": "Cleveland Cavaliers"
+     }
+    }
+   },
+   {
+    "case_id": "release-066",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1947,
+    "cost_usd": 0.00010968,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2024-25",
+     "team": {
+      "team_id": 1610612752,
+      "tricode": "NYK",
+      "name": "New York Knicks"
+     }
+    }
+   },
+   {
+    "case_id": "release-067",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2760,
+    "cost_usd": 0.00011386,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2023-24",
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-068",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1900,
+    "cost_usd": 0.00011368,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2013-14",
+     "team": {
+      "team_id": 1610612759,
+      "tricode": "SAS",
+      "name": "San Antonio Spurs"
+     }
+    }
+   },
+   {
+    "case_id": "release-069",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2532,
+    "cost_usd": 0.00010815,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2010-11",
+     "team": {
+      "team_id": 1610612742,
+      "tricode": "DAL",
+      "name": "Dallas Mavericks"
+     }
+    }
+   },
+   {
+    "case_id": "release-070",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2349,
+    "cost_usd": 0.00011518,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2020-21",
+     "team": {
+      "team_id": 1610612749,
+      "tricode": "MIL",
+      "name": "Milwaukee Bucks"
+     }
+    }
+   },
+   {
+    "case_id": "release-071",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2966,
+    "cost_usd": 0.00011965,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2020-21",
+     "team": {
+      "team_id": 1610612756,
+      "tricode": "PHX",
+      "name": "Phoenix Suns"
+     }
+    }
+   },
+   {
+    "case_id": "release-072",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2477,
+    "cost_usd": 0.00010916,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2007-08",
+     "team": {
+      "team_id": 1610612738,
+      "tricode": "BOS",
+      "name": "Boston Celtics"
+     }
+    }
+   },
+   {
+    "case_id": "release-073",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2648,
+    "cost_usd": 0.00011166,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2022-23",
+     "team": {
+      "team_id": 1610612755,
+      "tricode": "PHI",
+      "name": "Philadelphia 76ers"
+     }
+    }
+   },
+   {
+    "case_id": "release-074",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2635,
+    "cost_usd": 0.00010817,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2008-09",
+     "team": {
+      "team_id": 1610612753,
+      "tricode": "ORL",
+      "name": "Orlando Magic"
+     }
+    }
+   },
+   {
+    "case_id": "release-075",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1905,
+    "cost_usd": 0.00011469,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "1999-00",
+     "team": {
+      "team_id": 1610612757,
+      "tricode": "POR",
+      "name": "Portland Trail Blazers"
+     }
+    }
+   },
+   {
+    "case_id": "release-076",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1903,
+    "cost_usd": 0.00010718,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2023-24",
+     "team": {
+      "team_id": 1610612750,
+      "tricode": "MIN",
+      "name": "Minnesota Timberwolves"
+     }
+    }
+   },
+   {
+    "case_id": "release-077",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1753,
+    "cost_usd": 0.00010629,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "season",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-078",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1740,
+    "cost_usd": 9.82e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2026-11-01",
+      "end": "2026-11-01"
+     },
+     "teams": []
+    }
+   },
+   {
+    "case_id": "release-079",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1616,
+    "cost_usd": 9.217e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2026-11-01",
+      "end": "2026-11-01"
+     },
+     "teams": []
+    }
+   },
+   {
+    "case_id": "release-080",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2024,
+    "cost_usd": 0.00010165,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2026-03-08",
+      "end": "2026-03-08"
+     },
+     "teams": []
+    }
+   }
+  ]
+ }
+}

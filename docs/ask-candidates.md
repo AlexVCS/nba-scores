@@ -177,9 +177,12 @@ Results on the development set, 2026-09-29:
 | Warm latency | median 0.128 ms, p95 1.993 ms, max 5.607 ms (fuzzy spelling checks dominate) |
 | Index load | 74.4 ms, first call only |
 
-Proposed recall target for the release evaluation: at least 95% per field, and
-at least 90% of questions with every gold value offered. Record it in #189
-before the release run.
+Release targets fixed before opening the unseen set: at least 95% recall per
+field and at least 90% of questions with every gold value offered. Warm lookup
+p95 must stay below 20 ms. Explicit no-match labels must abstain correctly,
+and forbidden candidates must never be offered. Report first-load time
+separately. These targets apply to the independently labeled release set;
+the development measurements above do not satisfy the release gate.
 
 ## Known gaps
 

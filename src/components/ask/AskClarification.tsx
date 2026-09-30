@@ -66,7 +66,7 @@ function AskClarification({clarification, revealed, onChoose, onEditQuestion}: A
           ))}
         </ul>
       )}
-      {!revealed && !optionsRevealed && (
+      {!revealed && !optionsRevealed && clarification.options.some(option => option.spoiler) && (
         <button
           type="button"
           className="min-h-8 w-fit cursor-pointer font-bold text-hw-accent-ink underline underline-offset-3 focus-visible:outline-2 focus-visible:outline-hw-accent"

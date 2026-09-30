@@ -4,7 +4,7 @@ import pytest
 from pydantic import ValidationError
 
 from server.ask.models.common import DateRange, TeamRef
-from server.ask.models.request import GameSearchRequest, PlayoffSeriesRequest
+from server.ask.models.request import BoxscoreStatRequest, GameSearchRequest, PlayoffSeriesRequest
 from server.ask.models.response import AskResponse
 from server.ask.resolvers import games, resolve
 from server.ask.resolvers.spoiler_policy import HIDDEN_GAME_GATE, conditional_playoff_game, request_spoiler_gate
@@ -181,6 +181,30 @@ def test_player_without_a_game_that_day_did_not_play(boards, monkeypatch, clear_
     with pytest.raises(NotFoundError) as error:
         games.find_player_game(PLAYER, DAY)
     assert error.value.code == "player_did_not_play"
+
+
+@pytest.mark.parametrize("days_after", [0, 1])
+def test_recent_empty_player_log_does_not_claim_did_not_play(boards, monkeypatch, clear_player_games, days_after):
+    monkeypatch.setattr(games, "nba_today", lambda: DAY + timedelta(days=days_after))
+    monkeypatch.setattr(nba_stats_client, "fetch_league_game_finder", FakeFinder())
+    with pytest.raises(NotFoundError) as error:
+        games.find_player_game(PLAYER, DAY)
+    assert (error.value.code, error.value.reason) == ("no_record", "recent_player_record_unverified")
+    assert boards.calls == [DAY.isoformat()]
+
+
+def test_recent_empty_player_log_keeps_spoiler_gate(boards, monkeypatch, clear_player_games):
+    monkeypatch.setattr(games, "nba_today", lambda: DAY)
+    monkeypatch.setattr(nba_stats_client, "fetch_league_game_finder", FakeFinder())
+    monkeypatch.setattr("server.ask.resolvers.request_spoiler_gate", lambda _request: HIDDEN_GAME_GATE)
+    request = BoxscoreStatRequest.model_validate({
+        "scope": "player", "stat": {"stat": "points"},
+        "player": {"player_id": PLAYER, "name": "Jayson Tatum"},
+        "game": {"date": DAY.isoformat()},
+    })
+    with pytest.raises(NotFoundError) as error:
+        resolve(request)
+    assert error.value.spoiler_gate == HIDDEN_GAME_GATE
 
 
 def test_player_rows_that_disagree_with_the_scoreboard_are_not_trusted(boards, monkeypatch, clear_player_games):

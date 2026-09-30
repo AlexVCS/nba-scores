@@ -25,6 +25,7 @@ from server.ask.resolvers.spoiler_policy import conditional_playoff_game
 from server.ask.spoilers import game_spoilers, guard
 from server.services.playoffs import infer_round_from_game_id
 from server.utils.boxscore_availability import is_boxscore_available_metadata, is_valid_nba_game_id
+from server.utils.season import nba_today
 
 logger = logging.getLogger(__name__)
 
@@ -270,6 +271,13 @@ def find_player_game(player_id: int, day: dt.date) -> tuple[ResolvedGame, TeamRe
     rows = data.player_games_on(player_id, day)
     game_ids = sorted({row[0] for row in rows})
     if not game_ids:
+        today = nba_today()
+        if day in (today, today - dt.timedelta(days=1)) and _day_games(day):
+            # LeagueGameFinder can lag games still on the recent scoreboard.
+            # Without a dated player record, none of those games is known to
+            # be this player's; avoid claiming they did not play.
+            raise NotFoundError("no_record", "recent_player_record_unverified",
+                                details={"playerId": player_id, "date": day.isoformat()})
         raise NotFoundError(
             "player_did_not_play", "no_player_game_on_date", details={"playerId": player_id, "date": day.isoformat()}
         )

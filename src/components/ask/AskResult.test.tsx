@@ -126,6 +126,11 @@ describe("AskResult spoiler protection", () => {
     expect(screen.getByRole("button", {name: /Jalen Duren/})).toBeInTheDocument();
   });
 
+  it("omits the option reveal control when every option is already visible", () => {
+    renderFixture("clarification-which-jalen");
+    expect(screen.queryByRole("button", {name: "Show all options"})).not.toBeInTheDocument();
+  });
+
   it("uses the same hidden score controls for a completed and an unfinished game", () => {
     const final = structuredClone(ASK_RESPONSE_FIXTURES["answer-player-stat"]);
     const pending = structuredClone(final);

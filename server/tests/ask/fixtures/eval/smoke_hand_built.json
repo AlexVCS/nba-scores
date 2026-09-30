@@ -1,0 +1,1054 @@
+{
+ "description": "Hand-built smoke cases for the #199 harness. Candidates are hand-picked, so these cases exercise the plumbing only; they are NOT valid for the interpreter comparison, which must use #200's candidate lookup, and they are not a release set.",
+ "reference_time": "2026-09-29T12:00:00-04:00",
+ "cases": [
+  {
+   "id": "smoke-games-last-week",
+   "question": "Cavs games last week",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "game_search",
+    "alias",
+    "relative_date"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2026-09-21",
+      "end": "2026-09-27"
+     },
+     "teams": [
+      {
+       "team_id": 1610612739,
+       "tricode": "CLE",
+       "name": "Cleveland Cavaliers"
+      }
+     ]
+    }
+   },
+   "candidates": {
+    "sets": {
+     "player": {
+      "field": "player",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "team": {
+      "field": "team",
+      "status": "candidates",
+      "candidates": [
+       {
+        "id": "team:1610612739",
+        "field": "team",
+        "label": "Cleveland Cavaliers",
+        "matched_text": "Cavs",
+        "span": null,
+        "source": "alias",
+        "alias": null,
+        "match_score": 0.9,
+        "value": {
+         "kind": "team",
+         "team": {
+          "team_id": 1610612739,
+          "tricode": "CLE",
+          "name": "Cleveland Cavaliers"
+         },
+         "valid_from": null,
+         "valid_to": null
+        }
+       }
+      ],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "date": {
+      "field": "date",
+      "status": "candidates",
+      "candidates": [
+       {
+        "id": "date:0",
+        "field": "date",
+        "label": "last week",
+        "matched_text": "last week",
+        "span": null,
+        "source": "date_parser",
+        "alias": null,
+        "match_score": 1.0,
+        "value": {
+         "kind": "date",
+         "components": {
+          "kind": "relative",
+          "year": null,
+          "month": null,
+          "day": null,
+          "end_year": null,
+          "end_month": null,
+          "end_day": null,
+          "relative": "last_week",
+          "weekday": null,
+          "count": null
+         },
+         "resolved": {
+          "start": "2026-09-21",
+          "end": "2026-09-27"
+         },
+         "unresolved_reason": null
+        }
+       }
+      ],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "season": {
+      "field": "season",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "round": {
+      "field": "round",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "game_number": {
+      "field": "game_number",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     }
+    },
+    "alias_version": "hand-built",
+    "latency_ms": 0
+   }
+  },
+  {
+   "id": "smoke-player-stat-finals",
+   "question": "How many points did Tatum score in game 4 of the 2024 Finals?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "boxscore_stat",
+    "player",
+    "playoff_game"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "boxscore_stat",
+     "scope": "player",
+     "stat": {
+      "stat": "points",
+      "aggregation": "total"
+     },
+     "game": {
+      "season": "2023-24",
+      "round": "finals",
+      "game_number": 4
+     },
+     "player": {
+      "player_id": 1628369,
+      "name": "Jayson Tatum"
+     }
+    }
+   },
+   "candidates": {
+    "sets": {
+     "player": {
+      "field": "player",
+      "status": "candidates",
+      "candidates": [
+       {
+        "id": "player:1628369",
+        "field": "player",
+        "label": "Jayson Tatum",
+        "matched_text": "Tatum",
+        "span": null,
+        "source": "player_catalog",
+        "alias": null,
+        "match_score": 0.9,
+        "value": {
+         "kind": "player",
+         "player": {
+          "player_id": 1628369,
+          "name": "Jayson Tatum"
+         },
+         "team_ids": [],
+         "first_season": "2017-18",
+         "last_season": "2025-26"
+        }
+       }
+      ],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "team": {
+      "field": "team",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "date": {
+      "field": "date",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "season": {
+      "field": "season",
+      "status": "candidates",
+      "candidates": [
+       {
+        "id": "season:2023-24",
+        "field": "season",
+        "label": "2023-24 season (2024 playoffs)",
+        "matched_text": "2024",
+        "span": null,
+        "source": "pattern",
+        "alias": null,
+        "match_score": 1.0,
+        "value": {
+         "kind": "season",
+         "season": "2023-24",
+         "from_year": 2024
+        }
+       }
+      ],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "round": {
+      "field": "round",
+      "status": "candidates",
+      "candidates": [
+       {
+        "id": "round:finals",
+        "field": "round",
+        "label": "Finals",
+        "matched_text": "Finals",
+        "span": null,
+        "source": "pattern",
+        "alias": null,
+        "match_score": 1.0,
+        "value": {
+         "kind": "round",
+         "round": "finals",
+         "conference": null
+        }
+       }
+      ],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "game_number": {
+      "field": "game_number",
+      "status": "candidates",
+      "candidates": [
+       {
+        "id": "game_number:4",
+        "field": "game_number",
+        "label": "Game 4",
+        "matched_text": "game 4",
+        "span": null,
+        "source": "pattern",
+        "alias": null,
+        "match_score": 1.0,
+        "value": {
+         "kind": "game_number",
+         "game_number": 4
+        }
+       }
+      ],
+      "truncated": false,
+      "unmatched_text": []
+     }
+    },
+    "alias_version": "hand-built",
+    "latency_ms": 0
+   }
+  },
+  {
+   "id": "smoke-series-finals",
+   "question": "Who won the 2023 NBA Finals?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "playoff_series"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "playoff_series",
+     "season": "2022-23",
+     "round": "finals"
+    }
+   },
+   "candidates": {
+    "sets": {
+     "player": {
+      "field": "player",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "team": {
+      "field": "team",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "date": {
+      "field": "date",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "season": {
+      "field": "season",
+      "status": "candidates",
+      "candidates": [
+       {
+        "id": "season:2022-23",
+        "field": "season",
+        "label": "2022-23 season (2023 playoffs)",
+        "matched_text": "2023",
+        "span": null,
+        "source": "pattern",
+        "alias": null,
+        "match_score": 1.0,
+        "value": {
+         "kind": "season",
+         "season": "2022-23",
+         "from_year": 2023
+        }
+       }
+      ],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "round": {
+      "field": "round",
+      "status": "candidates",
+      "candidates": [
+       {
+        "id": "round:finals",
+        "field": "round",
+        "label": "Finals",
+        "matched_text": "Finals",
+        "span": null,
+        "source": "pattern",
+        "alias": null,
+        "match_score": 1.0,
+        "value": {
+         "kind": "round",
+         "round": "finals",
+         "conference": null
+        }
+       }
+      ],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "game_number": {
+      "field": "game_number",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     }
+    },
+    "alias_version": "hand-built",
+    "latency_ms": 0
+   }
+  },
+  {
+   "id": "smoke-postseason-team",
+   "question": "How did the Nuggets do in the 2023 playoffs?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "postseason_summary"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "postseason_summary",
+     "season": "2022-23",
+     "team": {
+      "team_id": 1610612743,
+      "tricode": "DEN",
+      "name": "Denver Nuggets"
+     }
+    }
+   },
+   "candidates": {
+    "sets": {
+     "player": {
+      "field": "player",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "team": {
+      "field": "team",
+      "status": "candidates",
+      "candidates": [
+       {
+        "id": "team:1610612743",
+        "field": "team",
+        "label": "Denver Nuggets",
+        "matched_text": "Nuggets",
+        "span": null,
+        "source": "team_catalog",
+        "alias": null,
+        "match_score": 0.9,
+        "value": {
+         "kind": "team",
+         "team": {
+          "team_id": 1610612743,
+          "tricode": "DEN",
+          "name": "Denver Nuggets"
+         },
+         "valid_from": null,
+         "valid_to": null
+        }
+       }
+      ],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "date": {
+      "field": "date",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "season": {
+      "field": "season",
+      "status": "candidates",
+      "candidates": [
+       {
+        "id": "season:2022-23",
+        "field": "season",
+        "label": "2022-23 season (2023 playoffs)",
+        "matched_text": "2023",
+        "span": null,
+        "source": "pattern",
+        "alias": null,
+        "match_score": 1.0,
+        "value": {
+         "kind": "season",
+         "season": "2022-23",
+         "from_year": 2023
+        }
+       }
+      ],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "round": {
+      "field": "round",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "game_number": {
+      "field": "game_number",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     }
+    },
+    "alias_version": "hand-built",
+    "latency_ms": 0
+   }
+  },
+  {
+   "id": "smoke-year-required",
+   "question": "Lakers vs Celtics on January 23",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "game_search",
+    "clarify",
+    "year_required"
+   ],
+   "expected": {
+    "action": "clarify",
+    "clarify_field": "date"
+   },
+   "candidates": {
+    "sets": {
+     "player": {
+      "field": "player",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "team": {
+      "field": "team",
+      "status": "candidates",
+      "candidates": [
+       {
+        "id": "team:1610612747",
+        "field": "team",
+        "label": "Los Angeles Lakers",
+        "matched_text": "Lakers",
+        "span": null,
+        "source": "team_catalog",
+        "alias": null,
+        "match_score": 0.9,
+        "value": {
+         "kind": "team",
+         "team": {
+          "team_id": 1610612747,
+          "tricode": "LAL",
+          "name": "Los Angeles Lakers"
+         },
+         "valid_from": null,
+         "valid_to": null
+        }
+       },
+       {
+        "id": "team:1610612738",
+        "field": "team",
+        "label": "Boston Celtics",
+        "matched_text": "Celtics",
+        "span": null,
+        "source": "team_catalog",
+        "alias": null,
+        "match_score": 0.9,
+        "value": {
+         "kind": "team",
+         "team": {
+          "team_id": 1610612738,
+          "tricode": "BOS",
+          "name": "Boston Celtics"
+         },
+         "valid_from": null,
+         "valid_to": null
+        }
+       }
+      ],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "date": {
+      "field": "date",
+      "status": "candidates",
+      "candidates": [
+       {
+        "id": "date:0",
+        "field": "date",
+        "label": "January 23 (no year)",
+        "matched_text": "January 23",
+        "span": null,
+        "source": "date_parser",
+        "alias": null,
+        "match_score": 1.0,
+        "value": {
+         "kind": "date",
+         "components": {
+          "kind": "calendar_date",
+          "year": null,
+          "month": 1,
+          "day": 23,
+          "end_year": null,
+          "end_month": null,
+          "end_day": null,
+          "relative": null,
+          "weekday": null,
+          "count": null
+         },
+         "resolved": null,
+         "unresolved_reason": "year_required"
+        }
+       }
+      ],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "season": {
+      "field": "season",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "round": {
+      "field": "round",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "game_number": {
+      "field": "game_number",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     }
+    },
+    "alias_version": "hand-built",
+    "latency_ms": 0
+   }
+  },
+  {
+   "id": "smoke-which-jalen",
+   "question": "How many assists did Jalen have last night?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "boxscore_stat",
+    "clarify",
+    "ambiguous_player"
+   ],
+   "expected": {
+    "action": "clarify",
+    "clarify_field": "player"
+   },
+   "candidates": {
+    "sets": {
+     "player": {
+      "field": "player",
+      "status": "candidates",
+      "candidates": [
+       {
+        "id": "player:1628973",
+        "field": "player",
+        "label": "Jalen Brunson",
+        "matched_text": "Jalen",
+        "span": null,
+        "source": "player_catalog",
+        "alias": null,
+        "match_score": 0.6,
+        "value": {
+         "kind": "player",
+         "player": {
+          "player_id": 1628973,
+          "name": "Jalen Brunson"
+         },
+         "team_ids": [],
+         "first_season": "2018-19",
+         "last_season": "2025-26"
+        }
+       },
+       {
+        "id": "player:1631114",
+        "field": "player",
+        "label": "Jalen Williams",
+        "matched_text": "Jalen",
+        "span": null,
+        "source": "player_catalog",
+        "alias": null,
+        "match_score": 0.6,
+        "value": {
+         "kind": "player",
+         "player": {
+          "player_id": 1631114,
+          "name": "Jalen Williams"
+         },
+         "team_ids": [],
+         "first_season": "2022-23",
+         "last_season": "2025-26"
+        }
+       },
+       {
+        "id": "player:1630224",
+        "field": "player",
+        "label": "Jalen Green",
+        "matched_text": "Jalen",
+        "span": null,
+        "source": "player_catalog",
+        "alias": null,
+        "match_score": 0.6,
+        "value": {
+         "kind": "player",
+         "player": {
+          "player_id": 1630224,
+          "name": "Jalen Green"
+         },
+         "team_ids": [],
+         "first_season": "2021-22",
+         "last_season": "2025-26"
+        }
+       }
+      ],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "team": {
+      "field": "team",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "date": {
+      "field": "date",
+      "status": "candidates",
+      "candidates": [
+       {
+        "id": "date:0",
+        "field": "date",
+        "label": "last night",
+        "matched_text": "last night",
+        "span": null,
+        "source": "date_parser",
+        "alias": null,
+        "match_score": 1.0,
+        "value": {
+         "kind": "date",
+         "components": {
+          "kind": "relative",
+          "year": null,
+          "month": null,
+          "day": null,
+          "end_year": null,
+          "end_month": null,
+          "end_day": null,
+          "relative": "last_night",
+          "weekday": null,
+          "count": null
+         },
+         "resolved": {
+          "start": "2026-09-28",
+          "end": "2026-09-28"
+         },
+         "unresolved_reason": null
+        }
+       }
+      ],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "season": {
+      "field": "season",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "round": {
+      "field": "round",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "game_number": {
+      "field": "game_number",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     }
+    },
+    "alias_version": "hand-built",
+    "latency_ms": 0
+   }
+  },
+  {
+   "id": "smoke-career",
+   "question": "What are LeBron's career points?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "unsupported"
+   ],
+   "expected": {
+    "action": "unsupported",
+    "unsupported_reason": "career_stats"
+   },
+   "candidates": {
+    "sets": {
+     "player": {
+      "field": "player",
+      "status": "candidates",
+      "candidates": [
+       {
+        "id": "player:2544",
+        "field": "player",
+        "label": "LeBron James",
+        "matched_text": "LeBron",
+        "span": null,
+        "source": "player_catalog",
+        "alias": null,
+        "match_score": 0.9,
+        "value": {
+         "kind": "player",
+         "player": {
+          "player_id": 2544,
+          "name": "LeBron James"
+         },
+         "team_ids": [],
+         "first_season": "2003-04",
+         "last_season": "2025-26"
+        }
+       }
+      ],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "team": {
+      "field": "team",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "date": {
+      "field": "date",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "season": {
+      "field": "season",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "round": {
+      "field": "round",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "game_number": {
+      "field": "game_number",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     }
+    },
+    "alias_version": "hand-built",
+    "latency_ms": 0
+   }
+  },
+  {
+   "id": "smoke-per-game",
+   "question": "What did Tatum average in the 2024 Finals?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "unsupported",
+    "per_game"
+   ],
+   "expected": {
+    "action": "unsupported",
+    "unsupported_reason": "multi_game_average"
+   },
+   "candidates": {
+    "sets": {
+     "player": {
+      "field": "player",
+      "status": "candidates",
+      "candidates": [
+       {
+        "id": "player:1628369",
+        "field": "player",
+        "label": "Jayson Tatum",
+        "matched_text": "Tatum",
+        "span": null,
+        "source": "player_catalog",
+        "alias": null,
+        "match_score": 0.9,
+        "value": {
+         "kind": "player",
+         "player": {
+          "player_id": 1628369,
+          "name": "Jayson Tatum"
+         },
+         "team_ids": [],
+         "first_season": "2017-18",
+         "last_season": "2025-26"
+        }
+       }
+      ],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "team": {
+      "field": "team",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "date": {
+      "field": "date",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "season": {
+      "field": "season",
+      "status": "candidates",
+      "candidates": [
+       {
+        "id": "season:2023-24",
+        "field": "season",
+        "label": "2023-24 season (2024 playoffs)",
+        "matched_text": "2024",
+        "span": null,
+        "source": "pattern",
+        "alias": null,
+        "match_score": 1.0,
+        "value": {
+         "kind": "season",
+         "season": "2023-24",
+         "from_year": 2024
+        }
+       }
+      ],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "round": {
+      "field": "round",
+      "status": "candidates",
+      "candidates": [
+       {
+        "id": "round:finals",
+        "field": "round",
+        "label": "Finals",
+        "matched_text": "Finals",
+        "span": null,
+        "source": "pattern",
+        "alias": null,
+        "match_score": 1.0,
+        "value": {
+         "kind": "round",
+         "round": "finals",
+         "conference": null
+        }
+       }
+      ],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "game_number": {
+      "field": "game_number",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     }
+    },
+    "alias_version": "hand-built",
+    "latency_ms": 0
+   }
+  },
+  {
+   "id": "smoke-missing-team",
+   "question": "Did the Sonics play last night?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "game_search",
+    "absent_candidate"
+   ],
+   "expected": {
+    "action": "clarify",
+    "clarify_field": "teams"
+   },
+   "candidates": {
+    "sets": {
+     "player": {
+      "field": "player",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "team": {
+      "field": "team",
+      "status": "no_candidates",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": [
+       "Sonics"
+      ]
+     },
+     "date": {
+      "field": "date",
+      "status": "candidates",
+      "candidates": [
+       {
+        "id": "date:0",
+        "field": "date",
+        "label": "last night",
+        "matched_text": "last night",
+        "span": null,
+        "source": "date_parser",
+        "alias": null,
+        "match_score": 1.0,
+        "value": {
+         "kind": "date",
+         "components": {
+          "kind": "relative",
+          "year": null,
+          "month": null,
+          "day": null,
+          "end_year": null,
+          "end_month": null,
+          "end_day": null,
+          "relative": "last_night",
+          "weekday": null,
+          "count": null
+         },
+         "resolved": {
+          "start": "2026-09-28",
+          "end": "2026-09-28"
+         },
+         "unresolved_reason": null
+        }
+       }
+      ],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "season": {
+      "field": "season",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "round": {
+      "field": "round",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     },
+     "game_number": {
+      "field": "game_number",
+      "status": "not_mentioned",
+      "candidates": [],
+      "truncated": false,
+      "unmatched_text": []
+     }
+    },
+    "alias_version": "hand-built",
+    "latency_ms": 0
+   }
+  }
+ ]
+}

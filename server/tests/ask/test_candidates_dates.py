@@ -86,6 +86,8 @@ def test_calendar_date_without_year_is_never_defaulted(service, question, month,
     ("Lakers games from March 1, 2025 to March 3, 2025", ("2025-03-01", "2025-03-03")),
     ("Lakers games from March 1 to March 3, 2025", ("2025-03-01", "2025-03-03")),
     ("games from December 30, 2025 to January 2", ("2025-12-30", "2026-01-02")),
+    ("games between April 29 and May 2, 2024", ("2024-04-29", "2024-05-02")),
+    ("games between December 30 and January 2, 2025", ("2024-12-30", "2025-01-02")),
     ("games in the past 3 days", ("2026-03-16", "2026-03-18")),
     ("games from two days ago", ("2026-03-16", "2026-03-16")),
     ("Warriors games this weekend", ("2026-03-21", "2026-03-22")),
@@ -102,6 +104,14 @@ def test_long_ranges_are_kept_but_unresolved(service):
     assert candidate.value.unresolved_reason == "range_too_long"
     [candidate] = dates(service, "Games in March 2025").candidates
     assert candidate.value.unresolved_reason == "range_too_long"
+
+
+def test_between_range_without_year_stays_unresolved(service):
+    [candidate] = dates(service, "games between April 29 and May 2").candidates
+    assert candidate.value.resolved is None
+    assert candidate.value.unresolved_reason == "year_required"
+    assert candidate.value.components.year is None
+    assert candidate.value.components.end_year is None
 
 
 def test_impossible_date_is_flagged_not_moved(service):

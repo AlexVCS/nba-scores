@@ -9,6 +9,7 @@ export interface AskSubmission {
   id: number;
   question: string;
   resolution: string | null;
+  context: AskClientContext | null;
 }
 
 export interface AskSessionState {
@@ -32,7 +33,6 @@ let state = INITIAL_STATE;
 let nextId = 1;
 let controller: AbortController | null = null;
 let requester: AskRequester = postAsk;
-let lastContext: AskClientContext | null = null;
 const listeners = new Set<() => void>();
 
 function setState(patch: Partial<AskSessionState>) {
@@ -64,8 +64,7 @@ export const askSession = {
     controller?.abort();
     const abort = new AbortController();
     controller = abort;
-    lastContext = context;
-    const submission: AskSubmission = {id: nextId++, question: trimmed, resolution};
+    const submission: AskSubmission = {id: nextId++, question: trimmed, resolution, context};
     setState({query: trimmed, submission, status: "loading", response: null, revealedGroups: []});
 
     requester({question: trimmed, context, resolution}, abort.signal)
@@ -81,7 +80,7 @@ export const askSession = {
 
   retry() {
     const current = state.submission;
-    if (current) askSession.submit(current.question, {resolution: current.resolution, context: lastContext});
+    if (current) askSession.submit(current.question, {resolution: current.resolution, context: current.context});
   },
 
   reveal(group: string) {
@@ -101,7 +100,6 @@ export const askSession = {
     controller?.abort();
     controller = null;
     requester = postAsk;
-    lastContext = null;
     state = INITIAL_STATE;
     listeners.forEach(listener => listener());
   },

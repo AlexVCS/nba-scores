@@ -1,0 +1,62 @@
+{
+  "questions": 83,
+  "recall": {
+    "player": 1.0,
+    "team": 1.0,
+    "date": 1.0,
+    "season": 1.0,
+    "round": 1.0,
+    "game_number": 1.0
+  },
+  "recall_counts": {
+    "player": [
+      8,
+      8
+    ],
+    "team": [
+      65,
+      65
+    ],
+    "date": [
+      36,
+      36
+    ],
+    "season": [
+      45,
+      45
+    ],
+    "round": [
+      20,
+      20
+    ],
+    "game_number": [
+      1,
+      1
+    ]
+  },
+  "recall_overall": 1.0,
+  "questions_with_every_gold_value": [
+    83,
+    83
+  ],
+  "correct_abstention": [
+    2,
+    2
+  ],
+  "ambiguity_kept_open": [
+    2,
+    2
+  ],
+  "forbidden_candidates_offered": 0,
+  "candidate_set_size": {
+    "median": 2,
+    "max": 9
+  },
+  "latency_ms": {
+    "median": 0.098,
+    "p95": 0.264,
+    "max": 4.167,
+    "index_load": 93.0
+  },
+  "misses": []
+}

@@ -172,8 +172,30 @@ _MONTH_RANGE_WITH_YEARS = re.compile(
     rf"(?P<end_day>\d{{1,2}})(?:st|nd|rd|th)?(?P<end_year>,?\s+\d{{4}})?\b"
 )
 
+_BETWEEN_MONTH_DAYS = re.compile(
+    rf"\bbetween\s+(?P<start_month>{'|'.join(sorted(MONTHS, key=len, reverse=True))})\.?\s+"
+    rf"(?P<start_day>\d{{1,2}})(?:st|nd|rd|th)?(?P<start_year>,?\s+\d{{4}})?\s+and\s+"
+    rf"(?P<end_month>{'|'.join(sorted(MONTHS, key=len, reverse=True))})\.?\s+"
+    rf"(?P<end_day>\d{{1,2}})(?:st|nd|rd|th)?(?P<end_year>,?\s+\d{{4}})?\b"
+)
+
 
 def _month_range_with_years(m: re.Match, today: dt.date) -> list[Hit]:
+    start_month = MONTHS[m.group("start_month")]
+    start_day = int(m.group("start_day"))
+    end_month = MONTHS[m.group("end_month")]
+    end_day = int(m.group("end_day"))
+    start_year = int(m.group("start_year").replace(",", "").strip()) if m.group("start_year") else None
+    end_year = int(m.group("end_year").replace(",", "").strip()) if m.group("end_year") else None
+    if start_year is None and end_year is not None:
+        start_year = end_year - (1 if end_month < start_month else 0)
+    elif start_year is not None and end_year is None:
+        end_year = start_year + (1 if end_month < start_month else 0)
+    hit = range_hit(start_year, start_month, start_day, end_year, end_month, end_day, m.group(0).strip())
+    return [hit] if hit else []
+
+
+def _between_month_days(m: re.Match, today: dt.date) -> list[Hit]:
     start_month = MONTHS[m.group("start_month")]
     start_day = int(m.group("start_day"))
     end_month = MONTHS[m.group("end_month")]
@@ -314,6 +336,7 @@ def _weekday(m: re.Match, today: dt.date) -> list[Hit]:
 PATTERNS: tuple[tuple[re.Pattern, Handler], ...] = tuple((re.compile(p), h) for p, h in (
     (_ISO_RANGE, _iso_range),
     (_MONTH_RANGE_WITH_YEARS, _month_range_with_years),
+    (_BETWEEN_MONTH_DAYS, _between_month_days),
     (rf"\b{_MONTH}\s+{_DAY}\s*(?:-|to|through|until)\s*(?:{_MONTH}\s+)?{_DAY}{_YEAR}\b", _month_day_range),
     (rf"\b{_MONTH}\s+{_DAY}{_YEAR}\b", _month_day),
     (rf"\b{_DAY}\s+(?:of\s+)?{_MONTH}{_YEAR}\b", _day_month),
