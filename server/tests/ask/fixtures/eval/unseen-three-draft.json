@@ -1,5 +1,5 @@
 {
-  "scope": "DRAFT unseen evaluation set three (ADR 0009), not frozen. Labels were authored from the production contract (docs/ask-contract.md, docs/ask-stage2.md, docs/ask-stage3.md, ADRs 0004, 0005, 0011-0014, server/ask/models) without running any interpreter, lookup or provider, and without reading evaluation results. It REQUIRES independent human label review before freezing; debatable labels are tagged 'debatable' and listed in docs/verification/ask-unseen-three-label-notes.md. Not yet exposed to any model run. 179 cases: accept 138, clarify 20, unsupported 21. Per family: game_search 22 (accept 17, clarify 3, unsupported 2); boxscore_stat 24 (accept 18, clarify 3, unsupported 3); playoff_series 19 (accept 16, clarify 2, unsupported 1); postseason_summary 20 (accept 18, clarify 1, unsupported 1); player_season_stats 25 (accept 18, clarify 4, unsupported 3); team_records 20 (accept 16, clarify 2, unsupported 2); season_leaders 23 (accept 17, clarify 3, unsupported 3); career_stats 26 (accept 18, clarify 2, unsupported 6).",
+  "scope": "DRAFT unseen evaluation set three (ADR 0009), not frozen. Labels were authored from the production contract (docs/ask-contract.md, docs/ask-stage2.md, docs/ask-stage3.md, ADRs 0004, 0005, 0011-0014, server/ask/models) without running any interpreter, lookup or provider, and without reading evaluation results. It REQUIRES independent human label review before freezing; debatable labels are tagged 'debatable' and listed in docs/verification/ask-unseen-three-label-notes.md. Not yet exposed to any model run. 179 cases: accept 139, clarify 19, unsupported 21. Per family: game_search 22 (accept 17, clarify 3, unsupported 2); boxscore_stat 24 (accept 18, clarify 3, unsupported 3); playoff_series 19 (accept 16, clarify 2, unsupported 1); postseason_summary 20 (accept 18, clarify 1, unsupported 1); player_season_stats 25 (accept 18, clarify 4, unsupported 3); team_records 20 (accept 16, clarify 2, unsupported 2); season_leaders 23 (accept 18, clarify 2, unsupported 3); career_stats 26 (accept 18, clarify 2, unsupported 6).",
   "cases": [
     {
       "id": "unseen-three-game_search-01",
@@ -361,14 +361,16 @@
             }
           ],
           "location": null
-        }
+        },
+        "also_accept": [
+          "clarify"
+        ]
       },
       "tags": [
         "game_search",
-        "typo",
-        "debatable"
+        "typo"
       ],
-      "label_rationale": "Misspelled team name; the only plausible reading is the Warriors. DEBATABLE: accept vs teams clarification."
+      "label_rationale": "Misspelled team name; the only plausible reading is the Warriors. Reviewed 2026-09-30: accept, and a clarification also counts as correct."
     },
     {
       "id": "unseen-three-game_search-12",
@@ -1109,15 +1111,17 @@
             "name": "Joel Embiid"
           },
           "team": null
-        }
+        },
+        "also_accept": [
+          "clarify"
+        ]
       },
       "tags": [
         "boxscore_stat",
         "player_scope",
-        "typo",
-        "debatable"
+        "typo"
       ],
-      "label_rationale": "Misspelled surname; only Joel Embiid fits. DEBATABLE: accept vs player clarification."
+      "label_rationale": "Misspelled surname; only Joel Embiid fits. Reviewed 2026-09-30: accept, and a clarification also counts as correct."
     },
     {
       "id": "unseen-three-boxscore_stat-17",
@@ -2623,14 +2627,16 @@
             "aggregation": "per_game"
           },
           "team": null
-        }
+        },
+        "also_accept": [
+          "clarify"
+        ]
       },
       "tags": [
         "player_season_stats",
-        "typo",
-        "debatable"
+        "typo"
       ],
-      "label_rationale": "Misspelled surname; only Kevin Durant fits. DEBATABLE: accept vs player clarification."
+      "label_rationale": "Misspelled surname; only Kevin Durant fits. Reviewed 2026-09-30: accept, and a clarification also counts as correct."
     },
     {
       "id": "unseen-three-team_records-01",
@@ -4016,17 +4022,22 @@
       "reference_time": "2026-09-30T12:00:00-04:00",
       "context": {},
       "expected": {
-        "action": "clarify",
-        "clarify_field": "aggregation",
-        "clarify_reason": "ambiguous"
+        "action": "accept",
+        "request": {
+          "intent": "season_leaders",
+          "season": "2013-14",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "points",
+            "aggregation": "per_game"
+          },
+          "limit": 10
+        }
       },
       "tags": [
-        "season_leaders",
-        "clarify",
-        "no_measure",
-        "debatable"
+        "season_leaders"
       ],
-      "label_rationale": "Contract: no measure wording -> clarify. DEBATABLE: the NBA scoring title is by definition per game."
+      "label_rationale": "The NBA scoring title is decided by points per game. Reviewed 2026-09-30: accept per game."
     },
     {
       "id": "unseen-three-player_season_stats-20",

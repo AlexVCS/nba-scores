@@ -5,6 +5,7 @@ in 2019-20?", which states no measure. Python therefore decides whether a measur
 stated, and the interpreter's `aggregation` read is replaced before normalization:
 
 - stated per game ("per game", "a game", "ppg", "average"/"averaged") -> per_game
+- "scoring title" -> per_game: the NBA decides it by points per game
 - stated totals ("total", "totals", "in total", "how many") -> total
 - both stated -> ambiguous (a clarification where the tool needs one measure)
 - nothing stated -> absent; each tool then applies its documented rule
@@ -29,7 +30,7 @@ QUESTION_TIER = "question"
 
 _PER_GAME = re.compile(
     r"\b(?:per[\s-]*game|(?<!\bin )(?:a|each|every)\s+(?:game|night|contest)|per\s+(?:night|contest)|"
-    r"averag(?:e|es|ed|ing)|avg|ppg|rpg|apg|spg|bpg|mpg|topg)\b"
+    r"averag(?:e|es|ed|ing)|avg|ppg|rpg|apg|spg|bpg|mpg|topg|scoring\s+(?:title|crown)s?)\b"
 )
 _TOTAL = re.compile(r"\b(?:totals?|in\s+total|altogether|cumulative)\b")
 _HOW_MANY = re.compile(r"\bhow\s+many\b")

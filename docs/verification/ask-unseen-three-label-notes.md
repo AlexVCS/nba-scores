@@ -15,9 +15,9 @@ no evaluation results or journals were read.
 | postseason_summary | 18 | 1 | 1 | 20 |
 | player_season_stats | 18 | 4 | 3 | 25 |
 | team_records | 16 | 2 | 2 | 20 |
-| season_leaders | 17 | 3 | 3 | 23 |
+| season_leaders | 18 | 2 | 3 | 23 |
 | career_stats | 18 | 2 | 6 | 26 |
-| **All** | **138** | **20** | **21** | **179** |
+| **All** | **139** | **19** | **21** | **179** |
 
 Each non-accept case names one family in its id and tags, as `scripts/ask/release.py`
 and `scripts/ask/tier_gate.py` expect. Unsupported reasons: `other` 12,
@@ -76,7 +76,9 @@ used.
   word. Every aggregation, limit, and career view (rank or totals) matches the Python
   rules.
 
-## Debatable labels (need a human decision)
+## Debatable labels
+
+Reviewed 2026-09-30. The three typo cases stay accept and now list `clarify` in `also_accept`. season_leaders-19 is now accept per game. The other eight keep their draft labels.
 
 | Case | Question | Draft label | Alternative |
 | --- | --- | --- | --- |

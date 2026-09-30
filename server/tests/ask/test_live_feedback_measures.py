@@ -64,6 +64,8 @@ def guard(question, output, candidates=None):
     ("Jokic assists in total in 2023-24", "total"),
     ("Jokic total points and points per game in 2023-24", "both"),
     ("Who scored the most points in a game in 2023-24?", None),
+    ("Who won the scoring title in 2013-14?", "per_game"),
+    ("Who won the scoring crown in 1986-87?", "per_game"),
 ])
 def test_stated_measure_is_read_from_the_question(question, measure):
     assert stated_measure(question) == measure
