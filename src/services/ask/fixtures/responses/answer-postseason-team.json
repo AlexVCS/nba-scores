@@ -45,100 +45,78 @@
       "tricode": "NYK",
       "name": "New York Knicks"
     },
-    "finish": {
-      "value": "champion",
-      "spoiler": true
-    },
+    "finish": "champion",
     "record": {
-      "value": {
-        "wins": 16,
-        "losses": 3
-      },
-      "spoiler": true
+      "wins": 16,
+      "losses": 3
     },
-    "series_won": {
-      "value": 4,
-      "spoiler": true
-    },
-    "rounds": {
-      "value": [
-        {
-          "round": "first_round",
-          "conference": "east",
-          "opponent": {
-            "team_id": 1610612737,
-            "tricode": "ATL",
-            "name": "Atlanta Hawks"
-          },
-          "team_wins": 4,
-          "opponent_wins": 2,
-          "won": true,
-          "series_link": {
-            "kind": "playoff_series",
-            "label": "Open series",
-            "href": "/playoffs/2026/east-conference-first-round-3",
-            "external": false,
-            "spoiler": true
-          }
+    "series_won": 4,
+    "rounds": [
+      {
+        "round": "first_round",
+        "conference": "east",
+        "opponent": {
+          "team_id": 1610612737,
+          "tricode": "ATL",
+          "name": "Atlanta Hawks"
         },
-        {
-          "round": "conference_semifinals",
-          "conference": "east",
-          "opponent": {
-            "team_id": 1610612755,
-            "tricode": "PHI",
-            "name": "Philadelphia 76ers"
-          },
-          "team_wins": 4,
-          "opponent_wins": 0,
-          "won": true,
-          "series_link": null
-        },
-        {
-          "round": "conference_finals",
-          "conference": "east",
-          "opponent": {
-            "team_id": 1610612739,
-            "tricode": "CLE",
-            "name": "Cleveland Cavaliers"
-          },
-          "team_wins": 4,
-          "opponent_wins": 0,
-          "won": true,
-          "series_link": null
-        },
-        {
-          "round": "finals",
-          "conference": null,
-          "opponent": {
-            "team_id": 1610612759,
-            "tricode": "SAS",
-            "name": "San Antonio Spurs"
-          },
-          "team_wins": 4,
-          "opponent_wins": 1,
-          "won": true,
-          "series_link": null
+        "team_wins": 4,
+        "opponent_wins": 2,
+        "won": true,
+        "series_link": {
+          "kind": "playoff_series",
+          "label": "Open series",
+          "href": "/playoffs/2026/east-conference-first-round-3",
+          "external": false,
+          "spoiler": false
         }
-      ],
-      "spoiler": true
-    },
-    "champion": {
-      "value": null,
-      "spoiler": false
-    },
-    "runner_up": {
-      "value": null,
-      "spoiler": false
-    },
-    "series": {
-      "value": [],
-      "spoiler": false
-    }
+      },
+      {
+        "round": "conference_semifinals",
+        "conference": "east",
+        "opponent": {
+          "team_id": 1610612755,
+          "tricode": "PHI",
+          "name": "Philadelphia 76ers"
+        },
+        "team_wins": 4,
+        "opponent_wins": 0,
+        "won": true,
+        "series_link": null
+      },
+      {
+        "round": "conference_finals",
+        "conference": "east",
+        "opponent": {
+          "team_id": 1610612739,
+          "tricode": "CLE",
+          "name": "Cleveland Cavaliers"
+        },
+        "team_wins": 4,
+        "opponent_wins": 0,
+        "won": true,
+        "series_link": null
+      },
+      {
+        "round": "finals",
+        "conference": null,
+        "opponent": {
+          "team_id": 1610612759,
+          "tricode": "SAS",
+          "name": "San Antonio Spurs"
+        },
+        "team_wins": 4,
+        "opponent_wins": 1,
+        "won": true,
+        "series_link": null
+      }
+    ],
+    "champion": null,
+    "runner_up": null,
+    "series": []
   },
   "clarification": null,
   "notice": null,
-  "spoiler_gate": null,
   "links": [
     {
       "kind": "playoff_bracket",

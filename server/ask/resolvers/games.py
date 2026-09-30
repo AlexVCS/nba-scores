@@ -21,8 +21,6 @@ from server.ask.models.response import FinalScore, GameContext, GameDay, GameRes
 from server.ask.resolvers import data
 from server.ask.resolvers.errors import AmbiguousError, ClarificationError, NotFoundError, UnavailableError
 from server.ask.resolvers.output import ResolverOutput, stats_source
-from server.ask.resolvers.spoiler_policy import conditional_playoff_game
-from server.ask.spoilers import game_spoilers, guard
 from server.services.playoffs import infer_round_from_game_id
 from server.utils.boxscore_availability import is_boxscore_available_metadata, is_valid_nba_game_id
 from server.utils.season import nba_today
@@ -106,10 +104,6 @@ class ResolvedGame:
     away: TeamRef
     round: PlayoffRound | None = None
     game_number: int | None = None
-    # True when the teams were found from results (e.g. "Game 3 of the Finals")
-    # rather than named or scheduled; they reveal advancement.
-    participants_inferred: bool = False
-    named_team_ids: tuple[int, ...] = ()
 
     @property
     def game_id(self) -> str:
@@ -155,7 +149,7 @@ def _day_games(day: dt.date) -> list[ResolvedGame]:
             continue
         game = {**raw, "boxscoreAvailable": is_boxscore_available_metadata(game_id, int_or_none(raw.get("gameStatus")))}
         round_, number = _playoff_details(game_id, game)
-        games.append(ResolvedGame(day, game, home, away, round_, number, game_id[2] in ("4", "5")))
+        games.append(ResolvedGame(day, game, home, away, round_, number))
     return games
 
 
@@ -164,14 +158,8 @@ def game_result_item(game: ResolvedGame) -> GameResultItem:
         payload = ScoreboardGame.model_validate(game.game)
     except ValidationError as error:
         raise UnavailableError("upstream_bad_response", f"Scoreboard game {game.game_id} is malformed: {error}") from error
-    # Published Games 5-7 and any team-filtered postseason appearance can
-    # disclose series length or advancement before the score is shown.
-    conditional = conditional_playoff_game(game.game_id, game.game_number, bool(game.game.get("ifNecessary")))
-    protected = conditional or (game.game_id[2] in ("4", "5") and bool(game.named_team_ids))
     item_links = [links.boxscore_link(game.game_id, game.date)] if game.game["boxscoreAvailable"] else []
-    if protected:
-        item_links = [link.model_copy(update={"spoiler": True}) for link in item_links]
-    return GameResultItem(date=game.date, game=payload, spoilers=game_spoilers(game.status), links=item_links, spoiler=protected)
+    return GameResultItem(date=game.date, game=payload, links=item_links)
 
 
 def search_games(dates: DateRange, team_ids: Sequence[int] = (),
@@ -197,7 +185,7 @@ def search_games(dates: DateRange, team_ids: Sequence[int] = (),
         day = dates.start + dt.timedelta(days=offset)
         if day < FIRST_RECORDED_DATE:
             continue
-        matches = [dataclasses.replace(game, named_team_ids=tuple(wanted)) for game in _day_games(day)
+        matches = [game for game in _day_games(day)
                    if wanted <= set(game.team_ids)
                    and (location is None or location.hosts(game.home.team_id, game.date))]
         if matches:
@@ -214,16 +202,8 @@ def search_games(dates: DateRange, team_ids: Sequence[int] = (),
     for team_id in team_ids:
         ref = next(team for game in found for team in (game.home, game.away) if team.team_id == team_id)
         teams.append(ref)
-    protected = any(item.spoiler for day in game_days for item in day.games)
-    result = GamesResult(
-        dates=dates, teams=teams, days=game_days,
-        total_games=guard(len(found), spoiler=protected),
-        hidden_note="Some game listings may reveal a result. Show results to see them." if protected else None,
-    )
-    day_links = tuple(
-        links.scores_link(day.date).model_copy(update={"spoiler": all(item.spoiler for item in day.games)})
-        for day in game_days[:MAX_RESPONSE_LINKS]
-    )
+    result = GamesResult(dates=dates, teams=teams, days=game_days, total_games=len(found))
+    day_links = tuple(links.scores_link(day.date) for day in game_days[:MAX_RESPONSE_LINKS])
     return ResolverOutput(result, day_links, (stats_source(all(game.settled for game in found)),))
 
 
@@ -312,11 +292,11 @@ def game_context(game: ResolvedGame) -> GameContext:
     return GameContext(
         game_id=game.game_id,
         date=game.date,
-        away=guard(game.away, game.participants_inferred and game.away.team_id not in game.named_team_ids),
-        home=guard(game.home, game.participants_inferred and game.home.team_id not in game.named_team_ids),
+        away=game.away,
+        home=game.home,
         season=season_for_game_id(game.game_id),
         season_type=SEASON_TYPES.get(game.game_id[2], "regular_season"),
         round=game.round,
         game_number=game.game_number,
-        final_score=guard(final),
+        final_score=final,
     )

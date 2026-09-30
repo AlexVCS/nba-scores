@@ -127,6 +127,43 @@ class InterpreterUsage(ContractModel):
     cost_usd: float | None = Field(default=None, ge=0)  # list-price estimate
 
 
+TierReadAction = Literal[
+    "accepted",  # this tier's read decided the field
+    "escalated",  # below the tier's accept_min; passed to the next tier
+    "vetoed",  # a confident read that contradicted an earlier selection (ADR 0002)
+    "unused",  # the field was already decided and this read did not contest it
+]
+
+FieldOutcome = Literal[
+    "accepted",  # decided by the first tier that read it
+    "escalated",  # decided by a later tier after an earlier read fell below threshold
+    "vetoed",  # tiers disagreed; the field is clarified, never executed
+    "undecided",  # no tier decided it (every read below threshold or tiers unavailable)
+]
+
+
+class TierRead(ContractModel):
+    """One tier's read of one field. No values, only status and confidence."""
+
+    tier: str = Field(max_length=20)  # "laya", "jev", "luna"
+    status: FieldStatus | Literal["unsupported"]
+    confidence: float | None = Field(default=None, ge=0, le=1)
+    action: TierReadAction
+
+
+class FieldDecision(ContractModel):
+    """Per-field cascade diagnostics (ADRs 0002, 0009, 0010). Dev details and logs only."""
+
+    field: InterpreterField
+    # "lookup", "laya", "jev", "luna", or "veto"; None when no tier decided the field.
+    decided_by: str | None = Field(default=None, max_length=20)
+    # Native confidence of the deciding read (the best pending read when undecided);
+    # None for lookup, vetoes, and tiers without confidences (Luna).
+    confidence: float | None = Field(default=None, ge=0, le=1)
+    outcome: FieldOutcome
+    reads: list[TierRead] = Field(default_factory=list, max_length=4)
+
+
 class InterpreterMetadata(ContractModel):
     adapter: AdapterName
     provider: str = Field(max_length=40)  # "typesafe", "openai"
@@ -136,6 +173,8 @@ class InterpreterMetadata(ContractModel):
     usage: InterpreterUsage = Field(default_factory=InterpreterUsage)
     # Cascade only: interpreter field -> tier ("laya", "jev", "luna") that decided it.
     field_tiers: dict[InterpreterField, str] = Field(default_factory=dict)
+    # Cascade only: how each field was decided, tier by tier.
+    field_decisions: list[FieldDecision] = Field(default_factory=list, max_length=12)
 
 
 class InterpreterInput(ContractModel):

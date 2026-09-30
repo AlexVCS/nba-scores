@@ -82,27 +82,25 @@ def test_exact_date_is_zero_model(tmp_path, monkeypatch):
     assert lookup.calls == adapter.calls == 0
 
 
-def test_answer_and_not_found_preserve_identical_resolver_gate(tmp_path, monkeypatch):
-    fixture = Path("src/services/ask/fixtures/responses/answer-conditional-game-hidden.json")
+def test_answer_and_not_found_are_returned_without_hidden_state(tmp_path, monkeypatch):
+    # Asking is consent (ADR 0006): a conditional game's answer, or the record
+    # that it was never played, comes back as is.
+    fixture = Path("src/services/ask/fixtures/responses/answer-games-conditional.json")
     conditional = AskResponse.model_validate_json(fixture.read_text())
-    known = AskResponse.model_validate_json(Path(
-        "src/services/ask/fixtures/responses/answer-games-last-week.json").read_text())
-    gate = conditional.spoiler_gate
-    assert gate is not None
     coordinator, _, _ = pipeline(tmp_path, b.lookup_result([]), output())
     query = AskQuery(question="Games on 2024-06-17?")
     monkeypatch.setattr("server.ask.pipeline.resolve", lambda request: ResolverOutput(
-        known.result, tuple(known.links), tuple(known.sources), gate))
+        conditional.result, tuple(conditional.links), tuple(conditional.sources)))
     answer = coordinator.answer(query)
+    assert answer.outcome == "answer" and answer.result == conditional.result
+
     def missing(request):
-        error = NotFoundError("no_games", "no_matching_games")
-        error.spoiler_gate = gate
-        raise error
+        raise NotFoundError("no_games", "no_matching_games")
     monkeypatch.setattr("server.ask.pipeline.resolve", missing)
     absent, _, _ = pipeline(tmp_path / "other", b.lookup_result([]), output())
     not_found = absent.answer(query)
-    assert answer.outcome == "answer" and not_found.outcome == "not_found"
-    assert answer.spoiler_gate == not_found.spoiler_gate == gate
+    assert not_found.outcome == "not_found" and not_found.notice.code == "no_games"
+    assert "spoiler_gate" not in answer.model_dump() and "spoiler_gate" not in not_found.model_dump()
 
 
 def test_parse_cache_saves_model_call_and_uses_ny_day(tmp_path, monkeypatch):

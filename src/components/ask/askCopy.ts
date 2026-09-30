@@ -17,9 +17,10 @@ export const ASK_DIAGNOSTICS_NOTE = "We kept an anonymous note of the question t
 export const ASK_SCOPE_COPY =
   "Ask about games on a date or within a week, one player’s stats in one game, or a playoff series. Include the year. Career totals and all-time comparisons aren’t supported.";
 
-export const ASK_HIDDEN_COPY = "Results stay hidden until you reveal them";
+// Asking is consent (ADR 0006): say so before the first question, so people avoiding spoilers aren't surprised.
+export const ASK_ANSWERS_SHOWN_COPY = "Answers show as soon as you ask, even when results are hidden.";
 
-// Always shown, including while results are hidden, so none may name a playoff team or matchup: the mockup's
+// Shown before anything is asked, including while results are hidden, so none may name a playoff team or matchup: the mockup's
 // "Did the Pistons beat the Magic in the 2026 first round?" would reveal that both teams qualified and met.
 export const ASK_EXAMPLES = [
   {label: "Stats", question: "How many points did James Harden score on March 9, 2026?"},

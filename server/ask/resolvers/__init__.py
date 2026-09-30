@@ -34,7 +34,7 @@ Request types:
 
 from __future__ import annotations
 
-import dataclasses
+from typing import Callable
 
 from server.ask.models.request import (
     AskRequest,
@@ -47,8 +47,8 @@ from server.ask.resolvers import boxscore, games, playoffs
 from server.ask.resolvers.errors import AmbiguousError, ClarificationError, NotFoundError
 from server.ask.resolvers.games import ResolvedGame
 from server.ask.resolvers.output import ResolverOutput, stats_source
-from server.ask.resolvers.spoiler_policy import request_spoiler_gate
-from server.ask import links
+from server.ask.resolvers.spoiler_policy import outcome_may_reveal_result
+from server.ask import links, tools
 
 
 def resolve_boxscore_game(request: BoxscoreStatRequest) -> ResolvedGame:
@@ -93,7 +93,7 @@ def resolve_boxscore_game(request: BoxscoreStatRequest) -> ResolvedGame:
     missing = [team_id for team_id in team_ids if team_id not in game.team_ids]
     if missing:
         raise NotFoundError("no_games", "team_not_in_game", details={"gameId": game.game_id, "teamIds": missing})
-    return dataclasses.replace(game, named_team_ids=tuple(team_ids))
+    return game
 
 
 def _boxscore(request: BoxscoreStatRequest) -> ResolverOutput:
@@ -106,15 +106,17 @@ def _boxscore(request: BoxscoreStatRequest) -> ResolverOutput:
         result = boxscore.team_stat(game, stat, team_ids, aggregation)
     else:
         result = boxscore.stat_leaders(game, stat, request.team.team_id if request.team else None, aggregation)
-    game_links = tuple(link.model_copy(update={"spoiler": game.participants_inferred and not set(game.team_ids) <= set(game.named_team_ids)})
-                       for link in (links.boxscore_link(game.game_id, game.date), links.scores_link(game.date)))
+    # Links to the game that was asked about are part of the answer, not spoilers.
+    game_links = (links.boxscore_link(game.game_id, game.date), links.scores_link(game.date))
     return ResolverOutput(result, game_links, (stats_source(game.settled),))
 
 
 def resolve(request: AskRequest) -> ResolverOutput:
     """Execute one validated request. Raises ``errors.ResolverError`` subclasses."""
-    gate = request_spoiler_gate(request)
-    if gate and isinstance(request, BoxscoreStatRequest):
+    # Asking is consent, so answers are never gated (ADR 0006). Clarifications
+    # are not answers: when a lookup-dependent choice list could reveal a
+    # result, ask for teams first, before any result lookup.
+    if isinstance(request, BoxscoreStatRequest) and outcome_may_reveal_result(request):
         selector = request.game
         named_teams = bool(selector.teams or request.team)
         unique_series = bool(selector.season and selector.game_number and (
@@ -127,26 +129,37 @@ def resolve(request: AskRequest) -> ResolverOutput:
             # A lookup-dependent clarification would reveal whether a
             # conditional playoff game took place on this date or in this round.
             raise ClarificationError("teams", "missing", "hidden_game_needs_teams")
-    try:
-        output = _resolve(request)
-    except NotFoundError as error:
-        error.spoiler_gate = gate
-        raise
-    return dataclasses.replace(output, spoiler_gate=gate)
+    return _resolve(request)
+
+
+def _search_games(request: GameSearchRequest) -> ResolverOutput:
+    return games.search_games(request.dates, [team.team_id for team in request.teams], request.location)
+
+
+def _series(request: PlayoffSeriesRequest) -> ResolverOutput:
+    return playoffs.series_result(request.season, [team.team_id for team in request.teams], request.round, request.conference)
+
+
+def _postseason(request: PostseasonSummaryRequest) -> ResolverOutput:
+    if request.team is None:
+        return playoffs.league_postseason(request.season)
+    return playoffs.team_postseason(request.season, request.team)
+
+
+# Executor per registered tool (`server.ask.tools`); `test_tools.py` checks coverage.
+EXECUTORS: dict[str, Callable[..., ResolverOutput]] = {
+    "game_search": _search_games,
+    "boxscore_stat": _boxscore,
+    "playoff_series": _series,
+    "postseason_summary": _postseason,
+}
 
 
 def _resolve(request: AskRequest) -> ResolverOutput:
-    if isinstance(request, GameSearchRequest):
-        return games.search_games(request.dates, [team.team_id for team in request.teams], request.location)
-    if isinstance(request, BoxscoreStatRequest):
-        return _boxscore(request)
-    if isinstance(request, PlayoffSeriesRequest):
-        return playoffs.series_result(request.season, [team.team_id for team in request.teams], request.round, request.conference)
-    if isinstance(request, PostseasonSummaryRequest):
-        if request.team is None:
-            return playoffs.league_postseason(request.season)
-        return playoffs.team_postseason(request.season, request.team)
-    raise TypeError(f"Unsupported request {type(request).__name__}")
+    tool = tools.route(getattr(request, "intent", ""))
+    if tool is None or not isinstance(request, tool.request_model):
+        raise TypeError(f"Unsupported request {type(request).__name__}")
+    return EXECUTORS[tool.name](request)
 
 
-__all__ = ["AmbiguousError", "NotFoundError", "ResolverOutput", "resolve", "resolve_boxscore_game"]
+__all__ = ["EXECUTORS", "AmbiguousError", "NotFoundError", "ResolverOutput", "resolve", "resolve_boxscore_game"]

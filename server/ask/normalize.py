@@ -24,6 +24,7 @@ from zoneinfo import ZoneInfo
 
 from pydantic import ValidationError
 
+from server.ask import tools
 from server.ask.models.candidates import CandidateLookupResult
 from server.ask.models.common import (
     MAX_GAME_SEARCH_DAYS,
@@ -58,23 +59,15 @@ CANDIDATE_SET_FOR = {
     "location": "location",
 }
 CLOSED_VALUES = {
-    "intent": set(get_args(Intent)),
+    "intent": set(tools.REGISTRY),
     "stat_scope": set(get_args(StatScope)),
     "stat": set(get_args(Stat)),
     "aggregation": set(get_args(Aggregation)),
 }
 
-# Fields each intent reads. A field outside this set is ignored, so a stray value on an
-# irrelevant field never changes the request (and never blocks it).
-RELEVANT_FIELDS: dict[str, frozenset[str]] = {
-    "game_search": frozenset({"date", "teams", "location"}),
-    "boxscore_stat": frozenset(
-        {"stat_scope", "stat", "aggregation", "player", "teams", "target_team", "date", "season", "round",
-         "game_number"}
-    ),
-    "playoff_series": frozenset({"season", "teams", "round"}),
-    "postseason_summary": frozenset({"season", "teams"}),
-}
+# Fields each tool reads (`server.ask.tools`). A field outside this set is ignored, so a
+# stray value on an irrelevant field never changes the request (and never blocks it).
+RELEVANT_FIELDS: dict[str, frozenset[str]] = {tool.name: tool.fields for tool in tools.TOOLS}
 
 # Entity fields in the order they are asked about ahead of an ambiguous intent.
 SHARED_CLARIFY_ORDER = ("teams", "player", "season", "date", "round", "game_number")
@@ -271,12 +264,10 @@ class Normalizer:
     def _build(self, output, candidates, context) -> NormalizationResult:
         self._clarify_shared_field_first(output)
         intent = self._require(output, "intent")[0]
-        builder = {
-            "game_search": self._game_search,
-            "boxscore_stat": self._boxscore,
-            "playoff_series": self._series,
-            "postseason_summary": self._postseason,
-        }[intent]
+        tool = tools.route(intent)
+        if tool is None:
+            raise _Invalid(f"intent {intent!r} is not a registered tool")
+        builder = self.builders()[tool.name]
         try:
             request = builder(output, candidates, context)
         except ValidationError as exc:
@@ -284,6 +275,15 @@ class Normalizer:
         if isinstance(request, NormalizationResult):
             return request
         return NormalizationResult(status="valid", request=request)
+
+    def builders(self) -> dict[str, Any]:
+        """Request builder per registered tool; `test_tools.py` checks coverage."""
+        return {
+            "game_search": self._game_search,
+            "boxscore_stat": self._boxscore,
+            "playoff_series": self._series,
+            "postseason_summary": self._postseason,
+        }
 
     def _game_search(self, output, candidates, context):
         dates = self._dates(output, candidates, context, required=True)

@@ -285,8 +285,12 @@ def test_cache_label_tracks_thresholds():
 
 
 def test_build_cascade_orders_configured_tiers():
-    config = AskConfig(api_key="sk", typesafe_api_key="ts", laya_base_url="http://laya.railway.internal/v1/systemone")
+    config = AskConfig(api_key="sk", typesafe_api_key="ts", laya_base_url="http://laya.railway.internal/v1/systemone",
+                       dev=True)
     assert [t.name for t in build_cascade(config).tiers] == ["laya", "jev", "luna"]
+    # Production never builds Laya, even with LAYA_BASE_URL set (ADR 0007).
+    production = AskConfig(api_key="sk", typesafe_api_key="ts", laya_base_url="http://laya.railway.internal/v1/systemone")
+    assert [t.name for t in build_cascade(production).tiers] == ["jev", "luna"]
     # Laya stays out of production while LAYA_BASE_URL is unset (ADR 0007).
     assert [t.name for t in build_cascade(AskConfig(api_key="sk", typesafe_api_key="ts")).tiers] == ["jev", "luna"]
     with pytest.raises(RuntimeError):
@@ -416,3 +420,81 @@ def test_undecided_target_team_is_clarified_as_teams():
                          fallback_enabled=False, remaining_budget_usd=1, remaining_ms=20_000)
     decision = POLICY.decide(state)
     assert (decision.action, decision.field) == ("clarify", "teams")
+
+
+# -- per-field tier diagnostics (ADRs 0002, 0009, 0010) -------------------------------
+
+def decisions(out):
+    return {d.field: d for d in out.metadata.field_decisions}
+
+
+def test_diagnostics_record_accepted_fields_with_native_confidence():
+    jev = Fake("jev", sel("intent", "game_search", confidence=0.97), sel("date", "date:0", confidence=0.91),
+               sel("teams", CLE.id, confidence=0.93))
+    out = cascade(jev, Fake("luna")).interpret(REQUEST)
+    got = decisions(out)
+    assert list(got) == ["intent", "teams", "date", "location"]
+    assert (got["intent"].decided_by, got["intent"].confidence, got["intent"].outcome) == ("jev", 0.97, "accepted")
+    assert [(r.tier, r.status, r.confidence, r.action) for r in got["date"].reads] == [
+        ("jev", "selected", 0.91, "accepted")]
+    assert (got["location"].decided_by, got["location"].outcome, got["location"].reads) == ("lookup", "accepted", [])
+    assert {name: d.decided_by for name, d in got.items()} == out.metadata.field_tiers
+
+
+def test_diagnostics_record_escalation_to_luna():
+    jev = Fake("jev", sel("intent", "game_search"), sel("date", "date:0"), sel("teams", CLE.id, confidence=0.3))
+    luna = Fake("luna", sel("intent", "game_search", confidence=None), sel("teams", CLE.id, confidence=None))
+    got = decisions(cascade(jev, luna).interpret(REQUEST))
+    teams = got["teams"]
+    assert (teams.decided_by, teams.confidence, teams.outcome) == ("luna", None, "escalated")
+    assert [(r.tier, r.confidence, r.action) for r in teams.reads] == [("jev", 0.3, "escalated"), ("luna", None, "accepted")]
+    # Luna's agreeing intent read does not change a field Jev already accepted.
+    assert [(r.tier, r.action) for r in got["intent"].reads] == [("jev", "accepted"), ("luna", "unused")]
+    assert got["intent"].outcome == "accepted"
+
+
+def test_diagnostics_record_vetoes():
+    jev = Fake("jev", sel("intent", "game_search"), sel("teams", CLE.id), sel("date", "date:0", confidence=0.3))
+    luna = Fake("luna", sel("intent", "game_search", confidence=None), sel("teams", BOS.id, confidence=None),
+                sel("date", "date:0", confidence=None))
+    teams = decisions(cascade(jev, luna).interpret(REQUEST))["teams"]
+    assert (teams.decided_by, teams.confidence, teams.outcome) == ("veto", None, "vetoed")
+    assert [(r.tier, r.confidence, r.action) for r in teams.reads] == [("jev", 0.95, "accepted"), ("luna", None, "vetoed")]
+
+
+def test_diagnostics_mark_fields_no_tier_decided_when_luna_is_unavailable():
+    jev = Fake("jev", sel("intent", "game_search"), sel("date", "date:0"), sel("teams", CLE.id, confidence=0.4))
+    luna = Fake("luna", outcome="unavailable")
+    out = cascade(jev, luna).interpret(REQUEST)
+    teams = decisions(out)["teams"]
+    assert (teams.decided_by, teams.confidence, teams.outcome) == (None, 0.4, "undecided")
+    assert "teams" not in out.metadata.field_tiers
+    assert decide(out).action == "clarify"
+
+
+def test_diagnostics_when_jev_is_unavailable_show_only_luna():
+    jev = Fake("jev", outcome="unavailable")
+    luna = Fake("luna", sel("intent", "game_search", confidence=None), sel("date", "date:0", confidence=None),
+                sel("teams", CLE.id, confidence=None))
+    out = cascade(jev, luna).interpret(REQUEST)
+    got = decisions(out)
+    assert {d.decided_by for name, d in got.items() if name != "location"} == {"luna"}
+    assert all(d.outcome == "accepted" and [r.tier for r in d.reads] == ["luna"]
+               for name, d in got.items() if name != "location")
+    assert decide(out).action == "accept"
+
+
+def test_diagnostics_record_an_unsupported_intent():
+    jev = Fake("jev", sel("intent", "game_search", confidence=0.4))
+    luna = Fake("luna", outcome="unsupported", reason="career_stats")
+    got = decisions(cascade(jev, luna).interpret(REQUEST))
+    assert list(got) == ["intent"]
+    assert (got["intent"].decided_by, got["intent"].outcome) == ("luna", "escalated")
+    assert [(r.tier, r.status, r.action) for r in got["intent"].reads] == [
+        ("jev", "selected", "escalated"), ("luna", "unsupported", "accepted")]
+
+
+def test_diagnostics_carry_no_candidate_values():
+    jev = Fake("jev", sel("intent", "game_search"), sel("date", "date:0"), sel("teams", CLE.id))
+    dumped = json.dumps([d.model_dump(mode="json") for d in cascade(jev).interpret(REQUEST).metadata.field_decisions])
+    assert CLE.id not in dumped and "date:0" not in dumped

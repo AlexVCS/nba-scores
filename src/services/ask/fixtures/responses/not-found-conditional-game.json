@@ -60,10 +60,6 @@
     "unsupported_reason": null,
     "diagnostics_recorded": false
   },
-  "spoiler_gate": {
-    "title": "Results hidden",
-    "message": "Whether this game was played would reveal how the series went. Show results to see the answer."
-  },
   "links": [],
   "suggestions": [],
   "sources": [

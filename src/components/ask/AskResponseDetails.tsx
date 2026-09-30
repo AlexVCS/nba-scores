@@ -9,7 +9,7 @@ interface AskResponseDetailsProps {
 }
 
 function AskResponseDetails({interpreter}: AskResponseDetailsProps) {
-  const {model_called: modelCalled, cache_hit: cacheHit, adapter, model, field_tiers: fieldTiers = {}} = interpreter;
+  const {model_called: modelCalled, cache_hit: cacheHit, adapter, model, field_tiers: fieldTiers = {}, field_decisions: fieldDecisions = []} = interpreter;
   const decisions = Object.entries(fieldTiers);
   const reportedModel = Boolean(model) || modelCalled || (cacheHit && Boolean(adapter));
 
@@ -33,6 +33,22 @@ function AskResponseDetails({interpreter}: AskResponseDetailsProps) {
                 <dt>Decided by</dt>
                 <dd className="font-semibold text-hw-ink">
                   {decisions.map(([field, tier]) => `${field.replace("_", " ")}: ${TIER_LABELS[tier] ?? tier}`).join(" · ")}
+                </dd>
+              </>
+            )}
+            {fieldDecisions.length > 0 && (
+              <>
+                <dt>Field decisions</dt>
+                <dd className="font-semibold text-hw-ink">
+                  <ul>
+                    {fieldDecisions.map(decision => (
+                      <li key={decision.field}>
+                        {decision.field.replace("_", " ")}: {decision.decided_by ? TIER_LABELS[decision.decided_by] ?? decision.decided_by : "Undecided"}
+                        {decision.confidence !== null && `, ${decision.confidence.toFixed(2)}`}
+                        {`, ${decision.outcome}`}
+                      </li>
+                    ))}
+                  </ul>
                 </dd>
               </>
             )}

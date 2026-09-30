@@ -27,12 +27,18 @@ absent, the later read replaces it; a claim backed by unmatched lookup text stan
 The merged output drops confidence from decided fields and keeps it on undecided ones.
 Paired with `CASCADE_POLICY_THRESHOLDS` (accept_min=1.0), the cascade policy then
 clarifies any field no tier decided and never executes a low-confidence read.
+
+Diagnostics (ADRs 0002, 0009): `metadata.field_tiers` names the tier that decided each
+field, and `metadata.field_decisions` adds each tier's read of it (status, native
+confidence, and whether it was accepted, escalated, vetoed, or unused) plus the field's
+outcome. They carry no candidate values, question text, or provider output.
 """
 
 from __future__ import annotations
 
 import time
 from dataclasses import dataclass, field
+from typing import get_args
 
 from server.ask.interpreters.cascade import PolicyThresholds
 from server.ask.models.candidates import (
@@ -43,11 +49,14 @@ from server.ask.models.candidates import (
 )
 from server.ask.models.interpreter import (
     INTERPRETER_TO_CANDIDATE_FIELD,
+    FieldDecision,
     FieldInterpretation,
     InterpreterInput,
     InterpreterMetadata,
     InterpreterOutput,
+    InterpreterField,
     InterpreterUsage,
+    TierRead,
 )
 from server.ask.normalize import relevant_fields
 from server.ask.protocols import InterpreterAdapter
@@ -55,6 +64,9 @@ from server.utils.season import get_nba_season
 
 # Any field that still carries a confidence after merging was not decided by a tier.
 CASCADE_POLICY_THRESHOLDS = PolicyThresholds(accept_min=1.0, clarify_min=0.0)
+
+# Diagnostics order: the contract's interpreter fields.
+FIELD_ORDER: tuple[str, ...] = get_args(InterpreterField)
 
 # Fields that exist only when lookup found text for them ("in <city>"; a target team
 # needs a team name). With nothing mentioned the field is absent by construction; no
@@ -72,6 +84,15 @@ class Tier:
 
 
 @dataclass
+class _Read:
+    tier: str
+    status: str
+    confidence: float | None
+    action: str  # TierReadAction before vetoes are settled
+    contested: bool = False  # contradicted an earlier selection; "vetoed" if the veto stands
+
+
+@dataclass
 class _Merge:
     decided: dict[str, FieldInterpretation] = field(default_factory=dict)
     decided_by: dict[str, str] = field(default_factory=dict)
@@ -86,6 +107,10 @@ class _Merge:
     vetoing_options: dict[str, list[str]] = field(default_factory=dict)
     # Models that actually made a provider call, in cascade order.
     called: list[str] = field(default_factory=list)
+    # Every tier's read per field, in cascade order, for diagnostics.
+    reads: dict[str, list[_Read]] = field(default_factory=dict)
+    # Fields the merged output reports; None until `_fields` (or an early return) sets it.
+    reported: set[str] | None = None
 
 
 def _confident(tier: Tier, read: FieldInterpretation) -> bool:
@@ -164,6 +189,7 @@ class TieredAdapter:
         for read in output.fields:
             name = read.field
             confident = _confident(tier, read)
+            contested = False
             if confident and read.status in ("selected", "absent", "ambiguous"):
                 for earlier, accepted in merge.vetoers.get(name, []):
                     if not accepted and tier.accept_min is not None:
@@ -171,13 +197,21 @@ class TieredAdapter:
                     if read.status == "ambiguous":
                         options = merge.vetoing_options.setdefault(name, [])
                         options.extend(v for v in read.alternatives if v not in options)
+                        contested = True
                     elif read.status != "selected" or not _same(earlier.selected, read.selected):
                         merge.vetoed.add(name)
+                        contested = True
+            trail = merge.reads.setdefault(name, [])
             if name in merge.decided:
+                action = "unused"
                 if confident and read.status == "absent" and self._unfounded_no_match(merge, name, candidates):
                     merge.decided[name] = read.model_copy(update={"confidence": None})
                     merge.decided_by[name] = tier.name
+                    action = "accepted"
+                trail.append(_Read(tier.name, read.status, read.confidence, action, contested))
                 continue
+            trail.append(_Read(tier.name, read.status, read.confidence,
+                               "accepted" if confident else "escalated", contested))
             if confident:
                 merge.decided[name] = read.model_copy(update={"confidence": None})
                 merge.decided_by[name] = tier.name
@@ -247,6 +281,7 @@ class TieredAdapter:
             needed = self._needed(merge)
             fields = {name: read for name, read in fields.items() if name in needed}
             merge.decided_by = {name: tier for name, tier in merge.decided_by.items() if name in needed}
+        merge.reported = set(fields)
         return list(fields.values())
 
     # -- InterpreterAdapter -----------------------------------------------------------
@@ -293,6 +328,9 @@ class TieredAdapter:
             last = output
             if output.outcome == "unsupported":
                 merge.decided_by = {"intent": tier.name}
+                merge.reported = {"intent"}
+                merge.reads.setdefault("intent", []).append(
+                    _Read(tier.name, "unsupported", output.unsupported_confidence, "accepted"))
                 return self._result(output.model_copy(update={"fields": []}), started, calls, tokens_in,
                                     spent if cost_known else None, merge)
             self._absorb(merge, tier, output, request.candidates)
@@ -322,7 +360,38 @@ class TieredAdapter:
             usage=InterpreterUsage(input_tokens=tokens_in or None, provider_calls=calls,
                                    cost_usd=cost if calls else None),
             field_tiers=dict(merge.decided_by),
+            field_decisions=self._decisions(merge),
         )
+
+    @staticmethod
+    def _decisions(merge: _Merge) -> list[FieldDecision]:
+        """Per-field diagnostics for the fields the merged output reports."""
+        reported = merge.reported if merge.reported is not None else {*merge.decided_by, *merge.pending}
+        names = [name for name in FIELD_ORDER if name in reported]
+        decisions = []
+        for name in names:
+            by = merge.decided_by.get(name)
+            vetoed = by == "veto"
+            reads = [TierRead(tier=r.tier, status=r.status, confidence=r.confidence,
+                              action="vetoed" if vetoed and r.contested else r.action)
+                     for r in merge.reads.get(name, [])]
+            confidence = None
+            if by is None:
+                outcome = "undecided"
+                known = [r.confidence for r in reads if r.confidence is not None]
+                confidence = max(known) if known else None
+            elif vetoed:
+                outcome = "vetoed"
+            elif by == "lookup":
+                outcome = "accepted"
+            else:
+                index = max((i for i, r in enumerate(reads) if r.tier == by and r.action == "accepted"), default=None)
+                confidence = reads[index].confidence if index is not None else None
+                escalated = index is not None and any(r.action == "escalated" for r in reads[:index])
+                outcome = "escalated" if escalated else "accepted"
+            decisions.append(FieldDecision(field=name, decided_by=by, confidence=confidence,
+                                           outcome=outcome, reads=reads[:4]))
+        return decisions
 
     def _result(self, output: InterpreterOutput, started: float, calls: int, tokens_in: int,
                 cost: float | None, merge: _Merge) -> InterpreterOutput:

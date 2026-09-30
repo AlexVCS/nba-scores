@@ -5,6 +5,7 @@ from __future__ import annotations
 import datetime as dt
 import hashlib
 import json
+import logging
 import re
 import time
 import uuid
@@ -16,10 +17,9 @@ from server.ask.cache import AskCache
 from server.ask.config import AskConfig
 from server.ask.diagnostics import AskDiagnostics, DiagnosticEvent
 from server.ask.interpreters.cascade import ThresholdCascadePolicy
-from server.ask.interpreters.jev import JevAdapter
-from server.ask.interpreters.laya import LayaAdapter
-from server.ask.interpreters.openai_responses import INSTRUCTIONS, OpenAIConfig, OpenAIResponsesAdapter
-from server.ask.interpreters.tiered import CASCADE_POLICY_THRESHOLDS, Tier, TieredAdapter
+from server.ask.interpreters.factory import build_cascade, build_policy
+from server.ask.interpreters.openai_responses import INSTRUCTIONS
+from server.ask.interpreters.tiered import TieredAdapter
 from server.ask.models.common import NEW_YORK, canonical_json
 from server.ask.models.interpreter import InterpreterInput, InterpreterOutput
 from server.ask.models.request import AskContext, AskRequest, BoxscoreStatRequest, GameSearchRequest, GameSelector, StatSelection
@@ -31,6 +31,8 @@ from server.ask.resolution import PendingResolution, ResolutionStore
 from server.ask.resolvers import resolve
 from server.ask.resolvers.errors import AmbiguousError, ClarificationError, NotFoundError, UnavailableError, UnsupportedError
 
+
+logger = logging.getLogger(__name__)
 
 _EXACT_DATE = re.compile(r"^(?:games|scores)(?: on| for)? (\d{4}-\d{2}-\d{2})\??$", re.IGNORECASE)
 _EXACT_LEADERS = re.compile(r"^(?:who led in|leaders? in|most) (points|rebounds|assists|steals|blocks)\??$", re.IGNORECASE)
@@ -50,8 +52,8 @@ class AskPipeline:
         self.adapter = adapter
         if policy is None:
             cascade = adapter is None or isinstance(adapter, TieredAdapter)
-            policy = ThresholdCascadePolicy(primary_model=self.config.primary_model,
-                                            thresholds=CASCADE_POLICY_THRESHOLDS if cascade else None)
+            # The same policy the release evaluation drives (`factory.build_policy`).
+            policy = build_policy() if cascade else ThresholdCascadePolicy(primary_model=self.config.primary_model)
         self.policy = policy
         self.cache = cache if cache is not None else AskCache(max_entries=self.config.cache_max_entries, version=self.config.cache_version)
         self.budget = budget if budget is not None else DailyBudget(self.config.state_dir, self.config.daily_budget_usd)
@@ -72,18 +74,21 @@ class AskPipeline:
                           game_id=client.game_id if client else None,
                           playoff_season=client.playoff_season if client else None)
 
-    @staticmethod
-    def _info(*, called: bool = False, hit: bool = False, adapter=None,
+    def _info(self, *, called: bool = False, hit: bool = False, adapter=None,
               output: InterpreterOutput | None = None) -> InterpreterInfo:
         metadata = output.metadata if output is not None else None
         field_tiers = dict(metadata.field_tiers) if metadata else {}
         first = adapter.tiers[0].name if isinstance(adapter, TieredAdapter) else None
+        # Per-field tier details are development-only (ADR 0010); production responses
+        # carry neither the tiers nor the confidences.
+        details = self.config.dev and metadata is not None
         return InterpreterInfo(
             model_called=called, cache_hit=hit,
             adapter=metadata.adapter if metadata else adapter.name if adapter else None,
             model=(metadata.resolved_model or metadata.model) if metadata else adapter.model if adapter else None,
             fallback_used=first is not None and any(tier not in (first, "veto") for tier in field_tiers.values()),
-            field_tiers=field_tiers,
+            field_tiers=field_tiers if details else {},
+            field_decisions=list(metadata.field_decisions) if details else [],
         )
 
     @staticmethod
@@ -179,10 +184,10 @@ class AskPipeline:
             info = info.model_copy(update={"cache_hit": info.cache_hit or hit})
             return self._response(question, "answer", info, interpretation=readout,
                                   result=output.result, links=list(output.links), sources=list(output.sources),
-                                  spoiler_gate=output.spoiler_gate, suggestions=suggestions(request))
+                                  suggestions=suggestions(request))
         except NotFoundError as error:
             return self._response(question, "not_found", info, interpretation=readout,
-                                  notice=notice(error.code, reason=error.reason), spoiler_gate=error.spoiler_gate)
+                                  notice=notice(error.code, reason=error.reason))
         except (AmbiguousError, ClarificationError) as error:
             return self._response(question, "needs_clarification", info, interpretation=readout,
                                   clarification={"field": error.field, "reason": error.clarify_reason,
@@ -222,6 +227,7 @@ class AskPipeline:
             for _ in range(3):
                 output, hit = self._interpret(question, context, candidates, deadline)
                 cache_hit = cache_hit or hit
+                _log_decisions(output, hit)
                 any_call = any_call or (not hit and output.metadata.usage.provider_calls > 0)
                 normalized = self.normalizer.normalize(output, candidates, context) if output.outcome == "interpreted" else None
                 attempts.append(CascadeAttempt(output=output, normalization=normalized))
@@ -290,21 +296,15 @@ class AskPipeline:
             return False
 
 
-def build_cascade(config: AskConfig) -> TieredAdapter:
-    """Production cascade (ADR 0002): Laya, then Jev, then Luna. Unconfigured tiers are skipped."""
-    tiers: list[Tier] = []
-    if config.laya_base_url:
-        tiers.append(Tier("laya", LayaAdapter(url=config.laya_base_url, model=config.laya_model),
-                          config.laya_accept_min))
-    if config.typesafe_api_key:
-        tiers.append(Tier("jev", JevAdapter(config.typesafe_api_key, model=config.jev_model),
-                          config.jev_accept_min))
-    if config.api_key:
-        tiers.append(Tier("luna", OpenAIResponsesAdapter(config.api_key, OpenAIConfig(
-            model=config.primary_model, reasoning_effort=config.primary_reasoning_effort,
-            timeout_s=config.deadline_seconds,
-        )), None))
-    if not tiers:
-        raise RuntimeError("ASK_ENABLED requires LAYA_BASE_URL, TYPESAFE_API_KEY, or OPENAI_API_KEY")
-    # Without Luna, fields the last System One tier cannot decide become clarifications.
-    return TieredAdapter(tiers, veto_min=config.veto_min)
+def _log_decisions(output: InterpreterOutput, cache_hit: bool) -> None:
+    """Log per-field tier decisions (ADRs 0009, 0010). Enumerated metadata only: never
+    the question, candidate values, provider text, or keys."""
+    metadata = output.metadata
+    if not metadata.field_decisions and not metadata.field_tiers:
+        return
+    decisions = [decision.model_dump(mode="json") for decision in metadata.field_decisions]
+    logger.info("ask cascade outcome=%s cache_hit=%s models=%s decisions=%s", output.outcome, cache_hit,
+                metadata.resolved_model or metadata.model, json.dumps(decisions, separators=(",", ":")))
+
+
+__all__ = ["AskPipeline", "build_cascade"]

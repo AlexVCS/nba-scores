@@ -2,11 +2,11 @@ import {RotateCcw, TriangleAlert} from "lucide-react";
 import type {AskClarificationOption} from "@/services/ask/types";
 import AskResult from "./AskResult";
 import type {AskSessionState} from "./askSessionStore";
-import {askButton, type AskRevealControls} from "./askStyles";
+import {askButton} from "./askStyles";
 
 interface AskResultAreaProps {
   session: AskSessionState;
-  controls: AskRevealControls;
+  resultsHidden: boolean;
   onAsk: (question: string, options: {remember: boolean}) => void;
   onChooseOption: (option: AskClarificationOption) => void;
   onRetry: () => void;
@@ -14,7 +14,7 @@ interface AskResultAreaProps {
 }
 
 /** Loading and transport-failure shells around the response renderer. */
-function AskResultArea({session, controls, onAsk, onChooseOption, onRetry, onEditQuestion}: AskResultAreaProps) {
+function AskResultArea({session, resultsHidden, onAsk, onChooseOption, onRetry, onEditQuestion}: AskResultAreaProps) {
   if (session.status === "loading") {
     return (
       <div className="grid gap-3" data-testid="ask-loading">
@@ -46,7 +46,7 @@ function AskResultArea({session, controls, onAsk, onChooseOption, onRetry, onEdi
     return (
       <AskResult
         response={session.response}
-        controls={controls}
+        resultsHidden={resultsHidden}
         onAsk={onAsk}
         onChooseOption={onChooseOption}
         onRetry={onRetry}
