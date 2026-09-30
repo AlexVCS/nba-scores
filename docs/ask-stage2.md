@@ -25,7 +25,7 @@ in both HTTP and interpretation evaluation, including clarification continuation
 
 PlayerCareerStats season-total rows, TeamYearByYearStats team records, and
 LeagueStandings are primary. Each NBA attempt has a four-second timeout and
-one retry. The tool verifies player/team identity, season and league before
+one retry, both inside the shared retrieval deadline described below. The tool verifies player/team identity, season and league before
 execution. Full standings must cover every franchise active that season; partial
 or duplicate tables cannot produce an answer. Source conference ranks are used
 when supplied; the tool does not invent a league tiebreak rank.
@@ -80,10 +80,57 @@ screen-reader checks also remain required. No production flags are changed here.
 
 ## Remaining deployment work from review
 
-The interpreter reserves at most five seconds for retrieval, while an NBA retry
-plus fallback can take about 13.75 seconds. The HTTP boundary still caps the
-response deadline and keeps occupied-worker accounting. Before enabling Ask,
-measure slow-host behavior and tune a shared retrieval deadline across calls.
+### Shared retrieval deadline (nba-scores-8ic)
+
+Unbudgeted, an NBA attempt, its backoff and retry, plus the BRef fallback took
+about 13.75 seconds, while interpretation leaves as little as five seconds.
+The pipeline now creates one monotonic `Deadline` (`server/utils/deadline.py`)
+per request. It ends with the response deadline, less a 0.25-second margin
+for building the response. The deadline is passed explicitly through
+`resolve(..., deadline=)` to the season tools, the NBA `_run` retry loop and
+the Basketball-Reference transport. There is no global state.
+
+- Each NBA attempt's timeout is capped to the time left. An attempt starts only
+  if 1.5 seconds remain. A retry also needs room for its 0.75-second backoff.
+  Otherwise it is skipped.
+- The fallback runs only if a BRef request can still start (2 seconds). The
+  transport checks this before it takes the shared start slot, so a request
+  that cannot finish does not use up the six-second limit. Its timeout is
+  capped to the time left. The limiter still never waits: when throttled, it
+  fails immediately.
+- A primary miss that has no time left for fallback reports
+  `season_deadline_exceeded`, shown as `service_unavailable`. It never becomes
+  a no-record answer.
+- Joined waits in the season cache, BRef HTML cache and outer answer cache end
+  at the earlier of five seconds and the deadline. Other tools' answer-cache
+  waits now also end at the deadline. A cached answer needs no budget.
+- Only `DEADLINE_EXECUTORS` (the two season tools) receive the deadline. Other
+  executors keep their `(request)` signature and existing source timeouts.
+  Calls without a deadline behave exactly as before.
+- The HTTP `run_bounded` deadline and the occupied-worker accounting are
+  unchanged.
+
+Tests: `server/tests/ask/test_retrieval_deadline.py`, using fake clocks and
+slow fakes. They cover a slow primary that skips its retry and fallback, a
+retry that fits (with a capped timeout), a fallback skipped as unavailable,
+fallback timeout capping, fast limiter refusal inside the budget, a start that
+cannot fit, and joined waits bounded at the season and answer layers
+(including a real coalesced load).
+
+**Slow-host measurement, not yet done.** `scripts/ask/measure_retrieval_deadline.py`
+calls only the season tools, with no interpreter or LLM. It prints one JSON
+record per case: the capped timeout, duration and error of each attempt, and
+whether retrieval finished within `--budget`. `--simulate` is offline and
+only checks the budget decisions. Before enabling Ask, run it on the
+production host, with the deployed deadline:
+`server/venv/bin/python scripts/ask/measure_retrieval_deadline.py --live --budget 4.75 --repeats 3`,
+plus a run with `--budget` equal to a typical post-interpretation remainder.
+Keep the output with the deployment record. Then tune
+`NBA_MIN_ATTEMPT_SECONDS`, `MIN_START_SECONDS` and the timeouts. Note that
+`requests` timeouts limit each connect/read, not total transfer time. A slow
+drip can outlast a capped attempt, and in that case the HTTP deadline remains
+the final bound. Boxscore, playoff and game-search retrieval do not yet share
+the deadline.
 
 A well-formed NBA season miss still tries BRef, as ADR 0010 requires fallback
 when the primary lacks coverage. A miss is not proof that a historical record

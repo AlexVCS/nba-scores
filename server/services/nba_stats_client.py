@@ -21,6 +21,9 @@ PROVIDER = "stats.nba.com"
 NBA_API_TIMEOUT_SECONDS = 10
 NBA_API_RETRIES = 2
 NBA_API_BACKOFF_SECONDS = 0.75
+# With a shared retrieval deadline, an attempt (first or retry) starts only when
+# at least this much time remains; its timeout is capped to the time left.
+NBA_MIN_ATTEMPT_SECONDS = 1.5
 NBA_LEAGUE_ID = "00"
 
 NBA_STATS_HEADERS = {
@@ -87,11 +90,23 @@ def _timeout():
     return NBA_API_TIMEOUT_SECONDS
 
 
-def _run(endpoint: str, operation: Callable[[], T], *, retries: int | None = None) -> T:
+def _run(endpoint: str, operation: Callable[[], T], *, retries: int | None = None,
+         deadline=None, min_attempt_seconds: float = NBA_MIN_ATTEMPT_SECONDS) -> T:
+    """Run ``operation`` with retries. ``deadline`` (``server.utils.deadline.Deadline``)
+    bounds attempts and backoff together: an attempt or retry that cannot fit
+    is skipped and reported as unavailable. The operation should cap its own
+    request timeout with ``deadline.cap``."""
     attempts = max(1, (NBA_API_RETRIES if retries is None else retries) + 1)
     started = time.monotonic()
 
     for attempt in range(1, attempts + 1):
+        if attempt == 1 and deadline is not None and not deadline.fits(min_attempt_seconds):
+            logger.warning(
+                "nba_stats_attempt_skipped provider=%s endpoint=%s attempt=%s remainingMs=%s",
+                PROVIDER, endpoint, attempt, int(deadline.remaining() * 1000),
+            )
+            raise UpstreamUnavailableError(endpoint=endpoint, error_type="DeadlineExceeded",
+                                           duration_ms=0, message="Retrieval deadline exhausted")
         attempt_started = time.monotonic()
         try:
             result = operation()
@@ -115,7 +130,14 @@ def _run(endpoint: str, operation: Callable[[], T], *, retries: int | None = Non
                 duration_ms,
                 type(e).__name__,
             )
-            if attempt == attempts:
+            backoff = NBA_API_BACKOFF_SECONDS * attempt
+            skip_retry = deadline is not None and not deadline.fits(backoff + min_attempt_seconds)
+            if skip_retry and attempt < attempts:
+                logger.warning(
+                    "nba_stats_retry_skipped provider=%s endpoint=%s attempt=%s remainingMs=%s",
+                    PROVIDER, endpoint, attempt, int(deadline.remaining() * 1000),
+                )
+            if attempt == attempts or skip_retry:
                 total_ms = int((time.monotonic() - started) * 1000)
                 raise UpstreamUnavailableError(
                     endpoint=endpoint,
@@ -123,7 +145,10 @@ def _run(endpoint: str, operation: Callable[[], T], *, retries: int | None = Non
                     duration_ms=total_ms,
                     message=str(e),
                 ) from e
-            time.sleep(NBA_API_BACKOFF_SECONDS * attempt)
+            if deadline is not None:
+                deadline.sleep(backoff)
+            else:
+                time.sleep(backoff)
         except UpstreamBadResponseError:
             raise
         except Exception as e:

@@ -51,6 +51,7 @@ from server.ask.resolvers.games import ResolvedGame
 from server.ask.resolvers.output import ResolverOutput, stats_source
 from server.ask.resolvers.spoiler_policy import outcome_may_reveal_result
 from server.ask import links, tools
+from server.utils.deadline import Deadline
 
 
 def resolve_boxscore_game(request: BoxscoreStatRequest) -> ResolvedGame:
@@ -113,8 +114,11 @@ def _boxscore(request: BoxscoreStatRequest) -> ResolverOutput:
     return ResolverOutput(result, game_links, (stats_source(game.settled),))
 
 
-def resolve(request: AskRequest) -> ResolverOutput:
-    """Execute one validated request. Raises ``errors.ResolverError`` subclasses."""
+def resolve(request: AskRequest, *, deadline: Deadline | None = None) -> ResolverOutput:
+    """Execute one validated request. Raises ``errors.ResolverError`` subclasses.
+
+    ``deadline`` is the time left in the Ask response. Executors named in
+    ``DEADLINE_EXECUTORS`` share it across source attempts and fallback."""
     # Asking is consent, so answers are never gated (ADR 0006). Clarifications
     # are not answers: when a lookup-dependent choice list could reveal a
     # result, ask for teams first, before any result lookup.
@@ -131,7 +135,7 @@ def resolve(request: AskRequest) -> ResolverOutput:
             # A lookup-dependent clarification would reveal whether a
             # conditional playoff game took place on this date or in this round.
             raise ClarificationError("teams", "missing", "hidden_game_needs_teams")
-    return _resolve(request)
+    return _resolve(request, deadline)
 
 
 def _search_games(request: GameSearchRequest) -> ResolverOutput:
@@ -157,13 +161,18 @@ EXECUTORS: dict[str, Callable[..., ResolverOutput]] = {
     "player_season_stats": seasons.player_season,
     "team_records": seasons.team_records,
 }
+# Executors that accept ``deadline=``. Others keep their own source timeouts,
+# bounded overall by the HTTP response deadline.
+DEADLINE_EXECUTORS: frozenset[str] = frozenset({"player_season_stats", "team_records"})
 
 
-def _resolve(request: AskRequest) -> ResolverOutput:
+def _resolve(request: AskRequest, deadline: Deadline | None = None) -> ResolverOutput:
     tool = tools.route(getattr(request, "intent", ""))
     if tool is None or not isinstance(request, tool.request_model):
         raise TypeError(f"Unsupported request {type(request).__name__}")
+    if deadline is not None and tool.name in DEADLINE_EXECUTORS:
+        return EXECUTORS[tool.name](request, deadline=deadline)
     return EXECUTORS[tool.name](request)
 
 
-__all__ = ["EXECUTORS", "AmbiguousError", "NotFoundError", "ResolverOutput", "resolve", "resolve_boxscore_game"]
+__all__ = ["DEADLINE_EXECUTORS", "EXECUTORS", "AmbiguousError", "NotFoundError", "ResolverOutput", "resolve", "resolve_boxscore_game"]

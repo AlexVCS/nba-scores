@@ -29,14 +29,19 @@ from server.ask.present import clarification, interpretation, notice, suggestion
 from server.ask.protocols import CascadeAttempt, CascadeState
 from server.ask.resolution import PendingResolution, ResolutionStore
 from server.ask.season_scope import normalize_question
+from server.utils.deadline import Deadline, wait_timeout
 from server.utils.ttl_cache import LoadInProgressError
-from server.ask.resolvers import resolve
+from server.ask.resolvers import DEADLINE_EXECUTORS, resolve
 from server.ask.resolvers.errors import AmbiguousError, ClarificationError, NotFoundError, UnavailableError, UnsupportedError
 
 
 logger = logging.getLogger(__name__)
 
 _EXACT_DATE = re.compile(r"^(?:games|scores)(?: on| for)? (\d{4}-\d{2}-\d{2})\??$", re.IGNORECASE)
+# Joined answer-cache waits for the season tools; every wait also ends at the deadline.
+_SEASON_JOIN_WAIT_SECONDS = 5
+# Time kept after retrieval to build the response inside the HTTP deadline.
+_RESPONSE_MARGIN_SECONDS = 0.25
 _EXACT_LEADERS = re.compile(r"^(?:who led in|leaders? in|most) (points|rebounds|assists|steals|blocks)\??$", re.IGNORECASE)
 
 
@@ -167,11 +172,19 @@ class AskPipeline:
         result = self.cache.get_or_load("parse", key, load)
         return result.value, result.hit
 
-    def _execute(self, question: str, request: AskRequest, readout, info: InterpreterInfo) -> AskResponse:
+    def _retrieval_deadline(self, started: float) -> Deadline:
+        """The remaining response deadline, shared by every retrieval step."""
+        margin = min(_RESPONSE_MARGIN_SECONDS, self.config.deadline_seconds / 20)
+        return Deadline(started + self.config.deadline_seconds - margin)
+
+    def _execute(self, question: str, request: AskRequest, readout, info: InterpreterInfo,
+                 deadline: Deadline | None = None) -> AskResponse:
         from server.ask.cache import CacheValue
 
         def load():
-            output = resolve(request)
+            # Only deadline-aware tools receive it; the others keep their source timeouts.
+            shared = deadline is not None and request.intent in DEADLINE_EXECUTORS
+            output = resolve(request, deadline=deadline) if shared else resolve(request)
             ttl = self.config.answer_ttl_seconds if all(s.complete for s in output.sources) else min(30, self.config.answer_ttl_seconds)
             return CacheValue(output, ttl)
 
@@ -180,7 +193,8 @@ class AskPipeline:
                 result = self.cache.get_or_load("answer", _key(
                     self.config.cache_version, "answer-1", self.lookup.alias_version,
                     readout.reference_time.date().isoformat(), canonical_json(request)), load,
-                    wait_timeout=5 if request.intent in {"player_season_stats", "team_records"} else None)
+                    wait_timeout=wait_timeout(deadline, _SEASON_JOIN_WAIT_SECONDS
+                                              if request.intent in {"player_season_stats", "team_records"} else None))
                 output, hit = result.value, result.hit
             else:
                 output, hit = load().value, False
@@ -208,18 +222,21 @@ class AskPipeline:
 
         # Leave time for verified NBA retrieval after interpretation. The HTTP
         # boundary retains its full deadline and occupied-worker accounting.
+        # Retrieval then shares one deadline: whatever remains of the response.
+        started = time.monotonic()
         resolver_reserve = min(5.0, self.config.deadline_seconds / 4)
-        deadline = time.monotonic() + self.config.deadline_seconds - resolver_reserve
+        deadline = started + self.config.deadline_seconds - resolver_reserve
+        retrieval = self._retrieval_deadline(started)
         question, context = query.question, self._context(query)
         if not self.config.enabled:
             return self.disabled(question)
         pending = self.resolutions.read(query.resolution, question, context) if query.resolution else None
         if pending is not None:
             # Continue against server-stored candidates and original reference time.
-            return self._from_pending(question, pending, self._info(output=pending.output))
+            return self._from_pending(question, pending, self._info(output=pending.output), retrieval)
         direct = self._exact(question, context)
         if direct is not None:
-            return self._execute(question, direct, interpretation(None, None, context, direct), self._info())
+            return self._execute(question, direct, interpretation(None, None, context, direct), self._info(), retrieval)
 
         any_call = False
         cache_hit = False
@@ -242,7 +259,7 @@ class AskPipeline:
                                   hit=cache_hit, adapter=self._adapter(), output=output)
                 if decision.action == "accept":
                     return self._execute(question, normalized.request,
-                                         interpretation(output, candidates, context, normalized.request), info)
+                                         interpretation(output, candidates, context, normalized.request), info, retrieval)
                 if decision.action == "clarify":
                     pending = PendingResolution(output, candidates, context)
                     clarify = clarification(decision.field, decision.clarify_reason, question, pending, self.resolutions)
@@ -274,12 +291,13 @@ class AskPipeline:
             return self._response(question, "unavailable", self._info(called=any_call, hit=cache_hit),
                                   notice=notice("interpreter_unavailable"))
 
-    def _from_pending(self, question: str, pending: PendingResolution, info: InterpreterInfo) -> AskResponse:
+    def _from_pending(self, question: str, pending: PendingResolution, info: InterpreterInfo,
+                      deadline: Deadline | None = None) -> AskResponse:
         normalized = normalize_question(self.normalizer, pending.output, pending.candidates, pending.context, question)
         readout = interpretation(pending.output, pending.candidates, pending.context,
                                  normalized.request if normalized.status == "valid" else None)
         if normalized.status == "valid":
-            return self._execute(question, normalized.request, readout, info)
+            return self._execute(question, normalized.request, readout, info, deadline)
         if normalized.status == "needs_clarification":
             clarify = clarification(normalized.clarify_field, normalized.clarify_reason, question,
                                     pending, self.resolutions)
