@@ -1,0 +1,4650 @@
+{
+  "scope": "DRAFT unseen evaluation set three (ADR 0009), not frozen. Labels were authored from the production contract (docs/ask-contract.md, docs/ask-stage2.md, docs/ask-stage3.md, ADRs 0004, 0005, 0011-0014, server/ask/models) without running any interpreter, lookup or provider, and without reading evaluation results. It REQUIRES independent human label review before freezing; debatable labels are tagged 'debatable' and listed in docs/verification/ask-unseen-three-label-notes.md. Not yet exposed to any model run. 179 cases: accept 138, clarify 20, unsupported 21. Per family: game_search 22 (accept 17, clarify 3, unsupported 2); boxscore_stat 24 (accept 18, clarify 3, unsupported 3); playoff_series 19 (accept 16, clarify 2, unsupported 1); postseason_summary 20 (accept 18, clarify 1, unsupported 1); player_season_stats 25 (accept 18, clarify 4, unsupported 3); team_records 20 (accept 16, clarify 2, unsupported 2); season_leaders 23 (accept 17, clarify 3, unsupported 3); career_stats 26 (accept 18, clarify 2, unsupported 6).",
+  "cases": [
+    {
+      "id": "unseen-three-game_search-01",
+      "question": "What games did the Dubs play between November 2 and November 5, 2016?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "2016-11-02",
+            "end": "2016-11-05"
+          },
+          "teams": [
+            {
+              "team_id": 1610612744,
+              "tricode": "GSW",
+              "name": "Golden State Warriors"
+            }
+          ],
+          "location": null
+        }
+      },
+      "tags": [
+        "game_search",
+        "nickname",
+        "date_range"
+      ],
+      "label_rationale": "Dubs is the Warriors alias; a four-day inclusive range is within the seven-day limit."
+    },
+    {
+      "id": "unseen-three-game_search-02",
+      "question": "Show NBA games played in Salt Lake City on April 20, 1997.",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "1997-04-20",
+            "end": "1997-04-20"
+          },
+          "teams": [],
+          "location": {
+            "city": "Salt Lake City",
+            "homes": [
+              {
+                "team": {
+                  "team_id": 1610612762,
+                  "tricode": "UTA",
+                  "name": "Utah Jazz"
+                },
+                "start": "1979-07-01",
+                "end": null
+              }
+            ]
+          }
+        }
+      },
+      "tags": [
+        "game_search",
+        "venue",
+        "older_season"
+      ],
+      "label_rationale": "'played in <city>' is a venue filter (ADR 0011), not a Jazz team filter."
+    },
+    {
+      "id": "unseen-three-game_search-03",
+      "question": "Any games at Madison Square Garden on February 2, 2009?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "2009-02-02",
+            "end": "2009-02-02"
+          },
+          "teams": [],
+          "location": {
+            "city": "Manhattan",
+            "homes": [
+              {
+                "team": {
+                  "team_id": 1610612752,
+                  "tricode": "NYK",
+                  "name": "New York Knicks"
+                },
+                "start": "1946-07-01",
+                "end": null
+              }
+            ]
+          }
+        }
+      },
+      "tags": [
+        "game_search",
+        "venue",
+        "arena_name"
+      ],
+      "label_rationale": "'at Madison Square Garden' is the Manhattan venue entry (Knicks home games)."
+    },
+    {
+      "id": "unseen-three-game_search-04",
+      "question": "Games in Kansas City on March 3, 1983",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "1983-03-03",
+            "end": "1983-03-03"
+          },
+          "teams": [],
+          "location": {
+            "city": "Kansas City",
+            "homes": [
+              {
+                "team": {
+                  "team_id": 1610612758,
+                  "tricode": "SAC",
+                  "name": "Kansas City Kings"
+                },
+                "start": "1972-07-01",
+                "end": "1985-06-30"
+              }
+            ]
+          }
+        }
+      },
+      "tags": [
+        "game_search",
+        "venue",
+        "former_city",
+        "older_season"
+      ],
+      "label_rationale": "Kansas City hosted Kings home games through 1984-85; venue, not a team."
+    },
+    {
+      "id": "unseen-three-game_search-05",
+      "question": "Did the Buffalo Braves play on January 10, 1975?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "1975-01-10",
+            "end": "1975-01-10"
+          },
+          "teams": [
+            {
+              "team_id": 1610612746,
+              "tricode": "BUF",
+              "name": "Buffalo Braves"
+            }
+          ],
+          "location": null
+        }
+      },
+      "tags": [
+        "game_search",
+        "historical_franchise",
+        "older_season"
+      ],
+      "label_rationale": "Buffalo Braves are the 1974-75 name of the Clippers franchise; 'Buffalo' is not preceded by in/at, so no venue."
+    },
+    {
+      "id": "unseen-three-game_search-06",
+      "question": "Rockets results from the last five days",
+      "reference_time": "2025-02-14T10:00:00-05:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "2025-02-10",
+            "end": "2025-02-14"
+          },
+          "teams": [
+            {
+              "team_id": 1610612745,
+              "tricode": "HOU",
+              "name": "Houston Rockets"
+            }
+          ],
+          "location": null
+        }
+      },
+      "tags": [
+        "game_search",
+        "relative_date",
+        "past_days"
+      ],
+      "label_rationale": "past_days count 5 ending on the New York reference date 2025-02-14 (inclusive)."
+    },
+    {
+      "id": "unseen-three-game_search-07",
+      "question": "What was on the schedule last Tuesday for Memphis?",
+      "reference_time": "2024-11-21T12:00:00-05:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "2024-11-19",
+            "end": "2024-11-19"
+          },
+          "teams": [
+            {
+              "team_id": 1610612763,
+              "tricode": "MEM",
+              "name": "Memphis Grizzlies"
+            }
+          ],
+          "location": null
+        }
+      },
+      "tags": [
+        "game_search",
+        "relative_date",
+        "last_weekday"
+      ],
+      "label_rationale": "Reference date is Thursday 2024-11-21; the most recent past Tuesday is 2024-11-19. 'for Memphis' names the team (not in/at)."
+    },
+    {
+      "id": "unseen-three-game_search-08",
+      "question": "Is there anything on tonight involving the Spurs?",
+      "reference_time": "2025-01-08T15:00:00-05:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "2025-01-08",
+            "end": "2025-01-08"
+          },
+          "teams": [
+            {
+              "team_id": 1610612759,
+              "tricode": "SAS",
+              "name": "San Antonio Spurs"
+            }
+          ],
+          "location": null
+        }
+      },
+      "tags": [
+        "game_search",
+        "relative_date",
+        "tonight"
+      ],
+      "label_rationale": "tonight = the New York reference date."
+    },
+    {
+      "id": "unseen-three-game_search-09",
+      "question": "Is the Heat playing this Saturday?",
+      "reference_time": "2025-03-05T09:00:00-05:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "2025-03-08",
+            "end": "2025-03-08"
+          },
+          "teams": [
+            {
+              "team_id": 1610612748,
+              "tricode": "MIA",
+              "name": "Miami Heat"
+            }
+          ],
+          "location": null
+        }
+      },
+      "tags": [
+        "game_search",
+        "relative_date",
+        "this_weekday"
+      ],
+      "label_rationale": "Reference date is Wednesday 2025-03-05; Saturday of the current Monday-Sunday week is 2025-03-08."
+    },
+    {
+      "id": "unseen-three-game_search-10",
+      "question": "Games in Oklahoma City last week",
+      "reference_time": "2025-01-15T12:00:00-05:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "2025-01-06",
+            "end": "2025-01-12"
+          },
+          "teams": [],
+          "location": {
+            "city": "Oklahoma City",
+            "homes": [
+              {
+                "team": {
+                  "team_id": 1610612760,
+                  "tricode": "OKC",
+                  "name": "Oklahoma City Thunder"
+                },
+                "start": "2008-07-01",
+                "end": null
+              },
+              {
+                "team": {
+                  "team_id": 1610612740,
+                  "tricode": "NOP",
+                  "name": "New Orleans/Oklahoma City Hornets"
+                },
+                "start": "2005-07-01",
+                "end": "2007-06-30"
+              }
+            ]
+          }
+        }
+      },
+      "tags": [
+        "game_search",
+        "venue",
+        "relative_date",
+        "last_week"
+      ],
+      "label_rationale": "Reference date Wednesday 2025-01-15; last week is the preceding Monday-Sunday, 2025-01-06..2025-01-12."
+    },
+    {
+      "id": "unseen-three-game_search-11",
+      "question": "Warriros games on March 8, 2016",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "2016-03-08",
+            "end": "2016-03-08"
+          },
+          "teams": [
+            {
+              "team_id": 1610612744,
+              "tricode": "GSW",
+              "name": "Golden State Warriors"
+            }
+          ],
+          "location": null
+        }
+      },
+      "tags": [
+        "game_search",
+        "typo",
+        "debatable"
+      ],
+      "label_rationale": "Misspelled team name; the only plausible reading is the Warriors. DEBATABLE: accept vs teams clarification."
+    },
+    {
+      "id": "unseen-three-game_search-12",
+      "question": "Pelicans games on 2/1/2019",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "2019-02-01",
+            "end": "2019-02-01"
+          },
+          "teams": [
+            {
+              "team_id": 1610612740,
+              "tricode": "NOP",
+              "name": "New Orleans Pelicans"
+            }
+          ],
+          "location": null
+        }
+      },
+      "tags": [
+        "game_search",
+        "numeric_date"
+      ],
+      "label_rationale": "US numeric date M/D/YYYY."
+    },
+    {
+      "id": "unseen-three-game_search-13",
+      "question": "Were the Bullets in action on January 5, 1985?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "1985-01-05",
+            "end": "1985-01-05"
+          },
+          "teams": [
+            {
+              "team_id": 1610612764,
+              "tricode": "WSB",
+              "name": "Washington Bullets"
+            }
+          ],
+          "location": null
+        }
+      },
+      "tags": [
+        "game_search",
+        "historical_franchise",
+        "older_season"
+      ],
+      "label_rationale": "In 1984-85 the Bullets are the Washington Bullets (current Wizards franchise)."
+    },
+    {
+      "id": "unseen-three-game_search-14",
+      "question": "Philadelphia Warriors games on March 2, 1962",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "1962-03-02",
+            "end": "1962-03-02"
+          },
+          "teams": [
+            {
+              "team_id": 1610612744,
+              "tricode": "PHW",
+              "name": "Philadelphia Warriors"
+            }
+          ],
+          "location": null
+        }
+      },
+      "tags": [
+        "game_search",
+        "historical_franchise",
+        "older_season"
+      ],
+      "label_rationale": "Philadelphia Warriors = Golden State franchise in 1961-62; 'Philadelphia' is part of the team name, not after in/at."
+    },
+    {
+      "id": "unseen-three-game_search-15",
+      "question": "Show games from April 1 to April 3, 2015 in Chicago",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "2015-04-01",
+            "end": "2015-04-03"
+          },
+          "teams": [],
+          "location": {
+            "city": "Chicago",
+            "homes": [
+              {
+                "team": {
+                  "team_id": 1610612741,
+                  "tricode": "CHI",
+                  "name": "Chicago Bulls"
+                },
+                "start": "1966-07-01",
+                "end": null
+              },
+              {
+                "team": {
+                  "team_id": 1610612764,
+                  "tricode": "WAS",
+                  "name": "Chicago Zephyrs"
+                },
+                "start": "1961-07-01",
+                "end": "1963-06-30"
+              }
+            ]
+          }
+        }
+      },
+      "tags": [
+        "game_search",
+        "venue",
+        "date_range"
+      ],
+      "label_rationale": "'in Chicago' after the dates is a venue filter; Bulls home games."
+    },
+    {
+      "id": "unseen-three-game_search-16",
+      "question": "Show the Lakers games on the date I'm looking at",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {
+        "route": "scores",
+        "view_date": "2023-02-07"
+      },
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "2023-02-07",
+            "end": "2023-02-07"
+          },
+          "teams": [
+            {
+              "team_id": 1610612747,
+              "tricode": "LAL",
+              "name": "Los Angeles Lakers"
+            }
+          ],
+          "location": null
+        }
+      },
+      "tags": [
+        "game_search",
+        "page_context",
+        "view_date"
+      ],
+      "label_rationale": "Date comes from the scores page view_date."
+    },
+    {
+      "id": "unseen-three-game_search-17",
+      "question": "Who is playing tonight?",
+      "reference_time": "2025-01-09T03:30:00Z",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "game_search",
+          "dates": {
+            "start": "2025-01-08",
+            "end": "2025-01-08"
+          },
+          "teams": [],
+          "location": null
+        }
+      },
+      "tags": [
+        "game_search",
+        "relative_date",
+        "timezone_boundary"
+      ],
+      "label_rationale": "03:30 UTC on Jan 9 is 22:30 on Jan 8 in New York, so tonight is 2025-01-08."
+    },
+    {
+      "id": "unseen-three-boxscore_stat-01",
+      "question": "How many points did Devin Booker drop on the Celtics on March 24, 2017?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "player",
+          "stat": {
+            "stat": "points",
+            "aggregation": "total"
+          },
+          "game": {
+            "date": "2017-03-24",
+            "teams": [
+              {
+                "team_id": 1610612738,
+                "tricode": "BOS",
+                "name": "Boston Celtics"
+              }
+            ]
+          },
+          "player": {
+            "player_id": 1626164,
+            "name": "Devin Booker"
+          },
+          "team": null
+        }
+      },
+      "tags": [
+        "boxscore_stat",
+        "player_scope",
+        "opponent_named"
+      ],
+      "label_rationale": "Opponent is kept in game.teams (teams lists every named team)."
+    },
+    {
+      "id": "unseen-three-boxscore_stat-02",
+      "question": "Klay's field goals on January 23, 2015",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "player",
+          "stat": {
+            "stat": "field_goals",
+            "aggregation": "total"
+          },
+          "game": {
+            "date": "2015-01-23"
+          },
+          "player": {
+            "player_id": 202691,
+            "name": "Klay Thompson"
+          },
+          "team": null
+        }
+      },
+      "tags": [
+        "boxscore_stat",
+        "player_scope",
+        "first_name_only",
+        "possessive"
+      ],
+      "label_rationale": "Klay is a unique first name in the catalog."
+    },
+    {
+      "id": "unseen-three-boxscore_stat-03",
+      "question": "Dame's three-pointers made on February 26, 2023",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "player",
+          "stat": {
+            "stat": "three_pointers",
+            "aggregation": "total"
+          },
+          "game": {
+            "date": "2023-02-26"
+          },
+          "player": {
+            "player_id": 203081,
+            "name": "Damian Lillard"
+          },
+          "team": null
+        }
+      },
+      "tags": [
+        "boxscore_stat",
+        "player_scope",
+        "nickname",
+        "possessive"
+      ],
+      "label_rationale": "Dame is the Lillard alias."
+    },
+    {
+      "id": "unseen-three-boxscore_stat-04",
+      "question": "What was Luka's full stat line against Atlanta on January 26, 2024?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "player",
+          "stat": {
+            "stat": "stat_line",
+            "aggregation": "total"
+          },
+          "game": {
+            "date": "2024-01-26",
+            "teams": [
+              {
+                "team_id": 1610612737,
+                "tricode": "ATL",
+                "name": "Atlanta Hawks"
+              }
+            ]
+          },
+          "player": {
+            "player_id": 1629029,
+            "name": "Luka Dončić"
+          },
+          "team": null
+        }
+      },
+      "tags": [
+        "boxscore_stat",
+        "player_scope",
+        "nickname",
+        "stat_line",
+        "opponent_named"
+      ],
+      "label_rationale": "Luka alias -> Doncic; 'against Atlanta' is an opponent, not a venue."
+    },
+    {
+      "id": "unseen-three-boxscore_stat-05",
+      "question": "Wilt's rebounds on March 2, 1962",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "player",
+          "stat": {
+            "stat": "rebounds",
+            "aggregation": "total"
+          },
+          "game": {
+            "date": "1962-03-02"
+          },
+          "player": {
+            "player_id": 76375,
+            "name": "Wilt Chamberlain"
+          },
+          "team": null
+        }
+      },
+      "tags": [
+        "boxscore_stat",
+        "player_scope",
+        "nickname",
+        "older_season"
+      ],
+      "label_rationale": "Wilt alias -> Chamberlain. Data coverage is a resolver concern, not a label concern."
+    },
+    {
+      "id": "unseen-three-boxscore_stat-06",
+      "question": "How many offensive rebounds did the Spurs grab in Game 7 of the 2005 Finals?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "team",
+          "stat": {
+            "stat": "offensive_rebounds",
+            "aggregation": "total"
+          },
+          "game": {
+            "season": "2004-05",
+            "round": "finals",
+            "game_number": 7,
+            "teams": [
+              {
+                "team_id": 1610612759,
+                "tricode": "SAS",
+                "name": "San Antonio Spurs"
+              }
+            ]
+          },
+          "player": null,
+          "team": {
+            "team_id": 1610612759,
+            "tricode": "SAS",
+            "name": "San Antonio Spurs"
+          }
+        }
+      },
+      "tags": [
+        "boxscore_stat",
+        "team_scope",
+        "playoff_game_number"
+      ],
+      "label_rationale": "2005 Finals = season 2004-05. The named team is the target and is kept in game.teams."
+    },
+    {
+      "id": "unseen-three-boxscore_stat-07",
+      "question": "Greek Freak blocks, Game 6, 2021 NBA Finals",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "player",
+          "stat": {
+            "stat": "blocks",
+            "aggregation": "total"
+          },
+          "game": {
+            "season": "2020-21",
+            "round": "finals",
+            "game_number": 6
+          },
+          "player": {
+            "player_id": 203507,
+            "name": "Giannis Antetokounmpo"
+          },
+          "team": null
+        }
+      },
+      "tags": [
+        "boxscore_stat",
+        "player_scope",
+        "nickname",
+        "playoff_game_number"
+      ],
+      "label_rationale": "Greek Freak alias -> Antetokounmpo."
+    },
+    {
+      "id": "unseen-three-boxscore_stat-08",
+      "question": "Kawhi Leonard points in Game 7 of the 2019 Eastern Conference semifinals",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "player",
+          "stat": {
+            "stat": "points",
+            "aggregation": "total"
+          },
+          "game": {
+            "season": "2018-19",
+            "round": "conference_semifinals",
+            "conference": "east",
+            "game_number": 7
+          },
+          "player": {
+            "player_id": 202695,
+            "name": "Kawhi Leonard"
+          },
+          "team": null
+        }
+      },
+      "tags": [
+        "boxscore_stat",
+        "player_scope",
+        "playoff_game_number",
+        "conference_round"
+      ],
+      "label_rationale": "Round with conference; the player identifies which East semifinal Game 7."
+    },
+    {
+      "id": "unseen-three-boxscore_stat-09",
+      "question": "Top shot-blocker in Game 7 of the 2013 Finals",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "leaders",
+          "stat": {
+            "stat": "blocks",
+            "aggregation": "total"
+          },
+          "game": {
+            "season": "2012-13",
+            "round": "finals",
+            "game_number": 7
+          },
+          "player": null,
+          "team": null
+        }
+      },
+      "tags": [
+        "boxscore_stat",
+        "leaders_scope",
+        "playoff_game_number"
+      ],
+      "label_rationale": "Game leaders for a countable stat."
+    },
+    {
+      "id": "unseen-three-boxscore_stat-10",
+      "question": "Who dished out the most assists here?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {
+        "route": "boxscore",
+        "game_id": "0042200405"
+      },
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "leaders",
+          "stat": {
+            "stat": "assists",
+            "aggregation": "total"
+          },
+          "game": {
+            "game_id": "0042200405"
+          },
+          "player": null,
+          "team": null
+        }
+      },
+      "tags": [
+        "boxscore_stat",
+        "leaders_scope",
+        "page_context"
+      ],
+      "label_rationale": "No game named; the boxscore page game_id identifies the game."
+    },
+    {
+      "id": "unseen-three-boxscore_stat-11",
+      "question": "Raptors three-point percentage on June 13, 2019",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "team",
+          "stat": {
+            "stat": "three_point_percentage",
+            "aggregation": "total"
+          },
+          "game": {
+            "date": "2019-06-13",
+            "teams": [
+              {
+                "team_id": 1610612761,
+                "tricode": "TOR",
+                "name": "Toronto Raptors"
+              }
+            ]
+          },
+          "player": null,
+          "team": {
+            "team_id": 1610612761,
+            "tricode": "TOR",
+            "name": "Toronto Raptors"
+          }
+        }
+      },
+      "tags": [
+        "boxscore_stat",
+        "team_scope",
+        "percentage"
+      ],
+      "label_rationale": "Team percentages are valid for team scope (not leaders)."
+    },
+    {
+      "id": "unseen-three-boxscore_stat-12",
+      "question": "How many free throws did the Bucks make against Phoenix on July 17, 2021?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "team",
+          "stat": {
+            "stat": "free_throws",
+            "aggregation": "total"
+          },
+          "game": {
+            "date": "2021-07-17",
+            "teams": [
+              {
+                "team_id": 1610612749,
+                "tricode": "MIL",
+                "name": "Milwaukee Bucks"
+              },
+              {
+                "team_id": 1610612756,
+                "tricode": "PHX",
+                "name": "Phoenix Suns"
+              }
+            ]
+          },
+          "player": null,
+          "team": {
+            "team_id": 1610612749,
+            "tricode": "MIL",
+            "name": "Milwaukee Bucks"
+          }
+        }
+      },
+      "tags": [
+        "boxscore_stat",
+        "team_scope",
+        "target_team",
+        "two_teams"
+      ],
+      "label_rationale": "Two teams named; the Bucks are the subject (target_team), Phoenix the opponent."
+    },
+    {
+      "id": "unseen-three-boxscore_stat-13",
+      "question": "What was Draymond's plus/minus on June 16, 2016?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "player",
+          "stat": {
+            "stat": "plus_minus",
+            "aggregation": "total"
+          },
+          "game": {
+            "date": "2016-06-16"
+          },
+          "player": {
+            "player_id": 203110,
+            "name": "Draymond Green"
+          },
+          "team": null
+        }
+      },
+      "tags": [
+        "boxscore_stat",
+        "player_scope",
+        "first_name_only",
+        "possessive"
+      ],
+      "label_rationale": "Draymond is a unique first name."
+    },
+    {
+      "id": "unseen-three-boxscore_stat-14",
+      "question": "How many minutes did Larry Legend play on May 22, 1988?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "player",
+          "stat": {
+            "stat": "minutes",
+            "aggregation": "total"
+          },
+          "game": {
+            "date": "1988-05-22"
+          },
+          "player": {
+            "player_id": 1449,
+            "name": "Larry Bird"
+          },
+          "team": null
+        }
+      },
+      "tags": [
+        "boxscore_stat",
+        "player_scope",
+        "nickname",
+        "older_season"
+      ],
+      "label_rationale": "Larry Legend alias -> Larry Bird."
+    },
+    {
+      "id": "unseen-three-boxscore_stat-15",
+      "question": "Haliburton's dimes last night?",
+      "reference_time": "2024-01-11T09:00:00-05:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "player",
+          "stat": {
+            "stat": "assists",
+            "aggregation": "total"
+          },
+          "game": {
+            "date": "2024-01-10"
+          },
+          "player": {
+            "player_id": 1630169,
+            "name": "Tyrese Haliburton"
+          },
+          "team": null
+        }
+      },
+      "tags": [
+        "boxscore_stat",
+        "player_scope",
+        "relative_date",
+        "surname_only"
+      ],
+      "label_rationale": "Unique surname; last night = reference date minus one."
+    },
+    {
+      "id": "unseen-three-boxscore_stat-16",
+      "question": "Joel Embid's points on January 22, 2024",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "player",
+          "stat": {
+            "stat": "points",
+            "aggregation": "total"
+          },
+          "game": {
+            "date": "2024-01-22"
+          },
+          "player": {
+            "player_id": 203954,
+            "name": "Joel Embiid"
+          },
+          "team": null
+        }
+      },
+      "tags": [
+        "boxscore_stat",
+        "player_scope",
+        "typo",
+        "debatable"
+      ],
+      "label_rationale": "Misspelled surname; only Joel Embiid fits. DEBATABLE: accept vs player clarification."
+    },
+    {
+      "id": "unseen-three-boxscore_stat-17",
+      "question": "Moses Malone defensive rebounds on May 31, 1983",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "player",
+          "stat": {
+            "stat": "defensive_rebounds",
+            "aggregation": "total"
+          },
+          "game": {
+            "date": "1983-05-31"
+          },
+          "player": {
+            "player_id": 77449,
+            "name": "Moses Malone"
+          },
+          "team": null
+        }
+      },
+      "tags": [
+        "boxscore_stat",
+        "player_scope",
+        "older_season"
+      ],
+      "label_rationale": "Full name disambiguates the Malones."
+    },
+    {
+      "id": "unseen-three-boxscore_stat-18",
+      "question": "Dwight Howard free throw percentage on January 12, 2012",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "player",
+          "stat": {
+            "stat": "free_throw_percentage",
+            "aggregation": "total"
+          },
+          "game": {
+            "date": "2012-01-12"
+          },
+          "player": {
+            "player_id": 2730,
+            "name": "Dwight Howard"
+          },
+          "team": null
+        }
+      },
+      "tags": [
+        "boxscore_stat",
+        "player_scope",
+        "percentage"
+      ],
+      "label_rationale": "Single-game percentage for one player is valid."
+    },
+    {
+      "id": "unseen-three-playoff_series-01",
+      "question": "Show the Bad Boys against the Bulls in the 1990 East finals.",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "1989-90",
+          "teams": [
+            {
+              "team_id": 1610612765,
+              "tricode": "DET",
+              "name": "Detroit Pistons"
+            },
+            {
+              "team_id": 1610612741,
+              "tricode": "CHI",
+              "name": "Chicago Bulls"
+            }
+          ],
+          "round": "conference_finals",
+          "conference": "east"
+        }
+      },
+      "tags": [
+        "playoff_series",
+        "nickname",
+        "two_teams",
+        "conference_round"
+      ],
+      "label_rationale": "Bad Boys alias -> Pistons. Stated round and conference are kept."
+    },
+    {
+      "id": "unseen-three-playoff_series-02",
+      "question": "Kansas City Kings vs Rockets, 1981 West finals",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "1980-81",
+          "teams": [
+            {
+              "team_id": 1610612758,
+              "tricode": "KCK",
+              "name": "Kansas City Kings"
+            },
+            {
+              "team_id": 1610612745,
+              "tricode": "HOU",
+              "name": "Houston Rockets"
+            }
+          ],
+          "round": "conference_finals",
+          "conference": "west"
+        }
+      },
+      "tags": [
+        "playoff_series",
+        "historical_franchise",
+        "two_teams",
+        "conference_round"
+      ],
+      "label_rationale": "Kansas City Kings = Sacramento franchise in 1980-81."
+    },
+    {
+      "id": "unseen-three-playoff_series-03",
+      "question": "Thunder-Heat 2012 title matchup",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "2011-12",
+          "teams": [
+            {
+              "team_id": 1610612760,
+              "tricode": "OKC",
+              "name": "Oklahoma City Thunder"
+            },
+            {
+              "team_id": 1610612748,
+              "tricode": "MIA",
+              "name": "Miami Heat"
+            }
+          ],
+          "round": "finals",
+          "conference": null
+        }
+      },
+      "tags": [
+        "playoff_series",
+        "two_teams",
+        "finals_synonym"
+      ],
+      "label_rationale": "'title matchup' = the Finals."
+    },
+    {
+      "id": "unseen-three-playoff_series-04",
+      "question": "Which series did the Clippers play in the 2014 conference semis?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "2013-14",
+          "teams": [
+            {
+              "team_id": 1610612746,
+              "tricode": "LAC",
+              "name": "Los Angeles Clippers"
+            }
+          ],
+          "round": "conference_semifinals",
+          "conference": null
+        }
+      },
+      "tags": [
+        "playoff_series",
+        "one_team_round",
+        "abbreviation"
+      ],
+      "label_rationale": "'conference semis' = conference_semifinals; no conference named."
+    },
+    {
+      "id": "unseen-three-playoff_series-05",
+      "question": "Find Denver's opening-round series in the 2012 playoffs.",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "2011-12",
+          "teams": [
+            {
+              "team_id": 1610612743,
+              "tricode": "DEN",
+              "name": "Denver Nuggets"
+            }
+          ],
+          "round": "first_round",
+          "conference": null
+        }
+      },
+      "tags": [
+        "playoff_series",
+        "one_team_round",
+        "round_synonym"
+      ],
+      "label_rationale": "'opening round' = first_round."
+    },
+    {
+      "id": "unseen-three-playoff_series-06",
+      "question": "Open the West finals from the postseason I'm viewing.",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {
+        "route": "playoffs",
+        "playoff_season": "2018-19"
+      },
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "2018-19",
+          "teams": [],
+          "round": "conference_finals",
+          "conference": "west"
+        }
+      },
+      "tags": [
+        "playoff_series",
+        "page_context",
+        "conference_round"
+      ],
+      "label_rationale": "Season from the playoffs page context."
+    },
+    {
+      "id": "unseen-three-playoff_series-07",
+      "question": "Celtics vs 76ers 1982 conference finals",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "1981-82",
+          "teams": [
+            {
+              "team_id": 1610612738,
+              "tricode": "BOS",
+              "name": "Boston Celtics"
+            },
+            {
+              "team_id": 1610612755,
+              "tricode": "PHI",
+              "name": "Philadelphia 76ers"
+            }
+          ],
+          "round": "conference_finals",
+          "conference": null
+        }
+      },
+      "tags": [
+        "playoff_series",
+        "two_teams",
+        "older_season"
+      ],
+      "label_rationale": "Conference not stated, so conference is null."
+    },
+    {
+      "id": "unseen-three-playoff_series-08",
+      "question": "Sixers-Nets first round 2019",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "2018-19",
+          "teams": [
+            {
+              "team_id": 1610612755,
+              "tricode": "PHI",
+              "name": "Philadelphia 76ers"
+            },
+            {
+              "team_id": 1610612751,
+              "tricode": "BKN",
+              "name": "Brooklyn Nets"
+            }
+          ],
+          "round": "first_round",
+          "conference": null
+        }
+      },
+      "tags": [
+        "playoff_series",
+        "nickname",
+        "two_teams"
+      ],
+      "label_rationale": "Sixers alias; 'first round' is playoff wording, so 2019 is the 2018-19 postseason."
+    },
+    {
+      "id": "unseen-three-playoff_series-09",
+      "question": "St. Louis Hawks vs Celtics 1958 Finals",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "1957-58",
+          "teams": [
+            {
+              "team_id": 1610612737,
+              "tricode": "STL",
+              "name": "St. Louis Hawks"
+            },
+            {
+              "team_id": 1610612738,
+              "tricode": "BOS",
+              "name": "Boston Celtics"
+            }
+          ],
+          "round": "finals",
+          "conference": null
+        }
+      },
+      "tags": [
+        "playoff_series",
+        "historical_franchise",
+        "older_season",
+        "two_teams"
+      ],
+      "label_rationale": "St. Louis Hawks = Atlanta franchise in 1957-58."
+    },
+    {
+      "id": "unseen-three-playoff_series-10",
+      "question": "The series between the Jazz and Rockets in the 1997 playoffs",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "1996-97",
+          "teams": [
+            {
+              "team_id": 1610612762,
+              "tricode": "UTA",
+              "name": "Utah Jazz"
+            },
+            {
+              "team_id": 1610612745,
+              "tricode": "HOU",
+              "name": "Houston Rockets"
+            }
+          ],
+          "round": null,
+          "conference": null
+        }
+      },
+      "tags": [
+        "playoff_series",
+        "two_teams"
+      ],
+      "label_rationale": "Two teams identify the series; no round stated."
+    },
+    {
+      "id": "unseen-three-playoff_series-11",
+      "question": "The Warriors' 2007 upset of Dallas in the first round",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "2006-07",
+          "teams": [
+            {
+              "team_id": 1610612744,
+              "tricode": "GSW",
+              "name": "Golden State Warriors"
+            },
+            {
+              "team_id": 1610612742,
+              "tricode": "DAL",
+              "name": "Dallas Mavericks"
+            }
+          ],
+          "round": "first_round",
+          "conference": null
+        }
+      },
+      "tags": [
+        "playoff_series",
+        "two_teams",
+        "narrative_phrasing"
+      ],
+      "label_rationale": "'upset' is narrative; the request is the first-round series."
+    },
+    {
+      "id": "unseen-three-playoff_series-12",
+      "question": "Who did the Mavericks face in the 2006 championship round?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "2005-06",
+          "teams": [
+            {
+              "team_id": 1610612742,
+              "tricode": "DAL",
+              "name": "Dallas Mavericks"
+            }
+          ],
+          "round": "finals",
+          "conference": null
+        }
+      },
+      "tags": [
+        "playoff_series",
+        "one_team_round",
+        "finals_synonym"
+      ],
+      "label_rationale": "Asking the opponent is answered by the series result (participants)."
+    },
+    {
+      "id": "unseen-three-playoff_series-13",
+      "question": "Pull up the Lakers' second-round series in 2023",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "2022-23",
+          "teams": [
+            {
+              "team_id": 1610612747,
+              "tricode": "LAL",
+              "name": "Los Angeles Lakers"
+            }
+          ],
+          "round": "conference_semifinals",
+          "conference": null
+        }
+      },
+      "tags": [
+        "playoff_series",
+        "one_team_round",
+        "round_synonym"
+      ],
+      "label_rationale": "'second round' = conference_semifinals."
+    },
+    {
+      "id": "unseen-three-playoff_series-14",
+      "question": "Show me the Knicks' 1999 first-round series with Miami.",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "1998-99",
+          "teams": [
+            {
+              "team_id": 1610612752,
+              "tricode": "NYK",
+              "name": "New York Knicks"
+            },
+            {
+              "team_id": 1610612748,
+              "tricode": "MIA",
+              "name": "Miami Heat"
+            }
+          ],
+          "round": "first_round",
+          "conference": null
+        }
+      },
+      "tags": [
+        "playoff_series",
+        "two_teams"
+      ],
+      "label_rationale": "Two teams plus round."
+    },
+    {
+      "id": "unseen-three-playoff_series-15",
+      "question": "Rockets-Sonics 1996 West semifinals",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "1995-96",
+          "teams": [
+            {
+              "team_id": 1610612745,
+              "tricode": "HOU",
+              "name": "Houston Rockets"
+            },
+            {
+              "team_id": 1610612760,
+              "tricode": "SEA",
+              "name": "Seattle SuperSonics"
+            }
+          ],
+          "round": "conference_semifinals",
+          "conference": "west"
+        }
+      },
+      "tags": [
+        "playoff_series",
+        "nickname",
+        "historical_franchise",
+        "conference_round"
+      ],
+      "label_rationale": "Sonics alias -> Seattle SuperSonics (OKC franchise)."
+    },
+    {
+      "id": "unseen-three-playoff_series-16",
+      "question": "Open the 1971 Finals between Milwaukee and Baltimore",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "playoff_series",
+          "season": "1970-71",
+          "teams": [
+            {
+              "team_id": 1610612749,
+              "tricode": "MIL",
+              "name": "Milwaukee Bucks"
+            },
+            {
+              "team_id": 1610612764,
+              "tricode": "BAL",
+              "name": "Baltimore Bullets"
+            }
+          ],
+          "round": "finals",
+          "conference": null
+        }
+      },
+      "tags": [
+        "playoff_series",
+        "historical_franchise",
+        "older_season",
+        "city_as_team"
+      ],
+      "label_rationale": "Baltimore = Baltimore Bullets (Wizards franchise) in 1970-71."
+    },
+    {
+      "id": "unseen-three-postseason_summary-01",
+      "question": "How did the Baltimore Bullets fare in the 1971 postseason?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "1970-71",
+          "team": {
+            "team_id": 1610612764,
+            "tricode": "BAL",
+            "name": "Baltimore Bullets"
+          }
+        }
+      },
+      "tags": [
+        "postseason_summary",
+        "historical_franchise",
+        "older_season"
+      ],
+      "label_rationale": "1971 postseason = 1970-71."
+    },
+    {
+      "id": "unseen-three-postseason_summary-02",
+      "question": "Summarize the Buffalo Braves' 1976 playoffs.",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "1975-76",
+          "team": {
+            "team_id": 1610612746,
+            "tricode": "BUF",
+            "name": "Buffalo Braves"
+          }
+        }
+      },
+      "tags": [
+        "postseason_summary",
+        "historical_franchise",
+        "older_season"
+      ],
+      "label_rationale": "Braves = Clippers franchise in 1975-76."
+    },
+    {
+      "id": "unseen-three-postseason_summary-03",
+      "question": "Give me the Philadelphia Warriors' 1956 postseason.",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "1955-56",
+          "team": {
+            "team_id": 1610612744,
+            "tricode": "PHW",
+            "name": "Philadelphia Warriors"
+          }
+        }
+      },
+      "tags": [
+        "postseason_summary",
+        "historical_franchise",
+        "older_season"
+      ],
+      "label_rationale": "Philadelphia Warriors = Golden State franchise."
+    },
+    {
+      "id": "unseen-three-postseason_summary-04",
+      "question": "San Diego Rockets 1969 playoff recap",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "1968-69",
+          "team": {
+            "team_id": 1610612745,
+            "tricode": "SDR",
+            "name": "San Diego Rockets"
+          }
+        }
+      },
+      "tags": [
+        "postseason_summary",
+        "historical_franchise",
+        "older_season"
+      ],
+      "label_rationale": "San Diego Rockets = Houston franchise."
+    },
+    {
+      "id": "unseen-three-postseason_summary-05",
+      "question": "Recap every round of the 2017 playoffs.",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "2016-17",
+          "team": null
+        }
+      },
+      "tags": [
+        "postseason_summary",
+        "league_wide"
+      ],
+      "label_rationale": "League-wide summary; no team."
+    },
+    {
+      "id": "unseen-three-postseason_summary-06",
+      "question": "Who won each round of the 1970 playoffs?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "1969-70",
+          "team": null
+        }
+      },
+      "tags": [
+        "postseason_summary",
+        "league_wide",
+        "older_season"
+      ],
+      "label_rationale": "Every series of one postseason = league postseason summary."
+    },
+    {
+      "id": "unseen-three-postseason_summary-07",
+      "question": "Give me the Magic's 1995 playoff run",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "1994-95",
+          "team": {
+            "team_id": 1610612753,
+            "tricode": "ORL",
+            "name": "Orlando Magic"
+          }
+        }
+      },
+      "tags": [
+        "postseason_summary",
+        "team"
+      ],
+      "label_rationale": "1995 playoffs = 1994-95."
+    },
+    {
+      "id": "unseen-three-postseason_summary-08",
+      "question": "Summarize Indiana's run for the playoff year I'm on.",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {
+        "route": "playoffs",
+        "playoff_season": "2013-14"
+      },
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "2013-14",
+          "team": {
+            "team_id": 1610612754,
+            "tricode": "IND",
+            "name": "Indiana Pacers"
+          }
+        }
+      },
+      "tags": [
+        "postseason_summary",
+        "page_context"
+      ],
+      "label_rationale": "Season from page context."
+    },
+    {
+      "id": "unseen-three-postseason_summary-09",
+      "question": "Walk me through the 2004 Pistons' postseason.",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "2003-04",
+          "team": {
+            "team_id": 1610612765,
+            "tricode": "DET",
+            "name": "Detroit Pistons"
+          }
+        }
+      },
+      "tags": [
+        "postseason_summary",
+        "team",
+        "year_before_team"
+      ],
+      "label_rationale": "2004 postseason = 2003-04."
+    },
+    {
+      "id": "unseen-three-postseason_summary-10",
+      "question": "How did the Heat's 2006 playoff run go?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "2005-06",
+          "team": {
+            "team_id": 1610612748,
+            "tricode": "MIA",
+            "name": "Miami Heat"
+          }
+        }
+      },
+      "tags": [
+        "postseason_summary",
+        "team"
+      ],
+      "label_rationale": "Team postseason summary."
+    },
+    {
+      "id": "unseen-three-postseason_summary-11",
+      "question": "Recap the Hawks' 2021 postseason",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "2020-21",
+          "team": {
+            "team_id": 1610612737,
+            "tricode": "ATL",
+            "name": "Atlanta Hawks"
+          }
+        }
+      },
+      "tags": [
+        "postseason_summary",
+        "team"
+      ],
+      "label_rationale": "Team postseason summary."
+    },
+    {
+      "id": "unseen-three-postseason_summary-12",
+      "question": "Tell me how the 1984 NBA playoffs played out.",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "1983-84",
+          "team": null
+        }
+      },
+      "tags": [
+        "postseason_summary",
+        "league_wide",
+        "older_season"
+      ],
+      "label_rationale": "League-wide summary."
+    },
+    {
+      "id": "unseen-three-postseason_summary-13",
+      "question": "Utah Jazz '98 playoff run",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "1997-98",
+          "team": {
+            "team_id": 1610612762,
+            "tricode": "UTA",
+            "name": "Utah Jazz"
+          }
+        }
+      },
+      "tags": [
+        "postseason_summary",
+        "apostrophe_year"
+      ],
+      "label_rationale": "'98 with playoff wording = the 1998 playoffs = 1997-98."
+    },
+    {
+      "id": "unseen-three-postseason_summary-14",
+      "question": "Rip City's 1990 playoff run",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "1989-90",
+          "team": {
+            "team_id": 1610612757,
+            "tricode": "POR",
+            "name": "Portland Trail Blazers"
+          }
+        }
+      },
+      "tags": [
+        "postseason_summary",
+        "nickname"
+      ],
+      "label_rationale": "Rip City alias -> Trail Blazers."
+    },
+    {
+      "id": "unseen-three-postseason_summary-15",
+      "question": "Summarize the Cincinnati Royals' 1964 postseason.",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "1963-64",
+          "team": {
+            "team_id": 1610612758,
+            "tricode": "CIN",
+            "name": "Cincinnati Royals"
+          }
+        }
+      },
+      "tags": [
+        "postseason_summary",
+        "historical_franchise",
+        "older_season"
+      ],
+      "label_rationale": "Cincinnati Royals = Sacramento franchise in 1963-64."
+    },
+    {
+      "id": "unseen-three-postseason_summary-16",
+      "question": "Brooklyn's 2021 playoff showing",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "2020-21",
+          "team": {
+            "team_id": 1610612751,
+            "tricode": "BKN",
+            "name": "Brooklyn Nets"
+          }
+        }
+      },
+      "tags": [
+        "postseason_summary",
+        "team",
+        "city_as_team"
+      ],
+      "label_rationale": "Brooklyn (not after in/at) names the Nets."
+    },
+    {
+      "id": "unseen-three-postseason_summary-17",
+      "question": "Recap OKC's run in last season's playoffs.",
+      "reference_time": "2025-01-20T12:00:00-05:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "2023-24",
+          "team": {
+            "team_id": 1610612760,
+            "tricode": "OKC",
+            "name": "Oklahoma City Thunder"
+          }
+        }
+      },
+      "tags": [
+        "postseason_summary",
+        "relative_season",
+        "abbreviation"
+      ],
+      "label_rationale": "Reference 2025-01-20 is in the 2024-25 season, so last season is 2023-24."
+    },
+    {
+      "id": "unseen-three-postseason_summary-18",
+      "question": "What was the Bucks' playoff record in 2018-19?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "2018-19",
+          "team": {
+            "team_id": 1610612749,
+            "tricode": "MIL",
+            "name": "Milwaukee Bucks"
+          }
+        }
+      },
+      "tags": [
+        "postseason_summary",
+        "record_wording",
+        "debatable"
+      ],
+      "label_rationale": "team_records is regular season only; the team postseason summary carries the playoff win-loss record. DEBATABLE: could be labeled unsupported/other (team_records guard rejects playoff wording)."
+    },
+    {
+      "id": "unseen-three-player_season_stats-01",
+      "question": "Steph's threes per game in 2015-16",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "player_season_stats",
+          "player": {
+            "player_id": 201939,
+            "name": "Stephen Curry"
+          },
+          "season": "2015-16",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "three_pointers",
+            "aggregation": "per_game"
+          },
+          "team": null
+        }
+      },
+      "tags": [
+        "player_season_stats",
+        "nickname",
+        "per_game"
+      ],
+      "label_rationale": "Steph alias; 'threes' = three_pointers."
+    },
+    {
+      "id": "unseen-three-player_season_stats-02",
+      "question": "Russell Westbrook's total rebounds in 2016-17",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "player_season_stats",
+          "player": {
+            "player_id": 201566,
+            "name": "Russell Westbrook"
+          },
+          "season": "2016-17",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "rebounds",
+            "aggregation": "total"
+          },
+          "team": null
+        }
+      },
+      "tags": [
+        "player_season_stats",
+        "totals",
+        "possessive"
+      ],
+      "label_rationale": "'total' states the measure."
+    },
+    {
+      "id": "unseen-three-player_season_stats-03",
+      "question": "What was Wilt's scoring average in 1961-62?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "player_season_stats",
+          "player": {
+            "player_id": 76375,
+            "name": "Wilt Chamberlain"
+          },
+          "season": "1961-62",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "points",
+            "aggregation": "per_game"
+          },
+          "team": null
+        }
+      },
+      "tags": [
+        "player_season_stats",
+        "nickname",
+        "older_season",
+        "per_game"
+      ],
+      "label_rationale": "'average' = per game."
+    },
+    {
+      "id": "unseen-three-player_season_stats-04",
+      "question": "Kawhi's steals per game in the 2019 playoffs",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "player_season_stats",
+          "player": {
+            "player_id": 202695,
+            "name": "Kawhi Leonard"
+          },
+          "season": "2018-19",
+          "season_type": "playoffs",
+          "stat": {
+            "stat": "steals",
+            "aggregation": "per_game"
+          },
+          "team": null
+        }
+      },
+      "tags": [
+        "player_season_stats",
+        "playoffs",
+        "first_name_only"
+      ],
+      "label_rationale": "2019 playoffs = 2018-19, season_type playoffs."
+    },
+    {
+      "id": "unseen-three-player_season_stats-05",
+      "question": "How many blocks did Mark Eaton have in 1984-85?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "player_season_stats",
+          "player": {
+            "player_id": 76631,
+            "name": "Mark Eaton"
+          },
+          "season": "1984-85",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "blocks",
+            "aggregation": "total"
+          },
+          "team": null
+        }
+      },
+      "tags": [
+        "player_season_stats",
+        "totals",
+        "older_season"
+      ],
+      "label_rationale": "'how many' = totals."
+    },
+    {
+      "id": "unseen-three-player_season_stats-06",
+      "question": "Giannis's free throw percentage in 2020-21",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "player_season_stats",
+          "player": {
+            "player_id": 203507,
+            "name": "Giannis Antetokounmpo"
+          },
+          "season": "2020-21",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "free_throw_percentage",
+            "aggregation": "total"
+          },
+          "team": null
+        }
+      },
+      "tags": [
+        "player_season_stats",
+        "percentage",
+        "first_name_only"
+      ],
+      "label_rationale": "Percentages are requested as total."
+    },
+    {
+      "id": "unseen-three-player_season_stats-07",
+      "question": "Jimmy Butler's minutes per game for the Heat in 2019-20",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "player_season_stats",
+          "player": {
+            "player_id": 202710,
+            "name": "Jimmy Butler III"
+          },
+          "season": "2019-20",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "minutes",
+            "aggregation": "per_game"
+          },
+          "team": {
+            "team_id": 1610612748,
+            "tricode": "MIA",
+            "name": "Miami Heat"
+          }
+        }
+      },
+      "tags": [
+        "player_season_stats",
+        "team_stint",
+        "per_game"
+      ],
+      "label_rationale": "A named team restricts the answer to that stint."
+    },
+    {
+      "id": "unseen-three-player_season_stats-08",
+      "question": "Carmelo Anthony stats for the Knicks in 2010-11",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "player_season_stats",
+          "player": {
+            "player_id": 2546,
+            "name": "Carmelo Anthony"
+          },
+          "season": "2010-11",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "stat_line",
+            "aggregation": "per_game"
+          },
+          "team": {
+            "team_id": 1610612752,
+            "tricode": "NYK",
+            "name": "New York Knicks"
+          }
+        }
+      },
+      "tags": [
+        "player_season_stats",
+        "team_stint",
+        "traded_player",
+        "stat_line"
+      ],
+      "label_rationale": "Traded mid-season; the named team selects the Knicks stint. No measure stated -> per game first (ADR 0014)."
+    },
+    {
+      "id": "unseen-three-player_season_stats-09",
+      "question": "Shai Gilgeous-Alexander's points per game this season",
+      "reference_time": "2025-02-10T12:00:00-05:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "player_season_stats",
+          "player": {
+            "player_id": 1628983,
+            "name": "Shai Gilgeous-Alexander"
+          },
+          "season": "2024-25",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "points",
+            "aggregation": "per_game"
+          },
+          "team": null
+        }
+      },
+      "tags": [
+        "player_season_stats",
+        "relative_season"
+      ],
+      "label_rationale": "Reference 2025-02-10 is inside 2024-25."
+    },
+    {
+      "id": "unseen-three-player_season_stats-10",
+      "question": "Dirk's 3-point percentage in 2006-07",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "player_season_stats",
+          "player": {
+            "player_id": 1717,
+            "name": "Dirk Nowitzki"
+          },
+          "season": "2006-07",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "three_point_percentage",
+            "aggregation": "total"
+          },
+          "team": null
+        }
+      },
+      "tags": [
+        "player_season_stats",
+        "nickname",
+        "percentage"
+      ],
+      "label_rationale": "Dirk alias -> Nowitzki."
+    },
+    {
+      "id": "unseen-three-player_season_stats-11",
+      "question": "Chris Paul assists in 2007-08",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "player_season_stats",
+          "player": {
+            "player_id": 101108,
+            "name": "Chris Paul"
+          },
+          "season": "2007-08",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "assists",
+            "aggregation": "per_game"
+          },
+          "team": null
+        }
+      },
+      "tags": [
+        "player_season_stats",
+        "no_measure"
+      ],
+      "label_rationale": "No measure stated -> per game first with a totals toggle (ADR 0014 decision 2)."
+    },
+    {
+      "id": "unseen-three-player_season_stats-12",
+      "question": "Hakeem's blocks in the 1994 playoffs",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "player_season_stats",
+          "player": {
+            "player_id": 165,
+            "name": "Hakeem Olajuwon"
+          },
+          "season": "1993-94",
+          "season_type": "playoffs",
+          "stat": {
+            "stat": "blocks",
+            "aggregation": "per_game"
+          },
+          "team": null
+        }
+      },
+      "tags": [
+        "player_season_stats",
+        "playoffs",
+        "no_measure",
+        "first_name_only"
+      ],
+      "label_rationale": "No measure -> per game; 1994 playoffs = 1993-94."
+    },
+    {
+      "id": "unseen-three-player_season_stats-13",
+      "question": "Oscar Robertson assists per game 1961-62",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "player_season_stats",
+          "player": {
+            "player_id": 600015,
+            "name": "Oscar Robertson"
+          },
+          "season": "1961-62",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "assists",
+            "aggregation": "per_game"
+          },
+          "team": null
+        }
+      },
+      "tags": [
+        "player_season_stats",
+        "older_season",
+        "per_game"
+      ],
+      "label_rationale": "Triple-double season, per game stated."
+    },
+    {
+      "id": "unseen-three-player_season_stats-14",
+      "question": "Anthony Edwards total points last season",
+      "reference_time": "2025-03-01T12:00:00-05:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "player_season_stats",
+          "player": {
+            "player_id": 1630162,
+            "name": "Anthony Edwards"
+          },
+          "season": "2023-24",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "points",
+            "aggregation": "total"
+          },
+          "team": null
+        }
+      },
+      "tags": [
+        "player_season_stats",
+        "relative_season",
+        "totals"
+      ],
+      "label_rationale": "Reference 2025-03-01 is in 2024-25; last season = 2023-24."
+    },
+    {
+      "id": "unseen-three-player_season_stats-15",
+      "question": "Total offensive rebounds for Dennis Rodman in 1991-92",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "player_season_stats",
+          "player": {
+            "player_id": 23,
+            "name": "Dennis Rodman"
+          },
+          "season": "1991-92",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "offensive_rebounds",
+            "aggregation": "total"
+          },
+          "team": null
+        }
+      },
+      "tags": [
+        "player_season_stats",
+        "totals",
+        "older_season"
+      ],
+      "label_rationale": "'Total' states the measure."
+    },
+    {
+      "id": "unseen-three-player_season_stats-16",
+      "question": "Stat line for Tim Duncan in the 2003 postseason",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "player_season_stats",
+          "player": {
+            "player_id": 1495,
+            "name": "Tim Duncan"
+          },
+          "season": "2002-03",
+          "season_type": "playoffs",
+          "stat": {
+            "stat": "stat_line",
+            "aggregation": "per_game"
+          },
+          "team": null
+        }
+      },
+      "tags": [
+        "player_season_stats",
+        "playoffs",
+        "stat_line",
+        "no_measure"
+      ],
+      "label_rationale": "Postseason wording -> playoffs; no measure -> per game first."
+    },
+    {
+      "id": "unseen-three-player_season_stats-17",
+      "question": "Tracy McGrady ppg 2002-03",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "player_season_stats",
+          "player": {
+            "player_id": 1503,
+            "name": "Tracy McGrady"
+          },
+          "season": "2002-03",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "points",
+            "aggregation": "per_game"
+          },
+          "team": null
+        }
+      },
+      "tags": [
+        "player_season_stats",
+        "abbreviation",
+        "per_game"
+      ],
+      "label_rationale": "'ppg' = points per game."
+    },
+    {
+      "id": "unseen-three-player_season_stats-18",
+      "question": "Kevin Duarnt points per game 2013-14",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "player_season_stats",
+          "player": {
+            "player_id": 201142,
+            "name": "Kevin Durant"
+          },
+          "season": "2013-14",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "points",
+            "aggregation": "per_game"
+          },
+          "team": null
+        }
+      },
+      "tags": [
+        "player_season_stats",
+        "typo",
+        "debatable"
+      ],
+      "label_rationale": "Misspelled surname; only Kevin Durant fits. DEBATABLE: accept vs player clarification."
+    },
+    {
+      "id": "unseen-three-team_records-01",
+      "question": "What was the Warriors' record in 2015-16?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "team_records",
+          "season": "2015-16",
+          "team": {
+            "team_id": 1610612744,
+            "tricode": "GSW",
+            "name": "Golden State Warriors"
+          },
+          "standings_scope": "league"
+        }
+      },
+      "tags": [
+        "team_records",
+        "team_record"
+      ],
+      "label_rationale": "Regular-season record."
+    },
+    {
+      "id": "unseen-three-team_records-02",
+      "question": "Bulls win-loss 1995-96",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "team_records",
+          "season": "1995-96",
+          "team": {
+            "team_id": 1610612741,
+            "tricode": "CHI",
+            "name": "Chicago Bulls"
+          },
+          "standings_scope": "league"
+        }
+      },
+      "tags": [
+        "team_records",
+        "team_record",
+        "terse"
+      ],
+      "label_rationale": "Terse team record request."
+    },
+    {
+      "id": "unseen-three-team_records-03",
+      "question": "How did the West standings look at the end of 2006-07?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "team_records",
+          "season": "2006-07",
+          "team": null,
+          "standings_scope": "west"
+        }
+      },
+      "tags": [
+        "team_records",
+        "standings",
+        "conference"
+      ],
+      "label_rationale": "Western Conference standings, final."
+    },
+    {
+      "id": "unseen-three-team_records-04",
+      "question": "Eastern Conference table for 1997-98",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "team_records",
+          "season": "1997-98",
+          "team": null,
+          "standings_scope": "east"
+        }
+      },
+      "tags": [
+        "team_records",
+        "standings",
+        "conference"
+      ],
+      "label_rationale": "'table' = standings."
+    },
+    {
+      "id": "unseen-three-team_records-05",
+      "question": "Show the full NBA standings from 1985-86.",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "team_records",
+          "season": "1985-86",
+          "team": null,
+          "standings_scope": "league"
+        }
+      },
+      "tags": [
+        "team_records",
+        "standings",
+        "league",
+        "older_season"
+      ],
+      "label_rationale": "League-wide standings."
+    },
+    {
+      "id": "unseen-three-team_records-06",
+      "question": "How many games did the Bobcats win in 2011-12?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "team_records",
+          "season": "2011-12",
+          "team": {
+            "team_id": 1610612766,
+            "tricode": "CHA",
+            "name": "Charlotte Bobcats"
+          },
+          "standings_scope": "league"
+        }
+      },
+      "tags": [
+        "team_records",
+        "team_record",
+        "historical_franchise",
+        "nickname"
+      ],
+      "label_rationale": "Bobcats = Charlotte franchise 2004-2013; wins are part of the record answer."
+    },
+    {
+      "id": "unseen-three-team_records-07",
+      "question": "Seattle SuperSonics record 1995-96",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "team_records",
+          "season": "1995-96",
+          "team": {
+            "team_id": 1610612760,
+            "tricode": "SEA",
+            "name": "Seattle SuperSonics"
+          },
+          "standings_scope": "league"
+        }
+      },
+      "tags": [
+        "team_records",
+        "team_record",
+        "historical_franchise"
+      ],
+      "label_rationale": "SuperSonics = OKC franchise."
+    },
+    {
+      "id": "unseen-three-team_records-08",
+      "question": "Sixers' record in 1966-67",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "team_records",
+          "season": "1966-67",
+          "team": {
+            "team_id": 1610612755,
+            "tricode": "PHI",
+            "name": "Philadelphia 76ers"
+          },
+          "standings_scope": "league"
+        }
+      },
+      "tags": [
+        "team_records",
+        "team_record",
+        "nickname",
+        "older_season"
+      ],
+      "label_rationale": "Sixers alias."
+    },
+    {
+      "id": "unseen-three-team_records-09",
+      "question": "What was the Knicks' record this season?",
+      "reference_time": "2025-02-10T12:00:00-05:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "team_records",
+          "season": "2024-25",
+          "team": {
+            "team_id": 1610612752,
+            "tricode": "NYK",
+            "name": "New York Knicks"
+          },
+          "standings_scope": "league"
+        }
+      },
+      "tags": [
+        "team_records",
+        "team_record",
+        "relative_season"
+      ],
+      "label_rationale": "Reference 2025-02-10 is in 2024-25."
+    },
+    {
+      "id": "unseen-three-team_records-10",
+      "question": "Celtics wins and losses last season",
+      "reference_time": "2025-11-15T12:00:00-05:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "team_records",
+          "season": "2024-25",
+          "team": {
+            "team_id": 1610612738,
+            "tricode": "BOS",
+            "name": "Boston Celtics"
+          },
+          "standings_scope": "league"
+        }
+      },
+      "tags": [
+        "team_records",
+        "team_record",
+        "relative_season"
+      ],
+      "label_rationale": "Reference 2025-11-15 is in 2025-26 (not the offseason), so last season is 2024-25."
+    },
+    {
+      "id": "unseen-three-team_records-11",
+      "question": "Vancouver Grizzlies' 1998-99 record",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "team_records",
+          "season": "1998-99",
+          "team": {
+            "team_id": 1610612763,
+            "tricode": "VAN",
+            "name": "Vancouver Grizzlies"
+          },
+          "standings_scope": "league"
+        }
+      },
+      "tags": [
+        "team_records",
+        "team_record",
+        "historical_franchise",
+        "shortened_season"
+      ],
+      "label_rationale": "Vancouver Grizzlies = Memphis franchise; lockout season."
+    },
+    {
+      "id": "unseen-three-team_records-12",
+      "question": "What did the Hornets finish with in 2005-06?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "team_records",
+          "season": "2005-06",
+          "team": {
+            "team_id": 1610612740,
+            "tricode": "NOK",
+            "name": "New Orleans/Oklahoma City Hornets"
+          },
+          "standings_scope": "league"
+        }
+      },
+      "tags": [
+        "team_records",
+        "team_record",
+        "historical_franchise",
+        "dated_name"
+      ],
+      "label_rationale": "In 2005-06 the only Hornets were the New Orleans/Oklahoma City Hornets (Pelicans franchise); Charlotte were not Hornets then."
+    },
+    {
+      "id": "unseen-three-team_records-13",
+      "question": "Record of the Kansas City-Omaha Kings in 1973-74",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "team_records",
+          "season": "1973-74",
+          "team": {
+            "team_id": 1610612758,
+            "tricode": "KCO",
+            "name": "Kansas City-Omaha Kings"
+          },
+          "standings_scope": "league"
+        }
+      },
+      "tags": [
+        "team_records",
+        "team_record",
+        "historical_franchise",
+        "older_season"
+      ],
+      "label_rationale": "KC-Omaha Kings = Sacramento franchise."
+    },
+    {
+      "id": "unseen-three-team_records-14",
+      "question": "What was Milwaukee's regular-season mark in 1970-71?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "team_records",
+          "season": "1970-71",
+          "team": {
+            "team_id": 1610612749,
+            "tricode": "MIL",
+            "name": "Milwaukee Bucks"
+          },
+          "standings_scope": "league"
+        }
+      },
+      "tags": [
+        "team_records",
+        "team_record",
+        "city_as_team"
+      ],
+      "label_rationale": "'mark' = record; regular-season wording with no playoff wording."
+    },
+    {
+      "id": "unseen-three-team_records-15",
+      "question": "Minneapolis Lakers record 1949-50",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "team_records",
+          "season": "1949-50",
+          "team": {
+            "team_id": 1610612747,
+            "tricode": "MNL",
+            "name": "Minneapolis Lakers"
+          },
+          "standings_scope": "league"
+        }
+      },
+      "tags": [
+        "team_records",
+        "team_record",
+        "historical_franchise",
+        "older_season"
+      ],
+      "label_rationale": "Minneapolis Lakers = Lakers franchise."
+    },
+    {
+      "id": "unseen-three-team_records-16",
+      "question": "Utah's record in 1997-98",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "team_records",
+          "season": "1997-98",
+          "team": {
+            "team_id": 1610612762,
+            "tricode": "UTA",
+            "name": "Utah Jazz"
+          },
+          "standings_scope": "league"
+        }
+      },
+      "tags": [
+        "team_records",
+        "team_record",
+        "city_as_team"
+      ],
+      "label_rationale": "Utah = Jazz."
+    },
+    {
+      "id": "unseen-three-season_leaders-01",
+      "question": "Rebounding leaders per game, 1991-92",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "season_leaders",
+          "season": "1991-92",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "rebounds",
+            "aggregation": "per_game"
+          },
+          "limit": 10
+        }
+      },
+      "tags": [
+        "season_leaders",
+        "per_game",
+        "default_limit"
+      ],
+      "label_rationale": "Default top 10."
+    },
+    {
+      "id": "unseen-three-season_leaders-02",
+      "question": "Top 5 scorers per game in 1986-87",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "season_leaders",
+          "season": "1986-87",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "points",
+            "aggregation": "per_game"
+          },
+          "limit": 5
+        }
+      },
+      "tags": [
+        "season_leaders",
+        "per_game",
+        "top_n"
+      ],
+      "label_rationale": "'scorers' = points; top 5."
+    },
+    {
+      "id": "unseen-three-season_leaders-03",
+      "question": "Top three in total steals in 2000-01, including anyone tied",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "season_leaders",
+          "season": "2000-01",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "steals",
+            "aggregation": "total"
+          },
+          "limit": 3
+        }
+      },
+      "tags": [
+        "season_leaders",
+        "totals",
+        "top_n_word",
+        "ties"
+      ],
+      "label_rationale": "Top N in words; ties are always listed by the tool, so the tie wording does not change the request."
+    },
+    {
+      "id": "unseen-three-season_leaders-04",
+      "question": "Who had the most assists in total in 1990-91?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "season_leaders",
+          "season": "1990-91",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "assists",
+            "aggregation": "total"
+          },
+          "limit": 10
+        }
+      },
+      "tags": [
+        "season_leaders",
+        "totals"
+      ],
+      "label_rationale": "'in total' states the measure."
+    },
+    {
+      "id": "unseen-three-season_leaders-05",
+      "question": "Which qualified shooters led in three-point percentage in 2008-09?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "season_leaders",
+          "season": "2008-09",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "three_point_percentage",
+            "aggregation": "total"
+          },
+          "limit": 10
+        }
+      },
+      "tags": [
+        "season_leaders",
+        "percentage",
+        "qualification"
+      ],
+      "label_rationale": "Percentages have no measure (total); qualification belongs to the source."
+    },
+    {
+      "id": "unseen-three-season_leaders-06",
+      "question": "Top 15 in field goal percentage in 1999-2000",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "season_leaders",
+          "season": "1999-00",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "field_goal_percentage",
+            "aggregation": "total"
+          },
+          "limit": 15
+        }
+      },
+      "tags": [
+        "season_leaders",
+        "percentage",
+        "top_n",
+        "four_digit_season_end"
+      ],
+      "label_rationale": "'1999-2000' = season 1999-00."
+    },
+    {
+      "id": "unseen-three-season_leaders-07",
+      "question": "Who averaged the most assists in the 2016 playoffs?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "season_leaders",
+          "season": "2015-16",
+          "season_type": "playoffs",
+          "stat": {
+            "stat": "assists",
+            "aggregation": "per_game"
+          },
+          "limit": 10
+        }
+      },
+      "tags": [
+        "season_leaders",
+        "playoffs",
+        "per_game"
+      ],
+      "label_rationale": "'averaged' = per game; 2016 playoffs = 2015-16."
+    },
+    {
+      "id": "unseen-three-season_leaders-08",
+      "question": "List the top 40 shot blockers by total blocks in 2004-05",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "season_leaders",
+          "season": "2004-05",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "blocks",
+            "aggregation": "total"
+          },
+          "limit": 25,
+          "requested_limit": 40
+        }
+      },
+      "tags": [
+        "season_leaders",
+        "top_n_over_max",
+        "totals"
+      ],
+      "label_rationale": "N above 25 shows the top 25 with a note (ADR 0014); requested_limit keeps 40."
+    },
+    {
+      "id": "unseen-three-season_leaders-09",
+      "question": "Who led the NBA in total three-pointers made in 1987-88?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "season_leaders",
+          "season": "1987-88",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "three_pointers",
+            "aggregation": "total"
+          },
+          "limit": 10
+        }
+      },
+      "tags": [
+        "season_leaders",
+        "totals",
+        "older_season"
+      ],
+      "label_rationale": "Early 3-point era; totals stated."
+    },
+    {
+      "id": "unseen-three-season_leaders-10",
+      "question": "Top twenty free throw makers in total, 2011-12",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "season_leaders",
+          "season": "2011-12",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "free_throws",
+            "aggregation": "total"
+          },
+          "limit": 20
+        }
+      },
+      "tags": [
+        "season_leaders",
+        "top_n_word",
+        "totals",
+        "shortened_season"
+      ],
+      "label_rationale": "'twenty' = 20."
+    },
+    {
+      "id": "unseen-three-season_leaders-11",
+      "question": "Playoff rebounding leaders per game, 2003 postseason",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "season_leaders",
+          "season": "2002-03",
+          "season_type": "playoffs",
+          "stat": {
+            "stat": "rebounds",
+            "aggregation": "per_game"
+          },
+          "limit": 10
+        }
+      },
+      "tags": [
+        "season_leaders",
+        "playoffs",
+        "per_game"
+      ],
+      "label_rationale": "2003 postseason = 2002-03."
+    },
+    {
+      "id": "unseen-three-season_leaders-12",
+      "question": "Minutes per game leaders in 2013-14",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "season_leaders",
+          "season": "2013-14",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "minutes",
+            "aggregation": "per_game"
+          },
+          "limit": 10
+        }
+      },
+      "tags": [
+        "season_leaders",
+        "per_game"
+      ],
+      "label_rationale": "Minutes are a season leader stat."
+    },
+    {
+      "id": "unseen-three-season_leaders-13",
+      "question": "Who led the league in turnovers in total in 2005-06?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "season_leaders",
+          "season": "2005-06",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "turnovers",
+            "aggregation": "total"
+          },
+          "limit": 10
+        }
+      },
+      "tags": [
+        "season_leaders",
+        "totals"
+      ],
+      "label_rationale": "'in total' states the measure."
+    },
+    {
+      "id": "unseen-three-season_leaders-14",
+      "question": "Most defensive rebounds per game in 2018-19",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "season_leaders",
+          "season": "2018-19",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "defensive_rebounds",
+            "aggregation": "per_game"
+          },
+          "limit": 10
+        }
+      },
+      "tags": [
+        "season_leaders",
+        "per_game"
+      ],
+      "label_rationale": "Defensive rebounds per game."
+    },
+    {
+      "id": "unseen-three-season_leaders-15",
+      "question": "Top 7 offensive rebounders in total, 1996-97",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "season_leaders",
+          "season": "1996-97",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "offensive_rebounds",
+            "aggregation": "total"
+          },
+          "limit": 7
+        }
+      },
+      "tags": [
+        "season_leaders",
+        "top_n",
+        "totals"
+      ],
+      "label_rationale": "Top 7."
+    },
+    {
+      "id": "unseen-three-season_leaders-16",
+      "question": "Who led in blocks per game this season?",
+      "reference_time": "2025-03-15T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "season_leaders",
+          "season": "2024-25",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "blocks",
+            "aggregation": "per_game"
+          },
+          "limit": 10
+        }
+      },
+      "tags": [
+        "season_leaders",
+        "relative_season",
+        "per_game"
+      ],
+      "label_rationale": "Reference 2025-03-15 is in 2024-25."
+    },
+    {
+      "id": "unseen-three-season_leaders-17",
+      "question": "Highest scoring average in 1974-75",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "season_leaders",
+          "season": "1974-75",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "points",
+            "aggregation": "per_game"
+          },
+          "limit": 10
+        }
+      },
+      "tags": [
+        "season_leaders",
+        "per_game",
+        "older_season"
+      ],
+      "label_rationale": "'average' = per game."
+    },
+    {
+      "id": "unseen-three-career_stats-01",
+      "question": "Elgin Baylor's career points total",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "career_stats",
+          "view": "player_totals",
+          "player": {
+            "player_id": 76127,
+            "name": "Elgin Baylor"
+          },
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "points",
+            "aggregation": "total"
+          },
+          "limit": 10
+        }
+      },
+      "tags": [
+        "career_stats",
+        "player_totals",
+        "older_season",
+        "totals"
+      ],
+      "label_rationale": "Career line, totals stated."
+    },
+    {
+      "id": "unseen-three-career_stats-02",
+      "question": "John Stockton career assists per game",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "career_stats",
+          "view": "player_totals",
+          "player": {
+            "player_id": 304,
+            "name": "John Stockton"
+          },
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "assists",
+            "aggregation": "per_game"
+          },
+          "limit": 10
+        }
+      },
+      "tags": [
+        "career_stats",
+        "player_totals",
+        "per_game"
+      ],
+      "label_rationale": "Averages must be explicit; they are here."
+    },
+    {
+      "id": "unseen-three-career_stats-03",
+      "question": "All-time steals leaders",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "career_stats",
+          "view": "leaders",
+          "player": null,
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "steals",
+            "aggregation": "total"
+          },
+          "limit": 10
+        }
+      },
+      "tags": [
+        "career_stats",
+        "leaders",
+        "default_limit"
+      ],
+      "label_rationale": "No player -> leaders view, default 10, totals."
+    },
+    {
+      "id": "unseen-three-career_stats-04",
+      "question": "Top five all-time three-point makers",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "career_stats",
+          "view": "leaders",
+          "player": null,
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "three_pointers",
+            "aggregation": "total"
+          },
+          "limit": 5
+        }
+      },
+      "tags": [
+        "career_stats",
+        "leaders",
+        "top_n_word"
+      ],
+      "label_rationale": "Top five in words."
+    },
+    {
+      "id": "unseen-three-career_stats-05",
+      "question": "Where does Dirk rank on the all-time scoring list?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "career_stats",
+          "view": "player_rank",
+          "player": {
+            "player_id": 1717,
+            "name": "Dirk Nowitzki"
+          },
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "points",
+            "aggregation": "total"
+          },
+          "limit": 10
+        }
+      },
+      "tags": [
+        "career_stats",
+        "player_rank",
+        "nickname"
+      ],
+      "label_rationale": "Rank wording with a named player -> player_rank."
+    },
+    {
+      "id": "unseen-three-career_stats-06",
+      "question": "Tim Duncan career playoff rebounds",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "career_stats",
+          "view": "player_totals",
+          "player": {
+            "player_id": 1495,
+            "name": "Tim Duncan"
+          },
+          "season_type": "playoffs",
+          "stat": {
+            "stat": "rebounds",
+            "aggregation": "total"
+          },
+          "limit": 10
+        }
+      },
+      "tags": [
+        "career_stats",
+        "player_totals",
+        "playoffs"
+      ],
+      "label_rationale": "Career default totals; playoffs stated."
+    },
+    {
+      "id": "unseen-three-career_stats-07",
+      "question": "Michael Jordan career stats",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "career_stats",
+          "view": "player_totals",
+          "player": {
+            "player_id": 893,
+            "name": "Michael Jordan"
+          },
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "stat_line",
+            "aggregation": "total"
+          },
+          "limit": 10
+        }
+      },
+      "tags": [
+        "career_stats",
+        "player_totals",
+        "stat_line"
+      ],
+      "label_rationale": "Full career line; career defaults to totals (ADR 0013)."
+    },
+    {
+      "id": "unseen-three-career_stats-08",
+      "question": "Reggie Miller's career free throw percentage",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "career_stats",
+          "view": "player_totals",
+          "player": {
+            "player_id": 397,
+            "name": "Reggie Miller"
+          },
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "free_throw_percentage",
+            "aggregation": "total"
+          },
+          "limit": 10
+        }
+      },
+      "tags": [
+        "career_stats",
+        "player_totals",
+        "percentage"
+      ],
+      "label_rationale": "Percentages are total."
+    },
+    {
+      "id": "unseen-three-career_stats-09",
+      "question": "All-time playoff assists leaders",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "career_stats",
+          "view": "leaders",
+          "player": null,
+          "season_type": "playoffs",
+          "stat": {
+            "stat": "assists",
+            "aggregation": "total"
+          },
+          "limit": 10
+        }
+      },
+      "tags": [
+        "career_stats",
+        "leaders",
+        "playoffs"
+      ],
+      "label_rationale": "Playoff all-time list."
+    },
+    {
+      "id": "unseen-three-career_stats-10",
+      "question": "Top 20 all-time in offensive rebounds",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "career_stats",
+          "view": "leaders",
+          "player": null,
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "offensive_rebounds",
+            "aggregation": "total"
+          },
+          "limit": 20
+        }
+      },
+      "tags": [
+        "career_stats",
+        "leaders",
+        "top_n",
+        "partial_coverage"
+      ],
+      "label_rationale": "Offensive rebounds recorded from 1973-74; the coverage note is an answer concern."
+    },
+    {
+      "id": "unseen-three-career_stats-11",
+      "question": "Where does Kevin Garnett rank all-time in career rebounds?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "career_stats",
+          "view": "player_rank",
+          "player": {
+            "player_id": 708,
+            "name": "Kevin Garnett"
+          },
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "rebounds",
+            "aggregation": "total"
+          },
+          "limit": 10
+        }
+      },
+      "tags": [
+        "career_stats",
+        "player_rank"
+      ],
+      "label_rationale": "Rank wording."
+    },
+    {
+      "id": "unseen-three-career_stats-12",
+      "question": "The Mailman's career playoff points per game",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "career_stats",
+          "view": "player_totals",
+          "player": {
+            "player_id": 252,
+            "name": "Karl Malone"
+          },
+          "season_type": "playoffs",
+          "stat": {
+            "stat": "points",
+            "aggregation": "per_game"
+          },
+          "limit": 10
+        }
+      },
+      "tags": [
+        "career_stats",
+        "player_totals",
+        "nickname",
+        "playoffs",
+        "per_game"
+      ],
+      "label_rationale": "Mailman alias -> Karl Malone."
+    },
+    {
+      "id": "unseen-three-career_stats-13",
+      "question": "Magic Johnson's lifetime assists",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "career_stats",
+          "view": "player_totals",
+          "player": {
+            "player_id": 77142,
+            "name": "Magic Johnson"
+          },
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "assists",
+            "aggregation": "total"
+          },
+          "limit": 10
+        }
+      },
+      "tags": [
+        "career_stats",
+        "player_totals",
+        "career_synonym"
+      ],
+      "label_rationale": "'lifetime' is career wording."
+    },
+    {
+      "id": "unseen-three-career_stats-14",
+      "question": "How many career blocks did Dikembe Mutombo have?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "career_stats",
+          "view": "player_totals",
+          "player": {
+            "player_id": 87,
+            "name": "Dikembe Mutombo"
+          },
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "blocks",
+            "aggregation": "total"
+          },
+          "limit": 10
+        }
+      },
+      "tags": [
+        "career_stats",
+        "player_totals",
+        "totals"
+      ],
+      "label_rationale": "'how many' = totals."
+    },
+    {
+      "id": "unseen-three-career_stats-15",
+      "question": "Top 40 all-time in career turnovers",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "career_stats",
+          "view": "leaders",
+          "player": null,
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "turnovers",
+            "aggregation": "total"
+          },
+          "limit": 25,
+          "requested_limit": 40
+        }
+      },
+      "tags": [
+        "career_stats",
+        "leaders",
+        "top_n_over_max"
+      ],
+      "label_rationale": "N above 25 shows 25 with a note (ADR 0014)."
+    },
+    {
+      "id": "unseen-three-career_stats-16",
+      "question": "Who is the NBA's all-time leader in free throws made?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "career_stats",
+          "view": "leaders",
+          "player": null,
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "free_throws",
+            "aggregation": "total"
+          },
+          "limit": 10
+        }
+      },
+      "tags": [
+        "career_stats",
+        "leaders",
+        "default_limit"
+      ],
+      "label_rationale": "No player; 'Who is the leader' still lists the top 10."
+    },
+    {
+      "id": "unseen-three-career_stats-17",
+      "question": "Steve Nash career three point percentage",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "career_stats",
+          "view": "player_totals",
+          "player": {
+            "player_id": 959,
+            "name": "Steve Nash"
+          },
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "three_point_percentage",
+            "aggregation": "total"
+          },
+          "limit": 10
+        }
+      },
+      "tags": [
+        "career_stats",
+        "player_totals",
+        "percentage"
+      ],
+      "label_rationale": "Career percentage."
+    },
+    {
+      "id": "unseen-three-career_stats-18",
+      "question": "Kobe's all-time rank in points",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "accept",
+        "request": {
+          "intent": "career_stats",
+          "view": "player_rank",
+          "player": {
+            "player_id": 977,
+            "name": "Kobe Bryant"
+          },
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "points",
+            "aggregation": "total"
+          },
+          "limit": 10
+        }
+      },
+      "tags": [
+        "career_stats",
+        "player_rank",
+        "nickname"
+      ],
+      "label_rationale": "Kobe alias -> Bryant; rank wording."
+    },
+    {
+      "id": "unseen-three-boxscore_stat-19",
+      "question": "How many rebounds did Gasol grab on February 20, 2014?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "player",
+        "clarify_reason": "ambiguous"
+      },
+      "tags": [
+        "boxscore_stat",
+        "clarify",
+        "ambiguous_surname"
+      ],
+      "label_rationale": "Pau and Marc Gasol were both active."
+    },
+    {
+      "id": "unseen-three-player_season_stats-19",
+      "question": "Ball's assists per game in 2021-22",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "player",
+        "clarify_reason": "ambiguous"
+      },
+      "tags": [
+        "player_season_stats",
+        "clarify",
+        "ambiguous_surname"
+      ],
+      "label_rationale": "Lonzo and LaMelo Ball both played 2021-22."
+    },
+    {
+      "id": "unseen-three-season_leaders-18",
+      "question": "Steals leaders for 2016-17",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "aggregation",
+        "clarify_reason": "ambiguous"
+      },
+      "tags": [
+        "season_leaders",
+        "clarify",
+        "no_measure"
+      ],
+      "label_rationale": "Counting-stat leaders never default the measure (ADR 0012/0014)."
+    },
+    {
+      "id": "unseen-three-season_leaders-19",
+      "question": "Who won the scoring title in 2013-14?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "aggregation",
+        "clarify_reason": "ambiguous"
+      },
+      "tags": [
+        "season_leaders",
+        "clarify",
+        "no_measure",
+        "debatable"
+      ],
+      "label_rationale": "Contract: no measure wording -> clarify. DEBATABLE: the NBA scoring title is by definition per game."
+    },
+    {
+      "id": "unseen-three-player_season_stats-20",
+      "question": "Karl-Anthony Towns rebounds per game in 2018",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "season",
+        "clarify_reason": "ambiguous"
+      },
+      "tags": [
+        "player_season_stats",
+        "clarify",
+        "bare_year"
+      ],
+      "label_rationale": "Bare year without playoff wording touches 2017-18 and 2018-19."
+    },
+    {
+      "id": "unseen-three-team_records-17",
+      "question": "What was LA's record in 2012-13?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "teams",
+        "clarify_reason": "ambiguous"
+      },
+      "tags": [
+        "team_records",
+        "clarify",
+        "ambiguous_city"
+      ],
+      "label_rationale": "LA = Lakers or Clippers."
+    },
+    {
+      "id": "unseen-three-team_records-18",
+      "question": "What's the Heat's win-loss record?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "season",
+        "clarify_reason": "missing"
+      },
+      "tags": [
+        "team_records",
+        "clarify",
+        "missing_season"
+      ],
+      "label_rationale": "No season; a missing season is clarified, never defaulted."
+    },
+    {
+      "id": "unseen-three-game_search-18",
+      "question": "Show every Knicks game from March 1 to March 20, 2024.",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "date",
+        "clarify_reason": "range_too_long"
+      },
+      "tags": [
+        "game_search",
+        "clarify",
+        "range_too_long"
+      ],
+      "label_rationale": "20 days exceeds the seven-day limit."
+    },
+    {
+      "id": "unseen-three-game_search-19",
+      "question": "Were the Grizzlies playing on the 4th of April?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "date",
+        "clarify_reason": "year_required"
+      },
+      "tags": [
+        "game_search",
+        "clarify",
+        "year_required"
+      ],
+      "label_rationale": "Calendar date without a year is never defaulted."
+    },
+    {
+      "id": "unseen-three-boxscore_stat-20",
+      "question": "Who led Game 3 of the 2019 Finals?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "stat",
+        "clarify_reason": "missing"
+      },
+      "tags": [
+        "boxscore_stat",
+        "clarify",
+        "leaders_no_stat",
+        "debatable"
+      ],
+      "label_rationale": "Leaders questions need a statistic (ADR 0011). DEBATABLE: could be read as 'who won' or intent clarification."
+    },
+    {
+      "id": "unseen-three-playoff_series-17",
+      "question": "Bring up a Spurs playoff series from 2014.",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "round",
+        "clarify_reason": "missing"
+      },
+      "tags": [
+        "playoff_series",
+        "clarify",
+        "missing_round"
+      ],
+      "label_rationale": "The Spurs played four series in 2014."
+    },
+    {
+      "id": "unseen-three-playoff_series-18",
+      "question": "Open a 2015 conference semifinal.",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "teams",
+        "clarify_reason": "missing"
+      },
+      "tags": [
+        "playoff_series",
+        "clarify",
+        "missing_teams"
+      ],
+      "label_rationale": "Four conference semifinals; round alone does not identify one."
+    },
+    {
+      "id": "unseen-three-career_stats-19",
+      "question": "How many blocks has Victor Wembanyama recorded?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "intent",
+        "clarify_reason": "ambiguous"
+      },
+      "tags": [
+        "career_stats",
+        "clarify",
+        "career_or_season"
+      ],
+      "label_rationale": "No career or season wording: career or one season (stage 3 'Career or one season?')."
+    },
+    {
+      "id": "unseen-three-career_stats-20",
+      "question": "Show the all-time leaders",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "stat",
+        "clarify_reason": "missing"
+      },
+      "tags": [
+        "career_stats",
+        "clarify",
+        "leaders_no_stat"
+      ],
+      "label_rationale": "All-time list without a statistic."
+    },
+    {
+      "id": "unseen-three-season_leaders-20",
+      "question": "Blocks per game leaders",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "season",
+        "clarify_reason": "missing"
+      },
+      "tags": [
+        "season_leaders",
+        "clarify",
+        "missing_season"
+      ],
+      "label_rationale": "Season leaders need a season."
+    },
+    {
+      "id": "unseen-three-boxscore_stat-21",
+      "question": "What did Antetokounmpo score on December 13, 2023?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "player",
+        "clarify_reason": "ambiguous"
+      },
+      "tags": [
+        "boxscore_stat",
+        "clarify",
+        "ambiguous_surname",
+        "debatable"
+      ],
+      "label_rationale": "Giannis and Thanasis were both Bucks on that date. DEBATABLE: Giannis's 64-point game makes the intent obvious to fans."
+    },
+    {
+      "id": "unseen-three-player_season_stats-21",
+      "question": "Malone's rebounds per game in 1985-86",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "player",
+        "clarify_reason": "ambiguous"
+      },
+      "tags": [
+        "player_season_stats",
+        "clarify",
+        "ambiguous_surname",
+        "older_season"
+      ],
+      "label_rationale": "Karl, Moses and Jeff Malone all played 1985-86."
+    },
+    {
+      "id": "unseen-three-player_season_stats-22",
+      "question": "Jayson Tatum stats this season",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "season",
+        "clarify_reason": "ambiguous"
+      },
+      "tags": [
+        "player_season_stats",
+        "clarify",
+        "relative_season",
+        "offseason",
+        "debatable"
+      ],
+      "label_rationale": "Reference 2026-09-30 is the offseason: 'this season' may mean 2025-26 (just finished) or 2026-27 (upcoming). DEBATABLE: some would default to the just-finished season."
+    },
+    {
+      "id": "unseen-three-game_search-20",
+      "question": "Which games were played at the Barclays Center?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "date",
+        "clarify_reason": "missing"
+      },
+      "tags": [
+        "game_search",
+        "clarify",
+        "missing_date",
+        "venue"
+      ],
+      "label_rationale": "Venue without a date."
+    },
+    {
+      "id": "unseen-three-postseason_summary-19",
+      "question": "Recap New York's 2021 postseason.",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "clarify",
+        "clarify_field": "teams",
+        "clarify_reason": "ambiguous"
+      },
+      "tags": [
+        "postseason_summary",
+        "clarify",
+        "ambiguous_city",
+        "debatable"
+      ],
+      "label_rationale": "Knicks and Nets both made the 2021 playoffs. DEBATABLE: many readers take 'New York' to mean the Knicks."
+    },
+    {
+      "id": "unseen-three-season_leaders-21",
+      "question": "Top Spurs scorer in 2013-14",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "unsupported",
+        "unsupported_reason": "other"
+      },
+      "tags": [
+        "season_leaders",
+        "unsupported",
+        "team_leaders"
+      ],
+      "label_rationale": "Team leaders are out of scope for season_leaders (stage 3 guard)."
+    },
+    {
+      "id": "unseen-three-season_leaders-22",
+      "question": "Which rookie averaged the most points in 2022-23?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "unsupported",
+        "unsupported_reason": "other"
+      },
+      "tags": [
+        "season_leaders",
+        "unsupported",
+        "rookie_filter"
+      ],
+      "label_rationale": "Rookie leaderboards are out of scope."
+    },
+    {
+      "id": "unseen-three-season_leaders-23",
+      "question": "Who led the league in personal fouls in 2018-19?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "unsupported",
+        "unsupported_reason": "other"
+      },
+      "tags": [
+        "season_leaders",
+        "unsupported",
+        "unsupported_stat",
+        "debatable"
+      ],
+      "label_rationale": "Fouls have no season leaderboard; the stage 3 guard reports 'other'. DEBATABLE: unsupported_leader_stat is also defensible."
+    },
+    {
+      "id": "unseen-three-career_stats-21",
+      "question": "Who has the most career triple-doubles?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "unsupported",
+        "unsupported_reason": "other"
+      },
+      "tags": [
+        "career_stats",
+        "unsupported",
+        "counting_game_record"
+      ],
+      "label_rationale": "Triple-doubles need the game-log index (ADR 0005)."
+    },
+    {
+      "id": "unseen-three-career_stats-22",
+      "question": "Top 10 in career rebounds per game, all-time",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "unsupported",
+        "unsupported_reason": "unsupported_leader_stat"
+      },
+      "tags": [
+        "career_stats",
+        "unsupported",
+        "per_game_all_time"
+      ],
+      "label_rationale": "All-time lists are totals only (ADR 0013)."
+    },
+    {
+      "id": "unseen-three-career_stats-23",
+      "question": "Where does Larry Bird rank all-time in career free throw percentage?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "unsupported",
+        "unsupported_reason": "unsupported_leader_stat"
+      },
+      "tags": [
+        "career_stats",
+        "unsupported",
+        "percentage_rank"
+      ],
+      "label_rationale": "No rank in percentage lists (ADR 0013)."
+    },
+    {
+      "id": "unseen-three-career_stats-24",
+      "question": "Dirk's career high in rebounds",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "unsupported",
+        "unsupported_reason": "other"
+      },
+      "tags": [
+        "career_stats",
+        "unsupported",
+        "career_high"
+      ],
+      "label_rationale": "Career highs are not built (ADR 0013 decision 4)."
+    },
+    {
+      "id": "unseen-three-career_stats-25",
+      "question": "Who has scored the most points in Knicks franchise history?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "unsupported",
+        "unsupported_reason": "other"
+      },
+      "tags": [
+        "career_stats",
+        "unsupported",
+        "franchise_leaders"
+      ],
+      "label_rationale": "Franchise leaders are out of scope."
+    },
+    {
+      "id": "unseen-three-player_season_stats-23",
+      "question": "Jaylen Brown's points per game at home in 2023-24",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "unsupported",
+        "unsupported_reason": "other"
+      },
+      "tags": [
+        "player_season_stats",
+        "unsupported",
+        "split_home"
+      ],
+      "label_rationale": "Home/away splits are not represented."
+    },
+    {
+      "id": "unseen-three-player_season_stats-24",
+      "question": "Luka's true shooting percentage in 2022-23",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "unsupported",
+        "unsupported_reason": "other"
+      },
+      "tags": [
+        "player_season_stats",
+        "unsupported",
+        "advanced_metric"
+      ],
+      "label_rationale": "Advanced metrics are not represented."
+    },
+    {
+      "id": "unseen-three-team_records-19",
+      "question": "Pacers' record in overtime games 2019-20",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "unsupported",
+        "unsupported_reason": "other"
+      },
+      "tags": [
+        "team_records",
+        "unsupported",
+        "split_overtime"
+      ],
+      "label_rationale": "Overtime split record is not represented."
+    },
+    {
+      "id": "unseen-three-team_records-20",
+      "question": "Which team had the best record in 2015-16?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "unsupported",
+        "unsupported_reason": "other"
+      },
+      "tags": [
+        "team_records",
+        "unsupported",
+        "best_record",
+        "debatable"
+      ],
+      "label_rationale": "Stage 2 guard rejects 'best'. DEBATABLE: league standings for 2015-16 would answer it."
+    },
+    {
+      "id": "unseen-three-boxscore_stat-22",
+      "question": "Who had the highest field-goal percentage in the Heat-Spurs game on June 18, 2013?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "unsupported",
+        "unsupported_reason": "unsupported_leader_stat"
+      },
+      "tags": [
+        "boxscore_stat",
+        "unsupported",
+        "percentage_leaders"
+      ],
+      "label_rationale": "Game leaders by percentage have no ranking rule."
+    },
+    {
+      "id": "unseen-three-boxscore_stat-23",
+      "question": "What were Kawhi Leonard's per-game averages over the 2019 Finals?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "unsupported",
+        "unsupported_reason": "multi_game_average"
+      },
+      "tags": [
+        "boxscore_stat",
+        "unsupported",
+        "multi_game_average",
+        "debatable"
+      ],
+      "label_rationale": "Average across the games of one series. DEBATABLE: via the player-season path the guard would say 'other' ('finals')."
+    },
+    {
+      "id": "unseen-three-game_search-21",
+      "question": "Will the Lakers beat the Suns tonight?",
+      "reference_time": "2025-01-08T15:00:00-05:00",
+      "context": {},
+      "expected": {
+        "action": "unsupported",
+        "unsupported_reason": "prediction"
+      },
+      "tags": [
+        "game_search",
+        "unsupported",
+        "prediction"
+      ],
+      "label_rationale": "Prediction."
+    },
+    {
+      "id": "unseen-three-postseason_summary-20",
+      "question": "Was the 2017 Warriors' playoff run better than the 2001 Lakers'?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "unsupported",
+        "unsupported_reason": "historical_comparison"
+      },
+      "tags": [
+        "postseason_summary",
+        "unsupported",
+        "comparison"
+      ],
+      "label_rationale": "Cross-season comparison."
+    },
+    {
+      "id": "unseen-three-boxscore_stat-24",
+      "question": "And how many rebounds did he have?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "unsupported",
+        "unsupported_reason": "follow_up"
+      },
+      "tags": [
+        "boxscore_stat",
+        "unsupported",
+        "follow_up"
+      ],
+      "label_rationale": "Depends on a previous turn; no conversation state."
+    },
+    {
+      "id": "unseen-three-career_stats-26",
+      "question": "How tall is Victor Wembanyama?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "unsupported",
+        "unsupported_reason": "reference_question"
+      },
+      "tags": [
+        "career_stats",
+        "unsupported",
+        "biography"
+      ],
+      "label_rationale": "Biography/reference question (#202)."
+    },
+    {
+      "id": "unseen-three-game_search-22",
+      "question": "What time does the Super Bowl start?",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "unsupported",
+        "unsupported_reason": "not_basketball"
+      },
+      "tags": [
+        "game_search",
+        "unsupported",
+        "not_basketball"
+      ],
+      "label_rationale": "Football."
+    },
+    {
+      "id": "unseen-three-playoff_series-19",
+      "question": "Show every playoff series the Spurs won from 1999 to 2014.",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "unsupported",
+        "unsupported_reason": "other"
+      },
+      "tags": [
+        "playoff_series",
+        "unsupported",
+        "multi_season"
+      ],
+      "label_rationale": "Multi-season series list is not a single request."
+    },
+    {
+      "id": "unseen-three-player_season_stats-25",
+      "question": "LeBron's points per game in the regular season and playoffs combined, 2012-13",
+      "reference_time": "2026-09-30T12:00:00-04:00",
+      "context": {},
+      "expected": {
+        "action": "unsupported",
+        "unsupported_reason": "other"
+      },
+      "tags": [
+        "player_season_stats",
+        "unsupported",
+        "combined_phases"
+      ],
+      "label_rationale": "Combined regular season plus playoffs is unsupported."
+    }
+  ]
+}

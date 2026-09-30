@@ -1,0 +1,1711 @@
+{
+ "draft": true,
+ "status": "DRAFT: needs human review before any gate relies on it. Values were read by an agent from the cited public pages on 2026-09-30; a reviewer should re-read each source, confirm stats.nba agrees where it is the primary source, and set draft to false.",
+ "description": "Answer-accuracy gold for scripts/ask/answer_check.py. Each case is an already interpreted AskRequest, the expected outcome, and checks against the AskResponse JSON (paths such as result.rows[team.team_id=1610612738].wins). match: exact (counts, ids), round (digits = the source's displayed precision), unordered, length, one_of.",
+ "reference_time": "2026-09-30T12:00:00-04:00",
+ "cases": [
+  {
+   "id": "gs-2024-06-17",
+   "family": "game_search",
+   "tags": [
+    "playoffs",
+    "single_date"
+   ],
+   "question": "Games on June 17, 2024?",
+   "request": {
+    "intent": "game_search",
+    "dates": {
+     "start": "2024-06-17",
+     "end": "2024-06-17"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/?month=6&day=17&year=2024",
+    "read": "NBA Games Played on June 17, 2024: one game, Dallas 88 at Boston 106 (Final).",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.total_games",
+     "value": 1
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.teamId",
+     "value": 1610612742
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.score",
+     "value": 88
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.teamId",
+     "value": 1610612738
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.score",
+     "value": 106
+    }
+   ]
+  },
+  {
+   "id": "gs-lal-2006-01-22",
+   "family": "game_search",
+   "tags": [
+    "pre_2010",
+    "team_filter"
+   ],
+   "question": "Lakers game on January 22, 2006",
+   "request": {
+    "intent": "game_search",
+    "dates": {
+     "start": "2006-01-22",
+     "end": "2006-01-22"
+    },
+    "teams": [
+     {
+      "team_id": 1610612747,
+      "tricode": "LAL",
+      "name": "Los Angeles Lakers"
+     }
+    ]
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/200601220LAL.html",
+    "read": "Scorebox: Toronto Raptors 104 at Los Angeles Lakers 122, January 22, 2006, STAPLES Center.",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.total_games",
+     "value": 1
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.score",
+     "value": 104
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.score",
+     "value": 122
+    }
+   ]
+  },
+  {
+   "id": "bx-kobe-81",
+   "family": "boxscore_stat",
+   "tags": [
+    "player",
+    "pre_2010"
+   ],
+   "question": "How many points did Kobe score on January 22, 2006?",
+   "request": {
+    "intent": "boxscore_stat",
+    "scope": "player",
+    "stat": {
+     "stat": "points"
+    },
+    "game": {
+     "date": "2006-01-22",
+     "teams": [
+      {
+       "team_id": 1610612747,
+       "tricode": "LAL",
+       "name": "Los Angeles Lakers"
+      }
+     ]
+    },
+    "player": {
+     "player_id": 977,
+     "name": "Kobe Bryant"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/200601220LAL.html",
+    "read": "LAL basic box score, Kobe Bryant row: PTS 81, FG 28 of 46, FT 18 of 20.",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.player_line.values[stat=points].value",
+     "value": 81
+    }
+   ]
+  },
+  {
+   "id": "bx-kobe-81-fg",
+   "family": "boxscore_stat",
+   "tags": [
+    "player",
+    "pre_2010",
+    "made_attempted"
+   ],
+   "question": "Kobe field goals on January 22, 2006",
+   "request": {
+    "intent": "boxscore_stat",
+    "scope": "player",
+    "stat": {
+     "stat": "field_goals"
+    },
+    "game": {
+     "date": "2006-01-22",
+     "teams": [
+      {
+       "team_id": 1610612747,
+       "tricode": "LAL",
+       "name": "Los Angeles Lakers"
+      }
+     ]
+    },
+    "player": {
+     "player_id": 977,
+     "name": "Kobe Bryant"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/200601220LAL.html",
+    "read": "LAL basic box score, Kobe Bryant row: FG 28, FGA 46.",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.player_line.values[stat=field_goals].made",
+     "value": 28
+    },
+    {
+     "path": "result.player_line.values[stat=field_goals].attempted",
+     "value": 46
+    }
+   ]
+  },
+  {
+   "id": "bx-2016-finals-g7-points-leader",
+   "family": "boxscore_stat",
+   "tags": [
+    "leaders",
+    "playoffs",
+    "playoff_game_selector"
+   ],
+   "question": "Who led game 7 of the 2016 Finals in points?",
+   "request": {
+    "intent": "boxscore_stat",
+    "scope": "leaders",
+    "stat": {
+     "stat": "points"
+    },
+    "game": {
+     "season": "2015-16",
+     "round": "finals",
+     "game_number": 7
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/201606190GSW.html",
+    "read": "June 19, 2016, CLE 93 at GSW 89. Basic box scores: Draymond Green 32 PTS (game high); LeBron James 27; Kyrie Irving 26.",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.leaders[0].player.player_id",
+     "value": 203110
+    },
+    {
+     "path": "result.leaders[0].value.value",
+     "value": 32
+    },
+    {
+     "path": "result.leaders[0].rank",
+     "value": 1
+    },
+    {
+     "path": "result.game.final_score.away",
+     "value": 93
+    },
+    {
+     "path": "result.game.final_score.home",
+     "value": 89
+    }
+   ]
+  },
+  {
+   "id": "bx-2016-finals-g7-assists-leader",
+   "family": "boxscore_stat",
+   "tags": [
+    "leaders",
+    "playoffs",
+    "playoff_game_selector"
+   ],
+   "question": "Who had the most assists in game 7 of the 2016 Finals?",
+   "request": {
+    "intent": "boxscore_stat",
+    "scope": "leaders",
+    "stat": {
+     "stat": "assists"
+    },
+    "game": {
+     "season": "2015-16",
+     "round": "finals",
+     "game_number": 7
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/201606190GSW.html",
+    "read": "Basic box scores: LeBron James 11 AST (game high); Draymond Green 9; no one else above 4.",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.leaders[0].player.player_id",
+     "value": 2544
+    },
+    {
+     "path": "result.leaders[0].value.value",
+     "value": 11
+    }
+   ]
+  },
+  {
+   "id": "bx-2016-finals-g7-cle-points",
+   "family": "boxscore_stat",
+   "tags": [
+    "team",
+    "playoffs",
+    "playoff_game_selector"
+   ],
+   "question": "How many points did the Cavs score in game 7 of the 2016 Finals?",
+   "request": {
+    "intent": "boxscore_stat",
+    "scope": "team",
+    "stat": {
+     "stat": "points"
+    },
+    "game": {
+     "season": "2015-16",
+     "round": "finals",
+     "game_number": 7
+    },
+    "team": {
+     "team_id": 1610612739,
+     "tricode": "CLE",
+     "name": "Cleveland Cavaliers"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/201606190GSW.html",
+    "read": "CLE basic box score Team Totals: PTS 93.",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.team_lines[team.team_id=1610612739].values[stat=points].value",
+     "value": 93
+    }
+   ]
+  },
+  {
+   "id": "ps-2016-finals",
+   "family": "playoff_series",
+   "tags": [
+    "playoffs"
+   ],
+   "question": "Who won the 2016 Finals?",
+   "request": {
+    "intent": "playoff_series",
+    "season": "2015-16",
+    "round": "finals"
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_2016.html",
+    "read": "Series summary: Finals, Cleveland Cavaliers over Golden State Warriors (4-3).",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.teams[team.team_id=1610612739].wins",
+     "value": 4
+    },
+    {
+     "path": "result.teams[team.team_id=1610612744].wins",
+     "value": 3
+    },
+    {
+     "path": "result.teams[team.team_id=1610612739].won_series",
+     "value": true
+    },
+    {
+     "path": "result.games_played",
+     "value": 7
+    },
+    {
+     "path": "result.status",
+     "value": "complete"
+    }
+   ]
+  },
+  {
+   "id": "ps-1970-finals",
+   "family": "playoff_series",
+   "tags": [
+    "playoffs",
+    "pre_1980"
+   ],
+   "question": "Who won the 1970 Finals?",
+   "request": {
+    "intent": "playoff_series",
+    "season": "1969-70",
+    "round": "finals"
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_1970.html",
+    "read": "Series summary: Finals, New York Knicks over Los Angeles Lakers (4-3).",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.teams[team.team_id=1610612752].wins",
+     "value": 4
+    },
+    {
+     "path": "result.teams[team.team_id=1610612747].wins",
+     "value": 3
+    },
+    {
+     "path": "result.teams[team.team_id=1610612752].won_series",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": "po-2024-league",
+   "family": "postseason_summary",
+   "tags": [
+    "playoffs"
+   ],
+   "question": "2024 playoffs",
+   "request": {
+    "intent": "postseason_summary",
+    "season": "2023-24"
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_2024.html",
+    "read": "Series summary: Finals, Boston Celtics over Dallas Mavericks (4-1); 15 series listed.",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.champion.team_id",
+     "value": 1610612738
+    },
+    {
+     "path": "result.runner_up.team_id",
+     "value": 1610612742
+    },
+    {
+     "path": "result.series",
+     "value": 15,
+     "match": "length"
+    }
+   ]
+  },
+  {
+   "id": "po-2024-celtics",
+   "family": "postseason_summary",
+   "tags": [
+    "playoffs",
+    "team"
+   ],
+   "question": "How did the Celtics do in the 2024 playoffs?",
+   "request": {
+    "intent": "postseason_summary",
+    "season": "2023-24",
+    "team": {
+     "team_id": 1610612738,
+     "tricode": "BOS",
+     "name": "Boston Celtics"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_2024.html",
+    "read": "Boston series: over Miami (4-1), over Cleveland (4-1), over Indiana (4-0), Finals over Dallas (4-1): 16-3, four series won.",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.finish",
+     "value": "champion"
+    },
+    {
+     "path": "result.record.wins",
+     "value": 16
+    },
+    {
+     "path": "result.record.losses",
+     "value": 3
+    },
+    {
+     "path": "result.series_won",
+     "value": 4
+    }
+   ]
+  },
+  {
+   "id": "pss-jokic-2024-reb-pg",
+   "family": "player_season_stats",
+   "tags": [
+    "per_game"
+   ],
+   "question": "Jokic rebounds per game in 2023-24",
+   "request": {
+    "intent": "player_season_stats",
+    "player": {
+     "player_id": 203999,
+     "name": "Nikola Jokic"
+    },
+    "season": "2023-24",
+    "stat": {
+     "stat": "rebounds",
+     "aggregation": "per_game"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/players/j/jokicni01.html",
+    "read": "Per Game and Totals tables, 2023-24 DEN row: G 79, TRB/G 12.4, TRB 976.",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.values[0].value",
+     "value": 12.4,
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.games_played",
+     "value": 79
+    },
+    {
+     "path": "result.alternate.values[0].value",
+     "value": 976
+    }
+   ]
+  },
+  {
+   "id": "pss-jokic-2024-reb-total",
+   "family": "player_season_stats",
+   "tags": [
+    "totals"
+   ],
+   "question": "Jokic total rebounds in 2023-24",
+   "request": {
+    "intent": "player_season_stats",
+    "player": {
+     "player_id": 203999,
+     "name": "Nikola Jokic"
+    },
+    "season": "2023-24",
+    "stat": {
+     "stat": "rebounds",
+     "aggregation": "total"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/players/j/jokicni01.html",
+    "read": "Totals table, 2023-24 DEN row: G 79, TRB 976.",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.values[0].value",
+     "value": 976
+    },
+    {
+     "path": "result.alternate.values[0].value",
+     "value": 12.4,
+     "match": "round",
+     "digits": 1
+    }
+   ]
+  },
+  {
+   "id": "pss-jokic-2024-playoffs-pts-pg",
+   "family": "player_season_stats",
+   "tags": [
+    "playoffs",
+    "per_game"
+   ],
+   "question": "Jokic points per game in the 2024 playoffs",
+   "request": {
+    "intent": "player_season_stats",
+    "player": {
+     "player_id": 203999,
+     "name": "Nikola Jokic"
+    },
+    "season": "2023-24",
+    "season_type": "playoffs",
+    "stat": {
+     "stat": "points",
+     "aggregation": "per_game"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/players/j/jokicni01.html",
+    "read": "Playoffs Per Game and Totals tables, 2023-24 DEN row: G 12, PTS/G 28.7, PTS 344 (regular season: 26.4).",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.values[0].value",
+     "value": 28.7,
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.games_played",
+     "value": 12
+    },
+    {
+     "path": "result.alternate.values[0].value",
+     "value": 344
+    }
+   ]
+  },
+  {
+   "id": "pss-harden-2022-pts-total",
+   "family": "player_season_stats",
+   "tags": [
+    "totals",
+    "traded"
+   ],
+   "question": "James Harden points in 2021-22",
+   "request": {
+    "intent": "player_season_stats",
+    "player": {
+     "player_id": 201935,
+     "name": "James Harden"
+    },
+    "season": "2021-22",
+    "stat": {
+     "stat": "points",
+     "aggregation": "total"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/players/h/hardeja01.html",
+    "read": "Totals table, 2021-22: 2TM row G 65 PTS 1432 (BRK 44 G 990, PHI 21 G 442).",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.values[0].value",
+     "value": 1432
+    },
+    {
+     "path": "result.games_played",
+     "value": 65
+    }
+   ]
+  },
+  {
+   "id": "pss-kareem-1972-pts-pg",
+   "family": "player_season_stats",
+   "tags": [
+    "per_game",
+    "pre_1980"
+   ],
+   "question": "Kareem points per game in 1971-72",
+   "request": {
+    "intent": "player_season_stats",
+    "player": {
+     "player_id": 76003,
+     "name": "Kareem Abdul-Jabbar"
+    },
+    "season": "1971-72",
+    "stat": {
+     "stat": "points",
+     "aggregation": "per_game"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/players/a/abdulka01.html",
+    "read": "Per Game and Totals tables, 1971-72 MIL row: G 81, PTS/G 34.8, PTS 2822.",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.values[0].value",
+     "value": 34.8,
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.games_played",
+     "value": 81
+    },
+    {
+     "path": "result.alternate.values[0].value",
+     "value": 2822
+    }
+   ]
+  },
+  {
+   "id": "pss-wilt-1962-pts-total",
+   "family": "player_season_stats",
+   "tags": [
+    "totals",
+    "pre_1980",
+    "pre_1970"
+   ],
+   "question": "Wilt Chamberlain points in 1961-62",
+   "request": {
+    "intent": "player_season_stats",
+    "player": {
+     "player_id": 76375,
+     "name": "Wilt Chamberlain"
+    },
+    "season": "1961-62",
+    "stat": {
+     "stat": "points",
+     "aggregation": "total"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/players/c/chambwi01.html",
+    "read": "Totals and Per Game tables, 1961-62 PHW row: G 80, PTS 4029, PTS/G 50.4.",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.values[0].value",
+     "value": 4029
+    },
+    {
+     "path": "result.games_played",
+     "value": 80
+    },
+    {
+     "path": "result.alternate.values[0].value",
+     "value": 50.4,
+     "match": "round",
+     "digits": 1
+    }
+   ]
+  },
+  {
+   "id": "pss-wilt-1962-steals",
+   "family": "player_season_stats",
+   "tags": [
+    "pre_1980",
+    "not_recorded"
+   ],
+   "question": "Wilt Chamberlain steals in 1961-62",
+   "request": {
+    "intent": "player_season_stats",
+    "player": {
+     "player_id": 76375,
+     "name": "Wilt Chamberlain"
+    },
+    "season": "1961-62",
+    "stat": {
+     "stat": "steals",
+     "aggregation": "total"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "not_found",
+   "source": {
+    "url": "https://www.basketball-reference.com/players/c/chambwi01.html",
+    "read": "Totals table, 1961-62 PHW row has no STL value (steals were first recorded in 1973-74).",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "notice.code",
+     "value": "no_record"
+    }
+   ],
+   "notes": "A zero or any number here would be a wrong answer; the stat was not recorded."
+  },
+  {
+   "id": "pss-jordan-1996-fg-pct",
+   "family": "player_season_stats",
+   "tags": [
+    "percentage",
+    "pre_2000"
+   ],
+   "question": "Michael Jordan field goal percentage in 1995-96",
+   "request": {
+    "intent": "player_season_stats",
+    "player": {
+     "player_id": 893,
+     "name": "Michael Jordan"
+    },
+    "season": "1995-96",
+    "stat": {
+     "stat": "field_goal_percentage",
+     "aggregation": "total"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/players/j/jordami01.html",
+    "read": "Totals table, 1995-96 CHI row: FG 916, FGA 1850, FG% .495.",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.values[0].value",
+     "value": 0.495,
+     "match": "round",
+     "digits": 3
+    },
+    {
+     "path": "result.games_played",
+     "value": 82
+    }
+   ]
+  },
+  {
+   "id": "pss-curry-2016-threes",
+   "family": "player_season_stats",
+   "tags": [
+    "totals",
+    "made_attempted"
+   ],
+   "question": "Steph Curry threes in 2015-16",
+   "request": {
+    "intent": "player_season_stats",
+    "player": {
+     "player_id": 201939,
+     "name": "Stephen Curry"
+    },
+    "season": "2015-16",
+    "stat": {
+     "stat": "three_pointers",
+     "aggregation": "total"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/players/c/curryst01.html",
+    "read": "Totals table, 2015-16 GSW row: 3P 402, 3PA 886, 3P% .454, G 79.",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.values[0].made",
+     "value": 402
+    },
+    {
+     "path": "result.values[0].attempted",
+     "value": 886
+    },
+    {
+     "path": "result.games_played",
+     "value": 79
+    }
+   ]
+  },
+  {
+   "id": "tr-bos-2008",
+   "family": "team_records",
+   "tags": [
+    "team"
+   ],
+   "question": "Celtics record in 2007-08",
+   "request": {
+    "intent": "team_records",
+    "season": "2007-08",
+    "team": {
+     "team_id": 1610612738,
+     "tricode": "BOS",
+     "name": "Boston Celtics"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/leagues/NBA_2008.html",
+    "read": "Division standings, Eastern Conference: Boston Celtics 66-16 (.805).",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.rows[0].wins",
+     "value": 66
+    },
+    {
+     "path": "result.rows[0].losses",
+     "value": 16
+    },
+    {
+     "path": "result.rows",
+     "value": 1,
+     "match": "length"
+    }
+   ]
+  },
+  {
+   "id": "tr-chi-1996",
+   "family": "team_records",
+   "tags": [
+    "team",
+    "pre_2000"
+   ],
+   "question": "Bulls record in 1995-96",
+   "request": {
+    "intent": "team_records",
+    "season": "1995-96",
+    "team": {
+     "team_id": 1610612741,
+     "tricode": "CHI",
+     "name": "Chicago Bulls"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/leagues/NBA_1996.html",
+    "read": "Division standings, Eastern Conference: Chicago Bulls 72-10 (.878).",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.rows[0].wins",
+     "value": 72
+    },
+    {
+     "path": "result.rows[0].losses",
+     "value": 10
+    }
+   ]
+  },
+  {
+   "id": "tr-lal-1972",
+   "family": "team_records",
+   "tags": [
+    "team",
+    "pre_1980"
+   ],
+   "question": "Lakers record in 1971-72",
+   "request": {
+    "intent": "team_records",
+    "season": "1971-72",
+    "team": {
+     "team_id": 1610612747,
+     "tricode": "LAL",
+     "name": "Los Angeles Lakers"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/leagues/NBA_1972.html",
+    "read": "Division standings, Western Conference: Los Angeles Lakers 69-13 (.841).",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.rows[0].wins",
+     "value": 69
+    },
+    {
+     "path": "result.rows[0].losses",
+     "value": 13
+    }
+   ]
+  },
+  {
+   "id": "tr-bos-1961",
+   "family": "team_records",
+   "tags": [
+    "team",
+    "pre_1980",
+    "pre_1970"
+   ],
+   "question": "Celtics record in 1960-61",
+   "request": {
+    "intent": "team_records",
+    "season": "1960-61",
+    "team": {
+     "team_id": 1610612738,
+     "tricode": "BOS",
+     "name": "Boston Celtics"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/leagues/NBA_1961.html",
+    "read": "Division standings: Boston Celtics 57-22.",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.rows[0].wins",
+     "value": 57
+    },
+    {
+     "path": "result.rows[0].losses",
+     "value": 22
+    }
+   ]
+  },
+  {
+   "id": "tr-east-2024",
+   "family": "team_records",
+   "tags": [
+    "standings",
+    "ties"
+   ],
+   "question": "2023-24 Eastern standings",
+   "request": {
+    "intent": "team_records",
+    "season": "2023-24",
+    "standings_scope": "east"
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/leagues/NBA_2024_standings.html",
+    "read": "Conference standings, Eastern Conference: BOS 64-18, NYK 50-32, MIL 49-33, CLE 48-34, then ORL, IND, PHI all 47-35 in that order, MIA 46-36 ... DET 14-68; 15 teams.",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.rows",
+     "value": 15,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612738
+    },
+    {
+     "path": "result.rows[0].wins",
+     "value": 64
+    },
+    {
+     "path": "result.rows[0].losses",
+     "value": 18
+    },
+    {
+     "path": "result.rows[*].team.team_id",
+     "value": [
+      1610612738,
+      1610612752,
+      1610612749,
+      1610612739,
+      1610612753,
+      1610612754,
+      1610612755,
+      1610612748,
+      1610612741,
+      1610612737,
+      1610612751,
+      1610612761,
+      1610612766,
+      1610612764,
+      1610612765
+     ]
+    },
+    {
+     "path": "result.rows[*].wins",
+     "value": [
+      64,
+      50,
+      49,
+      48,
+      47,
+      47,
+      47,
+      46,
+      39,
+      36,
+      32,
+      25,
+      21,
+      15,
+      14
+     ]
+    }
+   ],
+   "notes": "Rows 5-7 are a three-way 47-35 tie; source order is the tiebreak order (ORL 5, IND 6, PHI 7)."
+  },
+  {
+   "id": "tr-west-2024-tie",
+   "family": "team_records",
+   "tags": [
+    "standings",
+    "ties"
+   ],
+   "question": "2023-24 Western standings",
+   "request": {
+    "intent": "team_records",
+    "season": "2023-24",
+    "standings_scope": "west"
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/leagues/NBA_2024_standings.html",
+    "read": "Conference standings, Western Conference: Oklahoma City Thunder 57-25 first, Denver Nuggets 57-25 second, Minnesota 56-26 third; 15 teams.",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.rows",
+     "value": 15,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612760
+    },
+    {
+     "path": "result.rows[1].team.team_id",
+     "value": 1610612743
+    },
+    {
+     "path": "result.rows[0].wins",
+     "value": 57
+    },
+    {
+     "path": "result.rows[1].wins",
+     "value": 57
+    },
+    {
+     "path": "result.rows[2].team.team_id",
+     "value": 1610612750
+    }
+   ]
+  },
+  {
+   "id": "tr-league-1961",
+   "family": "team_records",
+   "tags": [
+    "standings",
+    "pre_1980",
+    "pre_1970"
+   ],
+   "question": "1960-61 NBA standings",
+   "request": {
+    "intent": "team_records",
+    "season": "1960-61"
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/leagues/NBA_1961.html",
+    "read": "Division standings (8 teams): Boston 57-22, Philadelphia Warriors 46-33, Syracuse 38-41, New York 21-58, St. Louis Hawks 51-28, Los Angeles Lakers 36-43, Detroit 34-45, Cincinnati 33-46.",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.rows",
+     "value": 8,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].team.team_id",
+     "value": [
+      1610612738,
+      1610612737,
+      1610612744,
+      1610612755,
+      1610612747,
+      1610612765,
+      1610612758,
+      1610612752
+     ]
+    },
+    {
+     "path": "result.rows[*].wins",
+     "value": [
+      57,
+      51,
+      46,
+      38,
+      36,
+      34,
+      33,
+      21
+     ]
+    }
+   ],
+   "notes": "League rows are ordered by win percentage (Ask's league ordering), not the source's division layout."
+  },
+  {
+   "id": "sl-2024-pts-pg",
+   "family": "season_leaders",
+   "tags": [
+    "per_game",
+    "qualification"
+   ],
+   "question": "Who led the league in points per game in 2023-24?",
+   "request": {
+    "intent": "season_leaders",
+    "season": "2023-24",
+    "stat": {
+     "stat": "points",
+     "aggregation": "per_game"
+    },
+    "limit": 3
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/leagues/NBA_2024_per_game.html",
+    "read": "Per Game table among players with 40+ games: Luka Doncic 33.9 (70 G), Giannis Antetokounmpo 30.4 (73 G), Shai Gilgeous-Alexander 30.1 (75 G). Joel Embiid (34.7 in 39 G) is below any NBA.com minimum.",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      1629029,
+      203507,
+      1628983
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      33.9,
+      30.4,
+      30.1
+     ],
+     "match": "round",
+     "digits": 1
+    }
+   ],
+   "notes": "Qualification belongs to stats.nba (ADR 0012); the 58-game rule excludes Embiid either way."
+  },
+  {
+   "id": "sl-2024-pts-total",
+   "family": "season_leaders",
+   "tags": [
+    "totals"
+   ],
+   "question": "Who scored the most total points in 2023-24?",
+   "request": {
+    "intent": "season_leaders",
+    "season": "2023-24",
+    "stat": {
+     "stat": "points",
+     "aggregation": "total"
+    },
+    "limit": 3
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/leagues/NBA_2024_totals.html",
+    "read": "Totals table: Luka Doncic 2370, Shai Gilgeous-Alexander 2254, Giannis Antetokounmpo 2222.",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      1629029,
+      1628983,
+      203507
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      2370,
+      2254,
+      2222
+     ]
+    }
+   ]
+  },
+  {
+   "id": "sl-2024-stl-total-ties",
+   "family": "season_leaders",
+   "tags": [
+    "totals",
+    "ties"
+   ],
+   "question": "Top 5 in total steals in 2023-24",
+   "request": {
+    "intent": "season_leaders",
+    "season": "2023-24",
+    "stat": {
+     "stat": "steals",
+     "aggregation": "total"
+    },
+    "limit": 5
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/leagues/NBA_2024_totals.html",
+    "read": "Totals table: Shai Gilgeous-Alexander 150, De'Aaron Fox 150, Alex Caruso 120, Paul George 113, Matisse Thybulle 113; next Dejounte Murray and Kawhi Leonard 111.",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.rows[*].rank",
+     "value": [
+      1,
+      1,
+      3,
+      4,
+      4
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      150,
+      150,
+      120,
+      113,
+      113
+     ]
+    },
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      1628983,
+      1628368,
+      1627936,
+      202331,
+      1629680
+     ],
+     "match": "unordered"
+    }
+   ],
+   "notes": "Two tie groups: rank 1 (150) and rank 4 (113). Order within a tie is not checked."
+  },
+  {
+   "id": "sl-2024-ast-total-tie-at-cut",
+   "family": "season_leaders",
+   "tags": [
+    "totals",
+    "ties"
+   ],
+   "question": "Top 6 in total assists in 2023-24",
+   "request": {
+    "intent": "season_leaders",
+    "season": "2023-24",
+    "stat": {
+     "stat": "assists",
+     "aggregation": "total"
+    },
+    "limit": 6
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/leagues/NBA_2024_totals.html",
+    "read": "Totals table: Haliburton 752, Jokic 708, Doncic 686, Sabonis 673, Harden 614, LeBron James 589, Fred VanVleet 589, Trae Young 583.",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.rows",
+     "value": 7,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].rank",
+     "value": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      6
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      752,
+      708,
+      686,
+      673,
+      614,
+      589,
+      589
+     ]
+    }
+   ],
+   "notes": "Top 6 must show 7 rows: the rank-6 tie is never split (ADR 0012)."
+  },
+  {
+   "id": "sl-2024-playoffs-pts-total",
+   "family": "season_leaders",
+   "tags": [
+    "playoffs",
+    "totals"
+   ],
+   "question": "Most total points in the 2024 playoffs",
+   "request": {
+    "intent": "season_leaders",
+    "season": "2023-24",
+    "season_type": "playoffs",
+    "stat": {
+     "stat": "points",
+     "aggregation": "total"
+    },
+    "limit": 3
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/leagues/NBA_2024_totals.html",
+    "read": "Playoffs Totals table: Luka Doncic 635 (22 G), Kyrie Irving 487 (22 G), Jayson Tatum 475 (19 G).",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      1629029,
+      202681,
+      1628369
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      635,
+      487,
+      475
+     ]
+    },
+    {
+     "path": "result.rows[0].games_played",
+     "value": 22
+    }
+   ]
+  },
+  {
+   "id": "sl-1962-pts-total",
+   "family": "season_leaders",
+   "tags": [
+    "totals",
+    "pre_1980",
+    "pre_1970"
+   ],
+   "question": "Who scored the most points in 1961-62?",
+   "request": {
+    "intent": "season_leaders",
+    "season": "1961-62",
+    "stat": {
+     "stat": "points",
+     "aggregation": "total"
+    },
+    "limit": 3
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/leagues/NBA_1962_totals.html",
+    "read": "Totals table: Wilt Chamberlain 4029 (80 G), Walt Bellamy 2495, Oscar Robertson 2432.",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      76375,
+      76144,
+      600015
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      4029,
+      2495,
+      2432
+     ]
+    }
+   ]
+  },
+  {
+   "id": "cs-kareem-pts",
+   "family": "career_stats",
+   "tags": [
+    "career",
+    "totals"
+   ],
+   "question": "Kareem career points",
+   "request": {
+    "intent": "career_stats",
+    "view": "player_totals",
+    "player": {
+     "player_id": 76003,
+     "name": "Kareem Abdul-Jabbar"
+    },
+    "stat": {
+     "stat": "points",
+     "aggregation": "total"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/players/a/abdulka01.html",
+    "read": "Totals table career row (20 Yrs): G 1560, PTS 38387.",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.values[0].value",
+     "value": 38387
+    },
+    {
+     "path": "result.games_played",
+     "value": 1560
+    }
+   ]
+  },
+  {
+   "id": "cs-jordan-ppg",
+   "family": "career_stats",
+   "tags": [
+    "career",
+    "per_game"
+   ],
+   "question": "Michael Jordan career points per game",
+   "request": {
+    "intent": "career_stats",
+    "view": "player_totals",
+    "player": {
+     "player_id": 893,
+     "name": "Michael Jordan"
+    },
+    "stat": {
+     "stat": "points",
+     "aggregation": "per_game"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/players/j/jordami01.html",
+    "read": "Per Game career row (15 Yrs): G 1072, PTS/G 30.1; Totals career row PTS 32292.",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.values[0].value",
+     "value": 30.1,
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.games_played",
+     "value": 1072
+    },
+    {
+     "path": "result.alternate.values[0].value",
+     "value": 32292
+    }
+   ]
+  },
+  {
+   "id": "cs-jordan-playoff-pts",
+   "family": "career_stats",
+   "tags": [
+    "career",
+    "playoffs",
+    "totals"
+   ],
+   "question": "Michael Jordan career playoff points",
+   "request": {
+    "intent": "career_stats",
+    "view": "player_totals",
+    "player": {
+     "player_id": 893,
+     "name": "Michael Jordan"
+    },
+    "season_type": "playoffs",
+    "stat": {
+     "stat": "points",
+     "aggregation": "total"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/players/j/jordami01.html",
+    "read": "Playoffs Totals career row (13 Yrs): G 179, PTS 5987.",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.values[0].value",
+     "value": 5987
+    },
+    {
+     "path": "result.games_played",
+     "value": 179
+    }
+   ]
+  },
+  {
+   "id": "cs-kareem-steals-partial",
+   "family": "career_stats",
+   "tags": [
+    "career",
+    "pre_1980",
+    "partial_coverage"
+   ],
+   "question": "Kareem career steals per game",
+   "request": {
+    "intent": "career_stats",
+    "view": "player_totals",
+    "player": {
+     "player_id": 76003,
+     "name": "Kareem Abdul-Jabbar"
+    },
+    "stat": {
+     "stat": "steals",
+     "aggregation": "per_game"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/players/a/abdulka01.html",
+    "read": "Totals table career row: STL 1160; STL is blank for 1969-70 through 1972-73 (steals first recorded 1973-74).",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.values[0].value",
+     "value": null
+    },
+    {
+     "path": "result.alternate.values[0].value",
+     "value": 1160
+    }
+   ],
+   "notes": "Per-game over all 1560 games would be diluted by unrecorded seasons, so it must be unavailable (ADR 0013)."
+  },
+  {
+   "id": "cs-alltime-assists",
+   "family": "career_stats",
+   "tags": [
+    "career",
+    "leaders"
+   ],
+   "question": "Who has the most career assists?",
+   "request": {
+    "intent": "career_stats",
+    "view": "leaders",
+    "stat": {
+     "stat": "assists",
+     "aggregation": "total"
+    },
+    "limit": 3
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/leaders/ast_career.html",
+    "read": "NBA career leaders table: 1. John Stockton 15806, 2. Chris Paul 12552, 3. Jason Kidd 12091.",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      304,
+      101108,
+      467
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      15806,
+      12552,
+      12091
+     ]
+    }
+   ]
+  },
+  {
+   "id": "cs-jordan-steals-rank",
+   "family": "career_stats",
+   "tags": [
+    "career",
+    "rank"
+   ],
+   "question": "Where does Michael Jordan rank in career steals?",
+   "request": {
+    "intent": "career_stats",
+    "view": "player_rank",
+    "player": {
+     "player_id": 893,
+     "name": "Michael Jordan"
+    },
+    "stat": {
+     "stat": "steals",
+     "aggregation": "total"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/leaders/stl_career.html",
+    "read": "NBA career leaders table: 4. Michael Jordan 2514 (behind Stockton 3265, Paul 2728, Kidd 2684).",
+    "checked_at": "2026-09-30"
+   },
+   "checks": [
+    {
+     "path": "result.rank",
+     "value": 4
+    },
+    {
+     "path": "result.values[0].value",
+     "value": 2514
+    }
+   ]
+  }
+ ]
+}

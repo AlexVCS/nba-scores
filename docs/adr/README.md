@@ -18,6 +18,7 @@ Ask design decisions from the 2026-09-29 interview. Vocabulary is in
 | [0012](0012-season-leader-qualification-and-sources.md) | Season leaders: source qualification, shared ranks, totals-only BRef fallback |
 | [0013](0013-career-stats-scope-and-sources.md) | Career stats: three views, totals-only all-time lists, stats.nba only |
 | [0014](0014-python-reads-the-measure-and-top-n.md) | Python reads the measure; unstated player measures show per game with a totals toggle; top N clamps to 25 |
+| [0015](0015-disabling-a-tool.md) | Proposed: disable one tool after routing, with the router unchanged |
 
 ## Open questions
 
@@ -26,3 +27,4 @@ Ask design decisions from the 2026-09-29 interview. Vocabulary is in
 - Record template set: which stats, thresholds, and scopes (ADR 0005).
 - Game-log index storage on Railway: a volume or a shipped artifact (ADR 0005).
 - Provider terms for training Laya on Luna or Jev outputs (ADR 0008).
+- How a single failing tool is turned off (ADR 0015, proposed).
