@@ -1,5 +1,13 @@
 # Ask development handoff
 
+## Stage 3 checkpoint, September 29
+
+Status: season leaders (`season_leaders`) and career stats (`career_stats`)
+are implemented locally on `ask/stage3-leaders` (from `ask/reviewed-components`
+at 4f96084f), behind the unchanged disabled production flags. See
+`docs/ask-stage3.md` and ADRs 0012-0013. No live evaluation; not pushed; the
+nba-scores-8ic retrieval deadline is not merged into these tools yet.
+
 ## Stage 2 checkpoint, September 29
 
 Player season stats and team records/standings are now implemented locally on

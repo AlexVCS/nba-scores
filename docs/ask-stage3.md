@@ -1,4 +1,4 @@
-# Ask Stage 3: season leaders
+# Ask Stage 3: season leaders and career stats
 
 Stage 3 of ADR 0010 ("leader families"). This document defines the
 `season_leaders` tool before it is built, as ADR 0004 requires. Decisions
@@ -183,12 +183,28 @@ Stage 2. Asking is consent (ADR 0006): the table shows immediately.
   not-found sources, throttling, caching, normalization and the scope guard.
 - `src/components/ask/AskSeasonLeadersResult.test.tsx`: table semantics, tied
   ranks, the leader emphasis, qualification and source notes.
-- `server/tests/ask/fixtures/eval/stage3-dev.json`: development cases with
-  labels authored before any live run. **Exposed development data, not unseen
-  release evidence.**
-- The stats.nba shapes and rules above come from a saved probe
-  (`server/tests/ask/fixtures/season-data/nba-leaders-*.json`); no live model or
+- `server/tests/ask/test_career_tools.py`: career lines from exact totals,
+  playoff separation, identity checks, mid-career and post-career statistics,
+  all-time lists and ranks, shared ranks, the tie cap, malformed data never
+  cached, views chosen by Python, clarifications and the career scope guard.
+- `src/components/ask/AskCareerResult.test.tsx`: career line, all-time table,
+  rank, shared rank and outside-the-list states.
+- `server/tests/ask/fixtures/eval/stage3-dev.json`: 38 development cases (26
+  season leaders, 12 career) with labels authored before any live run.
+  **Exposed development data, not unseen release evidence.** No interpreter was
+  run on them; they are checked for label validity and guard survival only.
+- The stats.nba shapes and rules above come from saved probes
+  (`server/tests/ask/fixtures/season-data/nba-leaders-2023-24.json`,
+  `nba-career-probe.json`), captured with a few direct stats.nba calls and one
+  Basketball-Reference page fetch through the shared limiter. No model or
   provider calls were made.
+- Retrieval deadlines (nba-scores-8ic) are not threaded through these tools.
+  `season_leaders` calls `seasons._load(primary, fallback, validate)` positionally,
+  so a keyword `deadline=None` added at merge stays compatible; both executors
+  can then be listed in `DEADLINE_EXECUTORS`. `career_stats` uses its own
+  stats.nba-only loader and would need the deadline passed to its two fetches.
+- Not done: live evaluation, Laya shadow numbers, unseen cases, visual
+  screenshots of the new cards, and a physical keyboard/screen-reader check.
 
 ## Career family: `career_stats`
 

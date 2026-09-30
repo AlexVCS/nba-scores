@@ -20,7 +20,7 @@ export type IsoDate = string; // "2026-02-08" (America/New_York calendar date)
 export type IsoDateTime = string; // "2026-02-09T10:15:00-05:00"
 export type Season = string; // "2023-24"
 
-export type AskIntent = "game_search" | "boxscore_stat" | "playoff_series" | "postseason_summary" | "player_season_stats" | "team_records" | "season_leaders";
+export type AskIntent = "game_search" | "boxscore_stat" | "playoff_series" | "postseason_summary" | "player_season_stats" | "team_records" | "season_leaders" | "career_stats";
 export type AskOutcome =
   | "answer"
   | "needs_clarification"
@@ -28,7 +28,7 @@ export type AskOutcome =
   | "not_found"
   | "unavailable"
   | "budget_exhausted";
-export type AskDetectedType = "games" | "player_stat" | "team_stat" | "stat_leaders" | "series" | "postseason" | "season_stats" | "team_records" | "season_leaders";
+export type AskDetectedType = "games" | "player_stat" | "team_stat" | "stat_leaders" | "series" | "postseason" | "season_stats" | "team_records" | "season_leaders" | "career_stats";
 export type AskStatScope = "player" | "team" | "leaders";
 export type AskStatKey =
   | "points"
@@ -418,6 +418,34 @@ export interface AskSeasonLeadersResult {
   as_of: IsoDateTime;
 }
 
+export interface AskCareerLeaderRow {
+  rank: number;
+  player: AskPlayerRef;
+  active: boolean;
+  value: AskStatValue;
+}
+
+/** ADR 0013: a player's career line, the all-time top N, or a player's all-time rank. */
+export interface AskCareerStatsResult {
+  kind: "career_stats";
+  view: "player_totals" | "leaders" | "player_rank";
+  season_type: "regular_season" | "playoffs";
+  stat: AskStat;
+  aggregation: AskAggregation;
+  player: AskPlayerRef | null;
+  games_played: number | null;
+  values: AskStatValue[];
+  limit: number | null;
+  rows: AskCareerLeaderRow[];
+  omitted_tie: {rank: number; count: number} | null;
+  /** Null in the player_rank view means outside NBA.com's top `list_size`. */
+  rank: number | null;
+  tied_count: number | null;
+  list_size: number | null;
+  coverage_note: string | null;
+  as_of: IsoDateTime;
+}
+
 export type AskResult =
   | AskGamesResult
   | AskBoxscoreStatResult
@@ -425,7 +453,8 @@ export type AskResult =
   | AskPostseasonSummaryResult
   | AskPlayerSeasonStatsResult
   | AskTeamRecordsResult
-  | AskSeasonLeadersResult;
+  | AskSeasonLeadersResult
+  | AskCareerStatsResult;
 
 // ---------------------------------------------------------------- clarification, notices
 
