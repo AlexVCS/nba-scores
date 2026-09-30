@@ -1,8 +1,12 @@
+import copy
+
+import requests
 from bs4 import BeautifulSoup, Comment
 from server.services import basketball_reference
 from fastapi import HTTPException
 
 from server.services import game_data, nba_stats_client
+from server.utils.ttl_cache import LoadInProgressError, TTLCache
 
 
 BREF_TEAM_CODE_OVERRIDES = {
@@ -19,7 +23,20 @@ BREF_REQUEST_HEADERS = {
 }
 
 BREF_REQUEST_TIMEOUT_SECONDS = 2
-BREF_LINE_SCORE_CACHE: dict[tuple[str, str], dict | None] = {}
+# A parsed line score is settled history; a page without one may still be
+# filled in, so it is kept far shorter. Failed fetches are never cached.
+BREF_LINE_SCORE_TTL_SECONDS = 24 * 3600
+BREF_MISSING_LINE_SCORE_TTL_SECONDS = 15 * 60
+BREF_LINE_SCORE_CACHE_MAX_ENTRIES = 512
+# Concurrent requests for one game share a single fetch; joined callers wait no
+# longer than that fetch's own timeout before reporting a retryable miss.
+BREF_JOIN_WAIT_SECONDS = BREF_REQUEST_TIMEOUT_SECONDS
+# The shared limiter frees its next start within one interval of a refusal.
+BREF_THROTTLED_RETRY_AFTER_SECONDS = int(basketball_reference.INTERVAL_SECONDS)
+BREF_FAILED_RETRY_AFTER_SECONDS = 30
+BREF_LINE_SCORE_CACHE: TTLCache[tuple[str, str], dict | None] = TTLCache(
+    BREF_LINE_SCORE_CACHE_MAX_ENTRIES, copy=copy.deepcopy
+)
 
 
 def safe_score(pts):
@@ -109,19 +126,49 @@ def extract_bref_line_score(html):
     return scores or None
 
 
-def fetch_bref_line_score(game_date_est, home_team_tricode):
-    cache_key = (str(game_date_est)[:10], str(home_team_tricode))
-    if cache_key in BREF_LINE_SCORE_CACHE:
-        return BREF_LINE_SCORE_CACHE[cache_key]
-
+def _load_bref_line_score(game_date_est, home_team_tricode):
     url = build_bref_boxscore_url(game_date_est, home_team_tricode)
     response = basketball_reference.get(
         url, headers=BREF_REQUEST_HEADERS, timeout=BREF_REQUEST_TIMEOUT_SECONDS
     )
     response.raise_for_status()
-    line_score = extract_bref_line_score(response.text)
-    BREF_LINE_SCORE_CACHE[cache_key] = line_score
-    return line_score
+    return extract_bref_line_score(response.text)
+
+
+def bref_line_score_ttl(line_score):
+    return BREF_LINE_SCORE_TTL_SECONDS if line_score else BREF_MISSING_LINE_SCORE_TTL_SECONDS
+
+
+def fetch_bref_line_score(game_date_est, home_team_tricode):
+    cache_key = (str(game_date_est)[:10], str(home_team_tricode))
+    return BREF_LINE_SCORE_CACHE.get_or_load(
+        cache_key,
+        lambda: _load_bref_line_score(game_date_est, home_team_tricode),
+        bref_line_score_ttl,
+        wait_timeout=BREF_JOIN_WAIT_SECONDS,
+    )
+
+
+def bref_retry_after(error):
+    """Seconds until a failed fallback is worth retrying, or None when it is not."""
+    if isinstance(error, (basketball_reference.FallbackRateLimited, LoadInProgressError)):
+        return BREF_THROTTLED_RETRY_AFTER_SECONDS
+    if isinstance(error, requests.HTTPError):
+        status = error.response.status_code if error.response is not None else None
+        if status is not None and status != 429 and status < 500:
+            return None
+    if isinstance(error, requests.RequestException):
+        return BREF_FAILED_RETRY_AFTER_SECONDS
+    return None
+
+
+def load_bref_line_score(game_id, game_date_est, home_team_tricode):
+    """Return ``(line_score, retry_after)``; a failed fallback never fails the summary."""
+    try:
+        return fetch_bref_line_score(game_date_est, home_team_tricode), None
+    except Exception as e:
+        print(f"Basketball-Reference fallback failed for {game_id}: {e}")
+        return None, bref_retry_after(e)
 
 
 def build_reliable_nba_periods(home_row, away_row, is_final=True):
@@ -337,29 +384,27 @@ def make_sparse_linescore_response(
     home_bref = None
     away_bref = None
     period_score_source = "unavailable"
+    retry_after = None
 
     if home_tricode and away_tricode:
-        try:
-            bref_line_score = fetch_bref_line_score(
-                game_meta["GAME_DATE_EST"], home_tricode
-            )
-            if bref_line_score:
-                home_bref = bref_line_score.get(home_tricode)
-                away_bref = bref_line_score.get(away_tricode)
-                if (
-                    home_bref
-                    and away_bref
-                    and period_sets_match(
-                        home_bref.get("periods"), away_bref.get("periods")
-                    )
-                    and bref_period_scores_match_own_total(home_bref)
-                    and bref_period_scores_match_own_total(away_bref)
-                ):
-                    home_periods = home_bref.get("periods")
-                    away_periods = away_bref.get("periods")
-                    period_score_source = "basketball-reference"
-        except Exception as e:
-            print(f"Basketball-Reference fallback failed for {game_id}: {e}")
+        bref_line_score, retry_after = load_bref_line_score(
+            game_id, game_meta["GAME_DATE_EST"], home_tricode
+        )
+        if bref_line_score:
+            home_bref = bref_line_score.get(home_tricode)
+            away_bref = bref_line_score.get(away_tricode)
+            if (
+                home_bref
+                and away_bref
+                and period_sets_match(
+                    home_bref.get("periods"), away_bref.get("periods")
+                )
+                and bref_period_scores_match_own_total(home_bref)
+                and bref_period_scores_match_own_total(away_bref)
+            ):
+                home_periods = home_bref.get("periods")
+                away_periods = away_bref.get("periods")
+                period_score_source = "basketball-reference"
 
     return {
         "homeTeam": sparse_summary_team(
@@ -374,6 +419,7 @@ def make_sparse_linescore_response(
         ),
         "period": int(live_period) if live_period else 0,
         "periodScoreSource": period_score_source,
+        "periodScoreRetryAfter": retry_after,
         "periodScoreType": "quarters",
     }
 
@@ -432,6 +478,7 @@ def make_scheduled_response(home_id, away_id):
         "gameStatusText": "Scheduled",
         "period": 0,
         "periodScoreSource": "unavailable",
+        "periodScoreRetryAfter": None,
         "periodScoreType": "quarters",
     }
 
@@ -529,6 +576,7 @@ def normalize_v3_game_summary(game_id, game):
             "gameStatusText": clean_tricode(game.get("gameStatusText")) or "Scheduled",
             "period": live_period,
             "periodScoreSource": "unavailable",
+            "periodScoreRetryAfter": None,
             "periodScoreType": "quarters",
         }
 
@@ -543,6 +591,7 @@ def normalize_v3_game_summary(game_id, game):
         )
 
     period_score_source = "nba" if periods_are_reliable else "unavailable"
+    retry_after = None
     if not periods_are_reliable:
         home_periods = []
         away_periods = []
@@ -550,23 +599,22 @@ def normalize_v3_game_summary(game_id, game):
         away_tricode = clean_tricode(away.get("teamTricode"))
         game_date = game.get("gameEt") or game.get("gameTimeUTC")
         if game_date and home_tricode and away_tricode:
-            try:
-                bref_line_score = fetch_bref_line_score(game_date, home_tricode)
-                home_bref = bref_line_score.get(home_tricode) if bref_line_score else None
-                away_bref = bref_line_score.get(away_tricode) if bref_line_score else None
-                if (
-                    period_sets_match(
-                        home_bref.get("periods") if home_bref else None,
-                        away_bref.get("periods") if away_bref else None,
-                    )
-                    and bref_period_scores_match_total(home.get("score"), home_bref)
-                    and bref_period_scores_match_total(away.get("score"), away_bref)
-                ):
-                    home_periods = home_bref["periods"]
-                    away_periods = away_bref["periods"]
-                    period_score_source = "basketball-reference"
-            except Exception as e:
-                print(f"Basketball-Reference fallback failed for {game_id}: {e}")
+            bref_line_score, retry_after = load_bref_line_score(
+                game_id, game_date, home_tricode
+            )
+            home_bref = bref_line_score.get(home_tricode) if bref_line_score else None
+            away_bref = bref_line_score.get(away_tricode) if bref_line_score else None
+            if (
+                period_sets_match(
+                    home_bref.get("periods") if home_bref else None,
+                    away_bref.get("periods") if away_bref else None,
+                )
+                and bref_period_scores_match_total(home.get("score"), home_bref)
+                and bref_period_scores_match_total(away.get("score"), away_bref)
+            ):
+                home_periods = home_bref["periods"]
+                away_periods = away_bref["periods"]
+                period_score_source = "basketball-reference"
 
     status_period = get_status_period(
         game_status_id, live_period, home_periods, away_periods
@@ -578,6 +626,7 @@ def normalize_v3_game_summary(game_id, game):
         or get_game_status(game_status_id, status_period),
         "period": live_period,
         "periodScoreSource": period_score_source,
+        "periodScoreRetryAfter": retry_after,
         "periodScoreType": "quarters",
     }
 
@@ -635,24 +684,22 @@ def fetch_game_summary_v2(game_id: str):
         home_row, away_row, game_status_id == 3
     )
     period_score_source = "nba"
+    retry_after = None
 
     if home_periods is None or away_periods is None:
         period_score_source = "unavailable"
         home_periods = []
         away_periods = []
-        try:
-            bref_line_score = fetch_bref_line_score(
-                game_meta["GAME_DATE_EST"], home_row["TEAM_ABBREVIATION"]
-            )
-            home_bref_periods, away_bref_periods = build_reliable_bref_periods(
-                home_row, away_row, bref_line_score
-            )
-            if home_bref_periods is not None and away_bref_periods is not None:
-                home_periods = home_bref_periods
-                away_periods = away_bref_periods
-                period_score_source = "basketball-reference"
-        except Exception as e:
-            print(f"Basketball-Reference fallback failed for {game_id}: {e}")
+        bref_line_score, retry_after = load_bref_line_score(
+            game_id, game_meta["GAME_DATE_EST"], home_row["TEAM_ABBREVIATION"]
+        )
+        home_bref_periods, away_bref_periods = build_reliable_bref_periods(
+            home_row, away_row, bref_line_score
+        )
+        if home_bref_periods is not None and away_bref_periods is not None:
+            home_periods = home_bref_periods
+            away_periods = away_bref_periods
+            period_score_source = "basketball-reference"
 
     return {
         "homeTeam": {
@@ -675,6 +722,7 @@ def fetch_game_summary_v2(game_id: str):
         ),
         "period": int(live_period) if live_period else 0,
         "periodScoreSource": period_score_source,
+        "periodScoreRetryAfter": retry_after,
         "periodScoreType": "quarters",
     }
 

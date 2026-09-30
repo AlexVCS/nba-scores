@@ -89,6 +89,9 @@ A well-formed NBA season miss still tries BRef, as ADR 0010 requires fallback
 when the primary lacks coverage. A miss is not proof that a historical record
 does not exist. Structural gaps are skipped. If fallback is busy, Ask reports
 unavailable rather than inventing a no-record result. The same global limit
-can temporarily leave historical boxscore quarter scores unavailable. Existing
-responses expose `periodScoreSource: unavailable`; explicit retry/presentation
-for that state needs a separate boxscore follow-up before deployment.
+can temporarily leave historical boxscore quarter scores unavailable. The game
+summary then keeps its NBA scores and adds `periodScoreRetryAfter` seconds (and a
+`Retry-After`, `no-store` header) when retrying can help. Views of one game share
+one fallback fetch, and joined views wait at most its two-second timeout. A parsed
+line score is cached for a day and a page without one for 15 minutes; failures are
+not cached. Design 1 follows the hint up to three times, then offers "Try again".
