@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from types import SimpleNamespace
 
 import pytest
 from fastapi.testclient import TestClient
@@ -94,3 +95,16 @@ def test_decisions_are_logged_without_question_or_keys(tmp_path, caplog):
     assert '"decided_by":"luna"' in lines[0] and '"outcome":"escalated"' in lines[0]
     assert "cache_hit=False" in lines[0] and "cache_hit=True" in lines[1]
     assert all("distinctive-question-marker" not in line and SECRET not in line for line in lines)
+
+
+@pytest.mark.parametrize("tiers, fallback", [
+    ({"intent": "jev", "location": "lookup"}, False),
+    ({"intent": "jev", "location": "lookup", "player": "luna"}, True),
+])
+def test_lookup_decided_fields_are_not_a_fallback(tmp_path, tiers, fallback):
+    # The candidate lookup settles fields such as a location the question never names.
+    pipeline, _, _ = build(tmp_path, dev=True)
+    metadata = SimpleNamespace(field_tiers=tiers, field_decisions=[], adapter="cascade", model="jev-1.13.0",
+                               resolved_model=None)
+    info = pipeline._info(called=True, adapter=pipeline.adapter, output=SimpleNamespace(metadata=metadata))
+    assert info.fallback_used is fallback

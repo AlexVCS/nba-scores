@@ -94,7 +94,7 @@ class AskPipeline:
             model_called=called, cache_hit=hit,
             adapter=metadata.adapter if metadata else adapter.name if adapter else None,
             model=(metadata.resolved_model or metadata.model) if metadata else adapter.model if adapter else None,
-            fallback_used=first is not None and any(tier not in (first, "veto", QUESTION_TIER) for tier in field_tiers.values()),
+            fallback_used=first is not None and any(tier not in (first, "veto", "lookup", QUESTION_TIER) for tier in field_tiers.values()),
             field_tiers=field_tiers if details else {},
             field_decisions=list(metadata.field_decisions) if details else [],
         )

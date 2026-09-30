@@ -452,11 +452,17 @@ def run(
                 config, case.question, case.context, candidates, guard=guard,
                 deadline_ms=deadline_ms, expand=expand, cached_primary=cache.get(key),
             )
+            if outcome.attempts[0].output.error_code != "budget_exceeded":
+                cache.setdefault(key, outcome.attempts[0].output)
             if outcome.budget_blocked:
+                # Unscore this case everywhere so every configuration covers the same cases.
                 result.stopped_reason = "spend cap reached"
+                for name, scores in result.scores.items():
+                    if scores and scores[-1].case_id == case.id:
+                        scores.pop()
+                        result.not_run[name].append(case.id)
                 result.not_run[config.name].append(case.id)
                 continue
-            cache.setdefault(key, outcome.attempts[0].output)
             result.scores[config.name].append(score(case, config.name, outcome))
     return result
 

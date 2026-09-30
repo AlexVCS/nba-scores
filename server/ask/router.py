@@ -19,6 +19,8 @@ _config = AskConfig.from_env()
 _pipeline = AskPipeline(_config)
 _suggester = AskSuggester(cache=_pipeline.cache)
 _limits = AskLimits(_config.per_client_per_minute, _config.per_worker_per_minute, _config.max_in_flight)
+_suggest_limits = AskLimits(_config.suggest_per_client_per_minute, _config.suggest_per_worker_per_minute,
+                            _config.suggest_max_in_flight)
 
 
 def _client_id(request: Request) -> str:
@@ -46,12 +48,13 @@ def ask(query: AskQuery, request: Request) -> AskResponse:
 
 
 @router.get("/ask/suggest", response_model=AskSuggestResponse)
-def suggest(q: str = Query(default="", max_length=300), hidden: bool = True) -> AskSuggestResponse:
+def suggest(request: Request, q: str = Query(default="", max_length=300), hidden: bool = True) -> AskSuggestResponse:
     if not _config.enabled:
         return AskSuggestResponse(query=q)
     try:
-        return _limits.run_bounded(lambda: _suggester.suggest(q, hidden), min(3.0, _config.deadline_seconds))
-    except (AskBusy, AskTimeout):
+        _suggest_limits.check_rate(_client_id(request))
+        return _suggest_limits.run_bounded(lambda: _suggester.suggest(q, hidden), min(3.0, _config.deadline_seconds))
+    except (AskBusy, AskRateLimited, AskTimeout):
         return AskSuggestResponse(query=q)
     except Exception as error:
         logger.error("Ask suggestion failed: %s", type(error).__name__)

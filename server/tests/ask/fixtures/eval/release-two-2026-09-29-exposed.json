@@ -1,5 +1,5 @@
 {
-  "comment": "Independently labeled unseen release set; frozen before corrected implementation evaluation.",
+  "comment": "EXPOSED: former release set, now seen by implementation and tuning; regression material only, never reuse as an unseen release set.",
   "cases": [
     {
       "id": "release-two-001",

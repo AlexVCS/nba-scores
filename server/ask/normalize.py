@@ -111,7 +111,9 @@ def resolve_components(parts: DateComponents, today: dt.date) -> DateRange | str
         else:
             if parts.year is None and parts.end_year is None:
                 return "year_required"
-            start_year = parts.year if parts.year is not None else parts.end_year
+            start_year = parts.year if parts.year is not None else parts.end_year - (
+                1 if parts.kind != "calendar_date" and parts.end_month < parts.month else 0
+            )
             start = dt.date(start_year, parts.month, parts.day)
             if parts.kind == "calendar_date":
                 end = start
