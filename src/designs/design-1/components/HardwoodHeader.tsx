@@ -1,6 +1,7 @@
 import {useId, useRef} from "react";
 import {Link} from "react-router";
 import DarkModeToggle from "@/components/DarkModeToggle";
+import AskEntry from "@/components/ask/AskEntry";
 import {useTheme} from "@/hooks/useTheme";
 import {useResultsVisibility} from "@/hooks/useResultsVisibility";
 import {designPath} from "../../designRoutes";
@@ -36,7 +37,8 @@ function HardwoodHeader({section, scoresPath = "/"}: HardwoodHeaderProps) {
 
   return (
     <header className={`${hwContainer} border-b border-hw-line pt-5`}>
-      <div className="flex min-h-14 items-center justify-end gap-3 border-b border-hw-line py-1.5">
+      <div className="flex min-h-14 items-center justify-between gap-3 border-b border-hw-line py-1.5">
+        <AskEntry />
         <div
           className="flex items-center gap-1 rounded-hw border border-hw-line bg-hw-surface p-1 shadow-hw-small"
           role="group"
