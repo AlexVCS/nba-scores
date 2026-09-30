@@ -313,7 +313,7 @@ def _nba_records(request):
     if not parsed:
         raise NotFoundError("no_record", "season_records_missing")
     return SeasonData(tuple(r.model_dump() for r in parsed), "nba_stats",
-                      f"https://www.nba.com/stats/teams/traditional?Season={request.season}&SeasonType={'Playoffs' if request.season_type == 'playoffs' else 'Regular%20Season'}", _now(), _complete(request.season))
+                      f"https://www.nba.com/stats/teams/traditional?Season={request.season}&SeasonType=Regular%20Season", _now(), _complete(request.season))
 
 
 def _bref_records(request):
