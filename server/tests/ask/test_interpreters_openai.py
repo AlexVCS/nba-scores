@@ -28,7 +28,7 @@ def blank_output(**overrides):
         "intent": "game_search",
         "unsupported_reason": None,
         "stat_scope": empty, "stat": empty, "aggregation": empty,
-        "player": empty, "teams": empty, "date": empty, "season": empty, "round": empty, "game_number": empty,
+        "player": empty, "teams": empty, "date": empty, "season": empty, "round": empty, "game_number": empty, "location": empty,
     }
     data.update(overrides)
     return data

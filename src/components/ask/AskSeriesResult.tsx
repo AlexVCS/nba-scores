@@ -1,10 +1,11 @@
+import TeamLogos from "@/components/TeamLogos";
 import type {AskPlayoffSeriesResult} from "@/services/ask/types";
 import AskGameCard from "./AskGameCard";
 import AskHiddenValue from "./AskHiddenValue";
 import AskRevealButton from "./AskRevealButton";
 import {playoffYear, roundLabel} from "./askFormat";
 import {RESULT_GROUP, guarded, safeGame} from "./askSpoilers";
-import {askCap, askCard, askTricode, type AskRevealControls} from "./askStyles";
+import {askCap, askCard, type AskRevealControls} from "./askStyles";
 
 interface AskSeriesResultProps {
   result: AskPlayoffSeriesResult;
@@ -40,7 +41,11 @@ function AskSeriesResult({result, controls}: AskSeriesResultProps) {
             const won = guarded(row.won_series, revealed);
             return (
               <li key={index} className="flex items-center gap-3 border-t border-hw-line px-3.5 py-3.5 first:border-t-0">
-                <span className={`${askTricode} h-[34px] min-w-12`}>{team ? team.tricode : <AskHiddenValue width={24} />}</span>
+                <span className="grid h-10 w-12 place-items-center">
+                  {team
+                    ? <TeamLogos teamName={team.name} teamId={team.team_id} tricode={team.tricode} size={40} />
+                    : <AskHiddenValue width={24} />}
+                </span>
                 <span className={`flex-1 text-sm font-extrabold ${won === false ? "text-hw-muted" : ""}`}>
                   {team ? team.name : <AskHiddenValue width={120} />}
                   {seed != null && <span className="ml-2 text-[10px] font-bold text-hw-muted">Seed {seed}</span>}

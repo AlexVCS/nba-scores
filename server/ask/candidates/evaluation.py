@@ -54,6 +54,8 @@ def candidate_key(candidate: Candidate) -> Any:
         return v.round + (f".{v.conference}" if v.conference else "")
     if v.kind == "game_number":
         return v.game_number
+    if v.kind == "location":
+        return v.location.city
     return v  # dates are matched by date_matches
 
 

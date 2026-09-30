@@ -55,6 +55,7 @@ CANDIDATE_CHOICES: dict[str, tuple[str, str]] = {
     "season": ("season", "season"),
     "round": ("round", "round"),
     "game_number": ("game_number", "game_number"),
+    "location": ("location", "location"),
 }
 NOUNS = {
     "player": "NBA player",
@@ -62,6 +63,7 @@ NOUNS = {
     "season": "NBA season or playoff year",
     "round": "playoff round",
     "game_number": "numbered game of a playoff series (e.g. 'game 4')",
+    "location": "city where the games are played (a venue, not a team)",
 }
 
 
@@ -284,7 +286,7 @@ class JevAdapter:
 
     def _metadata(self, started: float, resolved: str | None = None, usage: InterpreterUsage | None = None):
         return InterpreterMetadata(
-            adapter="jev",
+            adapter=self.name,
             provider=self.provider,
             model=self.model,
             resolved_model=resolved,

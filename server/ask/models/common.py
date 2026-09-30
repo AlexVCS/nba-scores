@@ -60,7 +60,9 @@ Intent = Literal["game_search", "boxscore_stat", "playoff_series", "postseason_s
 # (NormalizationResult.clarify_field), the cascade (ClarifyDecision.field), and
 # HTTP (Clarification.field). "teams" covers one team or a matchup.
 # "aggregation" is never clarified: per_game is unsupported (multi_game_average).
-ClarifyField = Literal["intent", "stat_scope", "stat", "player", "teams", "date", "season", "round", "game_number"]
+ClarifyField = Literal[
+    "intent", "stat_scope", "stat", "player", "teams", "date", "season", "round", "game_number", "location"
+]
 ClarifyReason = Literal["ambiguous", "missing", "no_matching_candidate", "year_required", "range_too_long"]
 
 # Scope of a boxscore_stat request: one player, team totals, or game leaders.
@@ -149,6 +151,34 @@ class TeamRef(ContractModel):
     team_id: int = Field(ge=1)
     tricode: str = Field(min_length=2, max_length=4)
     name: str = Field(min_length=1, max_length=80)
+
+
+class HomeTenure(ContractModel):
+    """A team's home arena was in the city from ``start`` to ``end`` (inclusive; None = present)."""
+
+    team: TeamRef
+    start: date
+    end: date | None = None
+
+
+class GameLocation(ContractModel):
+    """Where games are played (ADR 0011): a city and which teams were based there, when.
+
+    Game search keeps a game only if its home team had a tenure in this city on the
+    game's date, so "games in Brooklyn" in 2005 matches nothing (the Nets were in
+    New Jersey).
+    """
+
+    city: str = Field(min_length=1, max_length=40)
+    homes: list[HomeTenure] = Field(min_length=1, max_length=4)
+
+    def hosts(self, team_id: int, day: date) -> bool:
+        return any(h.team.team_id == team_id and h.start <= day and (h.end is None or day <= h.end)
+                   for h in self.homes)
+
+    def any_tenure(self, start: date, end: date) -> bool:
+        return any(h.start <= end and (h.end is None or start <= h.end) for h in self.homes)
+
 
 
 class PlayerRef(ContractModel):

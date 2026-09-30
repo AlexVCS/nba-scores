@@ -16,7 +16,7 @@ from typing import Sequence
 from pydantic import ValidationError
 
 from server.ask import links
-from server.ask.models.common import DateRange, PlayoffRound, TeamRef
+from server.ask.models.common import DateRange, GameLocation, PlayoffRound, TeamRef
 from server.ask.models.response import FinalScore, GameContext, GameDay, GameResultItem, GamesResult, ScoreboardGame
 from server.ask.resolvers import data
 from server.ask.resolvers.errors import AmbiguousError, ClarificationError, NotFoundError, UnavailableError
@@ -174,9 +174,11 @@ def game_result_item(game: ResolvedGame) -> GameResultItem:
     return GameResultItem(date=game.date, game=payload, spoilers=game_spoilers(game.status), links=item_links, spoiler=protected)
 
 
-def search_games(dates: DateRange, team_ids: Sequence[int] = ()) -> ResolverOutput[GamesResult]:
+def search_games(dates: DateRange, team_ids: Sequence[int] = (),
+                 location: GameLocation | None = None) -> ResolverOutput[GamesResult]:
     """Games on one date or up to seven consecutive days (``DateRange`` enforces
-    the limit), optionally only those in which every listed team played.
+    the limit), optionally only those in which every listed team played, and only
+    those hosted in ``location`` by a team based there on that date (ADR 0011).
 
     One day's scoreboard failing makes the whole search ``unavailable`` rather
     than a silently partial answer.
@@ -186,21 +188,27 @@ def search_games(dates: DateRange, team_ids: Sequence[int] = ()) -> ResolverOutp
         raise ClarificationError("date", "range_too_long", "range_too_long")
     _check_day(dates.end)
     wanted = set(validate_team_ids(team_ids))
+    if location is not None and not location.any_tenure(dates.start, dates.end):
+        raise NotFoundError("no_games", "no_team_at_location",
+                            details={"start": dates.start.isoformat(), "end": dates.end.isoformat(), "city": location.city})
     game_days: list[GameDay] = []
     found: list[ResolvedGame] = []
     for offset in range(days):
         day = dates.start + dt.timedelta(days=offset)
         if day < FIRST_RECORDED_DATE:
             continue
-        matches = [dataclasses.replace(game, named_team_ids=tuple(wanted)) for game in _day_games(day) if wanted <= set(game.team_ids)]
+        matches = [dataclasses.replace(game, named_team_ids=tuple(wanted)) for game in _day_games(day)
+                   if wanted <= set(game.team_ids)
+                   and (location is None or location.hosts(game.home.team_id, game.date))]
         if matches:
             found.extend(matches)
             game_days.append(GameDay(date=day, games=[game_result_item(game) for game in matches]))
     if not found:
         raise NotFoundError(
             "no_games",
-            "no_matching_games",
-            details={"start": dates.start.isoformat(), "end": dates.end.isoformat(), "teamIds": sorted(wanted)},
+            "no_games_at_location" if location else "no_matching_games",
+            details={"start": dates.start.isoformat(), "end": dates.end.isoformat(), "teamIds": sorted(wanted),
+                     **({"city": location.city} if location else {})},
         )
     teams = []
     for team_id in team_ids:

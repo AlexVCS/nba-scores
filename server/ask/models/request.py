@@ -20,6 +20,7 @@ from .common import (
     Conference,
     ContractModel,
     DateRange,
+    GameLocation,
     NewYorkDateTime,
     PlayerRef,
     PlayoffRound,
@@ -52,6 +53,8 @@ class GameSearchRequest(ContractModel):
     intent: Literal["game_search"] = "game_search"
     dates: DateRange
     teams: list[TeamRef] = Field(default_factory=list, max_length=2)
+    # Games played in this city (home team in `location.teams`), ADR 0011.
+    location: GameLocation | None = None
 
 
 class StatSelection(ContractModel):

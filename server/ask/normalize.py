@@ -49,6 +49,7 @@ CANDIDATE_SET_FOR = {
     "season": "season",
     "round": "round",
     "game_number": "game_number",
+    "location": "location",
 }
 CLOSED_VALUES = {
     "intent": set(get_args(Intent)),
@@ -60,7 +61,7 @@ CLOSED_VALUES = {
 # Fields each intent reads. A field outside this set is ignored, so a stray value on an
 # irrelevant field never changes the request (and never blocks it).
 RELEVANT_FIELDS: dict[str, frozenset[str]] = {
-    "game_search": frozenset({"date", "teams"}),
+    "game_search": frozenset({"date", "teams", "location"}),
     "boxscore_stat": frozenset(
         {"stat_scope", "stat", "aggregation", "player", "teams", "date", "season", "round", "game_number"}
     ),
@@ -154,6 +155,7 @@ class Normalizer:
             return NormalizationResult(status="invalid", errors=[f"interpreter outcome {output.outcome}"])
         try:
             self._check_values(output, candidates)
+            self._check_truncation(output, candidates)
             return self._build(output, candidates, context)
         except _Clarify as c:
             return NormalizationResult(status="needs_clarification", clarify_field=c.field, clarify_reason=c.reason)
@@ -175,6 +177,16 @@ class Normalizer:
                 candidate = candidates.by_id(value)
                 if candidate is None or candidate.field != wanted:
                     raise _Invalid(f"{f.field}: unknown candidate {value!r}")
+
+    @staticmethod
+    def _check_truncation(output: InterpreterOutput, candidates: CandidateLookupResult) -> None:
+        """A selection from a truncated candidate list is never executed: the intended
+        entity may be one lookup dropped ("Jalen" has 18 matches, 8 are offered)."""
+        relevant = relevant_fields(output)
+        for f in output.fields:
+            if f.status == "selected" and f.field in relevant and f.field in CANDIDATE_SET_FOR:
+                if candidates.sets[CANDIDATE_SET_FOR[f.field]].truncated:
+                    raise _Clarify(f.field, "ambiguous")
 
     # -- field access -----------------------------------------------------------------
 
@@ -250,7 +262,9 @@ class Normalizer:
     def _game_search(self, output, candidates, context):
         dates = self._dates(output, candidates, context, required=True)
         teams = self._teams(candidates, self._optional(output, "teams"))
-        return GameSearchRequest(dates=dates, teams=teams)
+        location_ids = self._optional(output, "location")
+        location = self._value(candidates, location_ids[0]).location if location_ids else None
+        return GameSearchRequest(dates=dates, teams=teams, location=location)
 
     def _boxscore(self, output, candidates, context):
         aggregation = self._optional(output, "aggregation")

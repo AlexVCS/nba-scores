@@ -11,7 +11,7 @@ Frozen contract (docs/ask-contract.md). Coordinate before changing.
 from __future__ import annotations
 
 import datetime as dt
-from typing import Annotated, Literal, Union
+from typing import Annotated, Any, Literal, Union
 
 from pydantic import Field, model_validator
 
@@ -20,6 +20,7 @@ from .common import (
     ContractModel,
     DateComponents,
     DateRange,
+    GameLocation,
     PlayerRef,
     PlayoffRound,
     Season,
@@ -29,8 +30,8 @@ from .common import (
 MAX_CANDIDATES_PER_FIELD = 12
 MAX_TOTAL_CANDIDATES = 48
 
-CandidateField = Literal["player", "team", "date", "season", "round", "game_number"]
-CANDIDATE_FIELDS: tuple[CandidateField, ...] = ("player", "team", "date", "season", "round", "game_number")
+CandidateField = Literal["player", "team", "date", "season", "round", "game_number", "location"]
+CANDIDATE_FIELDS: tuple[CandidateField, ...] = ("player", "team", "date", "season", "round", "game_number", "location")
 
 CandidateSource = Literal[
     "alias",  # maintained alias list (e.g. "Cavs", "KD")
@@ -88,6 +89,13 @@ class GameNumberCandidateValue(ContractModel):
     game_number: int = Field(ge=1, le=7)
 
 
+class LocationCandidateValue(ContractModel):
+    """A city where games are played (ADR 0011): the teams whose home arena is there."""
+
+    kind: Literal["location"] = "location"
+    location: GameLocation
+
+
 CandidateValue = Annotated[
     Union[
         PlayerCandidateValue,
@@ -95,6 +103,7 @@ CandidateValue = Annotated[
         DateCandidateValue,
         SeasonCandidateValue,
         RoundCandidateValue,
+        LocationCandidateValue,
         GameNumberCandidateValue,
     ],
     Field(discriminator="kind"),
@@ -151,6 +160,14 @@ class CandidateLookupResult(ContractModel):
     sets: dict[CandidateField, CandidateSet]
     alias_version: str = Field(min_length=1, max_length=40)
     latency_ms: int = Field(ge=0)
+
+    @model_validator(mode="before")
+    @classmethod
+    def _default_location(cls, data: Any) -> Any:
+        # Results recorded before ADR 0011 have no location set; nothing was detected.
+        if isinstance(data, dict) and isinstance(data.get("sets"), dict) and "location" not in data["sets"]:
+            data = {**data, "sets": {**data["sets"], "location": {"field": "location", "status": "not_mentioned"}}}
+        return data
 
     @model_validator(mode="after")
     def _complete(self) -> CandidateLookupResult:

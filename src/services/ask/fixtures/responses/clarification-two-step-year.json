@@ -114,6 +114,7 @@
     "cache_hit": false,
     "adapter": null,
     "model": null,
-    "fallback_used": false
+    "fallback_used": false,
+    "field_tiers": {}
   }
 }

@@ -1,11 +1,16 @@
 import type {AskInterpreterInfo} from "@/services/ask/types";
 
+const TIER_LABELS: Record<string, string> = {
+  lookup: "Lookup", laya: "Laya", jev: "Jev", luna: "Luna", veto: "Tiers disagreed",
+};
+
 interface AskResponseDetailsProps {
   interpreter: AskInterpreterInfo;
 }
 
 function AskResponseDetails({interpreter}: AskResponseDetailsProps) {
-  const {model_called: modelCalled, cache_hit: cacheHit, adapter, model} = interpreter;
+  const {model_called: modelCalled, cache_hit: cacheHit, adapter, model, field_tiers: fieldTiers = {}} = interpreter;
+  const decisions = Object.entries(fieldTiers);
   const reportedModel = Boolean(model) || modelCalled || (cacheHit && Boolean(adapter));
 
   return (
@@ -20,9 +25,17 @@ function AskResponseDetails({interpreter}: AskResponseDetailsProps) {
         <dd className="font-semibold text-hw-ink">{cacheHit ? "Yes" : "No"}</dd>
         {reportedModel ? (
           <>
-            <dt>Interpreter model</dt>
+            <dt>Interpreted by</dt>
             <dd className="break-all font-semibold text-hw-ink">{model ?? "Not reported"}</dd>
             {adapter && <><dt>Adapter</dt><dd className="break-all font-semibold text-hw-ink">{adapter}</dd></>}
+            {decisions.length > 0 && (
+              <>
+                <dt>Decided by</dt>
+                <dd className="font-semibold text-hw-ink">
+                  {decisions.map(([field, tier]) => `${field.replace("_", " ")}: ${TIER_LABELS[tier] ?? tier}`).join(" · ")}
+                </dd>
+              </>
+            )}
           </>
         ) : (
           <>

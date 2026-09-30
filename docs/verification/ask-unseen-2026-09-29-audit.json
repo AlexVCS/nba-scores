@@ -1,0 +1,39 @@
+{
+  "purpose": "Post-run semantic audit; original fixture and raw scores remain unchanged",
+  "raw_report_sha256": "3837b7cb9bcc1feef23f60ee4f2f69e31636fab8b9092b81d744cc18676a2e7a",
+  "fixture_sha256": "fd774408c30889239ff297baaabf2b971b73e5210bfa5b842fdfe478a1d37332",
+  "provider_calls_during_audit": 0,
+  "label_errors": [
+    {
+      "case_id": "unseen-2026-09-29-009",
+      "question": "I missed last night. Which games were on?",
+      "reference_time_new_york": "2026-02-08T21:35:00-05:00",
+      "frozen_expected_date": "2026-02-08",
+      "correct_prior_calendar_day": "2026-02-07",
+      "actual_date": "2026-02-07",
+      "verdict": "Application correct; author confirmed UTC-boundary label error independently."
+    }
+  ],
+  "raw_correct": 89,
+  "audited_correct": 90,
+  "raw_schema_valid_guesses": 3,
+  "confirmed_unsafe_accepted_requests": [
+    {
+      "case_id": "unseen-2026-09-29-049",
+      "problem": "Historical New Jersey phrase describes the Nets franchise; cascade adds an unwarranted home-city restriction."
+    },
+    {
+      "case_id": "unseen-2026-09-29-082",
+      "problem": "Curry could mean Stephen or Seth; Jev selects Stephen at1.0 confidence and cascade retains it despite Luna ambiguous player read."
+    }
+  ],
+  "confirmed_unsafe_accepted_request_count": 2,
+  "audited_system_gate_passed": false,
+  "remaining_failures": {
+    "unsafe_accepted_request": 2,
+    "unneeded_clarification": 6,
+    "false_unsupported": 1,
+    "expected_clarify_got_unsupported": 1
+  },
+  "scope_limitation": "Interpreter normalized requests only; no answers rendered, retrieval or UI gate measured. Set is now exposed and must not be reused as unseen evidence."
+}

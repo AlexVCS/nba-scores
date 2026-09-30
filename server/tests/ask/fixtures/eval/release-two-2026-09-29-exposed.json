@@ -147,9 +147,33 @@
             "start": "2026-03-08",
             "end": "2026-03-08"
           },
-          "teams": []
+          "teams": [],
+          "location": {
+            "city": "New York",
+            "homes": [
+              {
+                "team": {
+                  "team_id": 1610612752,
+                  "tricode": "NYK",
+                  "name": "New York Knicks"
+                },
+                "start": "1946-07-01",
+                "end": null
+              },
+              {
+                "team": {
+                  "team_id": 1610612751,
+                  "tricode": "BKN",
+                  "name": "Brooklyn Nets"
+                },
+                "start": "2012-07-01",
+                "end": null
+              }
+            ]
+          }
         }
-      }
+      },
+      "label_note": "2026-09-29 (ADR 0011): 'in New York' filters to Knicks and Nets home games."
     },
     {
       "id": "release-two-007",
@@ -1359,10 +1383,24 @@
         "boxscore_stat"
       ],
       "expected": {
-        "action": "clarify",
-        "clarify_field": "stat",
-        "clarify_reason": "missing"
-      }
+        "action": "accept",
+        "request": {
+          "intent": "boxscore_stat",
+          "scope": "player",
+          "stat": {
+            "stat": "stat_line",
+            "aggregation": "total"
+          },
+          "game": {
+            "date": "2025-02-03"
+          },
+          "player": {
+            "player_id": 203999,
+            "name": "Nikola Jokić"
+          }
+        }
+      },
+      "label_note": "2026-09-29 (ADR 0011): no stat named means the full stat line."
     },
     {
       "id": "release-two-057",

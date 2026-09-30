@@ -535,3 +535,118 @@ the field probabilities needed to separate extraction errors from policy vetoes.
 A production model recommendation therefore remains open. Record those details,
 calibrate on development data, and freeze both implementations before a fresh
 unseen comparison. No additional provider runs are required for this handoff.
+
+## Tiered cascade calibration (2026-09-29, ADRs 0002 and 0009)
+
+`scripts/ask/evaluate.py collect` recorded Jev and GPT-6 Luna once on all 203
+exposed cases (`dev.json` plus both exposed release sets), using lookup candidates.
+It spent an estimated $0.072 of a $0.60 cap:
+[`ask-tier-trace.json`](verification/ask-tier-trace.json). `calibrate` then
+replayed the cascade offline across thresholds with no provider calls:
+[`ask-tier-calibration.json`](verification/ask-tier-calibration.json).
+
+These are **exposed** cases. They are calibration data, not gate evidence.
+
+| Jev accept_min | Correct | Guesses | Unneeded clarifications | Finished by Jev / Luna |
+| ---: | ---: | ---: | ---: | ---: |
+| 0.5 | 160/203 | 5 | | 195 / 8 |
+| 0.8 | 182/203 | 4 | 12 | 119 / 84 |
+| 0.85 | 187/203 | 3 | 8 | 102 / 101 |
+| 0.9 | 188/203 | 3 | 7 | 94 / 109 |
+| 0.95 | 188/203 | 3 | 7 | 65 / 138 |
+
+`veto_min` from 0.0 to 0.5 changed no outcome. In every remaining guess, either
+both tiers agreed on the wrong reading or Jev had no competing selection.
+**0.9** keeps accuracy at its plateau while Jev still finishes 46% of cases, so it
+remains the default.
+
+The three guesses at 0.9:
+
+- `release-two-056` ("How many did Nikola Jokic have…"): Jev was unsure of the
+  stat, and Luna chose `stat_line` instead of asking which stat. This is a real
+  guess by the final tier.
+- `release-two-006` ("games … tonight in New York"): Luna added a Knicks filter,
+  while the label expects no team filter. The label is debatable: a location is
+  not a team, and the schema has no venue filter.
+- `release-two-029` (Boston's defensive rebounds in Game 3 of the 2024 Finals):
+  every field was correct. The normalizer also adds the target team to
+  `game.teams`, which selects the same game, but the strict scorer counts it as
+  a different request. This is a scoring and normalizer convention mismatch,
+  not a wrong answer.
+
+The field-level tier oracle (`trace.field_reads`) reported 99.8% Jev precision
+even at 0.5. It scores only `selected` reads on fields that accept labels pin
+down, so it misses the errors that matter. It is too lenient to serve as the
+ADR 0009 tier gate. Before any gate run, it needs `absent` reads on optional
+fields, clarify and unsupported labels, and boxscore team roles.
+
+The Luna-only replay is not comparable: when Jev called a case unsupported, the
+cascade never recorded Luna on it (15 cases).
+
+### Recalibration after the external review (2026-09-29)
+
+An external review of `cdc6c68` found three defects, all reproduced and fixed with
+regression tests (`server/tests/ask/test_review_fixes.py`, `test_location.py`):
+
+1. A selection from a truncated candidate list ("Jalen" has 18 matches, and 8 are
+   offered) was executed. The normalizer now asks for clarification instead.
+2. A sentence-initial capital ("How …") disabled lowercase names ("lebron"). The
+   casing check now ignores sentence-initial capitals, acronyms, and team names.
+   Fuzzy one-word matches still need a capital, or an all-lowercase question.
+3. The venue filter ignored history ("games in Brooklyn" in 2005). Each city now
+   carries dated team tenures (ADR 0011).
+
+The venue filter adds a `location` field. When the lookup finds no "in <city>",
+the field is absent by construction and no model is asked (`LOOKUP_DECIDED`).
+
+The trace was re-recorded on the fixed code for an estimated $0.050. Replay results:
+
+| Jev accept_min | Correct | Guesses | Finished by Jev / Luna |
+| ---: | ---: | ---: | ---: |
+| 0.8 | 184/203 | 2 | 120 / 83 |
+| **0.85** | **188/203** | **1** | **103 / 100** |
+| 0.9 | 188/203 | 1 | 92 / 111 |
+| 0.95 | 188/203 | 1 | 65 / 138 |
+
+The default is now **0.85**: same accuracy as 0.9, with more traffic kept on Jev.
+The one remaining guess is `release-two-029`, the `game.teams` scoring
+convention; the answer itself is correct. Remaining failures:
+
+- 4 unsupported answers where the label expects a clarification: missing page
+  context, and "Dwight Schrute".
+- 4 unneeded team clarifications on two-team stat questions: the known
+  target-team schema gap (`nba-scores-kzc.1`).
+- 2 season clarifications and 2 date clarifications.
+
+These are exposed cases, used for tuning. Next step: freeze this configuration and
+run a new unseen set written by someone who has not seen these cases.
+
+## Frozen independent 100-question run, September 29
+
+The frozen `9291237` production cascade was run once on 100 questions written
+by an isolated agent. Each of the four Phase 1 request types has 25 cases.
+Jev used accept minimum 0.85, Luna used low effort, and the veto minimum was 0.5.
+No production configuration or tool changed during measurement.
+
+The unchanged raw report scores 89/100 and flags three accepted-request errors.
+An independently confirmed date-label error accounts for one flag: at February 8,
+21:35 New York time, "last night" is February 7, as the application selected.
+The separate semantic audit therefore finds 90/100 correct and two unsafe
+accepted interpretations. Those errors are selecting Stephen for ambiguous
+"Curry", even after Luna reports ambiguity, and treating historical "when they
+were in New Jersey" wording as a home-only venue restriction.
+
+The zero-guess gate fails. Clarification accuracy also fails at 13/15, while all
+10 unsupported cases are correct. Median latency is 2.102 seconds and p95 is
+3.728 seconds. Jev finished 49 questions without Luna; Luna ran on 51.
+Known provider usage is $0.027154; the spend guard conservatively accounted
+$0.032570 because one timed-out request has unknown usage.
+
+All 100 results survived a report-assembly path error and were summarized offline
+without another provider call. The original journal, labels, manifest, executed
+runner, and raw report remain intact. The runner's path fix has a regression test.
+See the [full evaluation and audit](verification/ask-unseen-2026-09-29.md).
+
+The set is now exposed. It measures interpretations, not retrieval or rendered
+answers, and cannot establish the incomplete tier precision gate. Production
+remains disabled; fixes require another unseen set.

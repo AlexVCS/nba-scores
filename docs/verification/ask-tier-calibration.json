@@ -1,0 +1,807 @@
+{
+ "purpose": "Offline cascade calibration from recorded outputs (#199, ADR 0009). Exposed cases only; not gate evidence.",
+ "generated_at": "2026-09-29T20:43:13+00:00",
+ "trace": "docs/verification/ask-tier-trace.json",
+ "cases_files": [
+  "server/tests/ask/fixtures/eval/dev.json",
+  "server/tests/ask/fixtures/eval/release-2026-09-29-exposed.json",
+  "server/tests/ask/fixtures/eval/release-two-2026-09-29-exposed.json"
+ ],
+ "precision_min": 0.98,
+ "tier_calibration": {
+  "jev": {
+   "chosen": {
+    "threshold": 0.5,
+    "scored_fields": 558,
+    "accepted": 558,
+    "coverage": 1.0,
+    "precision": 0.9982,
+    "errors": [
+     "dev-page-playoffs:season"
+    ]
+   },
+   "curve": [
+    {
+     "threshold": 0.5,
+     "scored_fields": 558,
+     "accepted": 558,
+     "coverage": 1.0,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.51,
+     "scored_fields": 558,
+     "accepted": 558,
+     "coverage": 1.0,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.52,
+     "scored_fields": 558,
+     "accepted": 558,
+     "coverage": 1.0,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.53,
+     "scored_fields": 558,
+     "accepted": 558,
+     "coverage": 1.0,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.54,
+     "scored_fields": 558,
+     "accepted": 558,
+     "coverage": 1.0,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.55,
+     "scored_fields": 558,
+     "accepted": 557,
+     "coverage": 0.9982,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.56,
+     "scored_fields": 558,
+     "accepted": 556,
+     "coverage": 0.9964,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.57,
+     "scored_fields": 558,
+     "accepted": 556,
+     "coverage": 0.9964,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.58,
+     "scored_fields": 558,
+     "accepted": 554,
+     "coverage": 0.9928,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.59,
+     "scored_fields": 558,
+     "accepted": 554,
+     "coverage": 0.9928,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.6,
+     "scored_fields": 558,
+     "accepted": 554,
+     "coverage": 0.9928,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.61,
+     "scored_fields": 558,
+     "accepted": 551,
+     "coverage": 0.9875,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.62,
+     "scored_fields": 558,
+     "accepted": 551,
+     "coverage": 0.9875,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.63,
+     "scored_fields": 558,
+     "accepted": 546,
+     "coverage": 0.9785,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.64,
+     "scored_fields": 558,
+     "accepted": 546,
+     "coverage": 0.9785,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.65,
+     "scored_fields": 558,
+     "accepted": 543,
+     "coverage": 0.9731,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.66,
+     "scored_fields": 558,
+     "accepted": 543,
+     "coverage": 0.9731,
+     "precision": 0.9982,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.67,
+     "scored_fields": 558,
+     "accepted": 540,
+     "coverage": 0.9677,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.68,
+     "scored_fields": 558,
+     "accepted": 539,
+     "coverage": 0.9659,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.69,
+     "scored_fields": 558,
+     "accepted": 539,
+     "coverage": 0.9659,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.7,
+     "scored_fields": 558,
+     "accepted": 537,
+     "coverage": 0.9624,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.71,
+     "scored_fields": 558,
+     "accepted": 534,
+     "coverage": 0.957,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.72,
+     "scored_fields": 558,
+     "accepted": 534,
+     "coverage": 0.957,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.73,
+     "scored_fields": 558,
+     "accepted": 534,
+     "coverage": 0.957,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.74,
+     "scored_fields": 558,
+     "accepted": 534,
+     "coverage": 0.957,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.75,
+     "scored_fields": 558,
+     "accepted": 534,
+     "coverage": 0.957,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.76,
+     "scored_fields": 558,
+     "accepted": 534,
+     "coverage": 0.957,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.77,
+     "scored_fields": 558,
+     "accepted": 532,
+     "coverage": 0.9534,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.78,
+     "scored_fields": 558,
+     "accepted": 532,
+     "coverage": 0.9534,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.79,
+     "scored_fields": 558,
+     "accepted": 530,
+     "coverage": 0.9498,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.8,
+     "scored_fields": 558,
+     "accepted": 528,
+     "coverage": 0.9462,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.81,
+     "scored_fields": 558,
+     "accepted": 526,
+     "coverage": 0.9427,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.82,
+     "scored_fields": 558,
+     "accepted": 524,
+     "coverage": 0.9391,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.83,
+     "scored_fields": 558,
+     "accepted": 521,
+     "coverage": 0.9337,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.84,
+     "scored_fields": 558,
+     "accepted": 518,
+     "coverage": 0.9283,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.85,
+     "scored_fields": 558,
+     "accepted": 516,
+     "coverage": 0.9247,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.86,
+     "scored_fields": 558,
+     "accepted": 515,
+     "coverage": 0.9229,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.87,
+     "scored_fields": 558,
+     "accepted": 513,
+     "coverage": 0.9194,
+     "precision": 0.9981,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.88,
+     "scored_fields": 558,
+     "accepted": 512,
+     "coverage": 0.9176,
+     "precision": 0.998,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.89,
+     "scored_fields": 558,
+     "accepted": 512,
+     "coverage": 0.9176,
+     "precision": 0.998,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.9,
+     "scored_fields": 558,
+     "accepted": 509,
+     "coverage": 0.9122,
+     "precision": 0.998,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.91,
+     "scored_fields": 558,
+     "accepted": 506,
+     "coverage": 0.9068,
+     "precision": 0.998,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.92,
+     "scored_fields": 558,
+     "accepted": 499,
+     "coverage": 0.8943,
+     "precision": 0.998,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.93,
+     "scored_fields": 558,
+     "accepted": 483,
+     "coverage": 0.8656,
+     "precision": 0.9979,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.94,
+     "scored_fields": 558,
+     "accepted": 479,
+     "coverage": 0.8584,
+     "precision": 0.9979,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.95,
+     "scored_fields": 558,
+     "accepted": 471,
+     "coverage": 0.8441,
+     "precision": 0.9979,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.96,
+     "scored_fields": 558,
+     "accepted": 466,
+     "coverage": 0.8351,
+     "precision": 0.9979,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.97,
+     "scored_fields": 558,
+     "accepted": 453,
+     "coverage": 0.8118,
+     "precision": 0.9978,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.98,
+     "scored_fields": 558,
+     "accepted": 426,
+     "coverage": 0.7634,
+     "precision": 0.9977,
+     "errors": [
+      "dev-page-playoffs:season"
+     ]
+    },
+    {
+     "threshold": 0.99,
+     "scored_fields": 558,
+     "accepted": 391,
+     "coverage": 0.7007,
+     "precision": 1.0,
+     "errors": []
+    }
+   ]
+  }
+ },
+ "sweep": [
+  {
+   "thresholds": {
+    "jev": 0.5,
+    "luna": null
+   },
+   "veto_min": 0.5,
+   "cases": 203,
+   "complete_request_accuracy": 0.8079,
+   "correct": 164,
+   "schema_valid_guesses": 4,
+   "service_failures": 0,
+   "clarification": {
+    "expected": 40,
+    "correct": 36,
+    "issued": 69,
+    "unneeded": 32
+   },
+   "unsupported": {
+    "expected": 21,
+    "correct": 17,
+    "issued": 19,
+    "false": 2
+   },
+   "latency_ms": {
+    "median": 0,
+    "p95": 0
+   },
+   "total_cost_usd": 0.022658,
+   "cost_per_successful_answer_usd": 0.000138,
+   "fallback_rate": 0.0,
+   "resolved_models": [
+    "jev-1.13.0",
+    "jev-1.13.0+gpt-6-luna"
+   ],
+   "failures": {
+    "expected_clarify_got_unsupported": 2,
+    "expected_unsupported_got_clarify": 2,
+    "schema_valid_guess": 3,
+    "unneeded_clarification": 30,
+    "wrong_clarify_field": 1,
+    "wrong_request": 1
+   },
+   "replay_misses": 0,
+   "tier_share": {
+    "jev": 195,
+    "luna": 8
+   }
+  },
+  {
+   "thresholds": {
+    "jev": 0.8,
+    "luna": null
+   },
+   "veto_min": 0.5,
+   "cases": 203,
+   "complete_request_accuracy": 0.9064,
+   "correct": 184,
+   "schema_valid_guesses": 2,
+   "service_failures": 0,
+   "clarification": {
+    "expected": 40,
+    "correct": 34,
+    "issued": 47,
+    "unneeded": 11
+   },
+   "unsupported": {
+    "expected": 21,
+    "correct": 20,
+    "issued": 24,
+    "false": 4
+   },
+   "latency_ms": {
+    "median": 0,
+    "p95": 0
+   },
+   "total_cost_usd": null,
+   "cost_per_successful_answer_usd": null,
+   "fallback_rate": 0.0,
+   "resolved_models": [
+    "jev-1.13.0",
+    "jev-1.13.0+gpt-6-luna"
+   ],
+   "failures": {
+    "expected_clarify_got_unsupported": 4,
+    "schema_valid_guess": 1,
+    "unneeded_clarification": 11,
+    "wrong_clarify_field": 2,
+    "wrong_request": 1
+   },
+   "replay_misses": 0,
+   "tier_share": {
+    "jev": 120,
+    "luna": 83
+   }
+  },
+  {
+   "thresholds": {
+    "jev": 0.85,
+    "luna": null
+   },
+   "veto_min": 0.5,
+   "cases": 203,
+   "complete_request_accuracy": 0.9261,
+   "correct": 188,
+   "schema_valid_guesses": 1,
+   "service_failures": 0,
+   "clarification": {
+    "expected": 40,
+    "correct": 34,
+    "issued": 44,
+    "unneeded": 8
+   },
+   "unsupported": {
+    "expected": 21,
+    "correct": 21,
+    "issued": 25,
+    "false": 4
+   },
+   "latency_ms": {
+    "median": 0,
+    "p95": 0
+   },
+   "total_cost_usd": null,
+   "cost_per_successful_answer_usd": null,
+   "fallback_rate": 0.0,
+   "resolved_models": [
+    "jev-1.13.0",
+    "jev-1.13.0+gpt-6-luna"
+   ],
+   "failures": {
+    "expected_clarify_got_unsupported": 4,
+    "unneeded_clarification": 8,
+    "wrong_clarify_field": 2,
+    "wrong_request": 1
+   },
+   "replay_misses": 0,
+   "tier_share": {
+    "luna": 100,
+    "jev": 103
+   }
+  },
+  {
+   "thresholds": {
+    "jev": 0.9,
+    "luna": null
+   },
+   "veto_min": 0.5,
+   "cases": 203,
+   "complete_request_accuracy": 0.9261,
+   "correct": 188,
+   "schema_valid_guesses": 1,
+   "service_failures": 0,
+   "clarification": {
+    "expected": 40,
+    "correct": 34,
+    "issued": 44,
+    "unneeded": 8
+   },
+   "unsupported": {
+    "expected": 21,
+    "correct": 21,
+    "issued": 25,
+    "false": 4
+   },
+   "latency_ms": {
+    "median": 0,
+    "p95": 0
+   },
+   "total_cost_usd": null,
+   "cost_per_successful_answer_usd": null,
+   "fallback_rate": 0.0,
+   "resolved_models": [
+    "jev-1.13.0",
+    "jev-1.13.0+gpt-6-luna"
+   ],
+   "failures": {
+    "expected_clarify_got_unsupported": 4,
+    "unneeded_clarification": 8,
+    "wrong_clarify_field": 2,
+    "wrong_request": 1
+   },
+   "replay_misses": 0,
+   "tier_share": {
+    "luna": 111,
+    "jev": 92
+   }
+  },
+  {
+   "thresholds": {
+    "jev": 0.95,
+    "luna": null
+   },
+   "veto_min": 0.5,
+   "cases": 203,
+   "complete_request_accuracy": 0.9261,
+   "correct": 188,
+   "schema_valid_guesses": 1,
+   "service_failures": 0,
+   "clarification": {
+    "expected": 40,
+    "correct": 34,
+    "issued": 44,
+    "unneeded": 8
+   },
+   "unsupported": {
+    "expected": 21,
+    "correct": 21,
+    "issued": 25,
+    "false": 4
+   },
+   "latency_ms": {
+    "median": 0,
+    "p95": 0
+   },
+   "total_cost_usd": null,
+   "cost_per_successful_answer_usd": null,
+   "fallback_rate": 0.0,
+   "resolved_models": [
+    "jev-1.13.0",
+    "jev-1.13.0+gpt-6-luna"
+   ],
+   "failures": {
+    "expected_clarify_got_unsupported": 4,
+    "unneeded_clarification": 8,
+    "wrong_clarify_field": 2,
+    "wrong_request": 1
+   },
+   "replay_misses": 0,
+   "tier_share": {
+    "luna": 138,
+    "jev": 65
+   }
+  },
+  {
+   "thresholds": {
+    "jev": 0.99,
+    "luna": null
+   },
+   "veto_min": 0.5,
+   "cases": 203,
+   "complete_request_accuracy": 0.931,
+   "correct": 189,
+   "schema_valid_guesses": 1,
+   "service_failures": 1,
+   "clarification": {
+    "expected": 40,
+    "correct": 34,
+    "issued": 42,
+    "unneeded": 6
+   },
+   "unsupported": {
+    "expected": 21,
+    "correct": 21,
+    "issued": 25,
+    "false": 4
+   },
+   "latency_ms": {
+    "median": 0,
+    "p95": 0
+   },
+   "total_cost_usd": null,
+   "cost_per_successful_answer_usd": null,
+   "fallback_rate": 0.0,
+   "resolved_models": [
+    "jev-1.13.0",
+    "jev-1.13.0+gpt-6-luna"
+   ],
+   "failures": {
+    "expected_clarify_got_unsupported": 4,
+    "service_failure": 1,
+    "unneeded_clarification": 6,
+    "wrong_clarify_field": 2,
+    "wrong_request": 1
+   },
+   "replay_misses": 0,
+   "tier_share": {
+    "luna": 187,
+    "jev": 16
+   }
+  }
+ ]
+}

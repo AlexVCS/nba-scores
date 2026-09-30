@@ -23,6 +23,7 @@ _TYPE = {
 _FIELD_LABEL = {
     "intent": "kind of question", "stat_scope": "stat scope", "stat": "statistic", "player": "player",
     "teams": "team", "date": "date", "season": "season", "round": "round", "game_number": "game number",
+    "location": "location",
 }
 
 
@@ -35,7 +36,7 @@ def interpretation(output: InterpreterOutput | None, candidates: CandidateLookup
     items: list[InterpretationItem] = []
     if output is not None and candidates is not None:
         for field in output.fields:
-            if field.field not in ("player", "teams", "date", "season", "round", "game_number"):
+            if field.field not in ("player", "teams", "date", "season", "round", "game_number", "location"):
                 if field.field == "stat" and field.status == "selected":
                     items.append(InterpretationItem(field="stat", value=field.selected[0].replace("_", " ").title(), origin="question"))
                 continue
@@ -82,6 +83,10 @@ def notice(code: str, *, reason: str = "", retry_after: int | None = None,
     title, message = copy[code]
     if reason == "before_records":
         message = "NBA and BAA records begin on November 1, 1946."
+    elif reason == "no_games_at_location":
+        message = "No games were played there on those dates."
+    elif reason == "no_team_at_location":
+        message = "No NBA team played home games there on those dates."
     elif code == "no_record" and reason == "recent_player_record_unverified":
         message = "No verified player record is available for that date yet."
     return Notice(code=code, title=title, message=message, retryable=code in {

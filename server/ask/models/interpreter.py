@@ -20,7 +20,7 @@ from .candidates import CandidateField, CandidateLookupResult
 from .common import ClarifyField, ClarifyReason, ContractModel, DateComponents
 from .request import AskContext, AskRequest
 
-AdapterName = Literal["jev", "openai_responses"]
+AdapterName = Literal["laya", "jev", "openai_responses", "cascade"]
 
 # Fields an interpreter fills. Candidate-backed fields ("player", "teams",
 # "date", "season", "round", "game_number") select candidate IDs; closed-set
@@ -37,8 +37,11 @@ InterpreterField = Literal[
     "season",
     "round",
     "game_number",
+    "location",
 ]
-CANDIDATE_BACKED_FIELDS: frozenset[str] = frozenset({"player", "teams", "date", "season", "round", "game_number"})
+CANDIDATE_BACKED_FIELDS: frozenset[str] = frozenset(
+    {"player", "teams", "date", "season", "round", "game_number", "location"}
+)
 
 # Interpreter field -> candidate set it selects from. The only renamed field is
 # "teams" (an interpreter may select two) -> the "team" candidate set.
@@ -49,6 +52,7 @@ INTERPRETER_TO_CANDIDATE_FIELD: dict[str, CandidateField] = {
     "season": "season",
     "round": "round",
     "game_number": "game_number",
+    "location": "location",
 }
 
 FieldStatus = Literal[
@@ -124,6 +128,8 @@ class InterpreterMetadata(ContractModel):
     resolved_model: str | None = Field(default=None, max_length=80)  # version the provider reports
     latency_ms: int = Field(ge=0)
     usage: InterpreterUsage = Field(default_factory=InterpreterUsage)
+    # Cascade only: interpreter field -> tier ("laya", "jev", "luna") that decided it.
+    field_tiers: dict[InterpreterField, str] = Field(default_factory=dict)
 
 
 class InterpreterInput(ContractModel):
@@ -137,7 +143,7 @@ class InterpreterInput(ContractModel):
 class InterpreterOutput(ContractModel):
     outcome: InterpreterOutcome
     # At most one entry per field. Missing fields are treated as "absent".
-    fields: list[FieldInterpretation] = Field(default_factory=list, max_length=10)
+    fields: list[FieldInterpretation] = Field(default_factory=list, max_length=11)
     unsupported_reason: UnsupportedReason | None = None
     # Only for adapters that extract dates directly (OpenAI) when the date
     # candidate set had no match. Python validates it; it never overrides a

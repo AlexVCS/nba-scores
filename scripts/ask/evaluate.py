@@ -190,6 +190,92 @@ def run_command(args) -> int:
     return 0
 
 
+def load_cases(paths):
+    cases = []
+    for path in paths:
+        cases.extend(LabeledCase.from_json(c) for c in json.loads(Path(path).read_text())["cases"])
+    return cases
+
+
+def collect_command(args) -> int:
+    """Record each tier's output once per case for offline calibration (no sweeps here)."""
+    from server.ask.eval import trace as tr
+    from server.ask.interpreters.laya import LayaAdapter
+
+    keys = load_keys(args.env_file)
+    lookup = load_lookup(args.lookup)
+    adapters = {}
+    if args.laya_url:
+        adapters["laya"] = LayaAdapter(url=args.laya_url, model=args.laya_model, timeout_s=args.timeout)
+    if "jev" in args.tiers:
+        adapters["jev"] = JevAdapter(keys["TYPESAFE_API_KEY"], timeout_s=args.timeout)
+    if "luna" in args.tiers:
+        adapters["luna"] = OpenAIResponsesAdapter(keys["OPENAI_API_KEY"], OpenAIConfig(
+            model=args.luna_models[0], reasoning_effort=args.luna_effort, timeout_s=args.timeout))
+    cases = load_cases(args.cases)
+    guard = SpendGuard(args.spend_cap)
+    doc = tr.collect(cases, lambda case: lookup.lookup(case.question, case.context), adapters, guard,
+                     deadline_ms=args.deadline_ms, expand=lookup.expand)
+    doc.update({
+        "purpose": "Recorded tier outputs for offline cascade calibration (#199). Exposed cases only.",
+        "generated_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
+        "cases_files": [str(p) for p in args.cases],
+        "candidate_source": f"lookup:{args.lookup}:{getattr(lookup, 'alias_version', '?')}",
+    })
+    out = Path(args.out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(doc, indent=1, default=str) + "\n")
+    print(f"recorded {len(doc['candidates'])} cases; spent ${guard.spent_usd:.6f} of ${guard.cap_usd:.2f}; "
+          f"stopped={doc['stopped_reason']}; wrote {out}")
+    return 0
+
+
+def calibrate_command(args) -> int:
+    """Offline: per-tier precision/coverage curves, then a cascade sweep. No provider calls."""
+    from server.ask.eval import trace as tr
+
+    trace = json.loads(Path(args.trace).read_text())
+    cases = load_cases(args.cases)
+    lookup = load_lookup(args.lookup) if args.lookup else None
+    tier_names = [t for t in ("laya", "jev", "luna") if t in trace["tiers"]]
+    calibration = {}
+    for tier in tier_names:
+        if tier == "luna":
+            continue
+        calibration[tier] = tr.calibrate_tier(tr.field_reads(cases, trace, tier), precision_min=args.precision_min)
+    grids = {}
+    for tier in tier_names:
+        if tier == "luna":
+            grids[tier] = [None]
+        else:
+            chosen = calibration[tier]["chosen"]
+            base = [0.8, 0.85, 0.9, 0.95, 0.99]
+            grids[tier] = sorted(set(base + ([chosen["threshold"]] if chosen else [])))
+    rows = tr.sweep(cases, trace, grids, veto_mins=args.veto_mins, expand=lookup.expand if lookup else None)
+    doc = {
+        "purpose": "Offline cascade calibration from recorded outputs (#199, ADR 0009). Exposed cases only; "
+                   "not gate evidence.",
+        "generated_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
+        "trace": str(args.trace),
+        "cases_files": [str(p) for p in args.cases],
+        "precision_min": args.precision_min,
+        "tier_calibration": calibration,
+        "sweep": rows,
+    }
+    out = Path(args.out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(doc, indent=1, default=str) + "\n")
+    for tier, cal in calibration.items():
+        c = cal["chosen"]
+        print(f"{tier}: " + (f"threshold={c['threshold']} precision={c['precision']} coverage={c['coverage']}"
+                             if c else "no threshold meets the precision gate"))
+    for row in rows:
+        print(f"{row['thresholds']} veto={row['veto_min']} accuracy={row['complete_request_accuracy']} "
+              f"guesses={row['schema_valid_guesses']} misses={row['replay_misses']} share={row['tier_share']}")
+    print(f"wrote {out}")
+    return 0
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--env-file", help="dotenv file to read API keys from (values are never printed)")
@@ -213,6 +299,25 @@ def main(argv=None) -> int:
     r.add_argument("--thresholds-note", default=None)
     r.add_argument("--out", default=str(REPO_ROOT / "docs" / "verification" / "ask-interpreter-eval.json"))
     r.set_defaults(func=run_command)
+
+    c = sub.add_parser("collect", help="record each tier once per case for offline calibration")
+    c.add_argument("--cases", nargs="+", required=True)
+    c.add_argument("--lookup", required=True, help="module:factory returning a CandidateLookup (#200)")
+    c.add_argument("--tiers", nargs="+", default=["jev", "luna"], choices=["jev", "luna"])
+    c.add_argument("--laya-url", help="laya-serve /v1/systemone URL; adds the Laya tier (local only)")
+    c.add_argument("--laya-model", default="laya")
+    c.add_argument("--spend-cap", type=float, default=1.00)
+    c.add_argument("--out", default=str(REPO_ROOT / "docs" / "verification" / "ask-tier-trace.json"))
+    c.set_defaults(func=collect_command)
+
+    k = sub.add_parser("calibrate", help="offline threshold calibration from a collected trace")
+    k.add_argument("--trace", required=True)
+    k.add_argument("--cases", nargs="+", required=True)
+    k.add_argument("--lookup", help="module:factory, for replaying candidate expansions")
+    k.add_argument("--precision-min", type=float, default=0.98)
+    k.add_argument("--veto-mins", nargs="+", type=float, default=[0.5])
+    k.add_argument("--out", default=str(REPO_ROOT / "docs" / "verification" / "ask-tier-calibration.json"))
+    k.set_defaults(func=calibrate_command)
 
     args = parser.parse_args(argv)
     return args.func(args)
