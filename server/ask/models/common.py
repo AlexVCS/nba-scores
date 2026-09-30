@@ -63,7 +63,7 @@ StandingsScope = Literal["league", "east", "west"]
 # HTTP (Clarification.field). "teams" covers one team or a matchup.
 # "aggregation" is never clarified: per_game is unsupported (multi_game_average).
 ClarifyField = Literal[
-    "intent", "stat_scope", "stat", "player", "teams", "date", "season", "round", "game_number", "location"
+    "intent", "stat_scope", "stat", "player", "teams", "date", "season", "round", "game_number", "location", "aggregation", "season_type"
 ]
 ClarifyReason = Literal["ambiguous", "missing", "no_matching_candidate", "year_required", "range_too_long"]
 

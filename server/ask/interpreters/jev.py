@@ -134,8 +134,8 @@ def build_questions(candidates: CandidateLookupResult) -> tuple[dict[str, Any], 
             dict(cs.AGGREGATIONS),
         ),
     }
-    q["season_type"] = _choice("Does the question request regular-season or playoff statistics?", dict(cs.SEASON_TYPES))
-    q["standings_scope"] = _choice("Which conference, if any, does the standings question request?", dict(cs.STANDINGS_SCOPES))
+    q["season_type"] = _choice("Does the question request regular-season or playoff statistics?", {**cs.SEASON_TYPES, cs.NONE_OPTION: "The question does not specify regular season or playoffs."})
+    q["standings_scope"] = _choice("Which conference, if any, does the standings question request?", {**cs.STANDINGS_SCOPES, cs.NONE_OPTION: "The question does not specify a conference."})
     for field_name, (qid, cand_field) in CANDIDATE_CHOICES.items():
         noun = NOUNS[field_name]
         criteria: dict[str, str | None] = {

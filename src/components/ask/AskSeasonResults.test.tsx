@@ -1,6 +1,7 @@
 import {render, screen, within} from "@testing-library/react";
 import {describe, expect, it, vi} from "vitest";
 import {ASK_RESPONSE_FIXTURES} from "@/services/ask/fixtures";
+import {formatAskTimestamp} from "./askFormat";
 import AskResult from "./AskResult";
 import {AskTestProviders} from "./askTestUtils";
 
@@ -32,8 +33,13 @@ describe("Ask season answers", () => {
     expect(within(region).getByText(/Data as of/)).toBeInTheDocument();
   });
 
+  it("formats UTC fetch times on the Eastern calendar", () => {
+    expect(formatAskTimestamp("2026-09-29T00:00:00Z")).toBe("Mon, Sep 28, 2026");
+  });
+
   it("uses an accessible standings table with team row headings", () => {
     show("answer-standings");
+    expect(screen.getByRole("region", {name: /standings table, scroll/})).toHaveAttribute("tabindex", "0");
     const table = screen.getByRole("table", {name: "2023-24 Eastern conference regular-season wins and losses"});
     expect(within(table).getAllByRole("row")).toHaveLength(16);
     expect(within(table).getAllByRole("rowheader")).toHaveLength(15);

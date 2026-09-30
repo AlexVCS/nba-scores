@@ -41,7 +41,7 @@
     {
       "kind": "source",
       "label": "Source: NBA.com",
-      "href": "https://www.nba.com/stats/teams/traditional?Season=2023-24",
+      "href": "https://www.nba.com/stats/player/203999/traditional?Season=2023-24&SeasonType=Regular%20Season",
       "external": true,
       "spoiler": false
     }

@@ -1,5 +1,5 @@
 import type {AskTeamRecordsResult as TeamRecordsData} from "@/services/ask/types";
-import {formatAskDate} from "./askFormat";
+import {formatAskTimestamp} from "./askFormat";
 import {askCap, askCard} from "./askStyles";
 
 interface AskTeamRecordsResultProps {
@@ -20,7 +20,7 @@ function AskTeamRecordsResult({result}: AskTeamRecordsResultProps) {
             <div><dt className={askCap}>Win %</dt><dd className="text-2xl leading-10 font-extrabold tabular-nums">{(result.rows[0].win_percentage * 100).toFixed(1)}%</dd></div>
           </dl>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto" tabIndex={0} role="region" aria-label={`${scope} standings table, scroll horizontally if needed`}>
             <table className="w-full text-left text-xs">
               <caption className="sr-only">{result.season} {scope} regular-season wins and losses</caption>
               <thead className={askCap}><tr>
@@ -45,7 +45,7 @@ function AskTeamRecordsResult({result}: AskTeamRecordsResultProps) {
         )}
       </div>
       <p className="border-t border-hw-line bg-hw-surface-muted px-[18px] py-3 text-xs font-bold text-hw-muted">
-        Data as of {formatAskDate(result.as_of.slice(0, 10))}
+        Data as of {formatAskTimestamp(result.as_of)}
       </p>
     </section>
   );

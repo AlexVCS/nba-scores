@@ -217,10 +217,12 @@ class Normalizer:
             return f.selected
         if f.status == "absent":
             return []
-        if name in {"season_type", "standings_scope"}:
+        if name == "standings_scope":
             raise _Clarify("intent", "ambiguous")
+        if name == "season_type":
+            raise _Clarify("season_type", "ambiguous")
         if name == "aggregation":
-            raise _Invalid(f"aggregation: unresolved {f.status} value")
+            raise _Clarify("aggregation", "ambiguous")
         # The user said something we cannot pin down: dropping it would change the question.
         raise _Clarify(name, f.status)
 
@@ -442,6 +444,8 @@ class Normalizer:
         if season_type != ["regular_season"]:
             return NormalizationResult(status="unsupported", unsupported_reason="other")
         scope = self._optional(output, "standings_scope") or ["league"]
+        if teams and scope != ["league"]:
+            return NormalizationResult(status="unsupported", unsupported_reason="other")
         return TeamRecordsRequest(season=season, team=teams[0] if teams else None, standings_scope=scope[0])
 
 

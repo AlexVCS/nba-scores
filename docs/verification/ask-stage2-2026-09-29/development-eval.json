@@ -1,0 +1,5118 @@
+{
+  "purpose": "Exposed development evaluation, not an unseen release gate",
+  "frozen_commit": "665030a6c2031135cb943b91121692dbcee04e24",
+  "cases_sha256": "f0059cde76d5af3dfdd98abcf787a999481544845e99ad27dc50ceaaf1474fcd",
+  "configuration": {
+    "jev_accept_min": 0.85,
+    "veto_min": 0.5,
+    "luna_model": "gpt-6-luna",
+    "luna_effort": "low"
+  },
+  "summary": {
+    "cases": 21,
+    "complete_request_accuracy": 0.7619,
+    "correct": 16,
+    "schema_valid_guesses": 0,
+    "service_failures": 0,
+    "clarification": {
+      "expected": 4,
+      "correct": 4,
+      "issued": 8,
+      "unneeded": 4
+    },
+    "unsupported": {
+      "expected": 6,
+      "correct": 5,
+      "issued": 6,
+      "false": 0
+    },
+    "latency_ms": {
+      "median": 2872,
+      "p95": 3498
+    },
+    "total_cost_usd": 0.008354,
+    "cost_per_successful_answer_usd": 0.000522,
+    "fallback_rate": 0.0,
+    "resolved_models": [
+      "jev-1.13.0",
+      "jev-1.13.0+gpt-6-luna"
+    ],
+    "failures": {
+      "unneeded_clarification": 4,
+      "wrong_unsupported_reason": 1
+    }
+  },
+  "spend": {
+    "cap_usd": 0.05,
+    "accounted_list_price_usd": 0.008353893999999999,
+    "actual_billed_cost_usd": null
+  },
+  "laya_shadow": {
+    "status": "not_run",
+    "reason": "No Laya development endpoint configured; production excludes Laya"
+  },
+  "cases": [
+    {
+      "id": "stage2-player_season_stats-01",
+      "question": "Nikola Jokic rebounds per game in 2023-24",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "accept",
+      "tier_outputs": [
+        {
+          "tier": "jev",
+          "output": {
+            "outcome": "interpreted",
+            "fields": [
+              {
+                "field": "intent",
+                "status": "selected",
+                "selected": [
+                  "player_season_stats"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "stat_scope",
+                "status": "selected",
+                "selected": [
+                  "player"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "stat",
+                "status": "selected",
+                "selected": [
+                  "rebounds"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "aggregation",
+                "status": "selected",
+                "selected": [
+                  "per_game"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "season_type",
+                "status": "selected",
+                "selected": [
+                  "regular_season"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "standings_scope",
+                "status": "selected",
+                "selected": [
+                  "league"
+                ],
+                "alternatives": [],
+                "confidence": 0.96,
+                "mention": null
+              },
+              {
+                "field": "player",
+                "status": "selected",
+                "selected": [
+                  "player:203999"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "date",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.65,
+                "mention": null
+              },
+              {
+                "field": "season",
+                "status": "selected",
+                "selected": [
+                  "season:2023-24"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "round",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "game_number",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "location",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "teams",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.86,
+                "mention": null
+              },
+              {
+                "field": "target_team",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.76,
+                "mention": null
+              }
+            ],
+            "unsupported_reason": null,
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "jev",
+              "provider": "typesafe",
+              "model": "jev-1.13.0",
+              "resolved_model": "jev-1.13.0",
+              "latency_ms": 265,
+              "usage": {
+                "input_tokens": 2857,
+                "output_tokens": 845,
+                "cached_input_tokens": null,
+                "provider_calls": 1,
+                "cost_usd": 0.00011999400000000002
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        }
+      ],
+      "request": {
+        "intent": "player_season_stats",
+        "player": {
+          "player_id": 203999,
+          "name": "Nikola Joki\u0107"
+        },
+        "season": "2023-24",
+        "season_type": "regular_season",
+        "stat": {
+          "stat": "rebounds",
+          "aggregation": "per_game"
+        },
+        "team": null
+      }
+    },
+    {
+      "id": "stage2-player_season_stats-02",
+      "question": "Jokic total assists in 2023-24",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "accept",
+      "tier_outputs": [
+        {
+          "tier": "jev",
+          "output": {
+            "outcome": "interpreted",
+            "fields": [
+              {
+                "field": "intent",
+                "status": "selected",
+                "selected": [
+                  "player_season_stats"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "stat_scope",
+                "status": "selected",
+                "selected": [
+                  "player"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "stat",
+                "status": "selected",
+                "selected": [
+                  "assists"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "aggregation",
+                "status": "selected",
+                "selected": [
+                  "total"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "season_type",
+                "status": "selected",
+                "selected": [
+                  "regular_season"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "standings_scope",
+                "status": "selected",
+                "selected": [
+                  "league"
+                ],
+                "alternatives": [],
+                "confidence": 0.98,
+                "mention": null
+              },
+              {
+                "field": "player",
+                "status": "selected",
+                "selected": [
+                  "player:203999"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "date",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.73,
+                "mention": null
+              },
+              {
+                "field": "season",
+                "status": "selected",
+                "selected": [
+                  "season:2023-24"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "round",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "game_number",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "location",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "teams",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.85,
+                "mention": null
+              },
+              {
+                "field": "target_team",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.78,
+                "mention": null
+              }
+            ],
+            "unsupported_reason": null,
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "jev",
+              "provider": "typesafe",
+              "model": "jev-1.13.0",
+              "resolved_model": "jev-1.13.0",
+              "latency_ms": 163,
+              "usage": {
+                "input_tokens": 2854,
+                "output_tokens": 842,
+                "cached_input_tokens": null,
+                "provider_calls": 1,
+                "cost_usd": 0.00011986800000000001
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        }
+      ],
+      "request": {
+        "intent": "player_season_stats",
+        "player": {
+          "player_id": 203999,
+          "name": "Nikola Joki\u0107"
+        },
+        "season": "2023-24",
+        "season_type": "regular_season",
+        "stat": {
+          "stat": "assists",
+          "aggregation": "total"
+        },
+        "team": null
+      }
+    },
+    {
+      "id": "stage2-player_season_stats-03",
+      "question": "Jokic field goal percentage in 2023-24",
+      "correct": false,
+      "guess": false,
+      "failure": "unneeded_clarification",
+      "action": "clarify",
+      "tier_outputs": [
+        {
+          "tier": "jev",
+          "output": {
+            "outcome": "interpreted",
+            "fields": [
+              {
+                "field": "intent",
+                "status": "selected",
+                "selected": [
+                  "player_season_stats"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "stat_scope",
+                "status": "selected",
+                "selected": [
+                  "player"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "stat",
+                "status": "selected",
+                "selected": [
+                  "field_goal_percentage"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "aggregation",
+                "status": "ambiguous",
+                "selected": [],
+                "alternatives": [
+                  "total",
+                  "per_game"
+                ],
+                "confidence": 0.6,
+                "mention": null
+              },
+              {
+                "field": "season_type",
+                "status": "selected",
+                "selected": [
+                  "regular_season"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "standings_scope",
+                "status": "selected",
+                "selected": [
+                  "league"
+                ],
+                "alternatives": [],
+                "confidence": 0.97,
+                "mention": null
+              },
+              {
+                "field": "player",
+                "status": "selected",
+                "selected": [
+                  "player:203999"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "date",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.68,
+                "mention": null
+              },
+              {
+                "field": "season",
+                "status": "selected",
+                "selected": [
+                  "season:2023-24"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "round",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "game_number",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "location",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "teams",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.86,
+                "mention": null
+              },
+              {
+                "field": "target_team",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.72,
+                "mention": null
+              }
+            ],
+            "unsupported_reason": null,
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "jev",
+              "provider": "typesafe",
+              "model": "jev-1.13.0",
+              "resolved_model": "jev-1.13.0",
+              "latency_ms": 219,
+              "usage": {
+                "input_tokens": 2855,
+                "output_tokens": 843,
+                "cached_input_tokens": null,
+                "provider_calls": 1,
+                "cost_usd": 0.00011991000000000001
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        },
+        {
+          "tier": "luna",
+          "output": {
+            "outcome": "interpreted",
+            "fields": [
+              {
+                "field": "intent",
+                "status": "selected",
+                "selected": [
+                  "player_season_stats"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "stat_scope",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "stat",
+                "status": "selected",
+                "selected": [
+                  "field_goal_percentage"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "aggregation",
+                "status": "selected",
+                "selected": [
+                  "total"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "season_type",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "standings_scope",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "player",
+                "status": "selected",
+                "selected": [
+                  "player:203999"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "teams",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "target_team",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "date",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "season",
+                "status": "selected",
+                "selected": [
+                  "season:2023-24"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "round",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "game_number",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "location",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              }
+            ],
+            "unsupported_reason": null,
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "openai_responses",
+              "provider": "openai",
+              "model": "gpt-6-luna",
+              "resolved_model": "gpt-6-luna",
+              "latency_ms": 3592,
+              "usage": {
+                "input_tokens": 3130,
+                "output_tokens": 262,
+                "cached_input_tokens": 0,
+                "provider_calls": 1,
+                "cost_usd": 0.000444
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        }
+      ],
+      "request": null
+    },
+    {
+      "id": "stage2-player_season_stats-04",
+      "question": "Jokic stats in 2023-24",
+      "correct": false,
+      "guess": false,
+      "failure": "unneeded_clarification",
+      "action": "clarify",
+      "tier_outputs": [
+        {
+          "tier": "jev",
+          "output": {
+            "outcome": "interpreted",
+            "fields": [
+              {
+                "field": "intent",
+                "status": "selected",
+                "selected": [
+                  "player_season_stats"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "stat_scope",
+                "status": "selected",
+                "selected": [
+                  "player"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "stat",
+                "status": "selected",
+                "selected": [
+                  "stat_line"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "aggregation",
+                "status": "ambiguous",
+                "selected": [],
+                "alternatives": [
+                  "per_game",
+                  "total"
+                ],
+                "confidence": 0.74,
+                "mention": null
+              },
+              {
+                "field": "season_type",
+                "status": "selected",
+                "selected": [
+                  "regular_season"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "standings_scope",
+                "status": "selected",
+                "selected": [
+                  "league"
+                ],
+                "alternatives": [],
+                "confidence": 0.94,
+                "mention": null
+              },
+              {
+                "field": "player",
+                "status": "selected",
+                "selected": [
+                  "player:203999"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "date",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.72,
+                "mention": null
+              },
+              {
+                "field": "season",
+                "status": "selected",
+                "selected": [
+                  "season:2023-24"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "round",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "game_number",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "location",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "teams",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.8200000000000001,
+                "mention": null
+              },
+              {
+                "field": "target_team",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.76,
+                "mention": null
+              }
+            ],
+            "unsupported_reason": null,
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "jev",
+              "provider": "typesafe",
+              "model": "jev-1.13.0",
+              "resolved_model": "jev-1.13.0",
+              "latency_ms": 186,
+              "usage": {
+                "input_tokens": 2853,
+                "output_tokens": 843,
+                "cached_input_tokens": null,
+                "provider_calls": 1,
+                "cost_usd": 0.000119826
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        },
+        {
+          "tier": "luna",
+          "output": {
+            "outcome": "interpreted",
+            "fields": [
+              {
+                "field": "intent",
+                "status": "selected",
+                "selected": [
+                  "player_season_stats"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "stat_scope",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "stat",
+                "status": "selected",
+                "selected": [
+                  "stat_line"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "aggregation",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "season_type",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "standings_scope",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "player",
+                "status": "selected",
+                "selected": [
+                  "player:203999"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "teams",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "target_team",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "date",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "season",
+                "status": "selected",
+                "selected": [
+                  "season:2023-24"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "round",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "game_number",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "location",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              }
+            ],
+            "unsupported_reason": null,
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "openai_responses",
+              "provider": "openai",
+              "model": "gpt-6-luna",
+              "resolved_model": "gpt-6-luna",
+              "latency_ms": 2909,
+              "usage": {
+                "input_tokens": 3128,
+                "output_tokens": 265,
+                "cached_input_tokens": 2474,
+                "provider_calls": 1,
+                "cost_usd": 0.00022264000000000002
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        }
+      ],
+      "request": null
+    },
+    {
+      "id": "stage2-player_season_stats-05",
+      "question": "Jokic points per game in the 2024 playoffs",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "accept",
+      "tier_outputs": [
+        {
+          "tier": "jev",
+          "output": {
+            "outcome": "interpreted",
+            "fields": [
+              {
+                "field": "intent",
+                "status": "selected",
+                "selected": [
+                  "player_season_stats"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "stat_scope",
+                "status": "selected",
+                "selected": [
+                  "player"
+                ],
+                "alternatives": [],
+                "confidence": 0.99,
+                "mention": null
+              },
+              {
+                "field": "stat",
+                "status": "selected",
+                "selected": [
+                  "points"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "aggregation",
+                "status": "selected",
+                "selected": [
+                  "per_game"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "season_type",
+                "status": "selected",
+                "selected": [
+                  "playoffs"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "standings_scope",
+                "status": "selected",
+                "selected": [
+                  "league"
+                ],
+                "alternatives": [],
+                "confidence": 0.92,
+                "mention": null
+              },
+              {
+                "field": "player",
+                "status": "selected",
+                "selected": [
+                  "player:203999"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "date",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.85,
+                "mention": null
+              },
+              {
+                "field": "season",
+                "status": "selected",
+                "selected": [
+                  "season:2023-24"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "round",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "game_number",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "location",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "teams",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.84,
+                "mention": null
+              },
+              {
+                "field": "target_team",
+                "status": "no_matching_candidate",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.57,
+                "mention": null
+              }
+            ],
+            "unsupported_reason": null,
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "jev",
+              "provider": "typesafe",
+              "model": "jev-1.13.0",
+              "resolved_model": "jev-1.13.0",
+              "latency_ms": 182,
+              "usage": {
+                "input_tokens": 2858,
+                "output_tokens": 843,
+                "cached_input_tokens": null,
+                "provider_calls": 1,
+                "cost_usd": 0.000120036
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        },
+        {
+          "tier": "luna",
+          "output": {
+            "outcome": "interpreted",
+            "fields": [
+              {
+                "field": "intent",
+                "status": "selected",
+                "selected": [
+                  "player_season_stats"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "stat_scope",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "stat",
+                "status": "selected",
+                "selected": [
+                  "points"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "aggregation",
+                "status": "selected",
+                "selected": [
+                  "per_game"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "season_type",
+                "status": "selected",
+                "selected": [
+                  "playoffs"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "standings_scope",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "player",
+                "status": "selected",
+                "selected": [
+                  "player:203999"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "teams",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "target_team",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "date",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "season",
+                "status": "selected",
+                "selected": [
+                  "season:2023-24"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "round",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "game_number",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "location",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              }
+            ],
+            "unsupported_reason": null,
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "openai_responses",
+              "provider": "openai",
+              "model": "gpt-6-luna",
+              "resolved_model": "gpt-6-luna",
+              "latency_ms": 3032,
+              "usage": {
+                "input_tokens": 3132,
+                "output_tokens": 243,
+                "cached_input_tokens": 2474,
+                "provider_calls": 1,
+                "cost_usd": 0.00021203999999999998
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        }
+      ],
+      "request": {
+        "intent": "player_season_stats",
+        "player": {
+          "player_id": 203999,
+          "name": "Nikola Joki\u0107"
+        },
+        "season": "2023-24",
+        "season_type": "playoffs",
+        "stat": {
+          "stat": "points",
+          "aggregation": "per_game"
+        },
+        "team": null
+      }
+    },
+    {
+      "id": "stage2-player_season_stats-06",
+      "question": "Nikola Jokic rebounds for Denver in 2023-24",
+      "correct": false,
+      "guess": false,
+      "failure": "unneeded_clarification",
+      "action": "clarify",
+      "tier_outputs": [
+        {
+          "tier": "jev",
+          "output": {
+            "outcome": "interpreted",
+            "fields": [
+              {
+                "field": "intent",
+                "status": "selected",
+                "selected": [
+                  "player_season_stats"
+                ],
+                "alternatives": [],
+                "confidence": 0.92,
+                "mention": null
+              },
+              {
+                "field": "stat_scope",
+                "status": "selected",
+                "selected": [
+                  "player"
+                ],
+                "alternatives": [],
+                "confidence": 0.9299999999999999,
+                "mention": null
+              },
+              {
+                "field": "stat",
+                "status": "selected",
+                "selected": [
+                  "rebounds"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "aggregation",
+                "status": "selected",
+                "selected": [
+                  "total"
+                ],
+                "alternatives": [],
+                "confidence": 0.79,
+                "mention": null
+              },
+              {
+                "field": "season_type",
+                "status": "selected",
+                "selected": [
+                  "regular_season"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "standings_scope",
+                "status": "ambiguous",
+                "selected": [],
+                "alternatives": [
+                  "league",
+                  "west"
+                ],
+                "confidence": 0.62,
+                "mention": null
+              },
+              {
+                "field": "player",
+                "status": "selected",
+                "selected": [
+                  "player:203999"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "date",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.93,
+                "mention": null
+              },
+              {
+                "field": "season",
+                "status": "selected",
+                "selected": [
+                  "season:2023-24"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "round",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "game_number",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "location",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.71,
+                "mention": null
+              },
+              {
+                "field": "teams",
+                "status": "selected",
+                "selected": [
+                  "team:1610612743"
+                ],
+                "alternatives": [],
+                "confidence": 0.97,
+                "mention": null
+              },
+              {
+                "field": "target_team",
+                "status": "selected",
+                "selected": [
+                  "team:1610612743"
+                ],
+                "alternatives": [],
+                "confidence": 0.9400000000000001,
+                "mention": null
+              }
+            ],
+            "unsupported_reason": null,
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "jev",
+              "provider": "typesafe",
+              "model": "jev-1.13.0",
+              "resolved_model": "jev-1.13.0",
+              "latency_ms": 184,
+              "usage": {
+                "input_tokens": 3019,
+                "output_tokens": 887,
+                "cached_input_tokens": null,
+                "provider_calls": 1,
+                "cost_usd": 0.00012679800000000001
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        },
+        {
+          "tier": "luna",
+          "output": {
+            "outcome": "interpreted",
+            "fields": [
+              {
+                "field": "intent",
+                "status": "selected",
+                "selected": [
+                  "player_season_stats"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "stat_scope",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "stat",
+                "status": "selected",
+                "selected": [
+                  "rebounds"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "aggregation",
+                "status": "selected",
+                "selected": [
+                  "total"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "season_type",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "standings_scope",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "player",
+                "status": "selected",
+                "selected": [
+                  "player:203999"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "teams",
+                "status": "selected",
+                "selected": [
+                  "team:1610612743"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "target_team",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "date",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "season",
+                "status": "selected",
+                "selected": [
+                  "season:2023-24"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "round",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "game_number",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "location",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              }
+            ],
+            "unsupported_reason": null,
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "openai_responses",
+              "provider": "openai",
+              "model": "gpt-6-luna",
+              "resolved_model": "gpt-6-luna",
+              "latency_ms": 3311,
+              "usage": {
+                "input_tokens": 3163,
+                "output_tokens": 280,
+                "cached_input_tokens": 0,
+                "provider_calls": 1,
+                "cost_usd": 0.00045630000000000003
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        }
+      ],
+      "request": null
+    },
+    {
+      "id": "stage2-team_records-07",
+      "question": "Celtics regular-season record in 2007-08",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "accept",
+      "tier_outputs": [
+        {
+          "tier": "jev",
+          "output": {
+            "outcome": "interpreted",
+            "fields": [
+              {
+                "field": "intent",
+                "status": "selected",
+                "selected": [
+                  "team_records"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "stat_scope",
+                "status": "selected",
+                "selected": [
+                  "team"
+                ],
+                "alternatives": [],
+                "confidence": 0.99,
+                "mention": null
+              },
+              {
+                "field": "stat",
+                "status": "selected",
+                "selected": [
+                  "stat_line"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "aggregation",
+                "status": "selected",
+                "selected": [
+                  "total"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "season_type",
+                "status": "selected",
+                "selected": [
+                  "regular_season"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "standings_scope",
+                "status": "ambiguous",
+                "selected": [],
+                "alternatives": [
+                  "league",
+                  "east"
+                ],
+                "confidence": 0.57,
+                "mention": null
+              },
+              {
+                "field": "player",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "date",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.52,
+                "mention": null
+              },
+              {
+                "field": "season",
+                "status": "selected",
+                "selected": [
+                  "season:2007-08"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "round",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "game_number",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "location",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.97,
+                "mention": null
+              },
+              {
+                "field": "teams",
+                "status": "selected",
+                "selected": [
+                  "team:1610612738"
+                ],
+                "alternatives": [],
+                "confidence": 0.96,
+                "mention": null
+              },
+              {
+                "field": "target_team",
+                "status": "selected",
+                "selected": [
+                  "team:1610612738"
+                ],
+                "alternatives": [],
+                "confidence": 0.97,
+                "mention": null
+              }
+            ],
+            "unsupported_reason": null,
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "jev",
+              "provider": "typesafe",
+              "model": "jev-1.13.0",
+              "resolved_model": "jev-1.13.0",
+              "latency_ms": 205,
+              "usage": {
+                "input_tokens": 2982,
+                "output_tokens": 867,
+                "cached_input_tokens": null,
+                "provider_calls": 1,
+                "cost_usd": 0.00012524400000000002
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        },
+        {
+          "tier": "luna",
+          "output": {
+            "outcome": "interpreted",
+            "fields": [
+              {
+                "field": "intent",
+                "status": "selected",
+                "selected": [
+                  "team_records"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "stat_scope",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "stat",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "aggregation",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "season_type",
+                "status": "selected",
+                "selected": [
+                  "regular_season"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "standings_scope",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "player",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "teams",
+                "status": "selected",
+                "selected": [
+                  "team:1610612738"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "target_team",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "date",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "season",
+                "status": "selected",
+                "selected": [
+                  "season:2007-08"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "round",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "game_number",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "location",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              }
+            ],
+            "unsupported_reason": null,
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "openai_responses",
+              "provider": "openai",
+              "model": "gpt-6-luna",
+              "resolved_model": "gpt-6-luna",
+              "latency_ms": 2869,
+              "usage": {
+                "input_tokens": 3125,
+                "output_tokens": 232,
+                "cached_input_tokens": 0,
+                "provider_calls": 1,
+                "cost_usd": 0.0004285
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        }
+      ],
+      "request": {
+        "intent": "team_records",
+        "season": "2007-08",
+        "team": {
+          "team_id": 1610612738,
+          "tricode": "BOS",
+          "name": "Boston Celtics"
+        },
+        "standings_scope": "league"
+      }
+    },
+    {
+      "id": "stage2-team_records-08",
+      "question": "Nuggets wins and losses in 2023-24",
+      "correct": false,
+      "guess": false,
+      "failure": "unneeded_clarification",
+      "action": "clarify",
+      "tier_outputs": [
+        {
+          "tier": "jev",
+          "output": {
+            "outcome": "interpreted",
+            "fields": [
+              {
+                "field": "intent",
+                "status": "selected",
+                "selected": [
+                  "team_records"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "stat_scope",
+                "status": "selected",
+                "selected": [
+                  "team"
+                ],
+                "alternatives": [],
+                "confidence": 0.99,
+                "mention": null
+              },
+              {
+                "field": "stat",
+                "status": "selected",
+                "selected": [
+                  "stat_line"
+                ],
+                "alternatives": [],
+                "confidence": 0.98,
+                "mention": null
+              },
+              {
+                "field": "aggregation",
+                "status": "selected",
+                "selected": [
+                  "total"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "season_type",
+                "status": "selected",
+                "selected": [
+                  "regular_season"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "standings_scope",
+                "status": "ambiguous",
+                "selected": [],
+                "alternatives": [
+                  "league",
+                  "west"
+                ],
+                "confidence": 0.74,
+                "mention": null
+              },
+              {
+                "field": "player",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "date",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.6,
+                "mention": null
+              },
+              {
+                "field": "season",
+                "status": "selected",
+                "selected": [
+                  "season:2023-24"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "round",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "game_number",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "location",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.97,
+                "mention": null
+              },
+              {
+                "field": "teams",
+                "status": "selected",
+                "selected": [
+                  "team:1610612743"
+                ],
+                "alternatives": [],
+                "confidence": 0.96,
+                "mention": null
+              },
+              {
+                "field": "target_team",
+                "status": "selected",
+                "selected": [
+                  "team:1610612743"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              }
+            ],
+            "unsupported_reason": null,
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "jev",
+              "provider": "typesafe",
+              "model": "jev-1.13.0",
+              "resolved_model": "jev-1.13.0",
+              "latency_ms": 168,
+              "usage": {
+                "input_tokens": 2982,
+                "output_tokens": 867,
+                "cached_input_tokens": null,
+                "provider_calls": 1,
+                "cost_usd": 0.00012524400000000002
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        },
+        {
+          "tier": "luna",
+          "output": {
+            "outcome": "interpreted",
+            "fields": [
+              {
+                "field": "intent",
+                "status": "selected",
+                "selected": [
+                  "team_records"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "stat_scope",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "stat",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "aggregation",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "season_type",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "standings_scope",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "player",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "teams",
+                "status": "selected",
+                "selected": [
+                  "team:1610612743"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "target_team",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "date",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "season",
+                "status": "selected",
+                "selected": [
+                  "season:2023-24"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "round",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "game_number",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "location",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              }
+            ],
+            "unsupported_reason": null,
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "openai_responses",
+              "provider": "openai",
+              "model": "gpt-6-luna",
+              "resolved_model": "gpt-6-luna",
+              "latency_ms": 3296,
+              "usage": {
+                "input_tokens": 3125,
+                "output_tokens": 302,
+                "cached_input_tokens": 0,
+                "provider_calls": 1,
+                "cost_usd": 0.0004635
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        }
+      ],
+      "request": null
+    },
+    {
+      "id": "stage2-team_records-09",
+      "question": "NBA standings in 2023-24",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "accept",
+      "tier_outputs": [
+        {
+          "tier": "jev",
+          "output": {
+            "outcome": "interpreted",
+            "fields": [
+              {
+                "field": "intent",
+                "status": "selected",
+                "selected": [
+                  "team_records"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "stat_scope",
+                "status": "selected",
+                "selected": [
+                  "team"
+                ],
+                "alternatives": [],
+                "confidence": 0.68,
+                "mention": null
+              },
+              {
+                "field": "stat",
+                "status": "selected",
+                "selected": [
+                  "stat_line"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "aggregation",
+                "status": "selected",
+                "selected": [
+                  "total"
+                ],
+                "alternatives": [],
+                "confidence": 0.99,
+                "mention": null
+              },
+              {
+                "field": "season_type",
+                "status": "selected",
+                "selected": [
+                  "regular_season"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "standings_scope",
+                "status": "selected",
+                "selected": [
+                  "league"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "player",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "date",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.78,
+                "mention": null
+              },
+              {
+                "field": "season",
+                "status": "selected",
+                "selected": [
+                  "season:2023-24"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "round",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "game_number",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "location",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "teams",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.89,
+                "mention": null
+              },
+              {
+                "field": "target_team",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              }
+            ],
+            "unsupported_reason": null,
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "jev",
+              "provider": "typesafe",
+              "model": "jev-1.13.0",
+              "resolved_model": "jev-1.13.0",
+              "latency_ms": 164,
+              "usage": {
+                "input_tokens": 2810,
+                "output_tokens": 822,
+                "cached_input_tokens": null,
+                "provider_calls": 1,
+                "cost_usd": 0.00011802000000000001
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        }
+      ],
+      "request": {
+        "intent": "team_records",
+        "season": "2023-24",
+        "team": null,
+        "standings_scope": "league"
+      }
+    },
+    {
+      "id": "stage2-team_records-10",
+      "question": "Eastern conference standings in 2023-24",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "accept",
+      "tier_outputs": [
+        {
+          "tier": "jev",
+          "output": {
+            "outcome": "interpreted",
+            "fields": [
+              {
+                "field": "intent",
+                "status": "selected",
+                "selected": [
+                  "team_records"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "stat_scope",
+                "status": "selected",
+                "selected": [
+                  "team"
+                ],
+                "alternatives": [],
+                "confidence": 0.82,
+                "mention": null
+              },
+              {
+                "field": "stat",
+                "status": "selected",
+                "selected": [
+                  "stat_line"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "aggregation",
+                "status": "selected",
+                "selected": [
+                  "total"
+                ],
+                "alternatives": [],
+                "confidence": 0.99,
+                "mention": null
+              },
+              {
+                "field": "season_type",
+                "status": "selected",
+                "selected": [
+                  "regular_season"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "standings_scope",
+                "status": "selected",
+                "selected": [
+                  "east"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "player",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "date",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.9,
+                "mention": null
+              },
+              {
+                "field": "season",
+                "status": "selected",
+                "selected": [
+                  "season:2023-24"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "round",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "game_number",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "location",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "teams",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.87,
+                "mention": null
+              },
+              {
+                "field": "target_team",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              }
+            ],
+            "unsupported_reason": null,
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "jev",
+              "provider": "typesafe",
+              "model": "jev-1.13.0",
+              "resolved_model": "jev-1.13.0",
+              "latency_ms": 189,
+              "usage": {
+                "input_tokens": 2811,
+                "output_tokens": 822,
+                "cached_input_tokens": null,
+                "provider_calls": 1,
+                "cost_usd": 0.00011806200000000001
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        }
+      ],
+      "request": {
+        "intent": "team_records",
+        "season": "2023-24",
+        "team": null,
+        "standings_scope": "east"
+      }
+    },
+    {
+      "id": "stage2-team_records-11",
+      "question": "Western conference standings in 2023-24",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "accept",
+      "tier_outputs": [
+        {
+          "tier": "jev",
+          "output": {
+            "outcome": "interpreted",
+            "fields": [
+              {
+                "field": "intent",
+                "status": "selected",
+                "selected": [
+                  "team_records"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "stat_scope",
+                "status": "selected",
+                "selected": [
+                  "team"
+                ],
+                "alternatives": [],
+                "confidence": 0.8,
+                "mention": null
+              },
+              {
+                "field": "stat",
+                "status": "selected",
+                "selected": [
+                  "stat_line"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "aggregation",
+                "status": "selected",
+                "selected": [
+                  "total"
+                ],
+                "alternatives": [],
+                "confidence": 0.99,
+                "mention": null
+              },
+              {
+                "field": "season_type",
+                "status": "selected",
+                "selected": [
+                  "regular_season"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "standings_scope",
+                "status": "selected",
+                "selected": [
+                  "west"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "player",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "date",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.9,
+                "mention": null
+              },
+              {
+                "field": "season",
+                "status": "selected",
+                "selected": [
+                  "season:2023-24"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "round",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "game_number",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "location",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "teams",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.86,
+                "mention": null
+              },
+              {
+                "field": "target_team",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              }
+            ],
+            "unsupported_reason": null,
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "jev",
+              "provider": "typesafe",
+              "model": "jev-1.13.0",
+              "resolved_model": "jev-1.13.0",
+              "latency_ms": 200,
+              "usage": {
+                "input_tokens": 2811,
+                "output_tokens": 822,
+                "cached_input_tokens": null,
+                "provider_calls": 1,
+                "cost_usd": 0.00011806200000000001
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        }
+      ],
+      "request": {
+        "intent": "team_records",
+        "season": "2023-24",
+        "team": null,
+        "standings_scope": "west"
+      }
+    },
+    {
+      "id": "stage2-player_season_stats-12",
+      "question": "Jokic rebounds per game",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "clarify",
+      "tier_outputs": [
+        {
+          "tier": "jev",
+          "output": {
+            "outcome": "interpreted",
+            "fields": [
+              {
+                "field": "intent",
+                "status": "selected",
+                "selected": [
+                  "player_season_stats"
+                ],
+                "alternatives": [],
+                "confidence": 0.94,
+                "mention": null
+              },
+              {
+                "field": "stat_scope",
+                "status": "selected",
+                "selected": [
+                  "player"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "stat",
+                "status": "selected",
+                "selected": [
+                  "rebounds"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "aggregation",
+                "status": "selected",
+                "selected": [
+                  "per_game"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "season_type",
+                "status": "selected",
+                "selected": [
+                  "regular_season"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "standings_scope",
+                "status": "selected",
+                "selected": [
+                  "league"
+                ],
+                "alternatives": [],
+                "confidence": 0.96,
+                "mention": null
+              },
+              {
+                "field": "player",
+                "status": "selected",
+                "selected": [
+                  "player:203999"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "date",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "season",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "round",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "game_number",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "location",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "teams",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.89,
+                "mention": null
+              },
+              {
+                "field": "target_team",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.73,
+                "mention": null
+              }
+            ],
+            "unsupported_reason": null,
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "jev",
+              "provider": "typesafe",
+              "model": "jev-1.13.0",
+              "resolved_model": "jev-1.13.0",
+              "latency_ms": 157,
+              "usage": {
+                "input_tokens": 2809,
+                "output_tokens": 825,
+                "cached_input_tokens": null,
+                "provider_calls": 1,
+                "cost_usd": 0.00011797800000000001
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        }
+      ],
+      "request": null
+    },
+    {
+      "id": "stage2-team_records-13",
+      "question": "Celtics regular-season record",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "clarify",
+      "tier_outputs": [
+        {
+          "tier": "jev",
+          "output": {
+            "outcome": "interpreted",
+            "fields": [
+              {
+                "field": "intent",
+                "status": "selected",
+                "selected": [
+                  "team_records"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "stat_scope",
+                "status": "selected",
+                "selected": [
+                  "team"
+                ],
+                "alternatives": [],
+                "confidence": 0.99,
+                "mention": null
+              },
+              {
+                "field": "stat",
+                "status": "selected",
+                "selected": [
+                  "stat_line"
+                ],
+                "alternatives": [],
+                "confidence": 0.99,
+                "mention": null
+              },
+              {
+                "field": "aggregation",
+                "status": "selected",
+                "selected": [
+                  "total"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "season_type",
+                "status": "selected",
+                "selected": [
+                  "regular_season"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "standings_scope",
+                "status": "ambiguous",
+                "selected": [],
+                "alternatives": [
+                  "league",
+                  "east"
+                ],
+                "confidence": 0.65,
+                "mention": null
+              },
+              {
+                "field": "player",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "date",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "season",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "round",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "game_number",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "location",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.99,
+                "mention": null
+              },
+              {
+                "field": "teams",
+                "status": "selected",
+                "selected": [
+                  "team:1610612738"
+                ],
+                "alternatives": [],
+                "confidence": 0.9,
+                "mention": null
+              },
+              {
+                "field": "target_team",
+                "status": "selected",
+                "selected": [
+                  "team:1610612738"
+                ],
+                "alternatives": [],
+                "confidence": 0.96,
+                "mention": null
+              }
+            ],
+            "unsupported_reason": null,
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "jev",
+              "provider": "typesafe",
+              "model": "jev-1.13.0",
+              "resolved_model": "jev-1.13.0",
+              "latency_ms": 180,
+              "usage": {
+                "input_tokens": 2936,
+                "output_tokens": 847,
+                "cached_input_tokens": null,
+                "provider_calls": 1,
+                "cost_usd": 0.00012331200000000001
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        },
+        {
+          "tier": "luna",
+          "output": {
+            "outcome": "interpreted",
+            "fields": [
+              {
+                "field": "intent",
+                "status": "selected",
+                "selected": [
+                  "team_records"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "stat_scope",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "stat",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "aggregation",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "season_type",
+                "status": "selected",
+                "selected": [
+                  "regular_season"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "standings_scope",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "player",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "teams",
+                "status": "selected",
+                "selected": [
+                  "team:1610612738"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "target_team",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "date",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "season",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "round",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "game_number",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "location",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              }
+            ],
+            "unsupported_reason": null,
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "openai_responses",
+              "provider": "openai",
+              "model": "gpt-6-luna",
+              "resolved_model": "gpt-6-luna",
+              "latency_ms": 2094,
+              "usage": {
+                "input_tokens": 3086,
+                "output_tokens": 228,
+                "cached_input_tokens": 0,
+                "provider_calls": 1,
+                "cost_usd": 0.0004226
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        }
+      ],
+      "request": null
+    },
+    {
+      "id": "stage2-team_records-14",
+      "question": "Celtics record in 2008",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "clarify",
+      "tier_outputs": [
+        {
+          "tier": "jev",
+          "output": {
+            "outcome": "interpreted",
+            "fields": [
+              {
+                "field": "intent",
+                "status": "selected",
+                "selected": [
+                  "team_records"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "stat_scope",
+                "status": "selected",
+                "selected": [
+                  "team"
+                ],
+                "alternatives": [],
+                "confidence": 0.98,
+                "mention": null
+              },
+              {
+                "field": "stat",
+                "status": "selected",
+                "selected": [
+                  "stat_line"
+                ],
+                "alternatives": [],
+                "confidence": 0.99,
+                "mention": null
+              },
+              {
+                "field": "aggregation",
+                "status": "selected",
+                "selected": [
+                  "total"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "season_type",
+                "status": "selected",
+                "selected": [
+                  "regular_season"
+                ],
+                "alternatives": [],
+                "confidence": 0.98,
+                "mention": null
+              },
+              {
+                "field": "standings_scope",
+                "status": "ambiguous",
+                "selected": [],
+                "alternatives": [
+                  "east",
+                  "league"
+                ],
+                "confidence": 0.53,
+                "mention": null
+              },
+              {
+                "field": "player",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "date",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.5,
+                "mention": null
+              },
+              {
+                "field": "season",
+                "status": "selected",
+                "selected": [
+                  "season:2007-08"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "round",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "game_number",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "location",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.98,
+                "mention": null
+              },
+              {
+                "field": "teams",
+                "status": "selected",
+                "selected": [
+                  "team:1610612738"
+                ],
+                "alternatives": [],
+                "confidence": 0.92,
+                "mention": null
+              },
+              {
+                "field": "target_team",
+                "status": "selected",
+                "selected": [
+                  "team:1610612738"
+                ],
+                "alternatives": [],
+                "confidence": 0.97,
+                "mention": null
+              }
+            ],
+            "unsupported_reason": null,
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "jev",
+              "provider": "typesafe",
+              "model": "jev-1.13.0",
+              "resolved_model": "jev-1.13.0",
+              "latency_ms": 164,
+              "usage": {
+                "input_tokens": 3028,
+                "output_tokens": 882,
+                "cached_input_tokens": null,
+                "provider_calls": 1,
+                "cost_usd": 0.000127176
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        },
+        {
+          "tier": "luna",
+          "output": {
+            "outcome": "interpreted",
+            "fields": [
+              {
+                "field": "intent",
+                "status": "selected",
+                "selected": [
+                  "team_records"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "stat_scope",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "stat",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "aggregation",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "season_type",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "standings_scope",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "player",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "teams",
+                "status": "selected",
+                "selected": [
+                  "team:1610612738"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "target_team",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "date",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "season",
+                "status": "ambiguous",
+                "selected": [],
+                "alternatives": [
+                  "season:2007-08",
+                  "season:2008-09"
+                ],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "round",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "game_number",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "location",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              }
+            ],
+            "unsupported_reason": null,
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "openai_responses",
+              "provider": "openai",
+              "model": "gpt-6-luna",
+              "resolved_model": "gpt-6-luna",
+              "latency_ms": 2948,
+              "usage": {
+                "input_tokens": 3168,
+                "output_tokens": 276,
+                "cached_input_tokens": 0,
+                "provider_calls": 1,
+                "cost_usd": 0.0004548
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        }
+      ],
+      "request": null
+    },
+    {
+      "id": "stage2-player_season_stats-15",
+      "question": "Curry points per game in 2023-24",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "clarify",
+      "tier_outputs": [
+        {
+          "tier": "jev",
+          "output": {
+            "outcome": "interpreted",
+            "fields": [
+              {
+                "field": "intent",
+                "status": "selected",
+                "selected": [
+                  "player_season_stats"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "stat_scope",
+                "status": "selected",
+                "selected": [
+                  "player"
+                ],
+                "alternatives": [],
+                "confidence": 0.98,
+                "mention": null
+              },
+              {
+                "field": "stat",
+                "status": "selected",
+                "selected": [
+                  "points"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "aggregation",
+                "status": "selected",
+                "selected": [
+                  "per_game"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "season_type",
+                "status": "selected",
+                "selected": [
+                  "regular_season"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "standings_scope",
+                "status": "selected",
+                "selected": [
+                  "league"
+                ],
+                "alternatives": [],
+                "confidence": 0.98,
+                "mention": null
+              },
+              {
+                "field": "player",
+                "status": "selected",
+                "selected": [
+                  "player:201939"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "date",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.64,
+                "mention": null
+              },
+              {
+                "field": "season",
+                "status": "selected",
+                "selected": [
+                  "season:2023-24"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "round",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "game_number",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "location",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "teams",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.8,
+                "mention": null
+              },
+              {
+                "field": "target_team",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.75,
+                "mention": null
+              }
+            ],
+            "unsupported_reason": null,
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "jev",
+              "provider": "typesafe",
+              "model": "jev-1.13.0",
+              "resolved_model": "jev-1.13.0",
+              "latency_ms": 152,
+              "usage": {
+                "input_tokens": 3139,
+                "output_tokens": 906,
+                "cached_input_tokens": null,
+                "provider_calls": 1,
+                "cost_usd": 0.00013183800000000003
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        },
+        {
+          "tier": "luna",
+          "output": {
+            "outcome": "interpreted",
+            "fields": [
+              {
+                "field": "intent",
+                "status": "selected",
+                "selected": [
+                  "player_season_stats"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "stat_scope",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "stat",
+                "status": "selected",
+                "selected": [
+                  "points"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "aggregation",
+                "status": "selected",
+                "selected": [
+                  "per_game"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "season_type",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "standings_scope",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "player",
+                "status": "ambiguous",
+                "selected": [],
+                "alternatives": [
+                  "player:201939",
+                  "player:203552"
+                ],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "teams",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "target_team",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "date",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "season",
+                "status": "selected",
+                "selected": [
+                  "season:2023-24"
+                ],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "round",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "game_number",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              },
+              {
+                "field": "location",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": null,
+                "mention": null
+              }
+            ],
+            "unsupported_reason": null,
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "openai_responses",
+              "provider": "openai",
+              "model": "gpt-6-luna",
+              "resolved_model": "gpt-6-luna",
+              "latency_ms": 2792,
+              "usage": {
+                "input_tokens": 3318,
+                "output_tokens": 289,
+                "cached_input_tokens": 0,
+                "provider_calls": 1,
+                "cost_usd": 0.00047630000000000003
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        }
+      ],
+      "request": null
+    },
+    {
+      "id": "stage2-player_season_stats-16",
+      "question": "Jokic points per 36 in 2023-24",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "unsupported",
+      "tier_outputs": [
+        {
+          "tier": "jev",
+          "output": {
+            "outcome": "interpreted",
+            "fields": [
+              {
+                "field": "intent",
+                "status": "selected",
+                "selected": [
+                  "player_season_stats"
+                ],
+                "alternatives": [],
+                "confidence": 0.93,
+                "mention": null
+              },
+              {
+                "field": "stat_scope",
+                "status": "selected",
+                "selected": [
+                  "player"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "stat",
+                "status": "selected",
+                "selected": [
+                  "points"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "aggregation",
+                "status": "selected",
+                "selected": [
+                  "per_game"
+                ],
+                "alternatives": [],
+                "confidence": 0.98,
+                "mention": null
+              },
+              {
+                "field": "season_type",
+                "status": "selected",
+                "selected": [
+                  "regular_season"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "standings_scope",
+                "status": "selected",
+                "selected": [
+                  "league"
+                ],
+                "alternatives": [],
+                "confidence": 0.97,
+                "mention": null
+              },
+              {
+                "field": "player",
+                "status": "selected",
+                "selected": [
+                  "player:203999"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "date",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.7,
+                "mention": null
+              },
+              {
+                "field": "season",
+                "status": "selected",
+                "selected": [
+                  "season:2023-24"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "round",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "game_number",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "location",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "teams",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.9,
+                "mention": null
+              },
+              {
+                "field": "target_team",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.76,
+                "mention": null
+              }
+            ],
+            "unsupported_reason": null,
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "jev",
+              "provider": "typesafe",
+              "model": "jev-1.13.0",
+              "resolved_model": "jev-1.13.0",
+              "latency_ms": 194,
+              "usage": {
+                "input_tokens": 2857,
+                "output_tokens": 844,
+                "cached_input_tokens": null,
+                "provider_calls": 1,
+                "cost_usd": 0.00011999400000000002
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        }
+      ],
+      "request": null
+    },
+    {
+      "id": "stage2-team_records-17",
+      "question": "Celtics home record in 2023-24",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "unsupported",
+      "tier_outputs": [
+        {
+          "tier": "jev",
+          "output": {
+            "outcome": "interpreted",
+            "fields": [
+              {
+                "field": "intent",
+                "status": "selected",
+                "selected": [
+                  "team_records"
+                ],
+                "alternatives": [],
+                "confidence": 0.94,
+                "mention": null
+              },
+              {
+                "field": "stat_scope",
+                "status": "selected",
+                "selected": [
+                  "team"
+                ],
+                "alternatives": [],
+                "confidence": 0.99,
+                "mention": null
+              },
+              {
+                "field": "stat",
+                "status": "selected",
+                "selected": [
+                  "stat_line"
+                ],
+                "alternatives": [],
+                "confidence": 0.99,
+                "mention": null
+              },
+              {
+                "field": "aggregation",
+                "status": "selected",
+                "selected": [
+                  "total"
+                ],
+                "alternatives": [],
+                "confidence": 0.96,
+                "mention": null
+              },
+              {
+                "field": "season_type",
+                "status": "selected",
+                "selected": [
+                  "regular_season"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "standings_scope",
+                "status": "ambiguous",
+                "selected": [],
+                "alternatives": [
+                  "league",
+                  "east"
+                ],
+                "confidence": 0.67,
+                "mention": null
+              },
+              {
+                "field": "player",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "date",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.63,
+                "mention": null
+              },
+              {
+                "field": "season",
+                "status": "selected",
+                "selected": [
+                  "season:2023-24"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "round",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "game_number",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "location",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.84,
+                "mention": null
+              },
+              {
+                "field": "teams",
+                "status": "selected",
+                "selected": [
+                  "team:1610612738"
+                ],
+                "alternatives": [],
+                "confidence": 0.93,
+                "mention": null
+              },
+              {
+                "field": "target_team",
+                "status": "selected",
+                "selected": [
+                  "team:1610612738"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              }
+            ],
+            "unsupported_reason": null,
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "jev",
+              "provider": "typesafe",
+              "model": "jev-1.13.0",
+              "resolved_model": "jev-1.13.0",
+              "latency_ms": 173,
+              "usage": {
+                "input_tokens": 2981,
+                "output_tokens": 867,
+                "cached_input_tokens": null,
+                "provider_calls": 1,
+                "cost_usd": 0.000125202
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        },
+        {
+          "tier": "luna",
+          "output": {
+            "outcome": "unsupported",
+            "fields": [],
+            "unsupported_reason": "other",
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "openai_responses",
+              "provider": "openai",
+              "model": "gpt-6-luna",
+              "resolved_model": "gpt-6-luna",
+              "latency_ms": 2333,
+              "usage": {
+                "input_tokens": 3124,
+                "output_tokens": 242,
+                "cached_input_tokens": 0,
+                "provider_calls": 1,
+                "cost_usd": 0.0004334
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        }
+      ],
+      "request": null
+    },
+    {
+      "id": "stage2-team_records-18",
+      "question": "Atlantic division standings in 2023-24",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "unsupported",
+      "tier_outputs": [
+        {
+          "tier": "jev",
+          "output": {
+            "outcome": "interpreted",
+            "fields": [
+              {
+                "field": "intent",
+                "status": "selected",
+                "selected": [
+                  "team_records"
+                ],
+                "alternatives": [],
+                "confidence": 0.98,
+                "mention": null
+              },
+              {
+                "field": "stat_scope",
+                "status": "selected",
+                "selected": [
+                  "team"
+                ],
+                "alternatives": [],
+                "confidence": 0.78,
+                "mention": null
+              },
+              {
+                "field": "stat",
+                "status": "selected",
+                "selected": [
+                  "stat_line"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "aggregation",
+                "status": "selected",
+                "selected": [
+                  "total"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "season_type",
+                "status": "selected",
+                "selected": [
+                  "regular_season"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "standings_scope",
+                "status": "selected",
+                "selected": [
+                  "east"
+                ],
+                "alternatives": [],
+                "confidence": 0.99,
+                "mention": null
+              },
+              {
+                "field": "player",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "date",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.85,
+                "mention": null
+              },
+              {
+                "field": "season",
+                "status": "selected",
+                "selected": [
+                  "season:2023-24"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "round",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "game_number",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "location",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "teams",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.8200000000000001,
+                "mention": null
+              },
+              {
+                "field": "target_team",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              }
+            ],
+            "unsupported_reason": null,
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "jev",
+              "provider": "typesafe",
+              "model": "jev-1.13.0",
+              "resolved_model": "jev-1.13.0",
+              "latency_ms": 194,
+              "usage": {
+                "input_tokens": 2811,
+                "output_tokens": 822,
+                "cached_input_tokens": null,
+                "provider_calls": 1,
+                "cost_usd": 0.00011806200000000001
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        },
+        {
+          "tier": "luna",
+          "output": {
+            "outcome": "unsupported",
+            "fields": [],
+            "unsupported_reason": "other",
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "openai_responses",
+              "provider": "openai",
+              "model": "gpt-6-luna",
+              "resolved_model": "gpt-6-luna",
+              "latency_ms": 2677,
+              "usage": {
+                "input_tokens": 3089,
+                "output_tokens": 256,
+                "cached_input_tokens": 0,
+                "provider_calls": 1,
+                "cost_usd": 0.00043690000000000005
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        }
+      ],
+      "request": null
+    },
+    {
+      "id": "stage2-team_records-19",
+      "question": "Celtics record against Miami in 2023-24",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "unsupported",
+      "tier_outputs": [
+        {
+          "tier": "jev",
+          "output": {
+            "outcome": "interpreted",
+            "fields": [
+              {
+                "field": "intent",
+                "status": "selected",
+                "selected": [
+                  "team_records"
+                ],
+                "alternatives": [],
+                "confidence": 0.74,
+                "mention": null
+              },
+              {
+                "field": "stat_scope",
+                "status": "selected",
+                "selected": [
+                  "team"
+                ],
+                "alternatives": [],
+                "confidence": 0.99,
+                "mention": null
+              },
+              {
+                "field": "stat",
+                "status": "selected",
+                "selected": [
+                  "stat_line"
+                ],
+                "alternatives": [],
+                "confidence": 0.99,
+                "mention": null
+              },
+              {
+                "field": "aggregation",
+                "status": "selected",
+                "selected": [
+                  "total"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "season_type",
+                "status": "selected",
+                "selected": [
+                  "regular_season"
+                ],
+                "alternatives": [],
+                "confidence": 0.97,
+                "mention": null
+              },
+              {
+                "field": "standings_scope",
+                "status": "ambiguous",
+                "selected": [],
+                "alternatives": [
+                  "league",
+                  "east"
+                ],
+                "confidence": 0.52,
+                "mention": null
+              },
+              {
+                "field": "player",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "date",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.7,
+                "mention": null
+              },
+              {
+                "field": "season",
+                "status": "selected",
+                "selected": [
+                  "season:2023-24"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "round",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "game_number",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "location",
+                "status": "no_matching_candidate",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.51,
+                "mention": null
+              },
+              {
+                "field": "teams",
+                "status": "selected",
+                "selected": [
+                  "team:1610612738",
+                  "team:1610612748"
+                ],
+                "alternatives": [],
+                "confidence": 0.94,
+                "mention": null
+              },
+              {
+                "field": "target_team",
+                "status": "selected",
+                "selected": [
+                  "team:1610612738"
+                ],
+                "alternatives": [],
+                "confidence": 0.76,
+                "mention": null
+              }
+            ],
+            "unsupported_reason": null,
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "jev",
+              "provider": "typesafe",
+              "model": "jev-1.13.0",
+              "resolved_model": "jev-1.13.0",
+              "latency_ms": 186,
+              "usage": {
+                "input_tokens": 3145,
+                "output_tokens": 903,
+                "cached_input_tokens": null,
+                "provider_calls": 1,
+                "cost_usd": 0.00013209
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        },
+        {
+          "tier": "luna",
+          "output": {
+            "outcome": "unsupported",
+            "fields": [],
+            "unsupported_reason": "other",
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "openai_responses",
+              "provider": "openai",
+              "model": "gpt-6-luna",
+              "resolved_model": "gpt-6-luna",
+              "latency_ms": 2605,
+              "usage": {
+                "input_tokens": 3164,
+                "output_tokens": 270,
+                "cached_input_tokens": 0,
+                "provider_calls": 1,
+                "cost_usd": 0.0004514
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        }
+      ],
+      "request": null
+    },
+    {
+      "id": "stage2-player_season_stats-20",
+      "question": "Jokic points per game in March 2024",
+      "correct": false,
+      "guess": false,
+      "failure": "wrong_unsupported_reason",
+      "action": "unsupported",
+      "tier_outputs": [
+        {
+          "tier": "jev",
+          "output": {
+            "outcome": "unreliable",
+            "fields": [
+              {
+                "field": "intent",
+                "status": "selected",
+                "selected": [
+                  "player_season_stats"
+                ],
+                "alternatives": [],
+                "confidence": 0.56,
+                "mention": null
+              },
+              {
+                "field": "stat_scope",
+                "status": "selected",
+                "selected": [
+                  "player"
+                ],
+                "alternatives": [],
+                "confidence": 0.99,
+                "mention": null
+              },
+              {
+                "field": "stat",
+                "status": "selected",
+                "selected": [
+                  "points"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "aggregation",
+                "status": "selected",
+                "selected": [
+                  "per_game"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "season_type",
+                "status": "selected",
+                "selected": [
+                  "regular_season"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "standings_scope",
+                "status": "selected",
+                "selected": [
+                  "league"
+                ],
+                "alternatives": [],
+                "confidence": 0.95,
+                "mention": null
+              },
+              {
+                "field": "player",
+                "status": "selected",
+                "selected": [
+                  "player:203999"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "date",
+                "status": "selected",
+                "selected": [
+                  "date:0"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "season",
+                "status": "no_matching_candidate",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.83,
+                "mention": null
+              },
+              {
+                "field": "round",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "game_number",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "location",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "teams",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.8200000000000001,
+                "mention": null
+              },
+              {
+                "field": "target_team",
+                "status": "no_matching_candidate",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.53,
+                "mention": null
+              }
+            ],
+            "unsupported_reason": null,
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "jev",
+              "provider": "typesafe",
+              "model": "jev-1.13.0",
+              "resolved_model": "jev-1.13.0",
+              "latency_ms": 144,
+              "usage": {
+                "input_tokens": 2854,
+                "output_tokens": 832,
+                "cached_input_tokens": null,
+                "provider_calls": 1,
+                "cost_usd": 0.00011986800000000001
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        },
+        {
+          "tier": "luna",
+          "output": {
+            "outcome": "unsupported",
+            "fields": [],
+            "unsupported_reason": "multi_game_average",
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "openai_responses",
+              "provider": "openai",
+              "model": "gpt-6-luna",
+              "resolved_model": "gpt-6-luna",
+              "latency_ms": 3339,
+              "usage": {
+                "input_tokens": 2900,
+                "output_tokens": 343,
+                "cached_input_tokens": 0,
+                "provider_calls": 1,
+                "cost_usd": 0.0004615
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        }
+      ],
+      "request": null
+    },
+    {
+      "id": "stage2-team_records-21",
+      "question": "Celtics record before March 1, 2024",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "unsupported",
+      "tier_outputs": [
+        {
+          "tier": "jev",
+          "output": {
+            "outcome": "interpreted",
+            "fields": [
+              {
+                "field": "intent",
+                "status": "selected",
+                "selected": [
+                  "team_records"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "stat_scope",
+                "status": "selected",
+                "selected": [
+                  "team"
+                ],
+                "alternatives": [],
+                "confidence": 0.95,
+                "mention": null
+              },
+              {
+                "field": "stat",
+                "status": "selected",
+                "selected": [
+                  "stat_line"
+                ],
+                "alternatives": [],
+                "confidence": 0.99,
+                "mention": null
+              },
+              {
+                "field": "aggregation",
+                "status": "selected",
+                "selected": [
+                  "total"
+                ],
+                "alternatives": [],
+                "confidence": 0.99,
+                "mention": null
+              },
+              {
+                "field": "season_type",
+                "status": "selected",
+                "selected": [
+                  "regular_season"
+                ],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "standings_scope",
+                "status": "ambiguous",
+                "selected": [],
+                "alternatives": [
+                  "east",
+                  "league"
+                ],
+                "confidence": 0.5,
+                "mention": null
+              },
+              {
+                "field": "player",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "date",
+                "status": "selected",
+                "selected": [
+                  "date:0"
+                ],
+                "alternatives": [],
+                "confidence": 0.57,
+                "mention": null
+              },
+              {
+                "field": "season",
+                "status": "no_matching_candidate",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.74,
+                "mention": null
+              },
+              {
+                "field": "round",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "game_number",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 1.0,
+                "mention": null
+              },
+              {
+                "field": "location",
+                "status": "absent",
+                "selected": [],
+                "alternatives": [],
+                "confidence": 0.99,
+                "mention": null
+              },
+              {
+                "field": "teams",
+                "status": "selected",
+                "selected": [
+                  "team:1610612738"
+                ],
+                "alternatives": [],
+                "confidence": 0.91,
+                "mention": null
+              },
+              {
+                "field": "target_team",
+                "status": "selected",
+                "selected": [
+                  "team:1610612738"
+                ],
+                "alternatives": [],
+                "confidence": 0.99,
+                "mention": null
+              }
+            ],
+            "unsupported_reason": null,
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "jev",
+              "provider": "typesafe",
+              "model": "jev-1.13.0",
+              "resolved_model": "jev-1.13.0",
+              "latency_ms": 171,
+              "usage": {
+                "input_tokens": 3015,
+                "output_tokens": 855,
+                "cached_input_tokens": null,
+                "provider_calls": 1,
+                "cost_usd": 0.00012663
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        },
+        {
+          "tier": "luna",
+          "output": {
+            "outcome": "unsupported",
+            "fields": [],
+            "unsupported_reason": "other",
+            "unsupported_confidence": null,
+            "extracted_date": null,
+            "error_code": null,
+            "metadata": {
+              "adapter": "openai_responses",
+              "provider": "openai",
+              "model": "gpt-6-luna",
+              "resolved_model": "gpt-6-luna",
+              "latency_ms": 2853,
+              "usage": {
+                "input_tokens": 2923,
+                "output_tokens": 249,
+                "cached_input_tokens": 0,
+                "provider_calls": 1,
+                "cost_usd": 0.0004168
+              },
+              "field_tiers": {},
+              "field_decisions": []
+            }
+          }
+        }
+      ],
+      "request": null
+    }
+  ]
+}

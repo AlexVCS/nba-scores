@@ -25,6 +25,7 @@ from server.ask.models.response import PlayerSeasonStatsResult, TeamRecordsResul
 from server.ask.resolvers.errors import NotFoundError, UnavailableError, UnsupportedError
 from server.ask.resolvers.output import ResolverOutput
 from server.services import nba_stats_client, basketball_reference
+from server.utils.ttl_cache import LoadInProgressError
 
 logger = logging.getLogger(__name__)
 _cache = AskCache(max_entries=128, version="season-1")
@@ -54,8 +55,8 @@ def _now():
 
 def _complete(season):
     # Deliberately conservative: cache a season long only after the following
-    # October. This includes unusual late playoffs (2020) and stat corrections.
-    return _now().date() >= dt.date(int(season[:4]) + 1, 10, 1)
+    # November. This includes unusual late playoffs (2020) and stat corrections.
+    return _now().date() >= dt.date(int(season[:4]) + 1, 11, 1)
 
 
 def _number(value):
@@ -125,11 +126,11 @@ def _cells(row):
 def _bref_player(request):
     year = int(request.season[:4]) + 1
     league = "BAA" if year < 1950 else "NBA"
-    path = "playoffs" if request.season_type == "playoffs" else "leagues"
-    href = f"https://www.basketball-reference.com/{path}/{league}_{year}_totals.html"
+    href = f"https://www.basketball-reference.com/leagues/{league}_{year}_totals.html"
     soup = _html_tables(_html(href, request.season))
     _heading(soup, request.season)
-    tables = [t for t in soup.find_all("table") if t.get("id") in {"totals_stats", "totals"}]
+    table_ids = {"totals_stats_post", "playoffs_totals"} if request.season_type == "playoffs" else {"totals_stats", "totals"}
+    tables = [t for t in soup.find_all("table") if t.get("id") in table_ids]
     if len(tables) != 1:
         raise ValueError("BRef totals table missing or ambiguous")
     # Name-only cross-source matching is allowed only when the NBA catalog
@@ -143,10 +144,10 @@ def _bref_player(request):
     player_links = set()
     for tr in tables[0].select("tbody tr"):
         cells = _cells(tr)
-        name = cells.get("player", "").rstrip("*")
+        name = cells.get("name_display", cells.get("player", "")).rstrip("*")
         if name_key(name) != name_key(request.player.name):
             continue
-        anchor = tr.select_one('[data-stat="player"] a')
+        anchor = tr.select_one('[data-stat="name_display"] a') or tr.select_one('[data-stat="player"] a')
         if anchor is None or not str(anchor.get("href", "")).startswith("/players/"):
             raise ValueError("BRef player link missing")
         player_links.add(anchor["href"])
@@ -158,10 +159,11 @@ def _bref_player(request):
                 continue
             # Team page ending year and historical tricode are independently verified.
             from server.services.game_summary import to_bref_team_code
-            code = to_bref_team_code(_team(request.team.team_id, request.season).tricode)
+            tricode = _team(request.team.team_id, request.season).tricode
+            code = {"PHX": "PHO", "BKN": "BRK", "CHA": "CHO"}.get(tricode, to_bref_team_code(tricode))
             if anchor_team.get("href") != f"/teams/{code}/{year}.html":
                 continue
-        found.append((team_code, {"GP": cells.get("g"), **{key: next((cells[k] for k in names if k in cells), None)
+        found.append((team_code, {"GP": cells.get("games", cells.get("g")), **{key: next((cells[k] for k in names if k in cells), None)
                                                          for key, names in BREF_STATS.items()}}))
     if len(player_links) > 1:
         raise ValueError("Duplicate BRef player names")
@@ -176,7 +178,7 @@ def _bref_player(request):
 
 def _html(href, season):
     return _cache.get_or_load("bref-html", href, lambda: CacheValue(
-        basketball_reference.get(href).text, 30)).value
+        basketball_reference.get(href).text, 30), wait_timeout=5).value
 
 
 def _nba_player(request):
@@ -205,6 +207,12 @@ def _valid_player(data, request):
     games = _integer(row.get("GP"))
     if games == 0:
         raise NotFoundError("no_record", "season_player_missing")
+    row = dict(row)
+    start = int(request.season[:4])
+    for cutoff, fields in ((1951, ("MIN",)), (1973, ("STL", "BLK", "OREB", "DREB")), (1977, ("TOV",)), (1979, ("FG3M", "FG3A", "FG3_PCT"))):
+        if start < cutoff:
+            for field in fields:
+                row[field] = None
     keys = LINE if request.stat.stat == "stat_line" else (request.stat.stat,)
     values = [_value(row, key, games, request.stat.aggregation) for key in keys]
     if any(v.value is None for v in values) and request.stat.stat != "stat_line":
@@ -232,7 +240,10 @@ def _value(row, stat, games, aggregation):
                          made=int(made), attempted=int(attempted))
     if stat in PERCENTAGES:
         n = _number(row.get(PERCENTAGES[stat]))
-        n = n if n is not None and 0 <= n <= 1 else None
+        shooting = {"field_goal_percentage": "field_goals", "three_point_percentage": "three_pointers", "free_throw_percentage": "free_throws"}[stat]
+        made, attempts = [_number(row.get(k)) for k in SHOOTING[shooting]]
+        valid_attempts = made is not None and attempts is not None and attempts > 0 and 0 <= made <= attempts
+        n = n if n is not None and 0 <= n <= 1 and valid_attempts else None
         return StatValue(stat=stat, value=n, display=f"{n * 100:.1f}%" if n is not None else "Unavailable")
     raise UnsupportedError("other", "unsupported_season_stat")
 
@@ -243,6 +254,7 @@ def _load(primary, fallback, validate):
     try:
         data = primary()
         validate(data)
+        _source_link(data)
         return data
     except UnsupportedError:
         raise
@@ -252,6 +264,7 @@ def _load(primary, fallback, validate):
     try:
         data = fallback()
         validate(data)
+        _source_link(data)
         return data
     except NotFoundError:
         if primary_missing:
@@ -266,7 +279,14 @@ def _load(primary, fallback, validate):
 def player_season(request: PlayerSeasonStatsRequest):
     if request.stat.stat == "plus_minus":
         raise UnsupportedError("other", "unsupported_season_stat")
-    data = _cache.get_or_load("player-season", request.model_dump_json(), lambda: _cached(
+    # These facts were not recorded league-wide; another source cannot fill them.
+    start = int(request.season[:4])
+    if ((start < 1951 and request.stat.stat == "minutes")
+            or (start < 1977 and request.stat.stat == "turnovers")
+            or (start < 1973 and request.stat.stat in {"steals", "blocks", "offensive_rebounds", "defensive_rebounds"})
+            or (start < 1979 and request.stat.stat in {"three_pointers", "three_point_percentage"})):
+        raise NotFoundError("no_record", "season_stat_not_recorded")
+    data = _season_cached("player-season", request.model_dump_json(), lambda: _cached(
         _load(lambda: _nba_player(request), lambda: _bref_player(request), lambda d: _valid_player(d, request)))).value
     games, values = _valid_player(data, request)
     missing = any(v.value is None for v in values)
@@ -371,22 +391,36 @@ def _valid_records(data, request):
         raise ValueError("No unique team record")
     # Conference tiebreak ranks are source facts. League rows are ordered by
     # percentage with equal percentages alphabetically; we never invent a rank.
-    return sorted(rows, key=lambda r: (r.conference or "", r.conference_rank or 999, -r.win_percentage, r.team.name))
+    if request.standings_scope == "league":
+        return sorted(rows, key=lambda r: (-r.win_percentage, r.team.name))
+    return sorted(rows, key=lambda r: (r.conference_rank or 999, -r.win_percentage, r.team.name))
 
 
 def team_records(request: TeamRecordsRequest):
-    data = _cache.get_or_load("team-records", request.model_dump_json(), lambda: _cached(
+    data = _season_cached("team-records", request.model_dump_json(), lambda: _cached(
         _load(lambda: _nba_records(request), lambda: _bref_records(request), lambda d: _valid_records(d, request)))).value
     result = TeamRecordsResult(season=request.season, team=request.team, standings_scope=request.standings_scope,
                                rows=_valid_records(data, request), as_of=data.fetched_at)
     return _output(result, data)
 
 
+def _season_cached(namespace, key, loader):
+    try:
+        return _cache.get_or_load(namespace, key, loader, wait_timeout=5)
+    except LoadInProgressError:
+        raise UnavailableError("season_load_in_progress") from None
+
+
 def _cached(data):
     return CacheValue(data, 86400 if data.complete else 30)
 
 
+def _source_link(data):
+    label = "Basketball-Reference" if data.source == "basketball_reference" else "NBA.com"
+    return VerifiedLink(kind="source", label=f"Source: {label}", href=data.href, external=True)
+
+
 def _output(result, data):
     label = "Basketball-Reference" if data.source == "basketball_reference" else "NBA.com"
-    return ResolverOutput(result, (VerifiedLink(kind="source", label=f"Source: {label}", href=data.href, external=True),),
+    return ResolverOutput(result, (_source_link(data),),
                           (SourceMetadata(name=data.source, label=label, fetched_at=data.fetched_at, complete=data.complete),))

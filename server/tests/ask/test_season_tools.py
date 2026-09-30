@@ -343,3 +343,158 @@ def test_development_fixture_labels_and_candidate_seasons_validate():
         if c.action=="accept":
             candidates=CandidateLookupService().lookup(c.question,c.context)
             assert f"season:{c.request.season}" in [v.id for v in candidates.sets["season"].candidates]
+
+
+@pytest.mark.parametrize('question', [
+    'Jokic points in the 2024 Finals', 'Jokic points in round 1 of the 2024 playoffs',
+    'Jokic points in game 7 of the 2024 playoffs', 'Jokic points in wins in 2023-24',
+    'Jokic points per 48 in 2023-24', 'Jokic points per minute in 2023-24',
+    'Jokic clutch points in 2023-24', 'Jokic fourth quarter points in 2023-24',
+    'Jokic first half points in 2023-24', 'Jokic overtime points in 2023-24',
+    'Jokic points as a starter in 2023-24', 'Jokic bench points in 2023-24',
+    'Jokic points on back-to-back games in 2023-24', 'Jokic points in his last five games in 2023-24',
+    'Jokic and LeBron James points in 2023-24', 'Lakers record with LeBron James in 2023-24',
+    'Lakers record without LeBron James in 2023-24', 'Celtics conference record in 2023-24',
+    'Lakers record when LeBron James plays in 2023-24',
+])
+def test_review_scope_constraints_cannot_be_discarded(question):
+    from server.ask.season_scope import normalize_question
+    c = CandidateLookupService().lookup(question, CONTEXT)
+    intent = 'team_records' if 'record' in question else 'player_season_stats'
+    fields = {'season': c.sets['season'].candidates[0].id}
+    if intent == 'player_season_stats':
+        fields.update(player='player:203999', stat='points')
+    assert normalize_question(Normalizer(), interpreted(intent, fields), c, CONTEXT, question).status == 'unsupported'
+
+
+def test_playoff_language_requires_playoff_selection():
+    from server.ask.season_scope import normalize_question
+    q = 'Jokic points in the 2024 playoffs'
+    c = CandidateLookupService().lookup(q, CONTEXT)
+    fields = {'player':'player:203999', 'season':'season:2023-24', 'stat':'points'}
+    n = normalize_question(Normalizer(), interpreted('player_season_stats', fields), c, CONTEXT, q)
+    assert n.status == 'needs_clarification' and n.clarify_field == 'season_type'
+    fields['season_type']='playoffs'
+    assert normalize_question(Normalizer(), interpreted('player_season_stats', fields), c, CONTEXT, q).status == 'valid'
+    assert normalize_question(Normalizer(), interpreted('team_records', {'season':'season:2023-24'}), c, CONTEXT, q).status == 'unsupported'
+
+
+def test_curry_name_candidates_remain_clarifiable():
+    from server.ask.season_scope import normalize_question
+    q='Curry points in 2023-24'
+    c=CandidateLookupService().lookup(q, CONTEXT)
+    o=interpreted('player_season_stats', {'season':'season:2023-24','stat':'points'})
+    o=o.model_copy(update={'fields':o.fields+[FieldInterpretation(field='player',status='ambiguous',alternatives=[p.id for p in c.sets['player'].candidates][:4],confidence=1)]})
+    n=normalize_question(Normalizer(),o,c,CONTEXT,q)
+    assert n.status == 'needs_clarification' and n.clarify_field == 'player'
+
+
+@pytest.mark.parametrize('field, choices', [('aggregation', ['total','per_game']), ('season_type',['regular_season','playoffs'])])
+def test_closed_choices_round_trip_tokens_and_scope_guard(tmp_path,field,choices):
+    from server.ask.present import clarification
+    from server.ask.resolution import PendingResolution, ResolutionStore
+    from server.ask.season_scope import normalize_question
+    q='Jokic points in 2023-24 playoffs' if field == 'season_type' else 'Jokic points total or per game in 2023-24'
+    c=CandidateLookupService().lookup(q,CONTEXT)
+    o=interpreted('player_season_stats',{'player':'player:203999','season':'season:2023-24','stat':'points'})
+    o=o.model_copy(update={'fields':o.fields+[FieldInterpretation(field=field,status='ambiguous',alternatives=choices,confidence=1)]})
+    pending=PendingResolution(o,c,CONTEXT);store=ResolutionStore(tmp_path/'choices.sqlite3')
+    options=clarification(field,'ambiguous',q,pending,store).options
+    assert len(options)==2
+    for option,value in zip(options,choices):
+        chosen=store.read(option.resolution,option.question,CONTEXT)
+        assert chosen is not None
+        n=normalize_question(Normalizer(),chosen.output,chosen.candidates,chosen.context,option.question)
+        assert n.status=='valid'
+        assert (n.request.stat.aggregation if field=='aggregation' else n.request.season_type)==value
+
+
+@pytest.mark.parametrize('phase,games,points', [('regular_season',79,2085),('playoffs',12,344)])
+def test_current_live_bref_markup_both_phases(monkeypatch,phase,games,points):
+    html=(Path(__file__).parent/'fixtures/season-data/bref-jokic-2024.html').read_text()
+    monkeypatch.setattr(seasons,'_html',lambda *a:html)
+    r=request('points',season_type=phase,team=DEN)
+    data=seasons._bref_player(r)
+    gp,values=seasons._valid_player(data,r)
+    assert gp==games and values[0].value==pytest.approx(points/games)
+    assert data.href.endswith('NBA_2024_totals.html')
+
+
+@pytest.mark.parametrize('attempts,made,pct', [(0,0,0),(None,0,0),(5,6,.8)])
+def test_percentage_requires_valid_positive_attempts(attempts,made,pct):
+    assert seasons._value(row(FGA=attempts,FGM=made,FG_PCT=pct),'field_goal_percentage',79,'total').value is None
+
+
+def test_historical_unrecorded_stat_skips_fallback(monkeypatch):
+    monkeypatch.setattr(seasons,'_nba_player',lambda *a:pytest.fail('Unrecorded stat must not fetch'))
+    monkeypatch.setattr(seasons,'_bref_player',lambda *a:pytest.fail('Unrecorded stat must not consume fallback'))
+    r=request('steals').model_copy(update={'season':'1960-61'})
+    with pytest.raises(NotFoundError,match='season_stat_not_recorded'):
+        seasons.player_season(r)
+    _,values=seasons._valid_player(source_data([row(STL=0,BLK=0,FG3M=0,FG3A=0)]),request('stat_line').model_copy(update={'season':'1960-61'}))
+    assert next(v for v in values if v.stat=='steals').value is None
+
+
+def test_league_standings_sort_by_percentage_across_conferences():
+    rows=team_rows()
+    rows[0].update(wins=20,losses=62,win_percentage=20/82,conference_rank=1)
+    rows[1].update(wins=70,losses=12,win_percentage=70/82,conference_rank=2)
+    result=seasons._valid_records(source_data(rows),TeamRecordsRequest(season='2023-24'))
+    assert result[0].team.team_id == rows[1]['team']['team_id']
+    assert [r.win_percentage for r in result]==sorted((r.win_percentage for r in result),reverse=True)
+
+
+def test_late_2020_playoffs_not_complete_in_october(monkeypatch):
+    monkeypatch.setattr(seasons,'_now',lambda:dt.datetime(2020,10,15,tzinfo=dt.timezone.utc))
+    assert not seasons._complete('2019-20')
+
+
+def test_joined_cache_load_has_timeout_and_maps_to_unavailable(monkeypatch):
+    from server.utils.ttl_cache import LoadInProgressError
+    def joined(*a,**kwargs):
+        assert kwargs['wait_timeout']==5
+        raise LoadInProgressError('player')
+    monkeypatch.setattr(seasons._cache,'get_or_load',joined)
+    with pytest.raises(UnavailableError,match='season_load_in_progress'):
+        seasons.player_season(request())
+
+
+def test_development_accept_labels_survive_question_guard():
+    from server.ask.eval.runner import LabeledCase, scored_request
+    from server.ask.season_scope import normalize_question
+    cases=[LabeledCase.from_json(c) for c in json.loads((Path(__file__).parent/'fixtures/eval/stage2-dev.json').read_text())['cases']]
+    for case in cases:
+        if case.action!='accept':continue
+        r=case.request;c=CandidateLookupService().lookup(case.question,case.context)
+        fields={'season':f'season:{r.season}'}
+        if r.intent=='player_season_stats':
+            fields.update(player=f'player:{r.player.player_id}',stat=r.stat.stat,aggregation=r.stat.aggregation,season_type=r.season_type)
+        else: fields['standings_scope']=r.standings_scope
+        if r.team: fields['teams']=[f'team:{r.team.team_id}']
+        n=normalize_question(Normalizer(),interpreted(r.intent,fields),c,case.context,case.question)
+        assert n.status=='valid',case.id
+        assert scored_request(n.request)==scored_request(r),case.id
+
+
+@pytest.mark.parametrize('team_id,tricode,bref_code', [(1610612756,'PHX','PHO'),(1610612751,'BKN','BRK'),(1610612766,'CHA','CHO')])
+def test_bref_team_stint_provider_codes(monkeypatch,team_id,tricode,bref_code):
+    html=(Path(__file__).parent/'fixtures/season-data/bref-jokic-2024.html').read_text().replace('/teams/DEN/2024.html',f'/teams/{bref_code}/2024.html').replace('>DEN</a>',f'>{bref_code}</a>')
+    monkeypatch.setattr(seasons,'_html',lambda *a:html)
+    data=seasons._bref_player(request(team=seasons._team(team_id,'2023-24')))
+    assert data.rows[0]['GP']=='79'
+
+
+def test_invalid_source_link_cannot_poison_completed_cache(monkeypatch):
+    install_nba(monkeypatch,[row()])
+    bad=source_data([row()]);bad=seasons.SeasonData(bad.rows,bad.source,'https://evil.test/fake',bad.fetched_at,bad.complete)
+    monkeypatch.setattr(seasons,'_nba_player',lambda r:bad)
+    monkeypatch.setattr(seasons,'_bref_player',lambda r:source_data([row(REB=158)]))
+    assert seasons.player_season(request()).result.values[0].value==2
+
+
+def test_continuation_rewritten_names_do_not_hide_trailing_split():
+    from server.ask.season_scope import normalize_question
+    c=CandidateLookupService().lookup('Curry rebounds 2023-24',CONTEXT)
+    q='Stephen Curry rebounds at home in 2023-24'
+    o=interpreted('player_season_stats',{'player':'player:201939','season':'season:2023-24','stat':'rebounds'})
+    assert normalize_question(Normalizer(),o,c,CONTEXT,q).status=='unsupported'

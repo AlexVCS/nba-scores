@@ -410,7 +410,9 @@ export type AskClarifyField =
   | "season"
   | "round"
   | "game_number"
-  | "location";
+  | "location"
+  | "aggregation"
+  | "season_type";
 export type AskClarifyReason = "ambiguous" | "missing" | "no_matching_candidate" | "year_required" | "range_too_long";
 
 export interface AskClarificationOption {

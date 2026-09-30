@@ -35,6 +35,7 @@ def get(url: str, *, headers: dict | None = None, timeout: float = TIMEOUT_SECON
         _next_start = now + INTERVAL_SECONDS
     response = requests.get(url, headers={**(headers or {}), "User-Agent": USER_AGENT},
                             timeout=min(timeout, TIMEOUT_SECONDS), allow_redirects=False)
+    response.encoding = "utf-8"  # BRef declares UTF-8 in HTML; Requests otherwise assumes Latin-1.
     response.raise_for_status()
     if 300 <= response.status_code < 400:
         raise requests.RequestException("Basketball-Reference redirect refused")

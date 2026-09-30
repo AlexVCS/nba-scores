@@ -10,10 +10,14 @@ registry, in the order specified by ADR 0010.
 - `team_records`: one team's regular-season wins/losses or complete league or
   Eastern/Western conference standings for one season.
 
-A missing season is clarified. A bare calendar year outside playoff language
+A missing season is clarified. Ambiguous totals/per-game or season type has
+server-validated choices; explicit playoff wording cannot silently become a
+regular-season answer. A bare calendar year outside playoff language
 retains both overlapping seasons. The tools do not answer division standings,
 home/away, opponent, month/date splits, advanced metrics, per-36/per-100 rates,
-career totals, season leaders or records across seasons. The scope guard runs
+career totals, season leaders or records across seasons. Finals, rounds, individual
+games, quarter/half/clutch/overtime splits, conditional player-dependent records,
+multiple-player comparisons and conference-only win-loss records are rejected. The scope guard runs
 in both HTTP and interpretation evaluation, including clarification continuations.
 
 ## Data and answers
@@ -27,7 +31,8 @@ when supplied; the tool does not invent a league tiebreak rank.
 
 Basketball-Reference is a fallback only when NBA cannot supply the fact. It reads
 a season totals table or season summary standings, including comment-wrapped
-tables. Player matching requires a unique full-name identity in the independent
+tables. The season totals page has separate regular-season and postseason
+tables; a saved current UTF-8 page excerpt covers both. Player matching requires a unique full-name identity in the independent
 NBA catalog for that season. Historical team names must match dated franchise
 records. Each answer uses one source; values from sources are never combined.
 
@@ -37,11 +42,16 @@ when throttled. Existing boxscore fallback uses the same transport. This limit
 is process-wide, not shared across replicas. Multiple fallback workers need a
 shared external limit before deployment. Successful completed-season tool data
 is cached for a day; changing seasons and raw HTML use 30 seconds. Caches are
-bounded and identical loads coalesce. No provider error is stored as an answer.
+bounded and identical loads coalesce; joined season-cache callers wait at most
+five seconds. Completed seasons use the long TTL only after the following
+November, including the late 2020 playoffs. No provider error is stored as an answer.
 
 Missing historical statistics show "Unavailable" and a coverage note, rather
-than zero. A specifically requested missing statistic tries fallback; it cannot
+than zero. Known pre-tracking gaps do not fetch or spend fallback capacity. A
+shooting percentage requires positive, valid shot attempts. A specifically requested missing statistic tries fallback; it cannot
 be replaced by a different stat. Percentages retain their percentage units.
+League-wide standings sort by winning percentage across conferences, with
+alphabetical ordering for ties; conference tables retain source ranks.
 Each answer carries source metadata, a restricted source link and a fetch time.
 The Hardwood UI shows these answers immediately under ADR 0006. Suggestions,
 clarification choices and unrequested links keep their existing spoiler rules.
@@ -66,3 +76,18 @@ cases for the expanded scope, and meet ADR 0009's tier/system gates. Include
 Laya shadow numbers when its development endpoint is available; Laya remains
 excluded from production. Host-level NBA/BRef access and physical keyboard and
 screen-reader checks also remain required. No production flags are changed here.
+
+## Remaining deployment work from review
+
+The interpreter reserves at most five seconds for retrieval, while an NBA retry
+plus fallback can take about 13.75 seconds. The HTTP boundary still caps the
+response deadline and keeps occupied-worker accounting. Before enabling Ask,
+measure slow-host behavior and tune a shared retrieval deadline across calls.
+
+A well-formed NBA season miss still tries BRef, as ADR 0010 requires fallback
+when the primary lacks coverage. A miss is not proof that a historical record
+does not exist. Structural gaps are skipped. If fallback is busy, Ask reports
+unavailable rather than inventing a no-record result. The same global limit
+can temporarily leave historical boxscore quarter scores unavailable. Existing
+responses expose `periodScoreSource: unavailable`; explicit retry/presentation
+for that state needs a separate boxscore follow-up before deployment.

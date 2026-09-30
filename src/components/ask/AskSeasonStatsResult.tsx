@@ -1,5 +1,5 @@
 import type {AskPlayerSeasonStatsResult} from "@/services/ask/types";
-import {STAT_LABELS, formatAskDate} from "./askFormat";
+import {STAT_LABELS, formatAskTimestamp} from "./askFormat";
 import {askCap, askCard} from "./askStyles";
 
 interface AskSeasonStatsResultProps {
@@ -30,7 +30,7 @@ function AskSeasonStatsResult({result}: AskSeasonStatsResultProps) {
       </div>
       <div className="border-t border-hw-line bg-hw-surface-muted px-[18px] py-3 text-xs font-bold text-hw-muted">
         {result.values.every(value => value.stat.endsWith("percentage")) ? "Season shooting percentage" : result.aggregation === "per_game" ? "Per game" : "Season totals"} · {result.games_played} games played
-        <span className="mt-1 block">Data as of {formatAskDate(result.as_of.slice(0, 10))}</span>
+        <span className="mt-1 block">Data as of {formatAskTimestamp(result.as_of)}</span>
       </div>
     </section>
   );

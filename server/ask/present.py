@@ -24,7 +24,7 @@ _TYPE = {
 _FIELD_LABEL = {
     "intent": "kind of question", "stat_scope": "stat scope", "stat": "statistic", "player": "player",
     "teams": "team", "date": "date", "season": "season", "round": "round", "game_number": "game number",
-    "location": "location",
+    "location": "location", "aggregation": "measure (season totals or per game)", "season_type": "season type (regular season or playoffs)",
 }
 
 
@@ -38,7 +38,9 @@ def interpretation(output: InterpreterOutput | None, candidates: CandidateLookup
     if output is not None and candidates is not None:
         for field in output.fields:
             if field.field not in ("player", "teams", "date", "season", "round", "game_number", "location"):
-                if field.field in {"stat", "aggregation", "season_type", "standings_scope"} and field.status == "selected" and request is not None and field.field in tools.REGISTRY[request.intent].fields:
+                if field.field == "standings_scope" and field.status == "selected" and field.selected == ["league"]:
+                    continue
+                if field.status == "selected" and (field.field == "stat" or (field.field in {"aggregation", "season_type", "standings_scope"} and request is not None and request.intent in {"player_season_stats", "team_records"} and field.field in tools.REGISTRY[request.intent].fields)):
                     items.append(InterpretationItem(field=field.field, value=field.selected[0].replace("_", " ").title(), origin="question"))
                 continue
             ids = field.selected if field.status == "selected" else field.alternatives if field.status == "ambiguous" else []
@@ -152,7 +154,21 @@ def clarification(field: str, reason: str, question: str, pending: PendingResolu
     label = _FIELD_LABEL.get(field, field)
     options: list[ClarificationOption] = []
     overlong_rewrite = False
-    if field == "date" and reason == "year_required":
+    if field in {"aggregation", "season_type"}:
+        choices = ([("total", "Season totals"), ("per_game", "Per game")] if field == "aggregation"
+                   else [("regular_season", "Regular season"), ("playoffs", "Playoffs")])
+        pattern = (r"\b(?:season\s+totals?|totals?|per\s+game|averages?)\b" if field == "aggregation"
+                   else r"\b(?:regular[ -]season|playoffs?|postseason)\b")
+        base = re.sub(pattern, "", question, flags=re.IGNORECASE).rstrip(" ?")
+        for value, choice_label in choices:
+            chosen = choose(pending, field, closed_value=value)
+            rewritten = f"{base} {choice_label.lower()}?"
+            if len(rewritten) > MAX_QUESTION_LENGTH:
+                overlong_rewrite = True
+                continue
+            options.append(ClarificationOption(id=f"{field}:{value}", label=choice_label, question=rewritten,
+                                               resolution=store.issue(rewritten, chosen)))
+    elif field == "date" and reason == "year_required":
         today = pending.context.reference_time.year
         for year in (today, today - 1, today + 1):
             try:

@@ -498,3 +498,19 @@ def test_diagnostics_carry_no_candidate_values():
     jev = Fake("jev", sel("intent", "game_search"), sel("date", "date:0"), sel("teams", CLE.id))
     dumped = json.dumps([d.model_dump(mode="json") for d in cascade(jev).interpret(REQUEST).metadata.field_decisions])
     assert CLE.id not in dumped and "date:0" not in dumped
+
+
+@pytest.mark.parametrize('earlier,later,veto', [('regular_season',None,False),('playoffs',None,True),('regular_season','playoffs',True)])
+def test_season_type_defaults_do_not_create_false_vetoes(earlier,later,veto):
+    from server.ask.candidates.lookup import CandidateLookupService
+    q='Nikola Jokic points in 2023-24'
+    c=CandidateLookupService().lookup(q,CONTEXT)
+    shared=[sel('intent','player_season_stats'),sel('player','player:203999'),sel('season','season:2023-24'),sel('stat','points'),sel('aggregation','total'),absent('teams')]
+    # Force escalation with a low-confidence phase. The earlier read can veto Luna.
+    jev=Fake('jev',*shared,sel('season_type',earlier,confidence=.6))
+    luna=Fake('luna',*(f.model_copy(update={'confidence':None}) for f in shared),sel('season_type',later,confidence=None) if later else absent('season_type',confidence=None))
+    out=cascade(jev,luna).interpret(REQUEST.model_copy(update={'question':q,'candidates':c}))
+    assert (out.metadata.field_tiers['season_type']=='veto')==veto
+    if not veto:
+        n=Normalizer().normalize(out,c,CONTEXT)
+        assert n.status=='valid' and n.request.season_type=='regular_season'

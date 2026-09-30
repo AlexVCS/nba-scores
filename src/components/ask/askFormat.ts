@@ -93,6 +93,14 @@ export function formatAskDate(date: string, options: Intl.DateTimeFormatOptions 
   return Number.isNaN(parsed.getTime()) ? date : parsed.toLocaleDateString("en-US", options);
 }
 
+/** Fetch timestamps use the same Eastern calendar as Ask's interpretation. */
+export function formatAskTimestamp(timestamp: string): string {
+  const parsed = new Date(timestamp);
+  return Number.isNaN(parsed.getTime()) ? timestamp : parsed.toLocaleDateString("en-US", {
+    timeZone: "America/New_York", weekday: "short", month: "short", day: "numeric", year: "numeric",
+  });
+}
+
 export function formatAskRange(start: string, end: string): string {
   return start === end ? formatAskDate(start) : `${formatAskDate(start)} – ${formatAskDate(end)}`;
 }

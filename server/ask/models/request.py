@@ -161,6 +161,12 @@ class TeamRecordsRequest(ContractModel):
     team: TeamRef | None = None
     standings_scope: StandingsScope = "league"
 
+    @model_validator(mode="after")
+    def _one_scope(self):
+        if self.team and self.standings_scope != "league":
+            raise ValueError("Choose a team record or conference standings, not both")
+        return self
+
 
 AskRequest = Annotated[
     Union[GameSearchRequest, BoxscoreStatRequest, PlayoffSeriesRequest, PostseasonSummaryRequest, PlayerSeasonStatsRequest, TeamRecordsRequest],
