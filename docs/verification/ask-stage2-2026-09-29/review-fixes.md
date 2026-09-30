@@ -76,3 +76,19 @@ The recheck is saved unaltered in `opus-recheck.md`. It noticed the later
 
 Historical field availability follows the [NBA Stats FAQ](https://www.nba.com/stats/help/faq).
 The final source review is requested against the final frozen implementation.
+
+## Final assessment and final narrow correction
+
+`opus-final-review.md` records the final source review of `fd216d3e`. Opus found
+no implementation blockers and confirmed N1–N7 corrections. It recommended an
+additional combined-phase guard for "season and playoffs" / "regular and
+postseason" without the full phrase "regular season". Its exact proposed pattern
+was added afterward, with both phase selections and and/&/+ wording covered by
+regressions. Its copy nit for spg/bpg/mpg was also fixed with stat-preserving
+measure rewrites and three new tests. Remaining awkward grammar in some freeform
+rewrites is a copy nit; the server-issued token retains the exact requested stat
+and measure. The reviewer did not make changes or run checks; implementation
+and verification were performed by Codex.
+
+The original release/deployment follow-ups remain open. The review does not
+claim independently measured interpretation gates or production readiness.

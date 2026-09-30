@@ -11,13 +11,14 @@ registry, in the order specified by ADR 0010.
   Eastern/Western conference standings for one season.
 
 A missing season is clarified. Ambiguous totals/per-game or season type has
-server-validated choices; explicit playoff wording cannot silently become a
+server-validated choices; uncertain standings scope offers league/east/west; explicit playoff wording cannot silently become a
 regular-season answer. A bare calendar year outside playoff language
 retains both overlapping seasons. The tools do not answer division standings,
 home/away, opponent, month/date splits, advanced metrics, per-36/per-100 rates,
 career totals, season leaders or records across seasons. Finals, rounds, individual
 games, quarter/half/clutch/overtime splits, conditional player-dependent records,
-multiple-player comparisons and conference-only win-loss records are rejected. The scope guard runs
+multiple-player comparisons, combined regular-season/playoff totals and
+conference-only win-loss records are rejected. The scope guard runs
 in both HTTP and interpretation evaluation, including clarification continuations.
 
 ## Data and answers
@@ -42,8 +43,8 @@ when throttled. Existing boxscore fallback uses the same transport. This limit
 is process-wide, not shared across replicas. Multiple fallback workers need a
 shared external limit before deployment. Successful completed-season tool data
 is cached for a day; changing seasons and raw HTML use 30 seconds. Caches are
-bounded and identical loads coalesce; joined season-cache callers wait at most
-five seconds. Completed seasons use the long TTL only after the following
+bounded and identical loads coalesce; joined callers at both season-cache
+and outer answer-cache layers wait at most five seconds. Completed seasons use the long TTL only after the following
 November, including the late 2020 playoffs. No provider error is stored as an answer.
 
 Missing historical statistics show "Unavailable" and a coverage note, rather

@@ -1,0 +1,190 @@
+{
+  "purpose": "Offline replay of the second exposed development run; no provider calls; not unseen release evidence",
+  "implementation_commit": "fd216d3e776fddb5d60c822749a90af4900a6120",
+  "recorded_outputs_commit": "c875ee06192579c64b3b753a7a05b2d31c83a699",
+  "input_sha256": "6da54db265ae377802efaea9f67dec066ba28479833bc67a6ee982d2a983555c",
+  "summary": {
+    "cases": 21,
+    "complete_request_accuracy": 0.9524,
+    "correct": 20,
+    "schema_valid_guesses": 0,
+    "service_failures": 0,
+    "clarification": {
+      "expected": 4,
+      "correct": 4,
+      "issued": 4,
+      "unneeded": 0
+    },
+    "unsupported": {
+      "expected": 6,
+      "correct": 5,
+      "issued": 6,
+      "false": 0
+    },
+    "latency_ms": {
+      "median": 0,
+      "p95": 0
+    },
+    "total_cost_usd": 0.00554,
+    "cost_per_successful_answer_usd": 0.000277,
+    "fallback_rate": 0.0,
+    "resolved_models": [
+      "jev-1.13.0",
+      "jev-1.13.0+gpt-6-luna"
+    ],
+    "failures": {
+      "wrong_unsupported_reason": 1
+    }
+  },
+  "provider_calls_this_replay": 0,
+  "latency_valid": false,
+  "cases": [
+    {
+      "id": "stage2-player_season_stats-01",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "accept"
+    },
+    {
+      "id": "stage2-player_season_stats-02",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "accept"
+    },
+    {
+      "id": "stage2-player_season_stats-03",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "accept"
+    },
+    {
+      "id": "stage2-player_season_stats-04",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "accept"
+    },
+    {
+      "id": "stage2-player_season_stats-05",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "accept"
+    },
+    {
+      "id": "stage2-player_season_stats-06",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "accept"
+    },
+    {
+      "id": "stage2-team_records-07",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "accept"
+    },
+    {
+      "id": "stage2-team_records-08",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "accept"
+    },
+    {
+      "id": "stage2-team_records-09",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "accept"
+    },
+    {
+      "id": "stage2-team_records-10",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "accept"
+    },
+    {
+      "id": "stage2-team_records-11",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "accept"
+    },
+    {
+      "id": "stage2-player_season_stats-12",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "clarify"
+    },
+    {
+      "id": "stage2-team_records-13",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "clarify"
+    },
+    {
+      "id": "stage2-team_records-14",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "clarify"
+    },
+    {
+      "id": "stage2-player_season_stats-15",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "clarify"
+    },
+    {
+      "id": "stage2-player_season_stats-16",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "unsupported"
+    },
+    {
+      "id": "stage2-team_records-17",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "unsupported"
+    },
+    {
+      "id": "stage2-team_records-18",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "unsupported"
+    },
+    {
+      "id": "stage2-team_records-19",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "unsupported"
+    },
+    {
+      "id": "stage2-player_season_stats-20",
+      "correct": false,
+      "guess": false,
+      "failure": "wrong_unsupported_reason",
+      "action": "unsupported"
+    },
+    {
+      "id": "stage2-team_records-21",
+      "correct": true,
+      "guess": false,
+      "failure": null,
+      "action": "unsupported"
+    }
+  ]
+}

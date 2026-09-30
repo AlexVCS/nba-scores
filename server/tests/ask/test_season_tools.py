@@ -517,7 +517,8 @@ def test_confident_bare_year_guess_requires_season_choice(tmp_path):
         assert n.status=='valid' and f'season:{n.request.season}'==option.id
 
 
-@pytest.mark.parametrize('wording', ['including playoffs','regular season and playoffs','regular-season plus playoffs','playoffs included','combined postseason'])
+@pytest.mark.parametrize('wording', ['including playoffs','regular season and playoffs','regular-season plus playoffs','playoffs included','combined postseason',
+                                    'season and playoffs','regular and postseason','season & playoffs','regular + the postseason'])
 @pytest.mark.parametrize('phase', ['regular_season','playoffs'])
 def test_combined_regular_and_postseason_stats_are_unsupported(wording,phase):
     from server.ask.season_scope import normalize_question
@@ -587,3 +588,13 @@ def test_answer_layer_waiter_is_bounded_and_returns_service_notice(tmp_path,monk
     readout=interpretation(None,None,CONTEXT,request())
     response=coordinator._execute('Jokic rebounds 2023-24',request(),readout,InterpreterInfo(model_called=False))
     assert response.outcome=='unavailable' and response.notice.code=='service_unavailable'
+
+
+@pytest.mark.parametrize('abbreviation,stat', [('spg','steals'),('bpg','blocks'),('mpg','minutes')])
+def test_more_per_game_abbreviations_survive_total_choice(tmp_path,abbreviation,stat):
+    from server.ask.present import clarification
+    from server.ask.resolution import PendingResolution, ResolutionStore
+    q=f'Jokic {abbreviation} in 2023-24';c=CandidateLookupService().lookup(q,CONTEXT)
+    o=interpreted('player_season_stats',{'player':'player:203999','season':'season:2023-24','stat':stat})
+    options=clarification('aggregation','ambiguous',q,PendingResolution(o,c,CONTEXT),ResolutionStore(tmp_path/'copy.sqlite3')).options
+    assert stat in options[0].question and abbreviation not in options[0].question and 'per game' not in options[0].question

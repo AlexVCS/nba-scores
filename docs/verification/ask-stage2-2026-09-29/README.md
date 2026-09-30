@@ -67,3 +67,23 @@ The Opus finding disposition is in `review-fixes.md`. Deployment follow-ups
 cooldown/retry) remain open. Production flags are unchanged; independent unseen
 six-family gates, Laya dev shadow (no endpoint configured), host and physical
 keyboard/screen-reader checks still remain.
+
+## Final verified state
+
+After Opus's final recommended wording guard and extra abbreviation rewrites:
+**1,348 backend tests pass**. The frontend is unchanged from the last passing
+**478 tests**, lint and build. The final Opus review is saved in
+`opus-final-review.md`; it found no implementation blockers, and its remaining
+combined-phase wording recommendation was then implemented and tested. The
+review's deployment follow-ups remain open. `development-replay-reviewed-final.json`
+replays against the final reviewed implementation without provider calls and
+retains **20/21**, zero guesses, and the safe unsupported-reason mismatch.
+
+The temporary screenshot server originally blocked fonts from the symlinked
+worktree dependency directory. Final environment-only recaptures use the existing
+`vite.preview.config.mjs` allowed-directory config. `verified-*.png` and
+`ui-check-fonts-verified.json` have no HTTP/page errors, no page overflow and one
+source link per result on desktop light and mobile dark. Hardwood's Poppins
+font is loaded; Archivo is not used by that surface. These recaptures changed no
+product styles. The temporary port5292 server was stopped; the user's existing
+port5289 preview/backend8019 were left running.

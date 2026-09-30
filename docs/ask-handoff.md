@@ -8,6 +8,14 @@ Player season stats and team records/standings are now implemented locally on
 This supersedes the "next step is stage 1" note below. Production is still off;
 the old frozen four-family gate is not release evidence for the new code.
 
+A separate Opus 5.5 thread reviewed the implementation and two correction
+checkpoints. Findings and raw review text are saved with the verification
+artifacts. The final review found no implementation blockers; its remaining
+combined-phase wording recommendation was then added and regression-tested.
+Code is committed locally, with no push. Predeployment retrieval budgeting
+(**nba-scores-8ic**) and historical boxscore fallback retry/presentation
+(**nba-scores-cnm**) remain open alongside the expanded-scope release gates.
+
 
 ## 2026-09-29 design interview (read first)
 

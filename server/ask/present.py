@@ -176,7 +176,8 @@ def clarification(field: str, reason: str, question: str, pending: PendingResolu
                    "standings_scope": r"\b(?:eastern|western|east|west|league|conference)\b"}[field]
         editable = question
         if field == "aggregation":
-            for abbreviation, stat in (("ppg", "points per game"), ("rpg", "rebounds per game"), ("apg", "assists per game")):
+            for abbreviation, stat in (("ppg", "points per game"), ("rpg", "rebounds per game"), ("apg", "assists per game"),
+                                       ("spg", "steals per game"), ("bpg", "blocks per game"), ("mpg", "minutes per game")):
                 editable = re.sub(r"\b" + abbreviation + r"\b", stat, editable, flags=re.IGNORECASE)
         base = re.sub(pattern, "", editable, flags=re.IGNORECASE).rstrip(" ?")
         for value, choice_label in choices:
