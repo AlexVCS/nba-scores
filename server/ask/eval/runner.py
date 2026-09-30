@@ -12,8 +12,6 @@ unsupported outcome, is a schema-valid guess and counts as a failure.
 
 from __future__ import annotations
 
-from server.ask.season_scope import normalize_question
-
 import datetime as dt
 import math
 import statistics
@@ -27,6 +25,7 @@ from server.ask.models.common import ClarifyField, ClarifyReason
 from server.ask.models.interpreter import InterpreterInput, InterpreterOutput, UnsupportedReason
 from server.ask.models.request import ASK_REQUEST_ADAPTER, AskContext
 from server.ask.normalize import Normalizer, canonical_request
+from server.ask.season_scope import normalize_question
 from server.ask.protocols import (
     ClarifyDecision,
     CascadeAttempt,

@@ -40,3 +40,39 @@ The initial independent review used a new Claude session
 No release gate is claimed. The development fixture is exposed. The raw first
 run's 16/21 strict score, four unnecessary default-veto clarifications, and one
 unsupported-reason mismatch remain saved rather than being relabeled.
+
+A subsequent live dev run exposed a model-confident bare-year guess. A deterministic
+season guard now asks for the season whenever the named year still has both
+start/end-season candidates; offered rewrites use exact season labels and round-trip
+through the guard without looping. A regression covers the actual Celtics/2008
+trigger. Offline replay of that saved run gives 20/21 with zero guesses; the safe
+unsupported-reason mismatch remains recorded.
+
+Full tests also caught a regression in old boxscore normalization. Unresolved
+boxscore aggregation retains its prior invalid/retry behavior, while the new
+player-season family receives the requested measure clarification.
+
+## Recheck corrections
+
+The recheck is saved unaltered in `opus-recheck.md`. It noticed the later
+`bbc2500e` checkout and identified its reviewed commit range explicitly.
+
+- N1: absent `aggregation` now equals `total` in both veto and scoring. Cascade
+  measure clarification is scoped to player season stats; boxscores retain fail
+  behavior. Tests cover both false vetoes and the actual low-confidence policy path.
+- N2: uncertain standings scope has league/east/west token choices; a named
+  team's choices are restricted to the supported league scope.
+- N3: combined regular-season/postseason requests are rejected, including
+  "including playoffs", with either interpreted phase.
+- N4: Charlotte's CHO mapping applies from 2014-15; a real Al Jefferson
+  2013-14 Bobcats fixture verifies the older CHA link.
+- N5: ppg/rpg/apg expand to their statistic before measure rewrites; averaged
+  language is removed. Team records only offer the supported regular season.
+- N6: the outer answer-cache layer now also has a five-second joined wait bound
+  for the two season tools, with a service-unavailable response and regression.
+- N7: the "all-around" false positive was not reproducible: around does not
+  match the word-boundary round alternative. A valid-answer guard regression is
+  included. Pre-1950-51 rebounds are marked missing and skip specific-stat fetches.
+
+Historical field availability follows the [NBA Stats FAQ](https://www.nba.com/stats/help/faq).
+The final source review is requested against the final frozen implementation.

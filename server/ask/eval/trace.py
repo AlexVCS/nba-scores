@@ -291,7 +291,7 @@ def field_reads(cases: list[LabeledCase], trace: dict[str, Any], tier: str) -> l
                 got = _values(read.field, read.selected, cands)
                 reads.append(FieldRead(case.id, read.field, read.confidence, got == expected[read.field]))
             elif read.status == "absent" and read.field in expected:
-                defaults = {"season_type": {"regular_season"}, "standings_scope": {"league"}}
+                defaults = {"aggregation": {"total"}, "season_type": {"regular_season"}, "standings_scope": {"league"}}
                 got = defaults.get(read.field, set())
                 reads.append(FieldRead(case.id, read.field, read.confidence, got == expected[read.field]))
     return reads

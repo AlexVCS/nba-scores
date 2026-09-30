@@ -99,7 +99,7 @@ def choose(pending: PendingResolution, field: str, candidate_id: str | None = No
     """Apply only a server-offered choice to a validated pending interpretation."""
     output, candidates = pending.output, pending.candidates
     if closed_value is not None:
-        choices = {"aggregation": {"total", "per_game"}, "season_type": {"regular_season", "playoffs"}}
+        choices = {"aggregation": {"total", "per_game"}, "season_type": {"regular_season", "playoffs"}, "standings_scope": {"league", "east", "west"}}
         if closed_value not in choices.get(field, set()):
             raise ValueError("Invalid closed clarification choice")
         replacement = FieldInterpretation(field=field, status="selected", selected=[closed_value], confidence=1)

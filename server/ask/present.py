@@ -25,7 +25,7 @@ _TYPE = {
 _FIELD_LABEL = {
     "intent": "kind of question", "stat_scope": "stat scope", "stat": "statistic", "player": "player",
     "teams": "team", "date": "date", "season": "season", "round": "round", "game_number": "game number",
-    "location": "location", "aggregation": "measure (season totals or per game)", "season_type": "season type (regular season or playoffs)",
+    "location": "location", "aggregation": "measure (season totals or per game)", "season_type": "season type (regular season or playoffs)", "standings_scope": "standings scope",
 }
 
 
@@ -159,12 +159,26 @@ def clarification(field: str, reason: str, question: str, pending: PendingResolu
     label = _FIELD_LABEL.get(field, field)
     options: list[ClarificationOption] = []
     overlong_rewrite = False
-    if field in {"aggregation", "season_type"}:
-        choices = ([("total", "Season totals"), ("per_game", "Per game")] if field == "aggregation"
-                   else [("regular_season", "Regular season"), ("playoffs", "Playoffs")])
-        pattern = (r"\b(?:season\s+totals?|totals?|per\s+game|averages?)\b" if field == "aggregation"
-                   else r"\b(?:regular[ -]season|playoffs?|postseason)\b")
-        base = re.sub(pattern, "", question, flags=re.IGNORECASE).rstrip(" ?")
+    if field in {"aggregation", "season_type", "standings_scope"}:
+        intent = pending.output.get_field("intent")
+        team_read = pending.output.get_field("teams")
+        named_team = bool(team_read and team_read.status == "selected")
+        choices = {"aggregation": [("total", "Season totals"), ("per_game", "Per game")],
+                   "season_type": [("regular_season", "Regular season"), ("playoffs", "Playoffs")],
+                   "standings_scope": [("league", "NBA league"), ("east", "Eastern conference"), ("west", "Western conference")]}[field]
+        if intent and intent.selected == ["team_records"]:
+            if field == "season_type" or (field == "standings_scope" and named_team):
+                choices = choices[:1]
+        if field == "aggregation" and (intent is None or intent.selected != ["player_season_stats"]):
+            choices = []
+        pattern = {"aggregation": r"\b(?:season\s+totals?|totals?|per\s+game|averag(?:e[ds]?|es))\b",
+                   "season_type": r"\b(?:regular[ -]season|playoffs?|postseason)\b",
+                   "standings_scope": r"\b(?:eastern|western|east|west|league|conference)\b"}[field]
+        editable = question
+        if field == "aggregation":
+            for abbreviation, stat in (("ppg", "points per game"), ("rpg", "rebounds per game"), ("apg", "assists per game")):
+                editable = re.sub(r"\b" + abbreviation + r"\b", stat, editable, flags=re.IGNORECASE)
+        base = re.sub(pattern, "", editable, flags=re.IGNORECASE).rstrip(" ?")
         for value, choice_label in choices:
             chosen = choose(pending, field, closed_value=value)
             rewritten = f"{base} {choice_label.lower()}?"

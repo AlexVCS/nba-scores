@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from server.ask.season_scope import normalize_question
-
 import datetime as dt
 import hashlib
 import json
@@ -30,6 +28,8 @@ from server.ask.normalize import Normalizer
 from server.ask.present import clarification, interpretation, notice, suggestions
 from server.ask.protocols import CascadeAttempt, CascadeState
 from server.ask.resolution import PendingResolution, ResolutionStore
+from server.ask.season_scope import normalize_question
+from server.utils.ttl_cache import LoadInProgressError
 from server.ask.resolvers import resolve
 from server.ask.resolvers.errors import AmbiguousError, ClarificationError, NotFoundError, UnavailableError, UnsupportedError
 
@@ -179,7 +179,8 @@ class AskPipeline:
             if self.cache is not None:
                 result = self.cache.get_or_load("answer", _key(
                     self.config.cache_version, "answer-1", self.lookup.alias_version,
-                    readout.reference_time.date().isoformat(), canonical_json(request)), load)
+                    readout.reference_time.date().isoformat(), canonical_json(request)), load,
+                    wait_timeout=5 if request.intent in {"player_season_stats", "team_records"} else None)
                 output, hit = result.value, result.hit
             else:
                 output, hit = load().value, False
@@ -198,7 +199,7 @@ class AskPipeline:
         except UnsupportedError as error:
             return self._response(question, "unsupported", info, interpretation=readout,
                                   notice=notice("unsupported", unsupported_reason=error.unsupported_reason))
-        except UnavailableError:
+        except (UnavailableError, LoadInProgressError):
             return self._response(question, "unavailable", info, interpretation=readout,
                                   notice=notice("service_unavailable"))
 

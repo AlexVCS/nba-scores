@@ -126,7 +126,7 @@ def _same(a: list[str], b: list[str]) -> bool:
 def _equivalent(name: str, earlier: FieldInterpretation, later: FieldInterpretation) -> bool:
     # Optional closed selectors have documented defaults. Explicit default and
     # absent mean the same executed request, but playoffs and absent still disagree.
-    defaults = {"season_type": "regular_season", "standings_scope": "league"}
+    defaults = {"aggregation": "total", "season_type": "regular_season", "standings_scope": "league"}
     def values(read):
         if read.status == "selected":
             return read.selected

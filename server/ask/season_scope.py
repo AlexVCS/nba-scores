@@ -66,6 +66,10 @@ def normalize_question(normalizer, output, candidates, context, question):
     if ambiguous_season_candidates(candidates, question):
         return NormalizationResult(status="needs_clarification", clarify_field="season", clarify_reason="ambiguous")
     playoff_wording = re.search(r"\b(?:playoffs?|postseason)\b", text)
+    if playoff_wording and (re.search(r"\bregular[ -]season\b", text)
+                            or re.search(r"\b(?:including|combined|plus|with)\s+(?:the\s+)?(?:playoffs?|postseason)\b", text)
+                            or re.search(r"\b(?:playoffs?|postseason)\s+(?:included|combined)\b", text)):
+        return NormalizationResult(status="unsupported", unsupported_reason="other")
     if playoff_wording and result.status == "valid":
         if intent.selected == ["team_records"]:
             return NormalizationResult(status="unsupported", unsupported_reason="other")

@@ -515,3 +515,75 @@ def test_confident_bare_year_guess_requires_season_choice(tmp_path):
         chosen=store.read(option.resolution,option.question,CONTEXT)
         n=normalize_question(Normalizer(),chosen.output,chosen.candidates,CONTEXT,option.question)
         assert n.status=='valid' and f'season:{n.request.season}'==option.id
+
+
+@pytest.mark.parametrize('wording', ['including playoffs','regular season and playoffs','regular-season plus playoffs','playoffs included','combined postseason'])
+@pytest.mark.parametrize('phase', ['regular_season','playoffs'])
+def test_combined_regular_and_postseason_stats_are_unsupported(wording,phase):
+    from server.ask.season_scope import normalize_question
+    q=f'Jokic total points in 2023-24 {wording}';c=CandidateLookupService().lookup(q,CONTEXT)
+    o=interpreted('player_season_stats',{'player':'player:203999','season':'season:2023-24','stat':'points','season_type':phase})
+    assert normalize_question(Normalizer(),o,c,CONTEXT,q).status=='unsupported'
+
+
+def test_standings_scope_choices_round_trip(tmp_path):
+    from server.ask.present import clarification
+    from server.ask.resolution import PendingResolution, ResolutionStore
+    from server.ask.season_scope import normalize_question
+    q='2023-24 NBA standings';c=CandidateLookupService().lookup(q,CONTEXT)
+    o=interpreted('team_records',{'season':'season:2023-24'})
+    o=o.model_copy(update={'fields':o.fields+[FieldInterpretation(field='standings_scope',status='ambiguous',alternatives=['league','east','west'],confidence=1)]})
+    n=normalize_question(Normalizer(),o,c,CONTEXT,q)
+    assert n.status=='needs_clarification' and n.clarify_field=='standings_scope'
+    store=ResolutionStore(tmp_path/'scope.sqlite3')
+    options=clarification('standings_scope','ambiguous',q,PendingResolution(o,c,CONTEXT),store).options
+    assert [v.label for v in options]==['NBA league','Eastern conference','Western conference']
+    for option,value in zip(options,['league','east','west']):
+        chosen=store.read(option.resolution,option.question,CONTEXT)
+        n=normalize_question(Normalizer(),chosen.output,chosen.candidates,CONTEXT,option.question)
+        assert n.status=='valid' and n.request.standings_scope==value
+
+
+def test_measure_choice_expands_abbreviations_and_does_not_offer_boxscore_rates(tmp_path):
+    from server.ask.present import clarification
+    from server.ask.resolution import PendingResolution, ResolutionStore
+    q='Jokic ppg in 2023-24';c=CandidateLookupService().lookup(q,CONTEXT)
+    o=interpreted('player_season_stats',{'player':'player:203999','season':'season:2023-24','stat':'points'})
+    store=ResolutionStore(tmp_path/'measure.sqlite3')
+    options=clarification('aggregation','ambiguous',q,PendingResolution(o,c,CONTEXT),store).options
+    assert 'points' in options[0].question and 'ppg' not in options[0].question and 'per game' not in options[0].question
+    old=interpreted('boxscore_stat',{'player':'player:203999','stat':'points'})
+    assert clarification('aggregation','ambiguous',q,PendingResolution(old,c,CONTEXT),store).options==[]
+
+
+def test_charlotte_bobcats_stint_keeps_legacy_bref_code(monkeypatch):
+    player={'player_id':2744,'name':'Al Jefferson'}
+    q=PlayerSeasonStatsRequest(player=player,season='2013-14',team=seasons._team(1610612766,'2013-14'),stat={'stat':'points','aggregation':'total'})
+    html='<h1>2013-14 NBA Player Stats: Totals</h1><table id="totals_stats"><tbody><tr><td data-stat="name_display"><a href="/players/j/jeffeal01.html">Al Jefferson</a></td><td data-stat="team_name_abbr"><a href="/teams/CHA/2014.html">CHA</a></td><td data-stat="games">73</td><td data-stat="pts">1594</td></tr></tbody></table>'
+    monkeypatch.setattr(seasons,'_html',lambda *a:html)
+    data=seasons._bref_player(q)
+    assert data.rows[0]['PTS']=='1594' and q.team.name=='Charlotte Bobcats'
+
+
+def test_all_around_wording_is_supported_and_untracked_rebounds_missing():
+    from server.ask.season_scope import normalize_question
+    q='Jokic all-around stats in 2023-24';c=CandidateLookupService().lookup(q,CONTEXT)
+    o=interpreted('player_season_stats',{'player':'player:203999','season':'season:2023-24','stat':'stat_line'})
+    assert normalize_question(Normalizer(),o,c,CONTEXT,q).status=='valid'
+    _,values=seasons._valid_player(source_data([row(REB=0)]),request('stat_line').model_copy(update={'season':'1949-50'}))
+    assert next(v for v in values if v.stat=='rebounds').value is None
+
+
+def test_answer_layer_waiter_is_bounded_and_returns_service_notice(tmp_path,monkeypatch):
+    from server.ask.models.response import InterpreterInfo
+    from server.utils.ttl_cache import LoadInProgressError
+    from server.tests.ask.test_pipeline import pipeline,output
+    from server.ask.eval import builders as b
+    coordinator,_,_=pipeline(tmp_path,b.lookup_result([]),output())
+    def joined(*args,**kwargs):
+        assert args[0]=='answer' and kwargs['wait_timeout']==5
+        raise LoadInProgressError('same-answer')
+    monkeypatch.setattr(coordinator.cache,'get_or_load',joined)
+    readout=interpretation(None,None,CONTEXT,request())
+    response=coordinator._execute('Jokic rebounds 2023-24',request(),readout,InterpreterInfo())
+    assert response.outcome=='unavailable' and response.notice.code=='service_unavailable'

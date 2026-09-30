@@ -61,9 +61,9 @@ StandingsScope = Literal["league", "east", "west"]
 # Fields that a clarification can ask about. Shared by normalization
 # (NormalizationResult.clarify_field), the cascade (ClarifyDecision.field), and
 # HTTP (Clarification.field). "teams" covers one team or a matchup.
-# "aggregation" is never clarified: per_game is unsupported (multi_game_average).
+# Measure choices apply to player season stats; single-game averages stay unsupported.
 ClarifyField = Literal[
-    "intent", "stat_scope", "stat", "player", "teams", "date", "season", "round", "game_number", "location", "aggregation", "season_type"
+    "intent", "stat_scope", "stat", "player", "teams", "date", "season", "round", "game_number", "location", "aggregation", "season_type", "standings_scope"
 ]
 ClarifyReason = Literal["ambiguous", "missing", "no_matching_candidate", "year_required", "range_too_long"]
 

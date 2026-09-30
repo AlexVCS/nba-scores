@@ -218,7 +218,7 @@ class Normalizer:
         if f.status == "absent":
             return []
         if name == "standings_scope":
-            raise _Clarify("intent", "ambiguous")
+            raise _Clarify("standings_scope", "ambiguous")
         if name == "season_type":
             raise _Clarify("season_type", "ambiguous")
         if name == "aggregation":

@@ -160,7 +160,7 @@ def _bref_player(request):
             # Team page ending year and historical tricode are independently verified.
             from server.services.game_summary import to_bref_team_code
             tricode = _team(request.team.team_id, request.season).tricode
-            code = {"PHX": "PHO", "BKN": "BRK", "CHA": "CHO"}.get(tricode, to_bref_team_code(tricode))
+            code = {"PHX": "PHO", "BKN": "BRK", **({"CHA": "CHO"} if year >= 2015 else {})}.get(tricode, to_bref_team_code(tricode))
             if anchor_team.get("href") != f"/teams/{code}/{year}.html":
                 continue
         found.append((team_code, {"GP": cells.get("games", cells.get("g")), **{key: next((cells[k] for k in names if k in cells), None)
@@ -209,7 +209,7 @@ def _valid_player(data, request):
         raise NotFoundError("no_record", "season_player_missing")
     row = dict(row)
     start = int(request.season[:4])
-    for cutoff, fields in ((1951, ("MIN",)), (1973, ("STL", "BLK", "OREB", "DREB")), (1977, ("TOV",)), (1979, ("FG3M", "FG3A", "FG3_PCT"))):
+    for cutoff, fields in ((1950, ("REB",)), (1951, ("MIN",)), (1973, ("STL", "BLK", "OREB", "DREB")), (1977, ("TOV",)), (1979, ("FG3M", "FG3A", "FG3_PCT"))):
         if start < cutoff:
             for field in fields:
                 row[field] = None
@@ -281,7 +281,8 @@ def player_season(request: PlayerSeasonStatsRequest):
         raise UnsupportedError("other", "unsupported_season_stat")
     # These facts were not recorded league-wide; another source cannot fill them.
     start = int(request.season[:4])
-    if ((start < 1951 and request.stat.stat == "minutes")
+    if ((start < 1950 and request.stat.stat == "rebounds")
+            or (start < 1951 and request.stat.stat == "minutes")
             or (start < 1977 and request.stat.stat == "turnovers")
             or (start < 1973 and request.stat.stat in {"steals", "blocks", "offensive_rebounds", "defensive_rebounds"})
             or (start < 1979 and request.stat.stat in {"three_pointers", "three_point_percentage"})):
