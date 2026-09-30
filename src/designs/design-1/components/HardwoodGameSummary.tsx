@@ -5,9 +5,11 @@ import {hwNarrowContainer} from "./hardwoodStyles";
 
 interface HardwoodGameSummaryProps {
   summary: GameSummaryData;
+  // Present while missing quarter scores may still arrive.
+  periodRetry?: {isRetrying: boolean; onRetry: () => void};
 }
 
-function HardwoodGameSummary({summary}: HardwoodGameSummaryProps) {
+function HardwoodGameSummary({summary, periodRetry}: HardwoodGameSummaryProps) {
   const periods = summary.homeTeam.periods.length === summary.awayTeam.periods.length
     ? summary.homeTeam.periods.map((period) => period.period)
     : [];
@@ -51,6 +53,24 @@ function HardwoodGameSummary({summary}: HardwoodGameSummaryProps) {
               ))}
             </tbody>
           </table>
+        </div>
+      )}
+      {periods.length === 0 && summary.periodScoreSource === "unavailable" && (
+        // Mobile never shows the quarter table, so it has nothing missing to explain.
+        <div className="mt-3.5 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 rounded-hw border border-dashed border-hw-line bg-hw-surface px-5 py-3 max-[700px]:hidden">
+          <p className="text-[13px] text-hw-muted" role="status">
+            {periodRetry ? "Quarter scores are temporarily unavailable." : "Quarter scores are not available for this game."}
+          </p>
+          {periodRetry && (
+            <button
+              type="button"
+              className="min-h-10 cursor-pointer rounded-hw border border-hw-line bg-hw-surface px-4 text-xs font-bold tracking-[.12em] text-hw-ink uppercase transition-colors duration-[160ms] hover:bg-hw-surface-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-hw-ink disabled:cursor-wait disabled:opacity-60 motion-reduce:transition-none"
+              disabled={periodRetry.isRetrying}
+              onClick={periodRetry.onRetry}
+            >
+              {periodRetry.isRetrying ? "Checking…" : "Try again"}
+            </button>
+          )}
         </div>
       )}
     </section>

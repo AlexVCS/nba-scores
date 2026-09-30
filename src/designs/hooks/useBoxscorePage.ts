@@ -68,6 +68,16 @@ const buildSummaryTeam = (team: DesignBoxscoreTeam): GameSummaryTeam => ({
   periods: [],
 });
 
+// The server's retry hint is followed a few times; after that the reader can retry.
+const MAX_AUTO_PERIOD_RETRIES = 3;
+
+// Milliseconds until missing quarter scores are worth refetching, or null when
+// the server says retrying cannot help.
+const periodRetryDelay = (summary: GameSummaryData | null | undefined): number | null =>
+  summary?.periodScoreSource === "unavailable" && typeof summary.periodScoreRetryAfter === "number"
+    ? Math.max(summary.periodScoreRetryAfter, 1) * 1000
+    : null;
+
 type ScoreboardTeam = GameData["homeTeam"] & {teamCity?: string};
 
 const scoreboardTeam = (team: ScoreboardTeam): GameDetails["homeTeam"] => ({
@@ -155,7 +165,12 @@ export function useBoxscorePage() {
     queryKey: ["gameSummary", gameId],
     queryFn: () => getGameSummary(gameId),
     enabled: loadResults || prefetchResults,
-    refetchInterval: liveRefreshInterval,
+    refetchInterval: (query) => {
+      const retryDelay = periodRetryDelay(query.state.data);
+      // The count includes the first response, so this allows the maximum number of refetches.
+      if (retryDelay === null || query.state.dataUpdateCount > MAX_AUTO_PERIOD_RETRIES) return liveRefreshInterval;
+      return liveRefreshInterval === false ? retryDelay : Math.min(retryDelay, liveRefreshInterval);
+    },
   });
   const inactiveQuery = useQuery({
     queryKey: ["inactivePlayers", gameId],
@@ -230,6 +245,10 @@ export function useBoxscorePage() {
     isUnavailable: Boolean(details && !isPregame && !isHidden && (!hasStarted || !game && summaryQuery.isSuccess && !summaryQuery.data && (!loadPlayers || boxscoreQuery.isSuccess))),
     isError: !details && detailsQuery.isError || loadResults && !(loadPlayers && boxscoreQuery.isLoading) && !summaryQuery.isLoading && !game && !summaryQuery.data && (summaryQuery.isError || loadPlayers && boxscoreQuery.isError),
     statsError: loadPlayers && boxscoreQuery.isError,
+    // Quarter scores the server could not reach yet, or a failed summary behind the fallback.
+    periodScoresRetryable: loadResults && (summaryQuery.isError || periodRetryDelay(summaryQuery.data) !== null),
+    periodScoresRetrying: summaryQuery.isFetching,
+    retryPeriodScores: () => void summaryQuery.refetch(),
     retry: () => {
       void detailsQuery.refetch();
       if (loadResults) void summaryQuery.refetch();

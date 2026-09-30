@@ -13,7 +13,8 @@ const state: ReturnType<typeof useBoxscorePage> = {
     venue: null, broadcast: null, boxscoreAvailable: true,
   },
   isPregame: false, isHidden: true, showAllResults: false, scoresVisible: false, reveal: vi.fn(),
-  game: undefined, statEvents: null, lastMatchups: [], lastMatchupsLoading: false, summary: null, isLoading: false, isUnavailable: false, isError: false, statsError: false, retry: vi.fn(),
+  game: undefined, statEvents: null, lastMatchups: [], lastMatchupsLoading: false, summary: null, isLoading: false, isUnavailable: false, isError: false, statsError: false,
+  periodScoresRetryable: false, periodScoresRetrying: false, retryPeriodScores: vi.fn(), retry: vi.fn(),
 };
 
 describe("game details panel", () => {

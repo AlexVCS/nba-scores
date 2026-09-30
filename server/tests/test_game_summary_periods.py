@@ -3,6 +3,7 @@ from unittest.mock import Mock
 
 import pandas as pd
 import pytest
+from fastapi import Response
 
 from server import main
 from server.services import game_summary
@@ -106,7 +107,7 @@ def test_game_summary_uses_v3_without_requesting_v2(monkeypatch):
     monkeypatch.setattr(game_summary.nba_stats_client, "fetch_boxscore_summary_v3", fetch_v3)
     monkeypatch.setattr(game_summary.nba_stats_client, "fetch_boxscore_summary", fetch_v2)
 
-    result = main.get_game_summary(game_id)
+    result = main.get_game_summary(game_id, Response())
 
     fetch_v3.assert_called_once_with(game_id)
     fetch_v2.assert_not_called()
@@ -124,7 +125,7 @@ def test_game_summary_falls_back_to_v2_when_v3_is_unavailable(monkeypatch):
     _patch_summary(monkeypatch, [_game_summary_row(GAME_STATUS_ID=1)], [])
     monkeypatch.setattr(game_summary.nba_stats_client, "fetch_boxscore_summary_v3", fetch_v3)
 
-    result = main.get_game_summary(game_id)
+    result = main.get_game_summary(game_id, Response())
 
     fetch_v3.assert_called_once_with(game_id)
     assert result["gameStatusText"] == "Scheduled"
@@ -161,7 +162,6 @@ def _assert_no_period_fallback(result):
 
 def test_bref_fetch_uses_short_timeout(monkeypatch):
     calls = []
-    monkeypatch.setattr(game_summary, "BREF_LINE_SCORE_CACHE", {})
 
     def fake_get(url, headers, timeout):
         calls.append({"url": url, "headers": headers, "timeout": timeout})
@@ -177,7 +177,6 @@ def test_bref_fetch_uses_short_timeout(monkeypatch):
 
 def test_bref_fetch_caches_successful_parse(monkeypatch):
     calls = []
-    monkeypatch.setattr(game_summary, "BREF_LINE_SCORE_CACHE", {})
 
     def fake_get(*args, **kwargs):
         calls.append((args, kwargs))
@@ -200,7 +199,6 @@ def test_bref_fetch_caches_successful_parse(monkeypatch):
 
 def test_bref_fetch_caches_missing_line_score(monkeypatch):
     calls = []
-    monkeypatch.setattr(game_summary, "BREF_LINE_SCORE_CACHE", {})
 
     def fake_get(*args, **kwargs):
         calls.append((args, kwargs))
@@ -214,11 +212,15 @@ def test_bref_fetch_caches_missing_line_score(monkeypatch):
     assert first is None
     assert second is None
     assert len(calls) == 1
+    # A page without a line score is rechecked far sooner than a parsed one expires.
+    assert game_summary.BREF_LINE_SCORE_CACHE.expires_in(("1946-11-01", "HUS")) <= (
+        game_summary.BREF_MISSING_LINE_SCORE_TTL_SECONDS
+    )
+    assert game_summary.BREF_MISSING_LINE_SCORE_TTL_SECONDS < game_summary.BREF_LINE_SCORE_TTL_SECONDS
 
 
 def test_bref_fetch_does_not_cache_transport_failure(monkeypatch):
     calls = []
-    monkeypatch.setattr(game_summary, "BREF_LINE_SCORE_CACHE", {})
 
     def fake_get(*args, **kwargs):
         calls.append((args, kwargs))
