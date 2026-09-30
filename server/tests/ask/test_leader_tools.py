@@ -404,3 +404,14 @@ def test_answer_fixture_round_trips_the_contract():
     path = Path(__file__).resolve().parents[3] / "src/services/ask/fixtures/responses/answer-season-leaders.json"
     response = AskResponse.model_validate_json(path.read_text())
     assert response.result.kind == "season_leaders" and response.interpretation.intent == "season_leaders"
+
+
+@pytest.mark.parametrize("question,stat", [
+    ("Best 3-point shooting percentage in 2022-23", "three_point_percentage"),
+    ("Who led the league in free throw shooting percentage in 2022-23?", "free_throw_percentage"),
+    ("Top 5 in three-point field goals made in 2022-23", "three_pointers"),
+    ("Who led the league in offensive rebounds per game in 2022-23?", "offensive_rebounds"),
+])
+def test_one_statistic_in_several_words_is_not_a_multi_stat_question(question, stat):
+    aggregation = "per_game" if "per game" in question else "total"
+    assert guard(question, stat=stat, aggregation=aggregation).status == "valid"

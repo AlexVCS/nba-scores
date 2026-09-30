@@ -106,9 +106,9 @@ _LEADER_SPLIT = re.compile(
 )
 # Stat families, most specific first; each match is blanked before the next family.
 _STAT_FAMILIES = (
-    r"\b(?:3|three)[ -]?(?:point(?:ers?)?|pt|pointers?)s?(?:\s+field[ -]goals?)?(?:\s+(?:percentage|pct))?|\bthrees\b|\b3s\b|\b3p%?|\bfg3m?\b",
-    r"\bfree[ -]throws?(?:\s+(?:percentage|pct))?|\bft%?",
-    r"\bfield[ -]goals?(?:\s+(?:percentage|pct))?|\bfg%?|\bshooting\s+percentage",
+    r"\b(?:3|three)[ -]?(?:point(?:ers?)?|pt|pointers?)s?(?:\s+field[ -]goals?)?(?:\s+shooting)?(?:\s+(?:percentage|pct))?|\bthrees\b|\b3s\b|\b3p%?|\bfg3m?\b",
+    r"\bfree[ -]throws?(?:\s+shooting)?(?:\s+(?:percentage|pct))?|\bft%?",
+    r"\bfield[ -]goals?(?:\s+shooting)?(?:\s+(?:percentage|pct))?|\bfg%?|\bshooting\s+percentage",
     r"\bpoints?\b|\bscor(?:ing|er|ers|ed)\b|\bppg\b|\bpts\b",
     r"\b(?:offensive\s+|defensive\s+)?rebound(?:s|ing|er|ers)?\b|\bboards\b|\brpg\b",
     r"\bassists?\b|\bapg\b|\bdimes\b",
