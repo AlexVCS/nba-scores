@@ -1,0 +1,306 @@
+{
+  "schema_version": "1",
+  "request_id": "answer-season-leaders",
+  "outcome": "answer",
+  "question": "Who led the NBA in points per game in 2023-24?",
+  "interpretation": {
+    "intent": "season_leaders",
+    "detected_type": "season_leaders",
+    "items": [
+      {
+        "field": "stat",
+        "value": "Points",
+        "detail": null,
+        "expression": null,
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      },
+      {
+        "field": "aggregation",
+        "value": "Per Game",
+        "detail": null,
+        "expression": null,
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      },
+      {
+        "field": "season",
+        "value": "2023-24",
+        "detail": null,
+        "expression": null,
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      }
+    ],
+    "reference_time": "2026-09-29T12:00:00-04:00",
+    "timezone": "America/New_York",
+    "dates": null,
+    "season": "2023-24"
+  },
+  "result": {
+    "kind": "season_leaders",
+    "season": "2023-24",
+    "season_type": "regular_season",
+    "stat": "points",
+    "aggregation": "per_game",
+    "limit": 10,
+    "limit_note": null,
+    "qualification": "source_qualified",
+    "qualification_note": "Qualified players only, using NBA.com's per-game minimum for this season.",
+    "rows": [
+      {
+        "rank": 1,
+        "player": {
+          "player_id": 1629029,
+          "name": "Luka Dončić"
+        },
+        "team": {
+          "team_id": 1610612742,
+          "tricode": "DAL",
+          "name": "Dallas Mavericks"
+        },
+        "multiple_teams": false,
+        "games_played": 70,
+        "value": {
+          "stat": "points",
+          "value": 33.9,
+          "display": "33.9",
+          "made": null,
+          "attempted": null
+        }
+      },
+      {
+        "rank": 2,
+        "player": {
+          "player_id": 203507,
+          "name": "Giannis Antetokounmpo"
+        },
+        "team": {
+          "team_id": 1610612749,
+          "tricode": "MIL",
+          "name": "Milwaukee Bucks"
+        },
+        "multiple_teams": false,
+        "games_played": 73,
+        "value": {
+          "stat": "points",
+          "value": 30.4,
+          "display": "30.4",
+          "made": null,
+          "attempted": null
+        }
+      },
+      {
+        "rank": 3,
+        "player": {
+          "player_id": 1628983,
+          "name": "Shai Gilgeous-Alexander"
+        },
+        "team": {
+          "team_id": 1610612760,
+          "tricode": "OKC",
+          "name": "Oklahoma City Thunder"
+        },
+        "multiple_teams": false,
+        "games_played": 75,
+        "value": {
+          "stat": "points",
+          "value": 30.1,
+          "display": "30.1",
+          "made": null,
+          "attempted": null
+        }
+      },
+      {
+        "rank": 4,
+        "player": {
+          "player_id": 1628973,
+          "name": "Jalen Brunson"
+        },
+        "team": {
+          "team_id": 1610612752,
+          "tricode": "NYK",
+          "name": "New York Knicks"
+        },
+        "multiple_teams": false,
+        "games_played": 77,
+        "value": {
+          "stat": "points",
+          "value": 28.7,
+          "display": "28.7",
+          "made": null,
+          "attempted": null
+        }
+      },
+      {
+        "rank": 5,
+        "player": {
+          "player_id": 201142,
+          "name": "Kevin Durant"
+        },
+        "team": {
+          "team_id": 1610612756,
+          "tricode": "PHX",
+          "name": "Phoenix Suns"
+        },
+        "multiple_teams": false,
+        "games_played": 75,
+        "value": {
+          "stat": "points",
+          "value": 27.1,
+          "display": "27.1",
+          "made": null,
+          "attempted": null
+        }
+      },
+      {
+        "rank": 6,
+        "player": {
+          "player_id": 1626164,
+          "name": "Devin Booker"
+        },
+        "team": {
+          "team_id": 1610612756,
+          "tricode": "PHX",
+          "name": "Phoenix Suns"
+        },
+        "multiple_teams": false,
+        "games_played": 68,
+        "value": {
+          "stat": "points",
+          "value": 27.1,
+          "display": "27.1",
+          "made": null,
+          "attempted": null
+        }
+      },
+      {
+        "rank": 7,
+        "player": {
+          "player_id": 1628369,
+          "name": "Jayson Tatum"
+        },
+        "team": {
+          "team_id": 1610612738,
+          "tricode": "BOS",
+          "name": "Boston Celtics"
+        },
+        "multiple_teams": false,
+        "games_played": 74,
+        "value": {
+          "stat": "points",
+          "value": 26.9,
+          "display": "26.9",
+          "made": null,
+          "attempted": null
+        }
+      },
+      {
+        "rank": 8,
+        "player": {
+          "player_id": 1628368,
+          "name": "De'Aaron Fox"
+        },
+        "team": {
+          "team_id": 1610612758,
+          "tricode": "SAC",
+          "name": "Sacramento Kings"
+        },
+        "multiple_teams": false,
+        "games_played": 74,
+        "value": {
+          "stat": "points",
+          "value": 26.6,
+          "display": "26.6",
+          "made": null,
+          "attempted": null
+        }
+      },
+      {
+        "rank": 9,
+        "player": {
+          "player_id": 201939,
+          "name": "Stephen Curry"
+        },
+        "team": {
+          "team_id": 1610612744,
+          "tricode": "GSW",
+          "name": "Golden State Warriors"
+        },
+        "multiple_teams": false,
+        "games_played": 74,
+        "value": {
+          "stat": "points",
+          "value": 26.4,
+          "display": "26.4",
+          "made": null,
+          "attempted": null
+        }
+      },
+      {
+        "rank": 10,
+        "player": {
+          "player_id": 203999,
+          "name": "Nikola Jokić"
+        },
+        "team": {
+          "team_id": 1610612743,
+          "tricode": "DEN",
+          "name": "Denver Nuggets"
+        },
+        "multiple_teams": false,
+        "games_played": 79,
+        "value": {
+          "stat": "points",
+          "value": 26.4,
+          "display": "26.4",
+          "made": null,
+          "attempted": null
+        }
+      }
+    ],
+    "omitted_tie": null,
+    "coverage_note": null,
+    "as_of": "2026-09-29T00:00:00Z"
+  },
+  "clarification": null,
+  "notice": null,
+  "links": [
+    {
+      "kind": "source",
+      "label": "Source: NBA.com",
+      "href": "https://www.nba.com/stats/leaders?Season=2023-24&SeasonType=Regular%20Season&PerMode=PerGame&StatCategory=PTS",
+      "external": true,
+      "spoiler": false
+    }
+  ],
+  "suggestions": [],
+  "sources": [
+    {
+      "name": "nba_stats",
+      "label": "NBA.com",
+      "fetched_at": "2026-09-29T00:00:00Z",
+      "complete": true
+    }
+  ],
+  "interpreter": {
+    "model_called": false,
+    "cache_hit": false,
+    "adapter": null,
+    "model": null,
+    "fallback_used": false,
+    "field_tiers": {}
+  }
+}

@@ -1,0 +1,204 @@
+{
+  "schema_version": "1",
+  "request_id": "answer-player-season-line",
+  "outcome": "answer",
+  "question": "Kevin Durant stats 2015-16",
+  "interpretation": {
+    "intent": "player_season_stats",
+    "detected_type": "season_stats",
+    "items": [],
+    "reference_time": "2026-09-29T12:00:00-04:00",
+    "timezone": "America/New_York",
+    "dates": null,
+    "season": "2015-16"
+  },
+  "result": {
+    "kind": "player_season_stats",
+    "player": {
+      "player_id": 201142,
+      "name": "Kevin Durant"
+    },
+    "season": "2015-16",
+    "season_type": "regular_season",
+    "aggregation": "per_game",
+    "team": null,
+    "games_played": 72,
+    "values": [
+      {
+        "stat": "points",
+        "value": 28.180555555555557,
+        "display": "28.2",
+        "made": null,
+        "attempted": null
+      },
+      {
+        "stat": "rebounds",
+        "value": 8.180555555555555,
+        "display": "8.2",
+        "made": null,
+        "attempted": null
+      },
+      {
+        "stat": "assists",
+        "value": 5.013888888888889,
+        "display": "5.0",
+        "made": null,
+        "attempted": null
+      },
+      {
+        "stat": "steals",
+        "value": 0.9583333333333334,
+        "display": "1.0",
+        "made": null,
+        "attempted": null
+      },
+      {
+        "stat": "blocks",
+        "value": 1.1805555555555556,
+        "display": "1.2",
+        "made": null,
+        "attempted": null
+      },
+      {
+        "stat": "turnovers",
+        "value": 3.4722222222222223,
+        "display": "3.5",
+        "made": null,
+        "attempted": null
+      },
+      {
+        "stat": "minutes",
+        "value": 35.80555555555556,
+        "display": "35.8",
+        "made": null,
+        "attempted": null
+      },
+      {
+        "stat": "field_goals",
+        "value": 9.694444444444445,
+        "display": "9.7/19.2",
+        "made": 698,
+        "attempted": 1381
+      },
+      {
+        "stat": "three_pointers",
+        "value": 2.5833333333333335,
+        "display": "2.6/6.7",
+        "made": 186,
+        "attempted": 481
+      },
+      {
+        "stat": "free_throws",
+        "value": 6.208333333333333,
+        "display": "6.2/6.9",
+        "made": 447,
+        "attempted": 498
+      }
+    ],
+    "alternate": {
+      "aggregation": "total",
+      "values": [
+        {
+          "stat": "points",
+          "value": 2029.0,
+          "display": "2029",
+          "made": null,
+          "attempted": null
+        },
+        {
+          "stat": "rebounds",
+          "value": 589.0,
+          "display": "589",
+          "made": null,
+          "attempted": null
+        },
+        {
+          "stat": "assists",
+          "value": 361.0,
+          "display": "361",
+          "made": null,
+          "attempted": null
+        },
+        {
+          "stat": "steals",
+          "value": 69.0,
+          "display": "69",
+          "made": null,
+          "attempted": null
+        },
+        {
+          "stat": "blocks",
+          "value": 85.0,
+          "display": "85",
+          "made": null,
+          "attempted": null
+        },
+        {
+          "stat": "turnovers",
+          "value": 250.0,
+          "display": "250",
+          "made": null,
+          "attempted": null
+        },
+        {
+          "stat": "minutes",
+          "value": 2578.0,
+          "display": "2578",
+          "made": null,
+          "attempted": null
+        },
+        {
+          "stat": "field_goals",
+          "value": 698.0,
+          "display": "698/1381",
+          "made": 698,
+          "attempted": 1381
+        },
+        {
+          "stat": "three_pointers",
+          "value": 186.0,
+          "display": "186/481",
+          "made": 186,
+          "attempted": 481
+        },
+        {
+          "stat": "free_throws",
+          "value": 447.0,
+          "display": "447/498",
+          "made": 447,
+          "attempted": 498
+        }
+      ]
+    },
+    "coverage_note": null,
+    "as_of": "2026-09-29T00:00:00Z"
+  },
+  "clarification": null,
+  "notice": null,
+  "links": [
+    {
+      "kind": "source",
+      "label": "Source: NBA.com",
+      "href": "https://www.nba.com/stats/player/201142/traditional?Season=2015-16&SeasonType=Regular%20Season",
+      "external": true,
+      "spoiler": false
+    }
+  ],
+  "suggestions": [],
+  "sources": [
+    {
+      "name": "nba_stats",
+      "label": "NBA.com",
+      "fetched_at": "2026-09-29T00:00:00Z",
+      "complete": true
+    }
+  ],
+  "interpreter": {
+    "model_called": false,
+    "cache_hit": false,
+    "adapter": null,
+    "model": null,
+    "fallback_used": false,
+    "field_tiers": {}
+  }
+}

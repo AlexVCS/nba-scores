@@ -3,7 +3,7 @@ import time
 from datetime import date as calendar_date, datetime, timezone
 
 import requests
-from fastapi import Depends, FastAPI, Header, HTTPException, Query
+from fastapi import Depends, FastAPI, Header, HTTPException, Query, Response
 from fastapi.middleware.cors import CORSMiddleware
 from server.ask.router import router as ask_router
 from requests.exceptions import RequestException
@@ -167,9 +167,9 @@ def get_game_inactive_players(game_id: str):
 
 
 @app.get("/gamesummary/{game_id}")
-def get_game_summary(game_id: str):
+def get_game_summary(game_id: str, response: Response):
     try:
-        return fetch_game_summary(game_id)
+        summary = fetch_game_summary(game_id)
     except HTTPException:
         raise
     except (UpstreamUnavailableError, UpstreamBadResponseError) as e:
@@ -179,6 +179,12 @@ def get_game_summary(game_id: str):
         raise HTTPException(
             status_code=500, detail=f"Failed to fetch game summary: {str(e)}"
         )
+    retry_after = summary.get("periodScoreRetryAfter")
+    if retry_after is not None:
+        # Quarter scores are briefly unavailable; nothing downstream should keep this copy.
+        response.headers["Retry-After"] = str(retry_after)
+        response.headers["Cache-Control"] = "no-store"
+    return summary
 
 
 @app.get("/debug/linescore/{game_date}")

@@ -144,9 +144,18 @@ def load_lookup(spec: str):
     return factory()
 
 
+def unavailable_configs(names, adapters, luna_models) -> list[str]:
+    luna = luna_models[0] if luna_models else None
+    needs = {"jev+luna": ("jev", luna), "luna": (luna,)}
+    return [name for name in names if any(n is None or n not in adapters for n in needs.get(name, (name,)))]
+
+
 def run_command(args) -> int:
     keys = load_keys(args.env_file)
     adapters = build_adapters(keys, args)
+    if missing := unavailable_configs(args.configs, adapters, args.luna_models):
+        print(f"error: configs unavailable (missing API key or --luna-models): {', '.join(missing)}", file=sys.stderr)
+        return 2
     cases = [LabeledCase.from_json(c) for c in json.loads(Path(args.cases).read_text())["cases"]]
     if args.lookup:
         lookup = load_lookup(args.lookup)

@@ -32,6 +32,18 @@
         "attempted": null
       }
     ],
+    "alternate": {
+      "aggregation": "total",
+      "values": [
+        {
+          "stat": "rebounds",
+          "value": 976.0,
+          "display": "976",
+          "made": null,
+          "attempted": null
+        }
+      ]
+    },
     "coverage_note": null,
     "as_of": "2026-09-29T00:00:00Z"
   },

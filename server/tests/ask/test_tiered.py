@@ -529,7 +529,8 @@ def test_explicit_total_and_absent_aggregation_agree_across_tiers(intent):
     out=cascade(jev,luna).interpret(REQUEST.model_copy(update={'question':q,'candidates':c}))
     assert out.metadata.field_tiers['aggregation']!='veto'
     n=Normalizer().normalize(out,c,CONTEXT)
-    assert n.status=='valid' and n.request.stat.aggregation=='total'
+    # Absent means per game (with a totals toggle) for a player season; single games are totals.
+    assert n.status=='valid' and n.request.stat.aggregation==('per_game' if intent=='player_season_stats' else 'total')
 
 
 def test_boxscore_measure_disagreement_does_not_offer_season_choices():

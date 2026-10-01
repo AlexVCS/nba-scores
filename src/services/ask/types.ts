@@ -20,7 +20,7 @@ export type IsoDate = string; // "2026-02-08" (America/New_York calendar date)
 export type IsoDateTime = string; // "2026-02-09T10:15:00-05:00"
 export type Season = string; // "2023-24"
 
-export type AskIntent = "game_search" | "boxscore_stat" | "playoff_series" | "postseason_summary" | "player_season_stats" | "team_records";
+export type AskIntent = "game_search" | "boxscore_stat" | "playoff_series" | "postseason_summary" | "player_season_stats" | "team_records" | "season_leaders" | "career_stats";
 export type AskOutcome =
   | "answer"
   | "needs_clarification"
@@ -28,7 +28,7 @@ export type AskOutcome =
   | "not_found"
   | "unavailable"
   | "budget_exhausted";
-export type AskDetectedType = "games" | "player_stat" | "team_stat" | "stat_leaders" | "series" | "postseason" | "season_stats" | "team_records";
+export type AskDetectedType = "games" | "player_stat" | "team_stat" | "stat_leaders" | "series" | "postseason" | "season_stats" | "team_records" | "season_leaders" | "career_stats";
 export type AskStatScope = "player" | "team" | "leaders";
 export type AskStatKey =
   | "points"
@@ -59,7 +59,7 @@ export type AskUnsupportedReason =
   | "regular_season_record"
   | "standings"
   | "career_stats"
-  | "season_leaders"
+  | "season_leaders" // Legacy responses only since stage 3.
   | "historical_comparison"
   | "prediction"
   | "follow_up"
@@ -359,15 +359,23 @@ export interface AskPostseasonSummaryResult {
   series: AskPostseasonSeriesRow[];
 }
 
+/** The same statistics in the other measure, from the same source row (the card's toggle). */
+export interface AskMeasureValues {
+  aggregation: AskAggregation;
+  values: AskStatValue[];
+}
+
 export interface AskPlayerSeasonStatsResult {
   kind: "player_season_stats";
   player: AskPlayerRef;
   season: Season;
   season_type: "regular_season" | "playoffs";
+  /** The measure shown first; `alternate` holds the other one, null when identical (percentages). */
   aggregation: AskAggregation;
   team: AskTeamRef | null;
   games_played: number;
   values: AskStatValue[];
+  alternate: AskMeasureValues | null;
   coverage_note: string | null;
   as_of: IsoDateTime;
 }
@@ -390,13 +398,76 @@ export interface AskTeamRecordsResult {
   as_of: IsoDateTime;
 }
 
+export interface AskSeasonLeaderRow {
+  /** Competition rank on unrounded values: tied players share a rank. */
+  rank: number;
+  player: AskPlayerRef;
+  /** Null when the player had several teams, or the franchise is outside the catalog. */
+  team: AskTeamRef | null;
+  multiple_teams: boolean;
+  games_played: number;
+  value: AskStatValue;
+}
+
+export interface AskSeasonLeadersResult {
+  kind: "season_leaders";
+  season: Season;
+  season_type: "regular_season" | "playoffs";
+  stat: AskStatKey;
+  aggregation: AskAggregation;
+  /** Requested top N; every player ranked N or better is listed, so ties can add rows. */
+  limit: number;
+  /** Set when the question asked for more than 25 and the top 25 is shown. */
+  limit_note: string | null;
+  qualification: "all_players" | "source_qualified";
+  qualification_note: string;
+  rows: AskSeasonLeaderRow[];
+  /** A whole tie group left out because it would pass the 50-row cap. */
+  omitted_tie: {rank: number; count: number} | null;
+  coverage_note: string | null;
+  as_of: IsoDateTime;
+}
+
+export interface AskCareerLeaderRow {
+  rank: number;
+  player: AskPlayerRef;
+  active: boolean;
+  value: AskStatValue;
+}
+
+/** ADR 0013: a player's career line, the all-time top N, or a player's all-time rank. */
+export interface AskCareerStatsResult {
+  kind: "career_stats";
+  view: "player_totals" | "leaders" | "player_rank";
+  season_type: "regular_season" | "playoffs";
+  stat: AskStat;
+  aggregation: AskAggregation;
+  player: AskPlayerRef | null;
+  games_played: number | null;
+  values: AskStatValue[];
+  /** player_totals: the other measure from the same source row. */
+  alternate: AskMeasureValues | null;
+  limit: number | null;
+  limit_note: string | null;
+  rows: AskCareerLeaderRow[];
+  omitted_tie: {rank: number; count: number} | null;
+  /** Null in the player_rank view means outside NBA.com's top `list_size`. */
+  rank: number | null;
+  tied_count: number | null;
+  list_size: number | null;
+  coverage_note: string | null;
+  as_of: IsoDateTime;
+}
+
 export type AskResult =
   | AskGamesResult
   | AskBoxscoreStatResult
   | AskPlayoffSeriesResult
   | AskPostseasonSummaryResult
   | AskPlayerSeasonStatsResult
-  | AskTeamRecordsResult;
+  | AskTeamRecordsResult
+  | AskSeasonLeadersResult
+  | AskCareerStatsResult;
 
 // ---------------------------------------------------------------- clarification, notices
 

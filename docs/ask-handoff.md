@@ -1,5 +1,80 @@
 # Ask development handoff
 
+## Current state, September 30
+
+Read this first. It supersedes the stage 2 and stage 3 checkpoints below where
+they conflict. Verified with `git log`, `git merge-base --is-ancestor` and the
+code on `ask/reviewed-components` at `e415c970`. Nothing is pushed; the branch
+has no upstream.
+
+**Merged into `ask/reviewed-components`:**
+
+- nba-scores-8ic shared retrieval deadline: `c730aa97` merges
+  `ask/8ic-retrieval-deadline` (tip `03fd663c`).
+- nba-scores-cnm boxscore quarter-score retry: `e3bcf256` merges
+  `ask/cnm-boxscore-retry` (tip `01e82fbc`). Beads issue `nba-scores-cnm` is
+  closed.
+- Stage 3 `season_leaders` and `career_stats`: `8732b38c` merges
+  `ask/stage3-leaders` (tip `d6b665f3`). The deadline now reaches all four
+  season-scoped tools: `DEADLINE_EXECUTORS` in `server/ask/resolvers/__init__.py`
+  lists `player_season_stats`, `team_records`, `season_leaders` and
+  `career_stats`.
+- `1177dcd3`: Python reads the measure from the question text
+  (`server/ask/measure.py`), top N above 25 shows 25 with a note, and
+  "LeBron's career points" finds the player.
+- `e415c970`: the Per game | Totals toggle (`AskMeasureToggle`) on season and
+  career lines, and ADR 0014.
+
+The router now has eight tools plus `unsupported` (`server/ask/tools.py`).
+
+**Live preview.** On September 30 the preview at `http://127.0.0.1:5289` was
+served by Vite from this worktree (`vite.preview.config.mjs`, excluded from git),
+not from `/private/tmp/ask-resume-ui`. That older worktree is at `3ce4410d`,
+which is not in this branch's history and has no measure toggle. The backend on
+port 8019 also runs from this worktree with `--reload`.
+
+**Production is still off.** `ASK_ENABLED` defaults to off in
+`server/ask/config.py` (`enabled: bool = False`). The Design 1 entry shows only
+in development or with `VITE_ASK_ENABLED=1` (`HardwoodHeader.tsx`). `ASK_DEV`
+stays unset in production. There is no per-tool switch; ADR 0015 (proposed)
+suggests one.
+
+**Still pending:**
+
+- The 8ic slow-host measurement. No output from
+  `scripts/ask/measure_retrieval_deadline.py --live` is recorded in
+  `docs/verification`, and beads issue `nba-scores-8ic` is still open.
+  Boxscore, playoff and game-search retrieval still do not share the deadline.
+- No unseen evaluation covers the eight-tool scope. Both committed unseen runs
+  froze the four-family commit `6cdae70`. The committed `release.py` still pins
+  it and requires exactly 100 cases.
+- The ADR 0009 tier gate is still incomplete; `nba-scores-kzc.1` (target team)
+  and `nba-scores-kzc.2` (release misses) are open.
+- Laya shadow numbers, physical keyboard and screen-reader checks, and screenshots
+  of the stage 3 cards.
+- `docs/ask-stage3.md` still says the deadline is not threaded through the
+  stage 3 tools, and `docs/ask-stage2.md` says only "the two season tools" get
+  it. Both are stale after `8732b38c`.
+
+**In progress (other agents, not committed):** release-eval preparation for the
+eight-tool scope. `scripts/ask/release.py` is being generalized beyond the
+four-family, 100-case run; the uncommitted working copy may still change. A new
+answer-accuracy check, `scripts/ask/answer_check.py`, will check the answers,
+not only the interpretation. A draft third unseen set is being authored. None of
+this is reviewed or run yet. The ordered plan is `docs/ask-release-plan.md`.
+
+## Stage 3 checkpoint, September 29
+
+> **Superseded (September 30).** Both tools and the nba-scores-8ic deadline are
+> now merged into `ask/reviewed-components` (`8732b38c`). See "Current state,
+> September 30" above.
+
+Status: season leaders (`season_leaders`) and career stats (`career_stats`)
+are implemented locally on `ask/stage3-leaders` (from `ask/reviewed-components`
+at 4f96084f), behind the unchanged disabled production flags. See
+`docs/ask-stage3.md` and ADRs 0012-0013. No live evaluation; not pushed; the
+nba-scores-8ic retrieval deadline is not merged into these tools yet.
+
 ## Stage 2 checkpoint, September 29
 
 Player season stats and team records/standings are now implemented locally on
@@ -12,9 +87,15 @@ A separate Opus 5.5 thread reviewed the implementation and two correction
 checkpoints. Findings and raw review text are saved with the verification
 artifacts. The final review found no implementation blockers; its remaining
 combined-phase wording recommendation was then added and regression-tested.
-Code is committed locally, with no push. Predeployment retrieval budgeting
-(**nba-scores-8ic**) and historical boxscore fallback retry/presentation
-(**nba-scores-cnm**) remain open alongside the expanded-scope release gates.
+Code is committed locally, with no push. The shared season retrieval deadline
+(**nba-scores-8ic**) is implemented on `ask/8ic-retrieval-deadline`, but its
+slow-host measurement on the production host is still pending (see
+`docs/ask-stage2.md`). Historical boxscore fallback retry/presentation
+(**nba-scores-cnm**) remains open alongside the expanded-scope release gates.
+
+> **Partly superseded (September 30).** 8ic and cnm are both merged into
+> `ask/reviewed-components` (`c730aa97`, `e3bcf256`), and cnm is closed. The
+> 8ic slow-host measurement is still pending.
 
 
 ## 2026-09-29 design interview (read first)
@@ -33,7 +114,7 @@ and they take precedence over the earlier text below where the two conflict:
   Wikipedia is not used (ADRs 0003–0005).
 - Gates are per-tier precision and coverage, plus a system gate (ADR 0009).
 - Next step is stage 1 of ADR 0010: the tool registry and router over the
-  existing four intents, with Jev wired into the production adapter factory.
+  existing four intents, with Jev wired into the production adapter factory. (Superseded: stages 1-3 are done; see "Current state, September 30".)
 
 ## Stage 1 backend (branch `ask-stage1-cascade`)
 
@@ -71,10 +152,11 @@ calls and ran no live evaluation. Production enablement is still off
   when the server runs with `ASK_DEV=1`. Production sends `field_tiers: {}`
   and omits `field_decisions`. The dev preview backend now needs `ASK_DEV=1`
   to show the "Decided by" row.
-- **Frontend follow-up.** `src/services/ask/types.ts` and `AskResponseDetails`
-  do not show `field_decisions` yet. This branch stayed out of `src/`.
+- **Frontend.** `AskResponseDetails` shows `field_decisions` (tier, confidence
+  and outcome) when the dev server sends them.
 - **Release runner.** `release.py` still pins `FROZEN_COMMIT` `6cdae70`, so it
-  can't run from this branch until a new frozen commit is designated.
+  can't run from this branch until a new frozen commit is designated. (September 30: still true in the committed file;
+  a generalization is in progress.)
 
 GitHub issues were updated to match: #189 (parent), #199 (cascade), #200
 (lookup), #201 (tool registry and router), #202 (glossary only), #204 (leaders),
@@ -105,7 +187,9 @@ one model is inherently better.
 Open `http://127.0.0.1:5289/design-1?ask=live` and click Ask. It uses actual NBA
 data and the local backend on port 8019. The old Harden fixture interception
 has been removed. The preview frontend lives in `/private/tmp/ask-resume-ui`;
-its local Vite configuration proxies `/api` to 8019. Keep the user's preview
+its local Vite configuration proxies `/api` to 8019.
+(Superseded September 30: the running preview is served from
+`/private/tmp/ask-reviewed-components`; see "Current state, September 30".) Keep the user's preview
 running. Browser tab 3 belongs to the user's testing; tab 4 was used for checks.
 
 Expand **Response details** below an answer to see the reported interpreter
@@ -118,7 +202,8 @@ requires `ASK_ENABLED=1`.
 
 ## Verification and review
 
-The full frontend suite passed 463 tests using
+(Counts from an earlier September 29 checkpoint; not rerun for the
+September 30 checkpoint.) The full frontend suite passed 463 tests using
 `NODE_OPTIONS=--no-experimental-webstorage pnpm test:run`.
 The Node runtime's native storage conflicts with jsdom; a localStorage file
 workaround caused unrelated StorageEvent failures. Lint and build passed.

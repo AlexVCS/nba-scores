@@ -19,7 +19,7 @@ describe("Ask season answers", () => {
     expect(within(region).getByText("12.4")).toBeInTheDocument();
     expect(within(region).getByText(/79 games played/)).toBeInTheDocument();
     expect(within(region).getByText(/2023-24 · Regular season/)).toBeInTheDocument();
-    expect(within(region).getByText(/Per game/)).toBeInTheDocument();
+    expect(within(region).getByText(/Per game · 79 games played/)).toBeInTheDocument();
     expect(screen.getByRole("link", {name: /Source: NBA.com/})).toHaveAttribute("rel", "noopener noreferrer");
   });
 

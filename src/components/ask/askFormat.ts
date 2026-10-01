@@ -17,6 +17,8 @@ export const DETECTED_TYPE_LABELS: Record<AskDetectedType, string> = {
   postseason: "Postseason",
   season_stats: "Season stats",
   team_records: "Records / standings",
+  season_leaders: "Season leaders",
+  career_stats: "Career stats",
 };
 
 export const FIELD_LABELS: Record<AskInterpretationField, string> = {

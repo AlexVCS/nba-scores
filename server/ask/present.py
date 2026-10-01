@@ -10,7 +10,7 @@ from server.ask import tools
 from server.ask.models.candidates import Candidate, CandidateLookupResult
 from server.ask.models.common import DateRange, MAX_QUESTION_LENGTH
 from server.ask.models.interpreter import InterpreterOutput
-from server.ask.models.request import AskContext, AskRequest, BoxscoreStatRequest, GameSearchRequest, PlayoffSeriesRequest, PostseasonSummaryRequest, PlayerSeasonStatsRequest, TeamRecordsRequest
+from server.ask.models.request import AskContext, AskRequest, BoxscoreStatRequest, GameSearchRequest, PlayoffSeriesRequest, PostseasonSummaryRequest, PlayerSeasonStatsRequest, SeasonLeadersRequest, TeamRecordsRequest, CareerStatsRequest
 from server.ask.models.response import (
     Clarification, ClarificationOption, Interpretation, InterpretationItem, Notice, Suggestion,
 )
@@ -20,7 +20,7 @@ from server.ask.season_scope import ambiguous_season_candidates
 
 
 _TYPE = {
-    "game_search": "games", "playoff_series": "series", "postseason_summary": "postseason", "player_season_stats": "season_stats", "team_records": "team_records",
+    "game_search": "games", "playoff_series": "series", "postseason_summary": "postseason", "player_season_stats": "season_stats", "team_records": "team_records", "season_leaders": "season_leaders", "career_stats": "career_stats",
 }
 _FIELD_LABEL = {
     "intent": "kind of question", "stat_scope": "stat scope", "stat": "statistic", "player": "player",
@@ -41,7 +41,7 @@ def interpretation(output: InterpreterOutput | None, candidates: CandidateLookup
             if field.field not in ("player", "teams", "date", "season", "round", "game_number", "location"):
                 if field.field == "standings_scope" and field.status == "selected" and field.selected == ["league"]:
                     continue
-                if field.status == "selected" and (field.field == "stat" or (field.field in {"aggregation", "season_type", "standings_scope"} and request is not None and request.intent in {"player_season_stats", "team_records"} and field.field in tools.REGISTRY[request.intent].fields)):
+                if field.status == "selected" and (field.field == "stat" or (field.field in {"aggregation", "season_type", "standings_scope"} and request is not None and request.intent in {"player_season_stats", "team_records", "season_leaders", "career_stats"} and field.field in tools.REGISTRY[request.intent].fields)):
                     items.append(InterpretationItem(field=field.field, value=field.selected[0].replace("_", " ").title(), origin="question"))
                 continue
             ids = field.selected if field.status == "selected" else field.alternatives if field.status == "ambiguous" else []
@@ -66,7 +66,7 @@ def interpretation(output: InterpreterOutput | None, candidates: CandidateLookup
         if request.game.date:
             dates = DateRange(start=request.game.date, end=request.game.date)
         season = request.game.season
-    elif isinstance(request, (PlayoffSeriesRequest, PostseasonSummaryRequest, PlayerSeasonStatsRequest, TeamRecordsRequest)):
+    elif isinstance(request, (PlayoffSeriesRequest, PostseasonSummaryRequest, PlayerSeasonStatsRequest, TeamRecordsRequest, SeasonLeadersRequest)):
         season = request.season
     return Interpretation(intent=intent, detected_type=detected, items=items[:8],
                           reference_time=context.reference_time, dates=dates, season=season)
@@ -75,7 +75,7 @@ def interpretation(output: InterpreterOutput | None, candidates: CandidateLookup
 def notice(code: str, *, reason: str = "", retry_after: int | None = None,
            unsupported_reason: str | None = None, diagnostics_recorded: bool = False) -> Notice:
     copy = {
-        "unsupported": ("Can't answer that one yet", "Ask covers games, boxscores, playoffs, player season stats, and regular-season records and standings. Try a full name and season such as 2023-24. Career totals, leaders and statistical splits are not supported yet."),
+        "unsupported": ("Can't answer that one yet", "Ask covers games, boxscores, playoffs, player season and career stats, records and standings, season leaders and all-time totals. Try a season such as 2023-24. Career highs, franchise leaders and statistical splits are not supported yet."),
         "no_games": ("No games found", "No matching games were recorded for that date and team."),
         "no_record": ("No record found", "The data sources do not have a matching record for that question."),
         "player_did_not_play": ("Player did not play", "No game was recorded for that player on the selected date."),
@@ -169,7 +169,9 @@ def clarification(field: str, reason: str, question: str, pending: PendingResolu
         if intent and intent.selected == ["team_records"]:
             if field == "season_type" or (field == "standings_scope" and named_team):
                 choices = choices[:1]
-        if field == "aggregation" and (intent is None or intent.selected != ["player_season_stats"]):
+        if field == "aggregation" and intent and intent.status == "selected" and intent.selected == ["career_stats"]:
+            choices = [("total", "Career totals"), ("per_game", "Per game")]
+        if field == "aggregation" and (intent is None or intent.status != "selected" or intent.selected[0] not in {"player_season_stats", "season_leaders", "career_stats"}):
             choices = []
         pattern = {"aggregation": r"\b(?:season\s+totals?|totals?|per\s+game|averag(?:e[ds]?|es))\b",
                    "season_type": r"\b(?:regular[ -]season|playoffs?|postseason)\b",
@@ -188,6 +190,18 @@ def clarification(field: str, reason: str, question: str, pending: PendingResolu
                 continue
             options.append(ClarificationOption(id=f"{field}:{value}", label=choice_label, question=rewritten,
                                                resolution=store.issue(rewritten, chosen)))
+    elif field == "intent":
+        # The career guard asks this when a named player's count has no career or season
+        # wording ("How many points does LeBron James have?"). The interpretation is
+        # already career_stats, so one choice states "career" and continues without a model.
+        intent = pending.output.get_field("intent")
+        if intent is not None and intent.status == "selected" and intent.selected == ["career_stats"]:
+            rewritten = f"{question.rstrip(' ?')}, career totals?"
+            if len(rewritten) > MAX_QUESTION_LENGTH:
+                overlong_rewrite = True
+            else:
+                options.append(ClarificationOption(id="intent:career_stats", label="Career totals", question=rewritten,
+                                                   resolution=store.issue(rewritten, pending)))
     elif field == "date" and reason == "year_required":
         today = pending.context.reference_time.year
         for year in (today, today - 1, today + 1):
@@ -247,6 +261,15 @@ def clarification(field: str, reason: str, question: str, pending: PendingResolu
         prompt = "Which year?"
     hint = ("Shorten your question, then add a more specific name or date." if overlong_rewrite
             else "Edit your question to include a more specific name or date.") if not options else None
+    if field == "intent":
+        # Never the name/date hint: the question is what kind of answer is wanted.
+        intent = pending.output.get_field("intent")
+        career = intent is not None and intent.status == "selected" and intent.selected == ["career_stats"]
+        if career:
+            prompt = "Career or one season?"
+        hint = ("Or edit your question to name a season, such as 2023-24." if career and options
+                else "Edit your question to say career or name a season, such as 2023-24." if career
+                else "Edit your question to say what you want: a game, a season, a career or standings.")
     if not options and field == "teams" and reason == "ambiguous":
         scope = pending.output.get_field("stat_scope")
         if scope and scope.status == "selected" and scope.selected == ["team"]:

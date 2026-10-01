@@ -5,6 +5,7 @@ import type {ReactNode} from "react";
 import {beforeEach, describe, expect, it, vi} from "vitest";
 import {getBoxScores, getGameDetails, getGameSummary, getInactivePlayers, getLastMatchups} from "@/services/nbaService";
 import type {GameDetails, InactivePlayersResponse} from "@/services/nbaService";
+import type {GameSummaryData} from "@/helpers/helpers";
 import {useBoxscorePage} from "./useBoxscorePage";
 
 vi.mock("@/services/nbaService", () => ({
@@ -297,6 +298,79 @@ describe("game visits", () => {
     expect(getBoxScores).not.toHaveBeenCalled();
     unmount();
     client.clear();
+  });
+});
+
+describe("missing quarter scores", () => {
+  const summaryTeam = (teamId: number, score: string, scores: number[]) => ({
+    teamId, teamTricode: "", teamName: "", score,
+    periods: scores.map((points, index) => ({period: index + 1, score: String(points)})),
+  });
+  const throttled: GameSummaryData = {
+    homeTeam: summaryTeam(1, "100", []), awayTeam: summaryTeam(2, "90", []), period: 4, gameStatusText: "Final",
+    periodScoreSource: "unavailable", periodScoreRetryAfter: 6, periodScoreType: "quarters",
+  };
+  const recovered: GameSummaryData = {
+    ...throttled,
+    homeTeam: summaryTeam(1, "100", [25, 25, 25, 25]), awayTeam: summaryTeam(2, "90", [20, 20, 25, 25]),
+    periodScoreSource: "basketball-reference", periodScoreRetryAfter: null,
+  };
+
+  async function renderFinalGame() {
+    vi.useFakeTimers();
+    const {client, wrapper} = setup();
+    const view = renderHook(useBoxscorePage, {wrapper});
+    await act(async () => { await vi.advanceTimersByTimeAsync(50); });
+    await act(async () => { await vi.advanceTimersByTimeAsync(50); });
+    return {...view, cleanup: () => { view.unmount(); client.clear(); vi.useRealTimers(); }};
+  }
+
+  it("refetches on the server's retry hint and stops once quarter scores recover", async () => {
+    vi.mocked(getGameSummary).mockResolvedValueOnce(throttled).mockResolvedValue(recovered);
+    const {result, cleanup} = await renderFinalGame();
+    try {
+      expect(result.current.summary?.periodScoreSource).toBe("unavailable");
+      expect(result.current.periodScoresRetryable).toBe(true);
+      await act(async () => { await vi.advanceTimersByTimeAsync(5_900); });
+      expect(getGameSummary).toHaveBeenCalledTimes(1);
+      await act(async () => { await vi.advanceTimersByTimeAsync(200); });
+      expect(getGameSummary).toHaveBeenCalledTimes(2);
+      expect(result.current.summary?.periodScoreSource).toBe("basketball-reference");
+      expect(result.current.periodScoresRetryable).toBe(false);
+      await act(async () => { await vi.advanceTimersByTimeAsync(120_000); });
+      expect(getGameSummary).toHaveBeenCalledTimes(2);
+    } finally {
+      cleanup();
+    }
+  });
+
+  it("bounds automatic retries and leaves a manual retry", async () => {
+    vi.mocked(getGameSummary).mockResolvedValue(throttled);
+    const {result, cleanup} = await renderFinalGame();
+    try {
+      await act(async () => { await vi.advanceTimersByTimeAsync(120_000); });
+      expect(getGameSummary).toHaveBeenCalledTimes(4);
+      expect(result.current.periodScoresRetryable).toBe(true);
+      expect(result.current.game?.homeTeam.score).toBe(100);
+      vi.mocked(getGameSummary).mockResolvedValue(recovered);
+      await act(async () => { result.current.retryPeriodScores(); await vi.advanceTimersByTimeAsync(50); });
+      expect(getGameSummary).toHaveBeenCalledTimes(5);
+      expect(result.current.summary?.periodScoreSource).toBe("basketball-reference");
+    } finally {
+      cleanup();
+    }
+  });
+
+  it("does not retry quarter scores the server says cannot be recovered", async () => {
+    vi.mocked(getGameSummary).mockResolvedValue({...throttled, periodScoreRetryAfter: null});
+    const {result, cleanup} = await renderFinalGame();
+    try {
+      await act(async () => { await vi.advanceTimersByTimeAsync(120_000); });
+      expect(getGameSummary).toHaveBeenCalledTimes(1);
+      expect(result.current.periodScoresRetryable).toBe(false);
+    } finally {
+      cleanup();
+    }
   });
 });
 

@@ -68,7 +68,7 @@ class AskConfig:
     # when LAYA_BASE_URL is set. Production leaves ASK_DEV unset (ADR 0007).
     dev: bool = False
     primary_model: str = "gpt-6-luna"
-    primary_reasoning_effort: str = "low"
+    primary_reasoning_effort: str | None = "low"
     fallback_model: str | None = None
     deadline_seconds: float = 20.0
     daily_budget_usd: float = 1.0
@@ -80,6 +80,10 @@ class AskConfig:
     per_client_per_minute: int = 10
     per_worker_per_minute: int = 60
     max_in_flight: int = 2
+    # Typeahead has its own slots and rates so it never starves /ask (debounced 200 ms client-side).
+    suggest_per_client_per_minute: int = 120
+    suggest_per_worker_per_minute: int = 600
+    suggest_max_in_flight: int = 2
     api_key: str | None = field(default=None, repr=False)
     # Interpreter cascade (ADR 0002): Laya, then Jev, then Luna (`primary_model`).
     # A tier without its URL or key is skipped. Laya stays unset in production until
@@ -105,7 +109,7 @@ class AskConfig:
             enabled=enabled,
             dev=_flag("ASK_DEV"),
             primary_model=model,
-            primary_reasoning_effort=os.environ.get("ASK_REASONING_EFFORT", "low").strip(),
+            primary_reasoning_effort=os.environ.get("ASK_REASONING_EFFORT", "low").strip() or None,
             fallback_model=fallback,
             deadline_seconds=_number("ASK_DEADLINE_SECONDS", 20, minimum=0.001),
             daily_budget_usd=_number("ASK_DAILY_BUDGET_USD", 1),
@@ -117,6 +121,9 @@ class AskConfig:
             per_client_per_minute=_integer("ASK_CLIENT_RATE_PER_MINUTE", 10),
             per_worker_per_minute=_integer("ASK_WORKER_RATE_PER_MINUTE", 60),
             max_in_flight=_integer("ASK_MAX_IN_FLIGHT", 2),
+            suggest_per_client_per_minute=_integer("ASK_SUGGEST_CLIENT_RATE_PER_MINUTE", 120),
+            suggest_per_worker_per_minute=_integer("ASK_SUGGEST_WORKER_RATE_PER_MINUTE", 600),
+            suggest_max_in_flight=_integer("ASK_SUGGEST_MAX_IN_FLIGHT", 2),
             api_key=_api_key(),
             laya_base_url=os.environ.get("LAYA_BASE_URL", "").strip() or None,
             laya_model=os.environ.get("LAYA_MODEL", "laya").strip(),

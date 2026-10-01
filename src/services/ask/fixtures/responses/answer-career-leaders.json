@@ -1,0 +1,227 @@
+{
+  "schema_version": "1",
+  "request_id": "answer-career-leaders",
+  "outcome": "answer",
+  "question": "Who has the most career assists?",
+  "interpretation": {
+    "intent": "career_stats",
+    "detected_type": "career_stats",
+    "items": [
+      {
+        "field": "stat",
+        "value": "Assists",
+        "detail": null,
+        "expression": null,
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      }
+    ],
+    "reference_time": "2026-09-29T12:00:00-04:00",
+    "timezone": "America/New_York",
+    "dates": null,
+    "season": null
+  },
+  "result": {
+    "kind": "career_stats",
+    "view": "leaders",
+    "season_type": "regular_season",
+    "stat": "assists",
+    "aggregation": "total",
+    "player": null,
+    "games_played": null,
+    "values": [],
+    "alternate": null,
+    "limit": 10,
+    "limit_note": null,
+    "rows": [
+      {
+        "rank": 1,
+        "player": {
+          "player_id": 304,
+          "name": "John Stockton"
+        },
+        "active": false,
+        "value": {
+          "stat": "assists",
+          "value": 15806.0,
+          "display": "15,806",
+          "made": null,
+          "attempted": null
+        }
+      },
+      {
+        "rank": 2,
+        "player": {
+          "player_id": 101108,
+          "name": "Chris Paul"
+        },
+        "active": false,
+        "value": {
+          "stat": "assists",
+          "value": 12552.0,
+          "display": "12,552",
+          "made": null,
+          "attempted": null
+        }
+      },
+      {
+        "rank": 3,
+        "player": {
+          "player_id": 467,
+          "name": "Jason Kidd"
+        },
+        "active": false,
+        "value": {
+          "stat": "assists",
+          "value": 12091.0,
+          "display": "12,091",
+          "made": null,
+          "attempted": null
+        }
+      },
+      {
+        "rank": 4,
+        "player": {
+          "player_id": 2544,
+          "name": "LeBron James"
+        },
+        "active": true,
+        "value": {
+          "stat": "assists",
+          "value": 12016.0,
+          "display": "12,016",
+          "made": null,
+          "attempted": null
+        }
+      },
+      {
+        "rank": 5,
+        "player": {
+          "player_id": 201566,
+          "name": "Russell Westbrook"
+        },
+        "active": false,
+        "value": {
+          "stat": "assists",
+          "value": 10351.0,
+          "display": "10,351",
+          "made": null,
+          "attempted": null
+        }
+      },
+      {
+        "rank": 6,
+        "player": {
+          "player_id": 959,
+          "name": "Steve Nash"
+        },
+        "active": false,
+        "value": {
+          "stat": "assists",
+          "value": 10335.0,
+          "display": "10,335",
+          "made": null,
+          "attempted": null
+        }
+      },
+      {
+        "rank": 7,
+        "player": {
+          "player_id": 349,
+          "name": "Mark Jackson"
+        },
+        "active": false,
+        "value": {
+          "stat": "assists",
+          "value": 10334.0,
+          "display": "10,334",
+          "made": null,
+          "attempted": null
+        }
+      },
+      {
+        "rank": 8,
+        "player": {
+          "player_id": 77142,
+          "name": "Magic Johnson"
+        },
+        "active": false,
+        "value": {
+          "stat": "assists",
+          "value": 10141.0,
+          "display": "10,141",
+          "made": null,
+          "attempted": null
+        }
+      },
+      {
+        "rank": 9,
+        "player": {
+          "player_id": 600015,
+          "name": "Oscar Robertson"
+        },
+        "active": false,
+        "value": {
+          "stat": "assists",
+          "value": 9887.0,
+          "display": "9,887",
+          "made": null,
+          "attempted": null
+        }
+      },
+      {
+        "rank": 10,
+        "player": {
+          "player_id": 78318,
+          "name": "Isiah Thomas"
+        },
+        "active": false,
+        "value": {
+          "stat": "assists",
+          "value": 9061.0,
+          "display": "9,061",
+          "made": null,
+          "attempted": null
+        }
+      }
+    ],
+    "omitted_tie": null,
+    "rank": null,
+    "tied_count": null,
+    "list_size": null,
+    "coverage_note": null,
+    "as_of": "2026-09-29T00:00:00Z"
+  },
+  "clarification": null,
+  "notice": null,
+  "links": [
+    {
+      "kind": "source",
+      "label": "Source: NBA.com",
+      "href": "https://www.nba.com/stats/alltime-leaders?SeasonType=Regular%20Season",
+      "external": true,
+      "spoiler": false
+    }
+  ],
+  "suggestions": [],
+  "sources": [
+    {
+      "name": "nba_stats",
+      "label": "NBA.com",
+      "fetched_at": "2026-09-29T00:00:00Z",
+      "complete": false
+    }
+  ],
+  "interpreter": {
+    "model_called": false,
+    "cache_hit": false,
+    "adapter": null,
+    "model": null,
+    "fallback_used": false,
+    "field_tiers": {}
+  }
+}

@@ -69,6 +69,8 @@ export interface GameSummaryData {
   period: number;
   gameStatusText: string;
   periodScoreSource?: PeriodScoreSource;
+  // Seconds until missing quarter scores are worth requesting again; null when retrying cannot help.
+  periodScoreRetryAfter?: number | null;
   periodScoreType?: PeriodScoreType;
 }
 

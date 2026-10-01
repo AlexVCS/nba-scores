@@ -1,0 +1,122 @@
+{
+  "schema_version": "1",
+  "request_id": "answer-career-totals",
+  "outcome": "answer",
+  "question": "LeBron James career points per game",
+  "interpretation": {
+    "intent": "career_stats",
+    "detected_type": "career_stats",
+    "items": [
+      {
+        "field": "player",
+        "value": "LeBron James",
+        "detail": null,
+        "expression": null,
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": 2544,
+        "spoiler": false
+      },
+      {
+        "field": "stat",
+        "value": "Points",
+        "detail": null,
+        "expression": null,
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      },
+      {
+        "field": "aggregation",
+        "value": "Per Game",
+        "detail": null,
+        "expression": null,
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      }
+    ],
+    "reference_time": "2026-09-29T12:00:00-04:00",
+    "timezone": "America/New_York",
+    "dates": null,
+    "season": null
+  },
+  "result": {
+    "kind": "career_stats",
+    "view": "player_totals",
+    "season_type": "regular_season",
+    "stat": "points",
+    "aggregation": "per_game",
+    "player": {
+      "player_id": 2544,
+      "name": "LeBron James"
+    },
+    "games_played": 1622,
+    "values": [
+      {
+        "stat": "points",
+        "value": 26.781750924784216,
+        "display": "26.8",
+        "made": null,
+        "attempted": null
+      }
+    ],
+    "alternate": {
+      "aggregation": "total",
+      "values": [
+        {
+          "stat": "points",
+          "value": 43440.0,
+          "display": "43440",
+          "made": null,
+          "attempted": null
+        }
+      ]
+    },
+    "limit": null,
+    "limit_note": null,
+    "rows": [],
+    "omitted_tie": null,
+    "rank": null,
+    "tied_count": null,
+    "list_size": null,
+    "coverage_note": null,
+    "as_of": "2026-09-29T00:00:00Z"
+  },
+  "clarification": null,
+  "notice": null,
+  "links": [
+    {
+      "kind": "source",
+      "label": "Source: NBA.com",
+      "href": "https://www.nba.com/stats/player/2544/career",
+      "external": true,
+      "spoiler": false
+    }
+  ],
+  "suggestions": [],
+  "sources": [
+    {
+      "name": "nba_stats",
+      "label": "NBA.com",
+      "fetched_at": "2026-09-29T00:00:00Z",
+      "complete": false
+    }
+  ],
+  "interpreter": {
+    "model_called": false,
+    "cache_hit": false,
+    "adapter": null,
+    "model": null,
+    "fallback_used": false,
+    "field_tiers": {}
+  }
+}

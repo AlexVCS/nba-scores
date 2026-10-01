@@ -43,6 +43,7 @@ from server.ask.models.request import AskContext
 NEW_YORK = ZoneInfo("America/New_York")
 _JOINER = re.compile(r"^[\s.\-']{0,3}$")
 _SENTENCE_BREAK = re.compile(r"[.?!:;]\s*$")
+_POSSESSIVE = re.compile(r"['\u2019`\u02bc](?:s)?$", re.IGNORECASE)
 
 
 # --- player matching --------------------------------------------------------
@@ -135,6 +136,10 @@ class _Scan:
     def sentence_initial(self, k: int) -> bool:
         return k == 0 or bool(_SENTENCE_BREAK.search(self.question[:self.tokens[k].start]))
 
+    def possessive(self, k: int) -> bool:
+        token = self.tokens[k]
+        return bool(_POSSESSIVE.search(self.question[token.start:token.end]))
+
     def upper(self, i: int, j: int) -> bool:
         raw = re.sub(r"['\u2019][sS]?$", "", self.question[self.tokens[i].start:self.tokens[j].end])
         return raw.upper() == raw and any(c.isalpha() for c in raw)
@@ -199,8 +204,10 @@ def _entity_mentions(question: str, masked: str, seasons: frozenset[int], limits
             k += 1
             continue
         run_end = k
+        # A possessive ends a name: "LeBron's career points" is LeBron plus the word
+        # "career", never one unknown full name "LeBron's career".
         while (run_end + 1 < n_tokens and scan.eligible(run_end + 1) and run_end + 1 not in released
-               and scan.contiguous(k, run_end + 1)):
+               and not scan.possessive(run_end) and scan.contiguous(k, run_end + 1)):
             run_end += 1
         if 1 <= run_end - k <= 2 and _looks_like_full_name(players, scan, k):
             key = scan.key(k, run_end)

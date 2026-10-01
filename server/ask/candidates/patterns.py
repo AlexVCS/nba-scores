@@ -13,7 +13,7 @@ FIRST_SEASON = 1946  # 1946-47, the first BAA season
 PLAYOFF_CONTEXT = re.compile(
     r"\b(finals|final(?!\s+(?:score|minute|seconds?|quarter|play|shot))|playoffs?|postseason|champions?"
     r"|championship|champs|title|series|round|semi-?finals?|semis|ecf|wcf|seed|seeds"
-    r"|game\s*(?:#\s*)?(?:\d|one|two|three|four|five|six|seven))\b"
+    r"|game\s*(?:#\s*)?(?:\d|one|two|three|four|five|six|seven)(?!\s+(?:days?|weeks?|nights?)\s+ago\b))\b"
 )
 GAME_WORDS = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7}
 
@@ -37,7 +37,7 @@ def _mention(field: str, m: re.Match | tuple[int, int], original: str, hits: lis
 
 # --- game numbers -----------------------------------------------------------
 
-_GAME_NUMBER = re.compile(r"\bgame\s*(?:#\s*|no\.?\s*|number\s+)?(\d{1,2}|one|two|three|four|five|six|seven)\b(?!\s*(?:pm|am|p\.m|a\.m|:|/\d))")
+_GAME_NUMBER = re.compile(r"\bgame\s*(?:#\s*|no\.?\s*|number\s+)?(\d{1,2}|one|two|three|four|five|six|seven)\b(?!\s*(?:pm|am|p\.m|a\.m|:|/\d))(?!\s+(?:days?|weeks?|nights?)\s+ago\b)")
 _G_NUMBER = re.compile(r"\bg([1-9])\b")
 
 

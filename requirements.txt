@@ -6,3 +6,4 @@ httpx>=0.28,<0.29
 beautifulsoup4>=4.14,<4.15
 numpy>=2.3,<2.4
 pandas>=2.3,<2.4
+pydantic>=2.12,<3

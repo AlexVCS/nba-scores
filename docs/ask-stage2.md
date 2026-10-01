@@ -10,8 +10,10 @@ registry, in the order specified by ADR 0010.
 - `team_records`: one team's regular-season wins/losses or complete league or
   Eastern/Western conference standings for one season.
 
-A missing season is clarified. Ambiguous totals/per-game or season type has
-server-validated choices; uncertain standings scope offers league/east/west; explicit playoff wording cannot silently become a
+A missing season is clarified. The measure (totals or per game) is read by Python
+from the question text (ADR 0014); with none stated, a player's season shows per-game
+averages first with a totals toggle (see "Measure toggle" below). An ambiguous season
+type has server-validated choices; uncertain standings scope offers league/east/west; explicit playoff wording cannot silently become a
 regular-season answer. A bare calendar year outside playoff language
 retains both overlapping seasons. The tools do not answer division standings,
 home/away, opponent, month/date splits, advanced metrics, per-36/per-100 rates,
@@ -25,7 +27,7 @@ in both HTTP and interpretation evaluation, including clarification continuation
 
 PlayerCareerStats season-total rows, TeamYearByYearStats team records, and
 LeagueStandings are primary. Each NBA attempt has a four-second timeout and
-one retry. The tool verifies player/team identity, season and league before
+one retry, both inside the shared retrieval deadline described below. The tool verifies player/team identity, season and league before
 execution. Full standings must cover every franchise active that season; partial
 or duplicate tables cannot produce an answer. Source conference ranks are used
 when supplied; the tool does not invent a league tiebreak rank.
@@ -57,6 +59,34 @@ Each answer carries source metadata, a restricted source link and a fetch time.
 The Hardwood UI shows these answers immediately under ADR 0006. Suggestions,
 clarification choices and unrequested links keep their existing spoiler rules.
 
+## Measure toggle (ADR 0014)
+
+Live testing showed Jev confidently choosing a measure the question never stated.
+`server/ask/measure.py` now decides it from the text, for player season stats,
+season leaders and career stats. It replaces the interpreter's `aggregation` read
+before the normalizer and the cascade policy see it (diagnostics show
+`aggregation` decided by `question`).
+
+- Per-game wording: "per game", "a game"/"a night" (not "in a game"), "ppg",
+  "rpg", "apg", "spg", "bpg", "mpg", "average(s/d)". Totals wording: "total(s)",
+  "in total", "how many". "How many ... average" is per game. Both kinds together
+  are ambiguous.
+- **No measure stated** ("Kevin Durant stats 2015-16", "Jokic rebounds for Denver in
+  2023-24"): per-game averages first, no clarification. The answer also carries
+  season totals (`alternate`), and the Hardwood card shows a segmented
+  **Per game | Totals** toggle (a labelled group of `aria-pressed` buttons).
+- **Measure stated:** that measure is shown first. The toggle stays, because the
+  other measure comes from the same verified row and asking is consent (ADR 0006).
+- Both measures come from **one source row** (NBA or Basketball-Reference, never
+  both). Per game is the exact total divided by games played, shown to one decimal
+  (Python `format(value, ".1f")`, round-half-even on the binary value). It is never
+  rebuilt from rounded averages. Shooting splits show made/attempted per game
+  ("9.7/19.2") and in total ("698/1381"). Percentages are the same in both measures,
+  so a percentage-only answer is requested as `total` and has no toggle. The stat
+  line keeps its made/attempted splits; it does not add percentages.
+- Career lines (`career_stats` `player_totals`) get the same toggle, starting at
+  totals (ADR 0013).
+
 ## Verification and release boundary
 
 `server/tests/ask/test_season_tools.py` covers identity, traded players,
@@ -65,8 +95,12 @@ partial/duplicate standings, source URLs, throttling and concurrency.
 `AskSeasonResults.test.tsx` checks immediate display, season/measure context,
 record values and accessible standings rows.
 
-`server/tests/ask/fixtures/eval/stage2-dev.json` adds 21 development cases with
-labels authored before any live run. These cases are exposed development data,
+`server/tests/ask/fixtures/eval/stage2-dev.json` adds 22 development cases with
+labels authored before any live run. Case 22 ("Kevin Durant stats 2015-16") and the
+per-game relabeling of cases 4 and 6 come from live feedback on 2026-09-30 (ADR 0014).
+`server/tests/ask/test_live_feedback_measures.py` covers measure detection, the toggle
+values and the pipeline paths with fake interpreters. `AskMeasureToggle.test.tsx`
+covers the toggle. These cases are exposed development data,
 not independent unseen release evidence. Historical four-family artifacts and
 labels are preserved. Deprecated unsupported reasons remain deserializable for
 those artifacts, but current adapters do not offer them.
@@ -80,15 +114,65 @@ screen-reader checks also remain required. No production flags are changed here.
 
 ## Remaining deployment work from review
 
-The interpreter reserves at most five seconds for retrieval, while an NBA retry
-plus fallback can take about 13.75 seconds. The HTTP boundary still caps the
-response deadline and keeps occupied-worker accounting. Before enabling Ask,
-measure slow-host behavior and tune a shared retrieval deadline across calls.
+### Shared retrieval deadline (nba-scores-8ic)
+
+Unbudgeted, an NBA attempt, its backoff and retry, plus the BRef fallback took
+about 13.75 seconds, while interpretation leaves as little as five seconds.
+The pipeline now creates one monotonic `Deadline` (`server/utils/deadline.py`)
+per request. It ends with the response deadline, less a 0.25-second margin
+for building the response. The deadline is passed explicitly through
+`resolve(..., deadline=)` to the season tools, the NBA `_run` retry loop and
+the Basketball-Reference transport. There is no global state.
+
+- Each NBA attempt's timeout is capped to the time left. An attempt starts only
+  if 1.5 seconds remain. A retry also needs room for its 0.75-second backoff.
+  Otherwise it is skipped.
+- The fallback runs only if a BRef request can still start (2 seconds). The
+  transport checks this before it takes the shared start slot, so a request
+  that cannot finish does not use up the six-second limit. Its timeout is
+  capped to the time left. The limiter still never waits: when throttled, it
+  fails immediately.
+- A primary miss that has no time left for fallback reports
+  `season_deadline_exceeded`, shown as `service_unavailable`. It never becomes
+  a no-record answer.
+- Joined waits in the season cache, BRef HTML cache and outer answer cache end
+  at the earlier of five seconds and the deadline. Other tools' answer-cache
+  waits now also end at the deadline. A cached answer needs no budget.
+- Only `DEADLINE_EXECUTORS` (the two season tools) receive the deadline. Other
+  executors keep their `(request)` signature and existing source timeouts.
+  Calls without a deadline behave exactly as before.
+- The HTTP `run_bounded` deadline and the occupied-worker accounting are
+  unchanged.
+
+Tests: `server/tests/ask/test_retrieval_deadline.py`, using fake clocks and
+slow fakes. They cover a slow primary that skips its retry and fallback, a
+retry that fits (with a capped timeout), a fallback skipped as unavailable,
+fallback timeout capping, fast limiter refusal inside the budget, a start that
+cannot fit, and joined waits bounded at the season and answer layers
+(including a real coalesced load).
+
+**Slow-host measurement, not yet done.** `scripts/ask/measure_retrieval_deadline.py`
+calls only the season tools, with no interpreter or LLM. It prints one JSON
+record per case: the capped timeout, duration and error of each attempt, and
+whether retrieval finished within `--budget`. `--simulate` is offline and
+only checks the budget decisions. Before enabling Ask, run it on the
+production host, with the deployed deadline:
+`server/venv/bin/python scripts/ask/measure_retrieval_deadline.py --live --budget 4.75 --repeats 3`,
+plus a run with `--budget` equal to a typical post-interpretation remainder.
+Keep the output with the deployment record. Then tune
+`NBA_MIN_ATTEMPT_SECONDS`, `MIN_START_SECONDS` and the timeouts. Note that
+`requests` timeouts limit each connect/read, not total transfer time. A slow
+drip can outlast a capped attempt, and in that case the HTTP deadline remains
+the final bound. Boxscore, playoff and game-search retrieval do not yet share
+the deadline.
 
 A well-formed NBA season miss still tries BRef, as ADR 0010 requires fallback
 when the primary lacks coverage. A miss is not proof that a historical record
 does not exist. Structural gaps are skipped. If fallback is busy, Ask reports
 unavailable rather than inventing a no-record result. The same global limit
-can temporarily leave historical boxscore quarter scores unavailable. Existing
-responses expose `periodScoreSource: unavailable`; explicit retry/presentation
-for that state needs a separate boxscore follow-up before deployment.
+can temporarily leave historical boxscore quarter scores unavailable. The game
+summary then keeps its NBA scores and adds `periodScoreRetryAfter` seconds (and a
+`Retry-After`, `no-store` header) when retrying can help. Views of one game share
+one fallback fetch, and joined views wait at most its two-second timeout. A parsed
+line score is cached for a day and a page without one for 15 minutes; failures are
+not cached. Design 1 follows the hint up to three times, then offers "Try again".

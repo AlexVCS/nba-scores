@@ -10,6 +10,8 @@ import AskStatResult from "./AskStatResult";
 import AskSuggestions from "./AskSuggestions";
 import AskSeasonStatsResult from "./AskSeasonStatsResult";
 import AskTeamRecordsResult from "./AskTeamRecordsResult";
+import AskSeasonLeadersResult from "./AskSeasonLeadersResult";
+import AskCareerResult from "./AskCareerResult";
 
 interface AskResultProps {
   response: AskResponse;
@@ -45,8 +47,10 @@ function AskResult({response, resultsHidden, onAsk, onChooseOption, onRetry, onE
       {response.outcome === "answer" && result?.kind === "playoff_series" && <AskSeriesResult result={result} />}
       {response.outcome === "answer" && result?.kind === "postseason_summary" && <AskPostseasonResult result={result} resultsHidden={resultsHidden} />}
 
-      {response.outcome === "answer" && result?.kind === "player_season_stats" && <AskSeasonStatsResult result={result} />}
+      {response.outcome === "answer" && result?.kind === "player_season_stats" && <AskSeasonStatsResult key={response.request_id} result={result} />}
       {response.outcome === "answer" && result?.kind === "team_records" && <AskTeamRecordsResult result={result} />}
+      {response.outcome === "answer" && result?.kind === "season_leaders" && <AskSeasonLeadersResult result={result} />}
+      {response.outcome === "answer" && result?.kind === "career_stats" && <AskCareerResult key={response.request_id} result={result} />}
 
       {response.outcome === "needs_clarification" && response.clarification && (
         <AskClarification

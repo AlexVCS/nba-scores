@@ -13,7 +13,8 @@ Rules:
 - `extracted_date` is used only when the date candidate set had no candidates.
 - A relevant field read as absent takes the page's value when lookup offered exactly
   one candidate for it and that candidate came from the app context. Lookup offers
-  page candidates only when the question points at the page.
+  page candidates when the question points at the page, and the page season on a
+  playoffs or series page for any playoff question that names no season.
 """
 
 from __future__ import annotations
@@ -29,7 +30,10 @@ from server.ask.models.candidates import CandidateLookupResult
 from server.ask.models.common import (
     MAX_GAME_SEARCH_DAYS,
     NEW_YORK_TZ,
+    CAREER_LEADER_STATS,
+    LEADER_PERCENTAGES,
     NON_LEADER_STATS,
+    SEASON_LEADER_STATS,
     Aggregation,
     DateComponents,
     DateRange,
@@ -48,7 +52,9 @@ from server.ask.models.request import (
     PlayoffSeriesRequest,
     PostseasonSummaryRequest,
     StatSelection,
+    CareerStatsRequest,
     PlayerSeasonStatsRequest,
+    SeasonLeadersRequest,
     TeamRecordsRequest,
 )
 
@@ -106,7 +112,9 @@ def resolve_components(parts: DateComponents, today: dt.date) -> DateRange | str
         else:
             if parts.year is None and parts.end_year is None:
                 return "year_required"
-            start_year = parts.year if parts.year is not None else parts.end_year
+            start_year = parts.year if parts.year is not None else parts.end_year - (
+                1 if parts.kind != "calendar_date" and parts.end_month < parts.month else 0
+            )
             start = dt.date(start_year, parts.month, parts.day)
             if parts.kind == "calendar_date":
                 end = start
@@ -195,7 +203,7 @@ class Normalizer:
         for f in output.fields:
             if f.status == "selected" and f.field in relevant and f.field in CANDIDATE_SET_FOR:
                 if candidates.sets[CANDIDATE_SET_FOR[f.field]].truncated:
-                    raise _Clarify(f.field, "ambiguous")
+                    raise _Clarify("teams" if f.field == "target_team" else f.field, "ambiguous")
 
     # -- field access -----------------------------------------------------------------
 
@@ -223,7 +231,7 @@ class Normalizer:
             raise _Clarify("season_type", "ambiguous")
         if name == "aggregation":
             intent = self._field(output, "intent")
-            if intent.status == "selected" and intent.selected == ["player_season_stats"]:
+            if intent.status == "selected" and intent.selected[0] in {"player_season_stats", "season_leaders", "career_stats"}:
                 raise _Clarify("aggregation", "ambiguous")
             raise _Invalid("aggregation is unresolved")
         # The user said something we cannot pin down: dropping it would change the question.
@@ -298,6 +306,8 @@ class Normalizer:
             "postseason_summary": self._postseason,
             "player_season_stats": self._player_season,
             "team_records": self._team_records,
+            "season_leaders": self._season_leaders,
+            "career_stats": self._career,
         }
 
     def _game_search(self, output, candidates, context):
@@ -432,7 +442,12 @@ class Normalizer:
         if len(teams) > 1:
             raise _Clarify("teams", "ambiguous")
         stat = self._optional(output, "stat") or ["stat_line"]
-        aggregation = self._optional(output, "aggregation") or ["total"]
+        # No stated measure: per-game averages first; the answer carries totals too, so
+        # the card can switch without a clarification (docs/ask-stage2.md, "Measure toggle").
+        if stat[0] in LEADER_PERCENTAGES:
+            aggregation = ["total"]  # a percentage is the same in both measures
+        else:
+            aggregation = self._optional(output, "aggregation") or ["per_game"]
         season_type = self._optional(output, "season_type") or ["regular_season"]
         return PlayerSeasonStatsRequest(player=player, season=season, team=teams[0] if teams else None,
                                         stat=StatSelection(stat=stat[0], aggregation=aggregation[0]),
@@ -450,6 +465,45 @@ class Normalizer:
         if teams and scope != ["league"]:
             return NormalizationResult(status="unsupported", unsupported_reason="other")
         return TeamRecordsRequest(season=season, team=teams[0] if teams else None, standings_scope=scope[0])
+
+    def _season_leaders(self, output, candidates, context):
+        season = self._value(candidates, self._require(output, "season")[0]).season
+        stat = self._require(output, "stat")[0]
+        if stat == "stat_line":
+            raise _Clarify("stat", "missing")  # ADR 0011: leaders questions need a statistic
+        if stat not in SEASON_LEADER_STATS:
+            return NormalizationResult(status="unsupported", unsupported_reason="unsupported_leader_stat")
+        if stat in LEADER_PERCENTAGES:
+            aggregation = ["total"]  # a percentage has no per-game measure
+        else:
+            aggregation = self._optional(output, "aggregation")
+            if not aggregation:
+                # Never default: the scoring title is per game, "most points" reads as totals.
+                raise _Clarify("aggregation", "ambiguous")
+        season_type = self._optional(output, "season_type") or ["regular_season"]
+        return SeasonLeadersRequest(season=season, season_type=season_type[0],
+                                    stat=StatSelection(stat=stat, aggregation=aggregation[0]))
+
+    def _career(self, output, candidates, context):
+        players = self._optional(output, "player")
+        player = self._value(candidates, players[0]).player if players else None
+        stat = (self._optional(output, "stat") or ["stat_line" if player else ""])[0]
+        # Career questions default to totals (ADR 0013); averages must be explicit.
+        aggregation = "total" if stat in LEADER_PERCENTAGES else (self._optional(output, "aggregation") or ["total"])[0]
+        season_type = (self._optional(output, "season_type") or ["regular_season"])[0]
+        if player is not None:
+            if stat == "plus_minus":
+                return NormalizationResult(status="unsupported", unsupported_reason="other")
+            if stat in LEADER_PERCENTAGES:
+                aggregation = "total"
+            return CareerStatsRequest(view="player_totals", player=player, season_type=season_type,
+                                      stat=StatSelection(stat=stat, aggregation=aggregation))
+        if stat in ("", "stat_line"):
+            raise _Clarify("stat", "missing")  # ADR 0011: leaders questions need a statistic
+        if stat not in CAREER_LEADER_STATS or aggregation != "total":
+            # All-time per-game, percentage and minutes lists are not supported (ADR 0013).
+            return NormalizationResult(status="unsupported", unsupported_reason="unsupported_leader_stat")
+        return CareerStatsRequest(view="leaders", season_type=season_type, stat=StatSelection(stat=stat))
 
 
 def _with_page_context(output: InterpreterOutput, candidates: CandidateLookupResult) -> InterpreterOutput:

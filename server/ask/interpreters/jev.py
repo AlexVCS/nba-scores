@@ -121,7 +121,7 @@ def build_questions(candidates: CandidateLookupResult) -> tuple[dict[str, Any], 
         "intent": _choice("What is the `question` asking for?", dict(cs.INTENTS)),
         "unsupported_reason": _choice(
             "If the `question` asks for something other than NBA games, one game's box score, "
-            "one playoff series, one postseason, player season statistics, or regular-season records/standings, what kind of request is it?",
+            "one playoff series, one postseason, player season statistics, regular-season records/standings, season leaders, or career statistics, what kind of request is it?",
             dict(cs.UNSUPPORTED_REASONS),
         ),
         "stat_scope": _choice(

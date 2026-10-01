@@ -1,0 +1,806 @@
+{
+ "scope": "Stage 3 development cases only (docs/ask-stage3.md: season leaders and career stats). Labels authored alongside implementation, before any live run. Exposed development data, not unseen release evidence.",
+ "cases": [
+  {
+   "id": "stage3-season_leaders-01",
+   "question": "Who led the league in assists per game in 2019-20?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "season-leaders"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "season_leaders",
+     "season": "2019-20",
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "assists",
+      "aggregation": "per_game"
+     },
+     "limit": 10
+    }
+   }
+  },
+  {
+   "id": "stage3-season_leaders-02",
+   "question": "Who led the NBA in points per game in 2023-24?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "season-leaders"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "season_leaders",
+     "season": "2023-24",
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "points",
+      "aggregation": "per_game"
+     },
+     "limit": 10
+    }
+   }
+  },
+  {
+   "id": "stage3-season_leaders-03",
+   "question": "Top 5 in total rebounds in 2023-24",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "season-leaders"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "season_leaders",
+     "season": "2023-24",
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "rebounds",
+      "aggregation": "total"
+     },
+     "limit": 5
+    }
+   }
+  },
+  {
+   "id": "stage3-season_leaders-04",
+   "question": "2023-24 field goal percentage leaders",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "season-leaders"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "season_leaders",
+     "season": "2023-24",
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "field_goal_percentage",
+      "aggregation": "total"
+     },
+     "limit": 10
+    }
+   }
+  },
+  {
+   "id": "stage3-season_leaders-05",
+   "question": "Who had the most total blocks in 2015-16?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "season-leaders"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "season_leaders",
+     "season": "2015-16",
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "blocks",
+      "aggregation": "total"
+     },
+     "limit": 10
+    }
+   }
+  },
+  {
+   "id": "stage3-season_leaders-06",
+   "question": "Top ten in steals per game in 2012-13",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "season-leaders"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "season_leaders",
+     "season": "2012-13",
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "steals",
+      "aggregation": "per_game"
+     },
+     "limit": 10
+    }
+   }
+  },
+  {
+   "id": "stage3-season_leaders-07",
+   "question": "Who led the 2024 playoffs in points per game?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "season-leaders"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "season_leaders",
+     "season": "2023-24",
+     "season_type": "playoffs",
+     "stat": {
+      "stat": "points",
+      "aggregation": "per_game"
+     },
+     "limit": 10
+    }
+   }
+  },
+  {
+   "id": "stage3-season_leaders-08",
+   "question": "Who made the most three-pointers in the 2015-16 regular season?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "ambiguity",
+    "relabeled-2026-09-30"
+   ],
+   "expected": {
+    "action": "clarify",
+    "clarify_field": "aggregation",
+    "clarify_reason": "ambiguous"
+   }
+  },
+  {
+   "id": "stage3-season_leaders-09",
+   "question": "Best free throw percentage in 2022-23",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "season-leaders"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "season_leaders",
+     "season": "2022-23",
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "free_throw_percentage",
+      "aggregation": "total"
+     },
+     "limit": 10
+    }
+   }
+  },
+  {
+   "id": "stage3-season_leaders-10",
+   "question": "Top 3 in rebounds per game in the 2023 playoffs",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "season-leaders"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "season_leaders",
+     "season": "2022-23",
+     "season_type": "playoffs",
+     "stat": {
+      "stat": "rebounds",
+      "aggregation": "per_game"
+     },
+     "limit": 3
+    }
+   }
+  },
+  {
+   "id": "stage3-season_leaders-11",
+   "question": "Most total minutes played in 2023-24",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "season-leaders"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "season_leaders",
+     "season": "2023-24",
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "minutes",
+      "aggregation": "total"
+     },
+     "limit": 10
+    }
+   }
+  },
+  {
+   "id": "stage3-season_leaders-12",
+   "question": "Who averaged the most turnovers per game in 2021-22?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "season-leaders"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "season_leaders",
+     "season": "2021-22",
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "turnovers",
+      "aggregation": "per_game"
+     },
+     "limit": 10
+    }
+   }
+  },
+  {
+   "id": "stage3-season_leaders-13",
+   "question": "Top 20 in 3-point percentage in 2018-19",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "season-leaders"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "season_leaders",
+     "season": "2018-19",
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "three_point_percentage",
+      "aggregation": "total"
+     },
+     "limit": 20
+    }
+   }
+  },
+  {
+   "id": "stage3-season_leaders-14",
+   "question": "Who led the league in points in 2022-23?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "ambiguity"
+   ],
+   "expected": {
+    "action": "clarify",
+    "clarify_field": "aggregation",
+    "clarify_reason": "ambiguous"
+   }
+  },
+  {
+   "id": "stage3-season_leaders-15",
+   "question": "Who led the league in assists?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "ambiguity"
+   ],
+   "expected": {
+    "action": "clarify",
+    "clarify_field": "season",
+    "clarify_reason": "missing"
+   }
+  },
+  {
+   "id": "stage3-season_leaders-16",
+   "question": "Who led the NBA in rebounds per game in 2008?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "ambiguity"
+   ],
+   "expected": {
+    "action": "clarify",
+    "clarify_field": "season",
+    "clarify_reason": "ambiguous"
+   }
+  },
+  {
+   "id": "stage3-season_leaders-17",
+   "question": "Who led the league in 2021-22?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "ambiguity"
+   ],
+   "expected": {
+    "action": "clarify",
+    "clarify_field": "stat",
+    "clarify_reason": "missing"
+   }
+  },
+  {
+   "id": "stage3-season_leaders-18",
+   "question": "Who led the league in points per game including the playoffs in 2023-24?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "combined-phases"
+   ],
+   "expected": {
+    "action": "unsupported",
+    "unsupported_reason": "other"
+   }
+  },
+  {
+   "id": "stage3-season_leaders-19",
+   "question": "Who led the Lakers in points per game in 2023-24?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "out-of-scope"
+   ],
+   "expected": {
+    "action": "unsupported",
+    "unsupported_reason": "other"
+   }
+  },
+  {
+   "id": "stage3-season_leaders-20",
+   "question": "Did Nikola Jokic lead the league in rebounds per game in 2023-24?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "out-of-scope"
+   ],
+   "expected": {
+    "action": "unsupported",
+    "unsupported_reason": "other"
+   }
+  },
+  {
+   "id": "stage3-season_leaders-21",
+   "question": "Who led the league in points and assists per game in 2023-24?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "out-of-scope"
+   ],
+   "expected": {
+    "action": "unsupported",
+    "unsupported_reason": "other"
+   }
+  },
+  {
+   "id": "stage3-season_leaders-22",
+   "question": "Who has the most career points in NBA history?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "career"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "career_stats",
+     "view": "leaders",
+     "player": null,
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "points",
+      "aggregation": "total"
+     },
+     "limit": 10
+    }
+   }
+  },
+  {
+   "id": "stage3-season_leaders-23",
+   "question": "Who led the league in win shares in 2023-24?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "out-of-scope"
+   ],
+   "expected": {
+    "action": "unsupported",
+    "unsupported_reason": "other"
+   }
+  },
+  {
+   "id": "stage3-season_leaders-24",
+   "question": "Top 50 in total points in 2023-24",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "season-leaders",
+    "relabeled-2026-09-30"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "season_leaders",
+     "season": "2023-24",
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "points",
+      "aggregation": "total"
+     },
+     "limit": 25,
+     "requested_limit": 50
+    }
+   }
+  },
+  {
+   "id": "stage3-season_leaders-25",
+   "question": "Who had the fewest turnovers per game in 2023-24?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "out-of-scope"
+   ],
+   "expected": {
+    "action": "unsupported",
+    "unsupported_reason": "other"
+   }
+  },
+  {
+   "id": "stage3-season_leaders-26",
+   "question": "Who scored the most points in a single game in 2023-24?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "out-of-scope"
+   ],
+   "expected": {
+    "action": "unsupported",
+    "unsupported_reason": "other"
+   }
+  },
+  {
+   "id": "stage3-career_stats-27",
+   "question": "LeBron James career points",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "career"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "career_stats",
+     "view": "player_totals",
+     "player": {
+      "player_id": 2544,
+      "name": "LeBron James"
+     },
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "points",
+      "aggregation": "total"
+     },
+     "limit": 10
+    }
+   }
+  },
+  {
+   "id": "stage3-career_stats-28",
+   "question": "Stephen Curry career 3-point percentage",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "career"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "career_stats",
+     "view": "player_totals",
+     "player": {
+      "player_id": 201939,
+      "name": "Stephen Curry"
+     },
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "three_point_percentage",
+      "aggregation": "total"
+     },
+     "limit": 10
+    }
+   }
+  },
+  {
+   "id": "stage3-career_stats-29",
+   "question": "Kareem Abdul-Jabbar career rebounds per game",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "career"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "career_stats",
+     "view": "player_totals",
+     "player": {
+      "player_id": 76003,
+      "name": "Kareem Abdul-Jabbar"
+     },
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "rebounds",
+      "aggregation": "per_game"
+     },
+     "limit": 10
+    }
+   }
+  },
+  {
+   "id": "stage3-career_stats-30",
+   "question": "LeBron James career playoff points",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "career"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "career_stats",
+     "view": "player_totals",
+     "player": {
+      "player_id": 2544,
+      "name": "LeBron James"
+     },
+     "season_type": "playoffs",
+     "stat": {
+      "stat": "points",
+      "aggregation": "total"
+     },
+     "limit": 10
+    }
+   }
+  },
+  {
+   "id": "stage3-career_stats-31",
+   "question": "Who has the most career assists?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "career"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "career_stats",
+     "view": "leaders",
+     "player": null,
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "assists",
+      "aggregation": "total"
+     },
+     "limit": 10
+    }
+   }
+  },
+  {
+   "id": "stage3-career_stats-32",
+   "question": "Top 5 all-time in total blocks",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "career"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "career_stats",
+     "view": "leaders",
+     "player": null,
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "blocks",
+      "aggregation": "total"
+     },
+     "limit": 5
+    }
+   }
+  },
+  {
+   "id": "stage3-career_stats-33",
+   "question": "Where does Stephen Curry rank all-time in 3-pointers made?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "career"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "career_stats",
+     "view": "player_rank",
+     "player": {
+      "player_id": 201939,
+      "name": "Stephen Curry"
+     },
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "three_pointers",
+      "aggregation": "total"
+     },
+     "limit": 10
+    }
+   }
+  },
+  {
+   "id": "stage3-career_stats-34",
+   "question": "How many points does LeBron James have?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "career",
+    "ambiguity"
+   ],
+   "expected": {
+    "action": "clarify",
+    "clarify_field": "intent"
+   }
+  },
+  {
+   "id": "stage3-career_stats-35",
+   "question": "Where does LeBron James rank all-time?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "career",
+    "ambiguity"
+   ],
+   "expected": {
+    "action": "clarify",
+    "clarify_field": "stat"
+   }
+  },
+  {
+   "id": "stage3-career_stats-36",
+   "question": "Kobe Bryant career high in points",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "career",
+    "out-of-scope"
+   ],
+   "expected": {
+    "action": "unsupported",
+    "unsupported_reason": "other"
+   }
+  },
+  {
+   "id": "stage3-career_stats-37",
+   "question": "Lakers all-time leading scorer",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "career",
+    "out-of-scope"
+   ],
+   "expected": {
+    "action": "unsupported",
+    "unsupported_reason": "other"
+   }
+  },
+  {
+   "id": "stage3-career_stats-38",
+   "question": "Who has the highest career points per game?",
+   "reference_time": "2026-09-29T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "career",
+    "out-of-scope"
+   ],
+   "expected": {
+    "action": "unsupported",
+    "unsupported_reason": "unsupported_leader_stat"
+   }
+  },
+  {
+   "id": "stage3-season_leaders-39",
+   "question": "Who led the league in assists in 2019-20?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "ambiguity",
+    "live-feedback-2026-09-30"
+   ],
+   "expected": {
+    "action": "clarify",
+    "clarify_field": "aggregation",
+    "clarify_reason": "ambiguous"
+   }
+  },
+  {
+   "id": "stage3-season_leaders-40",
+   "question": "Top 30 scorers 2023-24",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "ambiguity",
+    "live-feedback-2026-09-30"
+   ],
+   "expected": {
+    "action": "clarify",
+    "clarify_field": "aggregation",
+    "clarify_reason": "ambiguous"
+   }
+  },
+  {
+   "id": "stage3-season_leaders-41",
+   "question": "Top 30 scorers 2023-24 per game?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "season-leaders",
+    "continuation",
+    "live-feedback-2026-09-30"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "season_leaders",
+     "season": "2023-24",
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "points",
+      "aggregation": "per_game"
+     },
+     "limit": 25,
+     "requested_limit": 30
+    }
+   }
+  },
+  {
+   "id": "stage3-career_stats-42",
+   "question": "LeBron's career points",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "tags": [
+    "stage3",
+    "career",
+    "live-feedback-2026-09-30"
+   ],
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "career_stats",
+     "view": "player_totals",
+     "player": {
+      "player_id": 2544,
+      "name": "LeBron James"
+     },
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "points",
+      "aggregation": "total"
+     },
+     "limit": 10
+    }
+   }
+  }
+ ]
+}
