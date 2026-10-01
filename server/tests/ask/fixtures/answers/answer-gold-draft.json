@@ -1393,7 +1393,7 @@
    "verified": true,
    "expected_outcome": "answer",
    "source": {
-    "url": "https://www.basketball-reference.com/leagues/NBA_2024_totals.html",
+    "url": "https://www.basketball-reference.com/playoffs/NBA_2024_totals.html",
     "read": "Playoffs Totals table: Luka Doncic 635 (22 G), Kyrie Irving 487 (22 G), Jayson Tatum 475 (19 G).",
     "checked_at": "2026-09-30"
    },

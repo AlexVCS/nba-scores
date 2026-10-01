@@ -397,8 +397,18 @@
     "career"
    ],
    "expected": {
-    "action": "unsupported",
-    "unsupported_reason": "career_stats"
+    "action": "accept",
+    "request": {
+     "intent": "career_stats",
+     "view": "leaders",
+     "player": null,
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "points",
+      "aggregation": "total"
+     },
+     "limit": 10
+    }
    }
   },
   {
