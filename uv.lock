@@ -362,6 +362,7 @@ dependencies = [
     { name = "nba-api" },
     { name = "numpy" },
     { name = "pandas" },
+    { name = "pydantic" },
     { name = "requests" },
     { name = "uvicorn", extra = ["standard"] },
 ]
@@ -374,6 +375,7 @@ requires-dist = [
     { name = "nba-api", specifier = ">=1.11,<1.12" },
     { name = "numpy", specifier = ">=2.3,<2.4" },
     { name = "pandas", specifier = ">=2.3,<2.4" },
+    { name = "pydantic", specifier = ">=2.12,<3" },
     { name = "requests", specifier = ">=2.32,<2.33" },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.38,<0.39" },
 ]

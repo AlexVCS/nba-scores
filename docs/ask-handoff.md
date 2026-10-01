@@ -152,8 +152,8 @@ calls and ran no live evaluation. Production enablement is still off
   when the server runs with `ASK_DEV=1`. Production sends `field_tiers: {}`
   and omits `field_decisions`. The dev preview backend now needs `ASK_DEV=1`
   to show the "Decided by" row.
-- **Frontend follow-up.** `src/services/ask/types.ts` and `AskResponseDetails`
-  do not show `field_decisions` yet. This branch stayed out of `src/`.
+- **Frontend.** `AskResponseDetails` shows `field_decisions` (tier, confidence
+  and outcome) when the dev server sends them.
 - **Release runner.** `release.py` still pins `FROZEN_COMMIT` `6cdae70`, so it
   can't run from this branch until a new frozen commit is designated. (September 30: still true in the committed file;
   a generalization is in progress.)
