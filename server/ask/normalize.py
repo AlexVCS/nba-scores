@@ -13,7 +13,8 @@ Rules:
 - `extracted_date` is used only when the date candidate set had no candidates.
 - A relevant field read as absent takes the page's value when lookup offered exactly
   one candidate for it and that candidate came from the app context. Lookup offers
-  page candidates only when the question points at the page.
+  page candidates when the question points at the page, and the page season on a
+  playoffs or series page for any playoff question that names no season.
 """
 
 from __future__ import annotations
@@ -202,7 +203,7 @@ class Normalizer:
         for f in output.fields:
             if f.status == "selected" and f.field in relevant and f.field in CANDIDATE_SET_FOR:
                 if candidates.sets[CANDIDATE_SET_FOR[f.field]].truncated:
-                    raise _Clarify(f.field, "ambiguous")
+                    raise _Clarify("teams" if f.field == "target_team" else f.field, "ambiguous")
 
     # -- field access -----------------------------------------------------------------
 

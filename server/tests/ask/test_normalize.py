@@ -384,6 +384,16 @@ def test_unclear_target_team_is_asked_as_teams(status):
     assert (result.clarify_field, result.clarify_reason) == ("teams", status)
 
 
+def test_target_team_from_a_truncated_team_list_is_asked_as_teams():
+    game_day = b.date(2, "March 3, 2024", DateComponents(kind="calendar_date", year=2024, month=3, day=3),
+                      start=dt.date(2024, 3, 3), end=dt.date(2024, 3, 3))
+    result = normalize(output(
+        sel("intent", "boxscore_stat"), sel("stat_scope", "team"), sel("stat", "steals"),
+        sel("date", game_day.id), sel("target_team", BOS.id),
+    ), b.lookup_result([CLE, BOS, game_day], truncated=["team"]))
+    assert (result.status, result.clarify_field, result.clarify_reason) == ("needs_clarification", "teams", "ambiguous")
+
+
 def test_target_team_is_ignored_outside_team_scope():
     candidates = b.lookup_result([TATUM, CLE, BOS, LAST_WEEK])
     out = output(sel("intent", "boxscore_stat"), sel("stat_scope", "player"), sel("player", TATUM.id),
