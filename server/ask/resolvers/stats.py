@@ -83,11 +83,54 @@ def stat_defs(stat: Stat, line: tuple[StatKey, ...]) -> tuple[StatDef, ...]:
         raise UnsupportedError("other", "unknown_stat", f"Unknown statistic {stat!r}") from None
 
 
+# stats.nba fills a statistic it does not hold with 0. Seasons are start years.
+# Three-pointers did not exist before 1979-80, and plus-minus is absent before
+# 1996-97. Boxscores before 1996-97 are also sparse game by game (rebound
+# splits, steals, blocks and turnovers are missing well after the league began
+# counting them), so there a statistic that is zero for everyone in a finished
+# game was not recorded. Points are always recorded.
+FIRST_RECORDED_SEASON: dict[str, int] = {
+    "three_pointers": 1979,
+    "three_point_percentage": 1979,
+    "plus_minus": 1996,
+}
+SPARSE_BOXSCORES_BEFORE_SEASON = 1996
+_ALWAYS_RECORDED = frozenset({"points", "three_pointers", "three_point_percentage", "plus_minus"})
+
+
+def _is_zero(statistics, definition: StatDef) -> bool:
+    statistics = statistics if isinstance(statistics, dict) else {}
+    if definition.kind == "minutes":
+        return not minutes_to_seconds(statistics.get(definition.field))
+    return not _number(statistics, definition.attempted or definition.field)
+
+
+def not_recorded(definition: StatDef, season_start: int, settled: bool, population) -> bool:
+    """Whether the source holds no real value of this statistic for a game.
+
+    ``population`` is every statistics object the statistic could appear in:
+    the lines of all players who played, or both teams' totals.
+    """
+    if season_start < FIRST_RECORDED_SEASON.get(definition.key, 0):
+        return True
+    if definition.key in _ALWAYS_RECORDED or season_start >= SPARSE_BOXSCORES_BEFORE_SEASON or not settled:
+        return False
+    population = list(population)
+    return bool(population) and all(_is_zero(statistics, definition) for statistics in population)
+
+
+def missing_value(definition: StatDef) -> StatValue:
+    return StatValue(stat=definition.key, value=None, display=MISSING_DISPLAY)
+
+
 def minutes_to_seconds(value) -> float | None:
-    """Parse V3 minutes ("34:12", "PT34M12.00S") to seconds."""
+    """Parse minutes ("34:12", "PT34M12.00S", or whole minutes "47" as
+    stats.nba reports them before 1996-97) to seconds."""
     if value is None or isinstance(value, bool):
         return None
     text = str(value).strip()
+    if match := re.fullmatch(r"\d+(?:\.\d+)?", text):
+        return float(match[0]) * 60
     if match := re.fullmatch(r"(\d+):(\d{1,2})(?:\.\d+)?", text):
         return int(match[1]) * 60 + int(match[2])
     if match := re.fullmatch(r"PT(\d+)M(\d+(?:\.\d+)?)S", text):
@@ -129,6 +172,9 @@ def stat_value(statistics, definition: StatDef) -> StatValue:
         if attempted == 0:
             # 0-for-0 has no percentage; the source reports 0.0.
             return StatValue(stat=key, value=None, display=MISSING_DISPLAY, made=made_int, attempted=0)
+        if percentage == 0 and made:
+            # Older boxscores report 0.0 beside real makes; the makes are the record.
+            percentage = round(made / attempted, 3)
         return StatValue(stat=key, value=percentage, display=f"{percentage * 100:.1f}%", made=made_int, attempted=attempted_int)
     value = _number(statistics, definition.field)
     if value is None:

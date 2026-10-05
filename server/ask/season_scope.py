@@ -138,6 +138,16 @@ _CAREER_SPLIT = re.compile(
     r"fewer\s+than|compare|compared|comparison|difference|aba|abl)\b"
 )
 _CAREER_WORDING = re.compile(r"\b(?:career|all[ -]?time|ever|history|lifetime)\b")
+# Owner decision 2026-10-01: present-perfect wording about a named player's count
+# ("How many blocks has Victor Wembanyama recorded?") means his career total.
+_PERFECT_WORDING = re.compile(
+    r"\bhas\s+(?:[a-z'.-]+\s+){0,4}?(?:recorded|had|scored|made|grabbed|gotten|got|blocked|stolen|dished(?:\s+out)?|"
+    r"handed\s+out|pulled\s+down|hit|knocked\s+down|drained|sunk|committed|played|logged|tallied|totaled|totalled|"
+    r"accumulated|amassed|collected|compiled|registered|notched|posted|racked\s+up|put\s+up|piled\s+up)\b")
+# A stated period is never a career: these keep the "career or one season?" question.
+_PERIOD_WORDING = re.compile(
+    r"\b(?:seasons?|years?|months?|weeks?|games?|tonight|today|yesterday|night|lately|recently|so\s+far|now|"
+    r"this|last|past|current|currently)\b")
 _RANK_WORDING = re.compile(r"\b(?:rank|ranks|ranked|ranking|stand|stands|place|lead|leads|led|leader|leading)\b")
 _NUMBER_WORDS = {w: i for i, w in enumerate(
     "zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen "
@@ -215,8 +225,10 @@ def _career(result, candidates, text, unmasked, explicit_constraints):
         return NormalizationResult(status="unsupported", unsupported_reason="other")
     # Career wording is read from the unmasked question: a loose player match can span
     # it ("LeBron's career" matched as one name), and masking would then erase it.
-    if not _CAREER_WORDING.search(unmasked):
+    perfect = len(players) == 1 and _PERFECT_WORDING.search(unmasked) and not _PERIOD_WORDING.search(text)
+    if not _CAREER_WORDING.search(unmasked) and not perfect:
         # "How many points does LeBron have?" could mean this season or his career.
+        # "How many points has LeBron scored?" is his career total (present perfect).
         return NormalizationResult(status="needs_clarification", clarify_field="intent", clarify_reason="ambiguous")
     if result.status != "valid":
         return result

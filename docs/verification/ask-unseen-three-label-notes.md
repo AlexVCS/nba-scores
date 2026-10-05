@@ -16,8 +16,8 @@ no evaluation results or journals were read.
 | player_season_stats | 18 | 4 | 3 | 25 |
 | team_records | 16 | 2 | 2 | 20 |
 | season_leaders | 18 | 2 | 3 | 23 |
-| career_stats | 18 | 2 | 6 | 26 |
-| **All** | **139** | **19** | **21** | **179** |
+| career_stats | 19 | 1 | 6 | 26 |
+| **All** | **140** | **18** | **21** | **179** |
 
 Each non-accept case names one family in its id and tags, as `scripts/ask/release.py`
 and `scripts/ask/tier_gate.py` expect. Unsupported reasons: `other` 12,
@@ -39,8 +39,9 @@ used.
   2005-07 Oklahoma City Hornets tenure the tricode `NOP`, while the dated team name uses
   `NOK`. Display fields are stripped in scoring, so this does not matter.
 - **Measure (ADR 0014).** Python reads it from the question text. With no stated measure,
-  player season stats are `per_game`, career stats are `total`, and counting-stat season
-  leaders ask for `aggregation`. Percentages are always `total`.
+  player season stats are `per_game`, a full career stat line is `per_game`, one career
+  statistic and all-time lists are `total` (ADR 0013 as amended 2026-10-01), and
+  counting-stat season leaders ask for `aggregation`. Percentages are always `total`.
 - **Top N.** Python reads it: digits or number words up to "twenty five". Above 25, the
   label is `limit 25` with `requested_limit`. "Who led ..." keeps the default of 10.
 - **Seasons.** A playoff year maps to the season that ends in it. A bare year without
@@ -51,7 +52,8 @@ used.
 - **Box scores.** `game.teams` lists every team named, opponents included. Team scope
   keeps the target in `game.teams`. With no game named, page context supplies `game_id`.
 - **Clarify fields.** These follow the precedents in `stage2-dev` and `stage3-dev`: an
-  ambiguous surname is `player`/ambiguous; "career or one season?" is `intent`/ambiguous;
+  ambiguous surname is `player`/ambiguous; "career or one season?" is `intent`/ambiguous
+  (not for present-perfect wording, which is a career total since 2026-10-01);
   a leaders question with no stat is `stat`/missing.
 - **Ties.** Ties do not change a request. Top N always lists every tied player, so the
   "including anyone tied" wording (`season_leaders-03`) keeps the plain top-3 request.
@@ -97,10 +99,9 @@ Reviewed 2026-09-30. The three typo cases stay accept and now list `clarify` in 
 
 Lower-risk judgment calls a reviewer may still want to confirm:
 
-- **career_stats-19** (Wembanyama "How many blocks has ... recorded?"): the draft label is
-  `intent`/ambiguous, following the stage 3 precedent. A model that picks player season
-  stats would instead ask for the `season`. The scorer checks the field, so the rule
-  needs to be confirmed.
+- **career_stats-19** (Wembanyama "How many blocks has ... recorded?"): the draft label was
+  `intent`/ambiguous, following the stage 3 precedent. Decided 2026-10-01: accept, career
+  total blocks (see "Owner decisions 2026-10-01").
 - **postseason_summary-06** ("Who won each round of the 1970 playoffs?") and **-05**
   ("Recap every round of the 2017 playoffs."): both are labeled as a league-wide
   postseason summary, not a list of series.
@@ -120,6 +121,28 @@ Lower-risk judgment calls a reviewer may still want to confirm:
   spot-checked. The accept labels do not depend on those facts, but the two
   surname-ambiguity clarifications (boxscore_stat-19 Gasol, -21 Antetokounmpo) assume
   both players were active on those dates.
+
+## Owner decisions 2026-10-01
+
+The owner answered the review sheet's "Needs your decision" items. The fixture, its
+`scope` counts and the field-label template (new `fixture_sha256`) were updated.
+
+- **"has recorded" means career.** Present-perfect wording about a named player's count
+  is his career total. career_stats-19 is now accept: `career_stats`, `player_totals`,
+  Victor Wembanyama (1641705), blocks, `total`, regular season. Counts moved to accept
+  140, clarify 18; career_stats is 19/1/6.
+- **Full career lines show per game first.** career_stats-07 ("Michael Jordan career
+  stats") is now `stat_line` `per_game`. It is the only full-line career case with no
+  stated measure in any eval fixture. Single career statistics stay `total`.
+- **Dates swapped so the games exist.** game_search-04 is March 4, 1983. game_search-10
+  has reference time 2025-01-08, so last week is 2024-12-30..2025-01-05. game_search-11
+  is March 7, 2016. game_search-12 is 2/2/2019. boxscore_stat-15 has reference time
+  2023-12-08, so last night is 2023-12-07. boxscore_stat-19 is February 21, 2014 (still a
+  `player` clarification).
+- **game_search-02 is kept** (Salt Lake City, April 20, 1997) as a deliberate "no games
+  that day" test.
+- No interpreter, lookup or provider was run on this set for these edits. The changed
+  questions are still unique across the fixture files.
 
 ## Before freezing
 

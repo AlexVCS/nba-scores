@@ -54,6 +54,23 @@ from server.ask import links, tools
 from server.utils.deadline import Deadline
 
 
+def _playoff_game(request: BoxscoreStatRequest, team_ids: list[int]) -> ResolvedGame:
+    """The numbered playoff game. A round named without teams is worked out when
+    only one game fits (one series reached that game, or the named player
+    appeared in just one of them); otherwise the teams are asked for."""
+    selector = request.game
+    # Passed only when it can narrow, so the call is unchanged otherwise.
+    narrow = {"player_id": request.player.player_id} if request.scope == "player" and not team_ids else {}
+    try:
+        return playoffs.find_playoff_game(
+            selector.season, selector.game_number, team_ids, selector.round, selector.conference, **narrow
+        )
+    except AmbiguousError as error:
+        if team_ids or error.reason != "several_series":
+            raise
+        raise ClarificationError("teams", "missing", "hidden_game_needs_teams") from error
+
+
 def resolve_boxscore_game(request: BoxscoreStatRequest) -> ResolvedGame:
     """Find the one game a boxscore request refers to."""
     selector = request.game
@@ -63,18 +80,14 @@ def resolve_boxscore_game(request: BoxscoreStatRequest) -> ResolvedGame:
     if selector.game_id:
         game = games.get_game(selector.game_id, selector.date)
     elif selector.season and selector.game_number and (selector.round or len(team_ids) == 2):
-        game = playoffs.find_playoff_game(
-            selector.season, selector.game_number, team_ids, selector.round, selector.conference
-        )
+        game = _playoff_game(request, team_ids)
     elif selector.date:
         if request.scope == "player" and not team_ids:
             game, _ = games.find_player_game(request.player.player_id, selector.date)
         else:
             game = games.find_game_on_date(selector.date, team_ids)
     else:
-        game = playoffs.find_playoff_game(
-            selector.season, selector.game_number, team_ids, selector.round, selector.conference
-        )
+        game = _playoff_game(request, team_ids)
     # GameSelector permits a date together with playoff details. Both describe
     # the same game; neither can be discarded merely because one located it.
     if selector.date and game.date != selector.date:
@@ -121,7 +134,9 @@ def resolve(request: AskRequest, *, deadline: Deadline | None = None) -> Resolve
     ``DEADLINE_EXECUTORS`` share it across source attempts and fallback."""
     # Asking is consent, so answers are never gated (ADR 0006). Clarifications
     # are not answers: when a lookup-dependent choice list could reveal a
-    # result, ask for teams first, before any result lookup.
+    # result, ask for teams first, before any result lookup. A round and game
+    # number without a date are looked up instead (``_playoff_game``): when
+    # only one game fits it is answered, and the clarification offers no options.
     if isinstance(request, BoxscoreStatRequest) and outcome_may_reveal_result(request):
         selector = request.game
         named_teams = bool(selector.teams or request.team)
@@ -129,11 +144,10 @@ def resolve(request: AskRequest, *, deadline: Deadline | None = None) -> Resolve
             selector.round == "finals" or
             (selector.round == "conference_finals" and selector.conference)
         ))
-        ambiguous_round = bool(selector.round and not selector.date and not unique_series)
         ambiguous_date = bool(selector.date and request.scope in ("leaders", "team") and not unique_series)
-        if not named_teams and not selector.game_id and (ambiguous_round or ambiguous_date):
+        if not named_teams and not selector.game_id and ambiguous_date:
             # A lookup-dependent clarification would reveal whether a
-            # conditional playoff game took place on this date or in this round.
+            # conditional playoff game took place on this date.
             raise ClarificationError("teams", "missing", "hidden_game_needs_teams")
     return _resolve(request, deadline)
 

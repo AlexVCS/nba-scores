@@ -598,3 +598,69 @@ def test_more_per_game_abbreviations_survive_total_choice(tmp_path,abbreviation,
     o=interpreted('player_season_stats',{'player':'player:203999','season':'season:2023-24','stat':stat})
     options=clarification('aggregation','ambiguous',q,PendingResolution(o,c,CONTEXT),ResolutionStore(tmp_path/'copy.sqlite3')).options
     assert stat in options[0].question and abbreviation not in options[0].question and 'per game' not in options[0].question
+
+
+SEASON_DATA = Path(__file__).parent / "fixtures/season-data"
+
+
+def test_division_era_league_standings_from_nba_fixture(monkeypatch):
+    # Pre-1970-71 stats.nba rows have Conference null and East/West divisions (#212).
+    payload = json.loads((SEASON_DATA / "nba-standings-1960-61.json").read_text())
+    monkeypatch.setattr(seasons.leaguestandings, "LeagueStandings", lambda **k: SimpleNamespace(get_dict=lambda: payload))
+    q = TeamRecordsRequest(season="1960-61")
+    rows = seasons._valid_records(seasons._nba_records(q), q)
+    assert [(r.team.name, r.wins, r.losses) for r in rows][:3] == [
+        ("Boston Celtics", 57, 22), ("St. Louis Hawks", 51, 28), ("Philadelphia Warriors", 46, 33)]
+    assert len(rows) == 8 and all(r.conference is None and r.conference_rank is None for r in rows)
+
+
+def test_conference_era_nba_row_without_conference_is_still_rejected(monkeypatch):
+    payload = json.loads((SEASON_DATA / "nba-standings-1960-61.json").read_text())
+    for r in payload["resultSets"][0]["rowSet"]:
+        r[1] = "21970"
+    monkeypatch.setattr(seasons.leaguestandings, "LeagueStandings", lambda **k: SimpleNamespace(get_dict=lambda: payload))
+    with pytest.raises(ValueError, match="Unknown NBA conference"):
+        seasons._nba_records(TeamRecordsRequest(season="1970-71"))
+
+
+def test_division_era_league_standings_fall_back_to_bref_divisions_table(monkeypatch):
+    monkeypatch.setattr(seasons, "_nba_records", lambda *a: (_ for _ in ()).throw(ValueError("NBA unusable")))
+    monkeypatch.setattr(seasons, "_html", lambda *a: (SEASON_DATA / "bref-standings-1960-61.html").read_text())
+    output = seasons.team_records(TeamRecordsRequest(season="1960-61"))
+    rows = output.result.rows
+    assert [(r.team.name, r.wins, r.losses) for r in rows] == [
+        ("Boston Celtics", 57, 22), ("St. Louis Hawks", 51, 28), ("Philadelphia Warriors", 46, 33),
+        ("Syracuse Nationals", 38, 41), ("Los Angeles Lakers", 36, 43), ("Detroit Pistons", 34, 45),
+        ("Cincinnati Royals", 33, 46), ("New York Knicks", 21, 58)]
+    assert all(r.conference is None for r in rows)
+    assert output.sources[0].name == "basketball_reference"
+
+
+def test_conference_era_bref_divs_tables_are_conferences(monkeypatch):
+    # From 1970-71 the divs_standings_E/W tables are the two conferences.
+    monkeypatch.setattr(seasons, "_html", lambda *a: (SEASON_DATA / "bref-standings-1970-71.html").read_text())
+    q = TeamRecordsRequest(season="1970-71", standings_scope="east")
+    data = seasons._bref_records(q)
+    assert len(seasons._valid_records(data, TeamRecordsRequest(season="1970-71"))) == 17
+    east = seasons._valid_records(data, q)
+    assert len(east) == 8 and east[0].team.name == "New York Knicks" and (east[0].wins, east[0].losses) == (52, 30)
+
+
+def test_division_era_page_divisions_never_become_conferences(monkeypatch):
+    html = (SEASON_DATA / "bref-standings-1960-61.html").read_text().replace('id="divs_standings_"', 'id="divs_standings_E"')
+    monkeypatch.setattr(seasons, "_html", lambda *a: html)
+    with pytest.raises(ValueError, match="BRef standings table missing"):
+        seasons._bref_records(TeamRecordsRequest(season="1960-61"))
+
+
+@pytest.mark.parametrize("scope", ["east", "west"])
+def test_conference_standings_before_1970_are_no_record_without_fetching(monkeypatch, scope):
+    from server.ask.present import notice
+    def fetched(*a, **k):
+        raise AssertionError("no fetch")
+    monkeypatch.setattr(seasons.leaguestandings, "LeagueStandings", fetched)
+    monkeypatch.setattr(seasons, "_html", fetched)
+    with pytest.raises(NotFoundError) as error:
+        seasons.team_records(TeamRecordsRequest(season="1969-70", standings_scope=scope))
+    assert error.value.code == "no_record" and error.value.reason == "no_conferences_before_1970"
+    assert "1970-71" in notice("no_record", reason="no_conferences_before_1970").message

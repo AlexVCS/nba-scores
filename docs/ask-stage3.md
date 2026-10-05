@@ -192,7 +192,8 @@ Stage 2. Asking is consent (ADR 0006): the table shows immediately.
 - `server/tests/ask/test_career_tools.py`: career lines from exact totals,
   playoff separation, identity checks, mid-career and post-career statistics,
   all-time lists and ranks, shared ranks, the tie cap, malformed data never
-  cached, views chosen by Python, clarifications and the career scope guard.
+  cached, views chosen by Python, clarifications, the career scope guard, the
+  present-perfect career rule and the career measure defaults.
 - `src/components/ask/AskCareerResult.test.tsx`: career line, all-time table,
   rank, shared rank and outside-the-list states.
 - `server/tests/ask/fixtures/eval/stage3-dev.json`: 42 development cases (29
@@ -205,11 +206,14 @@ Stage 2. Asking is consent (ADR 0006): the table shows immediately.
   `nba-career-probe.json`), captured with a few direct stats.nba calls and one
   Basketball-Reference page fetch through the shared limiter. No model or
   provider calls were made.
-- Retrieval deadlines (nba-scores-8ic) are not threaded through these tools.
-  `season_leaders` calls `seasons._load(primary, fallback, validate)` positionally,
-  so a keyword `deadline=None` added at merge stays compatible; both executors
-  can then be listed in `DEADLINE_EXECUTORS`. `career_stats` uses its own
-  stats.nba-only loader and would need the deadline passed to its two fetches.
+- Both tools share the retrieval deadline (nba-scores-8ic; see
+  [ask-stage2.md](ask-stage2.md#shared-retrieval-deadline-nba-scores-8ic)) and
+  are listed in `DEADLINE_EXECUTORS` in `server/ask/resolvers/__init__.py`.
+  `season_leaders` passes it to `seasons._load`, its NBA attempt and its
+  Basketball-Reference fallback. `career_stats` passes it to its two stats.nba
+  fetches and its joined-cache waits. `test_retrieval_deadline.py` checks that
+  neither makes an attempt after the deadline. The slow-host measurement on the
+  production host is still pending, and its script does not yet call these tools.
 - Not done: live evaluation, Laya shadow numbers, unseen cases, visual
   screenshots of the new cards, and a physical keyboard/screen-reader check.
 
@@ -231,9 +235,12 @@ three views, chosen by Python from the question and the interpreter fields:
   "Playoffs"/"postseason" wording requires a playoff reading (Stage 2 guard);
   combined regular season plus playoffs is unsupported. BAA/ABA seasons are
   whatever stats.nba includes in NBA career totals; ABA totals are never added.
-- **Totals vs per game.** Career questions default to totals ("career points",
-  "all-time leading scorer" are totals by convention). Python reads the measure from
-  the question text (ADR 0014). A player's career line also carries the other measure,
+- **Totals vs per game.** Python reads the measure from the question text (ADR 0014),
+  and a stated measure always wins. With no stated measure, one career statistic and
+  the all-time lists are totals ("career points", "all-time leading scorer" are totals
+  by convention). A player's **full career line** with no stated measure ("Michael
+  Jordan career stats") shows per-game averages first (owner decision 2026-10-01, ADR
+  0013 amendment), like a season line. A player's career answer also carries the other measure,
   and the card offers the same Per game | Totals toggle as a season line. A player's career per-game
   average is computed from his exact career totals and games played, as in
   Stage 2, never from rounded averages.
@@ -276,6 +283,25 @@ directly. The guard reads career wording from the unmasked question. The intent
 clarification never shows the name/date hint. When the reading is a career question
 without career or season wording ("How many points does LeBron James have?"), it asks
 "Career or one season?", offers a Career totals choice and suggests naming a season.
+
+### "has recorded" means career (owner decision 2026-10-01)
+
+Present-perfect wording about one named player's count means his career total, so Ask
+answers instead of asking "Career or one season?": "How many blocks has Victor
+Wembanyama recorded?", "How many points has LeBron James scored?", "How many assists
+has Chris Paul had?". The answer is `career_stats`, `player_totals`, that statistic,
+totals, regular season. The rule lives in the career guard
+(`server/ask/season_scope.py`, `_PERFECT_WORDING`), next to the career-wording check:
+
+- It needs exactly one named player and "has" followed by a counting verb (recorded,
+  had, scored, made, grabbed, blocked, played and similar).
+- Present-tense wording ("How many points does LeBron James have?") and questions with
+  no named player ("Who has scored the most points?") still get the clarification.
+- A stated period always wins. A season or date ("has recorded this season", "in
+  2023-24", "tonight") is never answered as a career, and loose period words ("so
+  far", "this", "last", "lately") keep the clarification.
+- The guard acts on a `career_stats` reading. If the interpreter reads the question as
+  player season stats with no season, Ask still asks for the season.
 
 ### Sources
 

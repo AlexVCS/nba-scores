@@ -36,3 +36,22 @@ adds career totals. A stats.nba probe
 - Rank beyond 250 is reported as "not in the top 250", never estimated.
 - Career totals for statistics first recorded mid-career carry a coverage note;
   their per-game averages are unavailable.
+
+## Amendment 2026-10-01: full career lines show per game first
+
+Owner decision, 2026-10-01. It narrows decision 3; the rest of this ADR stands.
+
+- A named player's **full career stat line with no stated measure** ("Michael Jordan
+  career stats") now shows **per-game averages first**. The answer carries the totals
+  as `alternate`, and the card's Per game | Totals toggle switches to them. This is the
+  same pattern as player season stats (ADR 0014).
+- A **single career statistic** with no stated measure ("LeBron's career points") stays
+  **totals**.
+- All-time lists and ranks stay totals only (decision 2).
+- A stated measure still wins ("career totals", "career averages", "how many").
+- Consequence: on a full line shown per game, a statistic first recorded mid-career
+  reads "Unavailable" until the user switches to totals; the coverage note says why.
+
+Also decided 2026-10-01: present-perfect wording about a named player's count ("How
+many blocks has Victor Wembanyama recorded?") means his career total and is answered
+without the "career or one season?" clarification (`docs/ask-stage3.md`).

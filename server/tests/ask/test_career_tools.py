@@ -263,6 +263,62 @@ def test_career_clarifications(question, fields, status, clarify):
     assert n.status == status and n.clarify_field == clarify
 
 
+@pytest.mark.parametrize("question,stat", [
+    ("How many blocks has Victor Wembanyama recorded?", "blocks"),
+    ("How many points has LeBron James scored?", "points"),
+    ("How many assists has Chris Paul had?", "assists"),
+    ("How many three-pointers has Stephen Curry made?", "three_pointers"),
+    ("How many rebounds has Kevin Durant grabbed?", "rebounds"),
+    ("Victor Wembanyama has recorded how many blocks?", "blocks"),
+])
+def test_present_perfect_count_is_the_career_total(question, stat):
+    # Owner decision 2026-10-01: "has recorded"/"has had" means career, so no clarification.
+    n = guard(question, stat=stat)
+    assert n.status == "valid", n
+    r = n.request
+    assert (r.view, r.stat.stat, r.stat.aggregation, r.season_type) == ("player_totals", stat, "total", "regular_season")
+
+
+@pytest.mark.parametrize("question,fields,status,clarify", [
+    # Present tense stays ambiguous; so does perfect wording with no named player.
+    ("How many points does LeBron James have?", {"stat": "points"}, "needs_clarification", "intent"),
+    ("Who has scored the most points?", {"stat": "points"}, "needs_clarification", "intent"),
+    ("How many points has LeBron James scored so far?", {"stat": "points"}, "needs_clarification", "intent"),
+    # A stated season or date is never answered with a career total.
+    ("How many blocks has Victor Wembanyama recorded this season?", {"stat": "blocks"}, "unsupported", None),
+    ("How many blocks has Victor Wembanyama recorded in 2023-24?", {"stat": "blocks"}, "unsupported", None),
+    ("How many points has LeBron James scored tonight?", {"stat": "points"}, "unsupported", None),
+])
+def test_present_perfect_rule_is_not_widened(question, fields, status, clarify):
+    n = guard(question, **fields)
+    assert n.status == status and n.clarify_field == clarify
+
+
+@pytest.mark.parametrize("question,fields,aggregation", [
+    # Owner decision 2026-10-01: a full career line with no stated measure is per game first.
+    ("LeBron James career stats", {}, "per_game"),
+    ("LeBron James career stat line", {"stat": "stat_line"}, "per_game"),
+    ("LeBron James career totals", {}, "total"),
+    ("LeBron James career averages", {}, "per_game"),
+    # One career statistic with no stated measure stays totals.
+    ("LeBron James career points", {"stat": "points"}, "total"),
+    ("LeBron's career rebounds", {"stat": "rebounds"}, "total"),
+    ("LeBron James career points per game", {"stat": "points"}, "per_game"),
+])
+def test_career_measure_defaults(question, fields, aggregation):
+    n = guard(question, **fields)
+    assert n.status == "valid", n
+    assert n.request.view == "player_totals" and n.request.stat.aggregation == aggregation
+
+
+def test_full_career_line_answer_is_per_game_with_totals_alternate(monkeypatch):
+    install_career(monkeypatch, career_payload())
+    n = guard("LeBron James career stats")
+    result = career.career_stats(n.request).result
+    assert result.aggregation == "per_game" and result.alternate.aggregation == "total"
+    assert [v.stat for v in result.values] == [v.stat for v in result.alternate.values]
+
+
 def test_playoff_career_with_playoff_reading_is_valid():
     n = guard("LeBron James career playoff points", stat="points", season_type="playoffs")
     assert n.status == "valid" and n.request.season_type == "playoffs"

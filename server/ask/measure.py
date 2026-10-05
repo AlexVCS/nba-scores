@@ -10,7 +10,8 @@ stated, and the interpreter's `aggregation` read is replaced before normalizatio
 - both stated -> ambiguous (a clarification where the tool needs one measure)
 - nothing stated -> absent; each tool then applies its documented rule
   (season leaders ask, player season stats show per game with a totals toggle,
-  career stats default to totals per ADR 0013).
+  career stats default to totals per ADR 0013, except a player's full career line,
+  which shows per game with a totals toggle per the ADR's 2026-10-01 amendment).
 
 "How many" is a weak totals signal: "how many points did he average" is per game.
 Clarification rewrites append "season totals" / "per game" / "career totals", so a

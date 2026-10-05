@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-"""Offline ADR 0009 tier gate for the second unseen Ask evaluation (nba-scores-kzc.3).
+"""Offline ADR 0009 tier gate for a frozen unseen Ask evaluation (nba-scores-kzc.3, #210).
 
-Scores the Jev tier's preserved per-field readings from the frozen journal against
-field-level gold. It makes no provider calls and never reruns the evaluation.
+Scores each gated tier's preserved per-field readings from a release journal against
+field-level gold. It makes no provider calls and never reruns the evaluation. Gated
+tiers come from the frozen manifest configuration: Laya when `laya_base_url` is set,
+then Jev. Luna is the final tier and is reported for information only.
 
 Gold comes from two sources:
 
@@ -10,17 +12,38 @@ Gold comes from two sources:
   pin every field their intent reads, except `player` in non-player boxscore scopes
   (the request ignores it). Unsupported labels whose reason only an interpreter can
   produce pin the intent.
-* Labeled: everything else, from an isolated labeler's file (see
-  docs/verification/ask-unseen-two-2026-09-29-field-label-brief.md).
+* Labeled: everything else, from an isolated labeler's file (see the set's
+  field-label brief, e.g. docs/verification/ask-unseen-three-field-label-brief.md).
+
+Fields Python decides are not tier readings and get no gold: `aggregation` for the
+measured tools (server/ask/measure.py, QUESTION_TIER "question"), and `location` and
+`target_team` when lookup found no mention (LOOKUP_DECIDED, field tier "lookup").
+`limit` and career `view` are read by Python and are not interpreter fields.
+
+Label schemas fix the field definitions. Schema 1 is the four-family definition the
+unseen-two report was scored with; schema 2 covers all eight ADR 0004 tools.
 
 Commands:
 
-* `inventory`: count gold fields by source, field and family. No labels, no scores.
-* `template --out PATH`: write the labeling template from the fixture alone.
-* `score --labels PATH --out PATH`: verify frozen hashes, score, write the report.
+* `inventory --fixture PATH | --report PATH`: count gold fields by source, field and
+  family. With a report, verifies the frozen inputs and separates lookup-decided fields.
+* `template --fixture PATH --out PATH`: write the labeling template from the fixture alone.
+* `score --report PATH --labels PATH --out PATH`: verify frozen hashes, score, write the
+  report. The manifest comes from the report's `manifest_file`, the fixture from the
+  manifest's `cases_file`, the journal from `journal_file` (or the report path with a
+  `.jsonl` suffix); `--manifest`, `--fixture` and `--journal` override them.
 
-Field definition, acceptance and correctness rules are in `RULES` below and in the
-report. Outputs are created exclusively; existing files are never overwritten.
+The recorded unseen-two report (docs/verification/ask-unseen-two-2026-09-29-tier-gate.json)
+reproduces, apart from `generated_at`, with:
+
+    python scripts/ask/tier_gate.py score \\
+        --report docs/verification/ask-unseen-two-2026-09-29.json \\
+        --labels docs/verification/ask-unseen-two-2026-09-29-field-labels.json --out OUT
+
+Its inventory: `inventory --label-schema 1 --report docs/verification/ask-unseen-two-2026-09-29.json`.
+
+Field definition, acceptance and correctness rules are in `RULES_V1`/`RULES_V2` below
+and in the report. Outputs are created exclusively; existing files are never overwritten.
 """
 
 from __future__ import annotations
@@ -34,61 +57,62 @@ import math
 from pathlib import Path
 import re
 import sys
-from typing import Any
+from typing import Any, get_args
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
+from server.ask.config import FROZEN_CASCADE  # noqa: E402
 from server.ask.eval.runner import LabeledCase  # noqa: E402
+from server.ask.interpreters.tiered import LOOKUP_DECIDED  # noqa: E402
+from server.ask.measure import MEASURED_INTENTS, QUESTION_TIER  # noqa: E402
 from server.ask.models.candidates import CandidateLookupResult  # noqa: E402
-from server.ask.models.common import DateComponents, Stat  # noqa: E402
-from server.ask.models.interpreter import UnsupportedReason  # noqa: E402
+from server.ask.models.common import DateComponents, Intent, SeasonType, StandingsScope, Stat  # noqa: E402
+from server.ask.models.interpreter import InterpreterField, UnsupportedReason  # noqa: E402
 from server.ask.normalize import RELEVANT_FIELDS, reference_date, resolve_components  # noqa: E402
 
-FIXTURE = "server/tests/ask/fixtures/eval/unseen-two-2026-09-29.json"
-MANIFEST = "docs/verification/ask-unseen-two-2026-09-29-manifest.json"
-JOURNAL = "docs/verification/ask-unseen-two-2026-09-29.jsonl"
-REPORT = "docs/verification/ask-unseen-two-2026-09-29.json"
 PLAYER_CATALOG = "server/ask/data/player_catalog.json"
 FRANCHISES = "server/ask/data/franchise_history.json"
-# The manifest and strict report pin the fixture and manifest. Neither records the
-# journal or report hash, so those two are pinned to commit 377001f, which added them.
-PINNED_SHA256 = {
-    FIXTURE: "fa3e001b816baf38967fd88c837b6228f2336af811749f06499cd4b59c1cf040",
-    MANIFEST: "f188b8440715a4d0f15c58c92cf647dd815bf37db362febace1a29bebb47ca4e",
-    JOURNAL: "c43d1b9c99e3fbb917d9808a27873365c38dae83b2ed08a3ab53d513b6059fd4",
-    REPORT: "30e142e3f4f81c8348008fa8e9ab58de9f09a9a4fa8e45e12c68f1b649c27a01",
-}
-LABEL_SCHEMA = "ask-tier-gate-field-labels/1"
 
-TIER = "jev"
-TIER_MODEL = "jev-1.13.0"
-ACCEPT_MIN = 0.85
+# The second unseen set. Its manifest and strict report pin the fixture and manifest.
+# Neither records the journal or report hash, so those two are pinned to commit 377001f,
+# which added them. Later release.py reports record the journal hash themselves.
+UNSEEN_TWO = {
+    "fixture": "server/tests/ask/fixtures/eval/unseen-two-2026-09-29.json",
+    "manifest": "docs/verification/ask-unseen-two-2026-09-29-manifest.json",
+    "journal": "docs/verification/ask-unseen-two-2026-09-29.jsonl",
+    "report": "docs/verification/ask-unseen-two-2026-09-29.json",
+}
+KNOWN_PINS = {
+    UNSEEN_TWO["fixture"]: "fa3e001b816baf38967fd88c837b6228f2336af811749f06499cd4b59c1cf040",
+    UNSEEN_TWO["manifest"]: "f188b8440715a4d0f15c58c92cf647dd815bf37db362febace1a29bebb47ca4e",
+    UNSEEN_TWO["journal"]: "c43d1b9c99e3fbb917d9808a27873365c38dae83b2ed08a3ab53d513b6059fd4",
+    UNSEEN_TWO["report"]: "30e142e3f4f81c8348008fa8e9ab58de9f09a9a4fa8e45e12c68f1b649c27a01",
+}
+
 PRECISION_MIN = 0.98
 COVERAGE_MIN = 0.30
 # Scorer choice, not ADR text: a pass is provisional when one more accepted-field
-# error would fail precision, or coverage is below this.
+# error would fail precision, or coverage is below this. scripts/ask/release.py uses it too.
 PROVISIONAL_COVERAGE = 0.35
 
-FAMILIES = ("game_search", "boxscore_stat", "playoff_series", "postseason_summary")
-INTENTS = FAMILIES
-FIELDS = ("intent", "stat_scope", "stat", "aggregation", "player", "teams", "date", "season", "round",
-          "game_number", "location")
-CLOSED = {"intent", "stat_scope", "stat", "aggregation"}
-CANDIDATE_SET = {"player": "player", "teams": "team", "date": "date", "season": "season", "round": "round",
-                 "game_number": "game_number", "location": "location"}
+# Closed-set fields select literal values; candidate-backed fields select candidate IDs.
+CLOSED = {"intent", "stat_scope", "stat", "aggregation", "season_type", "standings_scope"}
+CANDIDATE_SET = {"player": "player", "teams": "team", "target_team": "team", "date": "date", "season": "season",
+                 "round": "round", "game_number": "game_number", "location": "location"}
 STAT_SCOPES = {"player", "team", "leaders"}
 AGGREGATIONS = {"total", "per_game"}
+SEASON_TYPES = set(get_args(SeasonType))
+STANDINGS_SCOPES = set(get_args(StandingsScope))
 ROUNDS = {"first_round", "conference_semifinals", "conference_finals", "finals"}
 CONFERENCES = {"east", "west", None}
 UNSUPPORTED_REASONS = set(UnsupportedReason.__args__)
-# Only the normalizer produces these; an interpreter may read the question as a
-# supported intent with an unsupported parameter, so the intent needs a label.
-NORMALIZER_UNSUPPORTED = {"multi_game_average", "unsupported_leader_stat"}
 STATUSES = {"value", "absent", "ambiguous", "unresolved", "unlisted"}
-UNLISTED_FIELDS = {"player", "teams", "location"}
+UNLISTED_FIELDS = {"player", "teams", "target_team", "location"}
+# Normalizer defaults: an absent read stands for this value.
+ABSENT_DEFAULTS = {"aggregation": "total", "season_type": "regular_season", "standings_scope": "league"}
 
-RULES = [
+RULES_V1 = [
     "A field is one interpreter field (intent plus the fields RELEVANT_FIELDS assigns to the gold "
     "intent) on one question. Unsupported gold intent has only the intent field.",
     "location is excluded when its candidate set is not_mentioned: lookup decides it and no tier reads it.",
@@ -108,6 +132,103 @@ RULES = [
     "A later tier's unsupported outcome replaces an accepted Jev intent in the cascade; Jev's reading "
     "is still scored as accepted.",
 ]
+
+RULES_V2 = [
+    "A field is one interpreter field (intent plus the fields RELEVANT_FIELDS assigns to the gold "
+    "intent) on one question, for all eight ADR 0004 tools. Unsupported gold intent has only the intent "
+    "field. target_team is a boxscore_stat field only when the gold stat_scope is team (relevant_fields).",
+    "Fields Python decides are not tier readings and are excluded: aggregation for player_season_stats, "
+    "season_leaders and career_stats (measure.py replaces the interpreter's read; field tier 'question'), "
+    "and location and target_team when their candidate set is not_mentioned (field tier 'lookup'). "
+    "limit, requested_limit and the career view are read by Python and are not interpreter fields.",
+    "A gated tier accepts a reading when its confidence is at least the tier's frozen accept_min, whatever "
+    "its status (selected, absent, ambiguous or no_matching_candidate), as TieredAdapter does. The first "
+    "gated tier is scored on every field; a later gated tier on the fields earlier gated tiers escalated.",
+    "A tier 'unsupported' outcome is an accepted intent reading 'unsupported:<reason>'. The cascade "
+    "accepts it at the adapter's unsupported_min (0.6) and the trace keeps no confidence.",
+    "Fields with no reading from the tier (tier unavailable, or an unsupported outcome) are not accepted.",
+    "Correctness is judged per reading against gold: selected values map through the recorded "
+    "candidates to IDs/values; absent must match absent; ambiguous must match ambiguous; "
+    "no_matching_candidate is correct for unlisted gold, or when no recorded candidate carries the gold value.",
+    "An absent reading on a candidate-backed field counts as the page value when the set holds exactly "
+    "one app_context candidate (the normalizer fills it).",
+    "Normalizer defaults: aggregation absent equals total (boxscore_stat); season_type absent equals "
+    "regular_season; standings_scope absent equals league; stat absent equals stat_line for boxscore_stat "
+    "outside leaders scope, player_season_stats, and career_stats with a player. Teams compare as sets of "
+    "franchise IDs; round compares round and conference.",
+    "On season_leaders and all-time career lists a stat_line read equals an absent stat (the normalizer "
+    "asks which statistic for both).",
+    "A team-scope boxscore with one named team also accepts an absent target_team (the normalizer takes "
+    "the lone team as the target), and an absent teams read when the tier's target_team read is that team "
+    "(the normalizer takes the target as the game's team).",
+    "When lookup expansion reran the cascade, a tier is scored on its last attempt, against the "
+    "candidates that attempt read.",
+    "Unsupported gold is mechanical only for reasons no Python rule produces; multi_game_average, "
+    "unsupported_leader_stat and other (normalizer and season-scope guards) need a labeled intent.",
+    "Later-tier vetoes and overrides are ignored: the tier is scored on its own readings (ADR 0009). "
+    "A later tier's unsupported outcome replaces an accepted earlier intent in the cascade, and a later "
+    "absent read replaces an accepted no_matching_candidate on a field lookup found no text for; the "
+    "earlier reading is still scored as accepted.",
+]
+
+SCOPE_LIMITS_V1 = [
+    "Four of the eight ADR 0004 tool families are present; championships and the other families "
+    "have no questions, so per-family gate evidence covers four families only.",
+    "Laya is disabled; only Jev can be gated.",
+    "Jev 'unsupported' outcomes carry no confidence; the cascade accepts them at unsupported_min 0.6, "
+    "below accept_min 0.85.",
+    "Field gold for clarification, some unsupported and non-player boxscore cases was labeled after "
+    "the run by an isolated labeler; the fixture's authoring isolation does not cover those labels.",
+    "Journal and report hashes were not registered before the run; they are pinned to commit 377001f.",
+    "In the cascade, a later tier's unsupported outcome discards an accepted Jev intent without a veto, "
+    "so tier-level and system-level intent credit can differ.",
+]
+
+
+@dataclass(frozen=True)
+class Profile:
+    """Field definitions a label schema fixes."""
+
+    label_schema: str
+    intents: tuple[str, ...]
+    fields: tuple[str, ...]
+    # Unsupported reasons a Python rule can produce; an interpreter may read such a
+    # question as a supported intent with an unsupported parameter, so it needs a label.
+    normalizer_unsupported: frozenset[str]
+    rules: tuple[str, ...]
+    question_bucket: bool  # report the Python-decided aggregation fields in the inventory
+
+
+V1 = Profile("ask-tier-gate-field-labels/1",
+             ("game_search", "boxscore_stat", "playoff_series", "postseason_summary"),
+             ("intent", "stat_scope", "stat", "aggregation", "player", "teams", "date", "season", "round",
+              "game_number", "location"),
+             frozenset({"multi_game_average", "unsupported_leader_stat"}), tuple(RULES_V1), False)
+V2 = Profile("ask-tier-gate-field-labels/2", get_args(Intent), get_args(InterpreterField),
+             frozenset({"multi_game_average", "unsupported_leader_stat", "other"}), tuple(RULES_V2), True)
+PROFILES = {p.label_schema: p for p in (V1, V2)}
+LABEL_SCHEMA = V2.label_schema
+
+
+@dataclass(frozen=True)
+class TierSpec:
+    name: str
+    model: str | None
+    accept_min: float
+
+    def show(self) -> dict[str, Any]:
+        return {"name": self.name, "model": self.model, "accept_min": self.accept_min}
+
+
+def gated_tiers(config: dict[str, Any]) -> list[TierSpec]:
+    """Gated tiers in cascade order from a frozen configuration (ADR 0009: Laya, Jev)."""
+    tiers = []
+    if config.get("laya_base_url"):
+        if "laya_accept_min" not in config:
+            raise IntegrityError("Laya is enabled but the configuration records no laya_accept_min")
+        tiers.append(TierSpec("laya", config.get("laya_model"), config["laya_accept_min"]))
+    tiers.append(TierSpec("jev", config["jev_model"], config["jev_accept_min"]))
+    return tiers
 
 
 class IntegrityError(ValueError):
@@ -156,6 +277,21 @@ def city_key(city: str) -> str:
 ABSENT = Gold("absent")
 
 
+def question_decided(intent: str | None) -> list[str]:
+    """Fields Python reads from the question text for this intent (never a tier reading)."""
+    return ["aggregation"] if intent in MEASURED_INTENTS else []
+
+
+def fields_for(intent: str, profile: Profile = V2, team_scope: bool = False) -> list[str]:
+    """Gold fields of an intent: interpreter fields a tier decides, in profile order."""
+    if intent == "unsupported":
+        return ["intent"]
+    skip = set(question_decided(intent))
+    if not team_scope:
+        skip.add("target_team")  # relevant_fields: only a team-scope question has a target team
+    return [f for f in profile.fields if (f == "intent" or f in RELEVANT_FIELDS[intent]) and f not in skip]
+
+
 @dataclass
 class CasePlan:
     case_id: str
@@ -165,10 +301,17 @@ class CasePlan:
     gold: dict[str, list[Gold]] = field(default_factory=dict)
     sources: dict[str, str] = field(default_factory=dict)  # field -> mechanical | labeled
     notes: dict[str, str] = field(default_factory=dict)
+    profile: Profile = V2
+
+    def team_scope(self) -> bool:
+        return any(g.status == "value" and g.value == "team" for g in self.gold.get("stat_scope", []))
+
+    def fields(self) -> list[str]:
+        return fields_for(self.scored_intent or self.family, self.profile, self.team_scope())
 
 
-def family_of(case_id: str) -> str:
-    for family in FAMILIES:
+def family_of(case_id: str, profile: Profile = V2) -> str:
+    for family in profile.intents:
         if f"-{family}-" in case_id:
             return family
     raise IntegrityError(f"{case_id}: no family in id")
@@ -178,60 +321,91 @@ def _round(round_name: str | None, conference: str | None) -> Gold:
     return Gold("value", (round_name, conference)) if round_name else ABSENT
 
 
-def request_gold(request: Any) -> tuple[dict[str, Gold], list[str]]:
+def request_gold(request: Any, profile: Profile = V2) -> tuple[dict[str, list[Gold]], list[str]]:
     """Mechanical gold for an accept label, plus fields the request leaves undetermined."""
-    gold: dict[str, Gold] = {"intent": Gold("value", request.intent)}
+    gold: dict[str, Gold | list[Gold]] = {"intent": Gold("value", request.intent)}
     undetermined: list[str] = []
 
     def teams(refs) -> Gold:
         return Gold("value", frozenset(t.team_id for t in refs)) if refs else ABSENT
 
-    if request.intent == "game_search":
-        gold["date"] = Gold("value", (request.dates.start, request.dates.end))
+    def team(ref) -> Gold:
+        return Gold("value", frozenset({ref.team_id})) if ref else ABSENT
+
+    def value(v) -> Gold:
+        return Gold("value", v)
+
+    intent = request.intent
+    if intent not in profile.intents:
+        raise IntegrityError(f"{intent} is not an intent of label schema {profile.label_schema}")
+    if intent == "game_search":
+        gold["date"] = value((request.dates.start, request.dates.end))
         gold["teams"] = teams(request.teams)
-        gold["location"] = Gold("value", city_key(request.location.city)) if request.location else ABSENT
-    elif request.intent == "boxscore_stat":
+        gold["location"] = value(city_key(request.location.city)) if request.location else ABSENT
+    elif intent == "boxscore_stat":
         game = request.game
-        gold["stat_scope"] = Gold("value", request.scope)
-        gold["stat"] = Gold("value", request.stat.stat)
-        gold["aggregation"] = Gold("value", request.stat.aggregation)
+        gold["stat_scope"] = value(request.scope)
+        gold["stat"] = value(request.stat.stat)
+        gold["aggregation"] = value(request.stat.aggregation)
         if request.scope == "player":
-            gold["player"] = Gold("value", request.player.player_id)
+            gold["player"] = value(request.player.player_id)
         else:
             undetermined.append("player")
+        if request.scope == "team":
+            named = [t.team_id for t in game.teams]
+            target = request.team.team_id if request.team else (named[0] if len(named) == 1 else None)
+            if target is None:
+                raise IntegrityError("team scope with no derivable target team")
+            # With one named team the normalizer takes it as the target, so absent is equivalent.
+            gold["target_team"] = [value(target)] + ([ABSENT] if named == [target] else [])
         gold["teams"] = teams(game.teams)
-        gold["date"] = Gold("value", (game.date, game.date)) if game.date else ABSENT
-        gold["season"] = Gold("value", game.season) if game.season else ABSENT
+        gold["date"] = value((game.date, game.date)) if game.date else ABSENT
+        gold["season"] = value(game.season) if game.season else ABSENT
         gold["round"] = _round(game.round, game.conference)
-        gold["game_number"] = Gold("value", game.game_number) if game.game_number else ABSENT
-    elif request.intent == "playoff_series":
-        gold["season"] = Gold("value", request.season)
+        gold["game_number"] = value(game.game_number) if game.game_number else ABSENT
+    elif intent == "playoff_series":
+        gold["season"] = value(request.season)
         gold["teams"] = teams(request.teams)
         gold["round"] = _round(request.round, request.conference)
+    elif intent == "postseason_summary":
+        gold["season"] = value(request.season)
+        gold["teams"] = team(request.team)
+    elif intent == "player_season_stats":
+        gold["player"] = value(request.player.player_id)
+        gold["teams"] = team(request.team)
+        gold["season"] = value(request.season)
+        gold["stat"] = value(request.stat.stat)
+        gold["season_type"] = value(request.season_type)
+    elif intent == "team_records":
+        gold["teams"] = team(request.team)
+        gold["season"] = value(request.season)
+        gold["standings_scope"] = value(request.standings_scope)
+        gold["season_type"] = value("regular_season")  # the tool answers regular seasons only
+    elif intent == "season_leaders":
+        gold["season"] = value(request.season)
+        gold["stat"] = value(request.stat.stat)
+        gold["season_type"] = value(request.season_type)
+    elif intent == "career_stats":
+        gold["player"] = value(request.player.player_id) if request.player else ABSENT
+        gold["stat"] = value(request.stat.stat)
+        gold["season_type"] = value(request.season_type)
     else:
-        gold["season"] = Gold("value", request.season)
-        gold["teams"] = Gold("value", frozenset({request.team.team_id})) if request.team else ABSENT
-    return gold, undetermined
+        raise IntegrityError(f"no mechanical gold rule for {intent}")
+    keep = set(fields_for(intent, profile, team_scope=getattr(request, "scope", None) == "team"))
+    return {k: (v if isinstance(v, list) else [v]) for k, v in gold.items() if k in keep}, undetermined
 
 
-def plan(case: LabeledCase) -> CasePlan:
-    family = family_of(case.id)
+def plan(case: LabeledCase, profile: Profile = V2) -> CasePlan:
+    family = family_of(case.id, profile)
     if case.action == "accept":
-        gold, undetermined = request_gold(case.request)
-        p = CasePlan(case.id, family, "player" if undetermined else None, case.request.intent,
-                     {k: [v] for k, v in gold.items()}, {k: "mechanical" for k in gold})
-        return p
-    if case.action == "unsupported" and case.unsupported_reason not in NORMALIZER_UNSUPPORTED:
+        gold, undetermined = request_gold(case.request, profile)
+        return CasePlan(case.id, family, "player" if undetermined else None, case.request.intent,
+                        gold, {k: "mechanical" for k in gold}, profile=profile)
+    if case.action == "unsupported" and case.unsupported_reason not in profile.normalizer_unsupported:
         return CasePlan(case.id, family, None, "unsupported",
                         {"intent": [Gold("value", f"unsupported:{case.unsupported_reason}")]},
-                        {"intent": "mechanical"})
-    return CasePlan(case.id, family, "all")
-
-
-def fields_for(intent: str) -> list[str]:
-    if intent == "unsupported":
-        return ["intent"]
-    return [f for f in FIELDS if f == "intent" or f in RELEVANT_FIELDS[intent]]
+                        {"intent": "mechanical"}, profile=profile)
+    return CasePlan(case.id, family, "all", profile=profile)
 
 
 # -- labels ---------------------------------------------------------------------------------
@@ -259,9 +433,13 @@ def _typed(field_name: str, raw: Any, ref: Reference, where: str) -> Any:
         return raw if raw in Stat.__args__ else fail("unknown stat")
     if field_name == "aggregation":
         return raw if raw in AGGREGATIONS else fail("unknown aggregation")
+    if field_name == "season_type":
+        return raw if raw in SEASON_TYPES else fail("unknown season_type")
+    if field_name == "standings_scope":
+        return raw if raw in STANDINGS_SCOPES else fail("unknown standings_scope")
     if field_name == "player":
         return raw if isinstance(raw, int) and raw in ref.players else fail("player_id not in player_catalog.json")
-    if field_name == "teams":
+    if field_name in ("teams", "target_team"):
         return raw if isinstance(raw, int) and raw in ref.teams else fail("team_id not in franchise_history.json")
     if field_name == "date":
         try:
@@ -287,15 +465,15 @@ def _typed(field_name: str, raw: Any, ref: Reference, where: str) -> Any:
     fail(f"unknown field {field_name}")
 
 
-def parse_intent(raw: Any, where: str) -> str:
-    if raw in INTENTS:
+def parse_intent(raw: Any, where: str, profile: Profile = V2) -> str:
+    if raw in profile.intents:
         return raw
     if isinstance(raw, str) and raw.startswith("unsupported:") and raw.split(":", 1)[1] in UNSUPPORTED_REASONS:
         return raw
     raise ValueError(f"{where}: intent must be an intent or unsupported:<reason>: {raw!r}")
 
 
-def parse_one(field_name: str, raw: Any, ref: Reference, where: str) -> Gold:
+def parse_one(field_name: str, raw: Any, ref: Reference, where: str, profile: Profile = V2) -> Gold:
     if not isinstance(raw, dict) or raw.get("status") not in STATUSES:
         raise ValueError(f"{where}: status must be one of {sorted(STATUSES)}")
     status = raw["status"]
@@ -305,7 +483,7 @@ def parse_one(field_name: str, raw: Any, ref: Reference, where: str) -> Gold:
     if field_name == "intent":
         if status != "value":
             raise ValueError(f"{where}: intent labels are values")
-        return Gold("value", parse_intent(raw.get("value"), where))
+        return Gold("value", parse_intent(raw.get("value"), where, profile))
     if status == "value":
         if field_name == "teams":
             ids = raw.get("value")
@@ -327,23 +505,32 @@ def parse_one(field_name: str, raw: Any, ref: Reference, where: str) -> Gold:
     return Gold(status)
 
 
-def parse_field(field_name: str, raw: Any, ref: Reference, where: str) -> tuple[list[Gold], str | None]:
+def parse_field(field_name: str, raw: Any, ref: Reference, where: str,
+                profile: Profile = V2) -> tuple[list[Gold], str | None]:
     if isinstance(raw, dict) and "any_of" in raw:
         options, note = raw["any_of"], raw.get("note")
         if set(raw) - {"any_of", "note"} or not isinstance(options, list) or len(options) < 2:
             raise ValueError(f"{where}: any_of needs two or more labels")
         if not (isinstance(note, str) and note.strip()):
             raise ValueError(f"{where}: any_of needs a note")
-        return [parse_one(field_name, o, ref, f"{where}[{i}]") for i, o in enumerate(options)], note
+        return [parse_one(field_name, o, ref, f"{where}[{i}]", profile) for i, o in enumerate(options)], note
     if raw is None:
         raise ValueError(f"{where}: not labeled")
-    return [parse_one(field_name, raw, ref, where)], None
+    return [parse_one(field_name, raw, ref, where, profile)], None
+
+
+def _plans_profile(plans: dict[str, CasePlan]) -> Profile:
+    profiles = {p.profile for p in plans.values()}
+    if len(profiles) > 1:
+        raise IntegrityError("plans mix label schemas")
+    return profiles.pop() if profiles else V2
 
 
 def apply_labels(plans: dict[str, CasePlan], labels: dict[str, Any], ref: Reference) -> None:
     """Validate the labeler's file and merge it into the plans."""
-    if labels.get("schema") != LABEL_SCHEMA:
-        raise ValueError(f"labels schema must be {LABEL_SCHEMA}")
+    profile = _plans_profile(plans)
+    if labels.get("schema") != profile.label_schema:
+        raise ValueError(f"labels schema must be {profile.label_schema}")
     rows = {row["case_id"]: row for row in labels.get("cases", [])}
     needed = {cid for cid, p in plans.items() if p.label_scope}
     if set(rows) != needed:
@@ -356,17 +543,21 @@ def apply_labels(plans: dict[str, CasePlan], labels: dict[str, Any], ref: Refere
             if row.get("intent") is not None or row.get("scored_intent") is not None or set(fields) != {"player"}:
                 raise ValueError(f"{cid}: label only `player` for this case")
         else:
-            intent_options, note = parse_field("intent", row.get("intent"), ref, f"{cid}.intent")
+            intent_options, note = parse_field("intent", row.get("intent"), ref, f"{cid}.intent", profile)
             scored = row.get("scored_intent")
             values = {g.value for g in intent_options}
-            supported = {v for v in values if v in INTENTS}
-            if scored not in (*INTENTS, "unsupported"):
+            supported = {v for v in values if v in profile.intents}
+            if scored not in (*profile.intents, "unsupported"):
                 raise ValueError(f"{cid}: scored_intent must be an intent or 'unsupported'")
             if scored == "unsupported" and supported:
                 raise ValueError(f"{cid}: a supported intent is acceptable; score its fields")
             if scored != "unsupported" and scored not in values:
                 raise ValueError(f"{cid}: scored_intent must be one of the acceptable intents")
-            expected = set(fields_for(scored)) - {"intent"}
+            team_scope = False
+            if "stat_scope" in fields and scored == "boxscore_stat":
+                scopes, _ = parse_field("stat_scope", fields["stat_scope"], ref, f"{cid}.stat_scope", profile)
+                team_scope = any(g.status == "value" and g.value == "team" for g in scopes)
+            expected = set(fields_for(scored, profile, team_scope)) - {"intent"}
             if set(fields) != expected:
                 raise ValueError(f"{cid}: {scored} needs exactly fields {sorted(expected)}, got {sorted(fields)}")
             p.scored_intent = scored
@@ -375,7 +566,7 @@ def apply_labels(plans: dict[str, CasePlan], labels: dict[str, Any], ref: Refere
             if note:
                 p.notes["intent"] = note
         for name, raw in fields.items():
-            options, note = parse_field(name, raw, ref, f"{cid}.{name}")
+            options, note = parse_field(name, raw, ref, f"{cid}.{name}", profile)
             p.gold[name] = options
             p.sources[name] = "labeled"
             if note:
@@ -387,14 +578,20 @@ def label_warnings(cases: dict[str, LabeledCase], plans: dict[str, CasePlan]) ->
     warnings = []
     for cid, p in plans.items():
         case = cases[cid]
-        if case.action == "clarify" and case.clarify_field in p.gold:
+        if case.action == "clarify" and case.clarify_field == "intent" and p.profile.question_bucket:
+            if case.clarify_reason == "ambiguous" and len(p.gold.get("intent", [])) < 2:
+                warnings.append(f"{cid}: clarify intent/ambiguous labeled with one intent")
+        elif case.action == "clarify" and case.clarify_field in p.gold:
             statuses = {g.status for g in p.gold[case.clarify_field]}
+            if case.clarify_field == "teams":  # the normalizer reports target_team problems under teams
+                statuses |= {g.status for g in p.gold.get("target_team", [])}
             want = {"missing": {"absent"}, "ambiguous": {"ambiguous"}, "year_required": {"unresolved"},
                     "range_too_long": {"unresolved"}, "no_matching_candidate": {"unlisted"}}.get(case.clarify_reason)
             if want and not statuses & want:
                 warnings.append(f"{cid}: clarify {case.clarify_field}/{case.clarify_reason} labeled "
                                 f"{sorted(statuses)}")
-        elif case.action == "clarify" and p.scored_intent and case.clarify_field not in p.gold:
+        elif (case.action == "clarify" and p.scored_intent and case.clarify_field not in p.gold
+              and case.clarify_field not in question_decided(p.scored_intent)):
             warnings.append(f"{cid}: clarify field {case.clarify_field} is not a field of {p.scored_intent}")
         if case.action == "unsupported" and p.sources.get("intent") == "labeled":
             reason = f"unsupported:{case.unsupported_reason}"
@@ -471,16 +668,27 @@ def effective(field_name: str, read: dict[str, Any] | None, cands: CandidateLook
     return values[0]
 
 
-def _default(field_name: str, kind: str, payload: Any, scope_is_leaders: bool) -> tuple[str, Any]:
-    if kind == "absent" and field_name == "aggregation":
-        return "value", "total"
-    if kind == "absent" and field_name == "stat" and not scope_is_leaders:
-        return "value", "stat_line"
+# stat_default for season and all-time leaders lists: the normalizer asks which statistic
+# for a stat_line read exactly as for an absent one (ADR 0011).
+NO_STAT = "no_stat"
+
+
+def _default(field_name: str, kind: str, payload: Any, stat_default: str | None) -> tuple[str, Any]:
+    if field_name == "stat" and stat_default == NO_STAT and (kind, payload) == ("value", "stat_line"):
+        return "absent", None
+    if kind == "absent" and field_name == "stat" and stat_default == NO_STAT:
+        return kind, payload
+    if kind == "absent" and field_name in ABSENT_DEFAULTS:
+        return "value", ABSENT_DEFAULTS[field_name]
+    if kind == "absent" and field_name == "stat" and stat_default:
+        return "value", stat_default
     return kind, payload
 
 
-def _gold_default(field_name: str, gold: Gold, scope_is_leaders: bool) -> Gold:
-    kind, payload = _default(field_name, gold.status, gold.value, scope_is_leaders)
+def _gold_default(field_name: str, gold: Gold, stat_default: str | None) -> Gold:
+    kind, payload = _default(field_name, gold.status, gold.value, stat_default)
+    if kind == "absent" and gold.status == "value":
+        return ABSENT
     return Gold("value", payload) if kind == "value" and gold.status == "absent" else gold
 
 
@@ -495,9 +703,9 @@ def _representable(field_name: str, gold: Gold, cands: CandidateLookupResult) ->
 
 
 def judge(field_name: str, kind: str, payload: Any, golds: list[Gold], cands: CandidateLookupResult,
-          scope_is_leaders: bool) -> tuple[bool, str | None]:
-    kind, payload = _default(field_name, kind, payload, scope_is_leaders)
-    golds = [_gold_default(field_name, g, scope_is_leaders) for g in golds]
+          stat_default: str | None) -> tuple[bool, str | None]:
+    kind, payload = _default(field_name, kind, payload, stat_default)
+    golds = [_gold_default(field_name, g, stat_default) for g in golds]
     for gold in golds:
         if kind == "value" and gold.status == "value" and payload == gold.value:
             return True, None
@@ -512,15 +720,48 @@ def judge(field_name: str, kind: str, payload: Any, golds: list[Gold], cands: Ca
     return False, f"{kind}_vs_{'|'.join(sorted({g.status for g in golds}))}"
 
 
+def final_attempt(row: dict[str, Any]) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    """The tier records of the last cascade attempt, and the candidates that attempt read.
+
+    Lookup expansion reruns the cascade on wider candidates, so a row can hold several
+    attempts. Each record then carries its own candidates (release.py Recorder); journals
+    written before that hold one attempt, read against the row's candidates."""
+    records: list[dict[str, Any]] = []
+    for record in reversed(row["tier_outputs"]):
+        if any(r["tier"] == record["tier"] for r in records):
+            break
+        records.insert(0, record)
+    if len(records) < len(row["tier_outputs"]) and not all(r.get("candidates") for r in records):
+        raise IntegrityError(f"{row['case_id']}: several attempts without per-attempt candidates")
+    return records, next((r["candidates"] for r in records if r.get("candidates")), row["candidates"])
+
+
 def _tier_record(row: dict[str, Any], tier: str) -> dict[str, Any] | None:
-    records = [r for r in row["tier_outputs"] if r["tier"] == tier]
-    if len(records) > 1:
-        raise IntegrityError(f"{row['case_id']}: {len(records)} {tier} outputs; expected one attempt")
-    return records[0]["output"] if records else None
+    return next((r["output"] for r in final_attempt(row)[0] if r["tier"] == tier), None)
 
 
-def _scope_is_leaders(p: CasePlan) -> bool:
-    return any(g.status == "value" and g.value == "leaders" for g in p.gold.get("stat_scope", []))
+def _target_names_lone_team(p: CasePlan, output: dict[str, Any], cands: CandidateLookupResult) -> bool:
+    """Whether the tier read the lone named team as target_team. An absent `teams` read then
+    builds the same request (Normalizer._target_team)."""
+    gold = p.gold.get("target_team", [])
+    read = next((f for f in output["fields"] if f["field"] == "target_team"), None)
+    if ABSENT not in gold or read is None:
+        return False
+    return any(g.status == "value" and effective("target_team", read, cands, None) == ("value", g.value)
+               for g in gold)
+
+
+def stat_default(p: CasePlan) -> str | None:
+    """What an absent stat read becomes in the normalizer for the gold intent, if anything."""
+    intent = p.scored_intent
+    leaders = any(g.status == "value" and g.value == "leaders" for g in p.gold.get("stat_scope", []))
+    if intent == "career_stats":
+        return "stat_line" if any(g.status != "absent" for g in p.gold.get("player", [])) else NO_STAT
+    if intent == "season_leaders":
+        return NO_STAT
+    if leaders:
+        return None
+    return "stat_line"
 
 
 def _extracted(output: dict[str, Any], cands: CandidateLookupResult, case: LabeledCase) -> tuple[str, Any] | None:
@@ -533,6 +774,10 @@ def _extracted(output: dict[str, Any], cands: CandidateLookupResult, case: Label
     return "value", (resolved.start, resolved.end)
 
 
+def _lookup_decided(name: str, cands: CandidateLookupResult) -> bool:
+    return name in LOOKUP_DECIDED and cands.sets[LOOKUP_DECIDED[name]].status == "not_mentioned"
+
+
 def score_tier(tier: str, accept_min: float | None, cases: dict[str, LabeledCase], plans: dict[str, CasePlan],
                rows: dict[str, dict[str, Any]], *, only: set[tuple[str, str]] | None = None) -> list[Scored]:
     """Score one tier's readings. `accept_min=None` marks a final tier (every reading is final).
@@ -540,12 +785,13 @@ def score_tier(tier: str, accept_min: float | None, cases: dict[str, LabeledCase
     out: list[Scored] = []
     for cid, p in plans.items():
         row = rows[cid]
-        cands = CandidateLookupResult.model_validate(row["candidates"])
+        records, raw_candidates = final_attempt(row)
+        cands = CandidateLookupResult.model_validate(raw_candidates)
         output = _tier_record(row, tier)
-        later = [r["tier"] for r in row["tier_outputs"]]
+        later = [r["tier"] for r in records]
         escalates = tier in later and later.index(tier) < len(later) - 1
-        for name in fields_for(p.scored_intent):
-            if name == "location" and cands.sets["location"].status == "not_mentioned":
+        for name in p.fields():
+            if _lookup_decided(name, cands):
                 continue  # decided by lookup (LOOKUP_DECIDED), never by a tier
             if only is not None and (cid, name) not in only:
                 continue
@@ -578,26 +824,32 @@ def score_tier(tier: str, accept_min: float | None, cases: dict[str, LabeledCase
             if kind == "invalid":
                 item.correct, item.error_kind = False, "invalid_candidate"
             else:
-                item.correct, item.error_kind = judge(name, kind, payload, p.gold[name], cands, _scope_is_leaders(p))
+                item.correct, item.error_kind = judge(name, kind, payload, p.gold[name], cands, stat_default(p))
+                if name == "teams" and kind == "absent" and _target_names_lone_team(p, output, cands):
+                    item.correct, item.error_kind = True, None
             item.disposition = "accepted" if accepted else ("escalated" if escalates else "not_escalated")
     return out
 
 
 def check_cascade(tier: str, accept_min: float, rows: dict[str, dict[str, Any]], scored: list[Scored]) -> None:
-    """The acceptance rule must agree with which tier the frozen cascade credited."""
+    """The acceptance rule must agree with which tier the frozen cascade credited (first tier only)."""
     by_key = {(s.case_id, s.field): s for s in scored}
     for cid, row in rows.items():
         output = _tier_record(row, tier)
+        sets = final_attempt(row)[1]["sets"]
         final = row["attempts"][-1]["output"]["metadata"]["field_tiers"] if row["attempts"] else {}
         for name, decided_by in final.items():
             if decided_by == "lookup":
-                if row["candidates"]["sets"][name]["status"] != "not_mentioned":
+                if name not in LOOKUP_DECIDED or sets[LOOKUP_DECIDED[name]]["status"] != "not_mentioned":
                     raise IntegrityError(f"{cid}:{name} lookup-decided with candidates")
                 continue
+            if decided_by == QUESTION_TIER:
+                continue  # Python read it from the question (measure.py); no tier decided it
             if output is None or output["outcome"] == "unavailable":
                 if decided_by == tier:
                     raise IntegrityError(f"{cid}:{name} credited to {tier} without an output")
                 continue
+            read = None
             if output["outcome"] == "unsupported":
                 accepted = name == "intent"
             else:
@@ -608,7 +860,11 @@ def check_cascade(tier: str, accept_min: float, rows: dict[str, dict[str, Any]],
             # A later tier's unsupported outcome replaces every decision, including this
             # tier's accepted intent (TieredAdapter.interpret returns early without a veto).
             overridden = row["attempts"][-1]["output"]["outcome"] == "unsupported" and decided_by != tier
-            if decided_by not in (tier, "veto") and accepted and not overridden:
+            # A later tier's absent read replaces a no-match on a field lookup found no text for
+            # (TieredAdapter._unfounded_no_match).
+            unfounded = (read is not None and read["status"] == "no_matching_candidate" and name in CANDIDATE_SET
+                         and sets[CANDIDATE_SET[name]]["status"] == "not_mentioned")
+            if decided_by not in (tier, "veto") and accepted and not overridden and not unfounded:
                 raise IntegrityError(f"{cid}:{name} accepted by {tier} but credited to {decided_by}")
             item = by_key.get((cid, name))
             if item is not None and decided_by == tier and item.disposition != "accepted":
@@ -662,8 +918,8 @@ def gate(items: list[Scored]) -> dict[str, Any]:
             "provisional_rule": f"pass with zero error slack or coverage below {PROVISIONAL_COVERAGE}"}
 
 
-def breakdown(items: list[Scored], key: str) -> dict[str, Any]:
-    order = FIELDS if key == "field" else FAMILIES
+def breakdown(items: list[Scored], key: str, profile: Profile = V2) -> dict[str, Any]:
+    order = profile.fields if key == "field" else profile.intents
     groups = {k: [s for s in items if getattr(s, key) == k] for k in order}
     return {k: metrics(v) for k, v in groups.items() if v}
 
@@ -677,70 +933,137 @@ def error_rows(items: list[Scored]) -> list[dict[str, Any]]:
 def inventory(plans: dict[str, CasePlan], rows: dict[str, dict[str, Any]] | None = None) -> dict[str, Any]:
     """Gold fields by source. Labeled cases' field counts depend on the labeled intent,
     so they are reported as the fields of the family's intent (an estimate)."""
-    counts: dict[str, dict[str, dict[str, int]]] = {"mechanical": {}, "labeled": {}, "lookup_decided": {}}
+    profile = _plans_profile(plans)
+    buckets = ["mechanical", "labeled", "lookup_decided"] + (["question_decided"] if profile.question_bucket else [])
+    counts: dict[str, dict[str, dict[str, int]]] = {b: {} for b in buckets}
 
     def add(bucket: str, family: str, name: str) -> None:
         fam = counts[bucket].setdefault(family, {})
         fam[name] = fam.get(name, 0) + 1
 
     for cid, p in plans.items():
-        intent = p.scored_intent or p.family
-        location_by_lookup = rows is not None and rows[cid]["candidates"]["sets"]["location"]["status"] == "not_mentioned"
-        for name in fields_for(intent):
-            if name == "location" and location_by_lookup:
+        sets = rows[cid]["candidates"]["sets"] if rows is not None else None
+        for name in p.fields():
+            if sets is not None and name in LOOKUP_DECIDED and sets[LOOKUP_DECIDED[name]]["status"] == "not_mentioned":
                 add("lookup_decided", p.family, name)
             elif p.sources.get(name) == "mechanical":
                 add("mechanical", p.family, name)
             else:
                 add("labeled", p.family, name)
+        if profile.question_bucket:
+            for name in question_decided(p.scored_intent or p.family):
+                add("question_decided", p.family, name)
     totals = {bucket: sum(sum(f.values()) for f in fams.values()) for bucket, fams in counts.items()}
-    return {"by_bucket": counts, "totals": totals,
-            "labeled_cases": sorted(cid for cid, p in plans.items() if p.label_scope),
-            "note": "labeled counts assume each labeled case's family intent; the labeler may choose another"}
+    out = {"by_bucket": counts, "totals": totals,
+           "labeled_cases": sorted(cid for cid, p in plans.items() if p.label_scope),
+           "note": "labeled counts assume each labeled case's family intent; the labeler may choose another"}
+    if profile.question_bucket:
+        out["field_notes"] = [
+            "question_decided: aggregation for the measured tools is read by Python (measure.py), not a tier.",
+            "labeled boxscore_stat cases are counted without target_team; it is a field only when the labeled "
+            "stat_scope is team.",
+        ]
+        if rows is None:
+            out["field_notes"].append(
+                "No journal: location and target_team are counted under their gold source; with a journal, "
+                "those whose candidate set is not_mentioned move to lookup_decided.")
+    return out
 
 
 # -- loading and verification ------------------------------------------------------------------
 
 
-def load_cases(root: Path = ROOT) -> dict[str, LabeledCase]:
-    raw = json.loads((root / FIXTURE).read_text())["cases"]
+def rel(path: str | Path, root: Path = ROOT) -> str:
+    """A path relative to the repository root when it is inside it (report keys stay stable)."""
+    p = Path(path)
+    resolved = (p if p.is_absolute() else Path.cwd() / p).resolve()
+    try:
+        return str(resolved.relative_to(root.resolve()))
+    except ValueError:
+        return str(resolved)
+
+
+@dataclass(frozen=True)
+class SetPaths:
+    fixture: str
+    manifest: str
+    journal: str
+    report: str
+
+
+def resolve_paths(report: str, manifest: str | None = None, fixture: str | None = None,
+                  journal: str | None = None, root: Path = ROOT) -> SetPaths:
+    """Paths of one frozen run, from the release report unless given."""
+    report = rel(report, root)
+    doc = json.loads((root / report).read_text())
+    manifest = rel(manifest, root) if manifest else doc["manifest_file"]
+    if fixture is None:
+        fixture = json.loads((root / manifest).read_text())["cases_file"]
+    else:
+        fixture = rel(fixture, root)
+    if journal:
+        journal = rel(journal, root)
+    elif doc.get("journal_file"):
+        journal = str(Path(report).parent / doc["journal_file"])
+    else:
+        journal = str(Path(report).with_suffix(".jsonl"))
+    return SetPaths(fixture, manifest, journal, report)
+
+
+def load_cases(fixture: str | Path, root: Path = ROOT) -> dict[str, LabeledCase]:
+    raw = json.loads((root / fixture).read_text())["cases"]
     return {c["id"]: LabeledCase.from_json(c) for c in raw}
 
 
-def load_rows(root: Path = ROOT) -> dict[str, dict[str, Any]]:
-    rows = [json.loads(line) for line in (root / JOURNAL).read_text().splitlines() if line.strip()]
+def load_rows(journal: str | Path, root: Path = ROOT) -> dict[str, dict[str, Any]]:
+    rows = [json.loads(line) for line in (root / journal).read_text().splitlines() if line.strip()]
     return {row["case_id"]: row for row in rows}
 
 
-def verify(root: Path = ROOT, pinned: dict[str, str] = PINNED_SHA256) -> dict[str, str]:
-    hashes = {path: digest(root / path) for path in pinned}
-    changed = [path for path, sha in pinned.items() if hashes[path] != sha]
+def check_pins(hashes: dict[str, str], pins: dict[str, str]) -> None:
+    changed = [path for path, sha in pins.items() if path in hashes and hashes[path] != sha]
     if changed:
         raise IntegrityError(f"frozen inputs changed: {changed}")
-    manifest = json.loads((root / MANIFEST).read_text())
-    report = json.loads((root / REPORT).read_text())
-    if manifest["cases_sha256"] != hashes[FIXTURE] or report["cases_sha256"] != hashes[FIXTURE]:
+
+
+def verify(paths: SetPaths, root: Path = ROOT, pins: dict[str, str] = KNOWN_PINS) -> tuple[dict[str, str],
+                                                                                          list[TierSpec]]:
+    """Check the frozen fixture, manifest, journal and report agree. Returns their hashes
+    and the gated tiers of the frozen configuration."""
+    hashes = {path: digest(root / path) for path in (paths.fixture, paths.manifest, paths.journal, paths.report)}
+    check_pins(hashes, pins)
+    manifest = json.loads((root / paths.manifest).read_text())
+    report = json.loads((root / paths.report).read_text())
+    if manifest["cases_sha256"] != hashes[paths.fixture] or report["cases_sha256"] != hashes[paths.fixture]:
         raise IntegrityError("fixture hash differs from the manifest or report")
-    if report["manifest_sha256"] != hashes[MANIFEST]:
+    if report["manifest_sha256"] != hashes[paths.manifest]:
         raise IntegrityError("manifest hash differs from the report")
+    if "journal_sha256" in report:
+        if report["journal_sha256"] != hashes[paths.journal]:
+            raise IntegrityError("journal hash differs from the report")
+    elif paths.journal not in pins:
+        raise IntegrityError("the report records no journal hash and the journal is not pinned")
     config = manifest["configuration"]
-    if config["jev_model"] != TIER_MODEL or config["jev_accept_min"] != ACCEPT_MIN or config["laya_base_url"]:
-        raise IntegrityError("frozen configuration differs from the scored tier")
-    cases, rows = load_cases(root), load_rows(root)
+    if "configuration" in report and report["configuration"] != config:
+        raise IntegrityError("report configuration differs from the manifest")
+    tiers = gated_tiers(config)
+    cases, rows = load_cases(paths.fixture, root), load_rows(paths.journal, root)
     if list(cases) != list(rows) or [c["case_id"] for c in report["cases"]] != list(rows):
         raise IntegrityError("journal, report and fixture cases differ")
+    first = tiers[0]
     for cid, row in rows.items():
-        output = _tier_record(row, TIER)
-        if output is None or output["metadata"]["model"] != TIER_MODEL:
-            raise IntegrityError(f"{cid}: no {TIER_MODEL} output")
-    return hashes
+        output = _tier_record(row, first.name)
+        if output is None or (first.model and output["metadata"]["model"] != first.model):
+            raise IntegrityError(f"{cid}: no {first.model or first.name} output")
+    return hashes, tiers
 
 
-def template(cases: dict[str, LabeledCase]) -> dict[str, Any]:
+def template(cases: dict[str, LabeledCase], fixture: str | None = None, fixture_sha256: str | None = None,
+             profile: Profile = V2) -> dict[str, Any]:
     """The labeling template. Built from the fixture alone; carries no trace content."""
     items = []
     for cid, case in cases.items():
-        p = plan(case)
+        p = plan(case, profile)
         if not p.label_scope:
             continue
         item = {"case_id": cid, "question": case.question,
@@ -754,67 +1077,104 @@ def template(cases: dict[str, LabeledCase]) -> dict[str, Any]:
             item.update({"intent": None, "scored_intent": None, "fields": {}})
         item["notes"] = ""
         items.append(item)
-    return {
-        "schema": LABEL_SCHEMA,
-        "fixture": FIXTURE,
-        "fixture_sha256": PINNED_SHA256[FIXTURE],
+    doc = {
+        "schema": profile.label_schema,
+        "fixture": fixture,
+        "fixture_sha256": fixture_sha256,
         "labeler": {"name": "", "labeled_at": "", "isolation_statement": ""},
-        "fields_by_intent": {intent: [f for f in fields_for(intent) if f != "intent"]
-                             for intent in (*INTENTS, "unsupported")},
-        "cases": items,
+        "fields_by_intent": {intent: [f for f in fields_for(intent, profile, team_scope=True) if f != "intent"]
+                             for intent in (*profile.intents, "unsupported")},
     }
+    if profile is not V1:
+        doc["field_conditions"] = {
+            "target_team": "boxscore_stat only, and only when your stat_scope label is team; omit it otherwise"}
+        doc["not_labeled"] = {
+            "aggregation": sorted(i for i in profile.intents if question_decided(i)),
+            "reason": "Python reads the measure from the question for these intents; it is not labeled here"}
+    doc["cases"] = items
+    return doc
 
 
-def score(labels_path: Path, root: Path = ROOT) -> dict[str, Any]:
-    hashes = verify(root)
-    cases, rows = load_cases(root), load_rows(root)
+def score(labels_path: Path, paths: SetPaths, root: Path = ROOT) -> dict[str, Any]:
     labels = json.loads(labels_path.read_text())
-    if labels.get("fixture_sha256") != hashes[FIXTURE]:
+    profile = PROFILES.get(labels.get("schema"))
+    if profile is None:
+        raise ValueError(f"unknown labels schema {labels.get('schema')!r}; expected one of {sorted(PROFILES)}")
+    hashes, tiers = verify(paths, root)
+    if labels.get("fixture_sha256") != hashes[paths.fixture]:
         raise IntegrityError("labels were made for a different fixture")
-    plans = {cid: plan(case) for cid, case in cases.items()}
-    apply_labels(plans, labels, Reference.load(root))
-    return build_report(cases, plans, rows, hashes | {str(labels_path): digest(labels_path)})
+    cases, rows = load_cases(paths.fixture, root), load_rows(paths.journal, root)
+    plans = {cid: plan(case, profile) for cid, case in cases.items()}
+    apply_labels(plans, labels, Reference.load())  # repository reference data, not part of the run
+    return build_report(cases, plans, rows, hashes | {rel(labels_path, root): digest(labels_path)}, tiers,
+                        pinned=[p for p in hashes if p in KNOWN_PINS and p in (paths.journal, paths.report)])
 
 
-def build_report(cases, plans, rows, hashes) -> dict[str, Any]:
-    jev = score_tier(TIER, ACCEPT_MIN, cases, plans, rows)
-    check_cascade(TIER, ACCEPT_MIN, rows, jev)
-    escalated = {(s.case_id, s.field) for s in jev if s.disposition == "escalated"}
-    luna = score_tier("luna", None, cases, plans, rows, only=escalated)
+def _scope_limits(profile: Profile, plans: dict[str, CasePlan], tiers: list[TierSpec],
+                  pinned: list[str]) -> list[str]:
+    if profile is V1:
+        return list(SCOPE_LIMITS_V1)
+    present = [f for f in profile.intents if any(p.family == f for p in plans.values())]
+    missing = [f for f in profile.intents if f not in present]
+    limits = [f"{len(present)} of the {len(profile.intents)} ADR 0004 tool families have questions"
+              + (f"; no questions for {', '.join(missing)}." if missing else ".")]
+    if not any(t.name == "laya" for t in tiers):
+        limits.append("Laya is disabled in the frozen configuration; only Jev can be gated.")
+    limits += [
+        "Tier 'unsupported' outcomes carry no confidence; the cascade accepts them at unsupported_min 0.6, "
+        "below the tiers' accept_min.",
+        "Field gold for clarification, some unsupported and non-player boxscore cases was labeled after "
+        "the run by an isolated labeler; the fixture's authoring isolation does not cover those labels.",
+        "aggregation for the measured tools, limit and the career view are decided by Python, not tiers; "
+        "their correctness is part of the system gate only.",
+    ]
+    if pinned:
+        limits.append(f"Hashes of {', '.join(pinned)} were not registered before the run; they are pinned "
+                      "in scripts/ask/tier_gate.py.")
+    limits.append("In the cascade, a later tier's unsupported outcome discards an accepted earlier intent without "
+                  "a veto, so tier-level and system-level intent credit can differ.")
+    return limits
+
+
+def build_report(cases, plans, rows, hashes, tiers: list[TierSpec] | None = None,
+                 pinned: list[str] | None = None) -> dict[str, Any]:
+    profile = _plans_profile(plans)
+    tiers = tiers if tiers is not None else gated_tiers(FROZEN_CASCADE)
+    results: dict[str, Any] = {}
+    only = None
+    for index, spec in enumerate(tiers):
+        scored = score_tier(spec.name, spec.accept_min, cases, plans, rows, only=only)
+        if index == 0:
+            check_cascade(spec.name, spec.accept_min, rows, scored)
+        results[spec.name] = {
+            "gate": gate(scored), "by_field": breakdown(scored, "field", profile),
+            "by_family": breakdown(scored, "family", profile),
+            "by_gold_source": {src: metrics([s for s in scored if s.source == src]) for src in ("mechanical", "labeled")},
+            "accepted_field_errors": error_rows(scored)}
+        if index > 0:
+            results[spec.name]["eligible_rule"] = "fields earlier gated tiers escalated"
+        only = {(s.case_id, s.field) for s in scored if s.disposition == "escalated"}
+    luna = score_tier("luna", None, cases, plans, rows, only=only)
     luna_read = [s for s in luna if s.reading is not None]
+    results["luna"] = {"informational": f"final tier, no confidences; readings on fields "
+                                        f"{tiers[-1].name.capitalize()} escalated",
+                       "fields": len(luna), "read": len(luna_read),
+                       "correct": sum(1 for s in luna_read if s.correct),
+                       "by_field": {k: {"read": len(v), "correct": sum(1 for s in v if s.correct)}
+                                    for k in profile.fields if (v := [s for s in luna_read if s.field == k])}}
+    if "laya" not in results:
+        results["laya"] = {"informational": "disabled in the frozen configuration; no readings"}
     return {
         "purpose": "Offline ADR 0009 tier gate from preserved traces; no provider calls, no rerun",
         "generated_at": dt.datetime.now(dt.timezone.utc).isoformat(),
         "inputs_sha256": hashes,
-        "tier": {"name": TIER, "model": TIER_MODEL, "accept_min": ACCEPT_MIN},
-        "rules": RULES,
+        "tier": tiers[0].show() if len(tiers) == 1 else [t.show() for t in tiers],
+        "rules": list(profile.rules),
         "gold_inventory": inventory(plans, rows),
         "label_notes": {cid: p.notes for cid, p in plans.items() if p.notes},
         "label_warnings": label_warnings(cases, plans),
-        "tiers": {
-            TIER: {"gate": gate(jev), "by_field": breakdown(jev, "field"), "by_family": breakdown(jev, "family"),
-                   "by_gold_source": {src: metrics([s for s in jev if s.source == src])
-                                      for src in ("mechanical", "labeled")},
-                   "accepted_field_errors": error_rows(jev)},
-            "luna": {"informational": "final tier, no confidences; readings on fields Jev escalated",
-                     "fields": len(luna), "read": len(luna_read),
-                     "correct": sum(1 for s in luna_read if s.correct),
-                     "by_field": {k: {"read": len(v), "correct": sum(1 for s in v if s.correct)}
-                                  for k in FIELDS if (v := [s for s in luna_read if s.field == k])}},
-            "laya": {"informational": "disabled in the frozen configuration; no readings"},
-        },
-        "scope_limits": [
-            "Four of the eight ADR 0004 tool families are present; championships and the other families "
-            "have no questions, so per-family gate evidence covers four families only.",
-            "Laya is disabled; only Jev can be gated.",
-            "Jev 'unsupported' outcomes carry no confidence; the cascade accepts them at unsupported_min 0.6, "
-            "below accept_min 0.85.",
-            "Field gold for clarification, some unsupported and non-player boxscore cases was labeled after "
-            "the run by an isolated labeler; the fixture's authoring isolation does not cover those labels.",
-            "Journal and report hashes were not registered before the run; they are pinned to commit 377001f.",
-            "In the cascade, a later tier's unsupported outcome discards an accepted Jev intent without a veto, "
-            "so tier-level and system-level intent credit can differ.",
-        ],
+        "tiers": results,
+        "scope_limits": _scope_limits(profile, plans, tiers, pinned or []),
     }
 
 
@@ -826,26 +1186,50 @@ def write_exclusive(path: Path, doc: dict[str, Any]) -> None:
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest="command", required=True)
-    sub.add_parser("inventory")
+    schema_help = "label schema: 2 covers all eight tools (default); 1 is the four-family unseen-two definition"
+    i = sub.add_parser("inventory")
+    i.add_argument("--fixture", help="fixture only: no journal, no verification")
+    i.add_argument("--report", help="release report: verify the frozen run and use its journal")
+    i.add_argument("--manifest")
+    i.add_argument("--journal")
+    i.add_argument("--label-schema", choices=("1", "2"), default="2", help=schema_help)
     t = sub.add_parser("template")
+    t.add_argument("--fixture", required=True)
     t.add_argument("--out", required=True)
+    t.add_argument("--label-schema", choices=("1", "2"), default="2", help=schema_help)
     s = sub.add_parser("score")
+    s.add_argument("--report", required=True, help="release report (scripts/ask/release.py run --out)")
     s.add_argument("--labels", required=True)
     s.add_argument("--out", required=True)
+    s.add_argument("--manifest", help="default: the report's manifest_file")
+    s.add_argument("--fixture", help="default: the manifest's cases_file")
+    s.add_argument("--journal", help="default: the report's journal_file, else the report path with .jsonl")
     args = parser.parse_args(argv)
     if args.command == "inventory":
-        verify()
-        plans = {cid: plan(case) for cid, case in load_cases().items()}
-        print(json.dumps(inventory(plans, load_rows()), indent=1))
+        profile = {"1": V1, "2": V2}[args.label_schema]
+        if args.report:
+            paths = resolve_paths(args.report, args.manifest, args.fixture, args.journal)
+            verify(paths)
+            cases, rows = load_cases(paths.fixture), load_rows(paths.journal)
+        elif args.fixture:
+            cases, rows = load_cases(rel(args.fixture)), None
+        else:
+            parser.error("inventory needs --fixture or --report")
+        plans = {cid: plan(case, profile) for cid, case in cases.items()}
+        print(json.dumps(inventory(plans, rows), indent=1))
     elif args.command == "template":
-        write_exclusive(Path(args.out), template(load_cases()))
+        profile = {"1": V1, "2": V2}[args.label_schema]
+        fixture = rel(args.fixture)
+        write_exclusive(Path(args.out), template(load_cases(fixture), fixture, digest(ROOT / fixture), profile))
     else:
         out = Path(args.out)
         if out.exists():
             raise FileExistsError(f"{out} exists; refusing to overwrite a tier gate report")
-        doc = score(Path(args.labels))
+        paths = resolve_paths(args.report, args.manifest, args.fixture, args.journal)
+        doc = score(Path(args.labels), paths)
         write_exclusive(out, doc)
-        print(json.dumps({"out": str(out), "gate": doc["tiers"][TIER]["gate"]}, indent=1))
+        print(json.dumps({"out": str(out), "gates": {name: t["gate"] for name, t in doc["tiers"].items()
+                                                     if "gate" in t}}, indent=1))
 
 
 if __name__ == "__main__":

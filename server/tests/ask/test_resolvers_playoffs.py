@@ -12,6 +12,8 @@ from server.services import playoffs as playoffs_service
 from server.tests.ask.test_resolvers_support import (
     PLAYOFFS_2024,
     assert_fits_answer,
+    clear_player_games,  # noqa: F401
+    FakeFinder,
     FakeScoreboards,
     install_playoffs,
     playoff_day,
@@ -167,6 +169,92 @@ def test_series_game_missing_from_its_scoreboard_is_not_found(complete_2024, mon
     with pytest.raises(NotFoundError) as error:
         playoffs.find_playoff_game(SEASON, 1, [BOS, DAL])
     assert error.value.reason == "game_not_on_scoreboard"
+
+
+# Numbered games of a round named without teams ------------------------------
+
+SEMIS = "conference_semifinals"
+DONCIC = 1629029
+
+
+def semis_board(monkeypatch, position, home, away, game_number):
+    game_id = playoff_game_id(2, position, game_number)
+    day = playoff_day(14, game_number)
+    board = FakeScoreboards({day.isoformat(): [sb_game(game_id, home, away, series_number=f"Game {game_number}")]})
+    monkeypatch.setattr(nba_stats_client, "fetch_scoreboard_v3", board)
+    return game_id, day
+
+
+def finder_for(monkeypatch, game_ids, day):
+    rows = [{"GAME_ID": game_id, "PLAYER_ID": DONCIC, "TEAM_ID": DAL, "GAME_DATE": day.isoformat(),
+             "PLAYER_NAME": "Luka Doncic"} for game_id in game_ids]
+    finder = FakeFinder({(str(DONCIC), day.strftime("%m/%d/%Y")): rows})
+    monkeypatch.setattr(nba_stats_client, "fetch_league_game_finder", finder)
+    return finder
+
+
+def test_round_game_only_one_series_reached_is_used(complete_2024, monkeypatch):
+    # BOS-CLE ended in five; only DAL-OKC played a Game 6.
+    game_id, day = semis_board(monkeypatch, 2, "OKC", "DAL", 6)
+    finder = finder_for(monkeypatch, [], day)
+    game = playoffs.find_playoff_game(SEASON, 6, round_=SEMIS, player_id=DONCIC)
+    assert (game.game_id, game.date, game.round, game.game_number) == (game_id, day, SEMIS, 6)
+    assert playoffs.find_playoff_game(SEASON, 6, round_=SEMIS).game_id == game_id
+    assert finder.calls == []  # a unique game needs no player lookup
+
+
+def test_round_game_in_several_series_is_narrowed_by_the_player(complete_2024, monkeypatch, clear_player_games):
+    game_id, day = semis_board(monkeypatch, 2, "DAL", "OKC", 5)
+    finder = finder_for(monkeypatch, [game_id], day)
+    game = playoffs.find_playoff_game(SEASON, 5, round_=SEMIS, player_id=DONCIC)
+    assert (game.game_id, set(game.team_ids)) == (game_id, {DAL, tid("OKC")})
+    assert len(finder.calls) == 1  # one game-log read, no boxscore per series
+
+
+@pytest.mark.parametrize("played_in", ["neither", "both", "no_player"])
+def test_round_game_still_matching_several_series_is_never_guessed(complete_2024, monkeypatch, clear_player_games, played_in):
+    monkeypatch.setattr(nba_stats_client, "fetch_scoreboard_v3", lambda *args, **kwargs: pytest.fail("a game was chosen"))
+    both = [playoff_game_id(2, 0, 5), playoff_game_id(2, 2, 5)]
+    finder_for(monkeypatch, both if played_in == "both" else [], playoff_day(14, 5))
+    with pytest.raises(AmbiguousError) as error:
+        playoffs.find_playoff_game(SEASON, 5, round_=SEMIS, player_id=None if played_in == "no_player" else DONCIC)
+    assert (error.value.field, error.value.reason, error.value.spoiler) == ("teams", "several_series", True)
+    offered = sorted(sorted(team.tricode for team in option["teams"]) for option in error.value.options)
+    assert offered == [["BOS", "CLE"], ["DAL", "OKC"]]
+
+
+def test_round_game_no_series_reached_is_not_found(complete_2024):
+    with pytest.raises(NotFoundError) as error:
+        playoffs.find_playoff_game(SEASON, 7, round_=SEMIS, player_id=DONCIC)
+    assert (error.value.code, error.value.reason) == ("no_record", "series_game_not_played")
+
+
+def test_round_game_is_not_unique_while_another_series_may_still_reach_it(monkeypatch):
+    # BOS leads CLE 3-2: that series may still play a Game 6.
+    specs = [(2, 0, "BOS", "CLE", "WLWWL", 14), (2, 2, "DAL", "OKC", "LWWLWW", 14)]
+    install_playoffs(monkeypatch, specs, current_season=SEASON)
+    with pytest.raises(AmbiguousError) as error:
+        playoffs.find_playoff_game(SEASON, 6, round_=SEMIS)
+    assert len(error.value.options) == 2
+
+
+def test_boxscore_request_for_a_round_game_resolves_or_asks_for_teams(complete_2024, monkeypatch):
+    from server.ask.models.request import BoxscoreStatRequest
+    from server.ask.resolvers import resolve_boxscore_game
+    from server.ask.resolvers.errors import ClarificationError
+
+    def leaders(game_number):
+        return BoxscoreStatRequest.model_validate({
+            "intent": "boxscore_stat", "scope": "leaders", "stat": {"stat": "points"},
+            "game": {"season": SEASON, "round": SEMIS, "game_number": game_number}})
+
+    game_id, _ = semis_board(monkeypatch, 2, "OKC", "DAL", 6)
+    assert resolve_boxscore_game(leaders(6)).game_id == game_id
+    with pytest.raises(ClarificationError) as error:
+        resolve_boxscore_game(leaders(5))
+    assert (error.value.field, error.value.clarify_reason) == ("teams", "missing")
+    with pytest.raises(NotFoundError):
+        resolve_boxscore_game(leaders(7))
 
 
 # Postseason summaries -------------------------------------------------------

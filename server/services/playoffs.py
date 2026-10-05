@@ -22,6 +22,87 @@ with open(_CONFERENCES_JSON) as _f:
 EAST_TEAM_IDS: frozenset[int] = frozenset(CONFERENCES["east"])
 WEST_TEAM_IDS: frozenset[int] = frozenset(CONFERENCES["west"])
 
+# Franchises have changed sides. Each entry lists (first playoff year, side)
+# change points for one stats.nba team ID; a team's side in a postseason is the
+# last entry at or before that playoff year. Teams without an entry have always
+# been on their current side. Defunct franchises are listed so their series are
+# not placed by their opponent's present-day conference.
+# Checked against the standings and playoff round names for 1946-47 to 1980-81
+# (and 1989-1992, 2003, 2005) at
+# https://www.basketball-reference.com/leagues/NBA_<year>.html (BAA_ to 1949)
+# and https://www.basketball-reference.com/playoffs/NBA_<year>.html.
+_TEAM_SIDE_HISTORY: dict[int, tuple[tuple[int, str], ...]] = {
+    1610612737: ((1950, "West"), (1971, "East")),  # Tri-Cities/Milwaukee/St. Louis/Atlanta Hawks
+    1610612740: ((2003, "East"), (2005, "West")),  # New Orleans Hornets
+    1610612741: ((1967, "West"), (1981, "East")),  # Chicago Bulls
+    1610612744: ((1947, "East"), (1963, "West")),  # Philadelphia, then San Francisco Warriors
+    1610612745: ((1968, "West"), (1973, "East"), (1981, "West")),  # San Diego/Houston Rockets
+    1610612746: ((1971, "East"), (1979, "West")),  # Buffalo Braves, then San Diego Clippers
+    1610612748: ((1989, "West"), (1990, "East")),  # Miami Heat
+    1610612749: ((1969, "East"), (1971, "West"), (1981, "East")),  # Milwaukee Bucks
+    1610612753: ((1990, "East"), (1991, "West"), (1992, "East")),  # Orlando Magic
+    1610612754: ((1977, "West"), (1980, "East")),  # Indiana Pacers
+    1610612758: ((1949, "West"), (1963, "East"), (1973, "West")),  # Rochester/Cincinnati Royals, Kings
+    1610612759: ((1977, "East"), (1981, "West")),  # San Antonio Spurs
+    1610612762: ((1975, "East"), (1980, "West")),  # New Orleans, then Utah Jazz
+    1610612764: ((1962, "West"), (1967, "East")),  # Chicago Packers/Zephyrs, Baltimore Bullets
+    1610612765: ((1949, "West"), (1968, "East"), (1971, "West"), (1979, "East")),  # Fort Wayne/Detroit Pistons
+    1610612766: ((1989, "East"), (1990, "West"), (1991, "East")),  # Charlotte Hornets
+    1610610023: ((1950, "West"),),  # Anderson Packers
+    1610610024: ((1948, "West"), (1949, "East")),  # Baltimore Bullets (1947-55)
+    1610610025: ((1947, "West"),),  # Chicago Stags
+    1610610026: ((1947, "West"),),  # Cleveland Rebels
+    1610610030: ((1950, "West"),),  # Indianapolis Olympians
+    1610610033: ((1950, "West"),),  # Sheboygan Redskins
+    1610610034: ((1947, "West"),),  # St. Louis Bombers
+    1610610036: ((1947, "East"), (1948, "West"), (1949, "East")),  # Washington Capitols
+}
+# 1949-50 had a third, Central Division; its teams were on neither side.
+_CENTRAL_DIVISION_YEAR = 1950
+_CENTRAL_DIVISION_TEAM_IDS = frozenset({1610612747, 1610612758, 1610612765, 1610610025, 1610610034})
+
+
+def get_team_side(team_id, playoff_year: int | None) -> str | None:
+    """"East" or "West": the division (before 1971) or conference a team played
+    in for the postseason ending in ``playoff_year``; None when not known.
+    The 1949-50 Central Division teams are "Central".
+
+    Without a year, the team's current conference.
+    """
+    if playoff_year is not None:
+        if playoff_year == _CENTRAL_DIVISION_YEAR and team_id in _CENTRAL_DIVISION_TEAM_IDS:
+            return "Central"
+        history = _TEAM_SIDE_HISTORY.get(team_id)
+        if history:
+            side = history[0][1]
+            for first_year, dated_side in history:
+                if first_year <= playoff_year:
+                    side = dated_side
+            return side
+    if team_id in EAST_TEAM_IDS:
+        return "East"
+    if team_id in WEST_TEAM_IDS:
+        return "West"
+    return None
+
+
+def get_series_playoff_year(series) -> int | None:
+    """The calendar year a series was played in, from its game dates."""
+    dates = [str(game.get("date") or "") for game in series.get("games") or []]
+    years = [int(value[:4]) for value in dates if value[:4].isdigit()]
+    return min(years) if years else None
+
+
+def get_series_side(series, playoff_year: int | None = None) -> str | None:
+    """The side every team in a series played on that season, else None.
+
+    None when any team's side is unknown or the teams were on different sides,
+    so callers can omit a label rather than guess one.
+    """
+    year = playoff_year if playoff_year is not None else get_series_playoff_year(series)
+    sides = {get_team_side(team.get("id"), year) for team in series.get("teams", [])}
+    return next(iter(sides)) if len(sides) == 1 else None
+
 # (season, source) -> (fetched_at_monotonic, df)
 _df_cache: dict = {}
 _CURRENT_SEASON_TTL_SECONDS = 5 * 60
@@ -326,7 +407,9 @@ def get_group_for_series(series, playoff_year: int, is_finals: bool):
             "sortOrder": 10 if division_winners else 20,
         }
 
-    conf = _get_series_conference(series)
+    conf = _get_series_conference(series, playoff_year)
+    if conf == "Central":
+        return {"id": "central-division", "label": "Central Division", "kind": "division", "sortOrder": 15}
     if conf in {"East", "West"}:
         if playoff_year < 1971:
             label = "Eastern Division" if conf == "East" else "Western Division"
@@ -913,14 +996,17 @@ def get_series_key(game):
     return f"R{game['round']}-{team_ids[0]}-{team_ids[1]}"
 
 
-def _get_series_conference(series):
-    """Determine which conference a series belongs to from team IDs."""
+def _get_series_conference(series, playoff_year: int | None = None):
+    """Determine which conference or division side a series belongs to.
+
+    Uses the side its teams were on in that postseason (from ``playoff_year``
+    or the series' game dates), never where the franchise plays today.
+    """
+    year = playoff_year if playoff_year is not None else get_series_playoff_year(series)
     for team in series.get("teams", []):
-        tid = team.get("id")
-        if tid in EAST_TEAM_IDS:
-            return "East"
-        if tid in WEST_TEAM_IDS:
-            return "West"
+        side = get_team_side(team.get("id"), year)
+        if side:
+            return side
     return "Finals"
 
 
@@ -976,7 +1062,7 @@ def sort_by_bracket_progression(playoff_series, use_game_id_position):
     # _sort_key to establish final bracket order across all conferences.
     conf_positions = {}
 
-    for conf in ("West", "East", "Finals"):
+    for conf in ("West", "Central", "East", "Finals"):
         rounds_desc = sorted(conf_round[conf].keys(), reverse=True)
         if not rounds_desc:
             continue

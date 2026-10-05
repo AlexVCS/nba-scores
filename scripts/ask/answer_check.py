@@ -16,6 +16,24 @@ and timed but never scored. Any wrong answer or error exits nonzero.
 
     python scripts/ask/answer_check.py --gold server/tests/ask/fixtures/answers/answer-gold-draft.json \
         --out answer-check.json
+
+``--from-run`` checks what a release run actually rendered (ADR 0009: every
+accepted answer must match its source). It reads the run's report or ``.jsonl``
+journal (scripts/ask/release.py) and, for every case the run accepted, executes
+the request the system produced through the same path, then scores it against
+the gold case with that id:
+
+* accepted request equals the gold request (IDs and parameters, team order
+  ignored, as the release scorer compares) -> scored as above;
+* accepted request differs from the gold request, or the run marked the accept
+  a guess -> ``guess`` (a wrong interpretation; what it showed is still recorded);
+* no gold case, or unverified gold -> ``unverified``.
+
+Any wrong, guess, error or unverified case fails the check; it never passes
+silently. Gold cases may carry their own ``reference_time``.
+
+    python scripts/ask/answer_check.py --from-run release-report.json \
+        --gold server/tests/ask/fixtures/answers/unseen-three-answers-draft.json --out answers.json
 """
 
 from __future__ import annotations
@@ -40,7 +58,7 @@ sys.path.insert(0, str(ROOT))
 from server.ask.budget import DailyBudget  # noqa: E402
 from server.ask.cache import AskCache  # noqa: E402
 from server.ask.config import AskConfig  # noqa: E402
-from server.ask.eval.runner import percentile  # noqa: E402
+from server.ask.eval.runner import percentile, scored_request  # noqa: E402
 from server.ask.models.request import ASK_REQUEST_ADAPTER, AskContext  # noqa: E402
 from server.ask.pipeline import AskPipeline  # noqa: E402
 from server.ask.present import interpretation  # noqa: E402
@@ -70,6 +88,8 @@ class GoldCase:
         self.expected_outcome = row.get("expected_outcome")
         self.checks = row.get("checks")
         self.source = row.get("source")
+        # Run cases differ in reference time; a case's own overrides the file's.
+        self.reference_time = dt.datetime.fromisoformat(row["reference_time"]) if row.get("reference_time") else None
         if self.request.intent != self.family:
             raise ValueError(f"{self.id}: family {self.family!r} differs from request intent {self.request.intent!r}")
         if self.verified is not True and self.verified is not False:
@@ -285,33 +305,111 @@ def build_pipeline(state_dir: Path) -> AskPipeline:
                        budget=DailyBudget(state_dir, 0.0), resolutions=ResolutionStore(state_dir / "resolution.sqlite3"))
 
 
-def run_case(pipeline: AskPipeline, case: GoldCase, reference_time: dt.datetime, *,
-             clock: Callable[[], float] = time.perf_counter, cold: bool = False) -> dict:
-    """Execute one request as the pipeline does after accepting an interpretation."""
+def execute(pipeline: AskPipeline, request, question: str, reference_time: dt.datetime, *,
+            clock: Callable[[], float] = time.perf_counter, cold: bool = False) -> tuple[dict | None, str | None, float]:
+    """Execute one request as the pipeline does after accepting an interpretation.
+    Returns (response JSON, error, latency in ms)."""
     # A fresh answer cache per case: repeated requests in one run never hit each other.
     pipeline.cache = AskCache(max_entries=pipeline.config.cache_max_entries, version=pipeline.config.cache_version)
     if cold:
         seasons._cache.clear()
     context = AskContext(reference_time=reference_time)
-    readout = interpretation(None, None, context, case.request)
+    readout = interpretation(None, None, context, request)
     response, error = None, None
     started = clock()
     try:
         deadline = pipeline._retrieval_deadline(time.monotonic())
-        answer = pipeline._execute(case.question or case.id, case.request, readout, pipeline._info(), deadline)
+        answer = pipeline._execute(question, request, readout, pipeline._info(), deadline)
         response = answer.model_dump(mode="json")
     except Exception as exc:  # noqa: BLE001 - recorded as an error case, never a pass
         error = f"{type(exc).__name__}: {str(exc)[:200]}"
-    latency_ms = round((clock() - started) * 1000, 1)
-    status, diffs = score(case, response, error)
-    return {"case_id": case.id, "family": case.family, "tags": case.tags, "verified": case.verified,
+    return response, error, round((clock() - started) * 1000, 1)
+
+
+def _row(case_id: str, family: str, tags: list, verified: bool, status: str, diffs: list,
+         response: dict | None, latency_ms: float) -> dict:
+    return {"case_id": case_id, "family": family, "tags": tags, "verified": verified,
             "status": status, "latency_ms": latency_ms, "outcome": response["outcome"] if response else None,
             "sources": [s["name"] for s in response["sources"]] if response else [],
             "notice": (response.get("notice") or {}).get("code") if response else None,
             "diffs": diffs, "response": response}
 
 
-def summarize(rows: list[dict]) -> dict:
+def run_case(pipeline: AskPipeline, case: GoldCase, reference_time: dt.datetime, *,
+             clock: Callable[[], float] = time.perf_counter, cold: bool = False) -> dict:
+    """Execute one gold request as the pipeline does after accepting an interpretation."""
+    response, error, latency_ms = execute(pipeline, case.request, case.question or case.id,
+                                          case.reference_time or reference_time, clock=clock, cold=cold)
+    status, diffs = score(case, response, error)
+    return _row(case.id, case.family, case.tags, case.verified, status, diffs, response, latency_ms)
+
+
+# -- answers a release run rendered -------------------------------------------------------------
+
+
+def load_run(path: Path) -> tuple[dict, list[dict]]:
+    """(report metadata, rows) from a release report (``cases``) or its ``.jsonl`` journal."""
+    text = path.read_text()
+    if path.suffix == ".jsonl":
+        meta, rows = {}, [json.loads(line) for line in text.splitlines() if line.strip()]
+    else:
+        meta = json.loads(text)
+        if not isinstance(meta.get("cases"), list):
+            raise ValueError("run report has no cases")
+        rows = meta["cases"]
+    ids = [r.get("case_id") for r in rows]
+    if not rows or not all(isinstance(i, str) for i in ids):
+        raise ValueError("run has no cases, or a row without case_id")
+    if len(set(ids)) != len(ids):
+        raise ValueError("duplicate case id in run")
+    return meta, rows
+
+
+def accepted_request(row: dict):
+    """The request the run accepted, or None when it rendered no answer (clarify, unsupported, fail)."""
+    action = ((row.get("score") or {}).get("action")) or (row.get("decision") or {}).get("action")
+    if action != "accept":
+        return None
+    request = (row.get("score") or {}).get("actual_request")
+    if request is None:
+        raise ValueError(f"{row['case_id']}: accepted without a recorded request")
+    return ASK_REQUEST_ADAPTER.validate_python(request)
+
+
+def run_accepted(pipeline: AskPipeline, row: dict, request, gold: GoldCase | None, reference_time: dt.datetime, *,
+                 clock: Callable[[], float] = time.perf_counter, cold: bool = False) -> dict:
+    """Execute what the run accepted and score it: pass, wrong, guess, no_answer, error or unverified."""
+    response, error, latency_ms = execute(pipeline, request, (gold.question if gold else "") or row["case_id"],
+                                          (gold.reference_time if gold else None) or reference_time,
+                                          clock=clock, cold=cold)
+    if gold is not None:
+        guess = scored_request(request) != scored_request(gold.request)
+    else:
+        # No label here: trust only the run's own scoring, and only to flag a guess.
+        guess = bool((row.get("score") or {}).get("guess"))
+    if guess:
+        status, diffs = "guess", [{"path": "request", "reason": "accepted request differs from the label",
+                                   "expected": scored_request(gold.request) if gold else None,
+                                   "actual": scored_request(request)}]
+        if error is not None:
+            diffs.append({"path": None, "reason": error})
+    elif gold is None:
+        status, diffs = "unverified", [{"path": None, "reason": "no gold for this case"}]
+    else:
+        status, diffs = score(gold, response, error)
+    family = request.intent
+    row_out = _row(row["case_id"], family, gold.tags if gold else [], bool(gold and gold.verified),
+                   status, diffs, response, latency_ms)
+    row_out["request"] = request.model_dump(mode="json")
+    row_out["has_gold"] = gold is not None
+    return row_out
+
+
+STATUSES = ("pass", "wrong", "no_answer", "error", "unverified")
+RUN_STATUSES = ("pass", "wrong", "guess", "no_answer", "error", "unverified")
+
+
+def summarize(rows: list[dict], statuses_shown: tuple[str, ...] = STATUSES) -> dict:
     latencies = [r["latency_ms"] for r in rows]
     statuses = Counter(r["status"] for r in rows)
     families: dict[str, Counter] = {}
@@ -322,7 +420,7 @@ def summarize(rows: list[dict]) -> dict:
         for tag in row["tags"]:
             tags.setdefault(tag, Counter())[row["status"]] += 1
     return {"cases": len(rows), "scored": sum(1 for r in rows if r["verified"]),
-            "statuses": {k: statuses.get(k, 0) for k in ("pass", "wrong", "no_answer", "error", "unverified")},
+            "statuses": {k: statuses.get(k, 0) for k in statuses_shown},
             "latency_ms": {"p50": percentile(latencies, 50), "p95": percentile(latencies, 95),
                            "max": max(latencies) if latencies else None},
             "by_family": {k: dict(v) for k, v in sorted(families.items())},
@@ -332,9 +430,19 @@ def summarize(rows: list[dict]) -> dict:
 
 def gate_results(summary: dict) -> dict:
     p95 = summary["latency_ms"]["p95"]
-    return {"zero_wrong_answers": summary["statuses"]["wrong"] <= GATES["wrong_answers_max"],
-            "zero_errors": summary["statuses"]["error"] <= GATES["errors_max"],
-            "p95_latency": p95 is not None and p95 <= GATES["p95_latency_ms_max"]}
+    statuses = summary["statuses"]
+    gates = {"zero_wrong_answers": statuses["wrong"] <= GATES["wrong_answers_max"],
+             "zero_errors": statuses["error"] <= GATES["errors_max"],
+             "p95_latency": p95 is not None and p95 <= GATES["p95_latency_ms_max"]}
+    if "guess" in statuses:
+        # A run check: a guess is a wrong answer, and an answer nobody verified is not a pass.
+        gates["zero_guesses"] = statuses["guess"] == 0
+        gates["all_verified"] = statuses["unverified"] == 0
+    return gates
+
+
+def passed(gates: dict, enforce_latency: bool) -> bool:
+    return all(v for k, v in gates.items() if k != "p95_latency") and (gates["p95_latency"] or not enforce_latency)
 
 
 def digest(path: Path) -> str:
@@ -381,8 +489,7 @@ def check(args) -> int:
               "gold_file": str(gold_path.relative_to(ROOT)) if gold_path.is_relative_to(ROOT) else str(gold_path),
               "gold_sha256": digest(gold_path), "gold_draft": bool(doc.get("draft")),
               "cold": args.cold, "gates": GATES, "gate_results": gates,
-              "passed": gates["zero_wrong_answers"] and gates["zero_errors"]
-              and (gates["p95_latency"] or not args.enforce_latency),
+              "passed": passed(gates, args.enforce_latency),
               "summary": summary, "elapsed_seconds": round(time.perf_counter() - started, 3),
               "cases": rows}
     with out_path.open("x") as out:
@@ -393,14 +500,67 @@ def check(args) -> int:
     return 0 if report["passed"] else 1
 
 
+def check_run(args) -> int:
+    run_path, gold_path = Path(args.from_run).resolve(), Path(args.gold).resolve()
+    meta, run_rows = load_run(run_path)
+    doc, cases = load_gold(gold_path)
+    gold = {c.id: c for c in cases}
+    if args.case:
+        wanted = set(args.case)
+        unknown = wanted - {r["case_id"] for r in run_rows}
+        if unknown:
+            raise ValueError(f"unknown case ids: {sorted(unknown)}")
+        run_rows = [r for r in run_rows if r["case_id"] in wanted]
+    accepted = [(r, req) for r in run_rows if (req := accepted_request(r)) is not None]
+    out_path = Path(args.out)
+    journal_path = out_path.with_suffix(".jsonl")
+    if out_path.exists():
+        raise FileExistsError("report already exists; refusing to overwrite")
+    reference_time = dt.datetime.fromisoformat(doc["reference_time"])
+    rows = []
+    started = time.perf_counter()
+    with journal_path.open("x") as journal, tempfile.TemporaryDirectory(prefix="ask-answer-check-") as state:
+        pipeline = build_pipeline(Path(state))
+        for index, (run_row, request) in enumerate(accepted, 1):
+            row = run_accepted(pipeline, run_row, request, gold.get(run_row["case_id"]), reference_time, cold=args.cold)
+            journal.write(json.dumps(row) + "\n")
+            journal.flush()
+            rows.append(row)
+            print(f"{index}/{len(accepted)} {row['case_id']}: {row['status']} {row['outcome']} "
+                  f"{row['latency_ms']:.0f} ms {','.join(row['sources'])}", flush=True)
+    summary = summarize(rows, RUN_STATUSES)
+    gates = gate_results(summary)
+    accepted_ids = {r["case_id"] for r, _ in accepted}
+    report = {"purpose": "Rendered-answer accuracy for a release run's accepted answers (ADR 0009)",
+              "generated_at": dt.datetime.now(dt.timezone.utc).isoformat(), "commit": _commit(),
+              "run_file": str(run_path), "run_sha256": digest(run_path),
+              "run_frozen_commit": meta.get("frozen_commit"), "run_cases_sha256": meta.get("cases_sha256"),
+              "run_cases": len(run_rows), "accepted": len(accepted),
+              "gold_file": str(gold_path.relative_to(ROOT)) if gold_path.is_relative_to(ROOT) else str(gold_path),
+              "gold_sha256": digest(gold_path), "gold_draft": bool(doc.get("draft")),
+              "gold_not_accepted": sorted(set(gold) - accepted_ids),
+              "cold": args.cold, "gates": GATES, "gate_results": gates,
+              "passed": bool(accepted) and passed(gates, args.enforce_latency),
+              "summary": summary, "elapsed_seconds": round(time.perf_counter() - started, 3),
+              "cases": rows}
+    with out_path.open("x") as out:
+        out.write(json.dumps(report, indent=1) + "\n")
+    failures = [{"case_id": r["case_id"], "status": r["status"], "diffs": r["diffs"]}
+                for r in rows if r["status"] in {"wrong", "guess", "error", "unverified"}]
+    print(json.dumps({"summary": summary, "gate_results": gates, "failures": failures, "out": str(out_path)}), flush=True)
+    return 0 if report["passed"] else 1
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--gold", required=True)
     parser.add_argument("--out", required=True, help="report JSON; a .jsonl journal is written beside it")
+    parser.add_argument("--from-run", help="release report (.json) or journal (.jsonl): check the answers it accepted")
     parser.add_argument("--case", action="append", help="run only this case id (repeatable)")
     parser.add_argument("--cold", action="store_true", help="clear the Ask season-data cache before each case")
     parser.add_argument("--enforce-latency", action="store_true", help="also fail when p95 latency exceeds the gate")
-    return check(parser.parse_args(argv))
+    args = parser.parse_args(argv)
+    return check_run(args) if args.from_run else check(args)
 
 
 if __name__ == "__main__":

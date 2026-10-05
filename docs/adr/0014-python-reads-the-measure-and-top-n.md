@@ -29,7 +29,8 @@ Live testing on `ask/reviewed-components` (dev field decisions, ASK_DEV=1) found
    ambiguous.
 2. **With no stated measure:** season leaders ask the measure clarification (Season
    totals / Per game), as ADR 0012 intended. Career stats keep the ADR 0013 default
-   (totals). **Player season stats show per-game averages first, and the answer also
+   (totals; since 2026-10-01 a full career line shows per game first, see the ADR 0013
+   amendment). **Player season stats show per-game averages first, and the answer also
    carries season totals**, so the card offers a Per game | Totals toggle instead of a
    clarification.
 3. **Both measures come from one source row.** Per-game values are the source's exact

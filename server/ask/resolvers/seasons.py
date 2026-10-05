@@ -5,6 +5,11 @@ for traded players, never a sum of rounded stint averages. Team records use the
 team history endpoint; league/conference standings use LeagueStandings. No values
 are combined across sources. Missing fields remain missing, never zero.
 
+Conferences began in 1970-71. Earlier BAA/NBA seasons had only divisions, so
+their league standings rows carry no conference, and a conference request for
+them is answered as no record before any fetch; a division is never relabeled
+as a conference.
+
 An optional ``Deadline`` is the time left in the Ask response. It is shared by
 the NBA attempt, its retry and backoff, the fallback, and joined-cache waits.
 A step that cannot fit is skipped, and the tool reports unavailable, never a
@@ -39,6 +44,8 @@ NBA_TIMEOUT_SECONDS = 4
 JOIN_WAIT_SECONDS = 5
 # The fallback starts only if a Basketball-Reference request can still start.
 FALLBACK_MIN_SECONDS = basketball_reference.MIN_START_SECONDS
+# First season (start year) with Eastern/Western conferences; earlier seasons had divisions only.
+CONFERENCES_START_YEAR = 1970
 COUNTS = {"points": "PTS", "rebounds": "REB", "offensive_rebounds": "OREB", "defensive_rebounds": "DREB",
           "assists": "AST", "steals": "STL", "blocks": "BLK", "turnovers": "TOV", "fouls": "PF", "minutes": "MIN"}
 SHOOTING = {"field_goals": ("FGM", "FGA"), "three_pointers": ("FG3M", "FG3A"), "free_throws": ("FTM", "FTA")}
@@ -346,6 +353,10 @@ def _record(team, wins, losses, conference=None, rank=None):
                          conference=conference, conference_rank=_integer(rank) if rank and _number(rank) and _number(rank) > 0 else None)
 
 
+def _division_era(season, conference):
+    return int(season[:4]) < CONFERENCES_START_YEAR and conference in (None, "")
+
+
 def _nba_records(request, deadline: Deadline | None = None):
     if request.team and request.standings_scope == "league":
         endpoint = nba_stats_client._run("TeamYearByYearStats", lambda: teamyearbyyearstats.TeamYearByYearStats(
@@ -369,7 +380,7 @@ def _nba_records(request, deadline: Deadline | None = None):
             if str(row.get("SeasonID")) != expected_id or str(row.get("LeagueID")) != "00":
                 raise ValueError("NBA standings season/league mismatch")
             conf = {"East": "east", "West": "west", "Eastern": "east", "Western": "west"}.get(row.get("Conference"))
-            if conf is None:
+            if conf is None and not _division_era(request.season, row.get("Conference")):
                 raise ValueError("Unknown NBA conference")
             name = f"{row.get('TeamCity', '')} {row.get('TeamName', '')}".strip()
             parsed.append(_record(_team(_integer(row.get("TeamID")), request.season, name), row.get("WINS"), row.get("LOSSES"), conf, row.get("PlayoffRank")))
@@ -386,10 +397,17 @@ def _bref_records(request, deadline: Deadline | None = None):
     soup = _html_tables(_html(href, request.season, deadline))
     _heading(soup, request.season)
     tables = []
-    for side, conf in (("E", "east"), ("W", "west")):
-        table = soup.find("table", id=f"confs_standings_{side}") or soup.find("table", id=f"divs_standings_{side}")
+    if year - 1 >= CONFERENCES_START_YEAR:
+        for side, conf in (("E", "east"), ("W", "west")):
+            table = soup.find("table", id=f"confs_standings_{side}") or soup.find("table", id=f"divs_standings_{side}")
+            if table:
+                tables.append((table, conf))
+    else:
+        # Division-era pages have one table, id "divs_standings_", with a
+        # sub-header row per division. Divisions are not conferences.
+        table = soup.find("table", id="divs_standings_")
         if table:
-            tables.append((table, conf))
+            tables.append((table, None))
     if not tables:
         table = soup.find("table", id="standings")
         if table:
@@ -426,7 +444,7 @@ def _valid_records(data, request):
             raise ValueError("Incomplete league standings")
     if request.standings_scope != "league":
         if any(r.conference is None for r in rows):
-            raise UnsupportedError("other", "conference_unavailable")
+            raise ValueError("Missing standings conference")
         rows = [r for r in rows if r.conference == request.standings_scope]
     if not rows:
         raise NotFoundError("no_record", "season_records_missing")
@@ -440,6 +458,9 @@ def _valid_records(data, request):
 
 
 def team_records(request: TeamRecordsRequest, deadline: Deadline | None = None):
+    if request.standings_scope != "league" and int(request.season[:4]) < CONFERENCES_START_YEAR:
+        # No conference standings exist; answering with a division would be a different fact.
+        raise NotFoundError("no_record", "no_conferences_before_1970")
     data = _season_cached("team-records", request.model_dump_json(), lambda: _cached(
         _load(lambda: _nba_records(request, deadline), lambda: _bref_records(request, deadline),
               lambda d: _valid_records(d, request), deadline)), deadline).value

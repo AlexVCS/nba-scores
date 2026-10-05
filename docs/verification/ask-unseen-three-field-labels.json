@@ -1,0 +1,1329 @@
+{
+ "schema": "ask-tier-gate-field-labels/2",
+ "fixture": "server/tests/ask/fixtures/eval/unseen-three-draft.json",
+ "fixture_sha256": "ca5f3730a6186cbf9356e4ca3dc87c1d6497e07a3c44a408f77fe6e56da7349b",
+ "labeler": {
+  "name": "claude-subagent-field-labeler",
+  "labeled_at": "2026-10-05",
+  "isolation_statement": "Labeled from a fresh context with no prior knowledge of this project. I read only: the brief (docs/verification/ask-unseen-three-field-label-brief.md), the template (docs/verification/ask-unseen-three-field-label-template.json), the question fixture (server/tests/ask/fixtures/eval/unseen-three-draft.json), the contract schemas server/ask/models/common.py, request.py and interpreter.py, and the reference data server/ask/data/player_catalog.json and franchise_history.json. I read no other file under docs/, server/ask/, scripts/ or the tests, used no git history, issue tracker, pull request or web source, and ran no Ask code, lookup, model or scorer; the only scripts I ran read the allowed files and checked this JSON. Player and team IDs come from the two reference files; the rest is general NBA knowledge."
+ },
+ "fields_by_intent": {
+  "game_search": [
+   "teams",
+   "date",
+   "location"
+  ],
+  "boxscore_stat": [
+   "stat_scope",
+   "stat",
+   "aggregation",
+   "player",
+   "teams",
+   "target_team",
+   "date",
+   "season",
+   "round",
+   "game_number"
+  ],
+  "playoff_series": [
+   "teams",
+   "season",
+   "round"
+  ],
+  "postseason_summary": [
+   "teams",
+   "season"
+  ],
+  "player_season_stats": [
+   "stat",
+   "season_type",
+   "player",
+   "teams",
+   "season"
+  ],
+  "team_records": [
+   "season_type",
+   "standings_scope",
+   "teams",
+   "season"
+  ],
+  "season_leaders": [
+   "stat",
+   "season_type",
+   "season"
+  ],
+  "career_stats": [
+   "stat",
+   "season_type",
+   "player"
+  ],
+  "unsupported": []
+ },
+ "field_conditions": {
+  "target_team": "boxscore_stat only, and only when your stat_scope label is team; omit it otherwise"
+ },
+ "not_labeled": {
+  "aggregation": [
+   "career_stats",
+   "player_season_stats",
+   "season_leaders"
+  ],
+  "reason": "Python reads the measure from the question for these intents; it is not labeled here"
+ },
+ "cases": [
+  {
+   "case_id": "unseen-three-boxscore_stat-06",
+   "question": "How many offensive rebounds did the Spurs grab in Game 7 of the 2005 Finals?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "player",
+   "fixed_intent": "boxscore_stat",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {
+    "player": {
+     "status": "absent"
+    }
+   },
+   "notes": "Team or leaders scope; the question names no player."
+  },
+  {
+   "case_id": "unseen-three-boxscore_stat-09",
+   "question": "Top shot-blocker in Game 7 of the 2013 Finals",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "player",
+   "fixed_intent": "boxscore_stat",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {
+    "player": {
+     "status": "absent"
+    }
+   },
+   "notes": "Team or leaders scope; the question names no player."
+  },
+  {
+   "case_id": "unseen-three-boxscore_stat-10",
+   "question": "Who dished out the most assists here?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {
+    "route": "boxscore",
+    "game_id": "0042200405"
+   },
+   "label_scope": "player",
+   "fixed_intent": "boxscore_stat",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {
+    "player": {
+     "status": "absent"
+    }
+   },
+   "notes": "Team or leaders scope; the question names no player."
+  },
+  {
+   "case_id": "unseen-three-boxscore_stat-11",
+   "question": "Raptors three-point percentage on June 13, 2019",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "player",
+   "fixed_intent": "boxscore_stat",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {
+    "player": {
+     "status": "absent"
+    }
+   },
+   "notes": "Team or leaders scope; the question names no player."
+  },
+  {
+   "case_id": "unseen-three-boxscore_stat-12",
+   "question": "How many free throws did the Bucks make against Phoenix on July 17, 2021?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "player",
+   "fixed_intent": "boxscore_stat",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {
+    "player": {
+     "status": "absent"
+    }
+   },
+   "notes": "Team or leaders scope; the question names no player."
+  },
+  {
+   "case_id": "unseen-three-boxscore_stat-19",
+   "question": "How many rebounds did Gasol grab on February 21, 2014?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "boxscore_stat"
+   },
+   "scored_intent": "boxscore_stat",
+   "fields": {
+    "stat_scope": {
+     "status": "value",
+     "value": "player"
+    },
+    "stat": {
+     "status": "value",
+     "value": "rebounds"
+    },
+    "aggregation": {
+     "status": "value",
+     "value": "total"
+    },
+    "player": {
+     "status": "ambiguous",
+     "alternatives": [
+      2200,
+      201188
+     ]
+    },
+    "teams": {
+     "status": "absent"
+    },
+    "date": {
+     "status": "value",
+     "value": {
+      "start": "2014-02-21",
+      "end": "2014-02-21"
+     }
+    },
+    "season": {
+     "status": "absent"
+    },
+    "round": {
+     "status": "absent"
+    },
+    "game_number": {
+     "status": "absent"
+    }
+   },
+   "notes": "Pau (2001-2018) and Marc (2008-2020) Gasol were both active in February 2014. Agrees with the fixture."
+  },
+  {
+   "case_id": "unseen-three-player_season_stats-19",
+   "question": "Ball's assists per game in 2021-22",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "player_season_stats"
+   },
+   "scored_intent": "player_season_stats",
+   "fields": {
+    "stat": {
+     "status": "value",
+     "value": "assists"
+    },
+    "season_type": {
+     "status": "absent"
+    },
+    "player": {
+     "status": "ambiguous",
+     "alternatives": [
+      1628366,
+      1630163
+     ]
+    },
+    "teams": {
+     "status": "absent"
+    },
+    "season": {
+     "status": "value",
+     "value": "2021-22"
+    }
+   },
+   "notes": "Lonzo and LaMelo Ball both played in 2021-22; Cedric Ball (1990 only) is outside the time frame. Agrees with the fixture."
+  },
+  {
+   "case_id": "unseen-three-season_leaders-18",
+   "question": "Steals leaders for 2016-17",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "season_leaders"
+   },
+   "scored_intent": "season_leaders",
+   "fields": {
+    "stat": {
+     "status": "value",
+     "value": "steals"
+    },
+    "season_type": {
+     "status": "absent"
+    },
+    "season": {
+     "status": "value",
+     "value": "2016-17"
+    }
+   },
+   "notes": "The expected clarification is of aggregation, which is not a labeled field for season_leaders."
+  },
+  {
+   "case_id": "unseen-three-player_season_stats-20",
+   "question": "Karl-Anthony Towns rebounds per game in 2018",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "player_season_stats"
+   },
+   "scored_intent": "player_season_stats",
+   "fields": {
+    "stat": {
+     "status": "value",
+     "value": "rebounds"
+    },
+    "season_type": {
+     "status": "absent"
+    },
+    "player": {
+     "status": "value",
+     "value": 1626157
+    },
+    "teams": {
+     "status": "absent"
+    },
+    "season": {
+     "status": "ambiguous",
+     "alternatives": [
+      "2017-18",
+      "2018-19"
+     ]
+    }
+   },
+   "notes": "Bare year for a season statistic with no playoff wording: 2017-18 or 2018-19. Agrees with the fixture."
+  },
+  {
+   "case_id": "unseen-three-team_records-17",
+   "question": "What was LA's record in 2012-13?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "team_records"
+   },
+   "scored_intent": "team_records",
+   "fields": {
+    "season_type": {
+     "status": "absent"
+    },
+    "standings_scope": {
+     "status": "absent"
+    },
+    "teams": {
+     "status": "ambiguous",
+     "alternatives": [
+      1610612747,
+      1610612746
+     ]
+    },
+    "season": {
+     "status": "value",
+     "value": "2012-13"
+    }
+   },
+   "notes": "Both Los Angeles franchises existed in 2012-13. Agrees with the fixture."
+  },
+  {
+   "case_id": "unseen-three-team_records-18",
+   "question": "What's the Heat's win-loss record?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "team_records"
+   },
+   "scored_intent": "team_records",
+   "fields": {
+    "season_type": {
+     "status": "absent"
+    },
+    "standings_scope": {
+     "status": "absent"
+    },
+    "teams": {
+     "status": "value",
+     "value": [
+      1610612748
+     ]
+    },
+    "season": {
+     "status": "absent"
+    }
+   },
+   "notes": "No season stated. Present tense at an offseason reference time could suggest the latest season, but nothing is stated, so season is absent. Agrees with the fixture."
+  },
+  {
+   "case_id": "unseen-three-game_search-18",
+   "question": "Show every Knicks game from March 1 to March 20, 2024.",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "game_search"
+   },
+   "scored_intent": "game_search",
+   "fields": {
+    "teams": {
+     "status": "value",
+     "value": [
+      1610612752
+     ]
+    },
+    "date": {
+     "status": "unresolved",
+     "reason": "range_too_long"
+    },
+    "location": {
+     "status": "absent"
+    }
+   },
+   "notes": "March 1 to March 20, 2024 is 20 days. Agrees with the fixture."
+  },
+  {
+   "case_id": "unseen-three-game_search-19",
+   "question": "Were the Grizzlies playing on the 4th of April?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "game_search"
+   },
+   "scored_intent": "game_search",
+   "fields": {
+    "teams": {
+     "status": "value",
+     "value": [
+      1610612763
+     ]
+    },
+    "date": {
+     "status": "unresolved",
+     "reason": "year_required"
+    },
+    "location": {
+     "status": "absent"
+    }
+   },
+   "notes": "April 4 with no year. Agrees with the fixture."
+  },
+  {
+   "case_id": "unseen-three-boxscore_stat-20",
+   "question": "Who led Game 3 of the 2019 Finals?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "boxscore_stat"
+   },
+   "scored_intent": "boxscore_stat",
+   "fields": {
+    "stat_scope": {
+     "status": "value",
+     "value": "leaders"
+    },
+    "stat": {
+     "status": "absent"
+    },
+    "aggregation": {
+     "status": "value",
+     "value": "total"
+    },
+    "player": {
+     "status": "absent"
+    },
+    "teams": {
+     "status": "absent"
+    },
+    "date": {
+     "status": "absent"
+    },
+    "season": {
+     "status": "value",
+     "value": "2018-19"
+    },
+    "round": {
+     "status": "value",
+     "value": {
+      "round": "finals",
+      "conference": null
+     }
+    },
+    "game_number": {
+     "status": "value",
+     "value": 3
+    }
+   },
+   "notes": "Read as game leaders with no statistic named, following the fixture. 'Who led Game 3' could also mean who was ahead or who won, so an intent clarification would be defensible; I kept a single intent because no other request type fits a named single game better. aggregation is 'total' because it is one game."
+  },
+  {
+   "case_id": "unseen-three-playoff_series-17",
+   "question": "Bring up a Spurs playoff series from 2014.",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "playoff_series"
+   },
+   "scored_intent": "playoff_series",
+   "fields": {
+    "teams": {
+     "status": "value",
+     "value": [
+      1610612759
+     ]
+    },
+    "season": {
+     "status": "value",
+     "value": "2013-14"
+    },
+    "round": {
+     "status": "absent"
+    }
+   },
+   "notes": "'playoff series from 2014' is a playoff year, so 2013-14. No round named. Agrees with the fixture."
+  },
+  {
+   "case_id": "unseen-three-playoff_series-18",
+   "question": "Open a 2015 conference semifinal.",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "playoff_series"
+   },
+   "scored_intent": "playoff_series",
+   "fields": {
+    "teams": {
+     "status": "absent"
+    },
+    "season": {
+     "status": "value",
+     "value": "2014-15"
+    },
+    "round": {
+     "status": "value",
+     "value": {
+      "round": "conference_semifinals",
+      "conference": null
+     }
+    }
+   },
+   "notes": "Round named without a conference; no team. Agrees with the fixture."
+  },
+  {
+   "case_id": "unseen-three-career_stats-20",
+   "question": "Show the all-time leaders",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "career_stats"
+   },
+   "scored_intent": "career_stats",
+   "fields": {
+    "stat": {
+     "status": "absent"
+    },
+    "season_type": {
+     "status": "absent"
+    },
+    "player": {
+     "status": "absent"
+    }
+   },
+   "notes": "All-time list with no statistic. Agrees with the fixture."
+  },
+  {
+   "case_id": "unseen-three-season_leaders-20",
+   "question": "Blocks per game leaders",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "season_leaders"
+   },
+   "scored_intent": "season_leaders",
+   "fields": {
+    "stat": {
+     "status": "value",
+     "value": "blocks"
+    },
+    "season_type": {
+     "status": "absent"
+    },
+    "season": {
+     "status": "absent"
+    }
+   },
+   "notes": "No season and no all-time or career wording, so season_leaders with an absent season. Agrees with the fixture."
+  },
+  {
+   "case_id": "unseen-three-boxscore_stat-21",
+   "question": "What did Antetokounmpo score on December 13, 2023?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "boxscore_stat"
+   },
+   "scored_intent": "boxscore_stat",
+   "fields": {
+    "stat_scope": {
+     "status": "value",
+     "value": "player"
+    },
+    "stat": {
+     "status": "value",
+     "value": "points"
+    },
+    "aggregation": {
+     "status": "value",
+     "value": "total"
+    },
+    "player": {
+     "status": "ambiguous",
+     "alternatives": [
+      203507,
+      203648
+     ]
+    },
+    "teams": {
+     "status": "absent"
+    },
+    "date": {
+     "status": "value",
+     "value": {
+      "start": "2023-12-13",
+      "end": "2023-12-13"
+     }
+    },
+    "season": {
+     "status": "absent"
+    },
+    "round": {
+     "status": "absent"
+    },
+    "game_number": {
+     "status": "absent"
+    }
+   },
+   "notes": "Giannis (2013-) and Thanasis (2015-2025) both overlap December 2023; Kostas (2018-2020) and Alex (2025) do not. Agrees with the fixture's label. Most fans would mean Giannis, but the surname rule in the brief makes this ambiguous."
+  },
+  {
+   "case_id": "unseen-three-player_season_stats-21",
+   "question": "Malone's rebounds per game in 1985-86",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "player_season_stats"
+   },
+   "scored_intent": "player_season_stats",
+   "fields": {
+    "stat": {
+     "status": "value",
+     "value": "rebounds"
+    },
+    "season_type": {
+     "status": "absent"
+    },
+    "player": {
+     "status": "ambiguous",
+     "alternatives": [
+      117,
+      252,
+      77449
+     ]
+    },
+    "teams": {
+     "status": "absent"
+    },
+    "season": {
+     "status": "value",
+     "value": "1985-86"
+    }
+   },
+   "notes": "Jeff (1983-1995), Karl (1985-2003) and Moses (1976-1994) Malone all played in 1985-86. Agrees with the fixture."
+  },
+  {
+   "case_id": "unseen-three-player_season_stats-22",
+   "question": "Jayson Tatum stats this season",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "player_season_stats"
+   },
+   "scored_intent": "player_season_stats",
+   "fields": {
+    "stat": {
+     "status": "value",
+     "value": "stat_line"
+    },
+    "season_type": {
+     "status": "absent"
+    },
+    "player": {
+     "status": "value",
+     "value": 1628369
+    },
+    "teams": {
+     "status": "absent"
+    },
+    "season": {
+     "status": "ambiguous",
+     "alternatives": [
+      "2025-26",
+      "2026-27"
+     ]
+    }
+   },
+   "notes": "Reference time 2026-09-30 is the offseason: 'this season' is 2025-26 (just finished) or 2026-27 (coming). Labeled ambiguous as the brief directs. Earl Tatum is excluded by the full name. Agrees with the fixture."
+  },
+  {
+   "case_id": "unseen-three-game_search-20",
+   "question": "Which games were played at the Barclays Center?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "game_search"
+   },
+   "scored_intent": "game_search",
+   "fields": {
+    "teams": {
+     "status": "absent"
+    },
+    "date": {
+     "status": "absent"
+    },
+    "location": {
+     "status": "value",
+     "value": "Brooklyn"
+    }
+   },
+   "notes": "Arena name is a location; the Barclays Center is in Brooklyn. No date. Agrees with the fixture."
+  },
+  {
+   "case_id": "unseen-three-postseason_summary-19",
+   "question": "Recap New York's 2021 postseason.",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "postseason_summary"
+   },
+   "scored_intent": "postseason_summary",
+   "fields": {
+    "teams": {
+     "any_of": [
+      {
+       "status": "ambiguous",
+       "alternatives": [
+        1610612752,
+        1610612751
+       ]
+      },
+      {
+       "status": "value",
+       "value": [
+        1610612752
+       ]
+      }
+     ],
+     "note": "The brief treats 'New York' as a two-franchise city and both the Knicks and Nets made the 2021 playoffs, so ambiguous is defensible. But franchise_history.json gives the Nets the city name 'Brooklyn' from 2012-13 (they were 'New York Nets' only in 1976-77), and the fixture's own postseason_summary-16 uses 'Brooklyn' for the Nets, so 'New York' in 2021 naming only the Knicks is also defensible."
+    },
+    "season": {
+     "status": "value",
+     "value": "2020-21"
+    }
+   },
+   "notes": "Partial disagreement with the fixture: I think the Knicks-only reading is at least as strong as the ambiguous one, because no franchise other than the Knicks was named 'New York' in 2020-21 in the reference data. The fixture tags this debatable."
+  },
+  {
+   "case_id": "unseen-three-season_leaders-21",
+   "question": "Top Spurs scorer in 2013-14",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "any_of": [
+     {
+      "status": "value",
+      "value": "season_leaders"
+     },
+     {
+      "status": "value",
+      "value": "unsupported:other"
+     }
+    ],
+    "note": "A league-leaders question with a filter the request type rejects (one team's leading scorer)."
+   },
+   "scored_intent": "season_leaders",
+   "fields": {
+    "stat": {
+     "status": "value",
+     "value": "points"
+    },
+    "season_type": {
+     "status": "absent"
+    },
+    "season": {
+     "status": "value",
+     "value": "2013-14"
+    }
+   },
+   "notes": "'scorer' is points. The Spurs filter has no field under season_leaders. Agrees with the fixture's unsupported:other."
+  },
+  {
+   "case_id": "unseen-three-season_leaders-22",
+   "question": "Which rookie averaged the most points in 2022-23?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "any_of": [
+     {
+      "status": "value",
+      "value": "season_leaders"
+     },
+     {
+      "status": "value",
+      "value": "unsupported:other"
+     }
+    ],
+    "note": "A league-leaders question with a filter the request type rejects (rookies only)."
+   },
+   "scored_intent": "season_leaders",
+   "fields": {
+    "stat": {
+     "status": "value",
+     "value": "points"
+    },
+    "season_type": {
+     "status": "absent"
+    },
+    "season": {
+     "status": "value",
+     "value": "2022-23"
+    }
+   },
+   "notes": "'averaged the most points' is points. Agrees with the fixture's unsupported:other."
+  },
+  {
+   "case_id": "unseen-three-season_leaders-23",
+   "question": "Who led the league in personal fouls in 2018-19?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "any_of": [
+     {
+      "status": "value",
+      "value": "season_leaders"
+     },
+     {
+      "status": "value",
+      "value": "unsupported:unsupported_leader_stat"
+     }
+    ],
+    "note": "A league-leaders question for a statistic (fouls) that has no season leaderboard."
+   },
+   "scored_intent": "season_leaders",
+   "fields": {
+    "stat": {
+     "status": "value",
+     "value": "fouls"
+    },
+    "season_type": {
+     "status": "absent"
+    },
+    "season": {
+     "status": "value",
+     "value": "2018-19"
+    }
+   },
+   "notes": "Disagreement with the fixture's reason: it expects unsupported:other, I labeled unsupported:unsupported_leader_stat. 'fouls' is a Stat value outside SEASON_LEADER_STATS, and request.py's own validation error for that case is tagged unsupported_leader_stat. The interpreter.py comment limits that reason to percentages and stat lines, so 'other' remains defensible; the fixture tags this debatable."
+  },
+  {
+   "case_id": "unseen-three-career_stats-21",
+   "question": "Who has the most career triple-doubles?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "unsupported:other"
+   },
+   "scored_intent": "unsupported",
+   "fields": {},
+   "notes": "Triple-doubles are not a Stat value, so no request type can carry the question; unsupported only. Agrees with the fixture."
+  },
+  {
+   "case_id": "unseen-three-career_stats-22",
+   "question": "Top 10 in career rebounds per game, all-time",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "any_of": [
+     {
+      "status": "value",
+      "value": "career_stats"
+     },
+     {
+      "status": "value",
+      "value": "unsupported:unsupported_leader_stat"
+     }
+    ],
+    "note": "An all-time list by a per-game measure, which the request type rejects."
+   },
+   "scored_intent": "career_stats",
+   "fields": {
+    "stat": {
+     "status": "value",
+     "value": "rebounds"
+    },
+    "season_type": {
+     "status": "absent"
+    },
+    "player": {
+     "status": "absent"
+    }
+   },
+   "notes": "Agrees with the fixture. 'other' would also be a reasonable reason, since rebounds do have a ranking rule and only the measure is rejected."
+  },
+  {
+   "case_id": "unseen-three-career_stats-23",
+   "question": "Where does Larry Bird rank all-time in career free throw percentage?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "any_of": [
+     {
+      "status": "value",
+      "value": "career_stats"
+     },
+     {
+      "status": "value",
+      "value": "unsupported:unsupported_leader_stat"
+     }
+    ],
+    "note": "A player's all-time rank in a percentage, which the request type rejects."
+   },
+   "scored_intent": "career_stats",
+   "fields": {
+    "stat": {
+     "status": "value",
+     "value": "free_throw_percentage"
+    },
+    "season_type": {
+     "status": "absent"
+    },
+    "player": {
+     "status": "value",
+     "value": 1449
+    }
+   },
+   "notes": "Full name 'Larry Bird' resolves to 1449. Agrees with the fixture."
+  },
+  {
+   "case_id": "unseen-three-career_stats-24",
+   "question": "Dirk's career high in rebounds",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "unsupported:other"
+   },
+   "scored_intent": "unsupported",
+   "fields": {},
+   "notes": "A career high is a single-game maximum, not a career total or average and not one identified game, so no request type fits. Agrees with the fixture."
+  },
+  {
+   "case_id": "unseen-three-career_stats-25",
+   "question": "Who has scored the most points in Knicks franchise history?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "any_of": [
+     {
+      "status": "value",
+      "value": "career_stats"
+     },
+     {
+      "status": "value",
+      "value": "unsupported:other"
+     }
+    ],
+    "note": "An all-time points list with a franchise filter, which the request type rejects."
+   },
+   "scored_intent": "career_stats",
+   "fields": {
+    "stat": {
+     "status": "value",
+     "value": "points"
+    },
+    "season_type": {
+     "status": "absent"
+    },
+    "player": {
+     "status": "absent"
+    }
+   },
+   "notes": "The Knicks filter has no field under career_stats. Agrees with the fixture's unsupported:other."
+  },
+  {
+   "case_id": "unseen-three-player_season_stats-23",
+   "question": "Jaylen Brown's points per game at home in 2023-24",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "any_of": [
+     {
+      "status": "value",
+      "value": "player_season_stats"
+     },
+     {
+      "status": "value",
+      "value": "unsupported:other"
+     }
+    ],
+    "note": "A player season question with a home split the request type rejects."
+   },
+   "scored_intent": "player_season_stats",
+   "fields": {
+    "stat": {
+     "status": "value",
+     "value": "points"
+    },
+    "season_type": {
+     "status": "absent"
+    },
+    "player": {
+     "status": "value",
+     "value": 1627759
+    },
+    "teams": {
+     "status": "absent"
+    },
+    "season": {
+     "status": "value",
+     "value": "2023-24"
+    }
+   },
+   "notes": "'at home' is a split, not a team or location. Agrees with the fixture's unsupported:other."
+  },
+  {
+   "case_id": "unseen-three-player_season_stats-24",
+   "question": "Luka's true shooting percentage in 2022-23",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "unsupported:other"
+   },
+   "scored_intent": "unsupported",
+   "fields": {},
+   "notes": "True shooting percentage is not a Stat value, so the stat field could not be labeled; unsupported only. Had it been scored as player_season_stats the other fields would be player 1629029 (following the fixture's 'Luka' convention, although Luka Garza and Luka Samanic also played in 2022-23) and season 2022-23. Agrees with the fixture."
+  },
+  {
+   "case_id": "unseen-three-team_records-19",
+   "question": "Pacers' record in overtime games 2019-20",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "any_of": [
+     {
+      "status": "value",
+      "value": "team_records"
+     },
+     {
+      "status": "value",
+      "value": "unsupported:other"
+     }
+    ],
+    "note": "A team record question with an overtime split the request type rejects."
+   },
+   "scored_intent": "team_records",
+   "fields": {
+    "season_type": {
+     "status": "absent"
+    },
+    "standings_scope": {
+     "status": "absent"
+    },
+    "teams": {
+     "status": "value",
+     "value": [
+      1610612754
+     ]
+    },
+    "season": {
+     "status": "value",
+     "value": "2019-20"
+    }
+   },
+   "notes": "Agrees with the fixture's unsupported:other."
+  },
+  {
+   "case_id": "unseen-three-team_records-20",
+   "question": "Which team had the best record in 2015-16?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "any_of": [
+     {
+      "status": "value",
+      "value": "team_records"
+     },
+     {
+      "status": "value",
+      "value": "unsupported:other"
+     }
+    ],
+    "note": "League standings for 2015-16 answer 'which team had the best record'; the fixture instead treats 'best' as a ranking the request type rejects."
+   },
+   "scored_intent": "team_records",
+   "fields": {
+    "season_type": {
+     "status": "absent"
+    },
+    "standings_scope": {
+     "status": "value",
+     "value": "league"
+    },
+    "teams": {
+     "status": "absent"
+    },
+    "season": {
+     "status": "value",
+     "value": "2015-16"
+    }
+   },
+   "notes": "Disagreement with the fixture: I consider team_records with league-wide standings the primary reading, since the top row of the 2015-16 standings is the answer. The fixture expects unsupported:other and tags it debatable. standings_scope is 'league' because the question is league-wide with no conference and no team."
+  },
+  {
+   "case_id": "unseen-three-boxscore_stat-22",
+   "question": "Who had the highest field-goal percentage in the Heat-Spurs game on June 18, 2013?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "any_of": [
+     {
+      "status": "value",
+      "value": "boxscore_stat"
+     },
+     {
+      "status": "value",
+      "value": "unsupported:unsupported_leader_stat"
+     }
+    ],
+    "note": "Game leaders by a percentage, which has no ranking rule."
+   },
+   "scored_intent": "boxscore_stat",
+   "fields": {
+    "stat_scope": {
+     "status": "value",
+     "value": "leaders"
+    },
+    "stat": {
+     "status": "value",
+     "value": "field_goal_percentage"
+    },
+    "aggregation": {
+     "status": "value",
+     "value": "total"
+    },
+    "player": {
+     "status": "absent"
+    },
+    "teams": {
+     "status": "value",
+     "value": [
+      1610612748,
+      1610612759
+     ]
+    },
+    "date": {
+     "status": "value",
+     "value": {
+      "start": "2013-06-18",
+      "end": "2013-06-18"
+     }
+    },
+    "season": {
+     "status": "absent"
+    },
+    "round": {
+     "status": "absent"
+    },
+    "game_number": {
+     "status": "absent"
+    }
+   },
+   "notes": "Agrees with the fixture."
+  },
+  {
+   "case_id": "unseen-three-boxscore_stat-23",
+   "question": "What were Kawhi Leonard's per-game averages over the 2019 Finals?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "any_of": [
+     {
+      "status": "value",
+      "value": "boxscore_stat"
+     },
+     {
+      "status": "value",
+      "value": "unsupported:multi_game_average"
+     }
+    ],
+    "note": "A per-game average across the games of one series, which the single-game request type rejects."
+   },
+   "scored_intent": "boxscore_stat",
+   "fields": {
+    "stat_scope": {
+     "status": "value",
+     "value": "player"
+    },
+    "stat": {
+     "status": "value",
+     "value": "stat_line"
+    },
+    "aggregation": {
+     "status": "value",
+     "value": "per_game"
+    },
+    "player": {
+     "status": "value",
+     "value": 202695
+    },
+    "teams": {
+     "status": "absent"
+    },
+    "date": {
+     "status": "absent"
+    },
+    "season": {
+     "status": "value",
+     "value": "2018-19"
+    },
+    "round": {
+     "status": "value",
+     "value": {
+      "round": "finals",
+      "conference": null
+     }
+    },
+    "game_number": {
+     "status": "absent"
+    }
+   },
+   "notes": "Agrees with the fixture. A third reading, player_season_stats restricted to one round (unsupported:other), is also possible, as the fixture's rationale says; I did not add it to the any_of."
+  },
+  {
+   "case_id": "unseen-three-playoff_series-19",
+   "question": "Show every playoff series the Spurs won from 1999 to 2014.",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "status": "value",
+    "value": "unsupported:other"
+   },
+   "scored_intent": "unsupported",
+   "fields": {},
+   "notes": "A list of series across sixteen postseasons filtered by 'won'; playoff_series takes one season, and a season range has no label format, so I labeled the unsupported intent only. Agrees with the fixture."
+  },
+  {
+   "case_id": "unseen-three-player_season_stats-25",
+   "question": "LeBron's points per game in the regular season and playoffs combined, 2012-13",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": {
+    "any_of": [
+     {
+      "status": "value",
+      "value": "player_season_stats"
+     },
+     {
+      "status": "value",
+      "value": "unsupported:other"
+     }
+    ],
+    "note": "A player season question asking for regular season and playoffs combined, which the request type rejects."
+   },
+   "scored_intent": "player_season_stats",
+   "fields": {
+    "stat": {
+     "status": "value",
+     "value": "points"
+    },
+    "season_type": {
+     "any_of": [
+      {
+       "status": "value",
+       "value": "regular_season"
+      },
+      {
+       "status": "value",
+       "value": "playoffs"
+      }
+     ],
+     "note": "The question states both phases and asks for them combined; a single season_type cannot hold that, so either stated phase is defensible."
+    },
+    "player": {
+     "status": "value",
+     "value": 2544
+    },
+    "teams": {
+     "status": "absent"
+    },
+    "season": {
+     "status": "value",
+     "value": "2012-13"
+    }
+   },
+   "notes": "Agrees with the fixture's unsupported:other. season_type is an any_of because the question names both phases."
+  }
+ ]
+}

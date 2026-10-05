@@ -1,0 +1,6456 @@
+{
+ "draft": true,
+ "status": "DRAFT part B (player_season_stats, team_records, season_leaders, career_stats accept cases of unseen-three-draft.json). Values were read by an agent on 2026-10-01 from raw stats.nba.com endpoint responses (Ask's primary source for these tools) and cross-checked against the cited Basketball-Reference pages (Ask's fallback); a reviewer should re-read each source and set draft to false.",
+ "description": "Answer-accuracy gold for scripts/ask/answer_check.py --from-run, keyed by unseen-three case id. Each case carries the labeled request, expected outcome and checks against the AskResponse JSON. Where stats.nba and Basketball-Reference differ the gold is the stats.nba value (the source Ask reports using), the other is in notes, and the case is tagged source_disagreement. Career values of active players and all-time lists move during a season; they are as of checked_at.",
+ "reference_time": "2026-09-30T12:00:00-04:00",
+ "cases": [
+  {
+   "id": "unseen-three-player_season_stats-01",
+   "family": "player_season_stats",
+   "tags": [
+    "player_season_stats",
+    "nickname",
+    "per_game"
+   ],
+   "question": "Steph's threes per game in 2015-16",
+   "request": {
+    "intent": "player_season_stats",
+    "player": {
+     "player_id": 201939,
+     "name": "Stephen Curry"
+    },
+    "season": "2015-16",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "three_pointers",
+     "aggregation": "per_game"
+    },
+    "team": null
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://www.basketball-reference.com/players/c/curryst01.html",
+     "read": "Basketball-Reference (Ask's fallback source). Per Game and Totals tables, 2015-16 GSW row: G 79, FG3 402 total, 5.1 per game, FG3A 886.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://stats.nba.com/stats/playercareerstats?PlayerID=201939&PerMode=Totals&LeagueID=00",
+     "read": "stats.nba playercareerstats (Ask's primary source), SeasonTotalsRegularSeason 2015-16 GSW row: GP 79, MIN 2700, PTS 2375, REB 430, AST 527, STL 169, BLK 15, OREB 68, FG3M 402, FG3A 886, FG3_PCT 0.454, FTM 363, FTA 400, FT_PCT 0.908.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.player.player_id",
+     "value": 201939
+    },
+    {
+     "path": "result.season",
+     "value": "2015-16"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "per_game"
+    },
+    {
+     "path": "result.games_played",
+     "value": 79
+    },
+    {
+     "path": "result.values[0].stat",
+     "value": "three_pointers"
+    },
+    {
+     "path": "result.values[0].value",
+     "value": 5.1,
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.alternate.values[0].value",
+     "value": 402
+    },
+    {
+     "path": "result.values[0].made",
+     "value": 402
+    },
+    {
+     "path": "result.values[0].attempted",
+     "value": 886
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-player_season_stats-02",
+   "family": "player_season_stats",
+   "tags": [
+    "player_season_stats",
+    "totals",
+    "possessive"
+   ],
+   "question": "Russell Westbrook's total rebounds in 2016-17",
+   "request": {
+    "intent": "player_season_stats",
+    "player": {
+     "player_id": 201566,
+     "name": "Russell Westbrook"
+    },
+    "season": "2016-17",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "rebounds",
+     "aggregation": "total"
+    },
+    "team": null
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://www.basketball-reference.com/players/w/westbru01.html",
+     "read": "Basketball-Reference (Ask's fallback source). Per Game and Totals tables, 2016-17 OKC row: G 81, TRB 864 total, 10.7 per game.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://stats.nba.com/stats/playercareerstats?PlayerID=201566&PerMode=Totals&LeagueID=00",
+     "read": "stats.nba playercareerstats (Ask's primary source), SeasonTotalsRegularSeason 2016-17 OKC row: GP 81, MIN 2802, PTS 2558, REB 864, AST 840, STL 132, BLK 31, OREB 137, FG3M 200, FG3A 583, FG3_PCT 0.343, FTM 710, FTA 840, FT_PCT 0.845.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.player.player_id",
+     "value": 201566
+    },
+    {
+     "path": "result.season",
+     "value": "2016-17"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "total"
+    },
+    {
+     "path": "result.games_played",
+     "value": 81
+    },
+    {
+     "path": "result.values[0].stat",
+     "value": "rebounds"
+    },
+    {
+     "path": "result.values[0].value",
+     "value": 864
+    },
+    {
+     "path": "result.alternate.values[0].value",
+     "value": 10.7,
+     "match": "round",
+     "digits": 1
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-player_season_stats-03",
+   "family": "player_season_stats",
+   "tags": [
+    "player_season_stats",
+    "nickname",
+    "older_season",
+    "per_game"
+   ],
+   "question": "What was Wilt's scoring average in 1961-62?",
+   "request": {
+    "intent": "player_season_stats",
+    "player": {
+     "player_id": 76375,
+     "name": "Wilt Chamberlain"
+    },
+    "season": "1961-62",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "points",
+     "aggregation": "per_game"
+    },
+    "team": null
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://www.basketball-reference.com/players/c/chambwi01.html",
+     "read": "Basketball-Reference (Ask's fallback source). Per Game and Totals tables, 1961-62 PHW row: G 80, PTS 4029 total, 50.4 per game.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://stats.nba.com/stats/playercareerstats?PlayerID=76375&PerMode=Totals&LeagueID=00",
+     "read": "stats.nba playercareerstats (Ask's primary source), SeasonTotalsRegularSeason 1961-62 PHW row: GP 80, MIN 3882, PTS 4029, REB 2052, AST 192, STL None, BLK None, OREB None, FG3M None, FG3A None, FG3_PCT None, FTM 835, FTA 1363, FT_PCT 0.613.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.player.player_id",
+     "value": 76375
+    },
+    {
+     "path": "result.season",
+     "value": "1961-62"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "per_game"
+    },
+    {
+     "path": "result.games_played",
+     "value": 80
+    },
+    {
+     "path": "result.values[0].stat",
+     "value": "points"
+    },
+    {
+     "path": "result.values[0].value",
+     "value": 50.4,
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.alternate.values[0].value",
+     "value": 4029
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-player_season_stats-04",
+   "family": "player_season_stats",
+   "tags": [
+    "player_season_stats",
+    "playoffs",
+    "first_name_only"
+   ],
+   "question": "Kawhi's steals per game in the 2019 playoffs",
+   "request": {
+    "intent": "player_season_stats",
+    "player": {
+     "player_id": 202695,
+     "name": "Kawhi Leonard"
+    },
+    "season": "2018-19",
+    "season_type": "playoffs",
+    "stat": {
+     "stat": "steals",
+     "aggregation": "per_game"
+    },
+    "team": null
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://www.basketball-reference.com/players/l/leonaka01.html",
+     "read": "Basketball-Reference (Ask's fallback source). Playoffs Per Game and Totals tables, 2018-19 TOR row: G 24, STL 40 total, 1.7 per game.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://stats.nba.com/stats/playercareerstats?PlayerID=202695&PerMode=Totals&LeagueID=00",
+     "read": "stats.nba playercareerstats (Ask's primary source), SeasonTotalsPostSeason 2018-19 TOR row: GP 24, MIN 939, PTS 732, REB 218, AST 94, STL 40, BLK 17, OREB 54, FG3M 55, FG3A 145, FG3_PCT 0.379, FTM 191, FTA 216, FT_PCT 0.884.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.player.player_id",
+     "value": 202695
+    },
+    {
+     "path": "result.season",
+     "value": "2018-19"
+    },
+    {
+     "path": "result.season_type",
+     "value": "playoffs"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "per_game"
+    },
+    {
+     "path": "result.games_played",
+     "value": 24
+    },
+    {
+     "path": "result.values[0].stat",
+     "value": "steals"
+    },
+    {
+     "path": "result.values[0].value",
+     "value": 1.7,
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.alternate.values[0].value",
+     "value": 40
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-player_season_stats-05",
+   "family": "player_season_stats",
+   "tags": [
+    "player_season_stats",
+    "totals",
+    "older_season"
+   ],
+   "question": "How many blocks did Mark Eaton have in 1984-85?",
+   "request": {
+    "intent": "player_season_stats",
+    "player": {
+     "player_id": 76631,
+     "name": "Mark Eaton"
+    },
+    "season": "1984-85",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "blocks",
+     "aggregation": "total"
+    },
+    "team": null
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://www.basketball-reference.com/players/e/eatonma01.html",
+     "read": "Basketball-Reference (Ask's fallback source). Per Game and Totals tables, 1984-85 UTA row: G 82, BLK 456 total, 5.6 per game.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://stats.nba.com/stats/playercareerstats?PlayerID=76631&PerMode=Totals&LeagueID=00",
+     "read": "stats.nba playercareerstats (Ask's primary source), SeasonTotalsRegularSeason 1984-85 UTH row: GP 82, MIN 2813, PTS 794, REB 927, AST 124, STL 36, BLK 456, OREB 207, FG3M 0, FG3A 0, FG3_PCT 0.0, FTM 190, FTA 267, FT_PCT 0.712.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.player.player_id",
+     "value": 76631
+    },
+    {
+     "path": "result.season",
+     "value": "1984-85"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "total"
+    },
+    {
+     "path": "result.games_played",
+     "value": 82
+    },
+    {
+     "path": "result.values[0].stat",
+     "value": "blocks"
+    },
+    {
+     "path": "result.values[0].value",
+     "value": 456
+    },
+    {
+     "path": "result.alternate.values[0].value",
+     "value": 5.6,
+     "match": "round",
+     "digits": 1
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-player_season_stats-06",
+   "family": "player_season_stats",
+   "tags": [
+    "player_season_stats",
+    "percentage",
+    "first_name_only"
+   ],
+   "question": "Giannis's free throw percentage in 2020-21",
+   "request": {
+    "intent": "player_season_stats",
+    "player": {
+     "player_id": 203507,
+     "name": "Giannis Antetokounmpo"
+    },
+    "season": "2020-21",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "free_throw_percentage",
+     "aggregation": "total"
+    },
+    "team": null
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://www.basketball-reference.com/players/a/antetgi01.html",
+     "read": "Basketball-Reference (Ask's fallback source). Per Game and Totals tables, 2020-21 MIL row: G 61, ft_pct .685 (398/581).",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://stats.nba.com/stats/playercareerstats?PlayerID=203507&PerMode=Totals&LeagueID=00",
+     "read": "stats.nba playercareerstats (Ask's primary source), SeasonTotalsRegularSeason 2020-21 MIL row: GP 61, MIN 2013, PTS 1717, REB 671, AST 357, STL 72, BLK 73, OREB 97, FG3M 67, FG3A 221, FG3_PCT 0.303, FTM 398, FTA 581, FT_PCT 0.685.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.player.player_id",
+     "value": 203507
+    },
+    {
+     "path": "result.season",
+     "value": "2020-21"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "total"
+    },
+    {
+     "path": "result.games_played",
+     "value": 61
+    },
+    {
+     "path": "result.values[0].stat",
+     "value": "free_throw_percentage"
+    },
+    {
+     "path": "result.values[0].value",
+     "value": 0.685,
+     "match": "round",
+     "digits": 3
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-player_season_stats-07",
+   "family": "player_season_stats",
+   "tags": [
+    "player_season_stats",
+    "team_stint",
+    "per_game"
+   ],
+   "question": "Jimmy Butler's minutes per game for the Heat in 2019-20",
+   "request": {
+    "intent": "player_season_stats",
+    "player": {
+     "player_id": 202710,
+     "name": "Jimmy Butler III"
+    },
+    "season": "2019-20",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "minutes",
+     "aggregation": "per_game"
+    },
+    "team": {
+     "team_id": 1610612748,
+     "tricode": "MIA",
+     "name": "Miami Heat"
+    }
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://www.basketball-reference.com/players/b/butleji01.html",
+     "read": "Basketball-Reference (Ask's fallback source). Per Game and Totals tables, 2019-20 MIA row: G 58, MP 1959 total, 33.8 per game.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://stats.nba.com/stats/playercareerstats?PlayerID=202710&PerMode=Totals&LeagueID=00",
+     "read": "stats.nba playercareerstats (Ask's primary source), SeasonTotalsRegularSeason 2019-20 MIA row: GP 58, MIN 1959, PTS 1157, REB 386, AST 350, STL 103, BLK 32, OREB 106, FG3M 29, FG3A 119, FG3_PCT 0.244, FTM 438, FTA 525, FT_PCT 0.834.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.player.player_id",
+     "value": 202710
+    },
+    {
+     "path": "result.season",
+     "value": "2019-20"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "per_game"
+    },
+    {
+     "path": "result.games_played",
+     "value": 58
+    },
+    {
+     "path": "result.team.team_id",
+     "value": 1610612748
+    },
+    {
+     "path": "result.values[0].stat",
+     "value": "minutes"
+    },
+    {
+     "path": "result.values[0].value",
+     "value": 33.8,
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.alternate.values[0].value",
+     "value": 1959
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-player_season_stats-08",
+   "family": "player_season_stats",
+   "tags": [
+    "player_season_stats",
+    "team_stint",
+    "traded_player",
+    "stat_line"
+   ],
+   "question": "Carmelo Anthony stats for the Knicks in 2010-11",
+   "request": {
+    "intent": "player_season_stats",
+    "player": {
+     "player_id": 2546,
+     "name": "Carmelo Anthony"
+    },
+    "season": "2010-11",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "stat_line",
+     "aggregation": "per_game"
+    },
+    "team": {
+     "team_id": 1610612752,
+     "tricode": "NYK",
+     "name": "New York Knicks"
+    }
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://www.basketball-reference.com/players/a/anthoca01.html",
+     "read": "Basketball-Reference (Ask's fallback source). Per Game and Totals tables, 2010-11 NYK row: G 27, PTS 711 total, 26.3 per game, TRB 181 total, 6.7 per game, AST 81 total, 3.0 per game, STL 25 total, 0.9 per game, BLK 15 total, 0.6 per game.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://stats.nba.com/stats/playercareerstats?PlayerID=2546&PerMode=Totals&LeagueID=00",
+     "read": "stats.nba playercareerstats (Ask's primary source), SeasonTotalsRegularSeason 2010-11 NYK row: GP 27, MIN 977, PTS 711, REB 181, AST 81, STL 25, BLK 15, OREB 41, FG3M 53, FG3A 125, FG3_PCT 0.424, FTM 164, FTA 188, FT_PCT 0.872.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.player.player_id",
+     "value": 2546
+    },
+    {
+     "path": "result.season",
+     "value": "2010-11"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "per_game"
+    },
+    {
+     "path": "result.games_played",
+     "value": 27
+    },
+    {
+     "path": "result.team.team_id",
+     "value": 1610612752
+    },
+    {
+     "path": "result.values[stat=points].value",
+     "value": 26.3,
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.alternate.values[stat=points].value",
+     "value": 711
+    },
+    {
+     "path": "result.values[stat=rebounds].value",
+     "value": 6.7,
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.alternate.values[stat=rebounds].value",
+     "value": 181
+    },
+    {
+     "path": "result.values[stat=assists].value",
+     "value": 3.0,
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.alternate.values[stat=assists].value",
+     "value": 81
+    },
+    {
+     "path": "result.values[stat=steals].value",
+     "value": 0.9,
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.alternate.values[stat=steals].value",
+     "value": 25
+    },
+    {
+     "path": "result.values[stat=blocks].value",
+     "value": 0.6,
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.alternate.values[stat=blocks].value",
+     "value": 15
+    },
+    {
+     "path": "result.alternate.aggregation",
+     "value": "total"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-player_season_stats-09",
+   "family": "player_season_stats",
+   "tags": [
+    "player_season_stats",
+    "relative_season"
+   ],
+   "question": "Shai Gilgeous-Alexander's points per game this season",
+   "request": {
+    "intent": "player_season_stats",
+    "player": {
+     "player_id": 1628983,
+     "name": "Shai Gilgeous-Alexander"
+    },
+    "season": "2024-25",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "points",
+     "aggregation": "per_game"
+    },
+    "team": null
+   },
+   "reference_time": "2025-02-10T12:00:00-05:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://www.basketball-reference.com/players/g/gilgesh01.html",
+     "read": "Basketball-Reference (Ask's fallback source). Per Game and Totals tables, 2024-25 OKC row: G 76, PTS 2484 total, 32.7 per game.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://stats.nba.com/stats/playercareerstats?PlayerID=1628983&PerMode=Totals&LeagueID=00",
+     "read": "stats.nba playercareerstats (Ask's primary source), SeasonTotalsRegularSeason 2024-25 OKC row: GP 76, MIN 2598, PTS 2484, REB 379, AST 486, STL 131, BLK 77, OREB 67, FG3M 163, FG3A 435, FG3_PCT 0.375, FTM 601, FTA 669, FT_PCT 0.898.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.player.player_id",
+     "value": 1628983
+    },
+    {
+     "path": "result.season",
+     "value": "2024-25"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "per_game"
+    },
+    {
+     "path": "result.games_played",
+     "value": 76
+    },
+    {
+     "path": "result.values[0].stat",
+     "value": "points"
+    },
+    {
+     "path": "result.values[0].value",
+     "value": 32.7,
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.alternate.values[0].value",
+     "value": 2484
+    }
+   ],
+   "notes": "Label reference time is 2025-02-10 (mid-season), but Ask answers with the season as the source has it now: the completed 2024-25 line. Value as of checked_at."
+  },
+  {
+   "id": "unseen-three-player_season_stats-10",
+   "family": "player_season_stats",
+   "tags": [
+    "player_season_stats",
+    "nickname",
+    "percentage"
+   ],
+   "question": "Dirk's 3-point percentage in 2006-07",
+   "request": {
+    "intent": "player_season_stats",
+    "player": {
+     "player_id": 1717,
+     "name": "Dirk Nowitzki"
+    },
+    "season": "2006-07",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "three_point_percentage",
+     "aggregation": "total"
+    },
+    "team": null
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://www.basketball-reference.com/players/n/nowitdi01.html",
+     "read": "Basketball-Reference (Ask's fallback source). Per Game and Totals tables, 2006-07 DAL row: G 78, fg3_pct .416 (72/173).",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://stats.nba.com/stats/playercareerstats?PlayerID=1717&PerMode=Totals&LeagueID=00",
+     "read": "stats.nba playercareerstats (Ask's primary source), SeasonTotalsRegularSeason 2006-07 DAL row: GP 78, MIN 2820, PTS 1916, REB 693, AST 263, STL 52, BLK 62, OREB 122, FG3M 72, FG3A 173, FG3_PCT 0.416, FTM 498, FTA 551, FT_PCT 0.904.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.player.player_id",
+     "value": 1717
+    },
+    {
+     "path": "result.season",
+     "value": "2006-07"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "total"
+    },
+    {
+     "path": "result.games_played",
+     "value": 78
+    },
+    {
+     "path": "result.values[0].stat",
+     "value": "three_point_percentage"
+    },
+    {
+     "path": "result.values[0].value",
+     "value": 0.416,
+     "match": "round",
+     "digits": 3
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-player_season_stats-11",
+   "family": "player_season_stats",
+   "tags": [
+    "player_season_stats",
+    "no_measure"
+   ],
+   "question": "Chris Paul assists in 2007-08",
+   "request": {
+    "intent": "player_season_stats",
+    "player": {
+     "player_id": 101108,
+     "name": "Chris Paul"
+    },
+    "season": "2007-08",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "assists",
+     "aggregation": "per_game"
+    },
+    "team": null
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://www.basketball-reference.com/players/p/paulch01.html",
+     "read": "Basketball-Reference (Ask's fallback source). Per Game and Totals tables, 2007-08 NOH row: G 80, AST 925 total, 11.6 per game.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://stats.nba.com/stats/playercareerstats?PlayerID=101108&PerMode=Totals&LeagueID=00",
+     "read": "stats.nba playercareerstats (Ask's primary source), SeasonTotalsRegularSeason 2007-08 NOH row: GP 80, MIN 3006, PTS 1684, REB 321, AST 925, STL 217, BLK 4, OREB 62, FG3M 92, FG3A 249, FG3_PCT 0.369, FTM 332, FTA 390, FT_PCT 0.851.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.player.player_id",
+     "value": 101108
+    },
+    {
+     "path": "result.season",
+     "value": "2007-08"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "per_game"
+    },
+    {
+     "path": "result.games_played",
+     "value": 80
+    },
+    {
+     "path": "result.values[0].stat",
+     "value": "assists"
+    },
+    {
+     "path": "result.values[0].value",
+     "value": 11.6,
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.alternate.values[0].value",
+     "value": 925
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-player_season_stats-12",
+   "family": "player_season_stats",
+   "tags": [
+    "player_season_stats",
+    "playoffs",
+    "no_measure",
+    "first_name_only"
+   ],
+   "question": "Hakeem's blocks in the 1994 playoffs",
+   "request": {
+    "intent": "player_season_stats",
+    "player": {
+     "player_id": 165,
+     "name": "Hakeem Olajuwon"
+    },
+    "season": "1993-94",
+    "season_type": "playoffs",
+    "stat": {
+     "stat": "blocks",
+     "aggregation": "per_game"
+    },
+    "team": null
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://www.basketball-reference.com/players/o/olajuha01.html",
+     "read": "Basketball-Reference (Ask's fallback source). Playoffs Per Game and Totals tables, 1993-94 HOU row: G 23, BLK 92 total, 4.0 per game.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://stats.nba.com/stats/playercareerstats?PlayerID=165&PerMode=Totals&LeagueID=00",
+     "read": "stats.nba playercareerstats (Ask's primary source), SeasonTotalsPostSeason 1993-94 HOU row: GP 23, MIN 989, PTS 664, REB 254, AST 98, STL 40, BLK 92, OREB 55, FG3M 2, FG3A 4, FG3_PCT 0.5, FTM 128, FTA 161, FT_PCT 0.795.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.player.player_id",
+     "value": 165
+    },
+    {
+     "path": "result.season",
+     "value": "1993-94"
+    },
+    {
+     "path": "result.season_type",
+     "value": "playoffs"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "per_game"
+    },
+    {
+     "path": "result.games_played",
+     "value": 23
+    },
+    {
+     "path": "result.values[0].stat",
+     "value": "blocks"
+    },
+    {
+     "path": "result.values[0].value",
+     "value": 4.0,
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.alternate.values[0].value",
+     "value": 92
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-player_season_stats-13",
+   "family": "player_season_stats",
+   "tags": [
+    "player_season_stats",
+    "older_season",
+    "per_game"
+   ],
+   "question": "Oscar Robertson assists per game 1961-62",
+   "request": {
+    "intent": "player_season_stats",
+    "player": {
+     "player_id": 600015,
+     "name": "Oscar Robertson"
+    },
+    "season": "1961-62",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "assists",
+     "aggregation": "per_game"
+    },
+    "team": null
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://www.basketball-reference.com/players/r/roberos01.html",
+     "read": "Basketball-Reference (Ask's fallback source). Per Game and Totals tables, 1961-62 CIN row: G 79, AST 899 total, 11.4 per game.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://stats.nba.com/stats/playercareerstats?PlayerID=600015&PerMode=Totals&LeagueID=00",
+     "read": "stats.nba playercareerstats (Ask's primary source), SeasonTotalsRegularSeason 1961-62 CIN row: GP 79, MIN 3503, PTS 2432, REB 985, AST 899, STL None, BLK None, OREB None, FG3M None, FG3A None, FG3_PCT None, FTM 700, FTA 872, FT_PCT 0.803.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.player.player_id",
+     "value": 600015
+    },
+    {
+     "path": "result.season",
+     "value": "1961-62"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "per_game"
+    },
+    {
+     "path": "result.games_played",
+     "value": 79
+    },
+    {
+     "path": "result.values[0].stat",
+     "value": "assists"
+    },
+    {
+     "path": "result.values[0].value",
+     "value": 11.4,
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.alternate.values[0].value",
+     "value": 899
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-player_season_stats-14",
+   "family": "player_season_stats",
+   "tags": [
+    "player_season_stats",
+    "relative_season",
+    "totals"
+   ],
+   "question": "Anthony Edwards total points last season",
+   "request": {
+    "intent": "player_season_stats",
+    "player": {
+     "player_id": 1630162,
+     "name": "Anthony Edwards"
+    },
+    "season": "2023-24",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "points",
+     "aggregation": "total"
+    },
+    "team": null
+   },
+   "reference_time": "2025-03-01T12:00:00-05:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://www.basketball-reference.com/players/e/edwaran01.html",
+     "read": "Basketball-Reference (Ask's fallback source). Per Game and Totals tables, 2023-24 MIN row: G 79, PTS 2049 total, 25.9 per game.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://stats.nba.com/stats/playercareerstats?PlayerID=1630162&PerMode=Totals&LeagueID=00",
+     "read": "stats.nba playercareerstats (Ask's primary source), SeasonTotalsRegularSeason 2023-24 MIN row: GP 79, MIN 2770, PTS 2049, REB 430, AST 405, STL 101, BLK 42, OREB 52, FG3M 190, FG3A 532, FG3_PCT 0.357, FTM 423, FTA 506, FT_PCT 0.836.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.player.player_id",
+     "value": 1630162
+    },
+    {
+     "path": "result.season",
+     "value": "2023-24"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "total"
+    },
+    {
+     "path": "result.games_played",
+     "value": 79
+    },
+    {
+     "path": "result.values[0].stat",
+     "value": "points"
+    },
+    {
+     "path": "result.values[0].value",
+     "value": 2049
+    },
+    {
+     "path": "result.alternate.values[0].value",
+     "value": 25.9,
+     "match": "round",
+     "digits": 1
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-player_season_stats-15",
+   "family": "player_season_stats",
+   "tags": [
+    "player_season_stats",
+    "totals",
+    "older_season"
+   ],
+   "question": "Total offensive rebounds for Dennis Rodman in 1991-92",
+   "request": {
+    "intent": "player_season_stats",
+    "player": {
+     "player_id": 23,
+     "name": "Dennis Rodman"
+    },
+    "season": "1991-92",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "offensive_rebounds",
+     "aggregation": "total"
+    },
+    "team": null
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://www.basketball-reference.com/players/r/rodmade01.html",
+     "read": "Basketball-Reference (Ask's fallback source). Per Game and Totals tables, 1991-92 DET row: G 82, ORB 523 total, 6.4 per game.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://stats.nba.com/stats/playercareerstats?PlayerID=23&PerMode=Totals&LeagueID=00",
+     "read": "stats.nba playercareerstats (Ask's primary source), SeasonTotalsRegularSeason 1991-92 DET row: GP 82, MIN 3301, PTS 800, REB 1530, AST 191, STL 68, BLK 70, OREB 523, FG3M 32, FG3A 101, FG3_PCT 0.317, FTM 84, FTA 140, FT_PCT 0.6.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.player.player_id",
+     "value": 23
+    },
+    {
+     "path": "result.season",
+     "value": "1991-92"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "total"
+    },
+    {
+     "path": "result.games_played",
+     "value": 82
+    },
+    {
+     "path": "result.values[0].stat",
+     "value": "offensive_rebounds"
+    },
+    {
+     "path": "result.values[0].value",
+     "value": 523
+    },
+    {
+     "path": "result.alternate.values[0].value",
+     "value": 6.4,
+     "match": "round",
+     "digits": 1
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-player_season_stats-16",
+   "family": "player_season_stats",
+   "tags": [
+    "player_season_stats",
+    "playoffs",
+    "stat_line",
+    "no_measure"
+   ],
+   "question": "Stat line for Tim Duncan in the 2003 postseason",
+   "request": {
+    "intent": "player_season_stats",
+    "player": {
+     "player_id": 1495,
+     "name": "Tim Duncan"
+    },
+    "season": "2002-03",
+    "season_type": "playoffs",
+    "stat": {
+     "stat": "stat_line",
+     "aggregation": "per_game"
+    },
+    "team": null
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://www.basketball-reference.com/players/d/duncati01.html",
+     "read": "Basketball-Reference (Ask's fallback source). Playoffs Per Game and Totals tables, 2002-03 SAS row: G 24, PTS 593 total, 24.7 per game, TRB 369 total, 15.4 per game, AST 127 total, 5.3 per game, STL 15 total, 0.6 per game, BLK 79 total, 3.3 per game.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://stats.nba.com/stats/playercareerstats?PlayerID=1495&PerMode=Totals&LeagueID=00",
+     "read": "stats.nba playercareerstats (Ask's primary source), SeasonTotalsPostSeason 2002-03 SAS row: GP 24, MIN 1021, PTS 593, REB 369, AST 127, STL 15, BLK 79, OREB 96, FG3M 0, FG3A 7, FG3_PCT 0.0, FTM 157, FTA 232, FT_PCT 0.677.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.player.player_id",
+     "value": 1495
+    },
+    {
+     "path": "result.season",
+     "value": "2002-03"
+    },
+    {
+     "path": "result.season_type",
+     "value": "playoffs"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "per_game"
+    },
+    {
+     "path": "result.games_played",
+     "value": 24
+    },
+    {
+     "path": "result.values[stat=points].value",
+     "value": 24.7,
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.alternate.values[stat=points].value",
+     "value": 593
+    },
+    {
+     "path": "result.values[stat=rebounds].value",
+     "value": 15.4,
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.alternate.values[stat=rebounds].value",
+     "value": 369
+    },
+    {
+     "path": "result.values[stat=assists].value",
+     "value": 5.3,
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.alternate.values[stat=assists].value",
+     "value": 127
+    },
+    {
+     "path": "result.values[stat=steals].value",
+     "value": 0.6,
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.alternate.values[stat=steals].value",
+     "value": 15
+    },
+    {
+     "path": "result.values[stat=blocks].value",
+     "value": 3.3,
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.alternate.values[stat=blocks].value",
+     "value": 79
+    },
+    {
+     "path": "result.alternate.aggregation",
+     "value": "total"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-player_season_stats-17",
+   "family": "player_season_stats",
+   "tags": [
+    "player_season_stats",
+    "abbreviation",
+    "per_game"
+   ],
+   "question": "Tracy McGrady ppg 2002-03",
+   "request": {
+    "intent": "player_season_stats",
+    "player": {
+     "player_id": 1503,
+     "name": "Tracy McGrady"
+    },
+    "season": "2002-03",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "points",
+     "aggregation": "per_game"
+    },
+    "team": null
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://www.basketball-reference.com/players/m/mcgratr01.html",
+     "read": "Basketball-Reference (Ask's fallback source). Per Game and Totals tables, 2002-03 ORL row: G 75, PTS 2407 total, 32.1 per game.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://stats.nba.com/stats/playercareerstats?PlayerID=1503&PerMode=Totals&LeagueID=00",
+     "read": "stats.nba playercareerstats (Ask's primary source), SeasonTotalsRegularSeason 2002-03 ORL row: GP 75, MIN 2954, PTS 2407, REB 488, AST 411, STL 124, BLK 59, OREB 121, FG3M 173, FG3A 448, FG3_PCT 0.386, FTM 576, FTA 726, FT_PCT 0.793.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.player.player_id",
+     "value": 1503
+    },
+    {
+     "path": "result.season",
+     "value": "2002-03"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "per_game"
+    },
+    {
+     "path": "result.games_played",
+     "value": 75
+    },
+    {
+     "path": "result.values[0].stat",
+     "value": "points"
+    },
+    {
+     "path": "result.values[0].value",
+     "value": 32.1,
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.alternate.values[0].value",
+     "value": 2407
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-player_season_stats-18",
+   "family": "player_season_stats",
+   "tags": [
+    "player_season_stats",
+    "typo"
+   ],
+   "question": "Kevin Duarnt points per game 2013-14",
+   "request": {
+    "intent": "player_season_stats",
+    "player": {
+     "player_id": 201142,
+     "name": "Kevin Durant"
+    },
+    "season": "2013-14",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "points",
+     "aggregation": "per_game"
+    },
+    "team": null
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://www.basketball-reference.com/players/d/duranke01.html",
+     "read": "Basketball-Reference (Ask's fallback source). Per Game and Totals tables, 2013-14 OKC row: G 81, PTS 2593 total, 32.0 per game.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://stats.nba.com/stats/playercareerstats?PlayerID=201142&PerMode=Totals&LeagueID=00",
+     "read": "stats.nba playercareerstats (Ask's primary source), SeasonTotalsRegularSeason 2013-14 OKC row: GP 81, MIN 3122, PTS 2593, REB 598, AST 445, STL 103, BLK 59, OREB 58, FG3M 192, FG3A 491, FG3_PCT 0.391, FTM 703, FTA 805, FT_PCT 0.873.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.player.player_id",
+     "value": 201142
+    },
+    {
+     "path": "result.season",
+     "value": "2013-14"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "per_game"
+    },
+    {
+     "path": "result.games_played",
+     "value": 81
+    },
+    {
+     "path": "result.values[0].stat",
+     "value": "points"
+    },
+    {
+     "path": "result.values[0].value",
+     "value": 32.0,
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.alternate.values[0].value",
+     "value": 2593
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-team_records-01",
+   "family": "team_records",
+   "tags": [
+    "team_records",
+    "team_record"
+   ],
+   "question": "What was the Warriors' record in 2015-16?",
+   "request": {
+    "intent": "team_records",
+    "season": "2015-16",
+    "team": {
+     "team_id": 1610612744,
+     "tricode": "GSW",
+     "name": "Golden State Warriors"
+    },
+    "standings_scope": "league"
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/teamyearbyyearstats?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TeamID=1610612744",
+     "read": "stats.nba teamyearbyyearstats (Ask's primary source), 2015-16 row: Golden State Warriors 73-9 (0.89).",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_2016_standings.html",
+     "read": "Basketball-Reference expanded standings (cross-check): Golden State Warriors 73-9.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "2015-16"
+    },
+    {
+     "path": "result.rows",
+     "value": 1,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612744
+    },
+    {
+     "path": "result.rows[0].team.tricode",
+     "value": "GSW"
+    },
+    {
+     "path": "result.rows[0].wins",
+     "value": 73
+    },
+    {
+     "path": "result.rows[0].losses",
+     "value": 9
+    },
+    {
+     "path": "result.rows[0].win_percentage",
+     "value": 0.89,
+     "match": "round",
+     "digits": 3
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-team_records-02",
+   "family": "team_records",
+   "tags": [
+    "team_records",
+    "team_record",
+    "terse"
+   ],
+   "question": "Bulls win-loss 1995-96",
+   "request": {
+    "intent": "team_records",
+    "season": "1995-96",
+    "team": {
+     "team_id": 1610612741,
+     "tricode": "CHI",
+     "name": "Chicago Bulls"
+    },
+    "standings_scope": "league"
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/teamyearbyyearstats?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TeamID=1610612741",
+     "read": "stats.nba teamyearbyyearstats (Ask's primary source), 1995-96 row: Chicago Bulls 72-10 (0.878).",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_1996_standings.html",
+     "read": "Basketball-Reference expanded standings (cross-check): Chicago Bulls 72-10.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "1995-96"
+    },
+    {
+     "path": "result.rows",
+     "value": 1,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612741
+    },
+    {
+     "path": "result.rows[0].team.tricode",
+     "value": "CHI"
+    },
+    {
+     "path": "result.rows[0].wins",
+     "value": 72
+    },
+    {
+     "path": "result.rows[0].losses",
+     "value": 10
+    },
+    {
+     "path": "result.rows[0].win_percentage",
+     "value": 0.878,
+     "match": "round",
+     "digits": 3
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-team_records-03",
+   "family": "team_records",
+   "tags": [
+    "team_records",
+    "standings",
+    "conference",
+    "source_disagreement"
+   ],
+   "question": "How did the West standings look at the end of 2006-07?",
+   "request": {
+    "intent": "team_records",
+    "season": "2006-07",
+    "team": null,
+    "standings_scope": "west"
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/leaguestandings?LeagueID=00&Season=2006-07&SeasonType=Regular+Season&SeasonYear=",
+     "read": "stats.nba leaguestandings (Ask's primary source), 2006-07 west: 1. Dallas Mavericks 67-15, 2. Phoenix Suns 61-21, 3. San Antonio Spurs 58-24, 4. Utah Jazz 51-31, 5. Houston Rockets 52-30, 6. Denver Nuggets 45-37, 7. Los Angeles Lakers 42-40, 8. Golden State Warriors 42-40, 9. Los Angeles Clippers 40-42, 10. New Orleans/Oklahoma City Hornets 39-43, 11. Sacramento Kings 33-49, 12. Portland Trail Blazers 32-50, 13. Minnesota Timberwolves 32-50, 14. Seattle SuperSonics 31-51, 15. Memphis Grizzlies 22-60.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_2007_standings.html",
+     "read": "Basketball-Reference expanded standings and division tables (cross-check): every team's W-L compared with stats.nba (30 teams).",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.standings_scope",
+     "value": "west"
+    },
+    {
+     "path": "result.rows",
+     "value": 15,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].team.team_id",
+     "value": [
+      1610612742,
+      1610612756,
+      1610612759,
+      1610612762,
+      1610612745,
+      1610612743,
+      1610612747,
+      1610612744,
+      1610612746,
+      1610612740,
+      1610612758,
+      1610612757,
+      1610612750,
+      1610612760,
+      1610612763
+     ]
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612742
+    },
+    {
+     "path": "result.rows[1].team.team_id",
+     "value": 1610612756
+    },
+    {
+     "path": "result.rows[2].team.team_id",
+     "value": 1610612759
+    },
+    {
+     "path": "result.rows[-1].team.team_id",
+     "value": 1610612763
+    },
+    {
+     "path": "result.rows[*].wins",
+     "value": [
+      67,
+      61,
+      58,
+      51,
+      52,
+      45,
+      42,
+      42,
+      40,
+      39,
+      33,
+      32,
+      32,
+      31,
+      22
+     ]
+    },
+    {
+     "path": "result.rows[*].losses",
+     "value": [
+      15,
+      21,
+      24,
+      31,
+      30,
+      37,
+      40,
+      40,
+      42,
+      43,
+      49,
+      50,
+      50,
+      51,
+      60
+     ]
+    },
+    {
+     "path": "result.rows[*].conference_rank",
+     "value": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+     ]
+    }
+   ],
+   "notes": "stats.nba PlayoffRank is the official playoff seeding of the era (division winners seeded first), not pure win percentage: Utah Jazz 51-31 is seed 4. Basketball-Reference's standings list teams by record within divisions, so its implied conference order differs; gold follows stats.nba, the source Ask reports. Equal records (Golden State 42-40, Minnesota 32-50 and the team above each) are ordered by stats.nba PlayoffRank (tiebreak order)."
+  },
+  {
+   "id": "unseen-three-team_records-04",
+   "family": "team_records",
+   "tags": [
+    "team_records",
+    "standings",
+    "conference",
+    "source_disagreement"
+   ],
+   "question": "Eastern Conference table for 1997-98",
+   "request": {
+    "intent": "team_records",
+    "season": "1997-98",
+    "team": null,
+    "standings_scope": "east"
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/leaguestandings?LeagueID=00&Season=1997-98&SeasonType=Regular+Season&SeasonYear=",
+     "read": "stats.nba leaguestandings (Ask's primary source), 1997-98 east: 1. Chicago Bulls 62-20, 2. Miami Heat 55-27, 3. Indiana Pacers 58-24, 4. Charlotte Hornets 51-31, 5. Atlanta Hawks 50-32, 6. Cleveland Cavaliers 47-35, 7. New Jersey Nets 43-39, 7. New York Knicks 43-39, 9. Washington Wizards 42-40, 10. Orlando Magic 41-41, 11. Detroit Pistons 37-45, 12. Boston Celtics 36-46, 12. Milwaukee Bucks 36-46, 14. Philadelphia 76ers 31-51, 15. Toronto Raptors 16-66.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_1998_standings.html",
+     "read": "Basketball-Reference expanded standings and division tables (cross-check): every team's W-L compared with stats.nba (29 teams).",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.standings_scope",
+     "value": "east"
+    },
+    {
+     "path": "result.rows",
+     "value": 15,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].team.team_id",
+     "value": [
+      1610612741,
+      1610612748,
+      1610612754,
+      1610612766,
+      1610612737,
+      1610612739,
+      1610612751,
+      1610612752,
+      1610612764,
+      1610612753,
+      1610612765,
+      1610612738,
+      1610612749,
+      1610612755,
+      1610612761
+     ],
+     "match": "unordered"
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612741
+    },
+    {
+     "path": "result.rows[1].team.team_id",
+     "value": 1610612748
+    },
+    {
+     "path": "result.rows[2].team.team_id",
+     "value": 1610612754
+    },
+    {
+     "path": "result.rows[-1].team.team_id",
+     "value": 1610612761
+    },
+    {
+     "path": "result.rows[*].wins",
+     "value": [
+      62,
+      55,
+      58,
+      51,
+      50,
+      47,
+      43,
+      43,
+      42,
+      41,
+      37,
+      36,
+      36,
+      31,
+      16
+     ]
+    },
+    {
+     "path": "result.rows[*].losses",
+     "value": [
+      20,
+      27,
+      24,
+      31,
+      32,
+      35,
+      39,
+      39,
+      40,
+      41,
+      45,
+      46,
+      46,
+      51,
+      66
+     ]
+    },
+    {
+     "path": "result.rows[*].conference_rank",
+     "value": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      7,
+      9,
+      10,
+      11,
+      12,
+      12,
+      14,
+      15
+     ]
+    }
+   ],
+   "notes": "FLAG: stats.nba gives New Jersey and New York both PlayoffRank 7 and Boston and Milwaukee both 12 (the actual 1998 seeds were New York 7, New Jersey 8). Ask repeats the shared rank; gold follows the source Ask reports. stats.nba PlayoffRank is the official playoff seeding of the era (division winners seeded first), not pure win percentage: Miami Heat 55-27 is seed 2. Basketball-Reference's standings list teams by record within divisions, so its implied conference order differs; gold follows stats.nba, the source Ask reports. stats.nba gives shared PlayoffRank values: New Jersey Nets (43-39) rank 7, New York Knicks (43-39) rank 7, Boston Celtics (36-46) rank 12, Milwaukee Bucks (36-46) rank 12; order inside a shared rank is not checked (ids unordered)."
+  },
+  {
+   "id": "unseen-three-team_records-05",
+   "family": "team_records",
+   "tags": [
+    "team_records",
+    "standings",
+    "league",
+    "older_season"
+   ],
+   "question": "Show the full NBA standings from 1985-86.",
+   "request": {
+    "intent": "team_records",
+    "season": "1985-86",
+    "team": null,
+    "standings_scope": "league"
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/leaguestandings?LeagueID=00&Season=1985-86&SeasonType=Regular+Season&SeasonYear=",
+     "read": "stats.nba leaguestandings (Ask's primary source), 1985-86 league: Boston Celtics 67-15, Los Angeles Lakers 62-20, Milwaukee Bucks 57-25, Philadelphia 76ers 54-28, Houston Rockets 51-31, Atlanta Hawks 50-32, Denver Nuggets 47-35, Detroit Pistons 46-36, Dallas Mavericks 44-38, Utah Jazz 42-40, Portland Trail Blazers 40-42, New Jersey Nets 39-43, Washington Bullets 39-43, Sacramento Kings 37-45, San Antonio Spurs 35-47, Los Angeles Clippers 32-50, Phoenix Suns 32-50, Seattle SuperSonics 31-51, Chicago Bulls 30-52, Golden State Warriors 30-52, Cleveland Cavaliers 29-53, Indiana Pacers 26-56, New York Knicks 23-59.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_1986_standings.html",
+     "read": "Basketball-Reference expanded standings and division tables (cross-check): every team's W-L compared with stats.nba (23 teams).",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.standings_scope",
+     "value": "league"
+    },
+    {
+     "path": "result.rows",
+     "value": 23,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].wins",
+     "value": [
+      67,
+      62,
+      57,
+      54,
+      51,
+      50,
+      47,
+      46,
+      44,
+      42,
+      40,
+      39,
+      39,
+      37,
+      35,
+      32,
+      32,
+      31,
+      30,
+      30,
+      29,
+      26,
+      23
+     ]
+    },
+    {
+     "path": "result.rows[*].losses",
+     "value": [
+      15,
+      20,
+      25,
+      28,
+      31,
+      32,
+      35,
+      36,
+      38,
+      40,
+      42,
+      43,
+      43,
+      45,
+      47,
+      50,
+      50,
+      51,
+      52,
+      52,
+      53,
+      56,
+      59
+     ]
+    },
+    {
+     "path": "result.rows[*].team.team_id",
+     "value": [
+      1610612738,
+      1610612747,
+      1610612749,
+      1610612755,
+      1610612745,
+      1610612737,
+      1610612743,
+      1610612765,
+      1610612742,
+      1610612762,
+      1610612757,
+      1610612751,
+      1610612764,
+      1610612758,
+      1610612759,
+      1610612746,
+      1610612756,
+      1610612760,
+      1610612741,
+      1610612744,
+      1610612739,
+      1610612754,
+      1610612752
+     ],
+     "match": "unordered"
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612738
+    },
+    {
+     "path": "result.rows[-1].team.team_id",
+     "value": 1610612752
+    },
+    {
+     "path": "result.rows[team.team_id=1610612747].wins",
+     "value": 62
+    },
+    {
+     "path": "result.rows[team.team_id=1610612751].wins",
+     "value": 39
+    }
+   ],
+   "notes": "League rows are ordered by win percentage (Ask's league ordering); teams with equal records may appear in either order, so ids are checked unordered and wins/losses as ordered lists."
+  },
+  {
+   "id": "unseen-three-team_records-06",
+   "family": "team_records",
+   "tags": [
+    "team_records",
+    "team_record",
+    "historical_franchise",
+    "nickname"
+   ],
+   "question": "How many games did the Bobcats win in 2011-12?",
+   "request": {
+    "intent": "team_records",
+    "season": "2011-12",
+    "team": {
+     "team_id": 1610612766,
+     "tricode": "CHA",
+     "name": "Charlotte Bobcats"
+    },
+    "standings_scope": "league"
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/teamyearbyyearstats?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TeamID=1610612766",
+     "read": "stats.nba teamyearbyyearstats (Ask's primary source), 2011-12 row: Charlotte Bobcats 7-59 (0.106).",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_2012_standings.html",
+     "read": "Basketball-Reference expanded standings (cross-check): Charlotte Bobcats 7-59.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "2011-12"
+    },
+    {
+     "path": "result.rows",
+     "value": 1,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612766
+    },
+    {
+     "path": "result.rows[0].team.tricode",
+     "value": "CHA"
+    },
+    {
+     "path": "result.rows[0].wins",
+     "value": 7
+    },
+    {
+     "path": "result.rows[0].losses",
+     "value": 59
+    },
+    {
+     "path": "result.rows[0].win_percentage",
+     "value": 0.106,
+     "match": "round",
+     "digits": 3
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-team_records-07",
+   "family": "team_records",
+   "tags": [
+    "team_records",
+    "team_record",
+    "historical_franchise"
+   ],
+   "question": "Seattle SuperSonics record 1995-96",
+   "request": {
+    "intent": "team_records",
+    "season": "1995-96",
+    "team": {
+     "team_id": 1610612760,
+     "tricode": "SEA",
+     "name": "Seattle SuperSonics"
+    },
+    "standings_scope": "league"
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/teamyearbyyearstats?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TeamID=1610612760",
+     "read": "stats.nba teamyearbyyearstats (Ask's primary source), 1995-96 row: Seattle SuperSonics 64-18 (0.78).",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_1996_standings.html",
+     "read": "Basketball-Reference expanded standings (cross-check): Seattle SuperSonics 64-18.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "1995-96"
+    },
+    {
+     "path": "result.rows",
+     "value": 1,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612760
+    },
+    {
+     "path": "result.rows[0].team.tricode",
+     "value": "SEA"
+    },
+    {
+     "path": "result.rows[0].wins",
+     "value": 64
+    },
+    {
+     "path": "result.rows[0].losses",
+     "value": 18
+    },
+    {
+     "path": "result.rows[0].win_percentage",
+     "value": 0.78,
+     "match": "round",
+     "digits": 3
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-team_records-08",
+   "family": "team_records",
+   "tags": [
+    "team_records",
+    "team_record",
+    "nickname",
+    "older_season"
+   ],
+   "question": "Sixers' record in 1966-67",
+   "request": {
+    "intent": "team_records",
+    "season": "1966-67",
+    "team": {
+     "team_id": 1610612755,
+     "tricode": "PHI",
+     "name": "Philadelphia 76ers"
+    },
+    "standings_scope": "league"
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/teamyearbyyearstats?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TeamID=1610612755",
+     "read": "stats.nba teamyearbyyearstats (Ask's primary source), 1966-67 row: Philadelphia 76ers 68-13 (0.84).",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_1967_standings.html",
+     "read": "Basketball-Reference expanded standings (cross-check): Philadelphia 76ers 68-13.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "1966-67"
+    },
+    {
+     "path": "result.rows",
+     "value": 1,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612755
+    },
+    {
+     "path": "result.rows[0].team.tricode",
+     "value": "PHI"
+    },
+    {
+     "path": "result.rows[0].wins",
+     "value": 68
+    },
+    {
+     "path": "result.rows[0].losses",
+     "value": 13
+    },
+    {
+     "path": "result.rows[0].win_percentage",
+     "value": 0.84,
+     "match": "round",
+     "digits": 3
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-team_records-09",
+   "family": "team_records",
+   "tags": [
+    "team_records",
+    "team_record",
+    "relative_season"
+   ],
+   "question": "What was the Knicks' record this season?",
+   "request": {
+    "intent": "team_records",
+    "season": "2024-25",
+    "team": {
+     "team_id": 1610612752,
+     "tricode": "NYK",
+     "name": "New York Knicks"
+    },
+    "standings_scope": "league"
+   },
+   "reference_time": "2025-02-10T12:00:00-05:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/teamyearbyyearstats?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TeamID=1610612752",
+     "read": "stats.nba teamyearbyyearstats (Ask's primary source), 2024-25 row: New York Knicks 51-31 (0.622).",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_2025_standings.html",
+     "read": "Basketball-Reference expanded standings (cross-check): New York Knicks 51-31.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "2024-25"
+    },
+    {
+     "path": "result.rows",
+     "value": 1,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612752
+    },
+    {
+     "path": "result.rows[0].team.tricode",
+     "value": "NYK"
+    },
+    {
+     "path": "result.rows[0].wins",
+     "value": 51
+    },
+    {
+     "path": "result.rows[0].losses",
+     "value": 31
+    },
+    {
+     "path": "result.rows[0].win_percentage",
+     "value": 0.622,
+     "match": "round",
+     "digits": 3
+    }
+   ],
+   "notes": "Label reference time is 2025-02-10 (mid-season); the source now holds the final 2024-25 record, which is what Ask shows. Value as of checked_at."
+  },
+  {
+   "id": "unseen-three-team_records-10",
+   "family": "team_records",
+   "tags": [
+    "team_records",
+    "team_record",
+    "relative_season"
+   ],
+   "question": "Celtics wins and losses last season",
+   "request": {
+    "intent": "team_records",
+    "season": "2024-25",
+    "team": {
+     "team_id": 1610612738,
+     "tricode": "BOS",
+     "name": "Boston Celtics"
+    },
+    "standings_scope": "league"
+   },
+   "reference_time": "2025-11-15T12:00:00-05:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/teamyearbyyearstats?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TeamID=1610612738",
+     "read": "stats.nba teamyearbyyearstats (Ask's primary source), 2024-25 row: Boston Celtics 61-21 (0.744).",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_2025_standings.html",
+     "read": "Basketball-Reference expanded standings (cross-check): Boston Celtics 61-21.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "2024-25"
+    },
+    {
+     "path": "result.rows",
+     "value": 1,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612738
+    },
+    {
+     "path": "result.rows[0].team.tricode",
+     "value": "BOS"
+    },
+    {
+     "path": "result.rows[0].wins",
+     "value": 61
+    },
+    {
+     "path": "result.rows[0].losses",
+     "value": 21
+    },
+    {
+     "path": "result.rows[0].win_percentage",
+     "value": 0.744,
+     "match": "round",
+     "digits": 3
+    }
+   ],
+   "notes": "Reference time 2025-11-15; 'last season' = completed 2024-25."
+  },
+  {
+   "id": "unseen-three-team_records-11",
+   "family": "team_records",
+   "tags": [
+    "team_records",
+    "team_record",
+    "historical_franchise",
+    "shortened_season"
+   ],
+   "question": "Vancouver Grizzlies' 1998-99 record",
+   "request": {
+    "intent": "team_records",
+    "season": "1998-99",
+    "team": {
+     "team_id": 1610612763,
+     "tricode": "VAN",
+     "name": "Vancouver Grizzlies"
+    },
+    "standings_scope": "league"
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/teamyearbyyearstats?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TeamID=1610612763",
+     "read": "stats.nba teamyearbyyearstats (Ask's primary source), 1998-99 row: Vancouver Grizzlies 8-42 (0.16).",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_1999_standings.html",
+     "read": "Basketball-Reference expanded standings (cross-check): Vancouver Grizzlies 8-42.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "1998-99"
+    },
+    {
+     "path": "result.rows",
+     "value": 1,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612763
+    },
+    {
+     "path": "result.rows[0].team.tricode",
+     "value": "VAN"
+    },
+    {
+     "path": "result.rows[0].wins",
+     "value": 8
+    },
+    {
+     "path": "result.rows[0].losses",
+     "value": 42
+    },
+    {
+     "path": "result.rows[0].win_percentage",
+     "value": 0.16,
+     "match": "round",
+     "digits": 3
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-team_records-12",
+   "family": "team_records",
+   "tags": [
+    "team_records",
+    "team_record",
+    "historical_franchise",
+    "dated_name"
+   ],
+   "question": "What did the Hornets finish with in 2005-06?",
+   "request": {
+    "intent": "team_records",
+    "season": "2005-06",
+    "team": {
+     "team_id": 1610612740,
+     "tricode": "NOK",
+     "name": "New Orleans/Oklahoma City Hornets"
+    },
+    "standings_scope": "league"
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/teamyearbyyearstats?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TeamID=1610612740",
+     "read": "stats.nba teamyearbyyearstats (Ask's primary source), 2005-06 row: New Orleans/Oklahoma City Hornets 38-44 (0.463).",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_2006_standings.html",
+     "read": "Basketball-Reference expanded standings (cross-check): New Orleans/Oklahoma City Hornets 38-44.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "2005-06"
+    },
+    {
+     "path": "result.rows",
+     "value": 1,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612740
+    },
+    {
+     "path": "result.rows[0].team.tricode",
+     "value": "NOK"
+    },
+    {
+     "path": "result.rows[0].wins",
+     "value": 38
+    },
+    {
+     "path": "result.rows[0].losses",
+     "value": 44
+    },
+    {
+     "path": "result.rows[0].win_percentage",
+     "value": 0.463,
+     "match": "round",
+     "digits": 3
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-team_records-13",
+   "family": "team_records",
+   "tags": [
+    "team_records",
+    "team_record",
+    "historical_franchise",
+    "older_season"
+   ],
+   "question": "Record of the Kansas City-Omaha Kings in 1973-74",
+   "request": {
+    "intent": "team_records",
+    "season": "1973-74",
+    "team": {
+     "team_id": 1610612758,
+     "tricode": "KCO",
+     "name": "Kansas City-Omaha Kings"
+    },
+    "standings_scope": "league"
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/teamyearbyyearstats?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TeamID=1610612758",
+     "read": "stats.nba teamyearbyyearstats (Ask's primary source), 1973-74 row: Kansas City-Omaha Kings 33-49 (0.402).",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_1974_standings.html",
+     "read": "Basketball-Reference expanded standings (cross-check): Kansas City-Omaha Kings 33-49.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "1973-74"
+    },
+    {
+     "path": "result.rows",
+     "value": 1,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612758
+    },
+    {
+     "path": "result.rows[0].team.tricode",
+     "value": "KCO"
+    },
+    {
+     "path": "result.rows[0].wins",
+     "value": 33
+    },
+    {
+     "path": "result.rows[0].losses",
+     "value": 49
+    },
+    {
+     "path": "result.rows[0].win_percentage",
+     "value": 0.402,
+     "match": "round",
+     "digits": 3
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-team_records-14",
+   "family": "team_records",
+   "tags": [
+    "team_records",
+    "team_record",
+    "city_as_team"
+   ],
+   "question": "What was Milwaukee's regular-season mark in 1970-71?",
+   "request": {
+    "intent": "team_records",
+    "season": "1970-71",
+    "team": {
+     "team_id": 1610612749,
+     "tricode": "MIL",
+     "name": "Milwaukee Bucks"
+    },
+    "standings_scope": "league"
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/teamyearbyyearstats?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TeamID=1610612749",
+     "read": "stats.nba teamyearbyyearstats (Ask's primary source), 1970-71 row: Milwaukee Bucks 66-16 (0.805).",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_1971_standings.html",
+     "read": "Basketball-Reference expanded standings (cross-check): Milwaukee Bucks 66-16.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "1970-71"
+    },
+    {
+     "path": "result.rows",
+     "value": 1,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612749
+    },
+    {
+     "path": "result.rows[0].team.tricode",
+     "value": "MIL"
+    },
+    {
+     "path": "result.rows[0].wins",
+     "value": 66
+    },
+    {
+     "path": "result.rows[0].losses",
+     "value": 16
+    },
+    {
+     "path": "result.rows[0].win_percentage",
+     "value": 0.805,
+     "match": "round",
+     "digits": 3
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-team_records-15",
+   "family": "team_records",
+   "tags": [
+    "team_records",
+    "team_record",
+    "historical_franchise",
+    "older_season"
+   ],
+   "question": "Minneapolis Lakers record 1949-50",
+   "request": {
+    "intent": "team_records",
+    "season": "1949-50",
+    "team": {
+     "team_id": 1610612747,
+     "tricode": "MNL",
+     "name": "Minneapolis Lakers"
+    },
+    "standings_scope": "league"
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/teamyearbyyearstats?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TeamID=1610612747",
+     "read": "stats.nba teamyearbyyearstats (Ask's primary source), 1949-50 row: Minneapolis Lakers 51-17 (0.75).",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_1950_standings.html",
+     "read": "Basketball-Reference expanded standings (cross-check): Minneapolis Lakers 51-17.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "1949-50"
+    },
+    {
+     "path": "result.rows",
+     "value": 1,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612747
+    },
+    {
+     "path": "result.rows[0].team.tricode",
+     "value": "MNL"
+    },
+    {
+     "path": "result.rows[0].wins",
+     "value": 51
+    },
+    {
+     "path": "result.rows[0].losses",
+     "value": 17
+    },
+    {
+     "path": "result.rows[0].win_percentage",
+     "value": 0.75,
+     "match": "round",
+     "digits": 3
+    }
+   ],
+   "notes": "Pre-1970 season (1949-50, the NBA's first under that name). The single-team record is available from stats.nba teamyearbyyearstats and agrees with Basketball-Reference (51-17)."
+  },
+  {
+   "id": "unseen-three-team_records-16",
+   "family": "team_records",
+   "tags": [
+    "team_records",
+    "team_record",
+    "city_as_team"
+   ],
+   "question": "Utah's record in 1997-98",
+   "request": {
+    "intent": "team_records",
+    "season": "1997-98",
+    "team": {
+     "team_id": 1610612762,
+     "tricode": "UTA",
+     "name": "Utah Jazz"
+    },
+    "standings_scope": "league"
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/teamyearbyyearstats?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TeamID=1610612762",
+     "read": "stats.nba teamyearbyyearstats (Ask's primary source), 1997-98 row: Utah Jazz 62-20 (0.756).",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_1998_standings.html",
+     "read": "Basketball-Reference expanded standings (cross-check): Utah Jazz 62-20.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "1997-98"
+    },
+    {
+     "path": "result.rows",
+     "value": 1,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612762
+    },
+    {
+     "path": "result.rows[0].team.tricode",
+     "value": "UTA"
+    },
+    {
+     "path": "result.rows[0].wins",
+     "value": 62
+    },
+    {
+     "path": "result.rows[0].losses",
+     "value": 20
+    },
+    {
+     "path": "result.rows[0].win_percentage",
+     "value": 0.756,
+     "match": "round",
+     "digits": 3
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-season_leaders-01",
+   "family": "season_leaders",
+   "tags": [
+    "season_leaders",
+    "per_game",
+    "default_limit"
+   ],
+   "question": "Rebounding leaders per game, 1991-92",
+   "request": {
+    "intent": "season_leaders",
+    "season": "1991-92",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "rebounds",
+     "aggregation": "per_game"
+    },
+    "limit": 10
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/leagueleaders?LeagueID=00&PerMode=PerGame&Scope=S&Season=1991-92&SeasonType=Regular+Season&StatCategory=REB&ActiveFlag=",
+     "read": "stats.nba leagueleaders (Ask's primary source; NBA.com qualification) top 10: 1. Dennis Rodman (DET, 82 G) 18.7, 2. Kevin Willis (ATL, 81 G) 15.5, 3. Dikembe Mutombo (DEN, 71 G) 12.3, 4. David Robinson (SAN, 68 G) 12.2, 5. Hakeem Olajuwon (HOU, 70 G) 12.1, 6. Rony Seikaly (MIA, 79 G) 11.8, 7. Greg Anderson (DEN, 82 G) 11.5, 8. Patrick Ewing (NYK, 82 G) 11.2, 9. Karl Malone (UTH, 81 G) 11.2, 10. Charles Barkley (PHL, 75 G) 11.1.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_1992_leaders.html",
+     "read": "Basketball-Reference (cross-check), Rebounds Per Game: Dennis Rodman 18.7, Kevin Willis 15.5, Dikembe Mutombo 12.3, David Robinson 12.2, Hakeem Olajuwon 12.1, Rony Seikaly 11.8, Greg Anderson 11.5, Patrick Ewing 11.2, Karl Malone 11.2, Charles Barkley 11.1.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "1991-92"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.stat",
+     "value": "rebounds"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "per_game"
+    },
+    {
+     "path": "result.rows",
+     "value": 10,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      23,
+      788,
+      87,
+      764,
+      165,
+      938,
+      246,
+      121,
+      252,
+      787
+     ]
+    },
+    {
+     "path": "result.rows[*].rank",
+     "value": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      18.7,
+      15.5,
+      12.3,
+      12.2,
+      12.1,
+      11.8,
+      11.5,
+      11.2,
+      11.2,
+      11.1
+     ],
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.rows[0].games_played",
+     "value": 82
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612765
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-season_leaders-02",
+   "family": "season_leaders",
+   "tags": [
+    "season_leaders",
+    "per_game",
+    "top_n"
+   ],
+   "question": "Top 5 scorers per game in 1986-87",
+   "request": {
+    "intent": "season_leaders",
+    "season": "1986-87",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "points",
+     "aggregation": "per_game"
+    },
+    "limit": 5
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/leagueleaders?LeagueID=00&PerMode=PerGame&Scope=S&Season=1986-87&SeasonType=Regular+Season&StatCategory=PTS&ActiveFlag=",
+     "read": "stats.nba leagueleaders (Ask's primary source; NBA.com qualification) top 5: 1. Michael Jordan (CHI, 82 G) 37.1, 2. Dominique Wilkins (ATL, 79 G) 29.0, 3. Alex English (DEN, 82 G) 28.6, 4. Larry Bird (BOS, 74 G) 28.1, 5. Kiki Vandeweghe (POR, 79 G) 26.9.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_1987_leaders.html",
+     "read": "Basketball-Reference (cross-check), Points Per Game: Michael Jordan 37.1, Dominique Wilkins 29, Alex English 28.6, Larry Bird 28.1, Kiki Vandeweghe 26.9.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "1986-87"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.stat",
+     "value": "points"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "per_game"
+    },
+    {
+     "path": "result.rows",
+     "value": 5,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      893,
+      1122,
+      76673,
+      1449,
+      78404
+     ]
+    },
+    {
+     "path": "result.rows[*].rank",
+     "value": [
+      1,
+      2,
+      3,
+      4,
+      5
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      37.1,
+      29.0,
+      28.6,
+      28.1,
+      26.9
+     ],
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.rows[0].games_played",
+     "value": 82
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612741
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-season_leaders-03",
+   "family": "season_leaders",
+   "tags": [
+    "season_leaders",
+    "totals",
+    "top_n_word",
+    "ties"
+   ],
+   "question": "Top three in total steals in 2000-01, including anyone tied",
+   "request": {
+    "intent": "season_leaders",
+    "season": "2000-01",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "steals",
+     "aggregation": "total"
+    },
+    "limit": 3
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/leagueleaders?LeagueID=00&PerMode=Totals&Scope=S&Season=2000-01&SeasonType=Regular+Season&StatCategory=STL&ActiveFlag=",
+     "read": "stats.nba leagueleaders (Ask's primary source; NBA.com qualification) top 3: 1. Doug Christie (SAC, 81 G) 183, 2. Allen Iverson (PHI, 71 G) 178, 3. Baron Davis (CHH, 82 G) 170.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_2001_leaders.html",
+     "read": "Basketball-Reference (cross-check), Steals: Doug Christie 183, Allen Iverson 178, Baron Davis 170.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "2000-01"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.stat",
+     "value": "steals"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "total"
+    },
+    {
+     "path": "result.rows",
+     "value": 3,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      57,
+      947,
+      1884
+     ]
+    },
+    {
+     "path": "result.rows[*].rank",
+     "value": [
+      1,
+      2,
+      3
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      183,
+      178,
+      170
+     ]
+    },
+    {
+     "path": "result.rows[0].games_played",
+     "value": 81
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612758
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-season_leaders-04",
+   "family": "season_leaders",
+   "tags": [
+    "season_leaders",
+    "totals"
+   ],
+   "question": "Who had the most assists in total in 1990-91?",
+   "request": {
+    "intent": "season_leaders",
+    "season": "1990-91",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "assists",
+     "aggregation": "total"
+    },
+    "limit": 10
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/leagueleaders?LeagueID=00&PerMode=Totals&Scope=S&Season=1990-91&SeasonType=Regular+Season&StatCategory=AST&ActiveFlag=",
+     "read": "stats.nba leagueleaders (Ask's primary source; NBA.com qualification) top 10: 1. John Stockton (UTH, 82 G) 1164, 2. Magic Johnson (LAL, 79 G) 989, 3. Tim Hardaway (GOS, 82 G) 793, 4. Kevin Johnson (PHX, 77 G) 781, 5. Pooh Richardson (MIN, 82 G) 734, 6. Michael Adams (DEN, 66 G) 693, 7. Muggsy Bogues (CHH, 81 G) 669, 8. Scott Skiles (ORL, 79 G) 660, 9. Terry Porter (POR, 81 G) 649, 10. Sherman Douglas (MIA, 73 G) 624.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_1991_leaders.html",
+     "read": "Basketball-Reference (cross-check), Assists: John Stockton 1164, Magic Johnson 989, Tim Hardaway 793, Kevin Johnson 781, Pooh Richardson 734, Michael Adams 693, Muggsy Bogues 669, Scott Skiles 660, Terry Porter 649, Sherman Douglas 624.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "1990-91"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.stat",
+     "value": "assists"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "total"
+    },
+    {
+     "path": "result.rows",
+     "value": 10,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      304,
+      77142,
+      896,
+      134,
+      71,
+      149,
+      177,
+      101,
+      345,
+      428
+     ]
+    },
+    {
+     "path": "result.rows[*].rank",
+     "value": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      1164,
+      989,
+      793,
+      781,
+      734,
+      693,
+      669,
+      660,
+      649,
+      624
+     ]
+    },
+    {
+     "path": "result.rows[0].games_played",
+     "value": 82
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612762
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-season_leaders-05",
+   "family": "season_leaders",
+   "tags": [
+    "season_leaders",
+    "percentage",
+    "qualification"
+   ],
+   "question": "Which qualified shooters led in three-point percentage in 2008-09?",
+   "request": {
+    "intent": "season_leaders",
+    "season": "2008-09",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "three_point_percentage",
+     "aggregation": "total"
+    },
+    "limit": 10
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/leagueleaders?LeagueID=00&PerMode=Totals&Scope=S&Season=2008-09&SeasonType=Regular+Season&StatCategory=FG3_PCT&ActiveFlag=",
+     "read": "stats.nba leagueleaders (Ask's primary source; NBA.com qualification) top 10: 1. Anthony Morrow (GSW, 67 G) 0.467, 2. Jameer Nelson (ORL, 42 G) 0.453, 3. Troy Murphy (IND, 73 G) 0.45, 4. Kelenna Azubuike (GSW, 74 G) 0.448, 5. Bobby Simmons (NJN, 71 G) 0.447, 6. Mehmet Okur (UTA, 72 G) 0.446, 7. Eddie House (BOS, 81 G) 0.444, 8. Matt Bonner (SAS, 81 G) 0.44, 9. D.J. Augustin (CHA, 72 G) 0.439, 9. Steve Nash (PHX, 74 G) 0.439.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_2009_leaders.html",
+     "read": "Basketball-Reference (cross-check), 3-Pt Field Goal Pct: Anthony Morrow 0.467, Jameer Nelson 0.453, Troy Murphy 0.45, Kelenna Azubuike 0.448, Bobby Simmons 0.447, Mehmet Okur 0.446, Eddie House 0.444, Matt Bonner 0.44, D.J. Augustin 0.439, Steve Nash 0.439.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "2008-09"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.stat",
+     "value": "three_point_percentage"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "total"
+    },
+    {
+     "path": "result.rows",
+     "value": 10,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      201627,
+      2749,
+      2211,
+      101235,
+      2250,
+      2246,
+      2067,
+      2588,
+      201571,
+      959
+     ],
+     "match": "unordered"
+    },
+    {
+     "path": "result.rows[*].rank",
+     "value": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      9
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      0.467,
+      0.453,
+      0.45,
+      0.448,
+      0.447,
+      0.446,
+      0.444,
+      0.44,
+      0.439,
+      0.439
+     ],
+     "match": "round",
+     "digits": 3
+    },
+    {
+     "path": "result.rows[0].games_played",
+     "value": 67
+    }
+   ],
+   "notes": "Tie groups by rank: [1, 2, 3, 4, 5, 6, 7, 8, 9, 9]; a tie at the cut is never split, order within a tie is not checked."
+  },
+  {
+   "id": "unseen-three-season_leaders-06",
+   "family": "season_leaders",
+   "tags": [
+    "season_leaders",
+    "percentage",
+    "top_n",
+    "four_digit_season_end"
+   ],
+   "question": "Top 15 in field goal percentage in 1999-2000",
+   "request": {
+    "intent": "season_leaders",
+    "season": "1999-00",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "field_goal_percentage",
+     "aggregation": "total"
+    },
+    "limit": 15
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/leagueleaders?LeagueID=00&PerMode=Totals&Scope=S&Season=1999-00&SeasonType=Regular+Season&StatCategory=FG_PCT&ActiveFlag=",
+     "read": "stats.nba leagueleaders (Ask's primary source; NBA.com qualification) top 15: 1. Shaquille O'Neal (LAL, 79 G) 0.574, 2. Dikembe Mutombo (ATL, 82 G) 0.562, 3. Alonzo Mourning (MIA, 79 G) 0.551, 4. Ruben Patterson (SEA, 81 G) 0.536, 5. Rasheed Wallace (POR, 81 G) 0.519, 6. David Robinson (SAS, 80 G) 0.512, 7. Wally Szczerbiak (MIN, 73 G) 0.511, 8. Karl Malone (UTA, 82 G) 0.509, 9. Antonio McDyess (DEN, 81 G) 0.507, 10. Othella Harrington (VAN, 82 G) 0.506, 11. Arvydas Sabonis (POR, 66 G) 0.505, 12. Vlade Divac (SAC, 82 G) 0.503, 13. Dale Davis (IND, 74 G) 0.502, 14. John Stockton (UTA, 82 G) 0.501, 15. Corliss Williamson (SAC, 76 G) 0.5.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_2000_leaders.html",
+     "read": "Basketball-Reference (cross-check), Field Goal Pct: Shaquille O'Neal 0.574, Dikembe Mutombo 0.562, Alonzo Mourning 0.551, Ruben Patterson 0.536, Rasheed Wallace 0.519, David Robinson 0.512, Wally Szczerbiak 0.511, Karl Malone 0.509, Antonio McDyess 0.507, Othella Harrington 0.506, Arvydas Sabonis 0.505, Vlade Divac 0.503, Dale Davis 0.502, John Stockton 0.501, Corliss Williamson 0.5.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "1999-00"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.stat",
+     "value": "field_goal_percentage"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "total"
+    },
+    {
+     "path": "result.rows",
+     "value": 15,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      406,
+      87,
+      297,
+      1739,
+      739,
+      764,
+      1887,
+      252,
+      686,
+      970,
+      717,
+      124,
+      905,
+      304,
+      722
+     ]
+    },
+    {
+     "path": "result.rows[*].rank",
+     "value": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      0.574,
+      0.562,
+      0.551,
+      0.536,
+      0.519,
+      0.512,
+      0.511,
+      0.509,
+      0.507,
+      0.506,
+      0.505,
+      0.503,
+      0.502,
+      0.501,
+      0.5
+     ],
+     "match": "round",
+     "digits": 3
+    },
+    {
+     "path": "result.rows[0].games_played",
+     "value": 79
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612747
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-season_leaders-07",
+   "family": "season_leaders",
+   "tags": [
+    "season_leaders",
+    "playoffs",
+    "per_game",
+    "source_disagreement"
+   ],
+   "question": "Who averaged the most assists in the 2016 playoffs?",
+   "request": {
+    "intent": "season_leaders",
+    "season": "2015-16",
+    "season_type": "playoffs",
+    "stat": {
+     "stat": "assists",
+     "aggregation": "per_game"
+    },
+    "limit": 10
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/leagueleaders?LeagueID=00&PerMode=PerGame&Scope=S&Season=2015-16&SeasonType=Playoffs&StatCategory=AST&ActiveFlag=",
+     "read": "stats.nba leagueleaders (Ask's primary source; NBA.com qualification) top 10: 1. Russell Westbrook (OKC, 18 G) 11.0, 2. Reggie Jackson (DET, 4 G) 9.3, 3. LeBron James (CLE, 21 G) 7.6, 4. James Harden (HOU, 5 G) 7.6, 5. Damian Lillard (POR, 11 G) 6.3, 6. Jeff Teague (ATL, 10 G) 6.1, 7. Draymond Green (GSW, 23 G) 6.0, 8. Kyle Lowry (TOR, 20 G) 6.0, 9. Tony Parker (SAS, 10 G) 5.3, 10. Stephen Curry (GSW, 18 G) 5.2.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/playoffs/NBA_2016_leaders.html",
+     "read": "Basketball-Reference (cross-check), Assists Per Game: Russell Westbrook 11, Reggie Jackson 9.2, LeBron James 7.6, James Harden 7.6, Chris Paul 7.2, Damian Lillard 6.3, Jeff Teague 6.2, Draymond Green 6, Kyle Lowry 6, Tony Parker 5.3.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "2015-16"
+    },
+    {
+     "path": "result.season_type",
+     "value": "playoffs"
+    },
+    {
+     "path": "result.stat",
+     "value": "assists"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "per_game"
+    },
+    {
+     "path": "result.rows",
+     "value": 10,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      201566,
+      202704,
+      2544,
+      201935,
+      203081,
+      201952,
+      203110,
+      200768,
+      2225,
+      201939
+     ]
+    },
+    {
+     "path": "result.rows[*].rank",
+     "value": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      11.0,
+      9.3,
+      7.6,
+      7.6,
+      6.3,
+      6.1,
+      6.0,
+      6.0,
+      5.3,
+      5.2
+     ],
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.rows[0].games_played",
+     "value": 18
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612760
+    }
+   ],
+   "notes": "FLAG. Gold is stats.nba (the source Ask reports). Basketball-Reference's playoff leaderboard uses a different qualification: it lists Chris Paul (7.2 in 4 G) fifth, whom stats.nba's qualified list omits, so bref has Tony Parker tenth and no Stephen Curry. Rounding also differs at x.x5: Reggie Jackson stats.nba 9.3 vs bref 9.2 (37 AST / 4 G = 9.25), Jeff Teague stats.nba 6.1 vs bref 6.2."
+  },
+  {
+   "id": "unseen-three-season_leaders-08",
+   "family": "season_leaders",
+   "tags": [
+    "season_leaders",
+    "top_n_over_max",
+    "totals"
+   ],
+   "question": "List the top 40 shot blockers by total blocks in 2004-05",
+   "request": {
+    "intent": "season_leaders",
+    "season": "2004-05",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "blocks",
+     "aggregation": "total"
+    },
+    "limit": 25,
+    "requested_limit": 40
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/leagueleaders?LeagueID=00&PerMode=Totals&Scope=S&Season=2004-05&SeasonType=Regular+Season&StatCategory=BLK&ActiveFlag=",
+     "read": "stats.nba leagueleaders (Ask's primary source; NBA.com qualification) top 25: 1. Marcus Camby (DEN, 66 G) 199, 2. Ben Wallace (DET, 74 G) 176, 3. Tim Duncan (SAS, 66 G) 174, 4. Shaquille O'Neal (MIA, 73 G) 171, 5. Elton Brand (LAC, 81 G) 169, 6. Zydrunas Ilgauskas (CLE, 78 G) 165, 7. Joel Przybilla (POR, 76 G) 163, 8. Yao Ming (HOU, 80 G) 160, 9. Adonal Foyle (GSW, 78 G) 159, 10. Theo Ratliff (POR, 63 G) 158, 11. Josh Smith (ATL, 74 G) 144, 12. Tyson Chandler (CHI, 80 G) 141, 13. Andrei Kirilenko (UTA, 41 G) 136, 13. Dwight Howard (ORL, 82 G) 136, 15. Amar'e Stoudemire (PHX, 80 G) 130, 16. Emeka Okafor (CHA, 73 G) 125, 17. Samuel Dalembert (PHI, 72 G) 121, 18. Dirk Nowitzki (DAL, 78 G) 119, 18. Shawn Marion (PHX, 81 G) 119, 20. Eddie Griffin (MIN, 70 G) 118, 21. Rasho Nesterovic (SAS, 70 G) 117, 22. Rasheed Wallace (DET, 79 G) 115, 23. Brendan Haywood (WAS, 68 G) 114, 24. Chris Bosh (TOR, 81 G) 113, 25. Kevin Garnett (MIN, 82 G) 112.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_2005_totals.html",
+     "read": "Basketball-Reference (cross-check), Totals table sorted by BLK: Marcus Camby 199, Ben Wallace 176, Tim Duncan 174, Shaquille O'Neal 171, Elton Brand 169, Zydrunas Ilgauskas 165, Joel Przybilla 163, Yao Ming 160, Adonal Foyle 159, Theo Ratliff 158, Josh Smith 144, Tyson Chandler 141, Dwight Howard 136, Andrei Kirilenko 136, Amar'e Stoudemire 130, Emeka Okafor 125, Samuel Dalembert 121, Dirk Nowitzki 119, Shawn Marion 119, Eddie Griffin 118, Rasho Nesterović 117, Rasheed Wallace 115, Brendan Haywood 114, Chris Bosh 113, Kevin Garnett 112.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "2004-05"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.stat",
+     "value": "blocks"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "total"
+    },
+    {
+     "path": "result.rows",
+     "value": 25,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      948,
+      1112,
+      1495,
+      406,
+      1882,
+      980,
+      2038,
+      2397,
+      1502,
+      689,
+      2746,
+      2199,
+      1905,
+      2730,
+      2405,
+      2731,
+      2223,
+      1717,
+      1890,
+      2204,
+      1725,
+      739,
+      2217,
+      2547,
+      708
+     ],
+     "match": "unordered"
+    },
+    {
+     "path": "result.rows[*].rank",
+     "value": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      13,
+      15,
+      16,
+      17,
+      18,
+      18,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      199,
+      176,
+      174,
+      171,
+      169,
+      165,
+      163,
+      160,
+      159,
+      158,
+      144,
+      141,
+      136,
+      136,
+      130,
+      125,
+      121,
+      119,
+      119,
+      118,
+      117,
+      115,
+      114,
+      113,
+      112
+     ]
+    },
+    {
+     "path": "result.rows[0].games_played",
+     "value": 66
+    }
+   ],
+   "notes": "Requested 40; Ask lists at most 25 (ADR 0014), so 25 rows are expected (no tie at rank 25). same players, order within ties differs on bref; Tie groups by rank: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 13, 15, 16, 17, 18, 18, 20, 21, 22, 23, 24, 25]; a tie at the cut is never split, order within a tie is not checked."
+  },
+  {
+   "id": "unseen-three-season_leaders-09",
+   "family": "season_leaders",
+   "tags": [
+    "season_leaders",
+    "totals",
+    "older_season"
+   ],
+   "question": "Who led the NBA in total three-pointers made in 1987-88?",
+   "request": {
+    "intent": "season_leaders",
+    "season": "1987-88",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "three_pointers",
+     "aggregation": "total"
+    },
+    "limit": 10
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/leagueleaders?LeagueID=00&PerMode=Totals&Scope=S&Season=1987-88&SeasonType=Regular+Season&StatCategory=FG3M&ActiveFlag=",
+     "read": "stats.nba leagueleaders (Ask's primary source; NBA.com qualification) top 10: 1. Danny Ainge (BOS, 81 G) 148, 2. Michael Adams (DEN, 82 G) 139, 3. Dale Ellis (SEA, 75 G) 107, 4. Larry Bird (BOS, 76 G) 98, 5. Craig Hodges (PHX, 66 G) 86, 6. Mark Price (CLE, 80 G) 72, 7. Gerald Henderson (PHL, 75 G) 69, 7. Trent Tucker (NYK, 71 G) 69, 9. Byron Scott (LAL, 81 G) 62, 10. Reggie Miller (IND, 82 G) 61.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_1988_leaders.html",
+     "read": "Basketball-Reference (cross-check), 3-Pt Field Goals: Danny Ainge 148, Michael Adams 139, Dale Ellis 107, Larry Bird 98, Craig Hodges 86, Mark Price 72, Gerald Henderson 69, Trent Tucker 69, Byron Scott 62, Reggie Miller 61.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "1987-88"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.stat",
+     "value": "three_pointers"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "total"
+    },
+    {
+     "path": "result.rows",
+     "value": 10,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      76017,
+      149,
+      107,
+      1449,
+      77034,
+      899,
+      76993,
+      78375,
+      2,
+      397
+     ],
+     "match": "unordered"
+    },
+    {
+     "path": "result.rows[*].rank",
+     "value": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      7,
+      9,
+      10
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      148,
+      139,
+      107,
+      98,
+      86,
+      72,
+      69,
+      69,
+      62,
+      61
+     ]
+    },
+    {
+     "path": "result.rows[0].games_played",
+     "value": 81
+    }
+   ],
+   "notes": "Tie groups by rank: [1, 2, 3, 4, 5, 6, 7, 7, 9, 10]; a tie at the cut is never split, order within a tie is not checked."
+  },
+  {
+   "id": "unseen-three-season_leaders-10",
+   "family": "season_leaders",
+   "tags": [
+    "season_leaders",
+    "top_n_word",
+    "totals",
+    "shortened_season"
+   ],
+   "question": "Top twenty free throw makers in total, 2011-12",
+   "request": {
+    "intent": "season_leaders",
+    "season": "2011-12",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "free_throws",
+     "aggregation": "total"
+    },
+    "limit": 20
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/leagueleaders?LeagueID=00&PerMode=Totals&Scope=S&Season=2011-12&SeasonType=Regular+Season&StatCategory=FTM&ActiveFlag=",
+     "read": "stats.nba leagueleaders (Ask's primary source; NBA.com qualification) top 20: 1. Kevin Durant (OKC, 66 G) 431, 2. LeBron James (MIA, 62 G) 387, 3. Kobe Bryant (LAL, 58 G) 381, 4. Kevin Love (MIN, 55 G) 379, 5. Russell Westbrook (OKC, 66 G) 340, 6. Dirk Nowitzki (DAL, 62 G) 318, 7. John Wall (WAS, 66 G) 317, 8. James Harden (OKC, 62 G) 312, 9. Carmelo Anthony (NYK, 55 G) 295, 10. Paul Pierce (BOS, 61 G) 293, 11. Dwight Howard (ORL, 54 G) 281, 12. DeMar DeRozan (TOR, 63 G) 268, 13. Rodney Stuckey (DET, 55 G) 267, 14. DeMarcus Cousins (SAC, 64 G) 262, 15. Chris Paul (LAC, 60 G) 260, 16. Deron Williams (NJN, 55 G) 257, 17. Danny Granger (IND, 62 G) 254, 18. Blake Griffin (LAC, 66 G) 244, 19. Lou Williams (PHI, 64 G) 237, 19. Marc Gasol (MEM, 65 G) 237.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_2012_leaders.html",
+     "read": "Basketball-Reference (cross-check), Free Throws: Kevin Durant 431, LeBron James 387, Kobe Bryant 381, Kevin Love 379, Russell Westbrook 340, Dirk Nowitzki 318, John Wall 317, James Harden 312, Carmelo Anthony 295, Paul Pierce 293, Dwight Howard 281, DeMar DeRozan 268, Rodney Stuckey 267, DeMarcus Cousins 262, Chris Paul 260, Deron Williams 257, Danny Granger 254, Blake Griffin 244, Marc Gasol 237, Lou Williams 237.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "2011-12"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.stat",
+     "value": "free_throws"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "total"
+    },
+    {
+     "path": "result.rows",
+     "value": 20,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      201142,
+      2544,
+      977,
+      201567,
+      201566,
+      1717,
+      202322,
+      201935,
+      2546,
+      1718,
+      2730,
+      201942,
+      201155,
+      202326,
+      101108,
+      101114,
+      101122,
+      201933,
+      101150,
+      201188
+     ],
+     "match": "unordered"
+    },
+    {
+     "path": "result.rows[*].rank",
+     "value": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      19
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      431,
+      387,
+      381,
+      379,
+      340,
+      318,
+      317,
+      312,
+      295,
+      293,
+      281,
+      268,
+      267,
+      262,
+      260,
+      257,
+      254,
+      244,
+      237,
+      237
+     ]
+    },
+    {
+     "path": "result.rows[0].games_played",
+     "value": 66
+    }
+   ],
+   "notes": "same players, order within ties differs on bref; Tie groups by rank: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 19]; a tie at the cut is never split, order within a tie is not checked."
+  },
+  {
+   "id": "unseen-three-season_leaders-11",
+   "family": "season_leaders",
+   "tags": [
+    "season_leaders",
+    "playoffs",
+    "per_game",
+    "source_disagreement"
+   ],
+   "question": "Playoff rebounding leaders per game, 2003 postseason",
+   "request": {
+    "intent": "season_leaders",
+    "season": "2002-03",
+    "season_type": "playoffs",
+    "stat": {
+     "stat": "rebounds",
+     "aggregation": "per_game"
+    },
+    "limit": 10
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/leagueleaders?LeagueID=00&PerMode=PerGame&Scope=S&Season=2002-03&SeasonType=Playoffs&StatCategory=REB&ActiveFlag=",
+     "read": "stats.nba leagueleaders (Ask's primary source; NBA.com qualification) top 10: 1. Jermaine O'Neal (IND, 6 G) 17.5, 2. Ben Wallace (DET, 17 G) 16.3, 3. Kevin Garnett (MIN, 6 G) 15.7, 4. Tim Duncan (SAS, 24 G) 15.4, 5. Shaquille O'Neal (LAL, 12 G) 14.8, 6. Drew Gooden (ORL, 7 G) 12.7, 7. Shawn Marion (PHX, 6 G) 11.7, 8. Dirk Nowitzki (DAL, 17 G) 11.5, 9. Kenyon Martin (NJN, 20 G) 9.4, 10. Kenny Thomas (PHI, 12 G) 9.3.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/playoffs/NBA_2003_leaders.html",
+     "read": "Basketball-Reference (cross-check), Rebounds Per Game: Jermaine O'Neal 17.5, Ben Wallace 16.3, Kevin Garnett 15.7, Tim Duncan 15.4, Shaquille O'Neal 14.8, Drew Gooden 12.7, Shawn Marion 11.7, Dirk Nowitzki 11.5, Kenyon Martin 9.3, Kenny Thomas 9.3.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "2002-03"
+    },
+    {
+     "path": "result.season_type",
+     "value": "playoffs"
+    },
+    {
+     "path": "result.stat",
+     "value": "rebounds"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "per_game"
+    },
+    {
+     "path": "result.rows",
+     "value": 10,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      979,
+      1112,
+      708,
+      1495,
+      406,
+      2400,
+      1890,
+      1717,
+      2030,
+      1903
+     ]
+    },
+    {
+     "path": "result.rows[*].rank",
+     "value": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      17.5,
+      16.3,
+      15.7,
+      15.4,
+      14.8,
+      12.7,
+      11.7,
+      11.5,
+      9.4,
+      9.3
+     ],
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.rows[0].games_played",
+     "value": 6
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612754
+    }
+   ],
+   "notes": "FLAG (rounding only). Kenyon Martin: stats.nba 9.4, bref 9.3. Both lists have the same ten players in the same order. Jermaine O'Neal leads with 6 games played: playoff qualification is the source's."
+  },
+  {
+   "id": "unseen-three-season_leaders-12",
+   "family": "season_leaders",
+   "tags": [
+    "season_leaders",
+    "per_game"
+   ],
+   "question": "Minutes per game leaders in 2013-14",
+   "request": {
+    "intent": "season_leaders",
+    "season": "2013-14",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "minutes",
+     "aggregation": "per_game"
+    },
+    "limit": 10
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/leagueleaders?LeagueID=00&PerMode=PerGame&Scope=S&Season=2013-14&SeasonType=Regular+Season&StatCategory=MIN&ActiveFlag=",
+     "read": "stats.nba leagueleaders (Ask's primary source; NBA.com qualification) top 10: 1. Carmelo Anthony (NYK, 77 G) 38.7, 2. Jimmy Butler III (CHI, 67 G) 38.7, 3. Kevin Durant (OKC, 81 G) 38.5, 4. DeMar DeRozan (TOR, 79 G) 38.2, 5. James Harden (HOU, 73 G) 38.0, 6. LeBron James (MIA, 77 G) 37.7, 7. Chandler Parsons (HOU, 74 G) 37.6, 8. Monta Ellis (DAL, 82 G) 36.9, 9. Stephen Curry (GSW, 78 G) 36.5, 10. Gordon Hayward (UTA, 77 G) 36.4.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_2014_leaders.html",
+     "read": "Basketball-Reference (cross-check), Minutes Per Game: Carmelo Anthony 38.7, Jimmy Butler 38.7, Kevin Durant 38.5, DeMar DeRozan 38.2, James Harden 38, LeBron James 37.7, Chandler Parsons 37.6, Monta Ellis 36.9, Stephen Curry 36.5, Gordon Hayward 36.4.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "2013-14"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.stat",
+     "value": "minutes"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "per_game"
+    },
+    {
+     "path": "result.rows",
+     "value": 10,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      2546,
+      202710,
+      201142,
+      201942,
+      201935,
+      2544,
+      202718,
+      101145,
+      201939,
+      202330
+     ]
+    },
+    {
+     "path": "result.rows[*].rank",
+     "value": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      38.7,
+      38.7,
+      38.5,
+      38.2,
+      38.0,
+      37.7,
+      37.6,
+      36.9,
+      36.5,
+      36.4
+     ],
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.rows[0].games_played",
+     "value": 77
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612752
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-season_leaders-13",
+   "family": "season_leaders",
+   "tags": [
+    "season_leaders",
+    "totals"
+   ],
+   "question": "Who led the league in turnovers in total in 2005-06?",
+   "request": {
+    "intent": "season_leaders",
+    "season": "2005-06",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "turnovers",
+     "aggregation": "total"
+    },
+    "limit": 10
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/leagueleaders?LeagueID=00&PerMode=Totals&Scope=S&Season=2005-06&SeasonType=Regular+Season&StatCategory=TOV&ActiveFlag=",
+     "read": "stats.nba leagueleaders (Ask's primary source; NBA.com qualification) top 10: 1. Gilbert Arenas (WAS, 80 G) 297, 2. Steve Nash (PHX, 79 G) 276, 3. Paul Pierce (BOS, 79 G) 273, 4. Dwyane Wade (MIA, 75 G) 268, 5. Joe Johnson (ATL, 82 G) 267, 6. LeBron James (CLE, 79 G) 260, 7. Andre Miller (DEN, 82 G) 256, 8. Kobe Bryant (LAL, 80 G) 250, 9. Tony Parker (SAS, 80 G) 249, 10. Allen Iverson (PHI, 72 G) 248.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_2006_leaders.html",
+     "read": "Basketball-Reference (cross-check), Turnovers: Gilbert Arenas 297, Steve Nash 276, Paul Pierce 273, Dwyane Wade 268, Joe Johnson 267, LeBron James 260, Andre Miller 256, Kobe Bryant 250, Tony Parker 249, Allen Iverson 248.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "2005-06"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.stat",
+     "value": "turnovers"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "total"
+    },
+    {
+     "path": "result.rows",
+     "value": 10,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      2240,
+      959,
+      1718,
+      2548,
+      2207,
+      2544,
+      1889,
+      977,
+      2225,
+      947
+     ]
+    },
+    {
+     "path": "result.rows[*].rank",
+     "value": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      297,
+      276,
+      273,
+      268,
+      267,
+      260,
+      256,
+      250,
+      249,
+      248
+     ]
+    },
+    {
+     "path": "result.rows[0].games_played",
+     "value": 80
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612764
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-season_leaders-14",
+   "family": "season_leaders",
+   "tags": [
+    "season_leaders",
+    "per_game",
+    "source_disagreement"
+   ],
+   "question": "Most defensive rebounds per game in 2018-19",
+   "request": {
+    "intent": "season_leaders",
+    "season": "2018-19",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "defensive_rebounds",
+     "aggregation": "per_game"
+    },
+    "limit": 10
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/leagueleaders?LeagueID=00&PerMode=PerGame&Scope=S&Season=2018-19&SeasonType=Regular+Season&StatCategory=DREB&ActiveFlag=",
+     "read": "stats.nba leagueleaders (Ask's primary source; NBA.com qualification) top 10: 1. Joel Embiid (PHI, 64 G) 11.1, 2. Giannis Antetokounmpo (MIL, 72 G) 10.3, 3. Andre Drummond (DET, 79 G) 10.2, 4. DeAndre Jordan (NYK, 69 G) 9.8, 5. Russell Westbrook (OKC, 73 G) 9.6, 6. Nikola Vučević (ORL, 80 G) 9.2, 7. Rudy Gobert (UTA, 81 G) 9.0, 8. Karl-Anthony Towns (MIN, 77 G) 9.0, 9. Clint Capela (HOU, 67 G) 8.2, 10. Nikola Jokić (DEN, 80 G) 8.0.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_2019_leaders.html",
+     "read": "Basketball-Reference (cross-check), Defensive Rebounds Per Game: Joel Embiid 11.1, Giannis Antetokounmpo 10.3, Andre Drummond 10.2, DeAndre Jordan 9.8, Russell Westbrook 9.6, Nikola Vučević 9.2, Rudy Gobert 9, Karl-Anthony Towns 9, Anthony Davis 8.9, Clint Capela 8.2.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "2018-19"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.stat",
+     "value": "defensive_rebounds"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "per_game"
+    },
+    {
+     "path": "result.rows",
+     "value": 10,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      203954,
+      203507,
+      203083,
+      201599,
+      201566,
+      202696,
+      203497,
+      1626157,
+      203991,
+      203999
+     ]
+    },
+    {
+     "path": "result.rows[*].rank",
+     "value": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      11.1,
+      10.3,
+      10.2,
+      9.8,
+      9.6,
+      9.2,
+      9.0,
+      9.0,
+      8.2,
+      8.0
+     ],
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.rows[0].games_played",
+     "value": 64
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612755
+    }
+   ],
+   "notes": "FLAG. Gold is stats.nba (the source Ask reports). Basketball-Reference lists Anthony Davis (8.9 DRB/G, 56 G) ninth; stats.nba's qualified list omits him (below its games minimum), so Clint Capela is ninth and Nikola Jokic (8.0) tenth. The other nine players and values agree."
+  },
+  {
+   "id": "unseen-three-season_leaders-15",
+   "family": "season_leaders",
+   "tags": [
+    "season_leaders",
+    "top_n",
+    "totals"
+   ],
+   "question": "Top 7 offensive rebounders in total, 1996-97",
+   "request": {
+    "intent": "season_leaders",
+    "season": "1996-97",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "offensive_rebounds",
+     "aggregation": "total"
+    },
+    "limit": 7
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/leagueleaders?LeagueID=00&PerMode=Totals&Scope=S&Season=1996-97&SeasonType=Regular+Season&StatCategory=OREB&ActiveFlag=",
+     "read": "stats.nba leagueleaders (Ask's primary source; NBA.com qualification) top 7: 1. Dennis Rodman (CHI, 55 G) 320, 2. Dale Davis (IND, 80 G) 301, 3. Antoine Walker (BOS, 82 G) 288, 4. Shawn Kemp (SEA, 81 G) 275, 5. Rony Seikaly (ORL, 74 G) 274, 6. Olden Polynice (SAC, 82 G) 272, 7. Popeye Jones (TOR, 79 G) 270.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_1997_leaders.html",
+     "read": "Basketball-Reference (cross-check), Offensive Rebounds: Dennis Rodman 320, Dale Davis 301, Antoine Walker 288, Shawn Kemp 275, Rony Seikaly 274, Olden Polynice 272, Popeye Jones 270.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "1996-97"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.stat",
+     "value": "offensive_rebounds"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "total"
+    },
+    {
+     "path": "result.rows",
+     "value": 7,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      23,
+      905,
+      952,
+      431,
+      938,
+      178,
+      461
+     ]
+    },
+    {
+     "path": "result.rows[*].rank",
+     "value": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      320,
+      301,
+      288,
+      275,
+      274,
+      272,
+      270
+     ]
+    },
+    {
+     "path": "result.rows[0].games_played",
+     "value": 55
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612741
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-season_leaders-16",
+   "family": "season_leaders",
+   "tags": [
+    "season_leaders",
+    "relative_season",
+    "per_game"
+   ],
+   "question": "Who led in blocks per game this season?",
+   "request": {
+    "intent": "season_leaders",
+    "season": "2024-25",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "blocks",
+     "aggregation": "per_game"
+    },
+    "limit": 10
+   },
+   "reference_time": "2025-03-15T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/leagueleaders?LeagueID=00&PerMode=PerGame&Scope=S&Season=2024-25&SeasonType=Regular+Season&StatCategory=BLK&ActiveFlag=",
+     "read": "stats.nba leagueleaders (Ask's primary source; NBA.com qualification) top 10: 1. Victor Wembanyama (SAS, 46 G) 3.8, 2. Walker Kessler (UTA, 58 G) 2.4, 3. Myles Turner (IND, 72 G) 2.0, 4. Brook Lopez (MIL, 80 G) 1.9, 5. Donovan Clingan (POR, 67 G) 1.6, 6. Evan Mobley (CLE, 71 G) 1.6, 7. Jaren Jackson Jr. (MEM, 74 G) 1.5, 8. Alex Sarr (WAS, 67 G) 1.5, 9. Rudy Gobert (MIN, 72 G) 1.4, 10. Nic Claxton (BKN, 70 G) 1.4.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_2025_leaders.html",
+     "read": "Basketball-Reference (cross-check), Blocks Per Game: Victor Wembanyama 3.8, Walker Kessler 2.4, Myles Turner 2, Brook Lopez 1.9, Donovan Clingan 1.6, Evan Mobley 1.6, Jaren Jackson Jr. 1.5, Alex Sarr 1.5, Rudy Gobert 1.4, Nic Claxton 1.4.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "2024-25"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.stat",
+     "value": "blocks"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "per_game"
+    },
+    {
+     "path": "result.rows",
+     "value": 10,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      1641705,
+      1631117,
+      1626167,
+      201572,
+      1642270,
+      1630596,
+      1628991,
+      1642259,
+      203497,
+      1629651
+     ]
+    },
+    {
+     "path": "result.rows[*].rank",
+     "value": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      3.8,
+      2.4,
+      2.0,
+      1.9,
+      1.6,
+      1.6,
+      1.5,
+      1.5,
+      1.4,
+      1.4
+     ],
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.rows[0].games_played",
+     "value": 46
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612759
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-season_leaders-17",
+   "family": "season_leaders",
+   "tags": [
+    "season_leaders",
+    "per_game",
+    "older_season"
+   ],
+   "question": "Highest scoring average in 1974-75",
+   "request": {
+    "intent": "season_leaders",
+    "season": "1974-75",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "points",
+     "aggregation": "per_game"
+    },
+    "limit": 10
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/leagueleaders?LeagueID=00&PerMode=PerGame&Scope=S&Season=1974-75&SeasonType=Regular+Season&StatCategory=PTS&ActiveFlag=",
+     "read": "stats.nba leagueleaders (Ask's primary source; NBA.com qualification) top 10: 1. Bob McAdoo (BUF, 82 G) 34.5, 2. Rick Barry (GOS, 80 G) 30.6, 3. Kareem Abdul-Jabbar (MIL, 65 G) 30.0, 4. Nate Archibald (KCK, 82 G) 26.5, 5. Charlie Scott (PHX, 69 G) 24.3, 6. Bob Lanier (DET, 76 G) 24.0, 7. Elvin Hayes (WAS, 82 G) 23.0, 8. Gail Goodrich (LAL, 72 G) 22.6, 9. Spencer Haywood (SEA, 68 G) 22.4, 10. Fred Carter (PHL, 77 G) 21.9.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_1975_leaders.html",
+     "read": "Basketball-Reference (cross-check), Points Per Game: Bob McAdoo 34.5, Rick Barry 30.6, Kareem Abdul-Jabbar 30, Tiny Archibald 26.5, Charlie Scott 24.3, Bob Lanier 24, Elvin Hayes 23, Gail Goodrich 22.6, Spencer Haywood 22.4, Fred Carter 21.9.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "1974-75"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.stat",
+     "value": "points"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "per_game"
+    },
+    {
+     "path": "result.rows",
+     "value": 10,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      77498,
+      600013,
+      76003,
+      76054,
+      78097,
+      600005,
+      76979,
+      76832,
+      76981,
+      76356
+     ]
+    },
+    {
+     "path": "result.rows[*].rank",
+     "value": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      34.5,
+      30.6,
+      30.0,
+      26.5,
+      24.3,
+      24.0,
+      23.0,
+      22.6,
+      22.4,
+      21.9
+     ],
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.rows[0].games_played",
+     "value": 82
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612746
+    }
+   ],
+   "notes": "Basketball-Reference names rank 4 'Tiny Archibald'; stats.nba 'Nate Archibald' (same player, id 76054)."
+  },
+  {
+   "id": "unseen-three-career_stats-01",
+   "family": "career_stats",
+   "tags": [
+    "career_stats",
+    "player_totals",
+    "older_season",
+    "totals"
+   ],
+   "question": "Elgin Baylor's career points total",
+   "request": {
+    "intent": "career_stats",
+    "view": "player_totals",
+    "player": {
+     "player_id": 76127,
+     "name": "Elgin Baylor"
+    },
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "points",
+     "aggregation": "total"
+    },
+    "limit": 10
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/playercareerstats?PlayerID=76127&PerMode=Totals&LeagueID=00",
+     "read": "stats.nba playercareerstats (Ask's primary source), CareerTotalsRegularSeason: GP 846, PTS 23149, REB 11463, AST 3650, STL None, BLK None, FG3M None, FG3A None, FTM 5763, FTA 7391.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/players/b/bayloel01.html",
+     "read": "Basketball-Reference (fallback source), Per Game and Totals tables, career row (14 Yrs): G 846, PTS 23149 total, 27.4 per game.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.view",
+     "value": "player_totals"
+    },
+    {
+     "path": "result.player.player_id",
+     "value": 76127
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "total"
+    },
+    {
+     "path": "result.games_played",
+     "value": 846
+    },
+    {
+     "path": "result.values[0].stat",
+     "value": "points"
+    },
+    {
+     "path": "result.values[0].value",
+     "value": 23149
+    },
+    {
+     "path": "result.alternate.values[0].value",
+     "value": 27.4,
+     "match": "round",
+     "digits": 1
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-career_stats-02",
+   "family": "career_stats",
+   "tags": [
+    "career_stats",
+    "player_totals",
+    "per_game"
+   ],
+   "question": "John Stockton career assists per game",
+   "request": {
+    "intent": "career_stats",
+    "view": "player_totals",
+    "player": {
+     "player_id": 304,
+     "name": "John Stockton"
+    },
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "assists",
+     "aggregation": "per_game"
+    },
+    "limit": 10
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/playercareerstats?PlayerID=304&PerMode=Totals&LeagueID=00",
+     "read": "stats.nba playercareerstats (Ask's primary source), CareerTotalsRegularSeason: GP 1504, PTS 19711, REB 4051, AST 15806, STL 3265, BLK 315, FG3M 845, FG3A 2202, FTM 4788, FTA 5796.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/players/s/stockjo01.html",
+     "read": "Basketball-Reference (fallback source), Per Game and Totals tables, career row (19 Yrs): G 1504, AST 15806 total, 10.5 per game.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.view",
+     "value": "player_totals"
+    },
+    {
+     "path": "result.player.player_id",
+     "value": 304
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "per_game"
+    },
+    {
+     "path": "result.games_played",
+     "value": 1504
+    },
+    {
+     "path": "result.values[0].stat",
+     "value": "assists"
+    },
+    {
+     "path": "result.values[0].value",
+     "value": 10.5,
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.alternate.values[0].value",
+     "value": 15806
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-career_stats-03",
+   "family": "career_stats",
+   "tags": [
+    "career_stats",
+    "leaders",
+    "default_limit"
+   ],
+   "question": "All-time steals leaders",
+   "request": {
+    "intent": "career_stats",
+    "view": "leaders",
+    "player": null,
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "steals",
+     "aggregation": "total"
+    },
+    "limit": 10
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/alltimeleadersgrids?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TopX=250",
+     "read": "stats.nba alltimeleadersgrids (Ask's primary source), STLLeaders top 10: 1. John Stockton 3265, 2. Chris Paul 2728, 3. Jason Kidd 2684, 4. Michael Jordan 2514, 5. Gary Payton 2445, 6. LeBron James 2417, 7. Maurice Cheeks 2310, 8. Scottie Pippen 2307, 9. Clyde Drexler 2207, 10. Hakeem Olajuwon 2162.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leaders/stl_career.html",
+     "read": "Basketball-Reference NBA career leaders table (cross-check), top 10: John Stockton 3265, Chris Paul 2728, Jason Kidd 2684, Michael Jordan 2514, Gary Payton 2445, LeBron James 2417, Maurice Cheeks 2310, Scottie Pippen 2307, Clyde Drexler 2207, Hakeem Olajuwon 2162.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.view",
+     "value": "leaders"
+    },
+    {
+     "path": "result.stat",
+     "value": "steals"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.rows",
+     "value": 10,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      304,
+      101108,
+      467,
+      893,
+      56,
+      2544,
+      76385,
+      937,
+      17,
+      165
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      3265,
+      2728,
+      2684,
+      2514,
+      2445,
+      2417,
+      2310,
+      2307,
+      2207,
+      2162
+     ]
+    },
+    {
+     "path": "result.rows[*].rank",
+     "value": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+     ]
+    }
+   ],
+   "notes": "Includes active players (LeBron James): their totals move during a season; values as of checked_at (2026 offseason)."
+  },
+  {
+   "id": "unseen-three-career_stats-04",
+   "family": "career_stats",
+   "tags": [
+    "career_stats",
+    "leaders",
+    "top_n_word"
+   ],
+   "question": "Top five all-time three-point makers",
+   "request": {
+    "intent": "career_stats",
+    "view": "leaders",
+    "player": null,
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "three_pointers",
+     "aggregation": "total"
+    },
+    "limit": 5
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/alltimeleadersgrids?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TopX=250",
+     "read": "stats.nba alltimeleadersgrids (Ask's primary source), FG3MLeaders top 5: 1. Stephen Curry 4248, 2. James Harden 3390, 3. Ray Allen 2973, 4. Klay Thompson 2899, 5. Damian Lillard 2804.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leaders/fg3_career.html",
+     "read": "Basketball-Reference NBA career leaders table (cross-check), top 5: Stephen Curry 4248, James Harden 3390, Ray Allen 2973, Klay Thompson 2899, Damian Lillard 2804.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.view",
+     "value": "leaders"
+    },
+    {
+     "path": "result.stat",
+     "value": "three_pointers"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.rows",
+     "value": 5,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      201939,
+      201935,
+      951,
+      202691,
+      203081
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      4248,
+      3390,
+      2973,
+      2899,
+      2804
+     ]
+    },
+    {
+     "path": "result.rows[*].rank",
+     "value": [
+      1,
+      2,
+      3,
+      4,
+      5
+     ]
+    }
+   ],
+   "notes": "Includes active players (Stephen Curry, James Harden, Klay Thompson, Damian Lillard): their totals move during a season; values as of checked_at (2026 offseason)."
+  },
+  {
+   "id": "unseen-three-career_stats-05",
+   "family": "career_stats",
+   "tags": [
+    "career_stats",
+    "player_rank",
+    "nickname"
+   ],
+   "question": "Where does Dirk rank on the all-time scoring list?",
+   "request": {
+    "intent": "career_stats",
+    "view": "player_rank",
+    "player": {
+     "player_id": 1717,
+     "name": "Dirk Nowitzki"
+    },
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "points",
+     "aggregation": "total"
+    },
+    "limit": 10
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/alltimeleadersgrids?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TopX=250",
+     "read": "stats.nba alltimeleadersgrids (Ask's primary source), PTSLeaders: Dirk Nowitzki rank 7 with 31560; ahead: LeBron James 43440, Kareem Abdul-Jabbar 38387, Karl Malone 36928, Kobe Bryant 33643, Kevin Durant 32597, Michael Jordan 32292.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leaders/pts_career.html",
+     "read": "Basketball-Reference NBA career leaders table: Dirk Nowitzki #7 with 31560.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.view",
+     "value": "player_rank"
+    },
+    {
+     "path": "result.player.player_id",
+     "value": 1717
+    },
+    {
+     "path": "result.rank",
+     "value": 7
+    },
+    {
+     "path": "result.values[0].value",
+     "value": 31560
+    },
+    {
+     "path": "result.stat",
+     "value": "points"
+    }
+   ],
+   "notes": "Kevin Durant (active) passed Nowitzki during 2025-26, so Nowitzki is 7th as of checked_at (he was 6th before); the rank can move again. Active players sit near this rank; the rank can move during a season (value as of checked_at)."
+  },
+  {
+   "id": "unseen-three-career_stats-06",
+   "family": "career_stats",
+   "tags": [
+    "career_stats",
+    "player_totals",
+    "playoffs"
+   ],
+   "question": "Tim Duncan career playoff rebounds",
+   "request": {
+    "intent": "career_stats",
+    "view": "player_totals",
+    "player": {
+     "player_id": 1495,
+     "name": "Tim Duncan"
+    },
+    "season_type": "playoffs",
+    "stat": {
+     "stat": "rebounds",
+     "aggregation": "total"
+    },
+    "limit": 10
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/playercareerstats?PlayerID=1495&PerMode=Totals&LeagueID=00",
+     "read": "stats.nba playercareerstats (Ask's primary source), CareerTotalsPostSeason: GP 251, PTS 5172, REB 2859, AST 764, STL 168, BLK 568, FG3M 5, FG3A 35, FTM 1217, FTA 1766.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/players/d/duncati01.html",
+     "read": "Basketball-Reference (fallback source), Playoffs Per Game and Totals tables, career row (18 Yrs): G 251, TRB 2859 total, 11.4 per game.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.view",
+     "value": "player_totals"
+    },
+    {
+     "path": "result.player.player_id",
+     "value": 1495
+    },
+    {
+     "path": "result.season_type",
+     "value": "playoffs"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "total"
+    },
+    {
+     "path": "result.games_played",
+     "value": 251
+    },
+    {
+     "path": "result.values[0].stat",
+     "value": "rebounds"
+    },
+    {
+     "path": "result.values[0].value",
+     "value": 2859
+    },
+    {
+     "path": "result.alternate.values[0].value",
+     "value": 11.4,
+     "match": "round",
+     "digits": 1
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-career_stats-07",
+   "family": "career_stats",
+   "tags": [
+    "career_stats",
+    "player_totals",
+    "stat_line"
+   ],
+   "question": "Michael Jordan career stats",
+   "request": {
+    "intent": "career_stats",
+    "view": "player_totals",
+    "player": {
+     "player_id": 893,
+     "name": "Michael Jordan"
+    },
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "stat_line",
+     "aggregation": "per_game"
+    },
+    "limit": 10
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/playercareerstats?PlayerID=893&PerMode=Totals&LeagueID=00",
+     "read": "stats.nba playercareerstats (Ask's primary source), CareerTotalsRegularSeason: GP 1072, PTS 32292, REB 6672, AST 5633, STL 2514, BLK 893, FG3M 581, FG3A 1778, FTM 7327, FTA 8772.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/players/j/jordami01.html",
+     "read": "Basketball-Reference (fallback source), Per Game and Totals tables, career row (15 Yrs): G 1072, PTS 32292 total, 30.1 per game, TRB 6672 total, 6.2 per game, AST 5633 total, 5.3 per game.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.view",
+     "value": "player_totals"
+    },
+    {
+     "path": "result.player.player_id",
+     "value": 893
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "per_game"
+    },
+    {
+     "path": "result.games_played",
+     "value": 1072
+    },
+    {
+     "path": "result.values[stat=points].value",
+     "value": 30.1,
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.alternate.values[stat=points].value",
+     "value": 32292
+    },
+    {
+     "path": "result.values[stat=rebounds].value",
+     "value": 6.2,
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.alternate.values[stat=rebounds].value",
+     "value": 6672
+    },
+    {
+     "path": "result.values[stat=assists].value",
+     "value": 5.3,
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.alternate.values[stat=assists].value",
+     "value": 5633
+    },
+    {
+     "path": "result.alternate.aggregation",
+     "value": "total"
+    }
+   ],
+   "notes": "Full career line with no stated measure: per-game averages first, totals on the alternate (ADR 0013 amendment, owner decision 2026-10-01)."
+  },
+  {
+   "id": "unseen-three-career_stats-08",
+   "family": "career_stats",
+   "tags": [
+    "career_stats",
+    "player_totals",
+    "percentage"
+   ],
+   "question": "Reggie Miller's career free throw percentage",
+   "request": {
+    "intent": "career_stats",
+    "view": "player_totals",
+    "player": {
+     "player_id": 397,
+     "name": "Reggie Miller"
+    },
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "free_throw_percentage",
+     "aggregation": "total"
+    },
+    "limit": 10
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/playercareerstats?PlayerID=397&PerMode=Totals&LeagueID=00",
+     "read": "stats.nba playercareerstats (Ask's primary source), CareerTotalsRegularSeason: GP 1389, PTS 25279, REB 4182, AST 4141, STL 1505, BLK 299, FG3M 2560, FG3A 6486, FTM 6237, FTA 7026.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/players/m/millere01.html",
+     "read": "Basketball-Reference (fallback source), Per Game and Totals tables, career row (18 Yrs): G 1389, ft_pct .888 (6237/7026).",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.view",
+     "value": "player_totals"
+    },
+    {
+     "path": "result.player.player_id",
+     "value": 397
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "total"
+    },
+    {
+     "path": "result.games_played",
+     "value": 1389
+    },
+    {
+     "path": "result.values[0].stat",
+     "value": "free_throw_percentage"
+    },
+    {
+     "path": "result.values[0].value",
+     "value": 0.888,
+     "match": "round",
+     "digits": 3
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-career_stats-09",
+   "family": "career_stats",
+   "tags": [
+    "career_stats",
+    "leaders",
+    "playoffs"
+   ],
+   "question": "All-time playoff assists leaders",
+   "request": {
+    "intent": "career_stats",
+    "view": "leaders",
+    "player": null,
+    "season_type": "playoffs",
+    "stat": {
+     "stat": "assists",
+     "aggregation": "total"
+    },
+    "limit": 10
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/alltimeleadersgrids?LeagueID=00&PerMode=Totals&SeasonType=Playoffs&TopX=250",
+     "read": "stats.nba alltimeleadersgrids (Ask's primary source), ASTLeaders top 10: 1. Magic Johnson 2346, 2. LeBron James 2168, 3. John Stockton 1839, 4. Jason Kidd 1263, 5. Chris Paul 1233, 6. James Harden 1224, 7. Tony Parker 1143, 8. Rajon Rondo 1136, 9. Larry Bird 1062, 10. Steve Nash 1061.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leaders/ast_career_p.html",
+     "read": "Basketball-Reference NBA career leaders table (cross-check), top 10: Magic Johnson 2346, LeBron James 2168, John Stockton 1839, Jason Kidd 1263, Chris Paul 1233, James Harden 1224, Tony Parker 1143, Rajon Rondo 1136, Larry Bird 1062, Steve Nash 1061.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.view",
+     "value": "leaders"
+    },
+    {
+     "path": "result.stat",
+     "value": "assists"
+    },
+    {
+     "path": "result.season_type",
+     "value": "playoffs"
+    },
+    {
+     "path": "result.rows",
+     "value": 10,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      77142,
+      2544,
+      304,
+      467,
+      101108,
+      201935,
+      2225,
+      200765,
+      1449,
+      959
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      2346,
+      2168,
+      1839,
+      1263,
+      1233,
+      1224,
+      1143,
+      1136,
+      1062,
+      1061
+     ]
+    },
+    {
+     "path": "result.rows[*].rank",
+     "value": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+     ]
+    }
+   ],
+   "notes": "Includes active players (LeBron James, James Harden): their totals move during a season; values as of checked_at (2026 offseason)."
+  },
+  {
+   "id": "unseen-three-career_stats-10",
+   "family": "career_stats",
+   "tags": [
+    "career_stats",
+    "leaders",
+    "top_n",
+    "partial_coverage"
+   ],
+   "question": "Top 20 all-time in offensive rebounds",
+   "request": {
+    "intent": "career_stats",
+    "view": "leaders",
+    "player": null,
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "offensive_rebounds",
+     "aggregation": "total"
+    },
+    "limit": 20
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/alltimeleadersgrids?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TopX=250",
+     "read": "stats.nba alltimeleadersgrids (Ask's primary source), OREBLeaders top 20: 1. Moses Malone 6731, 2. Robert Parish 4598, 3. Buck Williams 4526, 4. Dennis Rodman 4329, 5. Charles Barkley 4260, 6. Shaquille O'Neal 4209, 7. Dwight Howard 4151, 8. Kevin Willis 4132, 9. Hakeem Olajuwon 4034, 10. Andre Drummond 3965, 11. Charles Oakley 3924, 12. Tim Duncan 3859, 13. Dikembe Mutombo 3808, 14. Karl Malone 3562, 15. Tyson Chandler 3529, 16. Horace Grant 3467, 17. Otis Thorpe 3446, 18. Ben Wallace 3444, 19. Larry Smith 3401, 20. A.C. Green 3354.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leaders/orb_career.html",
+     "read": "Basketball-Reference NBA career leaders table (cross-check), top 20: Moses Malone 6731, Robert Parish 4598, Buck Williams 4526, Dennis Rodman 4329, Charles Barkley 4260, Shaquille O'Neal 4209, Dwight Howard 4151, Kevin Willis 4132, Hakeem Olajuwon 4034, Andre Drummond 3965, Charles Oakley 3924, Tim Duncan 3859, Dikembe Mutombo 3808, Karl Malone 3562, Tyson Chandler 3529, Horace Grant 3467, Otis Thorpe 3446, Ben Wallace 3444, Larry Smith 3401, A.C. Green 3354.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.view",
+     "value": "leaders"
+    },
+    {
+     "path": "result.stat",
+     "value": "offensive_rebounds"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.rows",
+     "value": 20,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      77449,
+      305,
+      433,
+      23,
+      787,
+      406,
+      2730,
+      788,
+      165,
+      203083,
+      891,
+      1495,
+      87,
+      252,
+      2199,
+      270,
+      901,
+      1112,
+      78195,
+      920
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      6731,
+      4598,
+      4526,
+      4329,
+      4260,
+      4209,
+      4151,
+      4132,
+      4034,
+      3965,
+      3924,
+      3859,
+      3808,
+      3562,
+      3529,
+      3467,
+      3446,
+      3444,
+      3401,
+      3354
+     ]
+    },
+    {
+     "path": "result.rows[*].rank",
+     "value": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+     ]
+    }
+   ],
+   "notes": "Offensive rebounds are recorded from 1973-74; a coverage note is expected but not checked. Includes active players (Andre Drummond): their totals move during a season; values as of checked_at (2026 offseason)."
+  },
+  {
+   "id": "unseen-three-career_stats-11",
+   "family": "career_stats",
+   "tags": [
+    "career_stats",
+    "player_rank"
+   ],
+   "question": "Where does Kevin Garnett rank all-time in career rebounds?",
+   "request": {
+    "intent": "career_stats",
+    "view": "player_rank",
+    "player": {
+     "player_id": 708,
+     "name": "Kevin Garnett"
+    },
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "rebounds",
+     "aggregation": "total"
+    },
+    "limit": 10
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/alltimeleadersgrids?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TopX=250",
+     "read": "stats.nba alltimeleadersgrids (Ask's primary source), REBLeaders: Kevin Garnett rank 9 with 14662; ahead: Wilt Chamberlain 23924, Bill Russell 21620, Kareem Abdul-Jabbar 17440, Elvin Hayes 16279, Moses Malone 16212, Tim Duncan 15091, Karl Malone 14968, Robert Parish 14715.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leaders/trb_career.html",
+     "read": "Basketball-Reference NBA career leaders table: Kevin Garnett #9 with 14662.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.view",
+     "value": "player_rank"
+    },
+    {
+     "path": "result.player.player_id",
+     "value": 708
+    },
+    {
+     "path": "result.rank",
+     "value": 9
+    },
+    {
+     "path": "result.values[0].value",
+     "value": 14662
+    },
+    {
+     "path": "result.stat",
+     "value": "rebounds"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-career_stats-12",
+   "family": "career_stats",
+   "tags": [
+    "career_stats",
+    "player_totals",
+    "nickname",
+    "playoffs",
+    "per_game"
+   ],
+   "question": "The Mailman's career playoff points per game",
+   "request": {
+    "intent": "career_stats",
+    "view": "player_totals",
+    "player": {
+     "player_id": 252,
+     "name": "Karl Malone"
+    },
+    "season_type": "playoffs",
+    "stat": {
+     "stat": "points",
+     "aggregation": "per_game"
+    },
+    "limit": 10
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/playercareerstats?PlayerID=252&PerMode=Totals&LeagueID=00",
+     "read": "stats.nba playercareerstats (Ask's primary source), CareerTotalsPostSeason: GP 193, PTS 4761, REB 2062, AST 610, STL 258, BLK 135, FG3M 6, FG3A 37, FTM 1269, FTA 1725.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/players/m/malonka01.html",
+     "read": "Basketball-Reference (fallback source), Playoffs Per Game and Totals tables, career row (19 Yrs): G 193, PTS 4761 total, 24.7 per game.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.view",
+     "value": "player_totals"
+    },
+    {
+     "path": "result.player.player_id",
+     "value": 252
+    },
+    {
+     "path": "result.season_type",
+     "value": "playoffs"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "per_game"
+    },
+    {
+     "path": "result.games_played",
+     "value": 193
+    },
+    {
+     "path": "result.values[0].stat",
+     "value": "points"
+    },
+    {
+     "path": "result.values[0].value",
+     "value": 24.7,
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.alternate.values[0].value",
+     "value": 4761
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-career_stats-13",
+   "family": "career_stats",
+   "tags": [
+    "career_stats",
+    "player_totals",
+    "career_synonym"
+   ],
+   "question": "Magic Johnson's lifetime assists",
+   "request": {
+    "intent": "career_stats",
+    "view": "player_totals",
+    "player": {
+     "player_id": 77142,
+     "name": "Magic Johnson"
+    },
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "assists",
+     "aggregation": "total"
+    },
+    "limit": 10
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/playercareerstats?PlayerID=77142&PerMode=Totals&LeagueID=00",
+     "read": "stats.nba playercareerstats (Ask's primary source), CareerTotalsRegularSeason: GP 906, PTS 17707, REB 6559, AST 10141, STL 1724, BLK 374, FG3M 325, FG3A 1074, FTM 4960, FTA 5850.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/players/j/johnsma02.html",
+     "read": "Basketball-Reference (fallback source), Per Game and Totals tables, career row (13 Yrs): G 906, AST 10141 total, 11.2 per game.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.view",
+     "value": "player_totals"
+    },
+    {
+     "path": "result.player.player_id",
+     "value": 77142
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "total"
+    },
+    {
+     "path": "result.games_played",
+     "value": 906
+    },
+    {
+     "path": "result.values[0].stat",
+     "value": "assists"
+    },
+    {
+     "path": "result.values[0].value",
+     "value": 10141
+    },
+    {
+     "path": "result.alternate.values[0].value",
+     "value": 11.2,
+     "match": "round",
+     "digits": 1
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-career_stats-14",
+   "family": "career_stats",
+   "tags": [
+    "career_stats",
+    "player_totals",
+    "totals"
+   ],
+   "question": "How many career blocks did Dikembe Mutombo have?",
+   "request": {
+    "intent": "career_stats",
+    "view": "player_totals",
+    "player": {
+     "player_id": 87,
+     "name": "Dikembe Mutombo"
+    },
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "blocks",
+     "aggregation": "total"
+    },
+    "limit": 10
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/playercareerstats?PlayerID=87&PerMode=Totals&LeagueID=00",
+     "read": "stats.nba playercareerstats (Ask's primary source), CareerTotalsRegularSeason: GP 1196, PTS 11729, REB 12359, AST 1240, STL 494, BLK 3289, FG3M 0, FG3A 2, FTM 3391, FTA 4960.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/players/m/mutomdi01.html",
+     "read": "Basketball-Reference (fallback source), Per Game and Totals tables, career row (18 Yrs): G 1196, BLK 3289 total, 2.8 per game.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.view",
+     "value": "player_totals"
+    },
+    {
+     "path": "result.player.player_id",
+     "value": 87
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "total"
+    },
+    {
+     "path": "result.games_played",
+     "value": 1196
+    },
+    {
+     "path": "result.values[0].stat",
+     "value": "blocks"
+    },
+    {
+     "path": "result.values[0].value",
+     "value": 3289
+    },
+    {
+     "path": "result.alternate.values[0].value",
+     "value": 2.8,
+     "match": "round",
+     "digits": 1
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-career_stats-15",
+   "family": "career_stats",
+   "tags": [
+    "career_stats",
+    "leaders",
+    "top_n_over_max"
+   ],
+   "question": "Top 40 all-time in career turnovers",
+   "request": {
+    "intent": "career_stats",
+    "view": "leaders",
+    "player": null,
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "turnovers",
+     "aggregation": "total"
+    },
+    "limit": 25,
+    "requested_limit": 40
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/alltimeleadersgrids?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TopX=250",
+     "read": "stats.nba alltimeleadersgrids (Ask's primary source), TOVLeaders top 25: 1. LeBron James 5650, 2. Russell Westbrook 5038, 3. Karl Malone 4524, 4. James Harden 4505, 5. John Stockton 4244, 6. Kobe Bryant 4010, 7. Jason Kidd 4003, 8. Moses Malone 3804, 9. Kevin Durant 3800, 10. Isiah Thomas 3682, 11. Hakeem Olajuwon 3667, 12. Patrick Ewing 3537, 13. Paul Pierce 3532, 14. Magic Johnson 3506, 15. Reggie Theus 3493, 16. Steve Nash 3478, 17. Tim Duncan 3381, 18. Charles Barkley 3376, 19. Dwyane Wade 3326, 20. Shaquille O'Neal 3310, 21. Stephen Curry 3308, 22. Dwight Howard 3302, 23. Allen Iverson 3262, 24. Scottie Pippen 3257, 25. Robert Parish 3183.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leaders/tov_career.html",
+     "read": "Basketball-Reference NBA career leaders table (cross-check), top 25: LeBron James 5650, Russell Westbrook 5038, Karl Malone 4524, James Harden 4505, John Stockton 4244, Kobe Bryant 4010, Jason Kidd 4003, Moses Malone 3804, Kevin Durant 3800, Isiah Thomas 3682, Hakeem Olajuwon 3667, Patrick Ewing 3537, Paul Pierce 3532, Magic Johnson 3506, Reggie Theus 3493, Steve Nash 3478, Tim Duncan 3381, Charles Barkley 3376, Dwyane Wade 3326, Shaquille O'Neal 3310, Stephen Curry 3308, Dwight Howard 3302, Allen Iverson 3262, Scottie Pippen 3257, Robert Parish 3183.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.view",
+     "value": "leaders"
+    },
+    {
+     "path": "result.stat",
+     "value": "turnovers"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.rows",
+     "value": 25,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      2544,
+      201566,
+      252,
+      201935,
+      304,
+      977,
+      467,
+      77449,
+      201142,
+      78318,
+      165,
+      121,
+      1718,
+      77142,
+      78310,
+      959,
+      1495,
+      787,
+      2548,
+      406,
+      201939,
+      2730,
+      947,
+      937,
+      305
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      5650,
+      5038,
+      4524,
+      4505,
+      4244,
+      4010,
+      4003,
+      3804,
+      3800,
+      3682,
+      3667,
+      3537,
+      3532,
+      3506,
+      3493,
+      3478,
+      3381,
+      3376,
+      3326,
+      3310,
+      3308,
+      3302,
+      3262,
+      3257,
+      3183
+     ]
+    },
+    {
+     "path": "result.rows[*].rank",
+     "value": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25
+     ]
+    }
+   ],
+   "notes": "Requested 40; Ask lists at most 25 (ADR 0014), so 25 rows are expected. Includes active players (LeBron James, James Harden, Kevin Durant, Stephen Curry): their totals move during a season; values as of checked_at (2026 offseason)."
+  },
+  {
+   "id": "unseen-three-career_stats-16",
+   "family": "career_stats",
+   "tags": [
+    "career_stats",
+    "leaders",
+    "default_limit"
+   ],
+   "question": "Who is the NBA's all-time leader in free throws made?",
+   "request": {
+    "intent": "career_stats",
+    "view": "leaders",
+    "player": null,
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "free_throws",
+     "aggregation": "total"
+    },
+    "limit": 10
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/alltimeleadersgrids?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TopX=250",
+     "read": "stats.nba alltimeleadersgrids (Ask's primary source), FTMLeaders top 10: 1. Karl Malone 9787, 2. LeBron James 8882, 3. James Harden 8627, 4. Moses Malone 8531, 5. Kobe Bryant 8378, 6. Kevin Durant 7704, 7. Oscar Robertson 7694, 8. Michael Jordan 7327, 9. Dirk Nowitzki 7240, 10. Jerry West 7160.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leaders/ft_career.html",
+     "read": "Basketball-Reference NBA career leaders table (cross-check), top 10: Karl Malone 9787, LeBron James 8882, James Harden 8627, Moses Malone 8531, Kobe Bryant 8378, Kevin Durant 7704, Oscar Robertson 7694, Michael Jordan 7327, Dirk Nowitzki 7240, Jerry West 7160.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.view",
+     "value": "leaders"
+    },
+    {
+     "path": "result.stat",
+     "value": "free_throws"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.rows",
+     "value": 10,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      252,
+      2544,
+      201935,
+      77449,
+      977,
+      201142,
+      600015,
+      893,
+      1717,
+      78497
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      9787,
+      8882,
+      8627,
+      8531,
+      8378,
+      7704,
+      7694,
+      7327,
+      7240,
+      7160
+     ]
+    },
+    {
+     "path": "result.rows[*].rank",
+     "value": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+     ]
+    }
+   ],
+   "notes": "Includes active players (LeBron James, James Harden, Kevin Durant): their totals move during a season; values as of checked_at (2026 offseason)."
+  },
+  {
+   "id": "unseen-three-career_stats-17",
+   "family": "career_stats",
+   "tags": [
+    "career_stats",
+    "player_totals",
+    "percentage"
+   ],
+   "question": "Steve Nash career three point percentage",
+   "request": {
+    "intent": "career_stats",
+    "view": "player_totals",
+    "player": {
+     "player_id": 959,
+     "name": "Steve Nash"
+    },
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "three_point_percentage",
+     "aggregation": "total"
+    },
+    "limit": 10
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/playercareerstats?PlayerID=959&PerMode=Totals&LeagueID=00",
+     "read": "stats.nba playercareerstats (Ask's primary source), CareerTotalsRegularSeason: GP 1217, PTS 17387, REB 3642, AST 10335, STL 899, BLK 102, FG3M 1685, FG3A 3939, FTM 3060, FTA 3384.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/players/n/nashst01.html",
+     "read": "Basketball-Reference (fallback source), Per Game and Totals tables, career row (18 Yrs): G 1217, fg3_pct .428 (1685/3939).",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.view",
+     "value": "player_totals"
+    },
+    {
+     "path": "result.player.player_id",
+     "value": 959
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "total"
+    },
+    {
+     "path": "result.games_played",
+     "value": 1217
+    },
+    {
+     "path": "result.values[0].stat",
+     "value": "three_point_percentage"
+    },
+    {
+     "path": "result.values[0].value",
+     "value": 0.428,
+     "match": "round",
+     "digits": 3
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-career_stats-18",
+   "family": "career_stats",
+   "tags": [
+    "career_stats",
+    "player_rank",
+    "nickname"
+   ],
+   "question": "Kobe's all-time rank in points",
+   "request": {
+    "intent": "career_stats",
+    "view": "player_rank",
+    "player": {
+     "player_id": 977,
+     "name": "Kobe Bryant"
+    },
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "points",
+     "aggregation": "total"
+    },
+    "limit": 10
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/alltimeleadersgrids?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TopX=250",
+     "read": "stats.nba alltimeleadersgrids (Ask's primary source), PTSLeaders: Kobe Bryant rank 4 with 33643; ahead: LeBron James 43440, Kareem Abdul-Jabbar 38387, Karl Malone 36928.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leaders/pts_career.html",
+     "read": "Basketball-Reference NBA career leaders table: Kobe Bryant #4 with 33643.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.view",
+     "value": "player_rank"
+    },
+    {
+     "path": "result.player.player_id",
+     "value": 977
+    },
+    {
+     "path": "result.rank",
+     "value": 4
+    },
+    {
+     "path": "result.values[0].value",
+     "value": 33643
+    },
+    {
+     "path": "result.stat",
+     "value": "points"
+    }
+   ],
+   "notes": "Active players sit near this rank; the rank can move during a season (value as of checked_at)."
+  },
+  {
+   "id": "unseen-three-season_leaders-19",
+   "family": "season_leaders",
+   "tags": [
+    "season_leaders"
+   ],
+   "question": "Who won the scoring title in 2013-14?",
+   "request": {
+    "intent": "season_leaders",
+    "season": "2013-14",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "points",
+     "aggregation": "per_game"
+    },
+    "limit": 10
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/leagueleaders?LeagueID=00&PerMode=PerGame&Scope=S&Season=2013-14&SeasonType=Regular+Season&StatCategory=PTS&ActiveFlag=",
+     "read": "stats.nba leagueleaders (Ask's primary source; NBA.com qualification) top 10: 1. Kevin Durant (OKC, 81 G) 32.0, 2. Carmelo Anthony (NYK, 77 G) 27.4, 3. LeBron James (MIA, 77 G) 27.1, 4. Kevin Love (MIN, 77 G) 26.1, 5. James Harden (HOU, 73 G) 25.4, 6. Blake Griffin (LAC, 80 G) 24.1, 7. Stephen Curry (GSW, 78 G) 24.0, 8. LaMarcus Aldridge (POR, 69 G) 23.2, 9. DeMarcus Cousins (SAC, 71 G) 22.7, 10. DeMar DeRozan (TOR, 79 G) 22.7.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_2014_leaders.html",
+     "read": "Basketball-Reference (cross-check), Points Per Game: Kevin Durant 32, Carmelo Anthony 27.4, LeBron James 27.1, Kevin Love 26.1, James Harden 25.4, Blake Griffin 24.1, Stephen Curry 24, LaMarcus Aldridge 23.2, DeMarcus Cousins 22.7, DeMar DeRozan 22.7.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "2013-14"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.stat",
+     "value": "points"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "per_game"
+    },
+    {
+     "path": "result.rows",
+     "value": 10,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      201142,
+      2546,
+      2544,
+      201567,
+      201935,
+      201933,
+      201939,
+      200746,
+      202326,
+      201942
+     ]
+    },
+    {
+     "path": "result.rows[*].rank",
+     "value": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      32.0,
+      27.4,
+      27.1,
+      26.1,
+      25.4,
+      24.1,
+      24.0,
+      23.2,
+      22.7,
+      22.7
+     ],
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.rows[0].games_played",
+     "value": 81
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612760
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-career_stats-19",
+   "family": "career_stats",
+   "tags": [
+    "career_stats",
+    "player_totals",
+    "totals",
+    "present_perfect"
+   ],
+   "question": "How many blocks has Victor Wembanyama recorded?",
+   "request": {
+    "intent": "career_stats",
+    "view": "player_totals",
+    "player": {
+     "player_id": 1641705,
+     "name": "Victor Wembanyama"
+    },
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "blocks",
+     "aggregation": "total"
+    },
+    "limit": 10
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/playercareerstats?PlayerID=1641705&PerMode=Totals&LeagueID=00",
+     "read": "stats.nba playercareerstats (Ask's primary source), CareerTotalsRegularSeason: GP 181, PTS 4238, REB 1997, AST 641, STL 206, BLK 627, FG3M 392, FG3A 1147, FTM 822, FTA 1006.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/players/w/wembavi01.html",
+     "read": "Basketball-Reference (fallback source), Per Game and Totals tables, career row (3 Yrs): G 181, BLK 627 total, 3.5 per game.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.view",
+     "value": "player_totals"
+    },
+    {
+     "path": "result.player.player_id",
+     "value": 1641705
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "total"
+    },
+    {
+     "path": "result.games_played",
+     "value": 181
+    },
+    {
+     "path": "result.values[0].stat",
+     "value": "blocks"
+    },
+    {
+     "path": "result.values[0].value",
+     "value": 627
+    },
+    {
+     "path": "result.alternate.values[0].value",
+     "value": 3.5,
+     "match": "round",
+     "digits": 1
+    }
+   ],
+   "notes": "Career total (owner decision 2026-10-01), not a single season. Wembanyama is active: 627 blocks in 181 games is the total through 2025-26 as of checked_at and will move once 2026-27 starts."
+  }
+ ]
+}

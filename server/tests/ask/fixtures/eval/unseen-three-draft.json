@@ -1,5 +1,5 @@
 {
-  "scope": "DRAFT unseen evaluation set three (ADR 0009), not frozen. Labels were authored from the production contract (docs/ask-contract.md, docs/ask-stage2.md, docs/ask-stage3.md, ADRs 0004, 0005, 0011-0014, server/ask/models) without running any interpreter, lookup or provider, and without reading evaluation results. It REQUIRES independent human label review before freezing; debatable labels are tagged 'debatable' and listed in docs/verification/ask-unseen-three-label-notes.md. Not yet exposed to any model run. 179 cases: accept 139, clarify 19, unsupported 21. Per family: game_search 22 (accept 17, clarify 3, unsupported 2); boxscore_stat 24 (accept 18, clarify 3, unsupported 3); playoff_series 19 (accept 16, clarify 2, unsupported 1); postseason_summary 20 (accept 18, clarify 1, unsupported 1); player_season_stats 25 (accept 18, clarify 4, unsupported 3); team_records 20 (accept 16, clarify 2, unsupported 2); season_leaders 23 (accept 18, clarify 2, unsupported 3); career_stats 26 (accept 18, clarify 2, unsupported 6).",
+  "scope": "DRAFT unseen evaluation set three (ADR 0009), not frozen. Labels were authored from the production contract (docs/ask-contract.md, docs/ask-stage2.md, docs/ask-stage3.md, ADRs 0004, 0005, 0011-0014, server/ask/models) without running any interpreter, lookup or provider, and without reading evaluation results. It REQUIRES independent human label review before freezing; debatable labels are tagged 'debatable' and listed in docs/verification/ask-unseen-three-label-notes.md. Not yet exposed to any model run. 179 cases: accept 140, clarify 18, unsupported 21. Per family: game_search 22 (accept 17, clarify 3, unsupported 2); boxscore_stat 24 (accept 18, clarify 3, unsupported 3); playoff_series 19 (accept 16, clarify 2, unsupported 1); postseason_summary 20 (accept 18, clarify 1, unsupported 1); player_season_stats 25 (accept 18, clarify 4, unsupported 3); team_records 20 (accept 16, clarify 2, unsupported 2); season_leaders 23 (accept 18, clarify 2, unsupported 3); career_stats 26 (accept 19, clarify 1, unsupported 6).",
   "cases": [
     {
       "id": "unseen-three-game_search-01",
@@ -66,7 +66,7 @@
         "venue",
         "older_season"
       ],
-      "label_rationale": "'played in <city>' is a venue filter (ADR 0011), not a Jazz team filter."
+      "label_rationale": "'played in <city>' is a venue filter (ADR 0011), not a Jazz team filter. Reviewed 2026-10-01: kept as a deliberate 'no games that day' test (the Jazz played at Sacramento on April 20, 1997, so no game was played in Salt Lake City)."
     },
     {
       "id": "unseen-three-game_search-03",
@@ -107,7 +107,7 @@
     },
     {
       "id": "unseen-three-game_search-04",
-      "question": "Games in Kansas City on March 3, 1983",
+      "question": "Games in Kansas City on March 4, 1983",
       "reference_time": "2026-09-30T12:00:00-04:00",
       "context": {},
       "expected": {
@@ -115,8 +115,8 @@
         "request": {
           "intent": "game_search",
           "dates": {
-            "start": "1983-03-03",
-            "end": "1983-03-03"
+            "start": "1983-03-04",
+            "end": "1983-03-04"
           },
           "teams": [],
           "location": {
@@ -141,7 +141,7 @@
         "former_city",
         "older_season"
       ],
-      "label_rationale": "Kansas City hosted Kings home games through 1984-85; venue, not a team."
+      "label_rationale": "Kansas City hosted Kings home games through 1984-85; venue, not a team. Reviewed 2026-10-01: date moved from March 3 to March 4, 1983 (Kings hosted Indiana)."
     },
     {
       "id": "unseen-three-game_search-05",
@@ -296,15 +296,15 @@
     {
       "id": "unseen-three-game_search-10",
       "question": "Games in Oklahoma City last week",
-      "reference_time": "2025-01-15T12:00:00-05:00",
+      "reference_time": "2025-01-08T12:00:00-05:00",
       "context": {},
       "expected": {
         "action": "accept",
         "request": {
           "intent": "game_search",
           "dates": {
-            "start": "2025-01-06",
-            "end": "2025-01-12"
+            "start": "2024-12-30",
+            "end": "2025-01-05"
           },
           "teams": [],
           "location": {
@@ -338,11 +338,11 @@
         "relative_date",
         "last_week"
       ],
-      "label_rationale": "Reference date Wednesday 2025-01-15; last week is the preceding Monday-Sunday, 2025-01-06..2025-01-12."
+      "label_rationale": "Reference date Wednesday 2025-01-08; last week is the preceding Monday-Sunday, 2024-12-30..2025-01-05. Reviewed 2026-10-01: reference date moved from 2025-01-15 so the week contains Thunder home games."
     },
     {
       "id": "unseen-three-game_search-11",
-      "question": "Warriros games on March 8, 2016",
+      "question": "Warriros games on March 7, 2016",
       "reference_time": "2026-09-30T12:00:00-04:00",
       "context": {},
       "expected": {
@@ -350,8 +350,8 @@
         "request": {
           "intent": "game_search",
           "dates": {
-            "start": "2016-03-08",
-            "end": "2016-03-08"
+            "start": "2016-03-07",
+            "end": "2016-03-07"
           },
           "teams": [
             {
@@ -370,11 +370,11 @@
         "game_search",
         "typo"
       ],
-      "label_rationale": "Misspelled team name; the only plausible reading is the Warriors. Reviewed 2026-09-30: accept, and a clarification also counts as correct."
+      "label_rationale": "Misspelled team name; the only plausible reading is the Warriors. Reviewed 2026-09-30: accept, and a clarification also counts as correct. Reviewed 2026-10-01: date moved from March 8 to March 7, 2016 (Warriors hosted Orlando)."
     },
     {
       "id": "unseen-three-game_search-12",
-      "question": "Pelicans games on 2/1/2019",
+      "question": "Pelicans games on 2/2/2019",
       "reference_time": "2026-09-30T12:00:00-04:00",
       "context": {},
       "expected": {
@@ -382,8 +382,8 @@
         "request": {
           "intent": "game_search",
           "dates": {
-            "start": "2019-02-01",
-            "end": "2019-02-01"
+            "start": "2019-02-02",
+            "end": "2019-02-02"
           },
           "teams": [
             {
@@ -399,7 +399,7 @@
         "game_search",
         "numeric_date"
       ],
-      "label_rationale": "US numeric date M/D/YYYY."
+      "label_rationale": "US numeric date M/D/YYYY. Reviewed 2026-10-01: date moved from 2/1/2019 to 2/2/2019 (Pelicans at San Antonio)."
     },
     {
       "id": "unseen-three-game_search-13",
@@ -1060,7 +1060,7 @@
     {
       "id": "unseen-three-boxscore_stat-15",
       "question": "Haliburton's dimes last night?",
-      "reference_time": "2024-01-11T09:00:00-05:00",
+      "reference_time": "2023-12-08T09:00:00-05:00",
       "context": {},
       "expected": {
         "action": "accept",
@@ -1072,7 +1072,7 @@
             "aggregation": "total"
           },
           "game": {
-            "date": "2024-01-10"
+            "date": "2023-12-07"
           },
           "player": {
             "player_id": 1630169,
@@ -1087,7 +1087,7 @@
         "relative_date",
         "surname_only"
       ],
-      "label_rationale": "Unique surname; last night = reference date minus one."
+      "label_rationale": "Unique surname; last night = reference date minus one. Reviewed 2026-10-01: reference date moved from 2024-01-11 to 2023-12-08, so last night is 2023-12-07 (Haliburton played)."
     },
     {
       "id": "unseen-three-boxscore_stat-16",
@@ -3643,7 +3643,7 @@
           "season_type": "regular_season",
           "stat": {
             "stat": "stat_line",
-            "aggregation": "total"
+            "aggregation": "per_game"
           },
           "limit": 10
         }
@@ -3653,7 +3653,7 @@
         "player_totals",
         "stat_line"
       ],
-      "label_rationale": "Full career line; career defaults to totals (ADR 0013)."
+      "label_rationale": "Full career line with no stated measure: per-game averages first, totals on the toggle (ADR 0013 amendment, owner decision 2026-10-01)."
     },
     {
       "id": "unseen-three-career_stats-08",
@@ -3967,7 +3967,7 @@
     },
     {
       "id": "unseen-three-boxscore_stat-19",
-      "question": "How many rebounds did Gasol grab on February 20, 2014?",
+      "question": "How many rebounds did Gasol grab on February 21, 2014?",
       "reference_time": "2026-09-30T12:00:00-04:00",
       "context": {},
       "expected": {
@@ -3980,7 +3980,7 @@
         "clarify",
         "ambiguous_surname"
       ],
-      "label_rationale": "Pau and Marc Gasol were both active."
+      "label_rationale": "Pau and Marc Gasol were both active. Reviewed 2026-10-01: date moved from February 20 to February 21, 2014, when both played."
     },
     {
       "id": "unseen-three-player_season_stats-19",
@@ -4182,16 +4182,29 @@
       "reference_time": "2026-09-30T12:00:00-04:00",
       "context": {},
       "expected": {
-        "action": "clarify",
-        "clarify_field": "intent",
-        "clarify_reason": "ambiguous"
+        "action": "accept",
+        "request": {
+          "intent": "career_stats",
+          "view": "player_totals",
+          "player": {
+            "player_id": 1641705,
+            "name": "Victor Wembanyama"
+          },
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "blocks",
+            "aggregation": "total"
+          },
+          "limit": 10
+        }
       },
       "tags": [
         "career_stats",
-        "clarify",
-        "career_or_season"
+        "player_totals",
+        "totals",
+        "present_perfect"
       ],
-      "label_rationale": "No career or season wording: career or one season (stage 3 'Career or one season?')."
+      "label_rationale": "Present-perfect 'has recorded' with no season means the career total (owner decision 2026-10-01; previously the 'career or one season?' clarification). 'How many' = totals."
     },
     {
       "id": "unseen-three-career_stats-20",

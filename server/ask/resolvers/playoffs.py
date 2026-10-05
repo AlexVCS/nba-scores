@@ -66,10 +66,18 @@ def contract_round(season: str, series: dict) -> PlayoffRound | None:
 
 
 def conference(series: dict) -> Conference | None:
+    """The East or West side of a conference or division round, else None.
+
+    Before 1970-71 the sides were the Eastern and Western Divisions. The label
+    is the side both teams actually played on that season (franchises have
+    switched sides), and is omitted when that is not known for both teams or
+    they differ, rather than guessed from where a franchise plays today.
+    """
     group = str(series.get("bracketGroupId") or "")
-    if series.get("isFinals"):
+    if series.get("isFinals") or not group.startswith(("east", "west")):
         return None
-    return "east" if group.startswith("east") else "west" if group.startswith("west") else None
+    side = playoffs_service.get_series_side(series)
+    return side.lower() if side in ("East", "West") else None
 
 
 def _payload(season: str) -> dict:
@@ -138,13 +146,14 @@ def _game_item(game: dict) -> GameResultItem:
     return GameResultItem(date=day, game=payload, links=item_links)
 
 
-def _select_series(
+def _matching_series(
     season: str,
     payload: dict,
     team_ids: Sequence[int],
     round_: PlayoffRound | None,
     conference_: Conference | None,
-) -> dict:
+) -> list[dict]:
+    """Every series matching the teams, round and conference; never empty."""
     ids = validate_team_ids(team_ids)
     if not ids and round_ is None:
         raise ValueError("A team or a round is required to choose a series")
@@ -159,19 +168,61 @@ def _select_series(
             "no_record", "no_matching_series",
             details={"season": season, "teamIds": list(ids), "round": round_, "conference": conference_},
         )
+    return matches
+
+
+def _several_series(season: str, team_ids: Sequence[int], matches: Sequence[dict]) -> AmbiguousError:
+    # Candidates reveal who reached the round, so they are protected.
+    return AmbiguousError(
+        "round" if len(set(team_ids)) == 2 else "teams",
+        "several_series",
+        spoiler=True,
+        options=[
+            {"series_key": series.get("seriesKey"), "round": contract_round(season, series),
+             "conference": conference(series), "teams": [team_ref(team) for team in series.get("teams") or []]}
+            for series in matches
+        ],
+    )
+
+
+def _select_series(
+    season: str,
+    payload: dict,
+    team_ids: Sequence[int],
+    round_: PlayoffRound | None,
+    conference_: Conference | None,
+) -> dict:
+    matches = _matching_series(season, payload, team_ids, round_, conference_)
     if len(matches) > 1:
-        # Candidates reveal who reached the round, so they are protected.
-        raise AmbiguousError(
-            "round" if len(ids) == 2 else "teams",
-            "several_series",
-            spoiler=True,
-            options=[
-                {"series_key": series.get("seriesKey"), "round": contract_round(season, series),
-                 "conference": conference(series), "teams": [team_ref(team) for team in series.get("teams") or []]}
-                for series in matches
-            ],
-        )
+        raise _several_series(season, team_ids, matches)
     return matches[0]
+
+
+def _series_with_game(
+    season: str, matches: Sequence[dict], game_number: int, team_ids: Sequence[int], player_id: int | None
+) -> dict:
+    """The one series, among several matching, whose Game ``game_number`` is meant.
+
+    Only one series reached that game, or the named player appeared in that
+    game of exactly one series. Otherwise the choice is left to the user: a
+    series is never guessed. A series still being played that has not reached
+    the game yet may still do so, so it keeps the choice open.
+    """
+    reached = [series for series in matches if len(_series_games(series)) >= game_number]
+    if not reached:
+        raise NotFoundError("no_record", "series_game_not_played", details={"season": season, "gameNumber": game_number})
+    may_reach = [series for series in matches if series not in reached and _winner(season, series) is None]
+    if len(reached) == 1 and not may_reach:
+        return reached[0]
+    if player_id is not None:
+        numbered = [_series_games(series)[game_number - 1] for series in reached]
+        days = [dt.date.fromisoformat(str(game["date"])[:10]) for game in numbered]
+        # One read of the player's game log across the candidate dates, not a boxscore per series.
+        played = data.player_game_ids_between(player_id, min(days), max(days))
+        appeared = [series for series, game in zip(reached, numbered) if str(game["gameId"]) in played]
+        if len(appeared) == 1:
+            return appeared[0]
+    raise _several_series(season, team_ids, reached + may_reach)
 
 
 def _summary(series: dict, winner: int | None, refs: dict[int, TeamRef]) -> str:
@@ -241,15 +292,19 @@ def find_playoff_game(
     team_ids: Sequence[int] = (),
     round_: PlayoffRound | None = None,
     conference_: Conference | None = None,
+    player_id: int | None = None,
 ) -> ResolvedGame:
     """Game ``game_number`` of one series, verified on its date's scoreboard.
 
-    A game the series never reached is ``no_record``.
+    A game the series never reached is ``no_record``. When several series match
+    (a round with no teams), the one series that reached the game is used, or
+    the one in whose game ``player_id`` appeared; see ``_series_with_game``.
     """
     if isinstance(game_number, bool) or not isinstance(game_number, int) or not 1 <= game_number <= 7:
         raise ValueError("Game number must be 1-7")
     payload = _payload(season)
-    series = _select_series(season, payload, team_ids, round_, conference_)
+    matches = _matching_series(season, payload, team_ids, round_, conference_)
+    series = matches[0] if len(matches) == 1 else _series_with_game(season, matches, game_number, team_ids, player_id)
     games = _series_games(series)
     if game_number > len(games):
         raise NotFoundError(

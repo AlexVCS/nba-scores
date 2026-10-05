@@ -50,9 +50,10 @@ TIER_GATES = {"accepted_field_precision_min": 0.98, "coverage_min": 0.30,
                         "jev": {"accept_min": CONFIG["jev_accept_min"]}},
               "provisional_rule": f"a pass is provisional when one more accepted-field error would fail precision "
                                   f"or coverage is below {PROVISIONAL_COVERAGE}; rerun with a larger set"}
-TIER_GATE_COMMAND = ("extend scripts/ask/tier_gate.py (it pins the unseen-two fixture and scores four families) to "
-                     "this manifest, journal and eight families; label field gold; then run "
-                     "`python scripts/ask/tier_gate.py score --labels LABELS --out OUT`")
+TIER_GATE_COMMAND = ("write the isolated labeler's template with `python scripts/ask/tier_gate.py template "
+                     "--fixture FIXTURE --out TEMPLATE`, have an isolated labeler fill it (field-label brief), "
+                     "then run `python scripts/ask/tier_gate.py score --report REPORT --labels LABELS --out OUT` "
+                     "(REPORT is this report; its manifest, fixture and journal are read from it)")
 ANSWER_CHECK = "scripts/ask/answer_check.py"
 DEFAULT_MIN_CASES = 150
 DEFAULT_MIN_PER_FAMILY = 10
@@ -205,7 +206,9 @@ class Recorder:
 
     def interpret(self, request):
         output = self.adapter.interpret(request)
-        self.records.append({"tier": self.tier, "output": output.model_dump(mode="json")})
+        # Candidates differ per attempt once lookup expands them; tier_gate.py scores the last attempt.
+        self.records.append({"tier": self.tier, "output": output.model_dump(mode="json"),
+                             "candidates": request.candidates.model_dump(mode="json")})
         return output
 
 

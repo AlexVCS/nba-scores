@@ -1,0 +1,5449 @@
+{
+ "draft": true,
+ "status": "DRAFT: needs human review before any gate relies on it. Values were read by an agent from the cited basketball-reference.com pages on 2026-10-01; a reviewer should re-read each source and set draft to false.",
+ "description": "Answer-accuracy gold for scripts/ask/answer_check.py --from-run, part A: the accept cases of server/tests/ask/fixtures/eval/unseen-three-draft.json whose intent is game_search, boxscore_stat, playoff_series or postseason_summary. Case ids and requests are the unseen set's. Team and player ids are the NBA ids for the franchise or player named on the source page. Round and conference follow the source's series name (Division rounds before 1971 map to conference_semifinals / conference_finals with east or west from the division name); postseason records are the sum of the listed series scores.",
+ "reference_time": "2026-09-30T12:00:00-04:00",
+ "cases": [
+  {
+   "id": "unseen-three-game_search-01",
+   "family": "game_search",
+   "tags": [
+    "game_search",
+    "nickname",
+    "date_range"
+   ],
+   "question": "What games did the Dubs play between November 2 and November 5, 2016?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "game_search",
+    "dates": {
+     "start": "2016-11-02",
+     "end": "2016-11-05"
+    },
+    "teams": [
+     {
+      "team_id": 1610612744,
+      "tricode": "GSW",
+      "name": "Golden State Warriors"
+     }
+    ],
+    "location": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/teams/GSW/2017_games.html",
+    "read": "2016-17 Golden State Warriors Schedule and Results: Tue Nov 1 at Portland; Thu Nov 3 home vs Oklahoma City W 122-96; Fri Nov 4 at Los Angeles Lakers L 97-117; no games on Nov 2 or Nov 5.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.total_games",
+     "value": 2
+    },
+    {
+     "path": "result.days",
+     "value": 2,
+     "match": "length"
+    },
+    {
+     "path": "result.days[0].date",
+     "value": "2016-11-03"
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.teamId",
+     "value": 1610612760
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.score",
+     "value": 96
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.teamId",
+     "value": 1610612744
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.score",
+     "value": 122
+    },
+    {
+     "path": "result.days[1].date",
+     "value": "2016-11-04"
+    },
+    {
+     "path": "result.days[1].games[0].game.awayTeam.teamId",
+     "value": 1610612744
+    },
+    {
+     "path": "result.days[1].games[0].game.awayTeam.score",
+     "value": 97
+    },
+    {
+     "path": "result.days[1].games[0].game.homeTeam.teamId",
+     "value": 1610612747
+    },
+    {
+     "path": "result.days[1].games[0].game.homeTeam.score",
+     "value": 117
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-game_search-02",
+   "family": "game_search",
+   "tags": [
+    "game_search",
+    "venue",
+    "older_season"
+   ],
+   "question": "Show NBA games played in Salt Lake City on April 20, 1997.",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "game_search",
+    "dates": {
+     "start": "1997-04-20",
+     "end": "1997-04-20"
+    },
+    "teams": [],
+    "location": {
+     "city": "Salt Lake City",
+     "homes": [
+      {
+       "team": {
+        "team_id": 1610612762,
+        "tricode": "UTA",
+        "name": "Utah Jazz"
+       },
+       "start": "1979-07-01",
+       "end": null
+      }
+     ]
+    }
+   },
+   "verified": true,
+   "expected_outcome": "not_found",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/?month=4&day=20&year=1997",
+    "read": "NBA Games Played on April 20, 1997: 8 games, hosted by BOS, CLE, IND, MIL, NJN, POR, SAC, SAS. Utah played at Sacramento (UTA 113, SAC 109), so no game was hosted in Salt Lake City.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "notice.code",
+     "value": "no_games"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-game_search-03",
+   "family": "game_search",
+   "tags": [
+    "game_search",
+    "venue",
+    "arena_name"
+   ],
+   "question": "Any games at Madison Square Garden on February 2, 2009?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "game_search",
+    "dates": {
+     "start": "2009-02-02",
+     "end": "2009-02-02"
+    },
+    "teams": [],
+    "location": {
+     "city": "Manhattan",
+     "homes": [
+      {
+       "team": {
+        "team_id": 1610612752,
+        "tricode": "NYK",
+        "name": "New York Knicks"
+       },
+       "start": "1946-07-01",
+       "end": null
+      }
+     ]
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/?month=2&day=2&year=2009",
+    "read": "NBA Games Played on February 2, 2009: 8 games; the only game hosted by New York (Madison Square Garden) is LA Lakers 126 at New York 117.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.total_games",
+     "value": 1
+    },
+    {
+     "path": "result.days",
+     "value": 1,
+     "match": "length"
+    },
+    {
+     "path": "result.days[0].date",
+     "value": "2009-02-02"
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.teamId",
+     "value": 1610612747
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.score",
+     "value": 126
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.teamId",
+     "value": 1610612752
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.score",
+     "value": 117
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-game_search-04",
+   "family": "game_search",
+   "tags": [
+    "game_search",
+    "venue",
+    "former_city",
+    "older_season"
+   ],
+   "question": "Games in Kansas City on March 4, 1983",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "game_search",
+    "dates": {
+     "start": "1983-03-04",
+     "end": "1983-03-04"
+    },
+    "teams": [],
+    "location": {
+     "city": "Kansas City",
+     "homes": [
+      {
+       "team": {
+        "team_id": 1610612758,
+        "tricode": "SAC",
+        "name": "Kansas City Kings"
+       },
+       "start": "1972-07-01",
+       "end": "1985-06-30"
+      }
+     ]
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/?month=3&day=4&year=1983",
+    "read": "NBA Games Played on March 4, 1983: 9 games; the only game hosted by Kansas City is Indiana 103 at Kansas City Kings 120.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.total_games",
+     "value": 1
+    },
+    {
+     "path": "result.days",
+     "value": 1,
+     "match": "length"
+    },
+    {
+     "path": "result.days[0].date",
+     "value": "1983-03-04"
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.teamId",
+     "value": 1610612754
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.score",
+     "value": 103
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.teamId",
+     "value": 1610612758
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.score",
+     "value": 120
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-game_search-05",
+   "family": "game_search",
+   "tags": [
+    "game_search",
+    "historical_franchise",
+    "older_season"
+   ],
+   "question": "Did the Buffalo Braves play on January 10, 1975?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "game_search",
+    "dates": {
+     "start": "1975-01-10",
+     "end": "1975-01-10"
+    },
+    "teams": [
+     {
+      "team_id": 1610612746,
+      "tricode": "BUF",
+      "name": "Buffalo Braves"
+     }
+    ],
+    "location": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/?month=1&day=10&year=1975",
+    "read": "NBA and ABA Games Played on January 10, 1975: Cleveland 100 at Buffalo 104 (the only Buffalo game).",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.total_games",
+     "value": 1
+    },
+    {
+     "path": "result.days",
+     "value": 1,
+     "match": "length"
+    },
+    {
+     "path": "result.days[0].date",
+     "value": "1975-01-10"
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.teamId",
+     "value": 1610612739
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.score",
+     "value": 100
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.teamId",
+     "value": 1610612746
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.score",
+     "value": 104
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-game_search-06",
+   "family": "game_search",
+   "tags": [
+    "game_search",
+    "relative_date",
+    "past_days"
+   ],
+   "question": "Rockets results from the last five days",
+   "reference_time": "2025-02-14T10:00:00-05:00",
+   "request": {
+    "intent": "game_search",
+    "dates": {
+     "start": "2025-02-10",
+     "end": "2025-02-14"
+    },
+    "teams": [
+     {
+      "team_id": 1610612745,
+      "tricode": "HOU",
+      "name": "Houston Rockets"
+     }
+    ],
+    "location": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/teams/HOU/2025_games.html",
+    "read": "2024-25 Houston Rockets Schedule and Results: Sun Feb 9 vs Toronto, then Wed Feb 12 home vs Phoenix W 119-111, Thu Feb 13 home vs Golden State L 98-105, next game Fri Feb 21. So two games in Feb 10-14, 2025.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.total_games",
+     "value": 2
+    },
+    {
+     "path": "result.days",
+     "value": 2,
+     "match": "length"
+    },
+    {
+     "path": "result.days[0].date",
+     "value": "2025-02-12"
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.teamId",
+     "value": 1610612756
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.score",
+     "value": 111
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.teamId",
+     "value": 1610612745
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.score",
+     "value": 119
+    },
+    {
+     "path": "result.days[1].date",
+     "value": "2025-02-13"
+    },
+    {
+     "path": "result.days[1].games[0].game.awayTeam.teamId",
+     "value": 1610612744
+    },
+    {
+     "path": "result.days[1].games[0].game.awayTeam.score",
+     "value": 105
+    },
+    {
+     "path": "result.days[1].games[0].game.homeTeam.teamId",
+     "value": 1610612745
+    },
+    {
+     "path": "result.days[1].games[0].game.homeTeam.score",
+     "value": 98
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-game_search-07",
+   "family": "game_search",
+   "tags": [
+    "game_search",
+    "relative_date",
+    "last_weekday"
+   ],
+   "question": "What was on the schedule last Tuesday for Memphis?",
+   "reference_time": "2024-11-21T12:00:00-05:00",
+   "request": {
+    "intent": "game_search",
+    "dates": {
+     "start": "2024-11-19",
+     "end": "2024-11-19"
+    },
+    "teams": [
+     {
+      "team_id": 1610612763,
+      "tricode": "MEM",
+      "name": "Memphis Grizzlies"
+     }
+    ],
+    "location": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/?month=11&day=19&year=2024",
+    "read": "NBA Games Played on November 19, 2024: 6 games; Memphis played once, Denver 122 at Memphis 110.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.total_games",
+     "value": 1
+    },
+    {
+     "path": "result.days",
+     "value": 1,
+     "match": "length"
+    },
+    {
+     "path": "result.days[0].date",
+     "value": "2024-11-19"
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.teamId",
+     "value": 1610612743
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.score",
+     "value": 122
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.teamId",
+     "value": 1610612763
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.score",
+     "value": 110
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-game_search-08",
+   "family": "game_search",
+   "tags": [
+    "game_search",
+    "relative_date",
+    "tonight"
+   ],
+   "question": "Is there anything on tonight involving the Spurs?",
+   "reference_time": "2025-01-08T15:00:00-05:00",
+   "request": {
+    "intent": "game_search",
+    "dates": {
+     "start": "2025-01-08",
+     "end": "2025-01-08"
+    },
+    "teams": [
+     {
+      "team_id": 1610612759,
+      "tricode": "SAS",
+      "name": "San Antonio Spurs"
+     }
+    ],
+    "location": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/?month=1&day=8&year=2025",
+    "read": "NBA Games Played on January 8, 2025: 8 games; San Antonio played once, San Antonio 105 at Milwaukee 121.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.total_games",
+     "value": 1
+    },
+    {
+     "path": "result.days",
+     "value": 1,
+     "match": "length"
+    },
+    {
+     "path": "result.days[0].date",
+     "value": "2025-01-08"
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.teamId",
+     "value": 1610612759
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.score",
+     "value": 105
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.teamId",
+     "value": 1610612749
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.score",
+     "value": 121
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-game_search-09",
+   "family": "game_search",
+   "tags": [
+    "game_search",
+    "relative_date",
+    "this_weekday"
+   ],
+   "question": "Is the Heat playing this Saturday?",
+   "reference_time": "2025-03-05T09:00:00-05:00",
+   "request": {
+    "intent": "game_search",
+    "dates": {
+     "start": "2025-03-08",
+     "end": "2025-03-08"
+    },
+    "teams": [
+     {
+      "team_id": 1610612748,
+      "tricode": "MIA",
+      "name": "Miami Heat"
+     }
+    ],
+    "location": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/?month=3&day=8&year=2025",
+    "read": "NBA Games Played on March 8, 2025: 8 games; Miami played once, Chicago 114 at Miami 109.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.total_games",
+     "value": 1
+    },
+    {
+     "path": "result.days",
+     "value": 1,
+     "match": "length"
+    },
+    {
+     "path": "result.days[0].date",
+     "value": "2025-03-08"
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.teamId",
+     "value": 1610612741
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.score",
+     "value": 114
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.teamId",
+     "value": 1610612748
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.score",
+     "value": 109
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-game_search-10",
+   "family": "game_search",
+   "tags": [
+    "game_search",
+    "venue",
+    "relative_date",
+    "last_week"
+   ],
+   "question": "Games in Oklahoma City last week",
+   "reference_time": "2025-01-08T12:00:00-05:00",
+   "request": {
+    "intent": "game_search",
+    "dates": {
+     "start": "2024-12-30",
+     "end": "2025-01-05"
+    },
+    "teams": [],
+    "location": {
+     "city": "Oklahoma City",
+     "homes": [
+      {
+       "team": {
+        "team_id": 1610612760,
+        "tricode": "OKC",
+        "name": "Oklahoma City Thunder"
+       },
+       "start": "2008-07-01",
+       "end": null
+      },
+      {
+       "team": {
+        "team_id": 1610612740,
+        "tricode": "NOP",
+        "name": "New Orleans/Oklahoma City Hornets"
+       },
+       "start": "2005-07-01",
+       "end": "2007-06-30"
+      }
+     ]
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/teams/OKC/2025_games.html",
+    "read": "2024-25 Oklahoma City Thunder Schedule and Results, home games from Dec 30, 2024 to Jan 5, 2025: Dec 31 vs Minnesota W 113-105; Jan 2 vs LA Clippers W 116-98; Jan 3 vs New York W 117-107; Jan 5 vs Boston W 105-92. (Dec 29 vs Memphis is outside the range.)",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.total_games",
+     "value": 4
+    },
+    {
+     "path": "result.days",
+     "value": 4,
+     "match": "length"
+    },
+    {
+     "path": "result.days[0].date",
+     "value": "2024-12-31"
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.teamId",
+     "value": 1610612750
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.score",
+     "value": 105
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.teamId",
+     "value": 1610612760
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.score",
+     "value": 113
+    },
+    {
+     "path": "result.days[1].date",
+     "value": "2025-01-02"
+    },
+    {
+     "path": "result.days[1].games[0].game.awayTeam.teamId",
+     "value": 1610612746
+    },
+    {
+     "path": "result.days[1].games[0].game.awayTeam.score",
+     "value": 98
+    },
+    {
+     "path": "result.days[1].games[0].game.homeTeam.teamId",
+     "value": 1610612760
+    },
+    {
+     "path": "result.days[1].games[0].game.homeTeam.score",
+     "value": 116
+    },
+    {
+     "path": "result.days[2].date",
+     "value": "2025-01-03"
+    },
+    {
+     "path": "result.days[2].games[0].game.awayTeam.teamId",
+     "value": 1610612752
+    },
+    {
+     "path": "result.days[2].games[0].game.awayTeam.score",
+     "value": 107
+    },
+    {
+     "path": "result.days[2].games[0].game.homeTeam.teamId",
+     "value": 1610612760
+    },
+    {
+     "path": "result.days[2].games[0].game.homeTeam.score",
+     "value": 117
+    },
+    {
+     "path": "result.days[3].date",
+     "value": "2025-01-05"
+    },
+    {
+     "path": "result.days[3].games[0].game.awayTeam.teamId",
+     "value": 1610612738
+    },
+    {
+     "path": "result.days[3].games[0].game.awayTeam.score",
+     "value": 92
+    },
+    {
+     "path": "result.days[3].games[0].game.homeTeam.teamId",
+     "value": 1610612760
+    },
+    {
+     "path": "result.days[3].games[0].game.homeTeam.score",
+     "value": 105
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-game_search-11",
+   "family": "game_search",
+   "tags": [
+    "game_search",
+    "typo"
+   ],
+   "question": "Warriros games on March 7, 2016",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "game_search",
+    "dates": {
+     "start": "2016-03-07",
+     "end": "2016-03-07"
+    },
+    "teams": [
+     {
+      "team_id": 1610612744,
+      "tricode": "GSW",
+      "name": "Golden State Warriors"
+     }
+    ],
+    "location": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/?month=3&day=7&year=2016",
+    "read": "NBA Games Played on March 7, 2016: 7 games; Golden State played once, Orlando 113 at Golden State 119.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.total_games",
+     "value": 1
+    },
+    {
+     "path": "result.days",
+     "value": 1,
+     "match": "length"
+    },
+    {
+     "path": "result.days[0].date",
+     "value": "2016-03-07"
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.teamId",
+     "value": 1610612753
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.score",
+     "value": 113
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.teamId",
+     "value": 1610612744
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.score",
+     "value": 119
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-game_search-12",
+   "family": "game_search",
+   "tags": [
+    "game_search",
+    "numeric_date"
+   ],
+   "question": "Pelicans games on 2/2/2019",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "game_search",
+    "dates": {
+     "start": "2019-02-02",
+     "end": "2019-02-02"
+    },
+    "teams": [
+     {
+      "team_id": 1610612740,
+      "tricode": "NOP",
+      "name": "New Orleans Pelicans"
+     }
+    ],
+    "location": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/?month=2&day=2&year=2019",
+    "read": "NBA Games Played on February 2, 2019: 12 games; New Orleans played once, New Orleans 108 at San Antonio 113.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.total_games",
+     "value": 1
+    },
+    {
+     "path": "result.days",
+     "value": 1,
+     "match": "length"
+    },
+    {
+     "path": "result.days[0].date",
+     "value": "2019-02-02"
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.teamId",
+     "value": 1610612740
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.score",
+     "value": 108
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.teamId",
+     "value": 1610612759
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.score",
+     "value": 113
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-game_search-13",
+   "family": "game_search",
+   "tags": [
+    "game_search",
+    "historical_franchise",
+    "older_season"
+   ],
+   "question": "Were the Bullets in action on January 5, 1985?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "game_search",
+    "dates": {
+     "start": "1985-01-05",
+     "end": "1985-01-05"
+    },
+    "teams": [
+     {
+      "team_id": 1610612764,
+      "tricode": "WSB",
+      "name": "Washington Bullets"
+     }
+    ],
+    "location": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/?month=1&day=5&year=1985",
+    "read": "NBA Games Played on January 5, 1985: 9 games; Washington Bullets played once, Detroit 121 at Washington 113.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.total_games",
+     "value": 1
+    },
+    {
+     "path": "result.days",
+     "value": 1,
+     "match": "length"
+    },
+    {
+     "path": "result.days[0].date",
+     "value": "1985-01-05"
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.teamId",
+     "value": 1610612765
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.score",
+     "value": 121
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.teamId",
+     "value": 1610612764
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.score",
+     "value": 113
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-game_search-14",
+   "family": "game_search",
+   "tags": [
+    "game_search",
+    "historical_franchise",
+    "older_season"
+   ],
+   "question": "Philadelphia Warriors games on March 2, 1962",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "game_search",
+    "dates": {
+     "start": "1962-03-02",
+     "end": "1962-03-02"
+    },
+    "teams": [
+     {
+      "team_id": 1610612744,
+      "tricode": "PHW",
+      "name": "Philadelphia Warriors"
+     }
+    ],
+    "location": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://www.basketball-reference.com/boxscores/?month=3&day=2&year=1962",
+     "read": "NBA Games Played on March 2, 1962: 3 games; the Warriors played once, Philadelphia 169, New York 147.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/boxscores/196203020NYK.html",
+     "read": "Title \"Philadelphia Warriors vs New York Knicks Box Score, March 2, 1962\" (a neutral-site \"vs\" game, so the page does not settle home and away; checks accept either order). Scorebox: Philadelphia Warriors 169, New York Knicks 147.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.total_games",
+     "value": 1
+    },
+    {
+     "path": "result.days[0].date",
+     "value": "1962-03-02"
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.teamId",
+     "value": [
+      1610612744,
+      1610612752
+     ],
+     "match": "one_of"
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.teamId",
+     "value": [
+      1610612744,
+      1610612752
+     ],
+     "match": "one_of"
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.score",
+     "value": [
+      169,
+      147
+     ],
+     "match": "one_of"
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.score",
+     "value": [
+      169,
+      147
+     ],
+     "match": "one_of"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-game_search-15",
+   "family": "game_search",
+   "tags": [
+    "game_search",
+    "venue",
+    "date_range"
+   ],
+   "question": "Show games from April 1 to April 3, 2015 in Chicago",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "game_search",
+    "dates": {
+     "start": "2015-04-01",
+     "end": "2015-04-03"
+    },
+    "teams": [],
+    "location": {
+     "city": "Chicago",
+     "homes": [
+      {
+       "team": {
+        "team_id": 1610612741,
+        "tricode": "CHI",
+        "name": "Chicago Bulls"
+       },
+       "start": "1966-07-01",
+       "end": null
+      },
+      {
+       "team": {
+        "team_id": 1610612764,
+        "tricode": "WAS",
+        "name": "Chicago Zephyrs"
+       },
+       "start": "1961-07-01",
+       "end": "1963-06-30"
+      }
+     ]
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/teams/CHI/2015_games.html",
+    "read": "2014-15 Chicago Bulls Schedule and Results: Wed Apr 1 at Milwaukee (away); Fri Apr 3 home vs Detroit W 88-82; next game Sun Apr 5 at Cleveland. One home game in Chicago in Apr 1-3, 2015.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.total_games",
+     "value": 1
+    },
+    {
+     "path": "result.days",
+     "value": 1,
+     "match": "length"
+    },
+    {
+     "path": "result.days[0].date",
+     "value": "2015-04-03"
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.teamId",
+     "value": 1610612765
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.score",
+     "value": 82
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.teamId",
+     "value": 1610612741
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.score",
+     "value": 88
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-game_search-16",
+   "family": "game_search",
+   "tags": [
+    "game_search",
+    "page_context",
+    "view_date"
+   ],
+   "question": "Show the Lakers games on the date I'm looking at",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "game_search",
+    "dates": {
+     "start": "2023-02-07",
+     "end": "2023-02-07"
+    },
+    "teams": [
+     {
+      "team_id": 1610612747,
+      "tricode": "LAL",
+      "name": "Los Angeles Lakers"
+     }
+    ],
+    "location": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/?month=2&day=7&year=2023",
+    "read": "NBA Games Played on February 7, 2023: 6 games; the Lakers played once, Oklahoma City 133 at LA Lakers 130.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.total_games",
+     "value": 1
+    },
+    {
+     "path": "result.days",
+     "value": 1,
+     "match": "length"
+    },
+    {
+     "path": "result.days[0].date",
+     "value": "2023-02-07"
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.teamId",
+     "value": 1610612760
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.score",
+     "value": 133
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.teamId",
+     "value": 1610612747
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.score",
+     "value": 130
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-game_search-17",
+   "family": "game_search",
+   "tags": [
+    "game_search",
+    "relative_date",
+    "timezone_boundary"
+   ],
+   "question": "Who is playing tonight?",
+   "reference_time": "2025-01-09T03:30:00Z",
+   "request": {
+    "intent": "game_search",
+    "dates": {
+     "start": "2025-01-08",
+     "end": "2025-01-08"
+    },
+    "teams": [],
+    "location": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/?month=1&day=8&year=2025",
+    "read": "NBA Games Played on January 8, 2025: 8 games (visitor-home): DET 113-BRK 98; OKC 122-CLE 129; LAC 103-DEN 126; CHI 113-IND 129; SAS 105-MIL 121; POR 119-NOP 100; TOR 98-NYK 112; WAS 103-PHI 109.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.total_games",
+     "value": 8
+    },
+    {
+     "path": "result.days",
+     "value": 1,
+     "match": "length"
+    },
+    {
+     "path": "result.days[0].date",
+     "value": "2025-01-08"
+    },
+    {
+     "path": "result.days[0].games[*].game.homeTeam.teamId",
+     "value": [
+      1610612751,
+      1610612739,
+      1610612743,
+      1610612754,
+      1610612749,
+      1610612740,
+      1610612752,
+      1610612755
+     ],
+     "match": "unordered"
+    },
+    {
+     "path": "result.days[0].games[*].game.awayTeam.teamId",
+     "value": [
+      1610612765,
+      1610612760,
+      1610612746,
+      1610612741,
+      1610612759,
+      1610612757,
+      1610612761,
+      1610612764
+     ],
+     "match": "unordered"
+    },
+    {
+     "path": "result.days[0].games[*].game.homeTeam.score",
+     "value": [
+      98,
+      129,
+      126,
+      129,
+      121,
+      100,
+      112,
+      109
+     ],
+     "match": "unordered"
+    },
+    {
+     "path": "result.days[0].games[*].game.awayTeam.score",
+     "value": [
+      113,
+      122,
+      103,
+      113,
+      105,
+      119,
+      98,
+      103
+     ],
+     "match": "unordered"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-boxscore_stat-01",
+   "family": "boxscore_stat",
+   "tags": [
+    "boxscore_stat",
+    "player_scope",
+    "opponent_named"
+   ],
+   "question": "How many points did Devin Booker drop on the Celtics on March 24, 2017?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "boxscore_stat",
+    "scope": "player",
+    "stat": {
+     "stat": "points",
+     "aggregation": "total"
+    },
+    "game": {
+     "date": "2017-03-24",
+     "teams": [
+      {
+       "team_id": 1610612738,
+       "tricode": "BOS",
+       "name": "Boston Celtics"
+      }
+     ]
+    },
+    "player": {
+     "player_id": 1626164,
+     "name": "Devin Booker"
+    },
+    "team": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/201703240BOS.html",
+    "read": "Phoenix Suns at Boston Celtics, March 24, 2017 (PHO 120, BOS 130). PHO basic box, Devin Booker: PTS 70 (FG 21-40, FT 24-26).",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.player_line.values[stat=points].value",
+     "value": 70
+    },
+    {
+     "path": "result.player_line.player.player_id",
+     "value": 1626164
+    },
+    {
+     "path": "result.player_line.team.team_id",
+     "value": 1610612756
+    },
+    {
+     "path": "result.game.date",
+     "value": "2017-03-24"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-boxscore_stat-02",
+   "family": "boxscore_stat",
+   "tags": [
+    "boxscore_stat",
+    "player_scope",
+    "first_name_only",
+    "possessive"
+   ],
+   "question": "Klay's field goals on January 23, 2015",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "boxscore_stat",
+    "scope": "player",
+    "stat": {
+     "stat": "field_goals",
+     "aggregation": "total"
+    },
+    "game": {
+     "date": "2015-01-23"
+    },
+    "player": {
+     "player_id": 202691,
+     "name": "Klay Thompson"
+    },
+    "team": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/201501230GSW.html",
+    "read": "Sacramento Kings at Golden State Warriors, January 23, 2015. GSW basic box, Klay Thompson: FG 16, FGA 25, PTS 52.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.player_line.values[stat=field_goals].value",
+     "value": 16
+    },
+    {
+     "path": "result.player_line.values[stat=field_goals].made",
+     "value": 16
+    },
+    {
+     "path": "result.player_line.values[stat=field_goals].attempted",
+     "value": 25
+    },
+    {
+     "path": "result.player_line.player.player_id",
+     "value": 202691
+    },
+    {
+     "path": "result.player_line.team.team_id",
+     "value": 1610612744
+    },
+    {
+     "path": "result.game.date",
+     "value": "2015-01-23"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-boxscore_stat-03",
+   "family": "boxscore_stat",
+   "tags": [
+    "boxscore_stat",
+    "player_scope",
+    "nickname",
+    "possessive"
+   ],
+   "question": "Dame's three-pointers made on February 26, 2023",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "boxscore_stat",
+    "scope": "player",
+    "stat": {
+     "stat": "three_pointers",
+     "aggregation": "total"
+    },
+    "game": {
+     "date": "2023-02-26"
+    },
+    "player": {
+     "player_id": 203081,
+     "name": "Damian Lillard"
+    },
+    "team": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/202302260POR.html",
+    "read": "Houston Rockets at Portland Trail Blazers, February 26, 2023. POR basic box, Damian Lillard: 3P 13, 3PA 22, PTS 71.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.player_line.values[stat=three_pointers].value",
+     "value": 13
+    },
+    {
+     "path": "result.player_line.values[stat=three_pointers].made",
+     "value": 13
+    },
+    {
+     "path": "result.player_line.values[stat=three_pointers].attempted",
+     "value": 22
+    },
+    {
+     "path": "result.player_line.player.player_id",
+     "value": 203081
+    },
+    {
+     "path": "result.player_line.team.team_id",
+     "value": 1610612757
+    },
+    {
+     "path": "result.game.date",
+     "value": "2023-02-26"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-boxscore_stat-04",
+   "family": "boxscore_stat",
+   "tags": [
+    "boxscore_stat",
+    "player_scope",
+    "nickname",
+    "stat_line",
+    "opponent_named"
+   ],
+   "question": "What was Luka's full stat line against Atlanta on January 26, 2024?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "boxscore_stat",
+    "scope": "player",
+    "stat": {
+     "stat": "stat_line",
+     "aggregation": "total"
+    },
+    "game": {
+     "date": "2024-01-26",
+     "teams": [
+      {
+       "team_id": 1610612737,
+       "tricode": "ATL",
+       "name": "Atlanta Hawks"
+      }
+     ]
+    },
+    "player": {
+     "player_id": 1629029,
+     "name": "Luka Dončić"
+    },
+    "team": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/202401260ATL.html",
+    "read": "Dallas Mavericks at Atlanta Hawks, January 26, 2024 (DAL 148, ATL 143). DAL basic box, Luka Doncic: MP 44:43, FG 25-33, 3P 8-13, FT 15-16, TRB 10, AST 7, STL 1, BLK 0, TOV 4, PF 1, PTS 73, +/- +13.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.player_line.values[stat=points].value",
+     "value": 73
+    },
+    {
+     "path": "result.player_line.values[stat=rebounds].value",
+     "value": 10
+    },
+    {
+     "path": "result.player_line.values[stat=assists].value",
+     "value": 7
+    },
+    {
+     "path": "result.player_line.values[stat=steals].value",
+     "value": 1
+    },
+    {
+     "path": "result.player_line.values[stat=blocks].value",
+     "value": 0
+    },
+    {
+     "path": "result.player_line.values[stat=turnovers].value",
+     "value": 4
+    },
+    {
+     "path": "result.player_line.values[stat=field_goals].made",
+     "value": 25
+    },
+    {
+     "path": "result.player_line.values[stat=field_goals].attempted",
+     "value": 33
+    },
+    {
+     "path": "result.player_line.values[stat=three_pointers].made",
+     "value": 8
+    },
+    {
+     "path": "result.player_line.values[stat=three_pointers].attempted",
+     "value": 13
+    },
+    {
+     "path": "result.player_line.values[stat=free_throws].made",
+     "value": 15
+    },
+    {
+     "path": "result.player_line.values[stat=free_throws].attempted",
+     "value": 16
+    },
+    {
+     "path": "result.player_line.values[stat=plus_minus].value",
+     "value": 13
+    },
+    {
+     "path": "result.player_line.values[stat=minutes].value",
+     "value": 44.7,
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.player_line.player.player_id",
+     "value": 1629029
+    },
+    {
+     "path": "result.player_line.team.team_id",
+     "value": 1610612742
+    },
+    {
+     "path": "result.game.date",
+     "value": "2024-01-26"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-boxscore_stat-05",
+   "family": "boxscore_stat",
+   "tags": [
+    "boxscore_stat",
+    "player_scope",
+    "nickname",
+    "older_season"
+   ],
+   "question": "Wilt's rebounds on March 2, 1962",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "boxscore_stat",
+    "scope": "player",
+    "stat": {
+     "stat": "rebounds",
+     "aggregation": "total"
+    },
+    "game": {
+     "date": "1962-03-02"
+    },
+    "player": {
+     "player_id": 76375,
+     "name": "Wilt Chamberlain"
+    },
+    "team": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/196203020NYK.html",
+    "read": "Philadelphia Warriors vs New York Knicks, March 2, 1962 (PHW 169, NYK 147). PHW basic box, Wilt Chamberlain: MP 48:00, FG 36-63, FT 28-32, TRB 25, AST 2, PTS 100.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.player_line.values[stat=rebounds].value",
+     "value": 25
+    },
+    {
+     "path": "result.player_line.player.player_id",
+     "value": 76375
+    },
+    {
+     "path": "result.player_line.team.team_id",
+     "value": 1610612744
+    },
+    {
+     "path": "result.game.date",
+     "value": "1962-03-02"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-boxscore_stat-06",
+   "family": "boxscore_stat",
+   "tags": [
+    "boxscore_stat",
+    "team_scope",
+    "playoff_game_number"
+   ],
+   "question": "How many offensive rebounds did the Spurs grab in Game 7 of the 2005 Finals?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "boxscore_stat",
+    "scope": "team",
+    "stat": {
+     "stat": "offensive_rebounds",
+     "aggregation": "total"
+    },
+    "game": {
+     "season": "2004-05",
+     "round": "finals",
+     "game_number": 7,
+     "teams": [
+      {
+       "team_id": 1610612759,
+       "tricode": "SAS",
+       "name": "San Antonio Spurs"
+      }
+     ]
+    },
+    "player": null,
+    "team": {
+     "team_id": 1610612759,
+     "tricode": "SAS",
+     "name": "San Antonio Spurs"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/200506230SAS.html",
+    "read": "2005 NBA Finals Game 7: Detroit Pistons at San Antonio Spurs, June 23, 2005 (DET 74, SAS 81). SAS Team Totals: ORB 8, DRB 30, TRB 38.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.team_lines[team.team_id=1610612759].values[stat=offensive_rebounds].value",
+     "value": 8
+    },
+    {
+     "path": "result.game.date",
+     "value": "2005-06-23"
+    },
+    {
+     "path": "result.game.away.team_id",
+     "value": 1610612765
+    },
+    {
+     "path": "result.game.home.team_id",
+     "value": 1610612759
+    },
+    {
+     "path": "result.game.final_score.away",
+     "value": 74
+    },
+    {
+     "path": "result.game.final_score.home",
+     "value": 81
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-boxscore_stat-07",
+   "family": "boxscore_stat",
+   "tags": [
+    "boxscore_stat",
+    "player_scope",
+    "nickname",
+    "playoff_game_number"
+   ],
+   "question": "Greek Freak blocks, Game 6, 2021 NBA Finals",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "boxscore_stat",
+    "scope": "player",
+    "stat": {
+     "stat": "blocks",
+     "aggregation": "total"
+    },
+    "game": {
+     "season": "2020-21",
+     "round": "finals",
+     "game_number": 6
+    },
+    "player": {
+     "player_id": 203507,
+     "name": "Giannis Antetokounmpo"
+    },
+    "team": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/202107200MIL.html",
+    "read": "2021 NBA Finals Game 6: Phoenix Suns at Milwaukee Bucks, July 20, 2021 (PHO 98, MIL 105). MIL basic box, Giannis Antetokounmpo: BLK 5, PTS 50.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.player_line.values[stat=blocks].value",
+     "value": 5
+    },
+    {
+     "path": "result.player_line.player.player_id",
+     "value": 203507
+    },
+    {
+     "path": "result.player_line.team.team_id",
+     "value": 1610612749
+    },
+    {
+     "path": "result.game.date",
+     "value": "2021-07-20"
+    },
+    {
+     "path": "result.game.away.team_id",
+     "value": 1610612756
+    },
+    {
+     "path": "result.game.home.team_id",
+     "value": 1610612749
+    },
+    {
+     "path": "result.game.final_score.away",
+     "value": 98
+    },
+    {
+     "path": "result.game.final_score.home",
+     "value": 105
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-boxscore_stat-08",
+   "family": "boxscore_stat",
+   "tags": [
+    "boxscore_stat",
+    "player_scope",
+    "playoff_game_number",
+    "conference_round"
+   ],
+   "question": "Kawhi Leonard points in Game 7 of the 2019 Eastern Conference semifinals",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "boxscore_stat",
+    "scope": "player",
+    "stat": {
+     "stat": "points",
+     "aggregation": "total"
+    },
+    "game": {
+     "season": "2018-19",
+     "round": "conference_semifinals",
+     "conference": "east",
+     "game_number": 7
+    },
+    "player": {
+     "player_id": 202695,
+     "name": "Kawhi Leonard"
+    },
+    "team": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://www.basketball-reference.com/boxscores/201905120TOR.html",
+     "read": "2019 NBA Eastern Conference Semifinals Game 7: Philadelphia 76ers at Toronto Raptors, May 12, 2019 (PHI 90, TOR 92). TOR basic box, Kawhi Leonard: PTS 41 (FG 16-39).",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/playoffs/NBA_2019.html",
+     "read": "Playoff Series table: Eastern Conference Semifinals were Milwaukee over Boston (4-1) and Toronto over Philadelphia (4-3), so only one 2019 East semifinal had a Game 7.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.player_line.values[stat=points].value",
+     "value": 41
+    },
+    {
+     "path": "result.player_line.player.player_id",
+     "value": 202695
+    },
+    {
+     "path": "result.player_line.team.team_id",
+     "value": 1610612761
+    },
+    {
+     "path": "result.game.date",
+     "value": "2019-05-12"
+    },
+    {
+     "path": "result.game.away.team_id",
+     "value": 1610612755
+    },
+    {
+     "path": "result.game.home.team_id",
+     "value": 1610612761
+    },
+    {
+     "path": "result.game.final_score.away",
+     "value": 90
+    },
+    {
+     "path": "result.game.final_score.home",
+     "value": 92
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-boxscore_stat-09",
+   "family": "boxscore_stat",
+   "tags": [
+    "boxscore_stat",
+    "leaders_scope",
+    "playoff_game_number"
+   ],
+   "question": "Top shot-blocker in Game 7 of the 2013 Finals",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "boxscore_stat",
+    "scope": "leaders",
+    "stat": {
+     "stat": "blocks",
+     "aggregation": "total"
+    },
+    "game": {
+     "season": "2012-13",
+     "round": "finals",
+     "game_number": 7
+    },
+    "player": null,
+    "team": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/201306200MIA.html",
+    "read": "2013 NBA Finals Game 7: San Antonio Spurs at Miami Heat, June 20, 2013 (SAS 88, MIA 95). BLK column: Dwyane Wade 2 is the game high; Leonard, Duncan, Green, Bosh and Andersen 1 each.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.leaders[rank=1].player.player_id",
+     "value": 2548
+    },
+    {
+     "path": "result.leaders[rank=1].value.value",
+     "value": 2
+    },
+    {
+     "path": "result.leaders[rank=1].team.team_id",
+     "value": 1610612748
+    },
+    {
+     "path": "result.game.date",
+     "value": "2013-06-20"
+    },
+    {
+     "path": "result.game.away.team_id",
+     "value": 1610612759
+    },
+    {
+     "path": "result.game.home.team_id",
+     "value": 1610612748
+    },
+    {
+     "path": "result.game.final_score.away",
+     "value": 88
+    },
+    {
+     "path": "result.game.final_score.home",
+     "value": 95
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-boxscore_stat-10",
+   "family": "boxscore_stat",
+   "tags": [
+    "boxscore_stat",
+    "leaders_scope",
+    "page_context"
+   ],
+   "question": "Who dished out the most assists here?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "boxscore_stat",
+    "scope": "leaders",
+    "stat": {
+     "stat": "assists",
+     "aggregation": "total"
+    },
+    "game": {
+     "game_id": "0042200405"
+    },
+    "player": null,
+    "team": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/202306120DEN.html",
+    "read": "2023 NBA Finals Game 5: Miami Heat at Denver Nuggets, June 12, 2023 (MIA 89, DEN 94). AST column: Jamal Murray 8 is the game high (next: Jimmy Butler 5).",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.leaders[rank=1].player.player_id",
+     "value": 1627750
+    },
+    {
+     "path": "result.leaders[rank=1].value.value",
+     "value": 8
+    },
+    {
+     "path": "result.leaders[rank=1].team.team_id",
+     "value": 1610612743
+    },
+    {
+     "path": "result.game.date",
+     "value": "2023-06-12"
+    },
+    {
+     "path": "result.game.away.team_id",
+     "value": 1610612748
+    },
+    {
+     "path": "result.game.home.team_id",
+     "value": 1610612743
+    },
+    {
+     "path": "result.game.final_score.away",
+     "value": 89
+    },
+    {
+     "path": "result.game.final_score.home",
+     "value": 94
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-boxscore_stat-11",
+   "family": "boxscore_stat",
+   "tags": [
+    "boxscore_stat",
+    "team_scope",
+    "percentage"
+   ],
+   "question": "Raptors three-point percentage on June 13, 2019",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "boxscore_stat",
+    "scope": "team",
+    "stat": {
+     "stat": "three_point_percentage",
+     "aggregation": "total"
+    },
+    "game": {
+     "date": "2019-06-13",
+     "teams": [
+      {
+       "team_id": 1610612761,
+       "tricode": "TOR",
+       "name": "Toronto Raptors"
+      }
+     ]
+    },
+    "player": null,
+    "team": {
+     "team_id": 1610612761,
+     "tricode": "TOR",
+     "name": "Toronto Raptors"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/201906130GSW.html",
+    "read": "2019 NBA Finals Game 6: Toronto Raptors at Golden State Warriors, June 13, 2019 (TOR 114, GSW 110). TOR Team Totals: 3P 13, 3PA 33, 3P% .394.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.team_lines[team.team_id=1610612761].values[stat=three_point_percentage].value",
+     "value": 0.394,
+     "match": "round",
+     "digits": 3
+    },
+    {
+     "path": "result.team_lines[team.team_id=1610612761].values[stat=three_point_percentage].made",
+     "value": 13
+    },
+    {
+     "path": "result.team_lines[team.team_id=1610612761].values[stat=three_point_percentage].attempted",
+     "value": 33
+    },
+    {
+     "path": "result.game.date",
+     "value": "2019-06-13"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-boxscore_stat-12",
+   "family": "boxscore_stat",
+   "tags": [
+    "boxscore_stat",
+    "team_scope",
+    "target_team",
+    "two_teams"
+   ],
+   "question": "How many free throws did the Bucks make against Phoenix on July 17, 2021?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "boxscore_stat",
+    "scope": "team",
+    "stat": {
+     "stat": "free_throws",
+     "aggregation": "total"
+    },
+    "game": {
+     "date": "2021-07-17",
+     "teams": [
+      {
+       "team_id": 1610612749,
+       "tricode": "MIL",
+       "name": "Milwaukee Bucks"
+      },
+      {
+       "team_id": 1610612756,
+       "tricode": "PHX",
+       "name": "Phoenix Suns"
+      }
+     ]
+    },
+    "player": null,
+    "team": {
+     "team_id": 1610612749,
+     "tricode": "MIL",
+     "name": "Milwaukee Bucks"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/202107170PHO.html",
+    "read": "2021 NBA Finals Game 5: Milwaukee Bucks at Phoenix Suns, July 17, 2021 (MIL 123, PHO 119). MIL Team Totals: FT 9, FTA 17.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.team_lines[team.team_id=1610612749].values[stat=free_throws].value",
+     "value": 9
+    },
+    {
+     "path": "result.team_lines[team.team_id=1610612749].values[stat=free_throws].made",
+     "value": 9
+    },
+    {
+     "path": "result.team_lines[team.team_id=1610612749].values[stat=free_throws].attempted",
+     "value": 17
+    },
+    {
+     "path": "result.game.date",
+     "value": "2021-07-17"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-boxscore_stat-13",
+   "family": "boxscore_stat",
+   "tags": [
+    "boxscore_stat",
+    "player_scope",
+    "first_name_only",
+    "possessive"
+   ],
+   "question": "What was Draymond's plus/minus on June 16, 2016?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "boxscore_stat",
+    "scope": "player",
+    "stat": {
+     "stat": "plus_minus",
+     "aggregation": "total"
+    },
+    "game": {
+     "date": "2016-06-16"
+    },
+    "player": {
+     "player_id": 203110,
+     "name": "Draymond Green"
+    },
+    "team": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/201606160CLE.html",
+    "read": "2016 NBA Finals Game 6: Golden State Warriors at Cleveland Cavaliers, June 16, 2016 (GSW 101, CLE 115). GSW basic box, Draymond Green: +/- -12.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.player_line.values[stat=plus_minus].value",
+     "value": -12
+    },
+    {
+     "path": "result.player_line.player.player_id",
+     "value": 203110
+    },
+    {
+     "path": "result.player_line.team.team_id",
+     "value": 1610612744
+    },
+    {
+     "path": "result.game.date",
+     "value": "2016-06-16"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-boxscore_stat-14",
+   "family": "boxscore_stat",
+   "tags": [
+    "boxscore_stat",
+    "player_scope",
+    "nickname",
+    "older_season"
+   ],
+   "question": "How many minutes did Larry Legend play on May 22, 1988?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "boxscore_stat",
+    "scope": "player",
+    "stat": {
+     "stat": "minutes",
+     "aggregation": "total"
+    },
+    "game": {
+     "date": "1988-05-22"
+    },
+    "player": {
+     "player_id": 1449,
+     "name": "Larry Bird"
+    },
+    "team": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/198805220BOS.html",
+    "read": "1988 NBA Eastern Conference Semifinals Game 7: Atlanta Hawks at Boston Celtics, May 22, 1988 (ATL 116, BOS 118). BOS basic box, Larry Bird: MP 47:00, PTS 34.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.player_line.values[stat=minutes].value",
+     "value": 47.0,
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.player_line.player.player_id",
+     "value": 1449
+    },
+    {
+     "path": "result.player_line.team.team_id",
+     "value": 1610612738
+    },
+    {
+     "path": "result.game.date",
+     "value": "1988-05-22"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-boxscore_stat-15",
+   "family": "boxscore_stat",
+   "tags": [
+    "boxscore_stat",
+    "player_scope",
+    "relative_date",
+    "surname_only"
+   ],
+   "question": "Haliburton's dimes last night?",
+   "reference_time": "2023-12-08T09:00:00-05:00",
+   "request": {
+    "intent": "boxscore_stat",
+    "scope": "player",
+    "stat": {
+     "stat": "assists",
+     "aggregation": "total"
+    },
+    "game": {
+     "date": "2023-12-07"
+    },
+    "player": {
+     "player_id": 1630169,
+     "name": "Tyrese Haliburton"
+    },
+    "team": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://www.basketball-reference.com/boxscores/202312070MIL.html",
+     "read": "Indiana Pacers at Milwaukee Bucks, December 7, 2023 (IND 128, MIL 119). IND basic box, Tyrese Haliburton: AST 15, PTS 27, TOV 0.",
+     "checked_at": "2026-10-01"
+    },
+    {
+     "url": "https://www.basketball-reference.com/boxscores/?month=12&day=7&year=2023",
+     "read": "NBA Games Played on December 7, 2023: 2 games (NOP at LAL, IND at MIL); Indiana played once.",
+     "checked_at": "2026-10-01"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.player_line.values[stat=assists].value",
+     "value": 15
+    },
+    {
+     "path": "result.player_line.player.player_id",
+     "value": 1630169
+    },
+    {
+     "path": "result.player_line.team.team_id",
+     "value": 1610612754
+    },
+    {
+     "path": "result.game.date",
+     "value": "2023-12-07"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-boxscore_stat-16",
+   "family": "boxscore_stat",
+   "tags": [
+    "boxscore_stat",
+    "player_scope",
+    "typo"
+   ],
+   "question": "Joel Embid's points on January 22, 2024",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "boxscore_stat",
+    "scope": "player",
+    "stat": {
+     "stat": "points",
+     "aggregation": "total"
+    },
+    "game": {
+     "date": "2024-01-22"
+    },
+    "player": {
+     "player_id": 203954,
+     "name": "Joel Embiid"
+    },
+    "team": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/202401220PHI.html",
+    "read": "San Antonio Spurs at Philadelphia 76ers, January 22, 2024 (SAS 123, PHI 133). PHI basic box, Joel Embiid: PTS 70.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.player_line.values[stat=points].value",
+     "value": 70
+    },
+    {
+     "path": "result.player_line.player.player_id",
+     "value": 203954
+    },
+    {
+     "path": "result.player_line.team.team_id",
+     "value": 1610612755
+    },
+    {
+     "path": "result.game.date",
+     "value": "2024-01-22"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-boxscore_stat-17",
+   "family": "boxscore_stat",
+   "tags": [
+    "boxscore_stat",
+    "player_scope",
+    "older_season"
+   ],
+   "question": "Moses Malone defensive rebounds on May 31, 1983",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "boxscore_stat",
+    "scope": "player",
+    "stat": {
+     "stat": "defensive_rebounds",
+     "aggregation": "total"
+    },
+    "game": {
+     "date": "1983-05-31"
+    },
+    "player": {
+     "player_id": 77449,
+     "name": "Moses Malone"
+    },
+    "team": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/198305310LAL.html",
+    "read": "1983 NBA Finals Game 4: Philadelphia 76ers at Los Angeles Lakers, May 31, 1983 (PHI 115, LAL 108). PHI basic box, Moses Malone: ORB 8, DRB 15, TRB 23, PTS 24.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.player_line.values[stat=defensive_rebounds].value",
+     "value": 15
+    },
+    {
+     "path": "result.player_line.player.player_id",
+     "value": 77449
+    },
+    {
+     "path": "result.player_line.team.team_id",
+     "value": 1610612755
+    },
+    {
+     "path": "result.game.date",
+     "value": "1983-05-31"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-boxscore_stat-18",
+   "family": "boxscore_stat",
+   "tags": [
+    "boxscore_stat",
+    "player_scope",
+    "percentage"
+   ],
+   "question": "Dwight Howard free throw percentage on January 12, 2012",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "boxscore_stat",
+    "scope": "player",
+    "stat": {
+     "stat": "free_throw_percentage",
+     "aggregation": "total"
+    },
+    "game": {
+     "date": "2012-01-12"
+    },
+    "player": {
+     "player_id": 2730,
+     "name": "Dwight Howard"
+    },
+    "team": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/boxscores/201201120GSW.html",
+    "read": "Orlando Magic at Golden State Warriors, January 12, 2012 (ORL 117, GSW 109). ORL basic box, Dwight Howard: FT 21, FTA 39, FT% .538.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.player_line.values[stat=free_throw_percentage].value",
+     "value": 0.538,
+     "match": "round",
+     "digits": 3
+    },
+    {
+     "path": "result.player_line.values[stat=free_throw_percentage].made",
+     "value": 21
+    },
+    {
+     "path": "result.player_line.values[stat=free_throw_percentage].attempted",
+     "value": 39
+    },
+    {
+     "path": "result.player_line.player.player_id",
+     "value": 2730
+    },
+    {
+     "path": "result.player_line.team.team_id",
+     "value": 1610612753
+    },
+    {
+     "path": "result.game.date",
+     "value": "2012-01-12"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-playoff_series-01",
+   "family": "playoff_series",
+   "tags": [
+    "playoff_series",
+    "nickname",
+    "two_teams",
+    "conference_round"
+   ],
+   "question": "Show the Bad Boys against the Bulls in the 1990 East finals.",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "playoff_series",
+    "season": "1989-90",
+    "teams": [
+     {
+      "team_id": 1610612765,
+      "tricode": "DET",
+      "name": "Detroit Pistons"
+     },
+     {
+      "team_id": 1610612741,
+      "tricode": "CHI",
+      "name": "Chicago Bulls"
+     }
+    ],
+    "round": "conference_finals",
+    "conference": "east"
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_1990.html",
+    "read": "1990 NBA Playoffs, Playoff Series table: Eastern Conference Finals: Detroit Pistons over Chicago Bulls (4-3).",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.round",
+     "value": "conference_finals"
+    },
+    {
+     "path": "result.conference",
+     "value": "east"
+    },
+    {
+     "path": "result.teams[team.team_id=1610612765].wins",
+     "value": 4
+    },
+    {
+     "path": "result.teams[team.team_id=1610612765].won_series",
+     "value": true
+    },
+    {
+     "path": "result.teams[team.team_id=1610612741].wins",
+     "value": 3
+    },
+    {
+     "path": "result.teams[team.team_id=1610612741].won_series",
+     "value": false
+    },
+    {
+     "path": "result.games_played",
+     "value": 7
+    },
+    {
+     "path": "result.status",
+     "value": "complete"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-playoff_series-02",
+   "family": "playoff_series",
+   "tags": [
+    "playoff_series",
+    "historical_franchise",
+    "two_teams",
+    "conference_round"
+   ],
+   "question": "Kansas City Kings vs Rockets, 1981 West finals",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "playoff_series",
+    "season": "1980-81",
+    "teams": [
+     {
+      "team_id": 1610612758,
+      "tricode": "KCK",
+      "name": "Kansas City Kings"
+     },
+     {
+      "team_id": 1610612745,
+      "tricode": "HOU",
+      "name": "Houston Rockets"
+     }
+    ],
+    "round": "conference_finals",
+    "conference": "west"
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_1981.html",
+    "read": "1981 NBA Playoffs, Playoff Series table: Western Conference Finals: Houston Rockets over Kansas City Kings (4-1).",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.round",
+     "value": "conference_finals"
+    },
+    {
+     "path": "result.conference",
+     "value": "west"
+    },
+    {
+     "path": "result.teams[team.team_id=1610612745].wins",
+     "value": 4
+    },
+    {
+     "path": "result.teams[team.team_id=1610612745].won_series",
+     "value": true
+    },
+    {
+     "path": "result.teams[team.team_id=1610612758].wins",
+     "value": 1
+    },
+    {
+     "path": "result.teams[team.team_id=1610612758].won_series",
+     "value": false
+    },
+    {
+     "path": "result.games_played",
+     "value": 5
+    },
+    {
+     "path": "result.status",
+     "value": "complete"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-playoff_series-03",
+   "family": "playoff_series",
+   "tags": [
+    "playoff_series",
+    "two_teams",
+    "finals_synonym"
+   ],
+   "question": "Thunder-Heat 2012 title matchup",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "playoff_series",
+    "season": "2011-12",
+    "teams": [
+     {
+      "team_id": 1610612760,
+      "tricode": "OKC",
+      "name": "Oklahoma City Thunder"
+     },
+     {
+      "team_id": 1610612748,
+      "tricode": "MIA",
+      "name": "Miami Heat"
+     }
+    ],
+    "round": "finals",
+    "conference": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_2012.html",
+    "read": "2012 NBA Playoffs, Playoff Series table: Finals: Miami Heat over Oklahoma City Thunder (4-1).",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.round",
+     "value": "finals"
+    },
+    {
+     "path": "result.conference",
+     "value": null
+    },
+    {
+     "path": "result.teams[team.team_id=1610612748].wins",
+     "value": 4
+    },
+    {
+     "path": "result.teams[team.team_id=1610612748].won_series",
+     "value": true
+    },
+    {
+     "path": "result.teams[team.team_id=1610612760].wins",
+     "value": 1
+    },
+    {
+     "path": "result.teams[team.team_id=1610612760].won_series",
+     "value": false
+    },
+    {
+     "path": "result.games_played",
+     "value": 5
+    },
+    {
+     "path": "result.status",
+     "value": "complete"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-playoff_series-04",
+   "family": "playoff_series",
+   "tags": [
+    "playoff_series",
+    "one_team_round",
+    "abbreviation"
+   ],
+   "question": "Which series did the Clippers play in the 2014 conference semis?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "playoff_series",
+    "season": "2013-14",
+    "teams": [
+     {
+      "team_id": 1610612746,
+      "tricode": "LAC",
+      "name": "Los Angeles Clippers"
+     }
+    ],
+    "round": "conference_semifinals",
+    "conference": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_2014.html",
+    "read": "2014 NBA Playoffs, Playoff Series table: Western Conference Semifinals: Oklahoma City Thunder over Los Angeles Clippers (4-2).",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.round",
+     "value": "conference_semifinals"
+    },
+    {
+     "path": "result.conference",
+     "value": "west"
+    },
+    {
+     "path": "result.teams[team.team_id=1610612760].wins",
+     "value": 4
+    },
+    {
+     "path": "result.teams[team.team_id=1610612760].won_series",
+     "value": true
+    },
+    {
+     "path": "result.teams[team.team_id=1610612746].wins",
+     "value": 2
+    },
+    {
+     "path": "result.teams[team.team_id=1610612746].won_series",
+     "value": false
+    },
+    {
+     "path": "result.games_played",
+     "value": 6
+    },
+    {
+     "path": "result.status",
+     "value": "complete"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-playoff_series-05",
+   "family": "playoff_series",
+   "tags": [
+    "playoff_series",
+    "one_team_round",
+    "round_synonym"
+   ],
+   "question": "Find Denver's opening-round series in the 2012 playoffs.",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "playoff_series",
+    "season": "2011-12",
+    "teams": [
+     {
+      "team_id": 1610612743,
+      "tricode": "DEN",
+      "name": "Denver Nuggets"
+     }
+    ],
+    "round": "first_round",
+    "conference": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_2012.html",
+    "read": "2012 NBA Playoffs, Playoff Series table: Western Conference First Round: Los Angeles Lakers over Denver Nuggets (4-3).",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.round",
+     "value": "first_round"
+    },
+    {
+     "path": "result.conference",
+     "value": "west"
+    },
+    {
+     "path": "result.teams[team.team_id=1610612747].wins",
+     "value": 4
+    },
+    {
+     "path": "result.teams[team.team_id=1610612747].won_series",
+     "value": true
+    },
+    {
+     "path": "result.teams[team.team_id=1610612743].wins",
+     "value": 3
+    },
+    {
+     "path": "result.teams[team.team_id=1610612743].won_series",
+     "value": false
+    },
+    {
+     "path": "result.games_played",
+     "value": 7
+    },
+    {
+     "path": "result.status",
+     "value": "complete"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-playoff_series-06",
+   "family": "playoff_series",
+   "tags": [
+    "playoff_series",
+    "page_context",
+    "conference_round"
+   ],
+   "question": "Open the West finals from the postseason I'm viewing.",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "playoff_series",
+    "season": "2018-19",
+    "teams": [],
+    "round": "conference_finals",
+    "conference": "west"
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_2019.html",
+    "read": "2019 NBA Playoffs, Playoff Series table: Western Conference Finals: Golden State Warriors over Portland Trail Blazers (4-0).",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.round",
+     "value": "conference_finals"
+    },
+    {
+     "path": "result.conference",
+     "value": "west"
+    },
+    {
+     "path": "result.teams[team.team_id=1610612744].wins",
+     "value": 4
+    },
+    {
+     "path": "result.teams[team.team_id=1610612744].won_series",
+     "value": true
+    },
+    {
+     "path": "result.teams[team.team_id=1610612757].wins",
+     "value": 0
+    },
+    {
+     "path": "result.teams[team.team_id=1610612757].won_series",
+     "value": false
+    },
+    {
+     "path": "result.games_played",
+     "value": 4
+    },
+    {
+     "path": "result.status",
+     "value": "complete"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-playoff_series-07",
+   "family": "playoff_series",
+   "tags": [
+    "playoff_series",
+    "two_teams",
+    "older_season"
+   ],
+   "question": "Celtics vs 76ers 1982 conference finals",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "playoff_series",
+    "season": "1981-82",
+    "teams": [
+     {
+      "team_id": 1610612738,
+      "tricode": "BOS",
+      "name": "Boston Celtics"
+     },
+     {
+      "team_id": 1610612755,
+      "tricode": "PHI",
+      "name": "Philadelphia 76ers"
+     }
+    ],
+    "round": "conference_finals",
+    "conference": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_1982.html",
+    "read": "1982 NBA Playoffs, Playoff Series table: Eastern Conference Finals: Philadelphia 76ers over Boston Celtics (4-3).",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.round",
+     "value": "conference_finals"
+    },
+    {
+     "path": "result.conference",
+     "value": "east"
+    },
+    {
+     "path": "result.teams[team.team_id=1610612755].wins",
+     "value": 4
+    },
+    {
+     "path": "result.teams[team.team_id=1610612755].won_series",
+     "value": true
+    },
+    {
+     "path": "result.teams[team.team_id=1610612738].wins",
+     "value": 3
+    },
+    {
+     "path": "result.teams[team.team_id=1610612738].won_series",
+     "value": false
+    },
+    {
+     "path": "result.games_played",
+     "value": 7
+    },
+    {
+     "path": "result.status",
+     "value": "complete"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-playoff_series-08",
+   "family": "playoff_series",
+   "tags": [
+    "playoff_series",
+    "nickname",
+    "two_teams"
+   ],
+   "question": "Sixers-Nets first round 2019",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "playoff_series",
+    "season": "2018-19",
+    "teams": [
+     {
+      "team_id": 1610612755,
+      "tricode": "PHI",
+      "name": "Philadelphia 76ers"
+     },
+     {
+      "team_id": 1610612751,
+      "tricode": "BKN",
+      "name": "Brooklyn Nets"
+     }
+    ],
+    "round": "first_round",
+    "conference": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_2019.html",
+    "read": "2019 NBA Playoffs, Playoff Series table: Eastern Conference First Round: Philadelphia 76ers over Brooklyn Nets (4-1).",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.round",
+     "value": "first_round"
+    },
+    {
+     "path": "result.conference",
+     "value": "east"
+    },
+    {
+     "path": "result.teams[team.team_id=1610612755].wins",
+     "value": 4
+    },
+    {
+     "path": "result.teams[team.team_id=1610612755].won_series",
+     "value": true
+    },
+    {
+     "path": "result.teams[team.team_id=1610612751].wins",
+     "value": 1
+    },
+    {
+     "path": "result.teams[team.team_id=1610612751].won_series",
+     "value": false
+    },
+    {
+     "path": "result.games_played",
+     "value": 5
+    },
+    {
+     "path": "result.status",
+     "value": "complete"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-playoff_series-09",
+   "family": "playoff_series",
+   "tags": [
+    "playoff_series",
+    "historical_franchise",
+    "older_season",
+    "two_teams"
+   ],
+   "question": "St. Louis Hawks vs Celtics 1958 Finals",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "playoff_series",
+    "season": "1957-58",
+    "teams": [
+     {
+      "team_id": 1610612737,
+      "tricode": "STL",
+      "name": "St. Louis Hawks"
+     },
+     {
+      "team_id": 1610612738,
+      "tricode": "BOS",
+      "name": "Boston Celtics"
+     }
+    ],
+    "round": "finals",
+    "conference": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_1958.html",
+    "read": "1958 NBA Playoffs, Playoff Series table: Finals: St. Louis Hawks over Boston Celtics (4-2).",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.round",
+     "value": "finals"
+    },
+    {
+     "path": "result.conference",
+     "value": null
+    },
+    {
+     "path": "result.teams[team.team_id=1610612737].wins",
+     "value": 4
+    },
+    {
+     "path": "result.teams[team.team_id=1610612737].won_series",
+     "value": true
+    },
+    {
+     "path": "result.teams[team.team_id=1610612738].wins",
+     "value": 2
+    },
+    {
+     "path": "result.teams[team.team_id=1610612738].won_series",
+     "value": false
+    },
+    {
+     "path": "result.games_played",
+     "value": 6
+    },
+    {
+     "path": "result.status",
+     "value": "complete"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-playoff_series-10",
+   "family": "playoff_series",
+   "tags": [
+    "playoff_series",
+    "two_teams"
+   ],
+   "question": "The series between the Jazz and Rockets in the 1997 playoffs",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "playoff_series",
+    "season": "1996-97",
+    "teams": [
+     {
+      "team_id": 1610612762,
+      "tricode": "UTA",
+      "name": "Utah Jazz"
+     },
+     {
+      "team_id": 1610612745,
+      "tricode": "HOU",
+      "name": "Houston Rockets"
+     }
+    ],
+    "round": null,
+    "conference": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_1997.html",
+    "read": "1997 NBA Playoffs, Playoff Series table: Western Conference Finals: Utah Jazz over Houston Rockets (4-2).",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.round",
+     "value": "conference_finals"
+    },
+    {
+     "path": "result.conference",
+     "value": "west"
+    },
+    {
+     "path": "result.teams[team.team_id=1610612762].wins",
+     "value": 4
+    },
+    {
+     "path": "result.teams[team.team_id=1610612762].won_series",
+     "value": true
+    },
+    {
+     "path": "result.teams[team.team_id=1610612745].wins",
+     "value": 2
+    },
+    {
+     "path": "result.teams[team.team_id=1610612745].won_series",
+     "value": false
+    },
+    {
+     "path": "result.games_played",
+     "value": 6
+    },
+    {
+     "path": "result.status",
+     "value": "complete"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-playoff_series-11",
+   "family": "playoff_series",
+   "tags": [
+    "playoff_series",
+    "two_teams",
+    "narrative_phrasing"
+   ],
+   "question": "The Warriors' 2007 upset of Dallas in the first round",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "playoff_series",
+    "season": "2006-07",
+    "teams": [
+     {
+      "team_id": 1610612744,
+      "tricode": "GSW",
+      "name": "Golden State Warriors"
+     },
+     {
+      "team_id": 1610612742,
+      "tricode": "DAL",
+      "name": "Dallas Mavericks"
+     }
+    ],
+    "round": "first_round",
+    "conference": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_2007.html",
+    "read": "2007 NBA Playoffs, Playoff Series table: Western Conference First Round: Golden State Warriors over Dallas Mavericks (4-2).",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.round",
+     "value": "first_round"
+    },
+    {
+     "path": "result.conference",
+     "value": "west"
+    },
+    {
+     "path": "result.teams[team.team_id=1610612744].wins",
+     "value": 4
+    },
+    {
+     "path": "result.teams[team.team_id=1610612744].won_series",
+     "value": true
+    },
+    {
+     "path": "result.teams[team.team_id=1610612742].wins",
+     "value": 2
+    },
+    {
+     "path": "result.teams[team.team_id=1610612742].won_series",
+     "value": false
+    },
+    {
+     "path": "result.games_played",
+     "value": 6
+    },
+    {
+     "path": "result.status",
+     "value": "complete"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-playoff_series-12",
+   "family": "playoff_series",
+   "tags": [
+    "playoff_series",
+    "one_team_round",
+    "finals_synonym"
+   ],
+   "question": "Who did the Mavericks face in the 2006 championship round?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "playoff_series",
+    "season": "2005-06",
+    "teams": [
+     {
+      "team_id": 1610612742,
+      "tricode": "DAL",
+      "name": "Dallas Mavericks"
+     }
+    ],
+    "round": "finals",
+    "conference": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_2006.html",
+    "read": "2006 NBA Playoffs, Playoff Series table: Finals: Miami Heat over Dallas Mavericks (4-2).",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.round",
+     "value": "finals"
+    },
+    {
+     "path": "result.conference",
+     "value": null
+    },
+    {
+     "path": "result.teams[team.team_id=1610612748].wins",
+     "value": 4
+    },
+    {
+     "path": "result.teams[team.team_id=1610612748].won_series",
+     "value": true
+    },
+    {
+     "path": "result.teams[team.team_id=1610612742].wins",
+     "value": 2
+    },
+    {
+     "path": "result.teams[team.team_id=1610612742].won_series",
+     "value": false
+    },
+    {
+     "path": "result.games_played",
+     "value": 6
+    },
+    {
+     "path": "result.status",
+     "value": "complete"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-playoff_series-13",
+   "family": "playoff_series",
+   "tags": [
+    "playoff_series",
+    "one_team_round",
+    "round_synonym"
+   ],
+   "question": "Pull up the Lakers' second-round series in 2023",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "playoff_series",
+    "season": "2022-23",
+    "teams": [
+     {
+      "team_id": 1610612747,
+      "tricode": "LAL",
+      "name": "Los Angeles Lakers"
+     }
+    ],
+    "round": "conference_semifinals",
+    "conference": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_2023.html",
+    "read": "2023 NBA Playoffs, Playoff Series table: Western Conference Semifinals: Los Angeles Lakers over Golden State Warriors (4-2).",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.round",
+     "value": "conference_semifinals"
+    },
+    {
+     "path": "result.conference",
+     "value": "west"
+    },
+    {
+     "path": "result.teams[team.team_id=1610612747].wins",
+     "value": 4
+    },
+    {
+     "path": "result.teams[team.team_id=1610612747].won_series",
+     "value": true
+    },
+    {
+     "path": "result.teams[team.team_id=1610612744].wins",
+     "value": 2
+    },
+    {
+     "path": "result.teams[team.team_id=1610612744].won_series",
+     "value": false
+    },
+    {
+     "path": "result.games_played",
+     "value": 6
+    },
+    {
+     "path": "result.status",
+     "value": "complete"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-playoff_series-14",
+   "family": "playoff_series",
+   "tags": [
+    "playoff_series",
+    "two_teams"
+   ],
+   "question": "Show me the Knicks' 1999 first-round series with Miami.",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "playoff_series",
+    "season": "1998-99",
+    "teams": [
+     {
+      "team_id": 1610612752,
+      "tricode": "NYK",
+      "name": "New York Knicks"
+     },
+     {
+      "team_id": 1610612748,
+      "tricode": "MIA",
+      "name": "Miami Heat"
+     }
+    ],
+    "round": "first_round",
+    "conference": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_1999.html",
+    "read": "1999 NBA Playoffs, Playoff Series table: Eastern Conference First Round: New York Knicks over Miami Heat (3-2).",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.round",
+     "value": "first_round"
+    },
+    {
+     "path": "result.conference",
+     "value": "east"
+    },
+    {
+     "path": "result.teams[team.team_id=1610612752].wins",
+     "value": 3
+    },
+    {
+     "path": "result.teams[team.team_id=1610612752].won_series",
+     "value": true
+    },
+    {
+     "path": "result.teams[team.team_id=1610612748].wins",
+     "value": 2
+    },
+    {
+     "path": "result.teams[team.team_id=1610612748].won_series",
+     "value": false
+    },
+    {
+     "path": "result.games_played",
+     "value": 5
+    },
+    {
+     "path": "result.status",
+     "value": "complete"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-playoff_series-15",
+   "family": "playoff_series",
+   "tags": [
+    "playoff_series",
+    "nickname",
+    "historical_franchise",
+    "conference_round"
+   ],
+   "question": "Rockets-Sonics 1996 West semifinals",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "playoff_series",
+    "season": "1995-96",
+    "teams": [
+     {
+      "team_id": 1610612745,
+      "tricode": "HOU",
+      "name": "Houston Rockets"
+     },
+     {
+      "team_id": 1610612760,
+      "tricode": "SEA",
+      "name": "Seattle SuperSonics"
+     }
+    ],
+    "round": "conference_semifinals",
+    "conference": "west"
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_1996.html",
+    "read": "1996 NBA Playoffs, Playoff Series table: Western Conference Semifinals: Seattle SuperSonics over Houston Rockets (4-0).",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.round",
+     "value": "conference_semifinals"
+    },
+    {
+     "path": "result.conference",
+     "value": "west"
+    },
+    {
+     "path": "result.teams[team.team_id=1610612760].wins",
+     "value": 4
+    },
+    {
+     "path": "result.teams[team.team_id=1610612760].won_series",
+     "value": true
+    },
+    {
+     "path": "result.teams[team.team_id=1610612745].wins",
+     "value": 0
+    },
+    {
+     "path": "result.teams[team.team_id=1610612745].won_series",
+     "value": false
+    },
+    {
+     "path": "result.games_played",
+     "value": 4
+    },
+    {
+     "path": "result.status",
+     "value": "complete"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-playoff_series-16",
+   "family": "playoff_series",
+   "tags": [
+    "playoff_series",
+    "historical_franchise",
+    "older_season",
+    "city_as_team"
+   ],
+   "question": "Open the 1971 Finals between Milwaukee and Baltimore",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "playoff_series",
+    "season": "1970-71",
+    "teams": [
+     {
+      "team_id": 1610612749,
+      "tricode": "MIL",
+      "name": "Milwaukee Bucks"
+     },
+     {
+      "team_id": 1610612764,
+      "tricode": "BAL",
+      "name": "Baltimore Bullets"
+     }
+    ],
+    "round": "finals",
+    "conference": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_1971.html",
+    "read": "1971 NBA Playoffs, Playoff Series table: Finals: Milwaukee Bucks over Baltimore Bullets (4-0).",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.round",
+     "value": "finals"
+    },
+    {
+     "path": "result.conference",
+     "value": null
+    },
+    {
+     "path": "result.teams[team.team_id=1610612749].wins",
+     "value": 4
+    },
+    {
+     "path": "result.teams[team.team_id=1610612749].won_series",
+     "value": true
+    },
+    {
+     "path": "result.teams[team.team_id=1610612764].wins",
+     "value": 0
+    },
+    {
+     "path": "result.teams[team.team_id=1610612764].won_series",
+     "value": false
+    },
+    {
+     "path": "result.games_played",
+     "value": 4
+    },
+    {
+     "path": "result.status",
+     "value": "complete"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-postseason_summary-01",
+   "family": "postseason_summary",
+   "tags": [
+    "postseason_summary",
+    "historical_franchise",
+    "older_season"
+   ],
+   "question": "How did the Baltimore Bullets fare in the 1971 postseason?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "postseason_summary",
+    "season": "1970-71",
+    "team": {
+     "team_id": 1610612764,
+     "tricode": "BAL",
+     "name": "Baltimore Bullets"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_1971.html",
+    "read": "1971 NBA Playoffs, Playoff Series table, every series involving BAL: Eastern Conference Semifinals: Baltimore Bullets over Philadelphia 76ers (4-3); Eastern Conference Finals: Baltimore Bullets over New York Knicks (4-3); Finals: Milwaukee Bucks over Baltimore Bullets (4-0). Record 8-10 is the sum of those series scores.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.finish",
+     "value": "lost_finals"
+    },
+    {
+     "path": "result.record.wins",
+     "value": 8
+    },
+    {
+     "path": "result.record.losses",
+     "value": 10
+    },
+    {
+     "path": "result.series_won",
+     "value": 2
+    },
+    {
+     "path": "result.rounds",
+     "value": 3,
+     "match": "length"
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].opponent.team_id",
+     "value": 1610612755
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].team_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].opponent_wins",
+     "value": 3
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].conference",
+     "value": "east"
+    },
+    {
+     "path": "result.rounds[round=conference_finals].opponent.team_id",
+     "value": 1610612752
+    },
+    {
+     "path": "result.rounds[round=conference_finals].team_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=conference_finals].opponent_wins",
+     "value": 3
+    },
+    {
+     "path": "result.rounds[round=conference_finals].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=conference_finals].conference",
+     "value": "east"
+    },
+    {
+     "path": "result.rounds[round=finals].opponent.team_id",
+     "value": 1610612749
+    },
+    {
+     "path": "result.rounds[round=finals].team_wins",
+     "value": 0
+    },
+    {
+     "path": "result.rounds[round=finals].opponent_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=finals].won",
+     "value": false
+    },
+    {
+     "path": "result.rounds[round=finals].conference",
+     "value": null
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-postseason_summary-02",
+   "family": "postseason_summary",
+   "tags": [
+    "postseason_summary",
+    "historical_franchise",
+    "older_season"
+   ],
+   "question": "Summarize the Buffalo Braves' 1976 playoffs.",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "postseason_summary",
+    "season": "1975-76",
+    "team": {
+     "team_id": 1610612746,
+     "tricode": "BUF",
+     "name": "Buffalo Braves"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_1976.html",
+    "read": "1976 NBA Playoffs, Playoff Series table, every series involving BUF: Eastern Conference First Round: Buffalo Braves over Philadelphia 76ers (2-1); Eastern Conference Semifinals: Boston Celtics over Buffalo Braves (4-2). Record 4-5 is the sum of those series scores.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.finish",
+     "value": "lost_conference_semifinals"
+    },
+    {
+     "path": "result.record.wins",
+     "value": 4
+    },
+    {
+     "path": "result.record.losses",
+     "value": 5
+    },
+    {
+     "path": "result.series_won",
+     "value": 1
+    },
+    {
+     "path": "result.rounds",
+     "value": 2,
+     "match": "length"
+    },
+    {
+     "path": "result.rounds[round=first_round].opponent.team_id",
+     "value": 1610612755
+    },
+    {
+     "path": "result.rounds[round=first_round].team_wins",
+     "value": 2
+    },
+    {
+     "path": "result.rounds[round=first_round].opponent_wins",
+     "value": 1
+    },
+    {
+     "path": "result.rounds[round=first_round].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=first_round].conference",
+     "value": "east"
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].opponent.team_id",
+     "value": 1610612738
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].team_wins",
+     "value": 2
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].opponent_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].won",
+     "value": false
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].conference",
+     "value": "east"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-postseason_summary-03",
+   "family": "postseason_summary",
+   "tags": [
+    "postseason_summary",
+    "historical_franchise",
+    "older_season"
+   ],
+   "question": "Give me the Philadelphia Warriors' 1956 postseason.",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "postseason_summary",
+    "season": "1955-56",
+    "team": {
+     "team_id": 1610612744,
+     "tricode": "PHW",
+     "name": "Philadelphia Warriors"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_1956.html",
+    "read": "1956 NBA Playoffs, Playoff Series table, every series involving PHW: Eastern Division Finals: Philadelphia Warriors over Syracuse Nationals (3-2); Finals: Philadelphia Warriors over Fort Wayne Pistons (4-1). Record 7-3 is the sum of those series scores.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.finish",
+     "value": "champion"
+    },
+    {
+     "path": "result.record.wins",
+     "value": 7
+    },
+    {
+     "path": "result.record.losses",
+     "value": 3
+    },
+    {
+     "path": "result.series_won",
+     "value": 2
+    },
+    {
+     "path": "result.rounds",
+     "value": 2,
+     "match": "length"
+    },
+    {
+     "path": "result.rounds[round=conference_finals].opponent.team_id",
+     "value": 1610612755
+    },
+    {
+     "path": "result.rounds[round=conference_finals].team_wins",
+     "value": 3
+    },
+    {
+     "path": "result.rounds[round=conference_finals].opponent_wins",
+     "value": 2
+    },
+    {
+     "path": "result.rounds[round=conference_finals].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=conference_finals].conference",
+     "value": "east"
+    },
+    {
+     "path": "result.rounds[round=finals].opponent.team_id",
+     "value": 1610612765
+    },
+    {
+     "path": "result.rounds[round=finals].team_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=finals].opponent_wins",
+     "value": 1
+    },
+    {
+     "path": "result.rounds[round=finals].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=finals].conference",
+     "value": null
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-postseason_summary-04",
+   "family": "postseason_summary",
+   "tags": [
+    "postseason_summary",
+    "historical_franchise",
+    "older_season"
+   ],
+   "question": "San Diego Rockets 1969 playoff recap",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "postseason_summary",
+    "season": "1968-69",
+    "team": {
+     "team_id": 1610612745,
+     "tricode": "SDR",
+     "name": "San Diego Rockets"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_1969.html",
+    "read": "1969 NBA Playoffs, Playoff Series table, every series involving SDR: Western Division Semifinals: Atlanta Hawks over San Diego Rockets (4-2). Record 2-4 is the sum of those series scores.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.finish",
+     "value": "lost_conference_semifinals"
+    },
+    {
+     "path": "result.record.wins",
+     "value": 2
+    },
+    {
+     "path": "result.record.losses",
+     "value": 4
+    },
+    {
+     "path": "result.series_won",
+     "value": 0
+    },
+    {
+     "path": "result.rounds",
+     "value": 1,
+     "match": "length"
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].opponent.team_id",
+     "value": 1610612737
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].team_wins",
+     "value": 2
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].opponent_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].won",
+     "value": false
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].conference",
+     "value": "west"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-postseason_summary-05",
+   "family": "postseason_summary",
+   "tags": [
+    "postseason_summary",
+    "league_wide"
+   ],
+   "question": "Recap every round of the 2017 playoffs.",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "postseason_summary",
+    "season": "2016-17",
+    "team": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_2017.html",
+    "read": "2017 NBA Playoffs, Playoff Series table (15 series): Finals: Golden State Warriors over Cleveland Cavaliers (4-1); Eastern Conference Finals: Cleveland Cavaliers over Boston Celtics (4-1); Western Conference Finals: Golden State Warriors over San Antonio Spurs (4-0); Eastern Conference Semifinals: Boston Celtics over Washington Wizards (4-3); Eastern Conference Semifinals: Cleveland Cavaliers over Toronto Raptors (4-0); Western Conference Semifinals: Golden State Warriors over Utah Jazz (4-0); Western Conference Semifinals: San Antonio Spurs over Houston Rockets (4-2); Eastern Conference First Round: Boston Celtics over Chicago Bulls (4-2); Eastern Conference First Round: Cleveland Cavaliers over Indiana Pacers (4-0); Eastern Conference First Round: Toronto Raptors over Milwaukee Bucks (4-2); Eastern Conference First Round: Washington Wizards over Atlanta Hawks (4-2); Western Conference First Round: Golden State Warriors over Portland Trail Blazers (4-0); Western Conference First Round: Houston Rockets over Oklahoma City Thunder (4-1); Western Conference First Round: San Antonio Spurs over Memphis Grizzlies (4-2); Western Conference First Round: Utah Jazz over Los Angeles Clippers (4-3).",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.champion.team_id",
+     "value": 1610612744
+    },
+    {
+     "path": "result.runner_up.team_id",
+     "value": 1610612739
+    },
+    {
+     "path": "result.series",
+     "value": 15,
+     "match": "length"
+    },
+    {
+     "path": "result.series[*].winner_team_id",
+     "value": [
+      1610612744,
+      1610612739,
+      1610612744,
+      1610612738,
+      1610612739,
+      1610612744,
+      1610612759,
+      1610612738,
+      1610612739,
+      1610612761,
+      1610612764,
+      1610612744,
+      1610612745,
+      1610612759,
+      1610612762
+     ],
+     "match": "unordered"
+    },
+    {
+     "path": "result.series[*].round",
+     "value": [
+      "finals",
+      "conference_finals",
+      "conference_finals",
+      "conference_semifinals",
+      "conference_semifinals",
+      "conference_semifinals",
+      "conference_semifinals",
+      "first_round",
+      "first_round",
+      "first_round",
+      "first_round",
+      "first_round",
+      "first_round",
+      "first_round",
+      "first_round"
+     ],
+     "match": "unordered"
+    },
+    {
+     "path": "result.series[*].conference",
+     "value": [
+      null,
+      "east",
+      "west",
+      "east",
+      "east",
+      "west",
+      "west",
+      "east",
+      "east",
+      "east",
+      "east",
+      "west",
+      "west",
+      "west",
+      "west"
+     ],
+     "match": "unordered"
+    },
+    {
+     "path": "result.series[round=finals].winner_team_id",
+     "value": 1610612744
+    },
+    {
+     "path": "result.series[round=finals].teams[team.team_id=1610612744].wins",
+     "value": 4
+    },
+    {
+     "path": "result.series[round=finals].teams[team.team_id=1610612739].wins",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-postseason_summary-06",
+   "family": "postseason_summary",
+   "tags": [
+    "postseason_summary",
+    "league_wide",
+    "older_season"
+   ],
+   "question": "Who won each round of the 1970 playoffs?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "postseason_summary",
+    "season": "1969-70",
+    "team": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_1970.html",
+    "read": "1970 NBA Playoffs, Playoff Series table (7 series): Finals: New York Knicks over Los Angeles Lakers (4-3); Eastern Division Finals: New York Knicks over Milwaukee Bucks (4-1); Western Division Finals: Los Angeles Lakers over Atlanta Hawks (4-0); Eastern Division Semifinals: Milwaukee Bucks over Philadelphia 76ers (4-1); Eastern Division Semifinals: New York Knicks over Baltimore Bullets (4-3); Western Division Semifinals: Atlanta Hawks over Chicago Bulls (4-1); Western Division Semifinals: Los Angeles Lakers over Phoenix Suns (4-3).",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.champion.team_id",
+     "value": 1610612752
+    },
+    {
+     "path": "result.runner_up.team_id",
+     "value": 1610612747
+    },
+    {
+     "path": "result.series",
+     "value": 7,
+     "match": "length"
+    },
+    {
+     "path": "result.series[*].winner_team_id",
+     "value": [
+      1610612752,
+      1610612752,
+      1610612747,
+      1610612749,
+      1610612752,
+      1610612737,
+      1610612747
+     ],
+     "match": "unordered"
+    },
+    {
+     "path": "result.series[*].round",
+     "value": [
+      "finals",
+      "conference_finals",
+      "conference_finals",
+      "conference_semifinals",
+      "conference_semifinals",
+      "conference_semifinals",
+      "conference_semifinals"
+     ],
+     "match": "unordered"
+    },
+    {
+     "path": "result.series[*].conference",
+     "value": [
+      null,
+      "east",
+      "west",
+      "east",
+      "east",
+      "west",
+      "west"
+     ],
+     "match": "unordered"
+    },
+    {
+     "path": "result.series[round=finals].winner_team_id",
+     "value": 1610612752
+    },
+    {
+     "path": "result.series[round=finals].teams[team.team_id=1610612752].wins",
+     "value": 4
+    },
+    {
+     "path": "result.series[round=finals].teams[team.team_id=1610612747].wins",
+     "value": 3
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-postseason_summary-07",
+   "family": "postseason_summary",
+   "tags": [
+    "postseason_summary",
+    "team"
+   ],
+   "question": "Give me the Magic's 1995 playoff run",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "postseason_summary",
+    "season": "1994-95",
+    "team": {
+     "team_id": 1610612753,
+     "tricode": "ORL",
+     "name": "Orlando Magic"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_1995.html",
+    "read": "1995 NBA Playoffs, Playoff Series table, every series involving ORL: Eastern Conference First Round: Orlando Magic over Boston Celtics (3-1); Eastern Conference Semifinals: Orlando Magic over Chicago Bulls (4-2); Eastern Conference Finals: Orlando Magic over Indiana Pacers (4-3); Finals: Houston Rockets over Orlando Magic (4-0). Record 11-10 is the sum of those series scores.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.finish",
+     "value": "lost_finals"
+    },
+    {
+     "path": "result.record.wins",
+     "value": 11
+    },
+    {
+     "path": "result.record.losses",
+     "value": 10
+    },
+    {
+     "path": "result.series_won",
+     "value": 3
+    },
+    {
+     "path": "result.rounds",
+     "value": 4,
+     "match": "length"
+    },
+    {
+     "path": "result.rounds[round=first_round].opponent.team_id",
+     "value": 1610612738
+    },
+    {
+     "path": "result.rounds[round=first_round].team_wins",
+     "value": 3
+    },
+    {
+     "path": "result.rounds[round=first_round].opponent_wins",
+     "value": 1
+    },
+    {
+     "path": "result.rounds[round=first_round].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=first_round].conference",
+     "value": "east"
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].opponent.team_id",
+     "value": 1610612741
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].team_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].opponent_wins",
+     "value": 2
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].conference",
+     "value": "east"
+    },
+    {
+     "path": "result.rounds[round=conference_finals].opponent.team_id",
+     "value": 1610612754
+    },
+    {
+     "path": "result.rounds[round=conference_finals].team_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=conference_finals].opponent_wins",
+     "value": 3
+    },
+    {
+     "path": "result.rounds[round=conference_finals].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=conference_finals].conference",
+     "value": "east"
+    },
+    {
+     "path": "result.rounds[round=finals].opponent.team_id",
+     "value": 1610612745
+    },
+    {
+     "path": "result.rounds[round=finals].team_wins",
+     "value": 0
+    },
+    {
+     "path": "result.rounds[round=finals].opponent_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=finals].won",
+     "value": false
+    },
+    {
+     "path": "result.rounds[round=finals].conference",
+     "value": null
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-postseason_summary-08",
+   "family": "postseason_summary",
+   "tags": [
+    "postseason_summary",
+    "page_context"
+   ],
+   "question": "Summarize Indiana's run for the playoff year I'm on.",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "postseason_summary",
+    "season": "2013-14",
+    "team": {
+     "team_id": 1610612754,
+     "tricode": "IND",
+     "name": "Indiana Pacers"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_2014.html",
+    "read": "2014 NBA Playoffs, Playoff Series table, every series involving IND: Eastern Conference First Round: Indiana Pacers over Atlanta Hawks (4-3); Eastern Conference Semifinals: Indiana Pacers over Washington Wizards (4-2); Eastern Conference Finals: Miami Heat over Indiana Pacers (4-2). Record 10-9 is the sum of those series scores.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.finish",
+     "value": "lost_conference_finals"
+    },
+    {
+     "path": "result.record.wins",
+     "value": 10
+    },
+    {
+     "path": "result.record.losses",
+     "value": 9
+    },
+    {
+     "path": "result.series_won",
+     "value": 2
+    },
+    {
+     "path": "result.rounds",
+     "value": 3,
+     "match": "length"
+    },
+    {
+     "path": "result.rounds[round=first_round].opponent.team_id",
+     "value": 1610612737
+    },
+    {
+     "path": "result.rounds[round=first_round].team_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=first_round].opponent_wins",
+     "value": 3
+    },
+    {
+     "path": "result.rounds[round=first_round].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=first_round].conference",
+     "value": "east"
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].opponent.team_id",
+     "value": 1610612764
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].team_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].opponent_wins",
+     "value": 2
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].conference",
+     "value": "east"
+    },
+    {
+     "path": "result.rounds[round=conference_finals].opponent.team_id",
+     "value": 1610612748
+    },
+    {
+     "path": "result.rounds[round=conference_finals].team_wins",
+     "value": 2
+    },
+    {
+     "path": "result.rounds[round=conference_finals].opponent_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=conference_finals].won",
+     "value": false
+    },
+    {
+     "path": "result.rounds[round=conference_finals].conference",
+     "value": "east"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-postseason_summary-09",
+   "family": "postseason_summary",
+   "tags": [
+    "postseason_summary",
+    "team",
+    "year_before_team"
+   ],
+   "question": "Walk me through the 2004 Pistons' postseason.",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "postseason_summary",
+    "season": "2003-04",
+    "team": {
+     "team_id": 1610612765,
+     "tricode": "DET",
+     "name": "Detroit Pistons"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_2004.html",
+    "read": "2004 NBA Playoffs, Playoff Series table, every series involving DET: Eastern Conference First Round: Detroit Pistons over Milwaukee Bucks (4-1); Eastern Conference Semifinals: Detroit Pistons over New Jersey Nets (4-3); Eastern Conference Finals: Detroit Pistons over Indiana Pacers (4-2); Finals: Detroit Pistons over Los Angeles Lakers (4-1). Record 16-7 is the sum of those series scores.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.finish",
+     "value": "champion"
+    },
+    {
+     "path": "result.record.wins",
+     "value": 16
+    },
+    {
+     "path": "result.record.losses",
+     "value": 7
+    },
+    {
+     "path": "result.series_won",
+     "value": 4
+    },
+    {
+     "path": "result.rounds",
+     "value": 4,
+     "match": "length"
+    },
+    {
+     "path": "result.rounds[round=first_round].opponent.team_id",
+     "value": 1610612749
+    },
+    {
+     "path": "result.rounds[round=first_round].team_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=first_round].opponent_wins",
+     "value": 1
+    },
+    {
+     "path": "result.rounds[round=first_round].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=first_round].conference",
+     "value": "east"
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].opponent.team_id",
+     "value": 1610612751
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].team_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].opponent_wins",
+     "value": 3
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].conference",
+     "value": "east"
+    },
+    {
+     "path": "result.rounds[round=conference_finals].opponent.team_id",
+     "value": 1610612754
+    },
+    {
+     "path": "result.rounds[round=conference_finals].team_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=conference_finals].opponent_wins",
+     "value": 2
+    },
+    {
+     "path": "result.rounds[round=conference_finals].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=conference_finals].conference",
+     "value": "east"
+    },
+    {
+     "path": "result.rounds[round=finals].opponent.team_id",
+     "value": 1610612747
+    },
+    {
+     "path": "result.rounds[round=finals].team_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=finals].opponent_wins",
+     "value": 1
+    },
+    {
+     "path": "result.rounds[round=finals].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=finals].conference",
+     "value": null
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-postseason_summary-10",
+   "family": "postseason_summary",
+   "tags": [
+    "postseason_summary",
+    "team"
+   ],
+   "question": "How did the Heat's 2006 playoff run go?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "postseason_summary",
+    "season": "2005-06",
+    "team": {
+     "team_id": 1610612748,
+     "tricode": "MIA",
+     "name": "Miami Heat"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_2006.html",
+    "read": "2006 NBA Playoffs, Playoff Series table, every series involving MIA: Eastern Conference First Round: Miami Heat over Chicago Bulls (4-2); Eastern Conference Semifinals: Miami Heat over New Jersey Nets (4-1); Eastern Conference Finals: Miami Heat over Detroit Pistons (4-2); Finals: Miami Heat over Dallas Mavericks (4-2). Record 16-7 is the sum of those series scores.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.finish",
+     "value": "champion"
+    },
+    {
+     "path": "result.record.wins",
+     "value": 16
+    },
+    {
+     "path": "result.record.losses",
+     "value": 7
+    },
+    {
+     "path": "result.series_won",
+     "value": 4
+    },
+    {
+     "path": "result.rounds",
+     "value": 4,
+     "match": "length"
+    },
+    {
+     "path": "result.rounds[round=first_round].opponent.team_id",
+     "value": 1610612741
+    },
+    {
+     "path": "result.rounds[round=first_round].team_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=first_round].opponent_wins",
+     "value": 2
+    },
+    {
+     "path": "result.rounds[round=first_round].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=first_round].conference",
+     "value": "east"
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].opponent.team_id",
+     "value": 1610612751
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].team_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].opponent_wins",
+     "value": 1
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].conference",
+     "value": "east"
+    },
+    {
+     "path": "result.rounds[round=conference_finals].opponent.team_id",
+     "value": 1610612765
+    },
+    {
+     "path": "result.rounds[round=conference_finals].team_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=conference_finals].opponent_wins",
+     "value": 2
+    },
+    {
+     "path": "result.rounds[round=conference_finals].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=conference_finals].conference",
+     "value": "east"
+    },
+    {
+     "path": "result.rounds[round=finals].opponent.team_id",
+     "value": 1610612742
+    },
+    {
+     "path": "result.rounds[round=finals].team_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=finals].opponent_wins",
+     "value": 2
+    },
+    {
+     "path": "result.rounds[round=finals].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=finals].conference",
+     "value": null
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-postseason_summary-11",
+   "family": "postseason_summary",
+   "tags": [
+    "postseason_summary",
+    "team"
+   ],
+   "question": "Recap the Hawks' 2021 postseason",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "postseason_summary",
+    "season": "2020-21",
+    "team": {
+     "team_id": 1610612737,
+     "tricode": "ATL",
+     "name": "Atlanta Hawks"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_2021.html",
+    "read": "2021 NBA Playoffs, Playoff Series table, every series involving ATL: Eastern Conference First Round: Atlanta Hawks over New York Knicks (4-1); Eastern Conference Semifinals: Atlanta Hawks over Philadelphia 76ers (4-3); Eastern Conference Finals: Milwaukee Bucks over Atlanta Hawks (4-2). Record 10-8 is the sum of those series scores.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.finish",
+     "value": "lost_conference_finals"
+    },
+    {
+     "path": "result.record.wins",
+     "value": 10
+    },
+    {
+     "path": "result.record.losses",
+     "value": 8
+    },
+    {
+     "path": "result.series_won",
+     "value": 2
+    },
+    {
+     "path": "result.rounds",
+     "value": 3,
+     "match": "length"
+    },
+    {
+     "path": "result.rounds[round=first_round].opponent.team_id",
+     "value": 1610612752
+    },
+    {
+     "path": "result.rounds[round=first_round].team_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=first_round].opponent_wins",
+     "value": 1
+    },
+    {
+     "path": "result.rounds[round=first_round].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=first_round].conference",
+     "value": "east"
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].opponent.team_id",
+     "value": 1610612755
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].team_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].opponent_wins",
+     "value": 3
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].conference",
+     "value": "east"
+    },
+    {
+     "path": "result.rounds[round=conference_finals].opponent.team_id",
+     "value": 1610612749
+    },
+    {
+     "path": "result.rounds[round=conference_finals].team_wins",
+     "value": 2
+    },
+    {
+     "path": "result.rounds[round=conference_finals].opponent_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=conference_finals].won",
+     "value": false
+    },
+    {
+     "path": "result.rounds[round=conference_finals].conference",
+     "value": "east"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-postseason_summary-12",
+   "family": "postseason_summary",
+   "tags": [
+    "postseason_summary",
+    "league_wide",
+    "older_season"
+   ],
+   "question": "Tell me how the 1984 NBA playoffs played out.",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "postseason_summary",
+    "season": "1983-84",
+    "team": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_1984.html",
+    "read": "1984 NBA Playoffs, Playoff Series table (15 series): Finals: Boston Celtics over Los Angeles Lakers (4-3); Eastern Conference Finals: Boston Celtics over Milwaukee Bucks (4-1); Western Conference Finals: Los Angeles Lakers over Phoenix Suns (4-2); Eastern Conference Semifinals: Boston Celtics over New York Knicks (4-3); Eastern Conference Semifinals: Milwaukee Bucks over New Jersey Nets (4-2); Western Conference Semifinals: Los Angeles Lakers over Dallas Mavericks (4-1); Western Conference Semifinals: Phoenix Suns over Utah Jazz (4-2); Eastern Conference First Round: Boston Celtics over Washington Bullets (3-1); Eastern Conference First Round: Milwaukee Bucks over Atlanta Hawks (3-2); Eastern Conference First Round: New Jersey Nets over Philadelphia 76ers (3-2); Eastern Conference First Round: New York Knicks over Detroit Pistons (3-2); Western Conference First Round: Dallas Mavericks over Seattle SuperSonics (3-2); Western Conference First Round: Los Angeles Lakers over Kansas City Kings (3-0); Western Conference First Round: Phoenix Suns over Portland Trail Blazers (3-2); Western Conference First Round: Utah Jazz over Denver Nuggets (3-2).",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.champion.team_id",
+     "value": 1610612738
+    },
+    {
+     "path": "result.runner_up.team_id",
+     "value": 1610612747
+    },
+    {
+     "path": "result.series",
+     "value": 15,
+     "match": "length"
+    },
+    {
+     "path": "result.series[*].winner_team_id",
+     "value": [
+      1610612738,
+      1610612738,
+      1610612747,
+      1610612738,
+      1610612749,
+      1610612747,
+      1610612756,
+      1610612738,
+      1610612749,
+      1610612751,
+      1610612752,
+      1610612742,
+      1610612747,
+      1610612756,
+      1610612762
+     ],
+     "match": "unordered"
+    },
+    {
+     "path": "result.series[*].round",
+     "value": [
+      "finals",
+      "conference_finals",
+      "conference_finals",
+      "conference_semifinals",
+      "conference_semifinals",
+      "conference_semifinals",
+      "conference_semifinals",
+      "first_round",
+      "first_round",
+      "first_round",
+      "first_round",
+      "first_round",
+      "first_round",
+      "first_round",
+      "first_round"
+     ],
+     "match": "unordered"
+    },
+    {
+     "path": "result.series[*].conference",
+     "value": [
+      null,
+      "east",
+      "west",
+      "east",
+      "east",
+      "west",
+      "west",
+      "east",
+      "east",
+      "east",
+      "east",
+      "west",
+      "west",
+      "west",
+      "west"
+     ],
+     "match": "unordered"
+    },
+    {
+     "path": "result.series[round=finals].winner_team_id",
+     "value": 1610612738
+    },
+    {
+     "path": "result.series[round=finals].teams[team.team_id=1610612738].wins",
+     "value": 4
+    },
+    {
+     "path": "result.series[round=finals].teams[team.team_id=1610612747].wins",
+     "value": 3
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-postseason_summary-13",
+   "family": "postseason_summary",
+   "tags": [
+    "postseason_summary",
+    "apostrophe_year"
+   ],
+   "question": "Utah Jazz '98 playoff run",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "postseason_summary",
+    "season": "1997-98",
+    "team": {
+     "team_id": 1610612762,
+     "tricode": "UTA",
+     "name": "Utah Jazz"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_1998.html",
+    "read": "1998 NBA Playoffs, Playoff Series table, every series involving UTA: Western Conference First Round: Utah Jazz over Houston Rockets (3-2); Western Conference Semifinals: Utah Jazz over San Antonio Spurs (4-1); Western Conference Finals: Utah Jazz over Los Angeles Lakers (4-0); Finals: Chicago Bulls over Utah Jazz (4-2). Record 13-7 is the sum of those series scores.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.finish",
+     "value": "lost_finals"
+    },
+    {
+     "path": "result.record.wins",
+     "value": 13
+    },
+    {
+     "path": "result.record.losses",
+     "value": 7
+    },
+    {
+     "path": "result.series_won",
+     "value": 3
+    },
+    {
+     "path": "result.rounds",
+     "value": 4,
+     "match": "length"
+    },
+    {
+     "path": "result.rounds[round=first_round].opponent.team_id",
+     "value": 1610612745
+    },
+    {
+     "path": "result.rounds[round=first_round].team_wins",
+     "value": 3
+    },
+    {
+     "path": "result.rounds[round=first_round].opponent_wins",
+     "value": 2
+    },
+    {
+     "path": "result.rounds[round=first_round].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=first_round].conference",
+     "value": "west"
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].opponent.team_id",
+     "value": 1610612759
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].team_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].opponent_wins",
+     "value": 1
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].conference",
+     "value": "west"
+    },
+    {
+     "path": "result.rounds[round=conference_finals].opponent.team_id",
+     "value": 1610612747
+    },
+    {
+     "path": "result.rounds[round=conference_finals].team_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=conference_finals].opponent_wins",
+     "value": 0
+    },
+    {
+     "path": "result.rounds[round=conference_finals].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=conference_finals].conference",
+     "value": "west"
+    },
+    {
+     "path": "result.rounds[round=finals].opponent.team_id",
+     "value": 1610612741
+    },
+    {
+     "path": "result.rounds[round=finals].team_wins",
+     "value": 2
+    },
+    {
+     "path": "result.rounds[round=finals].opponent_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=finals].won",
+     "value": false
+    },
+    {
+     "path": "result.rounds[round=finals].conference",
+     "value": null
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-postseason_summary-14",
+   "family": "postseason_summary",
+   "tags": [
+    "postseason_summary",
+    "nickname"
+   ],
+   "question": "Rip City's 1990 playoff run",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "postseason_summary",
+    "season": "1989-90",
+    "team": {
+     "team_id": 1610612757,
+     "tricode": "POR",
+     "name": "Portland Trail Blazers"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_1990.html",
+    "read": "1990 NBA Playoffs, Playoff Series table, every series involving POR: Western Conference First Round: Portland Trail Blazers over Dallas Mavericks (3-0); Western Conference Semifinals: Portland Trail Blazers over San Antonio Spurs (4-3); Western Conference Finals: Portland Trail Blazers over Phoenix Suns (4-2); Finals: Detroit Pistons over Portland Trail Blazers (4-1). Record 12-9 is the sum of those series scores.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.finish",
+     "value": "lost_finals"
+    },
+    {
+     "path": "result.record.wins",
+     "value": 12
+    },
+    {
+     "path": "result.record.losses",
+     "value": 9
+    },
+    {
+     "path": "result.series_won",
+     "value": 3
+    },
+    {
+     "path": "result.rounds",
+     "value": 4,
+     "match": "length"
+    },
+    {
+     "path": "result.rounds[round=first_round].opponent.team_id",
+     "value": 1610612742
+    },
+    {
+     "path": "result.rounds[round=first_round].team_wins",
+     "value": 3
+    },
+    {
+     "path": "result.rounds[round=first_round].opponent_wins",
+     "value": 0
+    },
+    {
+     "path": "result.rounds[round=first_round].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=first_round].conference",
+     "value": "west"
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].opponent.team_id",
+     "value": 1610612759
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].team_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].opponent_wins",
+     "value": 3
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].conference",
+     "value": "west"
+    },
+    {
+     "path": "result.rounds[round=conference_finals].opponent.team_id",
+     "value": 1610612756
+    },
+    {
+     "path": "result.rounds[round=conference_finals].team_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=conference_finals].opponent_wins",
+     "value": 2
+    },
+    {
+     "path": "result.rounds[round=conference_finals].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=conference_finals].conference",
+     "value": "west"
+    },
+    {
+     "path": "result.rounds[round=finals].opponent.team_id",
+     "value": 1610612765
+    },
+    {
+     "path": "result.rounds[round=finals].team_wins",
+     "value": 1
+    },
+    {
+     "path": "result.rounds[round=finals].opponent_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=finals].won",
+     "value": false
+    },
+    {
+     "path": "result.rounds[round=finals].conference",
+     "value": null
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-postseason_summary-15",
+   "family": "postseason_summary",
+   "tags": [
+    "postseason_summary",
+    "historical_franchise",
+    "older_season"
+   ],
+   "question": "Summarize the Cincinnati Royals' 1964 postseason.",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "postseason_summary",
+    "season": "1963-64",
+    "team": {
+     "team_id": 1610612758,
+     "tricode": "CIN",
+     "name": "Cincinnati Royals"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_1964.html",
+    "read": "1964 NBA Playoffs, Playoff Series table, every series involving CIN: Eastern Division Semifinals: Cincinnati Royals over Philadelphia 76ers (3-2); Eastern Division Finals: Boston Celtics over Cincinnati Royals (4-1). Record 4-6 is the sum of those series scores.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.finish",
+     "value": "lost_conference_finals"
+    },
+    {
+     "path": "result.record.wins",
+     "value": 4
+    },
+    {
+     "path": "result.record.losses",
+     "value": 6
+    },
+    {
+     "path": "result.series_won",
+     "value": 1
+    },
+    {
+     "path": "result.rounds",
+     "value": 2,
+     "match": "length"
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].opponent.team_id",
+     "value": 1610612755
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].team_wins",
+     "value": 3
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].opponent_wins",
+     "value": 2
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].conference",
+     "value": "east"
+    },
+    {
+     "path": "result.rounds[round=conference_finals].opponent.team_id",
+     "value": 1610612738
+    },
+    {
+     "path": "result.rounds[round=conference_finals].team_wins",
+     "value": 1
+    },
+    {
+     "path": "result.rounds[round=conference_finals].opponent_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=conference_finals].won",
+     "value": false
+    },
+    {
+     "path": "result.rounds[round=conference_finals].conference",
+     "value": "east"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-postseason_summary-16",
+   "family": "postseason_summary",
+   "tags": [
+    "postseason_summary",
+    "team",
+    "city_as_team"
+   ],
+   "question": "Brooklyn's 2021 playoff showing",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "postseason_summary",
+    "season": "2020-21",
+    "team": {
+     "team_id": 1610612751,
+     "tricode": "BKN",
+     "name": "Brooklyn Nets"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_2021.html",
+    "read": "2021 NBA Playoffs, Playoff Series table, every series involving BRK: Eastern Conference First Round: Brooklyn Nets over Boston Celtics (4-1); Eastern Conference Semifinals: Milwaukee Bucks over Brooklyn Nets (4-3). Record 7-5 is the sum of those series scores.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.finish",
+     "value": "lost_conference_semifinals"
+    },
+    {
+     "path": "result.record.wins",
+     "value": 7
+    },
+    {
+     "path": "result.record.losses",
+     "value": 5
+    },
+    {
+     "path": "result.series_won",
+     "value": 1
+    },
+    {
+     "path": "result.rounds",
+     "value": 2,
+     "match": "length"
+    },
+    {
+     "path": "result.rounds[round=first_round].opponent.team_id",
+     "value": 1610612738
+    },
+    {
+     "path": "result.rounds[round=first_round].team_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=first_round].opponent_wins",
+     "value": 1
+    },
+    {
+     "path": "result.rounds[round=first_round].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=first_round].conference",
+     "value": "east"
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].opponent.team_id",
+     "value": 1610612749
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].team_wins",
+     "value": 3
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].opponent_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].won",
+     "value": false
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].conference",
+     "value": "east"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-postseason_summary-17",
+   "family": "postseason_summary",
+   "tags": [
+    "postseason_summary",
+    "relative_season",
+    "abbreviation"
+   ],
+   "question": "Recap OKC's run in last season's playoffs.",
+   "reference_time": "2025-01-20T12:00:00-05:00",
+   "request": {
+    "intent": "postseason_summary",
+    "season": "2023-24",
+    "team": {
+     "team_id": 1610612760,
+     "tricode": "OKC",
+     "name": "Oklahoma City Thunder"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_2024.html",
+    "read": "2024 NBA Playoffs, Playoff Series table, every series involving OKC: Western Conference First Round: Oklahoma City Thunder over New Orleans Pelicans (4-0); Western Conference Semifinals: Dallas Mavericks over Oklahoma City Thunder (4-2). Record 6-4 is the sum of those series scores.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.finish",
+     "value": "lost_conference_semifinals"
+    },
+    {
+     "path": "result.record.wins",
+     "value": 6
+    },
+    {
+     "path": "result.record.losses",
+     "value": 4
+    },
+    {
+     "path": "result.series_won",
+     "value": 1
+    },
+    {
+     "path": "result.rounds",
+     "value": 2,
+     "match": "length"
+    },
+    {
+     "path": "result.rounds[round=first_round].opponent.team_id",
+     "value": 1610612740
+    },
+    {
+     "path": "result.rounds[round=first_round].team_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=first_round].opponent_wins",
+     "value": 0
+    },
+    {
+     "path": "result.rounds[round=first_round].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=first_round].conference",
+     "value": "west"
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].opponent.team_id",
+     "value": 1610612742
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].team_wins",
+     "value": 2
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].opponent_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].won",
+     "value": false
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].conference",
+     "value": "west"
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-postseason_summary-18",
+   "family": "postseason_summary",
+   "tags": [
+    "postseason_summary",
+    "record_wording",
+    "debatable"
+   ],
+   "question": "What was the Bucks' playoff record in 2018-19?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "postseason_summary",
+    "season": "2018-19",
+    "team": {
+     "team_id": 1610612749,
+     "tricode": "MIL",
+     "name": "Milwaukee Bucks"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": {
+    "url": "https://www.basketball-reference.com/playoffs/NBA_2019.html",
+    "read": "2019 NBA Playoffs, Playoff Series table, every series involving MIL: Eastern Conference First Round: Milwaukee Bucks over Detroit Pistons (4-0); Eastern Conference Semifinals: Milwaukee Bucks over Boston Celtics (4-1); Eastern Conference Finals: Toronto Raptors over Milwaukee Bucks (4-2). Record 10-5 is the sum of those series scores.",
+    "checked_at": "2026-10-01"
+   },
+   "checks": [
+    {
+     "path": "result.finish",
+     "value": "lost_conference_finals"
+    },
+    {
+     "path": "result.record.wins",
+     "value": 10
+    },
+    {
+     "path": "result.record.losses",
+     "value": 5
+    },
+    {
+     "path": "result.series_won",
+     "value": 2
+    },
+    {
+     "path": "result.rounds",
+     "value": 3,
+     "match": "length"
+    },
+    {
+     "path": "result.rounds[round=first_round].opponent.team_id",
+     "value": 1610612765
+    },
+    {
+     "path": "result.rounds[round=first_round].team_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=first_round].opponent_wins",
+     "value": 0
+    },
+    {
+     "path": "result.rounds[round=first_round].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=first_round].conference",
+     "value": "east"
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].opponent.team_id",
+     "value": 1610612738
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].team_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].opponent_wins",
+     "value": 1
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].conference",
+     "value": "east"
+    },
+    {
+     "path": "result.rounds[round=conference_finals].opponent.team_id",
+     "value": 1610612761
+    },
+    {
+     "path": "result.rounds[round=conference_finals].team_wins",
+     "value": 2
+    },
+    {
+     "path": "result.rounds[round=conference_finals].opponent_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=conference_finals].won",
+     "value": false
+    },
+    {
+     "path": "result.rounds[round=conference_finals].conference",
+     "value": "east"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,522 @@
+{
+ "schema": "ask-tier-gate-field-labels/2",
+ "fixture": "server/tests/ask/fixtures/eval/unseen-three-draft.json",
+ "fixture_sha256": "ca5f3730a6186cbf9356e4ca3dc87c1d6497e07a3c44a408f77fe6e56da7349b",
+ "labeler": {
+  "name": "",
+  "labeled_at": "",
+  "isolation_statement": ""
+ },
+ "fields_by_intent": {
+  "game_search": [
+   "teams",
+   "date",
+   "location"
+  ],
+  "boxscore_stat": [
+   "stat_scope",
+   "stat",
+   "aggregation",
+   "player",
+   "teams",
+   "target_team",
+   "date",
+   "season",
+   "round",
+   "game_number"
+  ],
+  "playoff_series": [
+   "teams",
+   "season",
+   "round"
+  ],
+  "postseason_summary": [
+   "teams",
+   "season"
+  ],
+  "player_season_stats": [
+   "stat",
+   "season_type",
+   "player",
+   "teams",
+   "season"
+  ],
+  "team_records": [
+   "season_type",
+   "standings_scope",
+   "teams",
+   "season"
+  ],
+  "season_leaders": [
+   "stat",
+   "season_type",
+   "season"
+  ],
+  "career_stats": [
+   "stat",
+   "season_type",
+   "player"
+  ],
+  "unsupported": []
+ },
+ "field_conditions": {
+  "target_team": "boxscore_stat only, and only when your stat_scope label is team; omit it otherwise"
+ },
+ "not_labeled": {
+  "aggregation": [
+   "career_stats",
+   "player_season_stats",
+   "season_leaders"
+  ],
+  "reason": "Python reads the measure from the question for these intents; it is not labeled here"
+ },
+ "cases": [
+  {
+   "case_id": "unseen-three-boxscore_stat-06",
+   "question": "How many offensive rebounds did the Spurs grab in Game 7 of the 2005 Finals?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "player",
+   "fixed_intent": "boxscore_stat",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {
+    "player": null
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-boxscore_stat-09",
+   "question": "Top shot-blocker in Game 7 of the 2013 Finals",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "player",
+   "fixed_intent": "boxscore_stat",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {
+    "player": null
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-boxscore_stat-10",
+   "question": "Who dished out the most assists here?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {
+    "route": "boxscore",
+    "game_id": "0042200405"
+   },
+   "label_scope": "player",
+   "fixed_intent": "boxscore_stat",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {
+    "player": null
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-boxscore_stat-11",
+   "question": "Raptors three-point percentage on June 13, 2019",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "player",
+   "fixed_intent": "boxscore_stat",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {
+    "player": null
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-boxscore_stat-12",
+   "question": "How many free throws did the Bucks make against Phoenix on July 17, 2021?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "player",
+   "fixed_intent": "boxscore_stat",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {
+    "player": null
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-boxscore_stat-19",
+   "question": "How many rebounds did Gasol grab on February 21, 2014?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-player_season_stats-19",
+   "question": "Ball's assists per game in 2021-22",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-season_leaders-18",
+   "question": "Steals leaders for 2016-17",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-player_season_stats-20",
+   "question": "Karl-Anthony Towns rebounds per game in 2018",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-team_records-17",
+   "question": "What was LA's record in 2012-13?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-team_records-18",
+   "question": "What's the Heat's win-loss record?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-game_search-18",
+   "question": "Show every Knicks game from March 1 to March 20, 2024.",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-game_search-19",
+   "question": "Were the Grizzlies playing on the 4th of April?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-boxscore_stat-20",
+   "question": "Who led Game 3 of the 2019 Finals?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-playoff_series-17",
+   "question": "Bring up a Spurs playoff series from 2014.",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-playoff_series-18",
+   "question": "Open a 2015 conference semifinal.",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-career_stats-20",
+   "question": "Show the all-time leaders",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-season_leaders-20",
+   "question": "Blocks per game leaders",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-boxscore_stat-21",
+   "question": "What did Antetokounmpo score on December 13, 2023?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-player_season_stats-21",
+   "question": "Malone's rebounds per game in 1985-86",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-player_season_stats-22",
+   "question": "Jayson Tatum stats this season",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-game_search-20",
+   "question": "Which games were played at the Barclays Center?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-postseason_summary-19",
+   "question": "Recap New York's 2021 postseason.",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-season_leaders-21",
+   "question": "Top Spurs scorer in 2013-14",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-season_leaders-22",
+   "question": "Which rookie averaged the most points in 2022-23?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-season_leaders-23",
+   "question": "Who led the league in personal fouls in 2018-19?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-career_stats-21",
+   "question": "Who has the most career triple-doubles?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-career_stats-22",
+   "question": "Top 10 in career rebounds per game, all-time",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-career_stats-23",
+   "question": "Where does Larry Bird rank all-time in career free throw percentage?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-career_stats-24",
+   "question": "Dirk's career high in rebounds",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-career_stats-25",
+   "question": "Who has scored the most points in Knicks franchise history?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-player_season_stats-23",
+   "question": "Jaylen Brown's points per game at home in 2023-24",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-player_season_stats-24",
+   "question": "Luka's true shooting percentage in 2022-23",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-team_records-19",
+   "question": "Pacers' record in overtime games 2019-20",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-team_records-20",
+   "question": "Which team had the best record in 2015-16?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-boxscore_stat-22",
+   "question": "Who had the highest field-goal percentage in the Heat-Spurs game on June 18, 2013?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-boxscore_stat-23",
+   "question": "What were Kawhi Leonard's per-game averages over the 2019 Finals?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-playoff_series-19",
+   "question": "Show every playoff series the Spurs won from 1999 to 2014.",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  },
+  {
+   "case_id": "unseen-three-player_season_stats-25",
+   "question": "LeBron's points per game in the regular season and playoffs combined, 2012-13",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "label_scope": "all",
+   "intent": null,
+   "scored_intent": null,
+   "fields": {},
+   "notes": ""
+  }
+ ]
+}

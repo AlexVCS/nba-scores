@@ -362,3 +362,141 @@ def test_no_model_components_are_ever_used(ac, tmp_path):
         pipe.lookup.lookup("q", None)
     with pytest.raises(AssertionError):
         pipe.policy.decide(None)
+
+
+# -- answers a release run accepted (--from-run) ----------------------------------------------
+
+
+def run_row(case_id, request, action="accept", guess=False):
+    """A release journal row (scripts/ask/release.py live) reduced to what the check reads."""
+    return {"case_id": case_id, "family": request["intent"] if request else "team_records",
+            "score": {"case_id": case_id, "action": action, "correct": action == "accept" and not guess,
+                      "guess": guess, "actual_request": request if action == "accept" else None},
+            "decision": {"action": action}, "tier_outputs": []}
+
+
+def journal(tmp_path, rows, name="run.jsonl"):
+    path = tmp_path / name
+    path.write_text("".join(json.dumps(r) + "\n" for r in rows))
+    return path
+
+
+def check_run(ac, tmp_path, rows, cases, *extra):
+    out = tmp_path / "answers.json"
+    run_path = journal(tmp_path, rows)
+    code = ac.main(["--from-run", str(run_path), "--gold", str(gold(tmp_path, cases)), "--out", str(out), *extra])
+    return code, json.loads(out.read_text())
+
+
+LABEL = record_case()["request"]
+
+
+def test_run_accepting_the_label_is_scored_against_gold(ac, tmp_path, monkeypatch):
+    calls = install(monkeypatch, lambda request: records_output())
+    # Team display fields are not compared, as in the release scorer.
+    shown = {**LABEL, "team": {**BOS, "name": "Celtics"}}
+    code, report = check_run(ac, tmp_path, [run_row("tr-bos", shown)], [record_case()])
+    assert code == 0 and report["passed"], report["cases"][0]["diffs"]
+    row = report["cases"][0]
+    assert row["status"] == "pass" and row["has_gold"] and row["request"]["team"]["name"] == "Celtics"
+    assert len(calls) == 1 and calls[0][0].team.name == "Celtics"  # the request the run produced is executed
+    assert report["accepted"] == 1 and report["summary"]["statuses"]["guess"] == 0
+    assert set(report["gate_results"]) == {"zero_wrong_answers", "zero_errors", "p95_latency", "zero_guesses", "all_verified"}
+
+
+def test_run_wrong_value_for_the_labeled_request_is_wrong(ac, tmp_path, monkeypatch):
+    install(monkeypatch, lambda request: records_output(wins=65, losses=17))
+    code, report = check_run(ac, tmp_path, [run_row("tr-bos", LABEL)], [record_case()])
+    assert code == 1 and report["cases"][0]["status"] == "wrong"
+    assert report["gate_results"]["zero_wrong_answers"] is False
+
+
+def test_run_request_that_differs_from_the_label_is_a_guess_and_what_it_showed_is_recorded(ac, tmp_path, monkeypatch):
+    install(monkeypatch, lambda request: records_output())
+    other = {**LABEL, "season": "2008-09"}
+    code, report = check_run(ac, tmp_path, [run_row("tr-bos", other)], [record_case()])
+    row = report["cases"][0]
+    assert code == 1 and not report["passed"]
+    # Even an answer whose values happen to equal gold is a guess for a wrong request.
+    assert row["status"] == "guess" and row["outcome"] == "answer"
+    assert row["response"]["result"]["rows"][0]["wins"] == 66 and row["request"]["season"] == "2008-09"
+    assert row["diffs"][0]["path"] == "request" and row["diffs"][0]["expected"]["season"] == "2007-08"
+    assert report["gate_results"]["zero_guesses"] is False
+
+
+def test_run_answers_without_verified_gold_are_unverified_and_never_pass(ac, tmp_path, monkeypatch):
+    install(monkeypatch, lambda request: records_output())
+    unverified = record_case(id="u", verified=False, expected_outcome=None, checks=None, source=None)
+    rows = [run_row("u", LABEL), run_row("no-gold", LABEL)]
+    code, report = check_run(ac, tmp_path, rows, [unverified])
+    assert [r["status"] for r in report["cases"]] == ["unverified", "unverified"]
+    assert [r["has_gold"] for r in report["cases"]] == [True, False]
+    assert code == 1 and not report["passed"] and report["gate_results"]["all_verified"] is False
+    # Without a label, the run's own guess flag still marks a wrong interpretation.
+    out = tmp_path / "flagged.json"
+    code = ac.main(["--from-run", str(journal(tmp_path, [run_row("no-gold", LABEL, guess=True)], "g.jsonl")),
+                    "--gold", str(gold(tmp_path, [unverified], "g.json")), "--out", str(out)])
+    assert code == 1 and json.loads(out.read_text())["cases"][0]["status"] == "guess"
+
+
+def test_run_cases_without_an_accept_are_not_executed(ac, tmp_path, monkeypatch):
+    calls = install(monkeypatch, lambda request: records_output())
+    rows = [run_row("tr-bos", LABEL), run_row("c", None, action="clarify"), run_row("u", None, action="unsupported"),
+            run_row("f", None, action="fail")]
+    code, report = check_run(ac, tmp_path, rows, [record_case(), record_case(id="c")])
+    assert code == 0 and len(calls) == 1
+    assert report["run_cases"] == 4 and report["accepted"] == 1 and report["gold_not_accepted"] == ["c"]
+    # A run that accepted nothing has checked nothing, so it does not pass.
+    out = tmp_path / "none.json"
+    assert ac.main(["--from-run", str(journal(tmp_path, rows[1:], "no-accepts.jsonl")), "--gold",
+                    str(gold(tmp_path, [record_case()], "n.json")), "--out", str(out)]) == 1
+    assert json.loads(out.read_text())["passed"] is False
+
+
+def test_run_errors_and_unavailable_follow_the_gold_rules(ac, tmp_path, monkeypatch):
+    def behavior(request):
+        if request.season == "2009-10":
+            raise UnavailableError("season_sources_unavailable")
+        raise RuntimeError("malformed source")
+    install(monkeypatch, behavior)
+    later = {**LABEL, "season": "2009-10"}
+    cases = [record_case(id="a"), record_case(id="b", request=later)]
+    code, report = check_run(ac, tmp_path, [run_row("a", LABEL), run_row("b", later)], cases)
+    assert [r["status"] for r in report["cases"]] == ["error", "no_answer"] and code == 1
+
+
+def test_run_cases_use_their_own_reference_time(ac, tmp_path, monkeypatch):
+    install(monkeypatch, lambda request: records_output())
+    case = record_case(reference_time="2025-02-10T12:00:00-05:00")
+    _, report = check_run(ac, tmp_path, [run_row("tr-bos", LABEL)], [case])
+    assert report["cases"][0]["response"]["interpretation"]["reference_time"].startswith("2025-02-10")
+
+
+def test_run_reads_a_release_report_and_records_its_identity(ac, tmp_path, monkeypatch):
+    install(monkeypatch, lambda request: records_output())
+    path = tmp_path / "release.json"
+    path.write_text(json.dumps({"frozen_commit": "abc", "cases_sha256": "def", "cases": [run_row("tr-bos", LABEL)]}))
+    out = tmp_path / "answers.json"
+    assert ac.main(["--from-run", str(path), "--gold", str(gold(tmp_path, [record_case()])), "--out", str(out)]) == 0
+    report = json.loads(out.read_text())
+    assert report["run_frozen_commit"] == "abc" and report["run_cases_sha256"] == "def" and len(report["run_sha256"]) == 64
+
+
+def test_run_outputs_are_exclusive_and_inputs_validated(ac, tmp_path, monkeypatch):
+    install(monkeypatch, lambda request: records_output())
+    code, _ = check_run(ac, tmp_path, [run_row("tr-bos", LABEL)], [record_case()])
+    assert code == 0
+    with pytest.raises(FileExistsError):
+        ac.main(["--from-run", str(tmp_path / "run.jsonl"), "--gold", str(tmp_path / "gold.json"),
+                 "--out", str(tmp_path / "answers.json")])
+    with pytest.raises(ValueError, match="duplicate"):
+        ac.main(["--from-run", str(journal(tmp_path, [run_row("a", LABEL)] * 2, "dup.jsonl")),
+                 "--gold", str(tmp_path / "gold.json"), "--out", str(tmp_path / "dup.json")])
+    with pytest.raises(ValueError, match="without a recorded request"):
+        bad = run_row("a", LABEL)
+        bad["score"]["actual_request"] = None
+        ac.main(["--from-run", str(journal(tmp_path, [bad], "bad.jsonl")),
+                 "--gold", str(tmp_path / "gold.json"), "--out", str(tmp_path / "bad.json")])
+    with pytest.raises(ValueError, match="unknown case"):
+        ac.main(["--from-run", str(tmp_path / "run.jsonl"), "--gold", str(tmp_path / "gold.json"),
+                 "--out", str(tmp_path / "x.json"), "--case", "zzz"])

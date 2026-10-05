@@ -91,8 +91,14 @@ def notice(code: str, *, reason: str = "", retry_after: int | None = None,
         message = "No games were played there on those dates."
     elif reason == "no_team_at_location":
         message = "No NBA team played home games there on those dates."
+    elif code == "no_record" and reason == "no_conferences_before_1970":
+        message = "Conferences began in 1970-71. Earlier seasons had divisions only; ask for league standings instead."
     elif code == "no_record" and reason == "recent_player_record_unverified":
         message = "No verified player record is available for that date yet."
+    elif code == "no_record" and reason == "no_player_game_log_before_1983":
+        message = "No boxscore from that date lists that player. Player records before 1983-84 are incomplete, so this does not mean he sat out."
+    elif code == "no_record" and reason in {"stat_not_recorded", "player_stats_not_recorded"}:
+        message = "That statistic was not recorded for this game."
     return Notice(code=code, title=title, message=message, retryable=code in {
         "service_unavailable", "interpreter_unavailable", "rate_limited"},
         retry_after_seconds=retry_after, unsupported_reason=unsupported_reason,

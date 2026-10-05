@@ -76,6 +76,39 @@ describe("Ask measure toggle", () => {
     expect(within(region).getByText(/Career per game · 1622 games played/)).toBeInTheDocument();
   });
 
+  it("shows a full career line per game first and switches to totals from the keyboard", async () => {
+    const user = userEvent.setup();
+    const line = (points: number, rebounds: number, display: (n: number) => string) => [
+      {stat: "points" as const, value: points, display: display(points), made: null, attempted: null},
+      {stat: "rebounds" as const, value: rebounds, display: display(rebounds), made: null, attempted: null},
+    ];
+    show(edit<AskCareerStatsResult>("answer-career-totals", result => ({
+      ...result, stat: "stat_line", aggregation: "per_game",
+      values: line(26.8, 7.4, n => n.toFixed(1)),
+      alternate: {aggregation: "total", values: line(43440, 12000, n => String(n))},
+    })));
+    const region = screen.getByRole("region", {name: "LeBron James career statistics"});
+    const group = within(region).getByRole("group", {name: "Show LeBron James career statistics per game or as totals"});
+    const perGame = within(group).getByRole("button", {name: "Per game"});
+    const totals = within(group).getByRole("button", {name: "Totals"});
+    expect(perGame).toHaveAttribute("aria-pressed", "true");
+    expect(within(region).getByText("26.8")).toBeInTheDocument();
+    expect(within(region).getByText("7.4")).toBeInTheDocument();
+    expect(within(region).getByText(/Career per game · 1622 games played/)).toBeInTheDocument();
+
+    totals.focus();
+    await user.keyboard("{Enter}");
+    expect(totals).toHaveAttribute("aria-pressed", "true");
+    expect(within(region).getByText("43440")).toBeInTheDocument();
+    expect(within(region).getByText("12000")).toBeInTheDocument();
+    expect(within(region).queryByText("26.8")).not.toBeInTheDocument();
+    expect(within(region).getByText(/Career totals · 1622 games played/)).toBeInTheDocument();
+
+    await user.keyboard("{Shift>}{Tab}{/Shift} ");
+    expect(perGame).toHaveAttribute("aria-pressed", "true");
+    expect(within(region).getByText("26.8")).toBeInTheDocument();
+  });
+
   it("says when a leaderboard shows the top 25 instead of a larger request", () => {
     show(edit<AskSeasonLeadersResult>("answer-season-leaders", result => ({
       ...result, limit_note: "Showing the top 25, the most Ask lists.",

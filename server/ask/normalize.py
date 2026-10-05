@@ -488,8 +488,11 @@ class Normalizer:
         players = self._optional(output, "player")
         player = self._value(candidates, players[0]).player if players else None
         stat = (self._optional(output, "stat") or ["stat_line" if player else ""])[0]
-        # Career questions default to totals (ADR 0013); averages must be explicit.
-        aggregation = "total" if stat in LEADER_PERCENTAGES else (self._optional(output, "aggregation") or ["total"])[0]
+        # No stated measure (ADR 0013 and its 2026-10-01 amendment): one career statistic
+        # and all-time lists are totals; a player's full career line shows per-game
+        # averages first, and the answer carries totals for the card's toggle.
+        default = "per_game" if player is not None and stat == "stat_line" else "total"
+        aggregation = "total" if stat in LEADER_PERCENTAGES else (self._optional(output, "aggregation") or [default])[0]
         season_type = (self._optional(output, "season_type") or ["regular_season"])[0]
         if player is not None:
             if stat == "plus_minus":

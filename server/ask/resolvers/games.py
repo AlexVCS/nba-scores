@@ -252,12 +252,18 @@ def find_player_game(player_id: int, day: dt.date) -> tuple[ResolvedGame, TeamRe
     recorded team against the date's scoreboard. The team comes only from that
     dated record, never from a current roster. No game that day is
     ``player_did_not_play``; it is never a reason to try another player.
+
+    Before 1983-84 there are no player game logs, so an empty log says nothing.
+    The player is looked up in that date's boxscores instead, and when he is
+    in none of them the answer is ``no_record``, not a claim he sat out.
     """
     if isinstance(player_id, bool) or not isinstance(player_id, int) or player_id <= 0:
         raise ValueError(f"Invalid player ID {player_id!r}")
     _check_day(day)
     rows = data.player_games_on(player_id, day)
     game_ids = sorted({row[0] for row in rows})
+    if not game_ids and day < data.PLAYER_GAME_LOG_FIRST_DATE:
+        return _find_player_in_boxscores(player_id, day)
     if not game_ids:
         today = nba_today()
         if day in (today, today - dt.timedelta(days=1)) and _day_games(day):
@@ -279,6 +285,23 @@ def find_player_game(player_id: int, day: dt.date) -> tuple[ResolvedGame, TeamRe
             "no_record", "player_team_not_in_game", details={"gameId": game.game_id, "teamIds": sorted(recorded)}
         )
     return game, teams[0]
+
+
+def _find_player_in_boxscores(player_id: int, day: dt.date) -> tuple[ResolvedGame, TeamRef]:
+    """The game on ``day`` whose boxscore lists ``player_id``, and his team in it."""
+    for game in _day_games(day):
+        if not game.game.get("boxscoreAvailable"):
+            continue
+        try:
+            boxscore = data.boxscore(game.game_id)
+        except NotFoundError:
+            continue  # this game has no usable boxscore; another may list him
+        for key, team in (("homeTeam", game.home), ("awayTeam", game.away)):
+            side = boxscore.get(key) if isinstance(boxscore.get(key), dict) else {}
+            if any(isinstance(p, dict) and int_or_none(p.get("personId")) == player_id for p in side.get("players") or []):
+                return game, team
+    raise NotFoundError("no_record", "no_player_game_log_before_1983",
+                        details={"playerId": player_id, "date": day.isoformat()})
 
 
 def game_context(game: ResolvedGame) -> GameContext:

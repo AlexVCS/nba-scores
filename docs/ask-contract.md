@@ -78,7 +78,16 @@ America/New_York calendar date.
 - `GameSelector` identifies exactly one game in one of three ways: `game_id`;
   `date` (with optional teams); or `season` + `game_number` + (`round` or two
   teams). A player and a date are enough. The resolver finds that player's
-  game from dated records, never from current rosters. A question that names
+  game from dated records, never from current rosters. A round and game
+  number with no teams ("Game 7 of the 2019 East semifinals") are worked out
+  by the resolver: the game is used when only one matching series reached
+  that game number (and no unfinished series could still reach it), or when
+  the named player appeared in that game of exactly one series (one read of
+  his game log, from 1983-84 on). Several games still matching asks "Which
+  teams?" with no options, since the candidates would reveal who advanced; no
+  series reaching that game is `not_found`. A game is never guessed. A date
+  without teams for a team or leaders question still asks for teams before
+  any lookup. A question that names
   no game while the user views a boxscore ("who led in rebounds") uses
   `AskContext.game_id` directly in the normalizer; there is no game candidate
   field, and the interpretation item has `origin: "context"`.

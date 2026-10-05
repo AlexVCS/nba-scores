@@ -28,6 +28,10 @@ PLAYER_GAME_RECENT_TTL_SECONDS = 5 * 60
 PLAYER_GAME_SETTLED_TTL_SECONDS = 24 * 3600
 PLAYER_GAME_SETTLED_AFTER = timedelta(days=3)
 
+# stats.nba holds no player game logs before the 1983-84 season (regular season
+# or playoffs): LeagueGameFinder is empty for every earlier date, whoever played.
+PLAYER_GAME_LOG_FIRST_DATE = date(1983, 10, 28)
+
 # (player ID, YYYY-MM-DD) -> frozenset of (game ID, team ID, player name) rows.
 _player_game_cache: TTLCache[tuple[int, str], frozenset[tuple[str, int, str]]] = TTLCache(PLAYER_GAME_CACHE_MAX_ENTRIES)
 
@@ -97,14 +101,16 @@ def _finder_date(value) -> date:
     raise ValueError(f"unexpected GAME_DATE {text!r}")
 
 
-def _load_player_games(player_id: int, day: date) -> frozenset[tuple[str, int, str]]:
+def _load_player_games(player_id: int, day: date, end: date | None = None) -> frozenset[tuple[str, int, str]]:
+    """One LeagueGameFinder read: the player's games on ``day``, or from ``day`` through ``end``."""
+    end = end or day
     requested = day.strftime("%m/%d/%Y")
     try:
         response = nba_stats_client.fetch_league_game_finder(
             player_or_team_abbreviation="P",
             player_id_nullable=str(player_id),
             date_from_nullable=requested,
-            date_to_nullable=requested,
+            date_to_nullable=end.strftime("%m/%d/%Y"),
             league_id_nullable=nba_stats_client.NBA_LEAGUE_ID,
         )
         data = response.get_normalized_dict()
@@ -129,7 +135,7 @@ def _load_player_games(player_id: int, day: date) -> frozenset[tuple[str, int, s
         except (TypeError, ValueError) as error:
             raise _bad_finder(f"row is malformed: {error}") from error
         # The finder filters by player and date; keep only exact matches anyway.
-        if row_player == player_id and row_day == day:
+        if row_player == player_id and day <= row_day <= end:
             found.add((game_id, team_id, str(row.get("PLAYER_NAME") or "").strip()))
     return frozenset(found)
 
@@ -147,3 +153,19 @@ def player_games_on(player_id: int, day: date) -> frozenset[tuple[str, int, str]
         return PLAYER_GAME_SETTLED_TTL_SECONDS if settled else PLAYER_GAME_RECENT_TTL_SECONDS
 
     return _player_game_cache.get_or_load((player_id, day.isoformat()), lambda: _load_player_games(player_id, day), ttl)
+
+
+def player_game_ids_between(player_id: int, start: date, end: date) -> frozenset[str]:
+    """IDs of the games a player appeared in from ``start`` through ``end``, in one read.
+
+    Empty before 1983-84 (``PLAYER_GAME_LOG_FIRST_DATE``), whoever played.
+    """
+
+    def ttl(rows) -> float:
+        settled = rows and end < nba_today() - PLAYER_GAME_SETTLED_AFTER
+        return PLAYER_GAME_SETTLED_TTL_SECONDS if settled else PLAYER_GAME_RECENT_TTL_SECONDS
+
+    rows = _player_game_cache.get_or_load(
+        (player_id, f"{start.isoformat()}..{end.isoformat()}"), lambda: _load_player_games(player_id, start, end), ttl
+    )
+    return frozenset(row[0] for row in rows)

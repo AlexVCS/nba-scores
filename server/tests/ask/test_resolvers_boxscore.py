@@ -5,7 +5,7 @@ import pytest
 
 from server.ask.models.request import BoxscoreStatRequest
 from server.ask.resolvers import boxscore, games, resolve, resolve_boxscore_game
-from server.ask.resolvers.errors import ClarificationError, NotFoundError, UnavailableError, UnsupportedError
+from server.ask.resolvers.errors import AmbiguousError, ClarificationError, NotFoundError, UnavailableError, UnsupportedError
 from server.services import nba_stats_client
 from server.tests.ask.test_resolvers_support import (  # noqa: F401
     FakeBoxscores,
@@ -214,15 +214,38 @@ def test_result_revealing_leaders_without_teams_clarify_before_game_lookup(monke
     monkeypatch.setattr(games, "find_game_on_date", lambda *args: pytest.fail("game lookup disclosed schedule"))
     monkeypatch.setattr("server.ask.resolvers.playoffs.find_playoff_game",
                         lambda *args: pytest.fail("series lookup disclosed participants"))
-    for selector in ({"date": "2024-05-15"},
-                     {"season": "2023-24", "round": "conference_semifinals", "game_number": 5}):
-        with pytest.raises(ClarificationError) as error:
-            resolve(request(scope="leaders", game=selector))
-        assert (error.value.field, error.value.clarify_reason) == ("teams", "missing")
     with pytest.raises(ClarificationError) as error:
-        resolve(request(scope="player", player={"player_id": TATUM, "name": "Jayson Tatum"},
-                        game={"season": "2023-24", "round": "conference_finals", "game_number": 1}))
+        resolve(request(scope="leaders", game={"date": "2024-05-15"}))
     assert (error.value.field, error.value.clarify_reason) == ("teams", "missing")
+
+
+def test_round_and_game_number_without_teams_look_the_game_up(game_data, monkeypatch):
+    monkeypatch.setattr("server.ask.resolvers.outcome_may_reveal_result", lambda _request: True)
+    calls = []
+
+    def find(*args, **kwargs):
+        calls.append((args, kwargs))
+        return final_game()
+
+    monkeypatch.setattr("server.ask.resolvers.playoffs.find_playoff_game", find)
+    selector = {"season": "2023-24", "round": "conference_semifinals", "game_number": 5}
+    assert resolve(request(scope="leaders", game=selector)).result.leaders
+    output = resolve(request(scope="player", player={"player_id": TATUM, "name": "Jayson Tatum"}, game=selector))
+    assert output.result.player_line.player.player_id == TATUM
+    # Only a player-scope request with no teams offers the player for narrowing.
+    assert [kwargs for _, kwargs in calls] == [{}, {"player_id": TATUM}]
+
+
+def test_round_and_game_number_matching_several_games_still_ask_for_teams(monkeypatch):
+    monkeypatch.setattr("server.ask.resolvers.outcome_may_reveal_result", lambda _request: True)
+
+    def several(*args, **kwargs):
+        raise AmbiguousError("teams", "several_series", spoiler=True, options=[{"series_key": "a"}, {"series_key": "b"}])
+
+    monkeypatch.setattr("server.ask.resolvers.playoffs.find_playoff_game", several)
+    with pytest.raises(ClarificationError) as error:
+        resolve(request(scope="leaders", game={"season": "2023-24", "round": "conference_semifinals", "game_number": 5}))
+    assert (error.value.field, error.value.clarify_reason, error.value.reason) == ("teams", "missing", "hidden_game_needs_teams")
 
 
 @pytest.mark.parametrize("games_on_date", [1, 2])

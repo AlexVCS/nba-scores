@@ -7,7 +7,8 @@ single-game totals; a per-game aggregation is rejected as
 
 A requested statistic the source did not record is returned with
 ``value=None``; when none of the requested values were recorded the
-calculator raises ``NotFoundError("no_record")``.
+calculator raises ``NotFoundError("no_record")``. Older boxscores hold 0 for
+statistics nobody counted (``stats.not_recorded``); those are missing, never 0.
 """
 
 from __future__ import annotations
@@ -18,12 +19,14 @@ from server.ask.models.common import Aggregation, PlayerRef, Stat, TeamRef
 from server.ask.models.response import BoxscoreStatResult, LeaderRow, PlayerStatLine, StatValue, TeamStatLine
 from server.ask.resolvers import data
 from server.ask.resolvers.errors import NotFoundError, UnsupportedError
-from server.ask.resolvers.games import ResolvedGame, game_context, int_or_none, team_ref
+from server.ask.resolvers.games import ResolvedGame, game_context, int_or_none, season_for_game_id, team_ref
 from server.ask.resolvers.stats import (
     PLAYER_LINE,
     TEAM_LINE,
     StatDef,
     check_aggregation,
+    missing_value,
+    not_recorded,
     stat_defs,
     stat_value,
 )
@@ -62,8 +65,30 @@ def _played(player: dict) -> bool:
     return not str(player.get("comment") or "").strip()
 
 
-def _values(statistics, definitions: Sequence[StatDef], game: ResolvedGame) -> list[StatValue]:
-    values = [stat_value(statistics, definition) for definition in definitions]
+def _player_population(boxscore: dict) -> list:
+    """The statistics of everyone who played, both teams."""
+    return [
+        player.get("statistics")
+        for key in ("homeTeam", "awayTeam")
+        for player in ((boxscore.get(key) or {}).get("players") or [] if isinstance(boxscore.get(key), dict) else [])
+        if isinstance(player, dict) and _played(player)
+    ]
+
+
+def _team_population(boxscore: dict) -> list:
+    return [side.get("statistics") for side in (boxscore.get("homeTeam"), boxscore.get("awayTeam")) if isinstance(side, dict)]
+
+
+def _unrecorded(definitions: Sequence[StatDef], game: ResolvedGame, population: list) -> set[str]:
+    season_start = int(season_for_game_id(game.game_id)[:4])
+    return {d.key for d in definitions if not_recorded(d, season_start, game.settled, population)}
+
+
+def _values(statistics, definitions: Sequence[StatDef], game: ResolvedGame, unrecorded: set[str]) -> list[StatValue]:
+    values = [
+        missing_value(definition) if definition.key in unrecorded else stat_value(statistics, definition)
+        for definition in definitions
+    ]
     if all(value.value is None for value in values):
         raise NotFoundError(
             "no_record", "stat_not_recorded", details={"gameId": game.game_id, "stats": [d.key for d in definitions]}
@@ -85,7 +110,8 @@ def player_stat(game: ResolvedGame, player_id: int, stat: Stat, aggregation: Agg
     check_aggregation(aggregation)
     definitions = stat_defs(stat, PLAYER_LINE)
     boxscore = _boxscore(game)
-    for team, side in _sides(boxscore, game):
+    sides = _sides(boxscore, game)
+    for team, side in sides:
         for player in side.get("players") or []:
             if not isinstance(player, dict) or int_or_none(player.get("personId")) != player_id:
                 continue
@@ -93,14 +119,18 @@ def player_stat(game: ResolvedGame, player_id: int, stat: Stat, aggregation: Agg
             if ref is None:
                 continue
             if _played(player):
+                unrecorded = _unrecorded(definitions, game, _player_population(boxscore))
                 line = PlayerStatLine(
                     player=ref, team=team, status="played",
-                    values=_values(player.get("statistics"), definitions, game),
+                    values=_values(player.get("statistics"), definitions, game, unrecorded),
                 )
             else:
                 inactive = str(player.get("status") or "").upper() == "INACTIVE"
                 line = PlayerStatLine(player=ref, team=team, status="inactive" if inactive else "did_not_play", values=[])
             return _result(game, "player", stat, player_line=line)
+    if any(not side.get("players") for _, side in sides):
+        # Sparse history: without both player lists, absence proves nothing.
+        raise NotFoundError("no_record", "player_stats_not_recorded", details={"playerId": player_id, "gameId": game.game_id})
     raise NotFoundError("player_did_not_play", "player_not_in_boxscore", details={"playerId": player_id, "gameId": game.game_id})
 
 
@@ -114,8 +144,9 @@ def team_stat(
     if missing:
         raise NotFoundError("no_record", "team_not_in_game", details={"teamIds": missing, "gameId": game.game_id})
     boxscore = _boxscore(game)
+    unrecorded = _unrecorded(definitions, game, _team_population(boxscore))
     lines = [
-        TeamStatLine(team=team, values=_values(side.get("statistics"), definitions, game))
+        TeamStatLine(team=team, values=_values(side.get("statistics"), definitions, game, unrecorded))
         for team, side in _sides(boxscore, game)
         if not team_ids or team.team_id in team_ids
     ]
@@ -141,6 +172,8 @@ def stat_leaders(
     if team_id is not None and team_id not in game.team_ids:
         raise NotFoundError("no_record", "team_not_in_game", details={"teamIds": [team_id], "gameId": game.game_id})
     boxscore = _boxscore(game)
+    if _unrecorded((definition,), game, _player_population(boxscore)):
+        raise NotFoundError("no_record", "stat_not_recorded", details={"gameId": game.game_id, "stats": [stat]})
     team_leaders: list[tuple[PlayerRef, TeamRef, StatValue]] = []
     any_players = False
     for team, side in _sides(boxscore, game):
