@@ -14,31 +14,20 @@ function DesignRoute({designId, children}: DesignRouteProps) {
 
   useEffect(() => {
     const robotsMeta = document.querySelector<HTMLMetaElement>('meta[name="robots"]');
-    const referrerMeta = document.querySelector<HTMLMetaElement>('meta[name="referrer"]');
     const previousRobots = robotsMeta?.content;
-    const previousReferrer = referrerMeta?.content;
     const createdRobots = robotsMeta ?? document.createElement("meta");
-    const createdReferrer = referrerMeta ?? document.createElement("meta");
 
     createdRobots.name = "robots";
     createdRobots.content = "noindex, nofollow, noarchive";
-    createdReferrer.name = "referrer";
-    createdReferrer.content = "no-referrer";
 
+    // No referrer meta: WebKit tabs opened from here inherit it and NBA.com event pages never load.
     if (!robotsMeta) document.head.appendChild(createdRobots);
-    if (!referrerMeta) document.head.appendChild(createdReferrer);
 
     return () => {
       if (robotsMeta && previousRobots !== undefined) {
         robotsMeta.content = previousRobots;
       } else {
         createdRobots.remove();
-      }
-
-      if (referrerMeta && previousReferrer !== undefined) {
-        referrerMeta.content = previousReferrer;
-      } else {
-        createdReferrer.remove();
       }
     };
   }, []);
