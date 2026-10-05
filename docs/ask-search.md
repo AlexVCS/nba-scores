@@ -1,145 +1,81 @@
-# Natural-language basketball search
+# Ask search
 
-The search UI has been removed from the original and Hardwood pages. The backend
-remains available through `POST /ask`, which accepts `{"question":"..."}` with
-1–300 characters. The UI descriptions below document the earlier prototype;
-`scripts/verify-ask-search.mjs` requires restoring that UI before it can run.
-The model interprets one question. Python resolves teams, dates, games, and
-statistics, then the frontend renders the answer. Single-stat answers appear
-once in the headline; answers with several stats use a compact table beneath
-the player and game context. Game results reuse the scores page's existing
-game-card component, with the interpretation underneath. There is no second
-model call to write an answer.
+Ask is the Hardwood question interface backed by `POST /ask` and model-free
+`GET /ask/suggest`. The HTTP shapes and spoiler rules are defined in
+[`ask-contract.md`](ask-contract.md). The feature remains disabled by default:
+the backend returns `unavailable` for Ask questions and empty typeahead data
+until the release gate is explicitly enabled. Production builds show the Design 1
+Ask entry only with `VITE_ASK_ENABLED=1`; the Vite development server shows it
+by default. The frontend flag controls visibility, and the backend still needs
+`ASK_ENABLED=1` to answer questions.
 
-## Supported requests
+## What it answers
 
-- Games on a date or within seven consecutive days, optionally filtered by teams.
-- One player's statistics, team totals, or the leaders in one statistic for one game.
-  A player name and a single date are sufficient; the team is optional. Team
-  totals and leaders still need a team/date or playoff game selectors.
-- A playoff series identified by year and matchup or round.
-- A whole postseason or one team's postseason game results.
+Ask supports games over one to seven consecutive days, one-game boxscore
+statistics and leaders, a playoff series, and a team or league postseason
+summary. It asks a clarifying question for an ambiguous player, team, date,
+year, or game. Each option carries a short-lived resolution token; selecting
+an option can lead to another clarification without another model call.
+Unsupported requests are identified explicitly. Missing verified records are
+`not_found`; data-source and interpreter failures are `unavailable`.
 
-Examples include `Cavs games last week`, `How many points did Tatum score in game
-4 of the 2024 Finals?`, and `Who won the 2023 NBA Finals?`.
+The model interprets the question using bounded player, team, season, round,
+game-number, and date candidates. A Python normalizer validates every selected
+ID and produces a typed request. The basketball resolvers use only that typed
+request and existing data services. Python writes all result copy, links,
+notices, and clarification options. The model never writes answer prose or
+calls data services. Exact date searches (`games on YYYY-MM-DD`, `scores for
+YYYY-MM-DD`) and boxscore-context leader questions use validated direct
+shortcuts with zero model calls. A cached parse or resolution token also
+avoids a new model call.
 
-Career statistics, broad historical comparisons, predictions, conversational
-follow-ups, season-wide player averages, regular-season team win/loss totals,
-and season-wide biggest-win searches are unsupported. Ambiguous requests
-ask for more detail. Historical data gaps return `not_found`; provider outages
-return `unavailable`. Some historical names are supported as franchise aliases;
-unrecognized or ambiguous team names require clarification.
+Relative dates use the New York calendar date at request time. A date the
+user wrote without a year needs a year choice; no year is guessed. Candidate
+aliases, interpreter instructions, model name, cache version, app context,
+and New York day key parsed interpretations. Verified answer results have a
+short cache lifetime. Cache failures are not stored.
 
-Relative dates use `America/New_York`. `last week` means the previous Monday
-through Sunday. `last Friday` means the preceding Friday, excluding today when
-it is Friday. A playoff year of `2024` resolves to season `2023-24`. Dates without
-a year require clarification.
+## Spoilers and typeahead
 
-Scores, player names, series participants and winners, statistics, and revealing
-links are omitted from the DOM while hidden. Each result has its own reveal
-control and respects the global results preference. A new search resets local
-reveals. Global show followed by global hide also resets them.
+Resolvers decide a `spoiler_gate` from the normalized question and schedule
+before looking up the requested record. Thus a conditional playoff game has
+the same hidden-state gate whether it was played or absent. Protected whole
+game items, counts, series lengths, inferred participants, and revealing links
+carry spoiler flags. The UI omits flagged content from the DOM while hidden.
+Typeahead uses bounded candidate lookup and direct scoreboard matches, with
+no model call. Hidden typeahead omits postseason direct games whose presence
+could reveal advancement.
 
-The form provides short example chips. Choosing an example fills the input and
-submits it. Examples disappear after a result and return when the input is
-cleared; notices include two examples to help with another search.
+## Development response details
 
-Responses include an `interpretation` list built from the validated question,
-so users can check how it was read even while the answer is hidden. Items also
-include `context`, `teams` with ID, tricode, and name, and an optional `player_id`
-for team colors, logos, and headshots. Game items carry a `game` payload with
-the original scoreboard data for the shared game card. Result metadata stays out of the rendered
-card until reveal. These additions do not change supported requests or retrieval.
+In the Vite development server, expand **Response details** beneath an Ask result
+to see the interpreter model, whether this request made a model call, and whether
+the backend reported a cache hit. The server prefers the model identifier returned
+by the provider and falls back to the requested identifier. A clarification token
+can retain the original interpreter model without a new model call or cache hit.
+Exact direct lookups report that no model was used. These details describe question
+interpretation; the answer values come from NBA data. Production builds omit the
+control through `import.meta.env.DEV`.
 
-Explicit regular-season record,
-standings, and biggest-win requests are checked before the model or budget,
-so they receive a specific unsupported response even during provider outages.
-Typographic dashes in supported playoff season selectors are normalized.
+## Operations
 
-For a player/date question without a team, Python matches the NBA player catalog
-and queries LeagueGameFinder for that player on the exact date. It checks the
-returned player ID/date, requires one unique game, and verifies that game against
-the date's scoreboard before reading the boxscore. It never infers historical
-team membership from a current roster. Ambiguous names request a full name.
+`ASK_ENABLED=1` enables the endpoint for local development testing. Production
+enablement requires the separate release gates. The default model is `gpt-6-luna` at low reasoning effort. A daily
+`$1` list-price guard reserves estimated cost before a provider call and
+settles reported usage afterward. If the provider call's cost is unknown,
+the reservation stays charged. The ledger is shared through `ASK_STATE_DIR`
+and fails closed on corruption or a lock error. Only `OPENAI_API_KEY` may be
+read from `server/.env`; all other settings come from process environment.
 
-## Server configuration
+The HTTP boundary limits requests to 10 per client and 60 per worker per
+minute. Two Ask workers may run concurrently, with a 20-second response
+deadline. A timed-out worker keeps its slot until the provider call ends,
+including budget settlement. The client identity uses the transport peer,
+not an untrusted forwarded header. Anonymous diagnostics store a salted
+question hash and bounded enums, never raw questions, IPs, prompts, or keys.
 
-The backend reads `OPENAI_API_KEY` from the process environment or `server/.env`.
-Do not use a `VITE_` variable for API keys. Keys belong to projects; switching
-models does not require a new key when the project allows that model. An initial
-probe on September 11, 2026 returned `credit_balance_exhausted`; a later probe
-with the same configured key succeeded. See the evaluation report for live results.
-A provider failure is cooled down for 60 seconds to avoid repeated paid attempts.
-
-| Variable | Default | Purpose |
-| --- | --- | --- |
-| `ASK_PARSER_PROVIDER` | `openai` | `openai` or a Responses-compatible provider |
-| `ASK_PARSER_MODEL` | `gpt-4.1-mini-2025-04-14` | Eligible snapshot; provisional parser model pending live evaluation |
-| `OPENAI_RESPONSES_URL` | OpenAI `/v1/responses` | Server-configured provider endpoint |
-| `ASK_API_KEY` | unset | Key for `openai_compatible` |
-| `ASK_DAILY_BUDGET_USD` | `1` | List-price application guard per UTC day |
-| `ASK_STATE_DIR` | `server/.ask-state` | Durable budget ledger directory |
-| `ASK_INPUT_USD_PER_MILLION` | known model rate | Required for custom providers/models |
-| `ASK_OUTPUT_USD_PER_MILLION` | known model rate | Required for custom providers/models |
-| `ASK_CACHE_VERSION` | `1` | Bump after corrections or semantic changes |
-
-Only the API key has a server-local dotenv fallback. Set the other configuration
-variables in the backend process environment or deployment settings.
-
-The JSON budget ledger uses a file lock, atomic replacement, and fsync so worker
-processes sharing the directory reserve spending before a model call. Corrupt or
-unwritable state stops paid requests. Unknown-cost failures retain their
-reservations. Use a persistent shared volume for backend workers. Separate
-replicas with separate filesystems each have their own budget; do not deploy
-multiple such replicas and treat the limit as shared.
-
-The endpoint limits each client to 10 requests per minute and each worker to 60
-requests per minute. It accepts at most two in-flight search workers and bounds
-the HTTP response wait to 20 seconds. Slow synchronous NBA work may finish later,
-but retains its worker slot so repeated timeouts cannot build an unbounded queue.
-Configure trusted proxy handling in uvicorn; the endpoint does not read arbitrary
-forwarded headers itself.
-
-## Complimentary shared-data tokens
-
-The default snapshot is listed in [OpenAI's complimentary-token program](https://help.openai.com/en/articles/10306912-sharing-feedback-evaluation-and-fine-tuning-data-and-api-inputs-and-outputs-with-openai).
-The API key's project must have input/output sharing enabled, and the organization
-must show enrollment for complimentary daily tokens. Benefits apply automatically;
-a new key is unnecessary for an existing eligible project. OpenAI still requires
-a positive account balance, including for complimentary usage.
-
-GPT-4.1 mini and GPT-5.6 Luna share the larger daily pool: 2.5 million tokens for
-usage tiers 1–2 or 10 million for tiers 3–5. It resets at midnight UTC. Other
-eligible traffic in the organization consumes the same pool; a request crossing
-the limit is billed in full. Check the Usage Dashboard's incentive service tier
-and Costs to confirm actual billing.
-
-The local budget and evaluation reports use regular token list prices before
-complimentary tokens or caching discounts. They cannot observe the organization's
-remaining allowance. The default $1 guard may therefore pause requests even when
-actual charges are zero. Change `ASK_DAILY_BUDGET_USD` deliberately if more
-throughput is needed; do not set token prices to zero to represent the incentive.
-
-## Cache and diagnostics
-
-Parse caches are bounded to 256 entries and expire after one hour. Their keys
-include normalized question text, New York day, provider, model, prompt/schema
-fingerprint, and cache version. Identical concurrent parses share a lock.
-
-Answer caches use resolved dates, team IDs, player mentions, operations, statistics,
-rounds and game numbers. Ongoing or uncertain results expire after 30 seconds.
-Explicitly final daily games can remain in the bounded process cache until
-invalidation or eviction. Postseason data lacks a consistently explicit completion
-status, so it always uses the short TTL. No database or vector index is added.
-
-After correcting source data, clear its existing service cache and call
-`invalidate_ask_caches()` or restart with a new `ASK_CACHE_VERSION`. Restarting
-clears the in-memory search caches. The durable spending ledger survives restart.
-
-Unsupported-request diagnostics retain at most 200 entries for up to seven days,
-pruned on insertion/read and cleared on restart. They store question hashes and
-requested operations/statistics/missing fields, not raw questions, IPs, or keys.
-`unsupported_request_log()` is internal and has no public route. Usage logs contain
-model name, token counts, and parser latency only.
-
-See [evaluation](ask-evaluation.md) for the blocked live gate and rerun commands.
+Run the Ask checks with
+`server/venv/bin/python -m pytest -q server/tests/ask` from the repository
+root. No provider call is needed for these tests. Enabling production traffic
+still requires the separate unseen-question evaluation and manual release
+checks; setting the flag alone is an operational choice, not validation.

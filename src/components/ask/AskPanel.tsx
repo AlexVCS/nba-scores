@@ -6,7 +6,7 @@ import {useAskSession} from "@/hooks/useAskSession";
 import {useAskTypeahead} from "@/hooks/useAskTypeahead";
 import {useResultsVisibility} from "@/hooks/useResultsVisibility";
 import {addRecentSearch, clearRecentSearches, readRecentSearches, type AskRecentSearch} from "@/services/ask/recentSearches";
-import type {AskClarificationOption} from "@/services/ask/types";
+import type {AskClarificationOption, AskClientContext} from "@/services/ask/types";
 import AskActionList from "./AskActionList";
 import AskFooter from "./AskFooter";
 import AskResultArea from "./AskResultArea";
@@ -94,18 +94,18 @@ function AskPanel({onClose}: AskPanelProps) {
   }, [active, listboxId]);
 
   const {pathname, search} = location;
-  const ask = useCallback((question: string, {remember = true, resolution = null}: {remember?: boolean; resolution?: string | null} = {}) => {
+  const ask = useCallback((question: string, {remember = true, resolution = null, context = askClientContext(pathname, search)}: {remember?: boolean; resolution?: string | null; context?: AskClientContext | null} = {}) => {
     const next = question.trim();
     if (!next) return;
     // Recent history keeps the question only, and never one taken from a spoiler-flagged suggestion.
     if (remember) setRecents(addRecentSearch(next));
     setActiveId(null);
-    askSession.submit(next, {resolution, context: askClientContext(pathname, search)});
+    askSession.submit(next, {resolution, context});
   }, [pathname, search]);
 
   const chooseOption = useCallback((option: AskClarificationOption) => {
-    ask(option.question, {remember: !option.spoiler, resolution: option.resolution});
-  }, [ask]);
+    ask(option.question, {remember: !option.spoiler, resolution: option.resolution, context: session.submission?.context ?? null});
+  }, [ask, session.submission?.context]);
 
   const run = (action: AskAction) => {
     if (action.href) {

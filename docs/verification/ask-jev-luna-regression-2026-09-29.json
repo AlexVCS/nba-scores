@@ -1,0 +1,4070 @@
+{
+ "purpose": "#199 interpreter comparison",
+ "cases_file": "server/tests/ask/fixtures/eval/release-two-2026-09-29-exposed.json",
+ "candidate_source": "lookup:server.ask.candidates.lookup:CandidateLookupService:b1e671a647.3f8b89d1.52b7768d",
+ "thresholds": "Same exposed 80 questions for both Jev and GPT-6 Luna, code frozen at 80b5570 after shared fixes. Regression comparison only; original labels retained including documented concerns. Jev uses existing uncalibrated defaults; Luna low effort. No release claim.",
+ "generated_at": "2026-09-29T19:17:33+00:00",
+ "spend": {
+  "cap_usd": 0.2,
+  "spent_usd": 0.017794
+ },
+ "stopped_reason": null,
+ "candidate_errors": {},
+ "configs": {
+  "jev": {
+   "cases": 80,
+   "complete_request_accuracy": 0.6,
+   "correct": 48,
+   "schema_valid_guesses": 0,
+   "service_failures": 1,
+   "clarification": {
+    "expected": 20,
+    "correct": 15,
+    "issued": 45,
+    "unneeded": 27
+   },
+   "unsupported": {
+    "expected": 12,
+    "correct": 11,
+    "issued": 12,
+    "false": 1
+   },
+   "latency_ms": {
+    "median": 173.0,
+    "p95": 228
+   },
+   "total_cost_usd": 0.008068,
+   "cost_per_successful_answer_usd": 0.000168,
+   "fallback_rate": 0.0,
+   "resolved_models": [
+    "jev-1.13.0"
+   ],
+   "failures": {
+    "expected_clarify_got_unsupported": 1,
+    "expected_unsupported_got_clarify": 1,
+    "service_failure": 1,
+    "unneeded_clarification": 26,
+    "wrong_clarify_field": 3
+   },
+   "not_run": []
+  },
+  "gpt-6-luna": {
+   "cases": 80,
+   "complete_request_accuracy": 0.8375,
+   "correct": 67,
+   "schema_valid_guesses": 4,
+   "service_failures": 0,
+   "clarification": {
+    "expected": 20,
+    "correct": 14,
+    "issued": 20,
+    "unneeded": 5
+   },
+   "unsupported": {
+    "expected": 12,
+    "correct": 12,
+    "issued": 15,
+    "false": 3
+   },
+   "latency_ms": {
+    "median": 2401.5,
+    "p95": 3836
+   },
+   "total_cost_usd": 0.009726,
+   "cost_per_successful_answer_usd": 0.000145,
+   "fallback_rate": 0.0,
+   "resolved_models": [
+    "gpt-6-luna"
+   ],
+   "failures": {
+    "expected_clarify_got_unsupported": 3,
+    "schema_valid_guess": 2,
+    "unneeded_clarification": 5,
+    "wrong_clarify_field": 1,
+    "wrong_request": 2
+   },
+   "not_run": []
+  }
+ },
+ "cases": {
+  "jev": [
+   {
+    "case_id": "release-two-001",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 259,
+    "cost_usd": 0.00010693,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2006-02-08",
+      "end": "2006-02-10"
+     },
+     "teams": [
+      {
+       "team_id": 1610612760,
+       "tricode": "SEA",
+       "name": "Seattle SuperSonics"
+      }
+     ]
+    }
+   },
+   {
+    "case_id": "release-two-002",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 176,
+    "cost_usd": 0.00010571,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2010-01-19",
+      "end": "2010-01-19"
+     },
+     "teams": [
+      {
+       "team_id": 1610612751,
+       "tricode": "NJN",
+       "name": "New Jersey Nets"
+      }
+     ]
+    }
+   },
+   {
+    "case_id": "release-two-003",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 169,
+    "cost_usd": 0.00011046,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2021-03-11",
+      "end": "2021-03-11"
+     },
+     "teams": [
+      {
+       "team_id": 1610612756,
+       "tricode": "PHX",
+       "name": "Phoenix Suns"
+      },
+      {
+       "team_id": 1610612758,
+       "tricode": "SAC",
+       "name": "Sacramento Kings"
+      }
+     ]
+    }
+   },
+   {
+    "case_id": "release-two-004",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 252,
+    "cost_usd": 9.757e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2025-11-04",
+      "end": "2025-11-04"
+     },
+     "teams": []
+    }
+   },
+   {
+    "case_id": "release-two-005",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 190,
+    "cost_usd": 9.925e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-006",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 160,
+    "cost_usd": 0.00010172,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "teams",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-007",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 153,
+    "cost_usd": 0.00010231,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-008",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 163,
+    "cost_usd": 9.715e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-009",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 157,
+    "cost_usd": 0.00010408,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-010",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 170,
+    "cost_usd": 9.87e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2024-04-29",
+      "end": "2024-05-02"
+     },
+     "teams": []
+    }
+   },
+   {
+    "case_id": "release-two-011",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 188,
+    "cost_usd": 0.00010244,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2023-12-25",
+      "end": "2023-12-25"
+     },
+     "teams": [
+      {
+       "team_id": 1610612753,
+       "tricode": "ORL",
+       "name": "Orlando Magic"
+      }
+     ]
+    }
+   },
+   {
+    "case_id": "release-two-012",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 175,
+    "cost_usd": 9.66e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-013",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 204,
+    "cost_usd": 9.95e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "season",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-014",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 162,
+    "cost_usd": 9.967e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "season",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-015",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 207,
+    "cost_usd": 9.967e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "season",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-016",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 173,
+    "cost_usd": 9.941e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "season",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-017",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 153,
+    "cost_usd": 0.00010017,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "season",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-018",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 268,
+    "cost_usd": 9.992e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "season",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-019",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 181,
+    "cost_usd": 0.00010794,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "teams",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-020",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 147,
+    "cost_usd": 0.0001076,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "teams",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-021",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 271,
+    "cost_usd": 0.00010786,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "teams",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-022",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 148,
+    "cost_usd": 0.00010798,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "teams",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-023",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 162,
+    "cost_usd": 0.00010828,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "season",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-024",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 190,
+    "cost_usd": 0.00010811,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "season",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-025",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 173,
+    "cost_usd": 0.00010769,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "season",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-026",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 155,
+    "cost_usd": 0.00010437,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "season",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-027",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 143,
+    "cost_usd": 0.00010025,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "boxscore_stat",
+     "scope": "player",
+     "stat": {
+      "stat": "points",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": null,
+      "date": null,
+      "teams": [],
+      "season": "2023-24",
+      "round": "finals",
+      "conference": null,
+      "game_number": 2
+     },
+     "player": {
+      "player_id": 1629029,
+      "name": "Luka Don\u010di\u0107"
+     },
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-two-028",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 221,
+    "cost_usd": 9.832e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-029",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 196,
+    "cost_usd": 0.00010324,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-030",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 151,
+    "cost_usd": 9.61e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "boxscore_stat",
+     "scope": "player",
+     "stat": {
+      "stat": "rebounds",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": "0022400001",
+      "date": null,
+      "teams": [],
+      "season": null,
+      "round": null,
+      "conference": null,
+      "game_number": null
+     },
+     "player": {
+      "player_id": 203076,
+      "name": "Anthony Davis"
+     },
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-two-031",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 220,
+    "cost_usd": 9.874e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "teams",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-032",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 177,
+    "cost_usd": 0.00010609,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2022-23",
+     "teams": [
+      {
+       "team_id": 1610612748,
+       "tricode": "MIA",
+       "name": "Miami Heat"
+      },
+      {
+       "team_id": 1610612738,
+       "tricode": "BOS",
+       "name": "Boston Celtics"
+      }
+     ],
+     "round": null,
+     "conference": null
+    }
+   },
+   {
+    "case_id": "release-two-033",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 142,
+    "cost_usd": 9.744e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2023-24",
+     "teams": [],
+     "round": "conference_finals",
+     "conference": "west"
+    }
+   },
+   {
+    "case_id": "release-two-034",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 168,
+    "cost_usd": 0.00010513,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "1995-96",
+     "teams": [
+      {
+       "team_id": 1610612760,
+       "tricode": "SEA",
+       "name": "Seattle SuperSonics"
+      }
+     ],
+     "round": "finals",
+     "conference": null
+    }
+   },
+   {
+    "case_id": "release-two-035",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 186,
+    "cost_usd": 0.0001021,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2024-25",
+     "teams": [
+      {
+       "team_id": 1610612743,
+       "tricode": "DEN",
+       "name": "Denver Nuggets"
+      }
+     ],
+     "round": "first_round",
+     "conference": null
+    }
+   },
+   {
+    "case_id": "release-two-036",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 160,
+    "cost_usd": 0.0001063,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "1997-98",
+     "teams": [
+      {
+       "team_id": 1610612762,
+       "tricode": "UTA",
+       "name": "Utah Jazz"
+      },
+      {
+       "team_id": 1610612741,
+       "tricode": "CHI",
+       "name": "Chicago Bulls"
+      }
+     ],
+     "round": null,
+     "conference": null
+    }
+   },
+   {
+    "case_id": "release-two-037",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 181,
+    "cost_usd": 0.00010639,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2002-03",
+     "teams": [
+      {
+       "team_id": 1610612747,
+       "tricode": "LAL",
+       "name": "Los Angeles Lakers"
+      },
+      {
+       "team_id": 1610612759,
+       "tricode": "SAS",
+       "name": "San Antonio Spurs"
+      }
+     ],
+     "round": null,
+     "conference": null
+    }
+   },
+   {
+    "case_id": "release-two-038",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 147,
+    "cost_usd": 0.00010265,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2022-23",
+     "teams": [
+      {
+       "team_id": 1610612755,
+       "tricode": "PHI",
+       "name": "Philadelphia 76ers"
+      }
+     ],
+     "round": "conference_semifinals",
+     "conference": null
+    }
+   },
+   {
+    "case_id": "release-two-039",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 163,
+    "cost_usd": 9.736e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "teams",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-040",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 163,
+    "cost_usd": 0.00010639,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2023-24",
+     "teams": [
+      {
+       "team_id": 1610612752,
+       "tricode": "NYK",
+       "name": "New York Knicks"
+      },
+      {
+       "team_id": 1610612754,
+       "tricode": "IND",
+       "name": "Indiana Pacers"
+      }
+     ],
+     "round": null,
+     "conference": null
+    }
+   },
+   {
+    "case_id": "release-two-041",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 149,
+    "cost_usd": 9.618e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2020-21",
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-two-042",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 200,
+    "cost_usd": 0.00010471,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "1995-96",
+     "team": {
+      "team_id": 1610612760,
+      "tricode": "SEA",
+      "name": "Seattle SuperSonics"
+     }
+    }
+   },
+   {
+    "case_id": "release-two-043",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 227,
+    "cost_usd": 0.00010408,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2001-02",
+     "team": {
+      "team_id": 1610612751,
+      "tricode": "NJN",
+      "name": "New Jersey Nets"
+     }
+    }
+   },
+   {
+    "case_id": "release-two-044",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 175,
+    "cost_usd": 9.618e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2024-25",
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-two-045",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 172,
+    "cost_usd": 0.00010118,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2023-24",
+     "team": {
+      "team_id": 1610612742,
+      "tricode": "DAL",
+      "name": "Dallas Mavericks"
+     }
+    }
+   },
+   {
+    "case_id": "release-two-046",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 199,
+    "cost_usd": 0.00010114,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "teams",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-047",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 173,
+    "cost_usd": 9.61e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2013-14",
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-two-048",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 173,
+    "cost_usd": 0.00010164,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "teams",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-049",
+    "config": "jev",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 228,
+    "cost_usd": 0.00010063,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-050",
+    "config": "jev",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 204,
+    "cost_usd": 9.719e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-051",
+    "config": "jev",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 163,
+    "cost_usd": 9.778e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "teams",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-052",
+    "config": "jev",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 213,
+    "cost_usd": 9.425e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-053",
+    "config": "jev",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 157,
+    "cost_usd": 9.563e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-054",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "wrong_clarify_field",
+    "latency_ms": 163,
+    "cost_usd": 0.00011151,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "season",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-055",
+    "config": "jev",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 185,
+    "cost_usd": 0.00010282,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "player",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-056",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "wrong_clarify_field",
+    "latency_ms": 181,
+    "cost_usd": 9.946e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "season",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-057",
+    "config": "jev",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 161,
+    "cost_usd": 0.00010252,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "player",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-058",
+    "config": "jev",
+    "action": "fail",
+    "correct": false,
+    "guess": false,
+    "failure": "service_failure",
+    "latency_ms": 193,
+    "cost_usd": 0.00010542,
+    "fallback_used": false,
+    "first_outcome": "unavailable",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [
+     "inconsistent_team_count"
+    ],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-059",
+    "config": "jev",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 189,
+    "cost_usd": 9.412e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-060",
+    "config": "jev",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 164,
+    "cost_usd": 9.752e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-061",
+    "config": "jev",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 175,
+    "cost_usd": 0.00010139,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "round",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-062",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "wrong_clarify_field",
+    "latency_ms": 176,
+    "cost_usd": 9.626e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "round",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-063",
+    "config": "jev",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 161,
+    "cost_usd": 9.748e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "teams",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-064",
+    "config": "jev",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 171,
+    "cost_usd": 0.00010021,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "season",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-065",
+    "config": "jev",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 198,
+    "cost_usd": 9.626e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "teams",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-066",
+    "config": "jev",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 167,
+    "cost_usd": 9.437e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "season",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-067",
+    "config": "jev",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 158,
+    "cost_usd": 0.00010252,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "season",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-068",
+    "config": "jev",
+    "action": "unsupported",
+    "correct": false,
+    "guess": false,
+    "failure": "expected_clarify_got_unsupported",
+    "latency_ms": 170,
+    "cost_usd": 9.421e-05,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "other",
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-069",
+    "config": "jev",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 162,
+    "cost_usd": 9.71e-05,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "prediction",
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-070",
+    "config": "jev",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 184,
+    "cost_usd": 9.425e-05,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "standings",
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-071",
+    "config": "jev",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 185,
+    "cost_usd": 0.00010135,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "regular_season_record",
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-072",
+    "config": "jev",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 192,
+    "cost_usd": 9.622e-05,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "season_leaders",
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-073",
+    "config": "jev",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 186,
+    "cost_usd": 9.794e-05,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "season_stats",
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-074",
+    "config": "jev",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 152,
+    "cost_usd": 9.601e-05,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "career_stats",
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-075",
+    "config": "jev",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 190,
+    "cost_usd": 0.0001037,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "historical_comparison",
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-076",
+    "config": "jev",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 178,
+    "cost_usd": 9.429e-05,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "reference_question",
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-077",
+    "config": "jev",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 155,
+    "cost_usd": 0.00010781,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "unsupported_leader_stat",
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-078",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "expected_unsupported_got_clarify",
+    "latency_ms": 160,
+    "cost_usd": 9.836e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "player",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-079",
+    "config": "jev",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 188,
+    "cost_usd": 9.639e-05,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "multi_game_average",
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-080",
+    "config": "jev",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 172,
+    "cost_usd": 9.425e-05,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "not_basketball",
+    "actual_request": null
+   }
+  ],
+  "gpt-6-luna": [
+   {
+    "case_id": "release-two-001",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2190,
+    "cost_usd": 0.00010651,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2006-02-08",
+      "end": "2006-02-10"
+     },
+     "teams": [
+      {
+       "team_id": 1610612760,
+       "tricode": "SEA",
+       "name": "Seattle SuperSonics"
+      }
+     ]
+    }
+   },
+   {
+    "case_id": "release-two-002",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2136,
+    "cost_usd": 8.628e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2010-01-19",
+      "end": "2010-01-19"
+     },
+     "teams": [
+      {
+       "team_id": 1610612751,
+       "tricode": "NJN",
+       "name": "New Jersey Nets"
+      }
+     ]
+    }
+   },
+   {
+    "case_id": "release-two-003",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2462,
+    "cost_usd": 0.00011525,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2021-03-11",
+      "end": "2021-03-11"
+     },
+     "teams": [
+      {
+       "team_id": 1610612758,
+       "tricode": "SAC",
+       "name": "Sacramento Kings"
+      },
+      {
+       "team_id": 1610612756,
+       "tricode": "PHX",
+       "name": "Phoenix Suns"
+      }
+     ]
+    }
+   },
+   {
+    "case_id": "release-two-004",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2019,
+    "cost_usd": 8.328e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2025-11-04",
+      "end": "2025-11-04"
+     },
+     "teams": []
+    }
+   },
+   {
+    "case_id": "release-two-005",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2431,
+    "cost_usd": 0.00013871,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2026-11-02",
+      "end": "2026-11-02"
+     },
+     "teams": [
+      {
+       "team_id": 1610612761,
+       "tricode": "TOR",
+       "name": "Toronto Raptors"
+      }
+     ]
+    }
+   },
+   {
+    "case_id": "release-two-006",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": false,
+    "guess": true,
+    "failure": "wrong_request",
+    "latency_ms": 2785,
+    "cost_usd": 0.00011494,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2026-03-08",
+      "end": "2026-03-08"
+     },
+     "teams": [
+      {
+       "team_id": 1610612752,
+       "tricode": "NYK",
+       "name": "New York Knicks"
+      }
+     ]
+    }
+   },
+   {
+    "case_id": "release-two-007",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2314,
+    "cost_usd": 0.00010706,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2026-09-27",
+      "end": "2026-09-29"
+     },
+     "teams": [
+      {
+       "team_id": 1610612743,
+       "tricode": "DEN",
+       "name": "Denver Nuggets"
+      }
+     ]
+    }
+   },
+   {
+    "case_id": "release-two-008",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2350,
+    "cost_usd": 0.00010021,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2026-09-21",
+      "end": "2026-09-27"
+     },
+     "teams": []
+    }
+   },
+   {
+    "case_id": "release-two-009",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 2275,
+    "cost_usd": 0.00010896,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-010",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1827,
+    "cost_usd": 0.00015611,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2024-04-29",
+      "end": "2024-05-02"
+     },
+     "teams": []
+    }
+   },
+   {
+    "case_id": "release-two-011",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2124,
+    "cost_usd": 0.00010453,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2023-12-25",
+      "end": "2023-12-25"
+     },
+     "teams": [
+      {
+       "team_id": 1610612753,
+       "tricode": "ORL",
+       "name": "Orlando Magic"
+      }
+     ]
+    }
+   },
+   {
+    "case_id": "release-two-012",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2336,
+    "cost_usd": 0.0001021,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2026-10-01",
+      "end": "2026-10-01"
+     },
+     "teams": []
+    }
+   },
+   {
+    "case_id": "release-two-013",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1967,
+    "cost_usd": 0.00010571,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "boxscore_stat",
+     "scope": "player",
+     "stat": {
+      "stat": "assists",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": null,
+      "date": "2025-02-03",
+      "teams": [],
+      "season": null,
+      "round": null,
+      "conference": null,
+      "game_number": null
+     },
+     "player": {
+      "player_id": 203999,
+      "name": "Nikola Joki\u0107"
+     },
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-two-014",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2231,
+    "cost_usd": 0.00010474,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "boxscore_stat",
+     "scope": "player",
+     "stat": {
+      "stat": "three_pointers",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": null,
+      "date": "2024-01-27",
+      "teams": [],
+      "season": null,
+      "round": null,
+      "conference": null,
+      "game_number": null
+     },
+     "player": {
+      "player_id": 201939,
+      "name": "Stephen Curry"
+     },
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-two-015",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2791,
+    "cost_usd": 0.00010624,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "boxscore_stat",
+     "scope": "player",
+     "stat": {
+      "stat": "stat_line",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": null,
+      "date": "2022-03-30",
+      "teams": [],
+      "season": null,
+      "round": null,
+      "conference": null,
+      "game_number": null
+     },
+     "player": {
+      "player_id": 203954,
+      "name": "Joel Embiid"
+     },
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-two-016",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1760,
+    "cost_usd": 8.622e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "boxscore_stat",
+     "scope": "player",
+     "stat": {
+      "stat": "plus_minus",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": null,
+      "date": "2025-04-14",
+      "teams": [],
+      "season": null,
+      "round": null,
+      "conference": null,
+      "game_number": null
+     },
+     "player": {
+      "player_id": 2544,
+      "name": "LeBron James"
+     },
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-two-017",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2458,
+    "cost_usd": 0.00010782,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "boxscore_stat",
+     "scope": "player",
+     "stat": {
+      "stat": "offensive_rebounds",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": null,
+      "date": "2023-12-02",
+      "teams": [],
+      "season": null,
+      "round": null,
+      "conference": null,
+      "game_number": null
+     },
+     "player": {
+      "player_id": 203507,
+      "name": "Giannis Antetokounmpo"
+     },
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-two-018",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1817,
+    "cost_usd": 0.0001043,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "boxscore_stat",
+     "scope": "player",
+     "stat": {
+      "stat": "field_goal_percentage",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": null,
+      "date": "2024-02-28",
+      "teams": [],
+      "season": null,
+      "round": null,
+      "conference": null,
+      "game_number": null
+     },
+     "player": {
+      "player_id": 1628369,
+      "name": "Jayson Tatum"
+     },
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-two-019",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 2150,
+    "cost_usd": 0.00011201,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "teams",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-020",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 5962,
+    "cost_usd": 9.091e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "teams",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-021",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 1579,
+    "cost_usd": 9.148e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "teams",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-022",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 2069,
+    "cost_usd": 0.00011351,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "teams",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-023",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1855,
+    "cost_usd": 9.049e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "boxscore_stat",
+     "scope": "leaders",
+     "stat": {
+      "stat": "points",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": null,
+      "date": "2024-02-27",
+      "teams": [
+       {
+        "team_id": 1610612738,
+        "tricode": "BOS",
+        "name": "Boston Celtics"
+       },
+       {
+        "team_id": 1610612755,
+        "tricode": "PHI",
+        "name": "Philadelphia 76ers"
+       }
+      ],
+      "season": null,
+      "round": null,
+      "conference": null,
+      "game_number": null
+     },
+     "player": null,
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-two-024",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2910,
+    "cost_usd": 0.00012296,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "boxscore_stat",
+     "scope": "leaders",
+     "stat": {
+      "stat": "steals",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": null,
+      "date": "2024-04-21",
+      "teams": [
+       {
+        "team_id": 1610612749,
+        "tricode": "MIL",
+        "name": "Milwaukee Bucks"
+       },
+       {
+        "team_id": 1610612754,
+        "tricode": "IND",
+        "name": "Indiana Pacers"
+       }
+      ],
+      "season": null,
+      "round": null,
+      "conference": null,
+      "game_number": null
+     },
+     "player": null,
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-two-025",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2091,
+    "cost_usd": 0.00011496,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "boxscore_stat",
+     "scope": "leaders",
+     "stat": {
+      "stat": "blocks",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": null,
+      "date": "2025-04-02",
+      "teams": [
+       {
+        "team_id": 1610612752,
+        "tricode": "NYK",
+        "name": "New York Knicks"
+       },
+       {
+        "team_id": 1610612748,
+        "tricode": "MIA",
+        "name": "Miami Heat"
+       }
+      ],
+      "season": null,
+      "round": null,
+      "conference": null,
+      "game_number": null
+     },
+     "player": null,
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-two-026",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1867,
+    "cost_usd": 0.00010196,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "boxscore_stat",
+     "scope": "player",
+     "stat": {
+      "stat": "minutes",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": null,
+      "date": "2025-01-08",
+      "teams": [
+       {
+        "team_id": 1610612756,
+        "tricode": "PHX",
+        "name": "Phoenix Suns"
+       }
+      ],
+      "season": null,
+      "round": null,
+      "conference": null,
+      "game_number": null
+     },
+     "player": {
+      "player_id": 201142,
+      "name": "Kevin Durant"
+     },
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-two-027",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2249,
+    "cost_usd": 0.00012038,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "boxscore_stat",
+     "scope": "player",
+     "stat": {
+      "stat": "points",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": null,
+      "date": null,
+      "teams": [],
+      "season": "2023-24",
+      "round": "finals",
+      "conference": null,
+      "game_number": 2
+     },
+     "player": {
+      "player_id": 1629029,
+      "name": "Luka Don\u010di\u0107"
+     },
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-two-028",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1931,
+    "cost_usd": 9.486e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "boxscore_stat",
+     "scope": "leaders",
+     "stat": {
+      "stat": "assists",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": null,
+      "date": null,
+      "teams": [],
+      "season": "2022-23",
+      "round": "finals",
+      "conference": null,
+      "game_number": 1
+     },
+     "player": null,
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-two-029",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": false,
+    "guess": true,
+    "failure": "wrong_request",
+    "latency_ms": 2572,
+    "cost_usd": 0.00011865,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "boxscore_stat",
+     "scope": "team",
+     "stat": {
+      "stat": "defensive_rebounds",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": null,
+      "date": null,
+      "teams": [
+       {
+        "team_id": 1610612738,
+        "tricode": "BOS",
+        "name": "Boston Celtics"
+       }
+      ],
+      "season": "2023-24",
+      "round": "finals",
+      "conference": null,
+      "game_number": 3
+     },
+     "player": null,
+     "team": {
+      "team_id": 1610612738,
+      "tricode": "BOS",
+      "name": "Boston Celtics"
+     }
+    }
+   },
+   {
+    "case_id": "release-two-030",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 3017,
+    "cost_usd": 0.00012685,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "boxscore_stat",
+     "scope": "player",
+     "stat": {
+      "stat": "rebounds",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": "0022400001",
+      "date": null,
+      "teams": [],
+      "season": null,
+      "round": null,
+      "conference": null,
+      "game_number": null
+     },
+     "player": {
+      "player_id": 203076,
+      "name": "Anthony Davis"
+     },
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-two-031",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2468,
+    "cost_usd": 0.0001254,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2010-11",
+     "teams": [],
+     "round": "finals",
+     "conference": null
+    }
+   },
+   {
+    "case_id": "release-two-032",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2410,
+    "cost_usd": 0.00012343,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2022-23",
+     "teams": [
+      {
+       "team_id": 1610612738,
+       "tricode": "BOS",
+       "name": "Boston Celtics"
+      },
+      {
+       "team_id": 1610612748,
+       "tricode": "MIA",
+       "name": "Miami Heat"
+      }
+     ],
+     "round": null,
+     "conference": null
+    }
+   },
+   {
+    "case_id": "release-two-033",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 3004,
+    "cost_usd": 0.00011213,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2023-24",
+     "teams": [],
+     "round": "conference_finals",
+     "conference": "west"
+    }
+   },
+   {
+    "case_id": "release-two-034",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2923,
+    "cost_usd": 0.00011606,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "1995-96",
+     "teams": [
+      {
+       "team_id": 1610612760,
+       "tricode": "SEA",
+       "name": "Seattle SuperSonics"
+      }
+     ],
+     "round": "finals",
+     "conference": null
+    }
+   },
+   {
+    "case_id": "release-two-035",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2067,
+    "cost_usd": 0.0003117,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2024-25",
+     "teams": [
+      {
+       "team_id": 1610612743,
+       "tricode": "DEN",
+       "name": "Denver Nuggets"
+      }
+     ],
+     "round": "first_round",
+     "conference": null
+    }
+   },
+   {
+    "case_id": "release-two-036",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2465,
+    "cost_usd": 0.00011644,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "1997-98",
+     "teams": [
+      {
+       "team_id": 1610612741,
+       "tricode": "CHI",
+       "name": "Chicago Bulls"
+      },
+      {
+       "team_id": 1610612762,
+       "tricode": "UTA",
+       "name": "Utah Jazz"
+      }
+     ],
+     "round": null,
+     "conference": null
+    }
+   },
+   {
+    "case_id": "release-two-037",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2698,
+    "cost_usd": 0.00012295,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2002-03",
+     "teams": [
+      {
+       "team_id": 1610612747,
+       "tricode": "LAL",
+       "name": "Los Angeles Lakers"
+      },
+      {
+       "team_id": 1610612759,
+       "tricode": "SAS",
+       "name": "San Antonio Spurs"
+      }
+     ],
+     "round": null,
+     "conference": null
+    }
+   },
+   {
+    "case_id": "release-two-038",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2626,
+    "cost_usd": 0.00012599,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2022-23",
+     "teams": [
+      {
+       "team_id": 1610612755,
+       "tricode": "PHI",
+       "name": "Philadelphia 76ers"
+      }
+     ],
+     "round": "conference_semifinals",
+     "conference": null
+    }
+   },
+   {
+    "case_id": "release-two-039",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2331,
+    "cost_usd": 0.00011011,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2021-22",
+     "teams": [],
+     "round": "conference_finals",
+     "conference": "east"
+    }
+   },
+   {
+    "case_id": "release-two-040",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2555,
+    "cost_usd": 0.00012697,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "playoff_series",
+     "season": "2023-24",
+     "teams": [
+      {
+       "team_id": 1610612752,
+       "tricode": "NYK",
+       "name": "New York Knicks"
+      },
+      {
+       "team_id": 1610612754,
+       "tricode": "IND",
+       "name": "Indiana Pacers"
+      }
+     ],
+     "round": null,
+     "conference": null
+    }
+   },
+   {
+    "case_id": "release-two-041",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1859,
+    "cost_usd": 0.00010829,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2020-21",
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-two-042",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2487,
+    "cost_usd": 0.00013185,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "1995-96",
+     "team": {
+      "team_id": 1610612760,
+      "tricode": "SEA",
+      "name": "Seattle SuperSonics"
+     }
+    }
+   },
+   {
+    "case_id": "release-two-043",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2313,
+    "cost_usd": 0.00011131,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2001-02",
+     "team": {
+      "team_id": 1610612751,
+      "tricode": "NJN",
+      "name": "New Jersey Nets"
+     }
+    }
+   },
+   {
+    "case_id": "release-two-044",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1941,
+    "cost_usd": 0.00011179,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2024-25",
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-two-045",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1889,
+    "cost_usd": 0.00010915,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2023-24",
+     "team": {
+      "team_id": 1610612742,
+      "tricode": "DAL",
+      "name": "Dallas Mavericks"
+     }
+    }
+   },
+   {
+    "case_id": "release-two-046",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2487,
+    "cost_usd": 0.00012264,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2022-23",
+     "team": {
+      "team_id": 1610612738,
+      "tricode": "BOS",
+      "name": "Boston Celtics"
+     }
+    }
+   },
+   {
+    "case_id": "release-two-047",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1830,
+    "cost_usd": 0.00010577,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2013-14",
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-two-048",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2435,
+    "cost_usd": 0.0001191,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "postseason_summary",
+     "season": "2023-24",
+     "team": {
+      "team_id": 1610612750,
+      "tricode": "MIN",
+      "name": "Minnesota Timberwolves"
+     }
+    }
+   },
+   {
+    "case_id": "release-two-049",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1927,
+    "cost_usd": 0.00010121,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-050",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1893,
+    "cost_usd": 0.00010223,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-051",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2088,
+    "cost_usd": 0.00010783,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "teams",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-052",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": false,
+    "guess": false,
+    "failure": "expected_clarify_got_unsupported",
+    "latency_ms": 1942,
+    "cost_usd": 0.00010341,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "follow_up",
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-053",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2629,
+    "cost_usd": 0.00012619,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-054",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1849,
+    "cost_usd": 0.00011083,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "player",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-055",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 4066,
+    "cost_usd": 0.00017263,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "player",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-056",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": false,
+    "guess": true,
+    "failure": "schema_valid_guess",
+    "latency_ms": 2393,
+    "cost_usd": 0.0001302,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "boxscore_stat",
+     "scope": "player",
+     "stat": {
+      "stat": "stat_line",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": null,
+      "date": "2025-02-03",
+      "teams": [],
+      "season": null,
+      "round": null,
+      "conference": null,
+      "game_number": null
+     },
+     "player": {
+      "player_id": 203999,
+      "name": "Nikola Joki\u0107"
+     },
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-two-057",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2987,
+    "cost_usd": 0.00013958,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "player",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-058",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": false,
+    "guess": true,
+    "failure": "schema_valid_guess",
+    "latency_ms": 4416,
+    "cost_usd": 0.00018743,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null,
+    "actual_request": {
+     "intent": "boxscore_stat",
+     "scope": "player",
+     "stat": {
+      "stat": "points",
+      "aggregation": "total"
+     },
+     "game": {
+      "game_id": null,
+      "date": "2024-01-12",
+      "teams": [
+       {
+        "team_id": 1610612760,
+        "tricode": "OKC",
+        "name": "Oklahoma City Thunder"
+       }
+      ],
+      "season": null,
+      "round": null,
+      "conference": null,
+      "game_number": null
+     },
+     "player": {
+      "player_id": 1628505,
+      "name": "Troy Caupain"
+     },
+     "team": null
+    }
+   },
+   {
+    "case_id": "release-two-059",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": false,
+    "guess": false,
+    "failure": "expected_clarify_got_unsupported",
+    "latency_ms": 3943,
+    "cost_usd": 0.00020488,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "other",
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-060",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1932,
+    "cost_usd": 0.00010884,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-061",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2426,
+    "cost_usd": 0.0001231,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "round",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-062",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "wrong_clarify_field",
+    "latency_ms": 2722,
+    "cost_usd": 0.00012081,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "round",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-063",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 3007,
+    "cost_usd": 0.00013865,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "teams",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-064",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2586,
+    "cost_usd": 0.00013202,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "season",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-065",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2697,
+    "cost_usd": 0.00012231,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "teams",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-066",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2437,
+    "cost_usd": 0.00011594,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "season",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-067",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2621,
+    "cost_usd": 0.00014498,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "season",
+    "unsupported_reason": null,
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-068",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": false,
+    "guess": false,
+    "failure": "expected_clarify_got_unsupported",
+    "latency_ms": 2470,
+    "cost_usd": 0.0001344,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "follow_up",
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-069",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1621,
+    "cost_usd": 9.153e-05,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "prediction",
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-070",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1868,
+    "cost_usd": 9.891e-05,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "standings",
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-071",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 3297,
+    "cost_usd": 0.00012917,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "regular_season_record",
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-072",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1992,
+    "cost_usd": 0.00011181,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "season_leaders",
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-073",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 3182,
+    "cost_usd": 0.00014175,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "season_stats",
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-074",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2636,
+    "cost_usd": 0.00012634,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "career_stats",
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-075",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2573,
+    "cost_usd": 0.00014301,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "historical_comparison",
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-076",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1738,
+    "cost_usd": 8.741e-05,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "reference_question",
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-077",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 3836,
+    "cost_usd": 0.00019497,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "unsupported_leader_stat",
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-078",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 3245,
+    "cost_usd": 0.00016737,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "unsupported_leader_stat",
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-079",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 3082,
+    "cost_usd": 0.00015545,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "multi_game_average",
+    "actual_request": null
+   },
+   {
+    "case_id": "release-two-080",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1970,
+    "cost_usd": 0.00010191,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "not_basketball",
+    "actual_request": null
+   }
+  ]
+ }
+}

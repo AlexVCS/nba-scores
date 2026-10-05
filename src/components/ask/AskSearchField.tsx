@@ -1,5 +1,6 @@
 import type {ChangeEvent, KeyboardEvent, Ref} from "react";
 import {Search, XCircle} from "lucide-react";
+import {ASK_MAX_QUESTION_LENGTH} from "@/services/ask/types";
 import {ASK_PLACEHOLDER} from "./askCopy";
 
 interface AskSearchFieldProps {
@@ -32,7 +33,7 @@ function AskSearchField({inputRef, value, onChange, onKeyDown, onClear, onClose,
           autoCorrect="off"
           spellCheck={false}
           enterKeyHint="search"
-          maxLength={200}
+          maxLength={ASK_MAX_QUESTION_LENGTH}
           placeholder={ASK_PLACEHOLDER}
           className="min-w-0 flex-1 bg-transparent text-[17px] leading-snug font-semibold text-hw-ink caret-hw-accent-ink outline-none placeholder:font-medium placeholder:text-hw-muted max-[700px]:text-base"
           value={value}

@@ -1,0 +1,1428 @@
+{
+  "_comment": "Evaluated on 2026-09-29 and now exposed. Never reuse as an unseen release set. Labels were audited; see docs/verification/ask-release-label-audit.json.",
+  "default_reference_time": "2026-03-18T20:00:00-04:00",
+  "questions": [
+    {
+      "id": "release-001",
+      "intent": "game_search",
+      "question": "What NBA games were played on March 3, 2025?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "2025-03-03"
+          }
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-002",
+      "intent": "game_search",
+      "question": "Show the Knicks schedule for December 25, 2024",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "2024-12-25"
+          }
+        ],
+        "team": [
+          1610612752
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-003",
+      "intent": "game_search",
+      "question": "Games on October 22, 2024",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "2024-10-22"
+          }
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-004",
+      "intent": "game_search",
+      "question": "Did Boston play on January 5, 2023?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "2023-01-05"
+          }
+        ],
+        "team": [
+          1610612738
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-005",
+      "intent": "game_search",
+      "question": "Show Golden State games on February 1, 2020",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "2020-02-01"
+          }
+        ],
+        "team": [
+          1610612744
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-006",
+      "intent": "game_search",
+      "question": "Chicago Bulls games on April 9, 2019",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "2019-04-09"
+          }
+        ],
+        "team": [
+          1610612741
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-007",
+      "intent": "game_search",
+      "question": "Miami games on November 17, 2018",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "2018-11-17"
+          }
+        ],
+        "team": [
+          1610612748
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-008",
+      "intent": "game_search",
+      "question": "76ers games on March 10, 2022",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "2022-03-10"
+          }
+        ],
+        "team": [
+          1610612755
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-009",
+      "intent": "game_search",
+      "question": "Denver Nuggets games on May 1, 2023",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "2023-05-01"
+          }
+        ],
+        "team": [
+          1610612743
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-010",
+      "intent": "game_search",
+      "question": "Dallas games on June 12, 2011",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "2011-06-12"
+          }
+        ],
+        "team": [
+          1610612742
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-011",
+      "intent": "game_search",
+      "question": "Show games on March 3",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "month": 3,
+            "day": 3,
+            "year": null
+          }
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-012",
+      "intent": "game_search",
+      "question": "Games from March 1 through March 12, 2025",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "2025-03-01",
+            "end": "2025-03-12"
+          }
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-013",
+      "intent": "game_search",
+      "question": "What games were on yesterday?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "2026-03-17"
+          }
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-014",
+      "intent": "game_search",
+      "question": "Games last night?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "2026-03-17"
+          }
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-015",
+      "intent": "boxscore_stat",
+      "question": "How many points did LeBron James score on March 5, 2024?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "2024-03-05"
+          }
+        ],
+        "player": [
+          2544
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-016",
+      "intent": "boxscore_stat",
+      "question": "Stephen Curry rebounds on January 20, 2022",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "2022-01-20"
+          }
+        ],
+        "player": [
+          201939
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-017",
+      "intent": "boxscore_stat",
+      "question": "Jayson Tatum assists on April 17, 2022",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "2022-04-17"
+          }
+        ],
+        "player": [
+          1628369
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-018",
+      "intent": "boxscore_stat",
+      "question": "Nikola Jokic blocks on February 23, 2023",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "2023-02-23"
+          }
+        ],
+        "player": [
+          203999
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-019",
+      "intent": "boxscore_stat",
+      "question": "Michael Jordan full box score on June 12, 1997",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "1997-06-12"
+          }
+        ],
+        "player": [
+          893
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-020",
+      "intent": "boxscore_stat",
+      "question": "Kobe Bryant minutes on January 22, 2006",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "2006-01-22"
+          }
+        ],
+        "player": [
+          977
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-021",
+      "intent": "boxscore_stat",
+      "question": "Celtics team points on January 25, 2024",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "2024-01-25"
+          }
+        ],
+        "team": [
+          1610612738
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-022",
+      "intent": "boxscore_stat",
+      "question": "Who led in rebounds on February 12, 2023?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "2023-02-12"
+          }
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-023",
+      "intent": "boxscore_stat",
+      "question": "Knicks full team line on April 10, 2024",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "2024-04-10"
+          }
+        ],
+        "team": [
+          1610612752
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-024",
+      "intent": "boxscore_stat",
+      "question": "Who had the most assists on May 7, 2019?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "2019-05-07"
+          }
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-025",
+      "intent": "boxscore_stat",
+      "question": "Warriors team turnovers on March 15, 2022",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "2022-03-15"
+          }
+        ],
+        "team": [
+          1610612744
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-026",
+      "intent": "boxscore_stat",
+      "question": "Who scored most points on November 3, 2015?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "2015-11-03"
+          }
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-027",
+      "intent": "boxscore_stat",
+      "question": "How many points did Jalen score on March 3, 2025?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "2025-03-03",
+            "end": "2025-03-03"
+          }
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": [
+        "player"
+      ]
+    },
+    {
+      "id": "release-028",
+      "intent": "boxscore_stat",
+      "question": "How did LeBron do on March 3?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "month": 3,
+            "day": 3,
+            "year": null
+          }
+        ],
+        "player": [
+          2544
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-029",
+      "intent": "boxscore_stat",
+      "question": "What was LeBron James\u2019s points average over his last 5 games?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "player": [
+          2544
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-030",
+      "intent": "boxscore_stat",
+      "question": "Who led in field goal percentage on December 8, 2024?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "2024-12-08",
+            "end": "2024-12-08"
+          }
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-031",
+      "intent": "boxscore_stat",
+      "question": "Who had the best full stat line in the Knicks game on April 2, 2024?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "2024-04-02",
+            "end": "2024-04-02"
+          }
+        ],
+        "team": [
+          1610612752
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-032",
+      "intent": "boxscore_stat",
+      "question": "Who led the game in three-point percentage on March 2, 2024?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "2024-03-02",
+            "end": "2024-03-02"
+          }
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-033",
+      "intent": "playoff_series",
+      "question": "Celtics vs Lakers 2024 Finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2023-24"
+        ],
+        "round": [
+          "finals"
+        ],
+        "team": [
+          1610612738,
+          1610612747
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-034",
+      "intent": "playoff_series",
+      "question": "Bulls vs Jazz 1998 Finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "1997-98"
+        ],
+        "round": [
+          "finals"
+        ],
+        "team": [
+          1610612741,
+          1610612762
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-035",
+      "intent": "playoff_series",
+      "question": "Warriors vs Cavaliers 2016 Finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2015-16"
+        ],
+        "round": [
+          "finals"
+        ],
+        "team": [
+          1610612739,
+          1610612744
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-036",
+      "intent": "playoff_series",
+      "question": "Heat vs Spurs 2013 Finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2012-13"
+        ],
+        "round": [
+          "finals"
+        ],
+        "team": [
+          1610612748,
+          1610612759
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-037",
+      "intent": "playoff_series",
+      "question": "Raptors vs Warriors 2019 Finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2018-19"
+        ],
+        "round": [
+          "finals"
+        ],
+        "team": [
+          1610612744,
+          1610612761
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-038",
+      "intent": "playoff_series",
+      "question": "Mavericks vs Heat 2011 Finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2010-11"
+        ],
+        "round": [
+          "finals"
+        ],
+        "team": [
+          1610612742,
+          1610612748
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-039",
+      "intent": "playoff_series",
+      "question": "Lakers vs Celtics 2008 Finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2007-08"
+        ],
+        "round": [
+          "finals"
+        ],
+        "team": [
+          1610612738,
+          1610612747
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-040",
+      "intent": "playoff_series",
+      "question": "Nuggets vs Heat 2023 Finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2022-23"
+        ],
+        "round": [
+          "finals"
+        ],
+        "team": [
+          1610612743,
+          1610612748
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-041",
+      "intent": "playoff_series",
+      "question": "Knicks 2025 playoff series",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2024-25"
+        ],
+        "team": [
+          1610612752
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-042",
+      "intent": "playoff_series",
+      "question": "Suns 2021 Western Conference Finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2020-21"
+        ],
+        "round": [
+          "conference_finals.west"
+        ],
+        "team": [
+          1610612756
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-043",
+      "intent": "playoff_series",
+      "question": "Celtics 2024 Eastern Conference Semifinals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2023-24"
+        ],
+        "round": [
+          "conference_semifinals.east"
+        ],
+        "team": [
+          1610612738
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-044",
+      "intent": "playoff_series",
+      "question": "76ers vs Celtics 2023 playoffs",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2022-23"
+        ],
+        "team": [
+          1610612738,
+          1610612755
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-045",
+      "intent": "playoff_series",
+      "question": "Bucks 2021 first round",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2020-21"
+        ],
+        "round": [
+          "first_round"
+        ],
+        "team": [
+          1610612749
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-046",
+      "intent": "playoff_series",
+      "question": "Lakers 2020 Western Conference Finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2019-20"
+        ],
+        "round": [
+          "conference_finals.west"
+        ],
+        "team": [
+          1610612747
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-047",
+      "intent": "playoff_series",
+      "question": "Heat 2023 Eastern Conference Finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2022-23"
+        ],
+        "round": [
+          "conference_finals.east"
+        ],
+        "team": [
+          1610612748
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-048",
+      "intent": "playoff_series",
+      "question": "Thunder vs Spurs 2016 Western Conference Finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2015-16"
+        ],
+        "round": [
+          "conference_finals.west"
+        ],
+        "team": [
+          1610612759,
+          1610612760
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-049",
+      "intent": "playoff_series",
+      "question": "Pistons 2004 Finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2003-04"
+        ],
+        "round": [
+          "finals"
+        ],
+        "team": [
+          1610612765
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-050",
+      "intent": "playoff_series",
+      "question": "Cavaliers 2018 Eastern Conference Finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2017-18"
+        ],
+        "round": [
+          "conference_finals.east"
+        ],
+        "team": [
+          1610612739
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-051",
+      "intent": "playoff_series",
+      "question": "Warriors 2022 first round",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2021-22"
+        ],
+        "round": [
+          "first_round"
+        ],
+        "team": [
+          1610612744
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-052",
+      "intent": "playoff_series",
+      "question": "Celtics 2022 postseason conference finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2021-22"
+        ],
+        "round": [
+          "conference_finals"
+        ],
+        "team": [
+          1610612738
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-053",
+      "intent": "playoff_series",
+      "question": "Show the 2024 playoff series",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2023-24"
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-054",
+      "intent": "playoff_series",
+      "question": "Show the 2024 playoff series for Boston",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2023-24"
+        ],
+        "team": [
+          1610612738
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-055",
+      "intent": "playoff_series",
+      "question": "Show the 2024 conference finals",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2023-24"
+        ],
+        "round": [
+          "conference_finals"
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-056",
+      "intent": "playoff_series",
+      "question": "Show the 2024 playoff series between Boston and the Lakers",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2023-24"
+        ],
+        "team": [
+          1610612738,
+          1610612747
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-057",
+      "intent": "postseason_summary",
+      "question": "How did the Celtics do in the 2024 postseason?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2023-24"
+        ],
+        "team": [
+          1610612738
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-058",
+      "intent": "postseason_summary",
+      "question": "Lakers postseason summary for 2020",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2019-20"
+        ],
+        "team": [
+          1610612747
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-059",
+      "intent": "postseason_summary",
+      "question": "League-wide postseason summary, 2023",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2022-23"
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-060",
+      "intent": "postseason_summary",
+      "question": "Warriors postseason summary for 2015",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2014-15"
+        ],
+        "team": [
+          1610612744
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-061",
+      "intent": "postseason_summary",
+      "question": "Chicago Bulls postseason summary 1998",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "1997-98"
+        ],
+        "team": [
+          1610612741
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-062",
+      "intent": "postseason_summary",
+      "question": "Miami Heat 2012 postseason summary",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2011-12"
+        ],
+        "team": [
+          1610612748
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-063",
+      "intent": "postseason_summary",
+      "question": "Denver postseason summary for 2023",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2022-23"
+        ],
+        "team": [
+          1610612743
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-064",
+      "intent": "postseason_summary",
+      "question": "Toronto Raptors postseason summary, 2019",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2018-19"
+        ],
+        "team": [
+          1610612761
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-065",
+      "intent": "postseason_summary",
+      "question": "Cleveland postseason summary for 2016",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2015-16"
+        ],
+        "team": [
+          1610612739
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-066",
+      "intent": "postseason_summary",
+      "question": "New York Knicks postseason summary 2025",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2024-25"
+        ],
+        "team": [
+          1610612752
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-067",
+      "intent": "postseason_summary",
+      "question": "League postseason summary for 2024",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2023-24"
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-068",
+      "intent": "postseason_summary",
+      "question": "San Antonio Spurs postseason in 2014",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2013-14"
+        ],
+        "team": [
+          1610612759
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-069",
+      "intent": "postseason_summary",
+      "question": "Dallas Mavericks postseason in 2011",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2010-11"
+        ],
+        "team": [
+          1610612742
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-070",
+      "intent": "postseason_summary",
+      "question": "Milwaukee Bucks postseason summary 2021",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2020-21"
+        ],
+        "team": [
+          1610612749
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-071",
+      "intent": "postseason_summary",
+      "question": "Phoenix Suns postseason summary 2021",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2020-21"
+        ],
+        "team": [
+          1610612756
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-072",
+      "intent": "postseason_summary",
+      "question": "Boston Celtics postseason summary in 2008",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2007-08"
+        ],
+        "team": [
+          1610612738
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-073",
+      "intent": "postseason_summary",
+      "question": "Philadelphia postseason summary in 2023",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2022-23"
+        ],
+        "team": [
+          1610612755
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-074",
+      "intent": "postseason_summary",
+      "question": "Orlando postseason summary in 2009",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2008-09"
+        ],
+        "team": [
+          1610612753
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-075",
+      "intent": "postseason_summary",
+      "question": "Portland postseason summary in 2000",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "1999-00"
+        ],
+        "team": [
+          1610612757
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-076",
+      "intent": "postseason_summary",
+      "question": "Minnesota postseason summary in 2024",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "season": [
+          "2023-24"
+        ],
+        "team": [
+          1610612750
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-077",
+      "intent": "postseason_summary",
+      "question": "Show the Celtics postseason summary",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "team": [
+          1610612738
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-078",
+      "intent": "game_search",
+      "question": "What games were played yesterday?",
+      "reference_time": "2026-11-02T05:30:00Z",
+      "gold": {
+        "date": [
+          {
+            "start": "2026-11-01"
+          }
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-079",
+      "intent": "game_search",
+      "question": "Games tonight?",
+      "reference_time": "2026-11-02T02:30:00Z",
+      "gold": {
+        "date": [
+          {
+            "start": "2026-11-01"
+          }
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-080",
+      "intent": "game_search",
+      "question": "Games today?",
+      "reference_time": "2026-03-08T23:30:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "2026-03-08"
+          }
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-candidate-003",
+      "intent": "playoff_series",
+      "question": "What happened in Game 7 of the 2024 Finals between Boston and Los Angeles?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "team": [
+          1610612738
+        ],
+        "season": [
+          "2023-24"
+        ],
+        "round": [
+          "finals"
+        ],
+        "game_number": [
+          7
+        ]
+      },
+      "expect_no_candidates": [],
+      "expect_ambiguous": [
+        "team"
+      ]
+    },
+    {
+      "id": "release-candidate-001",
+      "intent": "game_search",
+      "question": "Show the Gotham Comets games on January 12, 2025.",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "2025-01-12"
+          }
+        ]
+      },
+      "expect_no_candidates": [
+        "team"
+      ],
+      "expect_ambiguous": []
+    },
+    {
+      "id": "release-candidate-002",
+      "intent": "boxscore_stat",
+      "question": "How many points did Xandor Quill score on January 12, 2025?",
+      "reference_time": "2026-03-18T20:00:00-04:00",
+      "gold": {
+        "date": [
+          {
+            "start": "2025-01-12"
+          }
+        ]
+      },
+      "expect_no_candidates": [
+        "player"
+      ],
+      "expect_ambiguous": []
+    }
+  ]
+}

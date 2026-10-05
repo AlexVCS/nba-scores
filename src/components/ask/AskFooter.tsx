@@ -1,6 +1,7 @@
 import {CornerDownLeft, Eye, EyeOff, ShieldCheck} from "lucide-react";
 import type {AskResponse} from "@/services/ask/types";
 import {ASK_HIDDEN_COPY, ASK_NO_MODEL_COPY, ASK_SOURCE_COPY} from "./askCopy";
+import AskResponseDetails from "./AskResponseDetails";
 
 interface AskFooterProps {
   mode: "empty" | "typeahead" | "result";
@@ -40,6 +41,9 @@ function AskFooter({mode, resultsHidden, response}: AskFooterProps) {
           <span className={`${kbd} ml-2`}><CornerDownLeft className="size-2.5" /></span> {mode === "typeahead" ? "open" : "select"}
           <span className={`${kbd} ml-2`}>esc</span> close
         </span>
+      )}
+      {import.meta.env.DEV && mode === "result" && response && (
+        <AskResponseDetails interpreter={response.interpreter} />
       )}
     </div>
   );

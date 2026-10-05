@@ -1,0 +1,1496 @@
+{
+ "purpose": "#199 interpreter comparison",
+ "cases_file": "/private/tmp/ask-release-unseen.json",
+ "candidate_source": "lookup:server.ask.candidates.lookup:CandidateLookupService:b1e671a647.3f8b89d1.52b7768d",
+ "thresholds": "Frozen single GPT-6 Luna at low effort; confidence thresholds unused. Candidate cf3737b; interpreter 1e2535d; gates fixed before private release labels opened.",
+ "generated_at": "2026-09-29T18:28:47+00:00",
+ "spend": {
+  "cap_usd": 0.5,
+  "spent_usd": 0.020513
+ },
+ "stopped_reason": null,
+ "candidate_errors": {},
+ "configs": {
+  "gpt-6-luna": {
+   "cases": 80,
+   "complete_request_accuracy": 0.775,
+   "correct": 62,
+   "schema_valid_guesses": 8,
+   "service_failures": 0,
+   "clarification": {
+    "expected": 0,
+    "correct": 0,
+    "issued": 7,
+    "unneeded": 7
+   },
+   "unsupported": {
+    "expected": 4,
+    "correct": 3,
+    "issued": 6,
+    "false": 2
+   },
+   "latency_ms": {
+    "median": 2316.0,
+    "p95": 4297
+   },
+   "total_cost_usd": 0.020513,
+   "cost_per_successful_answer_usd": 0.000331,
+   "fallback_rate": 0.0,
+   "resolved_models": [
+    "gpt-6-luna"
+   ],
+   "failures": {
+    "expected_needs_clarification_got_clarify": 7,
+    "false_unsupported": 2,
+    "schema_valid_guess": 3,
+    "wrong_request": 5,
+    "wrong_unsupported_reason": 1
+   },
+   "not_run": []
+  }
+ },
+ "cases": {
+  "gpt-6-luna": [
+   {
+    "case_id": "release-001",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1886,
+    "cost_usd": 0.00015051,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-002",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 4293,
+    "cost_usd": 0.00016174,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-003",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2010,
+    "cost_usd": 0.00014771,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-004",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2149,
+    "cost_usd": 0.0002733,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-005",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2588,
+    "cost_usd": 0.0002706,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-006",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 3607,
+    "cost_usd": 0.0002719,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-007",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1908,
+    "cost_usd": 0.00016034,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-008",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2809,
+    "cost_usd": 0.0002705,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-009",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2092,
+    "cost_usd": 0.0002528,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-010",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2141,
+    "cost_usd": 0.0002692,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-011",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "expected_needs_clarification_got_clarify",
+    "latency_ms": 1925,
+    "cost_usd": 0.00013101,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-012",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "expected_needs_clarification_got_clarify",
+    "latency_ms": 2241,
+    "cost_usd": 0.00014991,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-013",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2080,
+    "cost_usd": 0.00015471,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-014",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1724,
+    "cost_usd": 0.00014851,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-015",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2546,
+    "cost_usd": 0.00018162,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-016",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2544,
+    "cost_usd": 0.0002772,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-017",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2227,
+    "cost_usd": 0.0002845,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-018",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": false,
+    "guess": true,
+    "failure": "wrong_request",
+    "latency_ms": 2081,
+    "cost_usd": 0.0002721,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-019",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1955,
+    "cost_usd": 0.0002741,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-020",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2795,
+    "cost_usd": 0.0002737,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-021",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1986,
+    "cost_usd": 0.00017334,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-022",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 4070,
+    "cost_usd": 0.00018201,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-023",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2694,
+    "cost_usd": 0.00016534,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-024",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": false,
+    "guess": false,
+    "failure": "false_unsupported",
+    "latency_ms": 5853,
+    "cost_usd": 0.00031201,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "other"
+   },
+   {
+    "case_id": "release-025",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2329,
+    "cost_usd": 0.00016364,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-026",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": false,
+    "guess": false,
+    "failure": "false_unsupported",
+    "latency_ms": 4297,
+    "cost_usd": 0.00026301,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "other"
+   },
+   {
+    "case_id": "release-027",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "expected_needs_clarification_got_clarify",
+    "latency_ms": 1880,
+    "cost_usd": 0.00020865,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "player",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-028",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "expected_needs_clarification_got_clarify",
+    "latency_ms": 2192,
+    "cost_usd": 0.00017202,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-029",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2439,
+    "cost_usd": 0.0003087,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "multi_game_average"
+   },
+   {
+    "case_id": "release-030",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": false,
+    "guess": false,
+    "failure": "wrong_unsupported_reason",
+    "latency_ms": 4314,
+    "cost_usd": 0.00026021,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "other"
+   },
+   {
+    "case_id": "release-031",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 4868,
+    "cost_usd": 0.00022444,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "unsupported_leader_stat"
+   },
+   {
+    "case_id": "release-032",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 3127,
+    "cost_usd": 0.00018031,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "unsupported_leader_stat"
+   },
+   {
+    "case_id": "release-033",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 5105,
+    "cost_usd": 0.000311,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-034",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2418,
+    "cost_usd": 0.0003182,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-035",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2393,
+    "cost_usd": 0.0003105,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-036",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2238,
+    "cost_usd": 0.0003131,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-037",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1769,
+    "cost_usd": 0.0002893,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-038",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1765,
+    "cost_usd": 0.0002893,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-039",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2014,
+    "cost_usd": 0.0002894,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-040",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2197,
+    "cost_usd": 0.0003088,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-041",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "expected_needs_clarification_got_clarify",
+    "latency_ms": 1969,
+    "cost_usd": 0.0003014,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "round",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-042",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 3174,
+    "cost_usd": 0.0003392,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-043",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": false,
+    "guess": true,
+    "failure": "wrong_request",
+    "latency_ms": 2613,
+    "cost_usd": 0.0003122,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-044",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2046,
+    "cost_usd": 0.0003045,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-045",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 3166,
+    "cost_usd": 0.0003317,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-046",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2532,
+    "cost_usd": 0.0003218,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-047",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2118,
+    "cost_usd": 0.0003145,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-048",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 3350,
+    "cost_usd": 0.0003183,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-049",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": false,
+    "guess": true,
+    "failure": "wrong_request",
+    "latency_ms": 1712,
+    "cost_usd": 0.0002825,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-050",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": false,
+    "guess": true,
+    "failure": "wrong_request",
+    "latency_ms": 1801,
+    "cost_usd": 0.000285,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-051",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2445,
+    "cost_usd": 0.0003182,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-052",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": false,
+    "guess": true,
+    "failure": "wrong_request",
+    "latency_ms": 2653,
+    "cost_usd": 0.0003333,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-053",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": false,
+    "guess": true,
+    "failure": "schema_valid_guess",
+    "latency_ms": 2839,
+    "cost_usd": 0.00018734,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-054",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "expected_needs_clarification_got_clarify",
+    "latency_ms": 2324,
+    "cost_usd": 0.0002979,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "round",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-055",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": false,
+    "guess": true,
+    "failure": "schema_valid_guess",
+    "latency_ms": 2240,
+    "cost_usd": 0.0003136,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-056",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": false,
+    "guess": true,
+    "failure": "schema_valid_guess",
+    "latency_ms": 2334,
+    "cost_usd": 0.0003081,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-057",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2704,
+    "cost_usd": 0.00016647,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-058",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2166,
+    "cost_usd": 0.00017367,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-059",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2429,
+    "cost_usd": 0.0002955,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-060",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2154,
+    "cost_usd": 0.000301,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-061",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2564,
+    "cost_usd": 0.0003003,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-062",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2272,
+    "cost_usd": 0.0002983,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-063",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2139,
+    "cost_usd": 0.0002997,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-064",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1963,
+    "cost_usd": 0.0003024,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-065",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2653,
+    "cost_usd": 0.0002975,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-066",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2384,
+    "cost_usd": 0.00016827,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-067",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2308,
+    "cost_usd": 0.00017684,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-068",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2102,
+    "cost_usd": 0.0002991,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-069",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2852,
+    "cost_usd": 0.0003003,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-070",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2169,
+    "cost_usd": 0.0003026,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-071",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2331,
+    "cost_usd": 0.0003008,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-072",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2003,
+    "cost_usd": 0.0002974,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-073",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2674,
+    "cost_usd": 0.0003044,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-074",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2560,
+    "cost_usd": 0.000302,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-075",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2639,
+    "cost_usd": 0.0002987,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-076",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2702,
+    "cost_usd": 0.0003026,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-077",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "expected_needs_clarification_got_clarify",
+    "latency_ms": 1971,
+    "cost_usd": 0.0002917,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "season",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-078",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1886,
+    "cost_usd": 0.00014921,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-079",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2191,
+    "cost_usd": 0.00015091,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "release-080",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1655,
+    "cost_usd": 0.00014471,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   }
+  ]
+ }
+}

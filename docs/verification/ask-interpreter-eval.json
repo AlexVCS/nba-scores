@@ -1,0 +1,2477 @@
+{
+ "purpose": "#199 interpreter comparison",
+ "cases_file": "server/tests/ask/fixtures/eval/dev.json",
+ "candidate_source": "lookup:server.ask.candidates.lookup:CandidateLookupService:b1e671a647.3f8b89d1.52b7768d",
+ "thresholds": "uncalibrated defaults",
+ "generated_at": "2026-09-29T18:23:05+00:00",
+ "spend": {
+  "cap_usd": 1.3,
+  "spent_usd": 0.010432
+ },
+ "stopped_reason": null,
+ "candidate_errors": {},
+ "configs": {
+  "jev": {
+   "cases": 43,
+   "complete_request_accuracy": 0.6744,
+   "correct": 29,
+   "schema_valid_guesses": 0,
+   "service_failures": 3,
+   "clarification": {
+    "expected": 12,
+    "correct": 10,
+    "issued": 20,
+    "unneeded": 10
+   },
+   "unsupported": {
+    "expected": 5,
+    "correct": 4,
+    "issued": 5,
+    "false": 1
+   },
+   "latency_ms": {
+    "median": 180,
+    "p95": 238
+   },
+   "total_cost_usd": 0.004178,
+   "cost_per_successful_answer_usd": 0.000144,
+   "fallback_rate": 0.0,
+   "resolved_models": [
+    "jev-1.13.0"
+   ],
+   "failures": {
+    "expected_clarify_got_unsupported": 1,
+    "service_failure": 3,
+    "unneeded_clarification": 10
+   },
+   "not_run": []
+  },
+  "gpt-6-luna": {
+   "cases": 43,
+   "complete_request_accuracy": 0.9767,
+   "correct": 42,
+   "schema_valid_guesses": 0,
+   "service_failures": 0,
+   "clarification": {
+    "expected": 12,
+    "correct": 11,
+    "issued": 11,
+    "unneeded": 0
+   },
+   "unsupported": {
+    "expected": 5,
+    "correct": 5,
+    "issued": 6,
+    "false": 1
+   },
+   "latency_ms": {
+    "median": 2143,
+    "p95": 3582
+   },
+   "total_cost_usd": 0.005053,
+   "cost_per_successful_answer_usd": 0.00012,
+   "fallback_rate": 0.0,
+   "resolved_models": [
+    "gpt-6-luna"
+   ],
+   "failures": {
+    "expected_clarify_got_unsupported": 1
+   },
+   "not_run": []
+  },
+  "jev->gpt-6-luna": {
+   "cases": 43,
+   "complete_request_accuracy": 0.8837,
+   "correct": 38,
+   "schema_valid_guesses": 0,
+   "service_failures": 0,
+   "clarification": {
+    "expected": 12,
+    "correct": 11,
+    "issued": 15,
+    "unneeded": 4
+   },
+   "unsupported": {
+    "expected": 5,
+    "correct": 5,
+    "issued": 6,
+    "false": 1
+   },
+   "latency_ms": {
+    "median": 192,
+    "p95": 2526
+   },
+   "total_cost_usd": 0.005379,
+   "cost_per_successful_answer_usd": 0.000142,
+   "fallback_rate": 0.2558,
+   "resolved_models": [
+    "gpt-6-luna",
+    "jev-1.13.0"
+   ],
+   "failures": {
+    "expected_clarify_got_unsupported": 1,
+    "unneeded_clarification": 4
+   },
+   "not_run": [],
+   "fallback_effect_vs_primary_alone": {
+    "fixed": [
+     "dev-002",
+     "dev-012",
+     "dev-024",
+     "dev-030",
+     "dev-031",
+     "dev-050",
+     "dev-052",
+     "dev-070",
+     "dev-073"
+    ],
+    "worsened": []
+   }
+  }
+ },
+ "cases": {
+  "jev": [
+   {
+    "case_id": "dev-001",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 208,
+    "cost_usd": 9.303e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-002",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 178,
+    "cost_usd": 9.874e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-003",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 148,
+    "cost_usd": 0.00010437,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-008",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 158,
+    "cost_usd": 0.00010391,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-009",
+    "config": "jev",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 224,
+    "cost_usd": 9.181e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-012",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 219,
+    "cost_usd": 9.794e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-014",
+    "config": "jev",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 176,
+    "cost_usd": 9.198e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-022",
+    "config": "jev",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 198,
+    "cost_usd": 0.00010298,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "teams",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-024",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 161,
+    "cost_usd": 9.366e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-025",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 200,
+    "cost_usd": 9.937e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-026",
+    "config": "jev",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 218,
+    "cost_usd": 0.00010664,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "player",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-027",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 170,
+    "cost_usd": 9.521e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-028",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 160,
+    "cost_usd": 9.572e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "season",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-030",
+    "config": "jev",
+    "action": "fail",
+    "correct": false,
+    "guess": false,
+    "failure": "service_failure",
+    "latency_ms": 214,
+    "cost_usd": 0.00010114,
+    "fallback_used": false,
+    "first_outcome": "unavailable",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [
+     "inconsistent_team_count"
+    ],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-031",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 180,
+    "cost_usd": 9.828e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-032",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 155,
+    "cost_usd": 9.988e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "stat",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-035",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 247,
+    "cost_usd": 9.664e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-037",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 187,
+    "cost_usd": 9.748e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-038",
+    "config": "jev",
+    "action": "unsupported",
+    "correct": false,
+    "guess": false,
+    "failure": "expected_clarify_got_unsupported",
+    "latency_ms": 164,
+    "cost_usd": 9.332e-05,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "not_basketball"
+   },
+   {
+    "case_id": "dev-040",
+    "config": "jev",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 174,
+    "cost_usd": 9.353e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-047",
+    "config": "jev",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 164,
+    "cost_usd": 0.00010748,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "player",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-049",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 147,
+    "cost_usd": 9.937e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "season",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-050",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 159,
+    "cost_usd": 9.349e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "teams",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-051",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 214,
+    "cost_usd": 0.00010647,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-052",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 238,
+    "cost_usd": 9.391e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "teams",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-055",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 180,
+    "cost_usd": 0.00010156,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-058",
+    "config": "jev",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 211,
+    "cost_usd": 9.358e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "teams",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-061",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 176,
+    "cost_usd": 9.782e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-062",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 197,
+    "cost_usd": 9.261e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-063",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 158,
+    "cost_usd": 0.00010109,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-067",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 155,
+    "cost_usd": 0.00010063,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-069",
+    "config": "jev",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 180,
+    "cost_usd": 9.248e-05,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "career_stats"
+   },
+   {
+    "case_id": "dev-070",
+    "config": "jev",
+    "action": "fail",
+    "correct": false,
+    "guess": false,
+    "failure": "service_failure",
+    "latency_ms": 188,
+    "cost_usd": 9.353e-05,
+    "fallback_used": false,
+    "first_outcome": "unreliable",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-071",
+    "config": "jev",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 192,
+    "cost_usd": 9.064e-05,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "not_basketball"
+   },
+   {
+    "case_id": "dev-073",
+    "config": "jev",
+    "action": "fail",
+    "correct": false,
+    "guess": false,
+    "failure": "service_failure",
+    "latency_ms": 209,
+    "cost_usd": 9.341e-05,
+    "fallback_used": false,
+    "first_outcome": "unreliable",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-074",
+    "config": "jev",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 252,
+    "cost_usd": 9.53e-05,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "multi_game_average"
+   },
+   {
+    "case_id": "dev-invalid-day-32",
+    "config": "jev",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 155,
+    "cost_usd": 9.101e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-invalid-day-0",
+    "config": "jev",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 169,
+    "cost_usd": 9.097e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-sonics-2015",
+    "config": "jev",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 171,
+    "cost_usd": 9.412e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "teams",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-hornets-2008",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 177,
+    "cost_usd": 0.00010198,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-leader-pct",
+    "config": "jev",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 179,
+    "cost_usd": 0.00010366,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "unsupported_leader_stat"
+   },
+   {
+    "case_id": "dev-page-playoffs",
+    "config": "jev",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 202,
+    "cost_usd": 9.257e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "season",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-cross-year-range",
+    "config": "jev",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 203,
+    "cost_usd": 9.513e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   }
+  ],
+  "gpt-6-luna": [
+   {
+    "case_id": "dev-001",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2539,
+    "cost_usd": 9.718e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-002",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1955,
+    "cost_usd": 0.00010211,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-003",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1934,
+    "cost_usd": 0.00010802,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-008",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1848,
+    "cost_usd": 0.00010447,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-009",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2423,
+    "cost_usd": 0.00011145,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-012",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2157,
+    "cost_usd": 8.296e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-014",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1723,
+    "cost_usd": 9.501e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-022",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2555,
+    "cost_usd": 0.00011231,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "teams",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-024",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1832,
+    "cost_usd": 9.33e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-025",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2838,
+    "cost_usd": 0.00013475,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-026",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1682,
+    "cost_usd": 0.00012788,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "player",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-027",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1985,
+    "cost_usd": 0.00010414,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-028",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2320,
+    "cost_usd": 0.00012873,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-030",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1903,
+    "cost_usd": 0.00010509,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-031",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2622,
+    "cost_usd": 0.00010453,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-032",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2144,
+    "cost_usd": 0.00012126,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-035",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2184,
+    "cost_usd": 0.00011285,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-037",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1569,
+    "cost_usd": 9.281e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-038",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 4754,
+    "cost_usd": 0.00024583,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "player",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-040",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1989,
+    "cost_usd": 0.00010683,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-047",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1710,
+    "cost_usd": 0.00013048,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "player",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-049",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2271,
+    "cost_usd": 0.00011222,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-050",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1919,
+    "cost_usd": 0.00011111,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-051",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1433,
+    "cost_usd": 0.00011642,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-052",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2056,
+    "cost_usd": 0.00011821,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-055",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1829,
+    "cost_usd": 0.00011263,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-058",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2237,
+    "cost_usd": 8.961e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "teams",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-061",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1822,
+    "cost_usd": 0.0001107,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-062",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2143,
+    "cost_usd": 0.00010537,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-063",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2553,
+    "cost_usd": 0.00011389,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-067",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2223,
+    "cost_usd": 0.00011887,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-069",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2958,
+    "cost_usd": 0.00012786,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "career_stats"
+   },
+   {
+    "case_id": "dev-070",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2601,
+    "cost_usd": 0.00012662,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "prediction"
+   },
+   {
+    "case_id": "dev-071",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1851,
+    "cost_usd": 0.00010348,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "not_basketball"
+   },
+   {
+    "case_id": "dev-073",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": false,
+    "guess": false,
+    "failure": "expected_clarify_got_unsupported",
+    "latency_ms": 4258,
+    "cost_usd": 0.00015975,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "not_basketball"
+   },
+   {
+    "case_id": "dev-074",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 3165,
+    "cost_usd": 0.00013501,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "multi_game_average"
+   },
+   {
+    "case_id": "dev-invalid-day-32",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2600,
+    "cost_usd": 0.00014254,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-invalid-day-0",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2403,
+    "cost_usd": 0.00014554,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-sonics-2015",
+    "config": "gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1947,
+    "cost_usd": 0.00010488,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": "teams",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-hornets-2008",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1617,
+    "cost_usd": 0.00010134,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-leader-pct",
+    "config": "gpt-6-luna",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 3582,
+    "cost_usd": 0.00015892,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "unsupported_leader_stat"
+   },
+   {
+    "case_id": "dev-page-playoffs",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1994,
+    "cost_usd": 0.0001174,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-cross-year-range",
+    "config": "gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1852,
+    "cost_usd": 9.908e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   }
+  ],
+  "jev->gpt-6-luna": [
+   {
+    "case_id": "dev-001",
+    "config": "jev->gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 208,
+    "cost_usd": 9.303e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-002",
+    "config": "jev->gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 1993,
+    "cost_usd": 0.00018185,
+    "fallback_used": true,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna",
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-003",
+    "config": "jev->gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 148,
+    "cost_usd": 0.00010437,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-008",
+    "config": "jev->gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 158,
+    "cost_usd": 0.00010391,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-009",
+    "config": "jev->gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 224,
+    "cost_usd": 9.181e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-012",
+    "config": "jev->gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2031,
+    "cost_usd": 0.0001989,
+    "fallback_used": true,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna",
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-014",
+    "config": "jev->gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 176,
+    "cost_usd": 9.198e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-022",
+    "config": "jev->gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2457,
+    "cost_usd": 0.00021129,
+    "fallback_used": true,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna",
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "teams",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-024",
+    "config": "jev->gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2303,
+    "cost_usd": 0.00019146,
+    "fallback_used": true,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna",
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-025",
+    "config": "jev->gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 200,
+    "cost_usd": 9.937e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-026",
+    "config": "jev->gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2029,
+    "cost_usd": 0.00023152,
+    "fallback_used": true,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna",
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "player",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-027",
+    "config": "jev->gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 170,
+    "cost_usd": 9.521e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-028",
+    "config": "jev->gpt-6-luna",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 159,
+    "cost_usd": 9.572e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "season",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-030",
+    "config": "jev->gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2375,
+    "cost_usd": 0.00020923,
+    "fallback_used": true,
+    "first_outcome": "unavailable",
+    "resolved_models": [
+     "gpt-6-luna",
+     "jev-1.13.0"
+    ],
+    "error_codes": [
+     "inconsistent_team_count"
+    ],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-031",
+    "config": "jev->gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2526,
+    "cost_usd": 0.00020231,
+    "fallback_used": true,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna",
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-032",
+    "config": "jev->gpt-6-luna",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 155,
+    "cost_usd": 9.988e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "stat",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-035",
+    "config": "jev->gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 247,
+    "cost_usd": 9.664e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-037",
+    "config": "jev->gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 187,
+    "cost_usd": 9.748e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-038",
+    "config": "jev->gpt-6-luna",
+    "action": "unsupported",
+    "correct": false,
+    "guess": false,
+    "failure": "expected_clarify_got_unsupported",
+    "latency_ms": 164,
+    "cost_usd": 9.332e-05,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "not_basketball"
+   },
+   {
+    "case_id": "dev-040",
+    "config": "jev->gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 174,
+    "cost_usd": 9.353e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-047",
+    "config": "jev->gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 163,
+    "cost_usd": 0.00010748,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "player",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-049",
+    "config": "jev->gpt-6-luna",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 146,
+    "cost_usd": 9.937e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "season",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-050",
+    "config": "jev->gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2151,
+    "cost_usd": 0.0002041,
+    "fallback_used": true,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna",
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-051",
+    "config": "jev->gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 214,
+    "cost_usd": 0.00010647,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-052",
+    "config": "jev->gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2195,
+    "cost_usd": 0.00020612,
+    "fallback_used": true,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "gpt-6-luna",
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-055",
+    "config": "jev->gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 180,
+    "cost_usd": 0.00010156,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-058",
+    "config": "jev->gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 210,
+    "cost_usd": 9.358e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "teams",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-061",
+    "config": "jev->gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 176,
+    "cost_usd": 9.782e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-062",
+    "config": "jev->gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 197,
+    "cost_usd": 9.261e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-063",
+    "config": "jev->gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 157,
+    "cost_usd": 0.00010109,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-067",
+    "config": "jev->gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 155,
+    "cost_usd": 0.00010063,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-069",
+    "config": "jev->gpt-6-luna",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 180,
+    "cost_usd": 9.248e-05,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "career_stats"
+   },
+   {
+    "case_id": "dev-070",
+    "config": "jev->gpt-6-luna",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2830,
+    "cost_usd": 0.00021965,
+    "fallback_used": true,
+    "first_outcome": "unreliable",
+    "resolved_models": [
+     "gpt-6-luna",
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "prediction"
+   },
+   {
+    "case_id": "dev-071",
+    "config": "jev->gpt-6-luna",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 192,
+    "cost_usd": 9.064e-05,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "not_basketball"
+   },
+   {
+    "case_id": "dev-073",
+    "config": "jev->gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 2572,
+    "cost_usd": 0.00021766,
+    "fallback_used": true,
+    "first_outcome": "unreliable",
+    "resolved_models": [
+     "gpt-6-luna",
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "teams",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-074",
+    "config": "jev->gpt-6-luna",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 252,
+    "cost_usd": 9.53e-05,
+    "fallback_used": false,
+    "first_outcome": "unsupported",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "multi_game_average"
+   },
+   {
+    "case_id": "dev-invalid-day-32",
+    "config": "jev->gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 155,
+    "cost_usd": 9.101e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-invalid-day-0",
+    "config": "jev->gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 169,
+    "cost_usd": 9.097e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "date",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-sonics-2015",
+    "config": "jev->gpt-6-luna",
+    "action": "clarify",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 170,
+    "cost_usd": 9.412e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "teams",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-hornets-2008",
+    "config": "jev->gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 177,
+    "cost_usd": 0.00010198,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-leader-pct",
+    "config": "jev->gpt-6-luna",
+    "action": "unsupported",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 178,
+    "cost_usd": 0.00010366,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": "unsupported_leader_stat"
+   },
+   {
+    "case_id": "dev-page-playoffs",
+    "config": "jev->gpt-6-luna",
+    "action": "clarify",
+    "correct": false,
+    "guess": false,
+    "failure": "unneeded_clarification",
+    "latency_ms": 202,
+    "cost_usd": 9.257e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": "season",
+    "unsupported_reason": null
+   },
+   {
+    "case_id": "dev-cross-year-range",
+    "config": "jev->gpt-6-luna",
+    "action": "accept",
+    "correct": true,
+    "guess": false,
+    "failure": null,
+    "latency_ms": 203,
+    "cost_usd": 9.513e-05,
+    "fallback_used": false,
+    "first_outcome": "interpreted",
+    "resolved_models": [
+     "jev-1.13.0"
+    ],
+    "error_codes": [],
+    "clarify_field": null,
+    "unsupported_reason": null
+   }
+  ]
+ }
+}

@@ -1,5 +1,6 @@
 import {act, render, screen, waitFor, within} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import {useNavigate} from "react-router";
 import {afterEach, beforeEach, describe, expect, it, vi} from "vitest";
 import {ASK_RESPONSE_FIXTURES, ASK_SUGGEST_FIXTURES} from "@/services/ask/fixtures";
 import {ASK_RECENT_STORAGE_KEY} from "@/services/ask/recentSearches";
@@ -13,6 +14,11 @@ function setup(path?: string) {
   const user = userEvent.setup();
   render(<AskTestProviders path={path}><AskEntry /></AskTestProviders>);
   return user;
+}
+
+function NavigationButton() {
+  const navigate = useNavigate();
+  return <button onClick={() => navigate("/design-1/playoffs?season=2024-25")}>Go to playoffs</button>;
 }
 
 function mockRequester(response: AskResponse | ((query: AskQuery) => AskResponse)) {
@@ -121,7 +127,7 @@ describe("Ask entry and search dialog", () => {
     const stored = JSON.parse(localStorage.getItem(ASK_RECENT_STORAGE_KEY)!);
     expect(stored).toEqual([{question: "how many points did harden score on march 9 2026", askedAt: expect.any(String)}]);
     await user.click(screen.getByRole("button", {name: "Reveal points"}));
-    expect(localStorage.getItem(ASK_RECENT_STORAGE_KEY)).not.toMatch(/21|104|112/);
+    expect(JSON.parse(localStorage.getItem(ASK_RECENT_STORAGE_KEY)!)).toEqual(stored);
 
     await user.click(screen.getByRole("button", {name: "Clear question"}));
     expect(input()).toHaveValue("");
@@ -195,6 +201,40 @@ describe("Ask entry and search dialog", () => {
     expect(requester.mock.calls.map(([query]) => query.resolution)).toEqual([
       null, "rsv_fx_two_step_1628973", "rsv_fx_two_step_1628973_2026",
     ]);
+    expect(requester.mock.calls.map(([query]) => query.context)).toEqual([
+      {route: "scores", view_date: "2026-02-05", game_id: null, playoff_season: null},
+      {route: "scores", view_date: "2026-02-05", game_id: null, playoff_season: null},
+      {route: "scores", view_date: "2026-02-05", game_id: null, playoff_season: null},
+    ]);
+  });
+
+  it("keeps the original context when choosing an option after navigation", async () => {
+    const requester = mockRequester(query => query.resolution
+      ? ASK_RESPONSE_FIXTURES["answer-player-stat"]
+      : ASK_RESPONSE_FIXTURES["clarification-which-jalen"]);
+    const user = userEvent.setup();
+    render(<AskTestProviders><AskEntry /><NavigationButton /></AskTestProviders>);
+    await user.keyboard("{Control>}k{/Control}");
+    await user.type(input(), "how did jalen do last night{Enter}");
+    expect(await screen.findByRole("heading", {name: "Which Jalen?"})).toBeInTheDocument();
+
+    await user.keyboard("{Escape}");
+    await user.click(screen.getByRole("button", {name: "Go to playoffs"}));
+    expect(screen.getByTestId("location")).toHaveTextContent("/design-1/playoffs?season=2024-25");
+    await user.keyboard("{Control>}k{/Control}");
+    await user.click(screen.getByRole("button", {name: /Jalen Suggs/}));
+
+    expect(requester).toHaveBeenCalledTimes(2);
+    expect(requester.mock.calls[1][0]).toMatchObject({
+      resolution: "rsv_fx_jalen_2",
+      context: requester.mock.calls[0][0].context,
+    });
+  });
+
+  it("uses the contract's 300-character input limit", async () => {
+    const user = setup();
+    await user.keyboard("{Control>}k{/Control}");
+    expect(input()).toHaveAttribute("maxLength", "300");
   });
 
   it("resets local reveals on a new question but keeps them when the dialog closes and reopens", async () => {

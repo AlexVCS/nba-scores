@@ -358,6 +358,7 @@ source = { virtual = "." }
 dependencies = [
     { name = "beautifulsoup4" },
     { name = "fastapi", extra = ["standard"] },
+    { name = "httpx" },
     { name = "nba-api" },
     { name = "numpy" },
     { name = "pandas" },
@@ -369,6 +370,7 @@ dependencies = [
 requires-dist = [
     { name = "beautifulsoup4", specifier = ">=4.14,<4.15" },
     { name = "fastapi", extras = ["standard"], specifier = ">=0.128,<0.129" },
+    { name = "httpx", specifier = ">=0.28,<0.29" },
     { name = "nba-api", specifier = ">=1.11,<1.12" },
     { name = "numpy", specifier = ">=2.3,<2.4" },
     { name = "pandas", specifier = ">=2.3,<2.4" },
