@@ -1,0 +1,84 @@
+{
+  "schema_version": "1",
+  "request_id": "fx-conditional-game-absent",
+  "outcome": "not_found",
+  "question": "who had the most rebounds in game 7 of the 2024 finals",
+  "interpretation": {
+    "intent": "boxscore_stat",
+    "detected_type": "stat_leaders",
+    "items": [
+      {
+        "field": "round",
+        "value": "2024 NBA Finals",
+        "detail": null,
+        "expression": "2024 finals",
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      },
+      {
+        "field": "game_number",
+        "value": "Game 7",
+        "detail": null,
+        "expression": "game 7",
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      },
+      {
+        "field": "stat",
+        "value": "Rebounds",
+        "detail": null,
+        "expression": null,
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      }
+    ],
+    "reference_time": "2026-09-29T12:00:00-04:00",
+    "timezone": "America/New_York",
+    "dates": null,
+    "season": "2023-24"
+  },
+  "result": null,
+  "clarification": null,
+  "notice": {
+    "code": "no_games",
+    "title": "No Game 7",
+    "message": "The 2024 NBA Finals ended in five games, so there was no Game 7.",
+    "retryable": false,
+    "retry_after_seconds": null,
+    "unsupported_reason": null,
+    "diagnostics_recorded": false
+  },
+  "spoiler_gate": {
+    "title": "Results hidden",
+    "message": "Whether this game was played would reveal how the series went. Show results to see the answer."
+  },
+  "links": [],
+  "suggestions": [],
+  "sources": [
+    {
+      "name": "nba_live",
+      "label": "NBA.com",
+      "fetched_at": "2026-09-29T16:00:00Z",
+      "complete": true
+    }
+  ],
+  "interpreter": {
+    "model_called": true,
+    "cache_hit": false,
+    "adapter": "jev",
+    "model": "jev-1.13.0",
+    "fallback_used": false
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "schema_version": "1",
+  "request_id": "fx-two-step-1",
+  "outcome": "needs_clarification",
+  "question": "how did jalen do on march 3",
+  "interpretation": {
+    "intent": "boxscore_stat",
+    "detected_type": "player_stat",
+    "items": [
+      {
+        "field": "player",
+        "value": "Jalen",
+        "detail": null,
+        "expression": "jalen",
+        "origin": "question",
+        "status": "ambiguous",
+        "match_count": 5,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      },
+      {
+        "field": "date",
+        "value": "March 3",
+        "detail": "Year needed",
+        "expression": "march 3",
+        "origin": "question",
+        "status": "ambiguous",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      },
+      {
+        "field": "stat",
+        "value": "Full line",
+        "detail": null,
+        "expression": null,
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      }
+    ],
+    "reference_time": "2026-09-29T12:00:00-04:00",
+    "timezone": "America/New_York",
+    "dates": null,
+    "season": null
+  },
+  "result": null,
+  "clarification": {
+    "field": "player",
+    "reason": "ambiguous",
+    "prompt": "Which Jalen?",
+    "detail": "The year is still missing; you'll pick it next.",
+    "options": [
+      {
+        "id": "player:1628973",
+        "label": "Jalen Brunson",
+        "sublabel": "G",
+        "detail": null,
+        "team": null,
+        "player_id": 1628973,
+        "question": "How did Jalen Brunson do on March 3?",
+        "resolution": "rsv_fx_two_step_1628973",
+        "spoiler": false
+      },
+      {
+        "id": "player:1631114",
+        "label": "Jalen Williams",
+        "sublabel": "G",
+        "detail": null,
+        "team": null,
+        "player_id": 1631114,
+        "question": "How did Jalen Williams do on March 3?",
+        "resolution": "rsv_fx_two_step_1631114",
+        "spoiler": false
+      },
+      {
+        "id": "player:1631105",
+        "label": "Jalen Duren",
+        "sublabel": "C",
+        "detail": null,
+        "team": null,
+        "player_id": 1631105,
+        "question": "How did Jalen Duren do on March 3?",
+        "resolution": "rsv_fx_two_step_1631105",
+        "spoiler": false
+      },
+      {
+        "id": "player:1630224",
+        "label": "Jalen Green",
+        "sublabel": "G",
+        "detail": null,
+        "team": null,
+        "player_id": 1630224,
+        "question": "How did Jalen Green do on March 3?",
+        "resolution": "rsv_fx_two_step_1630224",
+        "spoiler": false
+      },
+      {
+        "id": "player:1630552",
+        "label": "Jalen Johnson",
+        "sublabel": "F",
+        "detail": null,
+        "team": null,
+        "player_id": 1630552,
+        "question": "How did Jalen Johnson do on March 3?",
+        "resolution": "rsv_fx_two_step_1630552",
+        "spoiler": false
+      }
+    ],
+    "hint": null
+  },
+  "notice": null,
+  "spoiler_gate": null,
+  "links": [],
+  "suggestions": [],
+  "sources": [],
+  "interpreter": {
+    "model_called": true,
+    "cache_hit": false,
+    "adapter": "jev",
+    "model": "jev-1.13.0",
+    "fallback_used": false
+  }
+}

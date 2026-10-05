@@ -1,0 +1,175 @@
+{
+  "schema_version": "1",
+  "request_id": "fx-stat-leaders-tied",
+  "outcome": "answer",
+  "question": "who led in blocks in game 3 of the 2025 finals",
+  "interpretation": {
+    "intent": "boxscore_stat",
+    "detected_type": "stat_leaders",
+    "items": [
+      {
+        "field": "round",
+        "value": "2025 NBA Finals",
+        "detail": null,
+        "expression": "2025 finals",
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      },
+      {
+        "field": "game_number",
+        "value": "Game 3",
+        "detail": null,
+        "expression": "game 3",
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      },
+      {
+        "field": "game",
+        "value": "OKC @ IND",
+        "detail": "Wed, Jun 11, 2025",
+        "expression": null,
+        "origin": "inferred",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": true
+      },
+      {
+        "field": "stat",
+        "value": "Blocks",
+        "detail": null,
+        "expression": null,
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      }
+    ],
+    "reference_time": "2026-09-29T12:00:00-04:00",
+    "timezone": "America/New_York",
+    "dates": null,
+    "season": "2024-25"
+  },
+  "result": {
+    "kind": "boxscore_stat",
+    "scope": "leaders",
+    "stat": "blocks",
+    "aggregation": "total",
+    "game": {
+      "game_id": "0042400403",
+      "date": "2025-06-11",
+      "away": {
+        "value": {
+          "team_id": 1610612760,
+          "tricode": "OKC",
+          "name": "Oklahoma City Thunder"
+        },
+        "spoiler": true
+      },
+      "home": {
+        "value": {
+          "team_id": 1610612754,
+          "tricode": "IND",
+          "name": "Indiana Pacers"
+        },
+        "spoiler": true
+      },
+      "season": "2024-25",
+      "season_type": "playoffs",
+      "round": "finals",
+      "game_number": 3,
+      "final_score": {
+        "value": {
+          "away": 107,
+          "home": 116,
+          "periods": 4
+        },
+        "spoiler": true
+      }
+    },
+    "player_line": null,
+    "team_lines": [],
+    "leaders": {
+      "value": [
+        {
+          "rank": 1,
+          "player": {
+            "player_id": 1631096,
+            "name": "Chet Holmgren"
+          },
+          "team": {
+            "team_id": 1610612760,
+            "tricode": "OKC",
+            "name": "Oklahoma City Thunder"
+          },
+          "value": {
+            "stat": "blocks",
+            "value": 2,
+            "display": "2",
+            "made": null,
+            "attempted": null
+          }
+        },
+        {
+          "rank": 1,
+          "player": {
+            "player_id": 1626167,
+            "name": "Myles Turner"
+          },
+          "team": {
+            "team_id": 1610612754,
+            "tricode": "IND",
+            "name": "Indiana Pacers"
+          },
+          "value": {
+            "stat": "blocks",
+            "value": 2,
+            "display": "2",
+            "made": null,
+            "attempted": null
+          }
+        }
+      ],
+      "spoiler": true
+    }
+  },
+  "clarification": null,
+  "notice": null,
+  "spoiler_gate": null,
+  "links": [
+    {
+      "kind": "boxscore",
+      "label": "Open boxscore",
+      "href": "/games/0042400403/boxscore?date=2025-06-11",
+      "external": false,
+      "spoiler": false
+    }
+  ],
+  "suggestions": [],
+  "sources": [
+    {
+      "name": "nba_live",
+      "label": "NBA.com",
+      "fetched_at": "2026-09-29T16:00:00Z",
+      "complete": true
+    }
+  ],
+  "interpreter": {
+    "model_called": true,
+    "cache_hit": false,
+    "adapter": "jev",
+    "model": "jev-1.13.0",
+    "fallback_used": false
+  }
+}

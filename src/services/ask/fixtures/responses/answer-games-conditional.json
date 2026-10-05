@@ -1,0 +1,230 @@
+{
+  "schema_version": "1",
+  "request_id": "fx-games-conditional",
+  "outcome": "answer",
+  "question": "games from june 13 to june 19 2025",
+  "interpretation": {
+    "intent": "game_search",
+    "detected_type": "games",
+    "items": [
+      {
+        "field": "dates",
+        "value": "Fri, Jun 13 – Thu, Jun 19, 2025",
+        "detail": "ET",
+        "expression": "june 13 to june 19 2025",
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      }
+    ],
+    "reference_time": "2026-09-29T12:00:00-04:00",
+    "timezone": "America/New_York",
+    "dates": {
+      "start": "2025-06-13",
+      "end": "2025-06-19"
+    },
+    "season": "2024-25"
+  },
+  "result": {
+    "kind": "games",
+    "dates": {
+      "start": "2025-06-13",
+      "end": "2025-06-19"
+    },
+    "teams": [],
+    "days": [
+      {
+        "date": "2025-06-13",
+        "games": [
+          {
+            "date": "2025-06-13",
+            "game": {
+              "gameId": "0042400404",
+              "gameCode": "20250613/OKCIND",
+              "gameStatus": 3,
+              "gameLabel": "NBA Finals",
+              "gameSubLabel": "Game 4",
+              "gameTimeUTC": "2025-06-14T00:30:00Z",
+              "gameStatusText": "Final",
+              "ifNecessary": false,
+              "seriesGameNumber": "Game 4",
+              "seriesText": "Series tied 2-2",
+              "boxscoreAvailable": true,
+              "period": 4,
+              "homeTeam": {
+                "teamId": 1610612754,
+                "teamName": "Pacers",
+                "teamCity": "Indiana",
+                "teamTricode": "IND",
+                "score": 104
+              },
+              "awayTeam": {
+                "teamId": 1610612760,
+                "teamName": "Thunder",
+                "teamCity": "Oklahoma City",
+                "teamTricode": "OKC",
+                "score": 111
+              }
+            },
+            "spoilers": {
+              "score": true,
+              "status_text": true,
+              "series_text": true,
+              "labels": true
+            },
+            "links": [
+              {
+                "kind": "boxscore",
+                "label": "Boxscore",
+                "href": "/games/0042400404/boxscore?date=2025-06-13",
+                "external": false,
+                "spoiler": false
+              }
+            ],
+            "spoiler": false
+          }
+        ]
+      },
+      {
+        "date": "2025-06-16",
+        "games": [
+          {
+            "date": "2025-06-16",
+            "game": {
+              "gameId": "0042400405",
+              "gameCode": "20250616/INDOKC",
+              "gameStatus": 3,
+              "gameLabel": "NBA Finals",
+              "gameSubLabel": "Game 5",
+              "gameTimeUTC": "2025-06-17T00:30:00Z",
+              "gameStatusText": "Final",
+              "ifNecessary": true,
+              "seriesGameNumber": "Game 5",
+              "seriesText": "OKC leads 3-2",
+              "boxscoreAvailable": true,
+              "period": 4,
+              "homeTeam": {
+                "teamId": 1610612760,
+                "teamName": "Thunder",
+                "teamCity": "Oklahoma City",
+                "teamTricode": "OKC",
+                "score": 120
+              },
+              "awayTeam": {
+                "teamId": 1610612754,
+                "teamName": "Pacers",
+                "teamCity": "Indiana",
+                "teamTricode": "IND",
+                "score": 109
+              }
+            },
+            "spoilers": {
+              "score": true,
+              "status_text": true,
+              "series_text": true,
+              "labels": true
+            },
+            "links": [
+              {
+                "kind": "boxscore",
+                "label": "Boxscore",
+                "href": "/games/0042400405/boxscore?date=2025-06-16",
+                "external": false,
+                "spoiler": true
+              }
+            ],
+            "spoiler": true
+          }
+        ]
+      },
+      {
+        "date": "2025-06-19",
+        "games": [
+          {
+            "date": "2025-06-19",
+            "game": {
+              "gameId": "0042400406",
+              "gameCode": "20250619/OKCIND",
+              "gameStatus": 3,
+              "gameLabel": "NBA Finals",
+              "gameSubLabel": "Game 6",
+              "gameTimeUTC": "2025-06-20T00:30:00Z",
+              "gameStatusText": "Final",
+              "ifNecessary": true,
+              "seriesGameNumber": "Game 6",
+              "seriesText": "Series tied 3-3",
+              "boxscoreAvailable": true,
+              "period": 4,
+              "homeTeam": {
+                "teamId": 1610612754,
+                "teamName": "Pacers",
+                "teamCity": "Indiana",
+                "teamTricode": "IND",
+                "score": 108
+              },
+              "awayTeam": {
+                "teamId": 1610612760,
+                "teamName": "Thunder",
+                "teamCity": "Oklahoma City",
+                "teamTricode": "OKC",
+                "score": 91
+              }
+            },
+            "spoilers": {
+              "score": true,
+              "status_text": true,
+              "series_text": true,
+              "labels": true
+            },
+            "links": [
+              {
+                "kind": "boxscore",
+                "label": "Boxscore",
+                "href": "/games/0042400406/boxscore?date=2025-06-19",
+                "external": false,
+                "spoiler": true
+              }
+            ],
+            "spoiler": true
+          }
+        ]
+      }
+    ],
+    "total_games": {
+      "value": 3,
+      "spoiler": true
+    },
+    "hidden_note": "Possible Games 5–7 stay hidden until you show results, because whether they were played reveals series results."
+  },
+  "clarification": null,
+  "notice": null,
+  "spoiler_gate": null,
+  "links": [
+    {
+      "kind": "scores_date",
+      "label": "Scores for Jun 13",
+      "href": "/?date=2025-06-13",
+      "external": false,
+      "spoiler": false
+    }
+  ],
+  "suggestions": [],
+  "sources": [
+    {
+      "name": "nba_live",
+      "label": "NBA.com",
+      "fetched_at": "2026-09-29T16:00:00Z",
+      "complete": true
+    }
+  ],
+  "interpreter": {
+    "model_called": true,
+    "cache_hit": false,
+    "adapter": "jev",
+    "model": "jev-1.13.0",
+    "fallback_used": false
+  }
+}
