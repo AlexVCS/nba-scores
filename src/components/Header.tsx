@@ -1,4 +1,5 @@
 import { useTheme } from "@/hooks/useTheme";
+import AskEntry from "@/components/ask/AskEntry";
 
 type HeaderProps = {
   variant?: "default" | "playoffs";
@@ -15,6 +16,9 @@ const Header = ({ variant = "default" }: HeaderProps) => {
   return (
     <article>
       <header className="flex flex-col justify-center items-center pt-4 gap-2">
+        <div className="flex w-full justify-center px-4 pb-2">
+          <AskEntry variant="original" />
+        </div>
         {isPlayoffs ? (
           <img
             className="w-48 sm:w-xs"
