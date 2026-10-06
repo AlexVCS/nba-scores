@@ -93,6 +93,15 @@ def test_pre_1983_playoff_game_is_found_in_the_boxscore(old_games):
     assert [(v.stat, v.value) for v in line.values] == [("defensive_rebounds", 15)]
 
 
+def test_pre_1983_dates_do_not_ask_for_a_game_log(old_games, monkeypatch):
+    def finder_unavailable(*args, **kwargs):
+        raise nba_stats_client.UpstreamUnavailableError("LeagueGameFinder", "Timeout", 10)
+
+    monkeypatch.setattr(nba_stats_client, "fetch_league_game_finder", finder_unavailable)
+    game, team = games.find_player_game(WILT, date(1962, 3, 2))
+    assert (game.date, team.team_id) == (date(1962, 3, 2), WARRIORS)
+
+
 def test_whole_minutes_are_read(old_games):
     # unseen-three-boxscore_stat-14: stats.nba reports "47" before 1996-97. Was no_record.
     result = player_value(BIRD, "Larry Bird", "1988-05-22", "minutes")

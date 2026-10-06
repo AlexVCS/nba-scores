@@ -260,10 +260,10 @@ def find_player_game(player_id: int, day: dt.date) -> tuple[ResolvedGame, TeamRe
     if isinstance(player_id, bool) or not isinstance(player_id, int) or player_id <= 0:
         raise ValueError(f"Invalid player ID {player_id!r}")
     _check_day(day)
+    if day < data.PLAYER_GAME_LOG_FIRST_DATE:
+        return _find_player_in_boxscores(player_id, day)
     rows = data.player_games_on(player_id, day)
     game_ids = sorted({row[0] for row in rows})
-    if not game_ids and day < data.PLAYER_GAME_LOG_FIRST_DATE:
-        return _find_player_in_boxscores(player_id, day)
     if not game_ids:
         today = nba_today()
         if day in (today, today - dt.timedelta(days=1)) and _day_games(day):
