@@ -6451,6 +6451,301 @@
     }
    ],
    "notes": "Career total (owner decision 2026-10-01), not a single season. Wembanyama is active: 627 blocks in 181 games is the total through 2025-26 as of checked_at and will move once 2026-27 starts."
+  },
+  {
+   "id": "unseen-three-team_records-20",
+   "family": "team_records",
+   "tags": [
+    "team_records",
+    "standings",
+    "league",
+    "best_record"
+   ],
+   "question": "Which team had the best record in 2015-16?",
+   "request": {
+    "intent": "team_records",
+    "season": "2015-16",
+    "team": null,
+    "standings_scope": "league"
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/leaguestandings?LeagueID=00&Season=2015-16&SeasonType=Regular+Season&SeasonYear=",
+     "read": "stats.nba leaguestandings (Ask's primary source), 2015-16 league, 30 teams: Golden State Warriors 73-9, San Antonio Spurs 67-15, Cleveland Cavaliers 57-25, Toronto Raptors 56-26, Oklahoma City Thunder 55-27, LA Clippers 53-29, Atlanta Hawks 48-34, Boston Celtics 48-34, Charlotte Hornets 48-34, Miami Heat 48-34, Indiana Pacers 45-37, Detroit Pistons 44-38, Portland Trail Blazers 44-38, Chicago Bulls 42-40, Dallas Mavericks 42-40, Memphis Grizzlies 42-40, Houston Rockets 41-41, Washington Wizards 41-41, Utah Jazz 40-42, Orlando Magic 35-47, Denver Nuggets 33-49, Milwaukee Bucks 33-49, Sacramento Kings 33-49, New York Knicks 32-50, New Orleans Pelicans 30-52, Minnesota Timberwolves 29-53, Phoenix Suns 23-59, Brooklyn Nets 21-61, Los Angeles Lakers 17-65, Philadelphia 76ers 10-72.",
+     "checked_at": "2026-10-06"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_2016_standings.html",
+     "read": "Basketball-Reference 2015-16 NBA Standings, Expanded Standings table (cross-check): all 30 teams' overall W-L equal the stats.nba values, from Golden State Warriors 73-9 (rank 1) to Philadelphia 76ers 10-72 (rank 30).",
+     "checked_at": "2026-10-06"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "2015-16"
+    },
+    {
+     "path": "result.standings_scope",
+     "value": "league"
+    },
+    {
+     "path": "result.rows",
+     "value": 30,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].wins",
+     "value": [
+      73,
+      67,
+      57,
+      56,
+      55,
+      53,
+      48,
+      48,
+      48,
+      48,
+      45,
+      44,
+      44,
+      42,
+      42,
+      42,
+      41,
+      41,
+      40,
+      35,
+      33,
+      33,
+      33,
+      32,
+      30,
+      29,
+      23,
+      21,
+      17,
+      10
+     ]
+    },
+    {
+     "path": "result.rows[*].losses",
+     "value": [
+      9,
+      15,
+      25,
+      26,
+      27,
+      29,
+      34,
+      34,
+      34,
+      34,
+      37,
+      38,
+      38,
+      40,
+      40,
+      40,
+      41,
+      41,
+      42,
+      47,
+      49,
+      49,
+      49,
+      50,
+      52,
+      53,
+      59,
+      61,
+      65,
+      72
+     ]
+    },
+    {
+     "path": "result.rows[*].team.team_id",
+     "value": [
+      1610612744,
+      1610612759,
+      1610612739,
+      1610612761,
+      1610612760,
+      1610612746,
+      1610612737,
+      1610612738,
+      1610612766,
+      1610612748,
+      1610612754,
+      1610612765,
+      1610612757,
+      1610612741,
+      1610612742,
+      1610612763,
+      1610612745,
+      1610612764,
+      1610612762,
+      1610612753,
+      1610612743,
+      1610612749,
+      1610612758,
+      1610612752,
+      1610612740,
+      1610612750,
+      1610612756,
+      1610612751,
+      1610612747,
+      1610612755
+     ],
+     "match": "unordered"
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612744
+    },
+    {
+     "path": "result.rows[0].wins",
+     "value": 73
+    },
+    {
+     "path": "result.rows[0].losses",
+     "value": 9
+    },
+    {
+     "path": "result.rows[-1].team.team_id",
+     "value": 1610612755
+    },
+    {
+     "path": "result.rows[team.team_id=1610612759].wins",
+     "value": 67
+    },
+    {
+     "path": "result.rows[team.team_id=1610612739].wins",
+     "value": 57
+    }
+   ],
+   "notes": "The question asks for the best record: rows[0] is the Golden State Warriors, 73-9, with no tie at the top (San Antonio is 67-15). League rows are ordered by win percentage (Ask's league ordering); teams with equal records (four at 48-34, two at 44-38, three at 42-40, two at 41-41, three at 33-49) may appear in either order, so ids are checked unordered and wins/losses as ordered lists. Added 2026-10-06 after the owner decision that made this case an accept."
+  },
+  {
+   "id": "unseen-three-season_leaders-23",
+   "family": "season_leaders",
+   "tags": [
+    "season_leaders",
+    "totals",
+    "fouls"
+   ],
+   "question": "Who led the league in personal fouls in 2018-19?",
+   "request": {
+    "intent": "season_leaders",
+    "season": "2018-19",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "fouls",
+     "aggregation": "total"
+    },
+    "limit": 10
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/leagueleaders?LeagueID=00&PerMode=Totals&Scope=S&Season=2018-19&SeasonType=Regular+Season&StatCategory=PF&ActiveFlag=",
+     "read": "stats.nba leagueleaders (Ask's primary source), PF totals, top 10: 1. Karl-Anthony Towns (MIN, 77 G) 292, 2. Andre Drummond (DET, 79 G) 272, 3. Patrick Beverley (LAC, 78 G) 265, 4. Montrezl Harrell (LAC, 82 G) 255, 5. Mason Plumlee (DEN, 82 G) 252, 5. P.J. Tucker (HOU, 82 G) 252, 7. Jusuf Nurkić (POR, 72 G) 250, 8. Julius Randle (NOP, 73 G) 246, 9. Russell Westbrook (OKC, 73 G) 245, 10. James Harden (HOU, 78 G) 244. Next: 11. Pascal Siakam 241, so there is no tie at the cut.",
+     "checked_at": "2026-10-06"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_2019_totals.html",
+     "read": "Basketball-Reference 2018-19 NBA Player Stats: Totals (cross-check), PF column sorted: Karl-Anthony Towns 292, Andre Drummond 272, Patrick Beverley 265, Montrezl Harrell 255, Mason Plumlee 252, P.J. Tucker 252, Jusuf Nurkić 250, Julius Randle 246, Russell Westbrook 245, James Harden 244, then Pascal Siakam 241. Games played match stats.nba (Towns 77).",
+     "checked_at": "2026-10-06"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "2018-19"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.stat",
+     "value": "fouls"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "total"
+    },
+    {
+     "path": "result.rows",
+     "value": 10,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      1626157,
+      203083,
+      201976,
+      1626149,
+      203486,
+      200782,
+      203994,
+      203944,
+      201566,
+      201935
+     ],
+     "match": "unordered"
+    },
+    {
+     "path": "result.rows[*].rank",
+     "value": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      5,
+      7,
+      8,
+      9,
+      10
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      292,
+      272,
+      265,
+      255,
+      252,
+      252,
+      250,
+      246,
+      245,
+      244
+     ]
+    },
+    {
+     "path": "result.rows[0].player.player_id",
+     "value": 1626157
+    },
+    {
+     "path": "result.rows[0].games_played",
+     "value": 77
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612750
+    }
+   ],
+   "notes": "The question asks who led: rows[0] is Karl-Anthony Towns, 292 personal fouls, alone at rank 1. Tie groups by rank: [1, 2, 3, 4, 5, 5, 7, 8, 9, 10] (Plumlee and Tucker tied at 252); a tie at the cut is never split, order within a tie is not checked. Fouls are season totals only (stats.nba has no per-game fouls board). Added 2026-10-06 after the owner decision that made this case an accept."
   }
  ]
 }

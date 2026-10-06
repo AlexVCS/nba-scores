@@ -5444,6 +5444,83 @@
      "value": "east"
     }
    ]
+  },
+  {
+   "id": "unseen-three-postseason_summary-19",
+   "family": "postseason_summary",
+   "tags": [
+    "postseason_summary",
+    "team_summary",
+    "city_as_team"
+   ],
+   "question": "Recap New York's 2021 postseason.",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "postseason_summary",
+    "season": "2020-21",
+    "team": {
+     "team_id": 1610612752,
+     "tricode": "NYK",
+     "name": "New York Knicks"
+    }
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/leaguegamelog?Counter=0&Direction=ASC&LeagueID=00&PlayerOrTeam=T&Season=2020-21&SeasonType=Playoffs&Sorter=DATE",
+     "read": "stats.nba leaguegamelog, 2020-21 Playoffs, team rows (the endpoint Ask's playoffs payload is built from). New York Knicks (1610612752) appear in 5 games, all against the Atlanta Hawks (1610612737): 2021-05-23 L 105-107, 05-26 W 101-92, 05-28 L 94-105, 05-30 L 96-113, 06-02 L 89-103 (game ids 0042000131-135; the id's round digit is 1, first round). Hawks won the series 4-1; the Knicks played no other playoff game. Both teams are in the East in leaguestandings 2020-21.",
+     "checked_at": "2026-10-06"
+    },
+    {
+     "url": "https://www.basketball-reference.com/playoffs/NBA_2021.html",
+     "read": "2021 NBA Playoffs Summary, Playoff Series table, the only series involving NYK: Eastern Conference First Round: Atlanta Hawks over New York Knicks (4-1). Record 1-4 is that series score.",
+     "checked_at": "2026-10-06"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.finish",
+     "value": "lost_first_round"
+    },
+    {
+     "path": "result.record.wins",
+     "value": 1
+    },
+    {
+     "path": "result.record.losses",
+     "value": 4
+    },
+    {
+     "path": "result.series_won",
+     "value": 0
+    },
+    {
+     "path": "result.rounds",
+     "value": 1,
+     "match": "length"
+    },
+    {
+     "path": "result.rounds[round=first_round].opponent.team_id",
+     "value": 1610612737
+    },
+    {
+     "path": "result.rounds[round=first_round].team_wins",
+     "value": 1
+    },
+    {
+     "path": "result.rounds[round=first_round].opponent_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=first_round].won",
+     "value": false
+    },
+    {
+     "path": "result.rounds[round=first_round].conference",
+     "value": "east"
+    }
+   ]
   }
  ]
 }
