@@ -471,6 +471,22 @@ def test_expanded_rows_are_scored_on_the_last_attempt_and_its_candidates():
         run([c], [r])
 
 
+def test_a_shorter_later_attempt_is_not_mixed_with_the_earlier_one():
+    narrow, wide = candidates(team=[TEAM_MIA], date=[DATE_0]), candidates(team=[TEAM_MIA, TEAM_BOS], date=[DATE_0])
+    first = output(read("intent", selected=["game_search"]), read("date", selected=["date:0"]),
+                   read("teams", status="no_matching_candidate", confidence=0.4))
+    luna = output(read("teams", status="no_matching_candidate"))
+    second = output(read("intent", selected=["game_search"]), read("date", selected=["date:0"]),
+                    read("teams", selected=["team:bos"]))
+    r = {"case_id": "x", "candidates": narrow,
+         "tier_outputs": [{"tier": "jev", "output": first, "candidates": narrow},
+                          {"tier": "luna", "output": luna, "candidates": narrow},
+                          {"tier": "jev", "output": second, "candidates": wide}]}
+    records, cands = tg.final_attempt(r)
+    assert [(x["tier"], x["output"]) for x in records] == [("jev", second)] and cands == wide
+    assert tg._tier_record(r, "luna") is None
+
+
 def test_absent_teams_is_correct_when_the_target_names_the_lone_team():
     c = accept("syn-boxscore_stat-07", {"intent": "boxscore_stat", "scope": "team", "stat": {"stat": "points"},
                                         "game": {"date": "2024-01-02", "teams": [BOS]}, "team": BOS})

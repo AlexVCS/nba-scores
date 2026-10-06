@@ -726,12 +726,12 @@ def final_attempt(row: dict[str, Any]) -> tuple[list[dict[str, Any]], dict[str, 
     Lookup expansion reruns the cascade on wider candidates, so a row can hold several
     attempts. Each record then carries its own candidates (release.py Recorder); journals
     written before that hold one attempt, read against the row's candidates."""
-    records: list[dict[str, Any]] = []
-    for record in reversed(row["tier_outputs"]):
-        if any(r["tier"] == record["tier"] for r in records):
-            break
-        records.insert(0, record)
-    if len(records) < len(row["tier_outputs"]) and not all(r.get("candidates") for r in records):
+    outputs = row["tier_outputs"]
+    # Every attempt starts at the cascade's first tier; a later attempt may stop earlier
+    # than the one before it (jev, luna, then jev alone).
+    start = max((i for i, r in enumerate(outputs) if r["tier"] == outputs[0]["tier"]), default=0)
+    records: list[dict[str, Any]] = outputs[start:]
+    if len(records) < len(outputs) and not all(r.get("candidates") for r in records):
         raise IntegrityError(f"{row['case_id']}: several attempts without per-attempt candidates")
     return records, next((r["candidates"] for r in records if r.get("candidates")), row["candidates"])
 
