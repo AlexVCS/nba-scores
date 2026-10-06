@@ -1,6 +1,6 @@
 {
  "draft": true,
- "status": "DRAFT part B (player_season_stats, team_records, season_leaders, career_stats accept cases of unseen-three-draft.json). Values were read by an agent on 2026-10-01 from raw stats.nba.com endpoint responses (Ask's primary source for these tools) and cross-checked against the cited Basketball-Reference pages (Ask's fallback); a reviewer should re-read each source and set draft to false.",
+ "status": "DRAFT part B (player_season_stats, team_records, season_leaders, career_stats accept cases of unseen-three-draft.json). Values were read by an agent on 2026-10-01 from raw stats.nba.com endpoint responses (Ask's primary source for these tools) and cross-checked against the cited Basketball-Reference pages (Ask's fallback); a reviewer should re-read each source and set draft to false. Five entries added on 2026-10-06 (team_records-21, team_records-22, season_leaders-24, season_leaders-25, career_stats-27) were read the same way on that date.",
  "description": "Answer-accuracy gold for scripts/ask/answer_check.py --from-run, keyed by unseen-three case id. Each case carries the labeled request, expected outcome and checks against the AskResponse JSON. Where stats.nba and Basketball-Reference differ the gold is the stats.nba value (the source Ask reports using), the other is in notes, and the case is tagged source_disagreement. Career values of active players and all-time lists move during a season; they are as of checked_at.",
  "reference_time": "2026-09-30T12:00:00-04:00",
  "cases": [
@@ -2559,74 +2559,6 @@
     {
      "path": "result.rows[0].win_percentage",
      "value": 0.402,
-     "match": "round",
-     "digits": 3
-    }
-   ]
-  },
-  {
-   "id": "unseen-three-team_records-14",
-   "family": "team_records",
-   "tags": [
-    "team_records",
-    "team_record",
-    "city_as_team"
-   ],
-   "question": "What was Milwaukee's regular-season mark in 1970-71?",
-   "request": {
-    "intent": "team_records",
-    "season": "1970-71",
-    "team": {
-     "team_id": 1610612749,
-     "tricode": "MIL",
-     "name": "Milwaukee Bucks"
-    },
-    "standings_scope": "league"
-   },
-   "reference_time": "2026-09-30T12:00:00-04:00",
-   "verified": true,
-   "expected_outcome": "answer",
-   "source": [
-    {
-     "url": "https://stats.nba.com/stats/teamyearbyyearstats?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TeamID=1610612749",
-     "read": "stats.nba teamyearbyyearstats (Ask's primary source), 1970-71 row: Milwaukee Bucks 66-16 (0.805).",
-     "checked_at": "2026-10-01"
-    },
-    {
-     "url": "https://www.basketball-reference.com/leagues/NBA_1971_standings.html",
-     "read": "Basketball-Reference expanded standings (cross-check): Milwaukee Bucks 66-16.",
-     "checked_at": "2026-10-01"
-    }
-   ],
-   "checks": [
-    {
-     "path": "result.season",
-     "value": "1970-71"
-    },
-    {
-     "path": "result.rows",
-     "value": 1,
-     "match": "length"
-    },
-    {
-     "path": "result.rows[0].team.team_id",
-     "value": 1610612749
-    },
-    {
-     "path": "result.rows[0].team.tricode",
-     "value": "MIL"
-    },
-    {
-     "path": "result.rows[0].wins",
-     "value": 66
-    },
-    {
-     "path": "result.rows[0].losses",
-     "value": 16
-    },
-    {
-     "path": "result.rows[0].win_percentage",
-     "value": 0.805,
      "match": "round",
      "digits": 3
     }
@@ -6203,179 +6135,6 @@
    ]
   },
   {
-   "id": "unseen-three-career_stats-18",
-   "family": "career_stats",
-   "tags": [
-    "career_stats",
-    "player_rank",
-    "nickname"
-   ],
-   "question": "Kobe's all-time rank in points",
-   "request": {
-    "intent": "career_stats",
-    "view": "player_rank",
-    "player": {
-     "player_id": 977,
-     "name": "Kobe Bryant"
-    },
-    "season_type": "regular_season",
-    "stat": {
-     "stat": "points",
-     "aggregation": "total"
-    },
-    "limit": 10
-   },
-   "reference_time": "2026-09-30T12:00:00-04:00",
-   "verified": true,
-   "expected_outcome": "answer",
-   "source": [
-    {
-     "url": "https://stats.nba.com/stats/alltimeleadersgrids?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TopX=250",
-     "read": "stats.nba alltimeleadersgrids (Ask's primary source), PTSLeaders: Kobe Bryant rank 4 with 33643; ahead: LeBron James 43440, Kareem Abdul-Jabbar 38387, Karl Malone 36928.",
-     "checked_at": "2026-10-01"
-    },
-    {
-     "url": "https://www.basketball-reference.com/leaders/pts_career.html",
-     "read": "Basketball-Reference NBA career leaders table: Kobe Bryant #4 with 33643.",
-     "checked_at": "2026-10-01"
-    }
-   ],
-   "checks": [
-    {
-     "path": "result.view",
-     "value": "player_rank"
-    },
-    {
-     "path": "result.player.player_id",
-     "value": 977
-    },
-    {
-     "path": "result.rank",
-     "value": 4
-    },
-    {
-     "path": "result.values[0].value",
-     "value": 33643
-    },
-    {
-     "path": "result.stat",
-     "value": "points"
-    }
-   ],
-   "notes": "Active players sit near this rank; the rank can move during a season (value as of checked_at)."
-  },
-  {
-   "id": "unseen-three-season_leaders-19",
-   "family": "season_leaders",
-   "tags": [
-    "season_leaders"
-   ],
-   "question": "Who won the scoring title in 2013-14?",
-   "request": {
-    "intent": "season_leaders",
-    "season": "2013-14",
-    "season_type": "regular_season",
-    "stat": {
-     "stat": "points",
-     "aggregation": "per_game"
-    },
-    "limit": 10
-   },
-   "reference_time": "2026-09-30T12:00:00-04:00",
-   "verified": true,
-   "expected_outcome": "answer",
-   "source": [
-    {
-     "url": "https://stats.nba.com/stats/leagueleaders?LeagueID=00&PerMode=PerGame&Scope=S&Season=2013-14&SeasonType=Regular+Season&StatCategory=PTS&ActiveFlag=",
-     "read": "stats.nba leagueleaders (Ask's primary source; NBA.com qualification) top 10: 1. Kevin Durant (OKC, 81 G) 32.0, 2. Carmelo Anthony (NYK, 77 G) 27.4, 3. LeBron James (MIA, 77 G) 27.1, 4. Kevin Love (MIN, 77 G) 26.1, 5. James Harden (HOU, 73 G) 25.4, 6. Blake Griffin (LAC, 80 G) 24.1, 7. Stephen Curry (GSW, 78 G) 24.0, 8. LaMarcus Aldridge (POR, 69 G) 23.2, 9. DeMarcus Cousins (SAC, 71 G) 22.7, 10. DeMar DeRozan (TOR, 79 G) 22.7.",
-     "checked_at": "2026-10-01"
-    },
-    {
-     "url": "https://www.basketball-reference.com/leagues/NBA_2014_leaders.html",
-     "read": "Basketball-Reference (cross-check), Points Per Game: Kevin Durant 32, Carmelo Anthony 27.4, LeBron James 27.1, Kevin Love 26.1, James Harden 25.4, Blake Griffin 24.1, Stephen Curry 24, LaMarcus Aldridge 23.2, DeMarcus Cousins 22.7, DeMar DeRozan 22.7.",
-     "checked_at": "2026-10-01"
-    }
-   ],
-   "checks": [
-    {
-     "path": "result.season",
-     "value": "2013-14"
-    },
-    {
-     "path": "result.season_type",
-     "value": "regular_season"
-    },
-    {
-     "path": "result.stat",
-     "value": "points"
-    },
-    {
-     "path": "result.aggregation",
-     "value": "per_game"
-    },
-    {
-     "path": "result.rows",
-     "value": 10,
-     "match": "length"
-    },
-    {
-     "path": "result.rows[*].player.player_id",
-     "value": [
-      201142,
-      2546,
-      2544,
-      201567,
-      201935,
-      201933,
-      201939,
-      200746,
-      202326,
-      201942
-     ]
-    },
-    {
-     "path": "result.rows[*].rank",
-     "value": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10
-     ]
-    },
-    {
-     "path": "result.rows[*].value.value",
-     "value": [
-      32.0,
-      27.4,
-      27.1,
-      26.1,
-      25.4,
-      24.1,
-      24.0,
-      23.2,
-      22.7,
-      22.7
-     ],
-     "match": "round",
-     "digits": 1
-    },
-    {
-     "path": "result.rows[0].games_played",
-     "value": 81
-    },
-    {
-     "path": "result.rows[0].team.team_id",
-     "value": 1610612760
-    }
-   ]
-  },
-  {
    "id": "unseen-three-career_stats-19",
    "family": "career_stats",
    "tags": [
@@ -6453,18 +6212,86 @@
    "notes": "Career total (owner decision 2026-10-01), not a single season. Wembanyama is active: 627 blocks in 181 games is the total through 2025-26 as of checked_at and will move once 2026-27 starts."
   },
   {
-   "id": "unseen-three-team_records-20",
+   "id": "unseen-three-team_records-21",
+   "family": "team_records",
+   "tags": [
+    "team_records",
+    "team_record",
+    "word_as_name"
+   ],
+   "question": "Will you show me the Trail Blazers' record from 1990-91?",
+   "request": {
+    "intent": "team_records",
+    "season": "1990-91",
+    "team": {
+     "team_id": 1610612757,
+     "tricode": "POR",
+     "name": "Portland Trail Blazers"
+    },
+    "standings_scope": "league"
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/teamyearbyyearstats?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TeamID=1610612757",
+     "read": "stats.nba teamyearbyyearstats (Ask's primary source), 1990-91 row: Portland Trail Blazers 63-19 (0.768), GP 82.",
+     "checked_at": "2026-10-06"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_1991_standings.html",
+     "read": "Basketball-Reference 1990-91 NBA Standings, Expanded Standings (cross-check): Portland Trail Blazers 63-19 (rank 1 of 27).",
+     "checked_at": "2026-10-06"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "1990-91"
+    },
+    {
+     "path": "result.rows",
+     "value": 1,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612757
+    },
+    {
+     "path": "result.rows[0].team.tricode",
+     "value": "POR"
+    },
+    {
+     "path": "result.rows[0].wins",
+     "value": 63
+    },
+    {
+     "path": "result.rows[0].losses",
+     "value": 19
+    },
+    {
+     "path": "result.rows[0].win_percentage",
+     "value": 0.768,
+     "match": "round",
+     "digits": 3
+    }
+   ]
+  },
+  {
+   "id": "unseen-three-team_records-22",
    "family": "team_records",
    "tags": [
     "team_records",
     "standings",
     "league",
-    "best_record"
+    "worst_record"
    ],
-   "question": "Which team had the best record in 2015-16?",
+   "question": "Who finished with the worst record in the NBA in 1992-93?",
    "request": {
     "intent": "team_records",
-    "season": "2015-16",
+    "season": "1992-93",
     "team": null,
     "standings_scope": "league"
    },
@@ -6473,20 +6300,20 @@
    "expected_outcome": "answer",
    "source": [
     {
-     "url": "https://stats.nba.com/stats/leaguestandings?LeagueID=00&Season=2015-16&SeasonType=Regular+Season&SeasonYear=",
-     "read": "stats.nba leaguestandings (Ask's primary source), 2015-16 league, 30 teams: Golden State Warriors 73-9, San Antonio Spurs 67-15, Cleveland Cavaliers 57-25, Toronto Raptors 56-26, Oklahoma City Thunder 55-27, LA Clippers 53-29, Atlanta Hawks 48-34, Boston Celtics 48-34, Charlotte Hornets 48-34, Miami Heat 48-34, Indiana Pacers 45-37, Detroit Pistons 44-38, Portland Trail Blazers 44-38, Chicago Bulls 42-40, Dallas Mavericks 42-40, Memphis Grizzlies 42-40, Houston Rockets 41-41, Washington Wizards 41-41, Utah Jazz 40-42, Orlando Magic 35-47, Denver Nuggets 33-49, Milwaukee Bucks 33-49, Sacramento Kings 33-49, New York Knicks 32-50, New Orleans Pelicans 30-52, Minnesota Timberwolves 29-53, Phoenix Suns 23-59, Brooklyn Nets 21-61, Los Angeles Lakers 17-65, Philadelphia 76ers 10-72.",
+     "url": "https://stats.nba.com/stats/leaguestandings?LeagueID=00&Season=1992-93&SeasonType=Regular+Season&SeasonYear=",
+     "read": "stats.nba leaguestandings (Ask's primary source), 1992-93 league, 27 teams: Phoenix Suns 62-20, New York Knicks 60-22, Chicago Bulls 57-25, Houston Rockets 55-27, Seattle SuperSonics 55-27, Cleveland Cavaliers 54-28, Portland Trail Blazers 51-31, San Antonio Spurs 49-33, Boston Celtics 48-34, Utah Jazz 47-35, Charlotte Hornets 44-38, Atlanta Hawks 43-39, New Jersey Nets 43-39, Indiana Pacers 41-41, Los Angeles Clippers 41-41, Orlando Magic 41-41, Detroit Pistons 40-42, Los Angeles Lakers 39-43, Denver Nuggets 36-46, Miami Heat 36-46, Golden State Warriors 34-48, Milwaukee Bucks 28-54, Philadelphia 76ers 26-56, Sacramento Kings 25-57, Washington Bullets 22-60, Minnesota Timberwolves 19-63, Dallas Mavericks 11-71.",
      "checked_at": "2026-10-06"
     },
     {
-     "url": "https://www.basketball-reference.com/leagues/NBA_2016_standings.html",
-     "read": "Basketball-Reference 2015-16 NBA Standings, Expanded Standings table (cross-check): all 30 teams' overall W-L equal the stats.nba values, from Golden State Warriors 73-9 (rank 1) to Philadelphia 76ers 10-72 (rank 30).",
+     "url": "https://www.basketball-reference.com/leagues/NBA_1993_standings.html",
+     "read": "Basketball-Reference 1992-93 NBA Standings, Expanded Standings table (cross-check): all 27 teams' overall W-L equal the stats.nba values, from Phoenix Suns 62-20 (rank 1) to Dallas Mavericks 11-71 (rank 27).",
      "checked_at": "2026-10-06"
     }
    ],
    "checks": [
     {
      "path": "result.season",
-     "value": "2015-16"
+     "value": "1992-93"
     },
     {
      "path": "result.standings_scope",
@@ -6494,157 +6321,263 @@
     },
     {
      "path": "result.rows",
-     "value": 30,
+     "value": 27,
      "match": "length"
     },
     {
      "path": "result.rows[*].wins",
      "value": [
-      73,
-      67,
+      62,
+      60,
       57,
-      56,
       55,
-      53,
+      55,
+      54,
+      51,
+      49,
       48,
-      48,
-      48,
-      48,
-      45,
+      47,
       44,
-      44,
-      42,
-      42,
-      42,
+      43,
+      43,
+      41,
       41,
       41,
       40,
-      35,
-      33,
-      33,
-      33,
-      32,
-      30,
-      29,
-      23,
-      21,
-      17,
-      10
+      39,
+      36,
+      36,
+      34,
+      28,
+      26,
+      25,
+      22,
+      19,
+      11
      ]
     },
     {
      "path": "result.rows[*].losses",
      "value": [
-      9,
-      15,
+      20,
+      22,
       25,
-      26,
       27,
-      29,
+      27,
+      28,
+      31,
+      33,
       34,
-      34,
-      34,
-      34,
-      37,
+      35,
       38,
-      38,
-      40,
-      40,
-      40,
+      39,
+      39,
+      41,
       41,
       41,
       42,
-      47,
-      49,
-      49,
-      49,
-      50,
-      52,
-      53,
-      59,
-      61,
-      65,
-      72
+      43,
+      46,
+      46,
+      48,
+      54,
+      56,
+      57,
+      60,
+      63,
+      71
      ]
     },
     {
      "path": "result.rows[*].team.team_id",
      "value": [
-      1610612744,
-      1610612759,
-      1610612739,
-      1610612761,
-      1610612760,
-      1610612746,
-      1610612737,
-      1610612738,
-      1610612766,
-      1610612748,
-      1610612754,
-      1610612765,
-      1610612757,
-      1610612741,
-      1610612742,
-      1610612763,
-      1610612745,
-      1610612764,
-      1610612762,
-      1610612753,
-      1610612743,
-      1610612749,
-      1610612758,
-      1610612752,
-      1610612740,
-      1610612750,
       1610612756,
+      1610612752,
+      1610612741,
+      1610612745,
+      1610612760,
+      1610612739,
+      1610612757,
+      1610612759,
+      1610612738,
+      1610612762,
+      1610612766,
+      1610612737,
       1610612751,
+      1610612754,
+      1610612746,
+      1610612753,
+      1610612765,
       1610612747,
-      1610612755
+      1610612743,
+      1610612748,
+      1610612744,
+      1610612749,
+      1610612755,
+      1610612758,
+      1610612764,
+      1610612750,
+      1610612742
      ],
      "match": "unordered"
     },
     {
      "path": "result.rows[0].team.team_id",
-     "value": 1610612744
-    },
-    {
-     "path": "result.rows[0].wins",
-     "value": 73
-    },
-    {
-     "path": "result.rows[0].losses",
-     "value": 9
+     "value": 1610612756
     },
     {
      "path": "result.rows[-1].team.team_id",
-     "value": 1610612755
+     "value": 1610612742
     },
     {
-     "path": "result.rows[team.team_id=1610612759].wins",
-     "value": 67
+     "path": "result.rows[-1].wins",
+     "value": 11
     },
     {
-     "path": "result.rows[team.team_id=1610612739].wins",
-     "value": 57
+     "path": "result.rows[-1].losses",
+     "value": 71
+    },
+    {
+     "path": "result.rows[team.team_id=1610612750].wins",
+     "value": 19
+    },
+    {
+     "path": "result.rows[team.team_id=1610612752].wins",
+     "value": 60
     }
    ],
-   "notes": "The question asks for the best record: rows[0] is the Golden State Warriors, 73-9, with no tie at the top (San Antonio is 67-15). League rows are ordered by win percentage (Ask's league ordering); teams with equal records (four at 48-34, two at 44-38, three at 42-40, two at 41-41, three at 33-49) may appear in either order, so ids are checked unordered and wins/losses as ordered lists. Added 2026-10-06 after the owner decision that made this case an accept."
+   "notes": "The question asks for the worst record: rows[-1] is the Dallas Mavericks, 11-71, with no tie at the bottom (Minnesota is 19-63). League rows are ordered by win percentage (Ask's league ordering); teams with equal records (two at 55-27, two at 43-39, three at 41-41, two at 36-46) may appear in either order, so ids are checked unordered and wins/losses as ordered lists. Added 2026-10-06 for a question that replaced an exposed case."
   },
   {
-   "id": "unseen-three-season_leaders-23",
+   "id": "unseen-three-season_leaders-24",
+   "family": "season_leaders",
+   "tags": [
+    "season_leaders",
+    "per_game",
+    "title_idiom",
+    "debatable"
+   ],
+   "question": "Who took the rebounding crown in 2006-07?",
+   "request": {
+    "intent": "season_leaders",
+    "season": "2006-07",
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "rebounds",
+     "aggregation": "per_game"
+    },
+    "limit": 10
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/leagueleaders?LeagueID=00&PerMode=PerGame&Scope=S&Season=2006-07&SeasonType=Regular+Season&StatCategory=REB&ActiveFlag=",
+     "read": "stats.nba leagueleaders (Ask's primary source; NBA.com qualification) top 10: 1. Kevin Garnett (MIN, 76 G) 12.8, 2. Tyson Chandler (NOK, 73 G) 12.4, 3. Dwight Howard (ORL, 82 G) 12.3, 4. Carlos Boozer (UTA, 74 G) 11.7, 5. Marcus Camby (DEN, 70 G) 11.7, 6. Ben Wallace (CHI, 77 G) 10.7, 7. Tim Duncan (SAS, 80 G) 10.6, 8. Shawn Marion (PHX, 80 G) 9.8, 9. Amar'e Stoudemire (PHX, 82 G) 9.6, 10. Elton Brand (LAC, 80 G) 9.3. Next: 11. Andris Biedrins (GSW, 82 G) 9.3, ranked 11 by the source.",
+     "checked_at": "2026-10-06"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leagues/NBA_2007_leaders.html",
+     "read": "Basketball-Reference (cross-check), Rebounds Per Game: Kevin Garnett 12.8, Tyson Chandler 12.4, Dwight Howard 12.3, Carlos Boozer 11.7, Marcus Camby 11.7, Ben Wallace 10.7, Tim Duncan 10.6, Shawn Marion 9.8, Amar'e Stoudemire 9.6, Elton Brand 9.3, then 11. Andris Biedriņš 9.3. Same ten players in the same order.",
+     "checked_at": "2026-10-06"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.season",
+     "value": "2006-07"
+    },
+    {
+     "path": "result.season_type",
+     "value": "regular_season"
+    },
+    {
+     "path": "result.stat",
+     "value": "rebounds"
+    },
+    {
+     "path": "result.aggregation",
+     "value": "per_game"
+    },
+    {
+     "path": "result.rows",
+     "value": 10,
+     "match": "length"
+    },
+    {
+     "path": "result.rows[*].player.player_id",
+     "value": [
+      708,
+      2199,
+      2730,
+      2430,
+      948,
+      1112,
+      1495,
+      1890,
+      2405,
+      1882
+     ]
+    },
+    {
+     "path": "result.rows[*].rank",
+     "value": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+     ]
+    },
+    {
+     "path": "result.rows[*].value.value",
+     "value": [
+      12.8,
+      12.4,
+      12.3,
+      11.7,
+      11.7,
+      10.7,
+      10.6,
+      9.8,
+      9.6,
+      9.3
+     ],
+     "match": "round",
+     "digits": 1
+    },
+    {
+     "path": "result.rows[0].games_played",
+     "value": 76
+    },
+    {
+     "path": "result.rows[0].team.team_id",
+     "value": 1610612750
+    }
+   ],
+   "notes": "The question asks who took the title: rows[0] is Kevin Garnett, 12.8. Both sources rank on unrounded averages, so the equal displayed values are not ties: Boozer (4) and Camby (5) both show 11.7, and Brand (10) and Biedrins (11) both show 9.3, with Biedrins outside the top 10 in both sources. Added 2026-10-06 for a question that replaced an exposed case."
+  },
+  {
+   "id": "unseen-three-season_leaders-25",
    "family": "season_leaders",
    "tags": [
     "season_leaders",
     "totals",
-    "fouls"
+    "field_goals"
    ],
-   "question": "Who led the league in personal fouls in 2018-19?",
+   "question": "Who sank the most field goals in total in 2002-03?",
    "request": {
     "intent": "season_leaders",
-    "season": "2018-19",
+    "season": "2002-03",
     "season_type": "regular_season",
     "stat": {
-     "stat": "fouls",
+     "stat": "field_goals",
      "aggregation": "total"
     },
     "limit": 10
@@ -6654,20 +6587,20 @@
    "expected_outcome": "answer",
    "source": [
     {
-     "url": "https://stats.nba.com/stats/leagueleaders?LeagueID=00&PerMode=Totals&Scope=S&Season=2018-19&SeasonType=Regular+Season&StatCategory=PF&ActiveFlag=",
-     "read": "stats.nba leagueleaders (Ask's primary source), PF totals, top 10: 1. Karl-Anthony Towns (MIN, 77 G) 292, 2. Andre Drummond (DET, 79 G) 272, 3. Patrick Beverley (LAC, 78 G) 265, 4. Montrezl Harrell (LAC, 82 G) 255, 5. Mason Plumlee (DEN, 82 G) 252, 5. P.J. Tucker (HOU, 82 G) 252, 7. Jusuf Nurkić (POR, 72 G) 250, 8. Julius Randle (NOP, 73 G) 246, 9. Russell Westbrook (OKC, 73 G) 245, 10. James Harden (HOU, 78 G) 244. Next: 11. Pascal Siakam 241, so there is no tie at the cut.",
+     "url": "https://stats.nba.com/stats/leagueleaders?LeagueID=00&PerMode=Totals&Scope=S&Season=2002-03&SeasonType=Regular+Season&StatCategory=FGM&ActiveFlag=",
+     "read": "stats.nba leagueleaders (Ask's primary source), FGM totals, top 10: 1. Kobe Bryant (LAL, 82 G) 868, 2. Tracy McGrady (ORL, 75 G) 829, 3. Allen Iverson (PHI, 82 G) 804, 4. Kevin Garnett (MIN, 82 G) 743, 5. Tim Duncan (SAS, 81 G) 714, 6. Shaquille O'Neal (LAL, 67 G) 695, 7. Antawn Jamison (GSW, 82 G) 691, 8. Dirk Nowitzki (DAL, 80 G) 690, 9. Michael Jordan (WAS, 82 G) 679, 10. Stephon Marbury (PHX, 81 G) 671. Next: 11. Jamal Mashburn 670, so there is no tie at the cut. Kobe Bryant's attempts: 1924.",
      "checked_at": "2026-10-06"
     },
     {
-     "url": "https://www.basketball-reference.com/leagues/NBA_2019_totals.html",
-     "read": "Basketball-Reference 2018-19 NBA Player Stats: Totals (cross-check), PF column sorted: Karl-Anthony Towns 292, Andre Drummond 272, Patrick Beverley 265, Montrezl Harrell 255, Mason Plumlee 252, P.J. Tucker 252, Jusuf Nurkić 250, Julius Randle 246, Russell Westbrook 245, James Harden 244, then Pascal Siakam 241. Games played match stats.nba (Towns 77).",
+     "url": "https://www.basketball-reference.com/leagues/NBA_2003_totals.html",
+     "read": "Basketball-Reference 2002-03 NBA Player Stats: Totals (cross-check), FG column sorted: Kobe Bryant 868, Tracy McGrady 829, Allen Iverson 804, Kevin Garnett 743, Tim Duncan 714, Shaquille O'Neal 695, Antawn Jamison 691, Dirk Nowitzki 690, Michael Jordan 679, Stephon Marbury 671, then Jamal Mashburn 670. Bryant: 82 G, 1924 FGA.",
      "checked_at": "2026-10-06"
     }
    ],
    "checks": [
     {
      "path": "result.season",
-     "value": "2018-19"
+     "value": "2002-03"
     },
     {
      "path": "result.season_type",
@@ -6675,7 +6608,7 @@
     },
     {
      "path": "result.stat",
-     "value": "fouls"
+     "value": "field_goals"
     },
     {
      "path": "result.aggregation",
@@ -6689,18 +6622,17 @@
     {
      "path": "result.rows[*].player.player_id",
      "value": [
-      1626157,
-      203083,
-      201976,
-      1626149,
-      203486,
-      200782,
-      203994,
-      203944,
-      201566,
-      201935
-     ],
-     "match": "unordered"
+      977,
+      1503,
+      947,
+      708,
+      1495,
+      406,
+      1712,
+      1717,
+      893,
+      950
+     ]
     },
     {
      "path": "result.rows[*].rank",
@@ -6710,7 +6642,7 @@
       3,
       4,
       5,
-      5,
+      6,
       7,
       8,
       9,
@@ -6720,32 +6652,89 @@
     {
      "path": "result.rows[*].value.value",
      "value": [
-      292,
-      272,
-      265,
-      255,
-      252,
-      252,
-      250,
-      246,
-      245,
-      244
+      868,
+      829,
+      804,
+      743,
+      714,
+      695,
+      691,
+      690,
+      679,
+      671
      ]
     },
     {
-     "path": "result.rows[0].player.player_id",
-     "value": 1626157
-    },
-    {
      "path": "result.rows[0].games_played",
-     "value": 77
+     "value": 82
     },
     {
      "path": "result.rows[0].team.team_id",
-     "value": 1610612750
+     "value": 1610612747
     }
    ],
-   "notes": "The question asks who led: rows[0] is Karl-Anthony Towns, 292 personal fouls, alone at rank 1. Tie groups by rank: [1, 2, 3, 4, 5, 5, 7, 8, 9, 10] (Plumlee and Tucker tied at 252); a tie at the cut is never split, order within a tie is not checked. Fouls are season totals only (stats.nba has no per-game fouls board). Added 2026-10-06 after the owner decision that made this case an accept."
+   "notes": "The question asks who made the most: rows[0] is Kobe Bryant, 868. No two players in the top 11 share a total, so there are no ties and the order is checked. Added 2026-10-06 for a question that replaced an exposed case."
+  },
+  {
+   "id": "unseen-three-career_stats-27",
+   "family": "career_stats",
+   "tags": [
+    "career_stats",
+    "player_rank"
+   ],
+   "question": "What is Hakeem Olajuwon's ranking on the career blocks list?",
+   "request": {
+    "intent": "career_stats",
+    "view": "player_rank",
+    "player": {
+     "player_id": 165,
+     "name": "Hakeem Olajuwon"
+    },
+    "season_type": "regular_season",
+    "stat": {
+     "stat": "blocks",
+     "aggregation": "total"
+    },
+    "limit": 10
+   },
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/alltimeleadersgrids?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TopX=250",
+     "read": "stats.nba alltimeleadersgrids (Ask's primary source), BLKLeaders: Hakeem Olajuwon rank 1 with 3830; next: Dikembe Mutombo 3289, Kareem Abdul-Jabbar 3189, Mark Eaton 3064.",
+     "checked_at": "2026-10-06"
+    },
+    {
+     "url": "https://www.basketball-reference.com/leaders/blk_career.html",
+     "read": "Basketball-Reference NBA career leaders table for blocks: 1. Hakeem Olajuwon 3830, 2. Dikembe Mutombo 3289, 3. Kareem Abdul-Jabbar 3189, 4. Mark Eaton 3064.",
+     "checked_at": "2026-10-06"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.view",
+     "value": "player_rank"
+    },
+    {
+     "path": "result.player.player_id",
+     "value": 165
+    },
+    {
+     "path": "result.rank",
+     "value": 1
+    },
+    {
+     "path": "result.values[0].value",
+     "value": 3830
+    },
+    {
+     "path": "result.stat",
+     "value": "blocks"
+    }
+   ],
+   "notes": "Blocks were first recorded in 1973-74, so the list covers seasons since then. The top four are retired and 541 blocks separate first from second, so this rank is not expected to move. Added 2026-10-06 for a question that replaced an exposed case."
   }
  ]
 }

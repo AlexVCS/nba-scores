@@ -1,6 +1,6 @@
 {
  "draft": true,
- "status": "DRAFT: needs human review before any gate relies on it. Values were read by an agent from the cited basketball-reference.com pages on 2026-10-01; a reviewer should re-read each source and set draft to false.",
+ "status": "DRAFT: needs human review before any gate relies on it. Values were read by an agent from the cited basketball-reference.com pages on 2026-10-01; a reviewer should re-read each source and set draft to false. Two entries added on 2026-10-06 (game_search-23, postseason_summary-21) were read from raw stats.nba.com responses and Basketball-Reference; each entry's source carries its own date.",
  "description": "Answer-accuracy gold for scripts/ask/answer_check.py --from-run, part A: the accept cases of server/tests/ask/fixtures/eval/unseen-three-draft.json whose intent is game_search, boxscore_stat, playoff_series or postseason_summary. Case ids and requests are the unseen set's. Team and player ids are the NBA ids for the franchise or player named on the source page. Round and conference follow the source's series name (Division rounds before 1971 map to conference_semifinals / conference_finals with east or west from the division name); postseason records are the sum of the listed series scores.",
  "reference_time": "2026-09-30T12:00:00-04:00",
  "cases": [
@@ -755,69 +755,6 @@
     {
      "path": "result.days[3].games[0].game.homeTeam.score",
      "value": 105
-    }
-   ]
-  },
-  {
-   "id": "unseen-three-game_search-11",
-   "family": "game_search",
-   "tags": [
-    "game_search",
-    "typo"
-   ],
-   "question": "Warriros games on March 7, 2016",
-   "reference_time": "2026-09-30T12:00:00-04:00",
-   "request": {
-    "intent": "game_search",
-    "dates": {
-     "start": "2016-03-07",
-     "end": "2016-03-07"
-    },
-    "teams": [
-     {
-      "team_id": 1610612744,
-      "tricode": "GSW",
-      "name": "Golden State Warriors"
-     }
-    ],
-    "location": null
-   },
-   "verified": true,
-   "expected_outcome": "answer",
-   "source": {
-    "url": "https://www.basketball-reference.com/boxscores/?month=3&day=7&year=2016",
-    "read": "NBA Games Played on March 7, 2016: 7 games; Golden State played once, Orlando 113 at Golden State 119.",
-    "checked_at": "2026-10-01"
-   },
-   "checks": [
-    {
-     "path": "result.total_games",
-     "value": 1
-    },
-    {
-     "path": "result.days",
-     "value": 1,
-     "match": "length"
-    },
-    {
-     "path": "result.days[0].date",
-     "value": "2016-03-07"
-    },
-    {
-     "path": "result.days[0].games[0].game.awayTeam.teamId",
-     "value": 1610612753
-    },
-    {
-     "path": "result.days[0].games[0].game.awayTeam.score",
-     "value": 113
-    },
-    {
-     "path": "result.days[0].games[0].game.homeTeam.teamId",
-     "value": 1610612744
-    },
-    {
-     "path": "result.days[0].games[0].game.homeTeam.score",
-     "value": 119
     }
    ]
   },
@@ -5446,79 +5383,191 @@
    ]
   },
   {
-   "id": "unseen-three-postseason_summary-19",
+   "id": "unseen-three-game_search-23",
+   "family": "game_search",
+   "tags": [
+    "game_search",
+    "typo",
+    "debatable"
+   ],
+   "question": "Was there a Timberwoves game on April 11, 2018?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "request": {
+    "intent": "game_search",
+    "dates": {
+     "start": "2018-04-11",
+     "end": "2018-04-11"
+    },
+    "teams": [
+     {
+      "team_id": 1610612750,
+      "tricode": "MIN",
+      "name": "Minnesota Timberwolves"
+     }
+    ],
+    "location": null
+   },
+   "verified": true,
+   "expected_outcome": "answer",
+   "source": [
+    {
+     "url": "https://stats.nba.com/stats/scoreboardv3?GameDate=2018-04-11&LeagueID=00",
+     "read": "stats.nba scoreboardv3 for 2018-04-11: 12 games; the Minnesota Timberwolves (1610612750) played once, game 0021701225, Final after 5 periods (overtime): Denver Nuggets (away) 106, Minnesota Timberwolves (home) 112.",
+     "checked_at": "2026-10-06"
+    },
+    {
+     "url": "https://www.basketball-reference.com/boxscores/?month=4&day=11&year=2018",
+     "read": "NBA Games Played on April 11, 2018: 12 games; Minnesota played once, Denver 106 at Minnesota 112 (OT).",
+     "checked_at": "2026-10-06"
+    }
+   ],
+   "checks": [
+    {
+     "path": "result.total_games",
+     "value": 1
+    },
+    {
+     "path": "result.days",
+     "value": 1,
+     "match": "length"
+    },
+    {
+     "path": "result.days[0].date",
+     "value": "2018-04-11"
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.teamId",
+     "value": 1610612743
+    },
+    {
+     "path": "result.days[0].games[0].game.awayTeam.score",
+     "value": 106
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.teamId",
+     "value": 1610612750
+    },
+    {
+     "path": "result.days[0].games[0].game.homeTeam.score",
+     "value": 112
+    }
+   ],
+   "notes": "The eval label also accepts a clarification for this misspelled team name; this key scores the answer when one is given. Added 2026-10-06 for a question that replaced an exposed case."
+  },
+  {
+   "id": "unseen-three-postseason_summary-21",
    "family": "postseason_summary",
    "tags": [
     "postseason_summary",
     "team_summary",
     "city_as_team"
    ],
-   "question": "Recap New York's 2021 postseason.",
+   "question": "Take me through Sacramento's 2002 playoffs.",
    "reference_time": "2026-09-30T12:00:00-04:00",
    "request": {
     "intent": "postseason_summary",
-    "season": "2020-21",
+    "season": "2001-02",
     "team": {
-     "team_id": 1610612752,
-     "tricode": "NYK",
-     "name": "New York Knicks"
+     "team_id": 1610612758,
+     "tricode": "SAC",
+     "name": "Sacramento Kings"
     }
    },
    "verified": true,
    "expected_outcome": "answer",
    "source": [
     {
-     "url": "https://stats.nba.com/stats/leaguegamelog?Counter=0&Direction=ASC&LeagueID=00&PlayerOrTeam=T&Season=2020-21&SeasonType=Playoffs&Sorter=DATE",
-     "read": "stats.nba leaguegamelog, 2020-21 Playoffs, team rows (the endpoint Ask's playoffs payload is built from). New York Knicks (1610612752) appear in 5 games, all against the Atlanta Hawks (1610612737): 2021-05-23 L 105-107, 05-26 W 101-92, 05-28 L 94-105, 05-30 L 96-113, 06-02 L 89-103 (game ids 0042000131-135; the id's round digit is 1, first round). Hawks won the series 4-1; the Knicks played no other playoff game. Both teams are in the East in leaguestandings 2020-21.",
+     "url": "https://stats.nba.com/stats/leaguegamelog?Counter=0&Direction=ASC&LeagueID=00&PlayerOrTeam=T&Season=2001-02&SeasonType=Playoffs&Sorter=DATE",
+     "read": "stats.nba leaguegamelog, 2001-02 Playoffs, team rows (the endpoint Ask's playoffs payload is built from). Sacramento Kings (1610612758) played 16 games in three series: vs Utah Jazz (1610612762), games 0040100141-144, W L W W, Kings 3-1; vs Dallas Mavericks (1610612742), games 0040100221-225, W L W W W, Kings 4-1; vs Los Angeles Lakers (1610612747), games 0040100311-317, L W W L W L L, Lakers 4-3 (game 7 on 2002-06-02, Lakers 112, Kings 106). The game ids' round digits are 1, 2 and 3. All four teams are in the West in leaguestandings 2001-02. Record 10-6 is the count of W and L rows.",
      "checked_at": "2026-10-06"
     },
     {
-     "url": "https://www.basketball-reference.com/playoffs/NBA_2021.html",
-     "read": "2021 NBA Playoffs Summary, Playoff Series table, the only series involving NYK: Eastern Conference First Round: Atlanta Hawks over New York Knicks (4-1). Record 1-4 is that series score.",
+     "url": "https://www.basketball-reference.com/playoffs/NBA_2002.html",
+     "read": "2002 NBA Playoffs Summary, Playoff Series table, every series involving SAC: Western Conference First Round: Sacramento Kings over Utah Jazz (3-1); Western Conference Semifinals: Sacramento Kings over Dallas Mavericks (4-1); Western Conference Finals: Los Angeles Lakers over Sacramento Kings (4-3). Record 10-6 is the sum of those series scores.",
      "checked_at": "2026-10-06"
     }
    ],
    "checks": [
     {
      "path": "result.finish",
-     "value": "lost_first_round"
+     "value": "lost_conference_finals"
     },
     {
      "path": "result.record.wins",
-     "value": 1
+     "value": 10
     },
     {
      "path": "result.record.losses",
-     "value": 4
+     "value": 6
     },
     {
      "path": "result.series_won",
-     "value": 0
+     "value": 2
     },
     {
      "path": "result.rounds",
-     "value": 1,
+     "value": 3,
      "match": "length"
     },
     {
      "path": "result.rounds[round=first_round].opponent.team_id",
-     "value": 1610612737
+     "value": 1610612762
     },
     {
      "path": "result.rounds[round=first_round].team_wins",
-     "value": 1
+     "value": 3
     },
     {
      "path": "result.rounds[round=first_round].opponent_wins",
-     "value": 4
+     "value": 1
     },
     {
      "path": "result.rounds[round=first_round].won",
-     "value": false
+     "value": true
     },
     {
      "path": "result.rounds[round=first_round].conference",
-     "value": "east"
+     "value": "west"
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].opponent.team_id",
+     "value": 1610612742
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].team_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].opponent_wins",
+     "value": 1
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].won",
+     "value": true
+    },
+    {
+     "path": "result.rounds[round=conference_semifinals].conference",
+     "value": "west"
+    },
+    {
+     "path": "result.rounds[round=conference_finals].opponent.team_id",
+     "value": 1610612747
+    },
+    {
+     "path": "result.rounds[round=conference_finals].team_wins",
+     "value": 3
+    },
+    {
+     "path": "result.rounds[round=conference_finals].opponent_wins",
+     "value": 4
+    },
+    {
+     "path": "result.rounds[round=conference_finals].won",
+     "value": false
+    },
+    {
+     "path": "result.rounds[round=conference_finals].conference",
+     "value": "west"
     }
    ]
   }

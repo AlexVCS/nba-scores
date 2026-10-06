@@ -200,7 +200,7 @@ question was listed there, otherwise at the end of the section.
 | G-08 | Is there anything on tonight involving the Spurs? *(asked Jan 8, 2025, 3pm)* | Spurs games on Jan 8, 2025 | ✅ Spurs at Milwaukee ([date](https://www.basketball-reference.com/boxscores/?month=1&day=8&year=2025)) |
 | G-09 | Is the Heat playing this Saturday? *(asked Wed Mar 5, 2025)* | Heat games on Sat Mar 8, 2025 | ✅ Heat hosted Chicago ([date](https://www.basketball-reference.com/boxscores/?month=3&day=8&year=2025)) |
 | G-10 | Games in Oklahoma City last week *(asked Wed Jan 8, 2025)* | Games played in Oklahoma City, Mon Dec 30, 2024–Sun Jan 5, 2025 *(ask date swapped Oct 1)* | ✅ 4 Thunder home games that week ([Thunder schedule](https://www.basketball-reference.com/teams/OKC/2025_games.html)) |
-| G-23 | Was there a Timberwoves game on April 11, 2018? | Timberwolves games on Apr 11, 2018, or ask which team (both OK) *(added Oct 6, replaces G-11; needs review)* | ⚠️ Not checked online. From memory, the Timberwolves hosted Denver that night |
+| G-23 | Was there a Timberwoves game on April 11, 2018? | Timberwolves games on Apr 11, 2018, or ask which team (both OK) *(added Oct 6, replaces G-11; needs review)* | ✅ Timberwolves hosted Denver and won 112-106 in overtime ([date](https://www.basketball-reference.com/boxscores/?month=4&day=11&year=2018)) |
 | G-12 | Pelicans games on 2/2/2019 | Pelicans games on Feb 2, 2019 *(date swapped Oct 1)* | ✅ Pelicans at San Antonio ([Pelicans schedule](https://www.basketball-reference.com/teams/NOP/2019_games.html)) |
 | G-13 | Were the Bullets in action on January 5, 1985? | Washington Bullets (today's Wizards) games on Jan 5, 1985 | ✅ Bullets hosted Detroit ([date](https://www.basketball-reference.com/boxscores/?month=1&day=5&year=1985)) |
 | G-14 | Philadelphia Warriors games on March 2, 1962 | Philadelphia Warriors (today's Golden State) games on Mar 2, 1962 | ✅ Wilt's 100-point game vs the Knicks (played in Hershey, PA) ([date](https://www.basketball-reference.com/boxscores/?month=3&day=2&year=1962)) |
@@ -274,7 +274,7 @@ question was listed there, otherwise at the end of the section.
 | R-16 | Brooklyn's 2021 playoff showing | Nets' 2021 playoff run | ✅ Lost to the Bucks in round 2 ([playoffs](https://www.basketball-reference.com/playoffs/NBA_2021.html)) |
 | R-17 | Recap OKC's run in last season's playoffs. *(asked Jan 20, 2025)* | Thunder's 2024 playoff run | ✅ Lost to Dallas in round 2 ([playoffs](https://www.basketball-reference.com/playoffs/NBA_2024.html)) |
 | R-18 | What was the Bucks' playoff record in 2018-19? | Bucks' 2019 playoff run (it includes their playoff win-loss record) *(decided Sep 30)* | ✅ Went 10-5 and lost the East finals ([playoffs](https://www.basketball-reference.com/playoffs/NBA_2019.html)) |
-| R-21 | Take me through Sacramento's 2002 playoffs. | Kings' 2002 playoff run *(added Oct 6, replaces R-19; needs review)* | ⚠️ Not checked online. From memory, the Kings reached the West finals and lost to the Lakers in seven games |
+| R-21 | Take me through Sacramento's 2002 playoffs. | Kings' 2002 playoff run *(added Oct 6, replaces R-19; needs review)* | ✅ Kings beat Utah 3-1 and Dallas 4-1, then lost the West finals to the Lakers in seven games ([playoffs](https://www.basketball-reference.com/playoffs/NBA_2002.html)) |
 
 ## Player season stats
 
@@ -342,7 +342,7 @@ question was listed there, otherwise at the end of the section.
 | L-15 | Top 7 offensive rebounders in total, 1996-97 | Top 7 in total offensive rebounds, 1996-97 | — |
 | L-16 | Who led in blocks per game this season? *(asked Mar 15, 2025)* | Top 10 in blocks per game, 2024-25 | — |
 | L-17 | Highest scoring average in 1974-75 | Top 10 in points per game, 1974-75 | — |
-| L-24 | Who took the rebounding crown in 2006-07? | Top 10 in rebounds per game, 2006-07 *(added Oct 6, replaces L-19; needs review)* | ⚠️ Not checked online. The rebounding title goes to the rebounds-per-game leader; from memory, Kevin Garnett led in 2006-07 |
+| L-24 | Who took the rebounding crown in 2006-07? | Top 10 in rebounds per game, 2006-07 *(added Oct 6, replaces L-19; needs review)* | ✅ The rebounding title goes to the rebounds-per-game leader; Kevin Garnett led in 2006-07 with 12.8 ([leaders](https://www.basketball-reference.com/leagues/NBA_2007_leaders.html)) |
 | L-25 | Who sank the most field goals in total in 2002-03? | Top 10 in total field goals made, 2002-03 *(added Oct 6, replaces L-23; needs review)* | — |
 
 ## Career stats
