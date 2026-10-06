@@ -1,0 +1,144 @@
+{
+  "schema_version": "1",
+  "request_id": "fx-which-jalen",
+  "outcome": "needs_clarification",
+  "question": "how did jalen do last night",
+  "interpretation": {
+    "intent": "boxscore_stat",
+    "detected_type": "player_stat",
+    "items": [
+      {
+        "field": "player",
+        "value": "Jalen",
+        "detail": null,
+        "expression": "jalen",
+        "origin": "question",
+        "status": "ambiguous",
+        "match_count": 4,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      },
+      {
+        "field": "date",
+        "value": "Last night",
+        "detail": "Thu, Feb 5, 2026 · ET",
+        "expression": "last night",
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      },
+      {
+        "field": "stat",
+        "value": "Full line",
+        "detail": null,
+        "expression": null,
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      }
+    ],
+    "reference_time": "2026-02-06T08:30:00-05:00",
+    "timezone": "America/New_York",
+    "dates": {
+      "start": "2026-02-05",
+      "end": "2026-02-05"
+    },
+    "season": "2025-26"
+  },
+  "result": null,
+  "clarification": {
+    "field": "player",
+    "reason": "ambiguous",
+    "prompt": "Which Jalen?",
+    "detail": "Four Jalens played on Thursday, Feb 5.",
+    "options": [
+      {
+        "id": "player:1631105",
+        "label": "Jalen Duren",
+        "sublabel": "C",
+        "detail": "WAS @ DET",
+        "team": {
+          "team_id": 1610612765,
+          "tricode": "DET",
+          "name": "Detroit Pistons"
+        },
+        "player_id": 1631105,
+        "question": "How did Jalen Duren do on February 5, 2026?",
+        "resolution": "rsv_fx_jalen_1",
+        "spoiler": false
+      },
+      {
+        "id": "player:1630591",
+        "label": "Jalen Suggs",
+        "sublabel": "G",
+        "detail": "BKN @ ORL",
+        "team": {
+          "team_id": 1610612753,
+          "tricode": "ORL",
+          "name": "Orlando Magic"
+        },
+        "player_id": 1630591,
+        "question": "How did Jalen Suggs do on February 5, 2026?",
+        "resolution": "rsv_fx_jalen_2",
+        "spoiler": false
+      },
+      {
+        "id": "player:1630552",
+        "label": "Jalen Johnson",
+        "sublabel": "F",
+        "detail": "UTA @ ATL",
+        "team": {
+          "team_id": 1610612737,
+          "tricode": "ATL",
+          "name": "Atlanta Hawks"
+        },
+        "player_id": 1630552,
+        "question": "How did Jalen Johnson do on February 5, 2026?",
+        "resolution": "rsv_fx_jalen_3",
+        "spoiler": false
+      },
+      {
+        "id": "player:1630188",
+        "label": "Jalen Smith",
+        "sublabel": "C",
+        "detail": "CHI @ TOR",
+        "team": {
+          "team_id": 1610612741,
+          "tricode": "CHI",
+          "name": "Chicago Bulls"
+        },
+        "player_id": 1630188,
+        "question": "How did Jalen Smith do on February 5, 2026?",
+        "resolution": "rsv_fx_jalen_4",
+        "spoiler": false
+      }
+    ],
+    "hint": "Looking for Jalen Brunson or Jalen Williams? The Knicks and Thunder didn't play that night. Try \"How many points did Jalen Brunson score on February 4, 2026?\""
+  },
+  "notice": null,
+  "spoiler_gate": null,
+  "links": [],
+  "suggestions": [],
+  "sources": [
+    {
+      "name": "nba_live",
+      "label": "NBA.com",
+      "fetched_at": "2026-09-29T16:00:00Z",
+      "complete": true
+    }
+  ],
+  "interpreter": {
+    "model_called": true,
+    "cache_hit": false,
+    "adapter": "jev",
+    "model": "jev-1.13.0",
+    "fallback_used": false
+  }
+}

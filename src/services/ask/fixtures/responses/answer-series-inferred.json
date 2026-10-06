@@ -1,0 +1,154 @@
+{
+  "schema_version": "1",
+  "request_id": "fx-series-inferred",
+  "outcome": "answer",
+  "question": "who won the 2025 nba finals",
+  "interpretation": {
+    "intent": "playoff_series",
+    "detected_type": "series",
+    "items": [
+      {
+        "field": "round",
+        "value": "2025 NBA Finals",
+        "detail": null,
+        "expression": "2025 nba finals",
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      },
+      {
+        "field": "series",
+        "value": "OKC vs IND",
+        "detail": null,
+        "expression": null,
+        "origin": "inferred",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": true
+      }
+    ],
+    "reference_time": "2026-09-29T12:00:00-04:00",
+    "timezone": "America/New_York",
+    "dates": null,
+    "season": "2024-25"
+  },
+  "result": {
+    "kind": "playoff_series",
+    "season": "2024-25",
+    "round": "finals",
+    "conference": null,
+    "teams": [
+      {
+        "team": {
+          "value": {
+            "team_id": 1610612760,
+            "tricode": "OKC",
+            "name": "Oklahoma City Thunder"
+          },
+          "spoiler": true
+        },
+        "seed": {
+          "value": 1,
+          "spoiler": true
+        },
+        "wins": {
+          "value": 4,
+          "spoiler": true
+        },
+        "won_series": {
+          "value": true,
+          "spoiler": true
+        }
+      },
+      {
+        "team": {
+          "value": {
+            "team_id": 1610612754,
+            "tricode": "IND",
+            "name": "Indiana Pacers"
+          },
+          "spoiler": true
+        },
+        "seed": {
+          "value": 4,
+          "spoiler": true
+        },
+        "wins": {
+          "value": 3,
+          "spoiler": true
+        },
+        "won_series": {
+          "value": false,
+          "spoiler": true
+        }
+      }
+    ],
+    "status": {
+      "value": "complete",
+      "spoiler": true
+    },
+    "games_played": {
+      "value": 7,
+      "spoiler": true
+    },
+    "summary": {
+      "value": "OKC won 4-3",
+      "spoiler": true
+    },
+    "games": {
+      "value": [],
+      "spoiler": true
+    }
+  },
+  "clarification": null,
+  "notice": null,
+  "spoiler_gate": null,
+  "links": [
+    {
+      "kind": "playoff_bracket",
+      "label": "Open 2025 bracket",
+      "href": "/playoffs?season=2024-25",
+      "external": false,
+      "spoiler": false
+    },
+    {
+      "kind": "playoff_series",
+      "label": "Open series",
+      "href": "/playoffs/2025/the-finals",
+      "external": false,
+      "spoiler": true
+    }
+  ],
+  "suggestions": [
+    {
+      "question": "How many points did Shai Gilgeous-Alexander score in game 7 of the 2025 NBA Finals?",
+      "category": "stats",
+      "spoiler": true
+    },
+    {
+      "question": "Who won the 2024 NBA Finals?",
+      "category": "series",
+      "spoiler": false
+    }
+  ],
+  "sources": [
+    {
+      "name": "nba_stats",
+      "label": "NBA.com",
+      "fetched_at": "2026-09-29T16:00:00Z",
+      "complete": true
+    }
+  ],
+  "interpreter": {
+    "model_called": true,
+    "cache_hit": false,
+    "adapter": "jev",
+    "model": "jev-1.13.0",
+    "fallback_used": false
+  }
+}
