@@ -1,0 +1,6614 @@
+{
+ "purpose": "Offline analysis of the 2026-10-06 exposed-data calibration run. Not release evidence.",
+ "inputs": {
+  "report": "report.json",
+  "journal": "report.jsonl",
+  "cases": "cases.json",
+  "field_labels": "docs/verification/ask-unseen-two-2026-09-29-field-labels.json"
+ },
+ "questions": 229,
+ "tier_gold": {
+  "cases_with_gold": 190,
+  "cases_without_field_gold": [
+   "stage2-player_season_stats-12",
+   "stage2-team_records-13",
+   "stage2-team_records-14",
+   "stage2-player_season_stats-15",
+   "stage2-player_season_stats-16",
+   "stage2-team_records-17",
+   "stage2-team_records-18",
+   "stage2-team_records-19",
+   "stage2-player_season_stats-20",
+   "stage2-team_records-21",
+   "stage3-season_leaders-08",
+   "stage3-season_leaders-14",
+   "stage3-season_leaders-15",
+   "stage3-season_leaders-16",
+   "stage3-season_leaders-17",
+   "stage3-season_leaders-18",
+   "stage3-season_leaders-19",
+   "stage3-season_leaders-20",
+   "stage3-season_leaders-21",
+   "stage3-season_leaders-23",
+   "stage3-season_leaders-25",
+   "stage3-season_leaders-26",
+   "stage3-career_stats-34",
+   "stage3-career_stats-35",
+   "stage3-career_stats-36",
+   "stage3-career_stats-37",
+   "stage3-career_stats-38",
+   "stage3-season_leaders-39",
+   "stage3-season_leaders-40",
+   "unseen-2026-09-29-072",
+   "unseen-2026-09-29-079",
+   "unseen-2026-09-29-080",
+   "unseen-2026-09-29-081",
+   "unseen-2026-09-29-082",
+   "unseen-2026-09-29-083",
+   "unseen-2026-09-29-084",
+   "unseen-2026-09-29-089",
+   "unseen-2026-09-29-090",
+   "unseen-2026-09-29-098"
+  ],
+  "note": "clarify and normalizer-unsupported cases outside unseen-two have no field gold"
+ },
+ "tier": {
+  "accept_min_current": 0.85,
+  "cascade_check": "ok",
+  "subsets": {
+   "all_gold": {
+    "current": {
+     "eligible": 896,
+     "accepted": 758,
+     "accepted_correct": 746,
+     "accepted_errors": 12,
+     "precision": 0.9842,
+     "coverage": 0.846,
+     "escalated": 138,
+     "escalation_rate": 0.154,
+     "not_accepted_not_escalated": 0,
+     "precision_min": 0.98,
+     "coverage_min": 0.3,
+     "precision_passed": true,
+     "coverage_passed": true,
+     "passed": true,
+     "error_slack": 3,
+     "precision_wilson95_lower": 0.9725,
+     "provisional": false,
+     "provisional_rule": "pass with zero error slack or coverage below 0.35"
+    },
+    "recommended": {
+     "threshold": 0.78,
+     "eligible": 896,
+     "accepted": 790,
+     "accepted_errors": 14,
+     "precision": 0.9823,
+     "coverage": 0.8817
+    },
+    "curve": [
+     {
+      "threshold": 0.5,
+      "eligible": 896,
+      "accepted": 881,
+      "accepted_errors": 45,
+      "precision": 0.9489,
+      "coverage": 0.9833
+     },
+     {
+      "threshold": 0.51,
+      "eligible": 896,
+      "accepted": 880,
+      "accepted_errors": 44,
+      "precision": 0.95,
+      "coverage": 0.9821
+     },
+     {
+      "threshold": 0.52,
+      "eligible": 896,
+      "accepted": 877,
+      "accepted_errors": 43,
+      "precision": 0.951,
+      "coverage": 0.9788
+     },
+     {
+      "threshold": 0.53,
+      "eligible": 896,
+      "accepted": 876,
+      "accepted_errors": 43,
+      "precision": 0.9509,
+      "coverage": 0.9777
+     },
+     {
+      "threshold": 0.54,
+      "eligible": 896,
+      "accepted": 875,
+      "accepted_errors": 42,
+      "precision": 0.952,
+      "coverage": 0.9766
+     },
+     {
+      "threshold": 0.55,
+      "eligible": 896,
+      "accepted": 873,
+      "accepted_errors": 41,
+      "precision": 0.953,
+      "coverage": 0.9743
+     },
+     {
+      "threshold": 0.56,
+      "eligible": 896,
+      "accepted": 872,
+      "accepted_errors": 41,
+      "precision": 0.953,
+      "coverage": 0.9732
+     },
+     {
+      "threshold": 0.57,
+      "eligible": 896,
+      "accepted": 871,
+      "accepted_errors": 40,
+      "precision": 0.9541,
+      "coverage": 0.9721
+     },
+     {
+      "threshold": 0.58,
+      "eligible": 896,
+      "accepted": 869,
+      "accepted_errors": 40,
+      "precision": 0.954,
+      "coverage": 0.9699
+     },
+     {
+      "threshold": 0.59,
+      "eligible": 896,
+      "accepted": 868,
+      "accepted_errors": 39,
+      "precision": 0.9551,
+      "coverage": 0.9688
+     },
+     {
+      "threshold": 0.6,
+      "eligible": 896,
+      "accepted": 865,
+      "accepted_errors": 37,
+      "precision": 0.9572,
+      "coverage": 0.9654
+     },
+     {
+      "threshold": 0.61,
+      "eligible": 896,
+      "accepted": 863,
+      "accepted_errors": 37,
+      "precision": 0.9571,
+      "coverage": 0.9632
+     },
+     {
+      "threshold": 0.62,
+      "eligible": 896,
+      "accepted": 860,
+      "accepted_errors": 35,
+      "precision": 0.9593,
+      "coverage": 0.9598
+     },
+     {
+      "threshold": 0.63,
+      "eligible": 896,
+      "accepted": 858,
+      "accepted_errors": 34,
+      "precision": 0.9604,
+      "coverage": 0.9576
+     },
+     {
+      "threshold": 0.64,
+      "eligible": 896,
+      "accepted": 849,
+      "accepted_errors": 32,
+      "precision": 0.9623,
+      "coverage": 0.9475
+     },
+     {
+      "threshold": 0.65,
+      "eligible": 896,
+      "accepted": 847,
+      "accepted_errors": 31,
+      "precision": 0.9634,
+      "coverage": 0.9453
+     },
+     {
+      "threshold": 0.66,
+      "eligible": 896,
+      "accepted": 844,
+      "accepted_errors": 30,
+      "precision": 0.9645,
+      "coverage": 0.942
+     },
+     {
+      "threshold": 0.67,
+      "eligible": 896,
+      "accepted": 842,
+      "accepted_errors": 29,
+      "precision": 0.9656,
+      "coverage": 0.9397
+     },
+     {
+      "threshold": 0.68,
+      "eligible": 896,
+      "accepted": 835,
+      "accepted_errors": 27,
+      "precision": 0.9677,
+      "coverage": 0.9319
+     },
+     {
+      "threshold": 0.69,
+      "eligible": 896,
+      "accepted": 831,
+      "accepted_errors": 25,
+      "precision": 0.9699,
+      "coverage": 0.9275
+     },
+     {
+      "threshold": 0.7,
+      "eligible": 896,
+      "accepted": 825,
+      "accepted_errors": 23,
+      "precision": 0.9721,
+      "coverage": 0.9208
+     },
+     {
+      "threshold": 0.71,
+      "eligible": 896,
+      "accepted": 821,
+      "accepted_errors": 20,
+      "precision": 0.9756,
+      "coverage": 0.9163
+     },
+     {
+      "threshold": 0.72,
+      "eligible": 896,
+      "accepted": 818,
+      "accepted_errors": 19,
+      "precision": 0.9768,
+      "coverage": 0.9129
+     },
+     {
+      "threshold": 0.73,
+      "eligible": 896,
+      "accepted": 815,
+      "accepted_errors": 19,
+      "precision": 0.9767,
+      "coverage": 0.9096
+     },
+     {
+      "threshold": 0.74,
+      "eligible": 896,
+      "accepted": 812,
+      "accepted_errors": 18,
+      "precision": 0.9778,
+      "coverage": 0.9062
+     },
+     {
+      "threshold": 0.75,
+      "eligible": 896,
+      "accepted": 809,
+      "accepted_errors": 18,
+      "precision": 0.9778,
+      "coverage": 0.9029
+     },
+     {
+      "threshold": 0.76,
+      "eligible": 896,
+      "accepted": 805,
+      "accepted_errors": 18,
+      "precision": 0.9776,
+      "coverage": 0.8984
+     },
+     {
+      "threshold": 0.77,
+      "eligible": 896,
+      "accepted": 796,
+      "accepted_errors": 16,
+      "precision": 0.9799,
+      "coverage": 0.8884
+     },
+     {
+      "threshold": 0.78,
+      "eligible": 896,
+      "accepted": 790,
+      "accepted_errors": 14,
+      "precision": 0.9823,
+      "coverage": 0.8817
+     },
+     {
+      "threshold": 0.79,
+      "eligible": 896,
+      "accepted": 790,
+      "accepted_errors": 14,
+      "precision": 0.9823,
+      "coverage": 0.8817
+     },
+     {
+      "threshold": 0.8,
+      "eligible": 896,
+      "accepted": 788,
+      "accepted_errors": 14,
+      "precision": 0.9822,
+      "coverage": 0.8795
+     },
+     {
+      "threshold": 0.81,
+      "eligible": 896,
+      "accepted": 784,
+      "accepted_errors": 14,
+      "precision": 0.9821,
+      "coverage": 0.875
+     },
+     {
+      "threshold": 0.82,
+      "eligible": 896,
+      "accepted": 777,
+      "accepted_errors": 13,
+      "precision": 0.9833,
+      "coverage": 0.8672
+     },
+     {
+      "threshold": 0.83,
+      "eligible": 896,
+      "accepted": 773,
+      "accepted_errors": 13,
+      "precision": 0.9832,
+      "coverage": 0.8627
+     },
+     {
+      "threshold": 0.84,
+      "eligible": 896,
+      "accepted": 765,
+      "accepted_errors": 13,
+      "precision": 0.983,
+      "coverage": 0.8538
+     },
+     {
+      "threshold": 0.85,
+      "eligible": 896,
+      "accepted": 758,
+      "accepted_errors": 12,
+      "precision": 0.9842,
+      "coverage": 0.846
+     },
+     {
+      "threshold": 0.86,
+      "eligible": 896,
+      "accepted": 753,
+      "accepted_errors": 12,
+      "precision": 0.9841,
+      "coverage": 0.8404
+     },
+     {
+      "threshold": 0.87,
+      "eligible": 896,
+      "accepted": 750,
+      "accepted_errors": 12,
+      "precision": 0.984,
+      "coverage": 0.8371
+     },
+     {
+      "threshold": 0.88,
+      "eligible": 896,
+      "accepted": 735,
+      "accepted_errors": 12,
+      "precision": 0.9837,
+      "coverage": 0.8203
+     },
+     {
+      "threshold": 0.89,
+      "eligible": 896,
+      "accepted": 730,
+      "accepted_errors": 12,
+      "precision": 0.9836,
+      "coverage": 0.8147
+     },
+     {
+      "threshold": 0.9,
+      "eligible": 896,
+      "accepted": 725,
+      "accepted_errors": 12,
+      "precision": 0.9834,
+      "coverage": 0.8092
+     },
+     {
+      "threshold": 0.91,
+      "eligible": 896,
+      "accepted": 714,
+      "accepted_errors": 11,
+      "precision": 0.9846,
+      "coverage": 0.7969
+     },
+     {
+      "threshold": 0.92,
+      "eligible": 896,
+      "accepted": 700,
+      "accepted_errors": 10,
+      "precision": 0.9857,
+      "coverage": 0.7812
+     },
+     {
+      "threshold": 0.93,
+      "eligible": 896,
+      "accepted": 686,
+      "accepted_errors": 10,
+      "precision": 0.9854,
+      "coverage": 0.7656
+     },
+     {
+      "threshold": 0.94,
+      "eligible": 896,
+      "accepted": 679,
+      "accepted_errors": 10,
+      "precision": 0.9853,
+      "coverage": 0.7578
+     },
+     {
+      "threshold": 0.95,
+      "eligible": 896,
+      "accepted": 668,
+      "accepted_errors": 9,
+      "precision": 0.9865,
+      "coverage": 0.7455
+     },
+     {
+      "threshold": 0.96,
+      "eligible": 896,
+      "accepted": 655,
+      "accepted_errors": 9,
+      "precision": 0.9863,
+      "coverage": 0.731
+     },
+     {
+      "threshold": 0.97,
+      "eligible": 896,
+      "accepted": 635,
+      "accepted_errors": 9,
+      "precision": 0.9858,
+      "coverage": 0.7087
+     },
+     {
+      "threshold": 0.98,
+      "eligible": 896,
+      "accepted": 598,
+      "accepted_errors": 9,
+      "precision": 0.9849,
+      "coverage": 0.6674
+     },
+     {
+      "threshold": 0.99,
+      "eligible": 896,
+      "accepted": 560,
+      "accepted_errors": 7,
+      "precision": 0.9875,
+      "coverage": 0.625
+     }
+    ],
+    "by_field": {
+     "intent": {
+      "eligible": 190,
+      "accepted": 184,
+      "accepted_correct": 174,
+      "accepted_errors": 10,
+      "precision": 0.9457,
+      "coverage": 0.9684,
+      "escalated": 6,
+      "escalation_rate": 0.0316,
+      "not_accepted_not_escalated": 0
+     },
+     "stat_scope": {
+      "eligible": 36,
+      "accepted": 34,
+      "accepted_correct": 34,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9444,
+      "escalated": 2,
+      "escalation_rate": 0.0556,
+      "not_accepted_not_escalated": 0
+     },
+     "stat": {
+      "eligible": 69,
+      "accepted": 69,
+      "accepted_correct": 69,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 1.0,
+      "escalated": 0,
+      "escalation_rate": 0.0,
+      "not_accepted_not_escalated": 0
+     },
+     "aggregation": {
+      "eligible": 36,
+      "accepted": 34,
+      "accepted_correct": 34,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9444,
+      "escalated": 2,
+      "escalation_rate": 0.0556,
+      "not_accepted_not_escalated": 0
+     },
+     "season_type": {
+      "eligible": 40,
+      "accepted": 23,
+      "accepted_correct": 23,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.575,
+      "escalated": 17,
+      "escalation_rate": 0.425,
+      "not_accepted_not_escalated": 0
+     },
+     "standings_scope": {
+      "eligible": 7,
+      "accepted": 4,
+      "accepted_correct": 4,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.5714,
+      "escalated": 3,
+      "escalation_rate": 0.4286,
+      "not_accepted_not_escalated": 0
+     },
+     "player": {
+      "eligible": 48,
+      "accepted": 36,
+      "accepted_correct": 35,
+      "accepted_errors": 1,
+      "precision": 0.9722,
+      "coverage": 0.75,
+      "escalated": 12,
+      "escalation_rate": 0.25,
+      "not_accepted_not_escalated": 0
+     },
+     "teams": {
+      "eligible": 152,
+      "accepted": 105,
+      "accepted_correct": 105,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.6908,
+      "escalated": 47,
+      "escalation_rate": 0.3092,
+      "not_accepted_not_escalated": 0
+     },
+     "target_team": {
+      "eligible": 3,
+      "accepted": 3,
+      "accepted_correct": 3,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 1.0,
+      "escalated": 0,
+      "escalation_rate": 0.0,
+      "not_accepted_not_escalated": 0
+     },
+     "date": {
+      "eligible": 72,
+      "accepted": 48,
+      "accepted_correct": 48,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.6667,
+      "escalated": 24,
+      "escalation_rate": 0.3333,
+      "not_accepted_not_escalated": 0
+     },
+     "season": {
+      "eligible": 132,
+      "accepted": 110,
+      "accepted_correct": 109,
+      "accepted_errors": 1,
+      "precision": 0.9909,
+      "coverage": 0.8333,
+      "escalated": 22,
+      "escalation_rate": 0.1667,
+      "not_accepted_not_escalated": 0
+     },
+     "round": {
+      "eligible": 69,
+      "accepted": 67,
+      "accepted_correct": 67,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.971,
+      "escalated": 2,
+      "escalation_rate": 0.029,
+      "not_accepted_not_escalated": 0
+     },
+     "game_number": {
+      "eligible": 36,
+      "accepted": 36,
+      "accepted_correct": 36,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 1.0,
+      "escalated": 0,
+      "escalation_rate": 0.0,
+      "not_accepted_not_escalated": 0
+     },
+     "location": {
+      "eligible": 6,
+      "accepted": 5,
+      "accepted_correct": 5,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.8333,
+      "escalated": 1,
+      "escalation_rate": 0.1667,
+      "not_accepted_not_escalated": 0
+     }
+    },
+    "by_family": {
+     "game_search": {
+      "eligible": 117,
+      "accepted": 99,
+      "accepted_correct": 97,
+      "accepted_errors": 2,
+      "precision": 0.9798,
+      "coverage": 0.8462,
+      "escalated": 18,
+      "escalation_rate": 0.1538,
+      "not_accepted_not_escalated": 0
+     },
+     "boxscore_stat": {
+      "eligible": 350,
+      "accepted": 281,
+      "accepted_correct": 277,
+      "accepted_errors": 4,
+      "precision": 0.9858,
+      "coverage": 0.8029,
+      "escalated": 69,
+      "escalation_rate": 0.1971,
+      "not_accepted_not_escalated": 0
+     },
+     "playoff_series": {
+      "eligible": 145,
+      "accepted": 129,
+      "accepted_correct": 127,
+      "accepted_errors": 2,
+      "precision": 0.9845,
+      "coverage": 0.8897,
+      "escalated": 16,
+      "escalation_rate": 0.1103,
+      "not_accepted_not_escalated": 0
+     },
+     "postseason_summary": {
+      "eligible": 103,
+      "accepted": 93,
+      "accepted_correct": 89,
+      "accepted_errors": 4,
+      "precision": 0.957,
+      "coverage": 0.9029,
+      "escalated": 10,
+      "escalation_rate": 0.0971,
+      "not_accepted_not_escalated": 0
+     },
+     "player_season_stats": {
+      "eligible": 42,
+      "accepted": 38,
+      "accepted_correct": 38,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9048,
+      "escalated": 4,
+      "escalation_rate": 0.0952,
+      "not_accepted_not_escalated": 0
+     },
+     "team_records": {
+      "eligible": 35,
+      "accepted": 27,
+      "accepted_correct": 27,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.7714,
+      "escalated": 8,
+      "escalation_rate": 0.2286,
+      "not_accepted_not_escalated": 0
+     },
+     "season_leaders": {
+      "eligible": 64,
+      "accepted": 55,
+      "accepted_correct": 55,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.8594,
+      "escalated": 9,
+      "escalation_rate": 0.1406,
+      "not_accepted_not_escalated": 0
+     },
+     "career_stats": {
+      "eligible": 40,
+      "accepted": 36,
+      "accepted_correct": 36,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9,
+      "escalated": 4,
+      "escalation_rate": 0.1,
+      "not_accepted_not_escalated": 0
+     }
+    },
+    "accepted_field_errors": [
+     {
+      "case_id": "unseen-two-game_search-24",
+      "field": "intent",
+      "source": "mechanical",
+      "reading": {
+       "status": "selected",
+       "selected": [
+        "team_records"
+       ],
+       "alternatives": []
+      },
+      "confidence": 1.0,
+      "gold": [
+       {
+        "status": "value",
+        "value": "unsupported:standings"
+       }
+      ],
+      "error_kind": "value_vs_value"
+     },
+     {
+      "case_id": "unseen-two-boxscore_stat-08",
+      "field": "season",
+      "source": "mechanical",
+      "reading": {
+       "status": "no_matching_candidate",
+       "selected": [],
+       "alternatives": []
+      },
+      "confidence": 0.91,
+      "gold": [
+       {
+        "status": "absent"
+       }
+      ],
+      "error_kind": "no_match_vs_absent"
+     },
+     {
+      "case_id": "unseen-two-boxscore_stat-15",
+      "field": "player",
+      "source": "labeled",
+      "reading": {
+       "status": "selected",
+       "selected": [
+        "player:201939"
+       ],
+       "alternatives": []
+      },
+      "confidence": 1.0,
+      "gold": [
+       {
+        "status": "ambiguous",
+        "alternatives": [
+         201939,
+         203552
+        ]
+       }
+      ],
+      "error_kind": "value_vs_ambiguous"
+     },
+     {
+      "case_id": "unseen-two-boxscore_stat-24",
+      "field": "intent",
+      "source": "mechanical",
+      "reading": {
+       "status": "selected",
+       "selected": [
+        "career_stats"
+       ],
+       "alternatives": []
+      },
+      "confidence": 1.0,
+      "gold": [
+       {
+        "status": "value",
+        "value": "unsupported:career_stats"
+       }
+      ],
+      "error_kind": "value_vs_value"
+     },
+     {
+      "case_id": "unseen-two-boxscore_stat-25",
+      "field": "intent",
+      "source": "mechanical",
+      "reading": {
+       "status": "selected",
+       "selected": [
+        "player_season_stats"
+       ],
+       "alternatives": []
+      },
+      "confidence": 1.0,
+      "gold": [
+       {
+        "status": "value",
+        "value": "unsupported:season_stats"
+       }
+      ],
+      "error_kind": "value_vs_value"
+     },
+     {
+      "case_id": "unseen-two-playoff_series-24",
+      "field": "intent",
+      "source": "mechanical",
+      "reading": {
+       "status": "selected",
+       "selected": [
+        "playoff_series"
+       ],
+       "alternatives": []
+      },
+      "confidence": 0.98,
+      "gold": [
+       {
+        "status": "value",
+        "value": "unsupported:historical_comparison"
+       }
+      ],
+      "error_kind": "value_vs_value"
+     },
+     {
+      "case_id": "unseen-two-playoff_series-25",
+      "field": "intent",
+      "source": "labeled",
+      "reading": {
+       "status": "selected",
+       "selected": [
+        "playoff_series"
+       ],
+       "alternatives": []
+      },
+      "confidence": 0.9,
+      "gold": [
+       {
+        "status": "value",
+        "value": "boxscore_stat"
+       },
+       {
+        "status": "value",
+        "value": "unsupported:multi_game_average"
+       }
+      ],
+      "error_kind": "value_vs_value"
+     },
+     {
+      "case_id": "unseen-two-postseason_summary-23",
+      "field": "intent",
+      "source": "mechanical",
+      "reading": {
+       "status": "selected",
+       "selected": [
+        "career_stats"
+       ],
+       "alternatives": []
+      },
+      "confidence": 0.99,
+      "gold": [
+       {
+        "status": "value",
+        "value": "unsupported:career_stats"
+       }
+      ],
+      "error_kind": "value_vs_value"
+     },
+     {
+      "case_id": "unseen-two-postseason_summary-24",
+      "field": "intent",
+      "source": "mechanical",
+      "reading": {
+       "status": "selected",
+       "selected": [
+        "team_records"
+       ],
+       "alternatives": []
+      },
+      "confidence": 1.0,
+      "gold": [
+       {
+        "status": "value",
+        "value": "unsupported:regular_season_record"
+       }
+      ],
+      "error_kind": "value_vs_value"
+     },
+     {
+      "case_id": "unseen-two-postseason_summary-25",
+      "field": "intent",
+      "source": "mechanical",
+      "reading": {
+       "status": "selected",
+       "selected": [
+        "season_leaders"
+       ],
+       "alternatives": []
+      },
+      "confidence": 1.0,
+      "gold": [
+       {
+        "status": "value",
+        "value": "unsupported:season_leaders"
+       }
+      ],
+      "error_kind": "value_vs_value"
+     },
+     {
+      "case_id": "unseen-2026-09-29-092",
+      "field": "intent",
+      "source": "mechanical",
+      "reading": {
+       "status": "selected",
+       "selected": [
+        "player_season_stats"
+       ],
+       "alternatives": []
+      },
+      "confidence": 0.94,
+      "gold": [
+       {
+        "status": "value",
+        "value": "unsupported:season_stats"
+       }
+      ],
+      "error_kind": "value_vs_value"
+     },
+     {
+      "case_id": "unseen-2026-09-29-097",
+      "field": "intent",
+      "source": "mechanical",
+      "reading": {
+       "status": "selected",
+       "selected": [
+        "team_records"
+       ],
+       "alternatives": []
+      },
+      "confidence": 0.98,
+      "gold": [
+       {
+        "status": "value",
+        "value": "unsupported:standings"
+       }
+      ],
+      "error_kind": "value_vs_value"
+     }
+    ]
+   },
+   "all_gold_without_stale_scope_labels": {
+    "current": {
+     "eligible": 888,
+     "accepted": 750,
+     "accepted_correct": 746,
+     "accepted_errors": 4,
+     "precision": 0.9947,
+     "coverage": 0.8446,
+     "escalated": 138,
+     "escalation_rate": 0.1554,
+     "not_accepted_not_escalated": 0,
+     "precision_min": 0.98,
+     "coverage_min": 0.3,
+     "precision_passed": true,
+     "coverage_passed": true,
+     "passed": true,
+     "error_slack": 11,
+     "precision_wilson95_lower": 0.9864,
+     "provisional": false,
+     "provisional_rule": "pass with zero error slack or coverage below 0.35"
+    },
+    "recommended": {
+     "threshold": 0.7,
+     "eligible": 888,
+     "accepted": 817,
+     "accepted_errors": 15,
+     "precision": 0.9816,
+     "coverage": 0.92
+    },
+    "curve": [
+     {
+      "threshold": 0.5,
+      "eligible": 888,
+      "accepted": 873,
+      "accepted_errors": 37,
+      "precision": 0.9576,
+      "coverage": 0.9831
+     },
+     {
+      "threshold": 0.51,
+      "eligible": 888,
+      "accepted": 872,
+      "accepted_errors": 36,
+      "precision": 0.9587,
+      "coverage": 0.982
+     },
+     {
+      "threshold": 0.52,
+      "eligible": 888,
+      "accepted": 869,
+      "accepted_errors": 35,
+      "precision": 0.9597,
+      "coverage": 0.9786
+     },
+     {
+      "threshold": 0.53,
+      "eligible": 888,
+      "accepted": 868,
+      "accepted_errors": 35,
+      "precision": 0.9597,
+      "coverage": 0.9775
+     },
+     {
+      "threshold": 0.54,
+      "eligible": 888,
+      "accepted": 867,
+      "accepted_errors": 34,
+      "precision": 0.9608,
+      "coverage": 0.9764
+     },
+     {
+      "threshold": 0.55,
+      "eligible": 888,
+      "accepted": 865,
+      "accepted_errors": 33,
+      "precision": 0.9618,
+      "coverage": 0.9741
+     },
+     {
+      "threshold": 0.56,
+      "eligible": 888,
+      "accepted": 864,
+      "accepted_errors": 33,
+      "precision": 0.9618,
+      "coverage": 0.973
+     },
+     {
+      "threshold": 0.57,
+      "eligible": 888,
+      "accepted": 863,
+      "accepted_errors": 32,
+      "precision": 0.9629,
+      "coverage": 0.9718
+     },
+     {
+      "threshold": 0.58,
+      "eligible": 888,
+      "accepted": 861,
+      "accepted_errors": 32,
+      "precision": 0.9628,
+      "coverage": 0.9696
+     },
+     {
+      "threshold": 0.59,
+      "eligible": 888,
+      "accepted": 860,
+      "accepted_errors": 31,
+      "precision": 0.964,
+      "coverage": 0.9685
+     },
+     {
+      "threshold": 0.6,
+      "eligible": 888,
+      "accepted": 857,
+      "accepted_errors": 29,
+      "precision": 0.9662,
+      "coverage": 0.9651
+     },
+     {
+      "threshold": 0.61,
+      "eligible": 888,
+      "accepted": 855,
+      "accepted_errors": 29,
+      "precision": 0.9661,
+      "coverage": 0.9628
+     },
+     {
+      "threshold": 0.62,
+      "eligible": 888,
+      "accepted": 852,
+      "accepted_errors": 27,
+      "precision": 0.9683,
+      "coverage": 0.9595
+     },
+     {
+      "threshold": 0.63,
+      "eligible": 888,
+      "accepted": 850,
+      "accepted_errors": 26,
+      "precision": 0.9694,
+      "coverage": 0.9572
+     },
+     {
+      "threshold": 0.64,
+      "eligible": 888,
+      "accepted": 841,
+      "accepted_errors": 24,
+      "precision": 0.9715,
+      "coverage": 0.9471
+     },
+     {
+      "threshold": 0.65,
+      "eligible": 888,
+      "accepted": 839,
+      "accepted_errors": 23,
+      "precision": 0.9726,
+      "coverage": 0.9448
+     },
+     {
+      "threshold": 0.66,
+      "eligible": 888,
+      "accepted": 836,
+      "accepted_errors": 22,
+      "precision": 0.9737,
+      "coverage": 0.9414
+     },
+     {
+      "threshold": 0.67,
+      "eligible": 888,
+      "accepted": 834,
+      "accepted_errors": 21,
+      "precision": 0.9748,
+      "coverage": 0.9392
+     },
+     {
+      "threshold": 0.68,
+      "eligible": 888,
+      "accepted": 827,
+      "accepted_errors": 19,
+      "precision": 0.977,
+      "coverage": 0.9313
+     },
+     {
+      "threshold": 0.69,
+      "eligible": 888,
+      "accepted": 823,
+      "accepted_errors": 17,
+      "precision": 0.9793,
+      "coverage": 0.9268
+     },
+     {
+      "threshold": 0.7,
+      "eligible": 888,
+      "accepted": 817,
+      "accepted_errors": 15,
+      "precision": 0.9816,
+      "coverage": 0.92
+     },
+     {
+      "threshold": 0.71,
+      "eligible": 888,
+      "accepted": 813,
+      "accepted_errors": 12,
+      "precision": 0.9852,
+      "coverage": 0.9155
+     },
+     {
+      "threshold": 0.72,
+      "eligible": 888,
+      "accepted": 810,
+      "accepted_errors": 11,
+      "precision": 0.9864,
+      "coverage": 0.9122
+     },
+     {
+      "threshold": 0.73,
+      "eligible": 888,
+      "accepted": 807,
+      "accepted_errors": 11,
+      "precision": 0.9864,
+      "coverage": 0.9088
+     },
+     {
+      "threshold": 0.74,
+      "eligible": 888,
+      "accepted": 804,
+      "accepted_errors": 10,
+      "precision": 0.9876,
+      "coverage": 0.9054
+     },
+     {
+      "threshold": 0.75,
+      "eligible": 888,
+      "accepted": 801,
+      "accepted_errors": 10,
+      "precision": 0.9875,
+      "coverage": 0.902
+     },
+     {
+      "threshold": 0.76,
+      "eligible": 888,
+      "accepted": 797,
+      "accepted_errors": 10,
+      "precision": 0.9875,
+      "coverage": 0.8975
+     },
+     {
+      "threshold": 0.77,
+      "eligible": 888,
+      "accepted": 788,
+      "accepted_errors": 8,
+      "precision": 0.9898,
+      "coverage": 0.8874
+     },
+     {
+      "threshold": 0.78,
+      "eligible": 888,
+      "accepted": 782,
+      "accepted_errors": 6,
+      "precision": 0.9923,
+      "coverage": 0.8806
+     },
+     {
+      "threshold": 0.79,
+      "eligible": 888,
+      "accepted": 782,
+      "accepted_errors": 6,
+      "precision": 0.9923,
+      "coverage": 0.8806
+     },
+     {
+      "threshold": 0.8,
+      "eligible": 888,
+      "accepted": 780,
+      "accepted_errors": 6,
+      "precision": 0.9923,
+      "coverage": 0.8784
+     },
+     {
+      "threshold": 0.81,
+      "eligible": 888,
+      "accepted": 776,
+      "accepted_errors": 6,
+      "precision": 0.9923,
+      "coverage": 0.8739
+     },
+     {
+      "threshold": 0.82,
+      "eligible": 888,
+      "accepted": 769,
+      "accepted_errors": 5,
+      "precision": 0.9935,
+      "coverage": 0.866
+     },
+     {
+      "threshold": 0.83,
+      "eligible": 888,
+      "accepted": 765,
+      "accepted_errors": 5,
+      "precision": 0.9935,
+      "coverage": 0.8615
+     },
+     {
+      "threshold": 0.84,
+      "eligible": 888,
+      "accepted": 757,
+      "accepted_errors": 5,
+      "precision": 0.9934,
+      "coverage": 0.8525
+     },
+     {
+      "threshold": 0.85,
+      "eligible": 888,
+      "accepted": 750,
+      "accepted_errors": 4,
+      "precision": 0.9947,
+      "coverage": 0.8446
+     },
+     {
+      "threshold": 0.86,
+      "eligible": 888,
+      "accepted": 745,
+      "accepted_errors": 4,
+      "precision": 0.9946,
+      "coverage": 0.839
+     },
+     {
+      "threshold": 0.87,
+      "eligible": 888,
+      "accepted": 742,
+      "accepted_errors": 4,
+      "precision": 0.9946,
+      "coverage": 0.8356
+     },
+     {
+      "threshold": 0.88,
+      "eligible": 888,
+      "accepted": 727,
+      "accepted_errors": 4,
+      "precision": 0.9945,
+      "coverage": 0.8187
+     },
+     {
+      "threshold": 0.89,
+      "eligible": 888,
+      "accepted": 722,
+      "accepted_errors": 4,
+      "precision": 0.9945,
+      "coverage": 0.8131
+     },
+     {
+      "threshold": 0.9,
+      "eligible": 888,
+      "accepted": 717,
+      "accepted_errors": 4,
+      "precision": 0.9944,
+      "coverage": 0.8074
+     },
+     {
+      "threshold": 0.91,
+      "eligible": 888,
+      "accepted": 706,
+      "accepted_errors": 3,
+      "precision": 0.9958,
+      "coverage": 0.795
+     },
+     {
+      "threshold": 0.92,
+      "eligible": 888,
+      "accepted": 692,
+      "accepted_errors": 2,
+      "precision": 0.9971,
+      "coverage": 0.7793
+     },
+     {
+      "threshold": 0.93,
+      "eligible": 888,
+      "accepted": 678,
+      "accepted_errors": 2,
+      "precision": 0.9971,
+      "coverage": 0.7635
+     },
+     {
+      "threshold": 0.94,
+      "eligible": 888,
+      "accepted": 671,
+      "accepted_errors": 2,
+      "precision": 0.997,
+      "coverage": 0.7556
+     },
+     {
+      "threshold": 0.95,
+      "eligible": 888,
+      "accepted": 661,
+      "accepted_errors": 2,
+      "precision": 0.997,
+      "coverage": 0.7444
+     },
+     {
+      "threshold": 0.96,
+      "eligible": 888,
+      "accepted": 648,
+      "accepted_errors": 2,
+      "precision": 0.9969,
+      "coverage": 0.7297
+     },
+     {
+      "threshold": 0.97,
+      "eligible": 888,
+      "accepted": 628,
+      "accepted_errors": 2,
+      "precision": 0.9968,
+      "coverage": 0.7072
+     },
+     {
+      "threshold": 0.98,
+      "eligible": 888,
+      "accepted": 591,
+      "accepted_errors": 2,
+      "precision": 0.9966,
+      "coverage": 0.6655
+     },
+     {
+      "threshold": 0.99,
+      "eligible": 888,
+      "accepted": 554,
+      "accepted_errors": 1,
+      "precision": 0.9982,
+      "coverage": 0.6239
+     }
+    ],
+    "by_field": {
+     "intent": {
+      "eligible": 182,
+      "accepted": 176,
+      "accepted_correct": 174,
+      "accepted_errors": 2,
+      "precision": 0.9886,
+      "coverage": 0.967,
+      "escalated": 6,
+      "escalation_rate": 0.033,
+      "not_accepted_not_escalated": 0
+     },
+     "stat_scope": {
+      "eligible": 36,
+      "accepted": 34,
+      "accepted_correct": 34,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9444,
+      "escalated": 2,
+      "escalation_rate": 0.0556,
+      "not_accepted_not_escalated": 0
+     },
+     "stat": {
+      "eligible": 69,
+      "accepted": 69,
+      "accepted_correct": 69,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 1.0,
+      "escalated": 0,
+      "escalation_rate": 0.0,
+      "not_accepted_not_escalated": 0
+     },
+     "aggregation": {
+      "eligible": 36,
+      "accepted": 34,
+      "accepted_correct": 34,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9444,
+      "escalated": 2,
+      "escalation_rate": 0.0556,
+      "not_accepted_not_escalated": 0
+     },
+     "season_type": {
+      "eligible": 40,
+      "accepted": 23,
+      "accepted_correct": 23,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.575,
+      "escalated": 17,
+      "escalation_rate": 0.425,
+      "not_accepted_not_escalated": 0
+     },
+     "standings_scope": {
+      "eligible": 7,
+      "accepted": 4,
+      "accepted_correct": 4,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.5714,
+      "escalated": 3,
+      "escalation_rate": 0.4286,
+      "not_accepted_not_escalated": 0
+     },
+     "player": {
+      "eligible": 48,
+      "accepted": 36,
+      "accepted_correct": 35,
+      "accepted_errors": 1,
+      "precision": 0.9722,
+      "coverage": 0.75,
+      "escalated": 12,
+      "escalation_rate": 0.25,
+      "not_accepted_not_escalated": 0
+     },
+     "teams": {
+      "eligible": 152,
+      "accepted": 105,
+      "accepted_correct": 105,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.6908,
+      "escalated": 47,
+      "escalation_rate": 0.3092,
+      "not_accepted_not_escalated": 0
+     },
+     "target_team": {
+      "eligible": 3,
+      "accepted": 3,
+      "accepted_correct": 3,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 1.0,
+      "escalated": 0,
+      "escalation_rate": 0.0,
+      "not_accepted_not_escalated": 0
+     },
+     "date": {
+      "eligible": 72,
+      "accepted": 48,
+      "accepted_correct": 48,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.6667,
+      "escalated": 24,
+      "escalation_rate": 0.3333,
+      "not_accepted_not_escalated": 0
+     },
+     "season": {
+      "eligible": 132,
+      "accepted": 110,
+      "accepted_correct": 109,
+      "accepted_errors": 1,
+      "precision": 0.9909,
+      "coverage": 0.8333,
+      "escalated": 22,
+      "escalation_rate": 0.1667,
+      "not_accepted_not_escalated": 0
+     },
+     "round": {
+      "eligible": 69,
+      "accepted": 67,
+      "accepted_correct": 67,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.971,
+      "escalated": 2,
+      "escalation_rate": 0.029,
+      "not_accepted_not_escalated": 0
+     },
+     "game_number": {
+      "eligible": 36,
+      "accepted": 36,
+      "accepted_correct": 36,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 1.0,
+      "escalated": 0,
+      "escalation_rate": 0.0,
+      "not_accepted_not_escalated": 0
+     },
+     "location": {
+      "eligible": 6,
+      "accepted": 5,
+      "accepted_correct": 5,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.8333,
+      "escalated": 1,
+      "escalation_rate": 0.1667,
+      "not_accepted_not_escalated": 0
+     }
+    },
+    "by_family": {
+     "game_search": {
+      "eligible": 115,
+      "accepted": 97,
+      "accepted_correct": 97,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.8435,
+      "escalated": 18,
+      "escalation_rate": 0.1565,
+      "not_accepted_not_escalated": 0
+     },
+     "boxscore_stat": {
+      "eligible": 348,
+      "accepted": 279,
+      "accepted_correct": 277,
+      "accepted_errors": 2,
+      "precision": 0.9928,
+      "coverage": 0.8017,
+      "escalated": 69,
+      "escalation_rate": 0.1983,
+      "not_accepted_not_escalated": 0
+     },
+     "playoff_series": {
+      "eligible": 145,
+      "accepted": 129,
+      "accepted_correct": 127,
+      "accepted_errors": 2,
+      "precision": 0.9845,
+      "coverage": 0.8897,
+      "escalated": 16,
+      "escalation_rate": 0.1103,
+      "not_accepted_not_escalated": 0
+     },
+     "postseason_summary": {
+      "eligible": 99,
+      "accepted": 89,
+      "accepted_correct": 89,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.899,
+      "escalated": 10,
+      "escalation_rate": 0.101,
+      "not_accepted_not_escalated": 0
+     },
+     "player_season_stats": {
+      "eligible": 42,
+      "accepted": 38,
+      "accepted_correct": 38,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9048,
+      "escalated": 4,
+      "escalation_rate": 0.0952,
+      "not_accepted_not_escalated": 0
+     },
+     "team_records": {
+      "eligible": 35,
+      "accepted": 27,
+      "accepted_correct": 27,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.7714,
+      "escalated": 8,
+      "escalation_rate": 0.2286,
+      "not_accepted_not_escalated": 0
+     },
+     "season_leaders": {
+      "eligible": 64,
+      "accepted": 55,
+      "accepted_correct": 55,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.8594,
+      "escalated": 9,
+      "escalation_rate": 0.1406,
+      "not_accepted_not_escalated": 0
+     },
+     "career_stats": {
+      "eligible": 40,
+      "accepted": 36,
+      "accepted_correct": 36,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9,
+      "escalated": 4,
+      "escalation_rate": 0.1,
+      "not_accepted_not_escalated": 0
+     }
+    },
+    "accepted_field_errors": [
+     {
+      "case_id": "unseen-two-boxscore_stat-08",
+      "field": "season",
+      "source": "mechanical",
+      "reading": {
+       "status": "no_matching_candidate",
+       "selected": [],
+       "alternatives": []
+      },
+      "confidence": 0.91,
+      "gold": [
+       {
+        "status": "absent"
+       }
+      ],
+      "error_kind": "no_match_vs_absent"
+     },
+     {
+      "case_id": "unseen-two-boxscore_stat-15",
+      "field": "player",
+      "source": "labeled",
+      "reading": {
+       "status": "selected",
+       "selected": [
+        "player:201939"
+       ],
+       "alternatives": []
+      },
+      "confidence": 1.0,
+      "gold": [
+       {
+        "status": "ambiguous",
+        "alternatives": [
+         201939,
+         203552
+        ]
+       }
+      ],
+      "error_kind": "value_vs_ambiguous"
+     },
+     {
+      "case_id": "unseen-two-playoff_series-24",
+      "field": "intent",
+      "source": "mechanical",
+      "reading": {
+       "status": "selected",
+       "selected": [
+        "playoff_series"
+       ],
+       "alternatives": []
+      },
+      "confidence": 0.98,
+      "gold": [
+       {
+        "status": "value",
+        "value": "unsupported:historical_comparison"
+       }
+      ],
+      "error_kind": "value_vs_value"
+     },
+     {
+      "case_id": "unseen-two-playoff_series-25",
+      "field": "intent",
+      "source": "labeled",
+      "reading": {
+       "status": "selected",
+       "selected": [
+        "playoff_series"
+       ],
+       "alternatives": []
+      },
+      "confidence": 0.9,
+      "gold": [
+       {
+        "status": "value",
+        "value": "boxscore_stat"
+       },
+       {
+        "status": "value",
+        "value": "unsupported:multi_game_average"
+       }
+      ],
+      "error_kind": "value_vs_value"
+     }
+    ]
+   },
+   "unseen_two_without_stale_scope_labels": {
+    "current": {
+     "eligible": 470,
+     "accepted": 397,
+     "accepted_correct": 393,
+     "accepted_errors": 4,
+     "precision": 0.9899,
+     "coverage": 0.8447,
+     "escalated": 73,
+     "escalation_rate": 0.1553,
+     "not_accepted_not_escalated": 0,
+     "precision_min": 0.98,
+     "coverage_min": 0.3,
+     "precision_passed": true,
+     "coverage_passed": true,
+     "passed": true,
+     "error_slack": 3,
+     "precision_wilson95_lower": 0.9744,
+     "provisional": false,
+     "provisional_rule": "pass with zero error slack or coverage below 0.35"
+    },
+    "recommended": {
+     "threshold": 0.77,
+     "eligible": 470,
+     "accepted": 415,
+     "accepted_errors": 8,
+     "precision": 0.9807,
+     "coverage": 0.883
+    },
+    "curve": [
+     {
+      "threshold": 0.5,
+      "eligible": 470,
+      "accepted": 459,
+      "accepted_errors": 30,
+      "precision": 0.9346,
+      "coverage": 0.9766
+     },
+     {
+      "threshold": 0.51,
+      "eligible": 470,
+      "accepted": 458,
+      "accepted_errors": 29,
+      "precision": 0.9367,
+      "coverage": 0.9745
+     },
+     {
+      "threshold": 0.52,
+      "eligible": 470,
+      "accepted": 455,
+      "accepted_errors": 28,
+      "precision": 0.9385,
+      "coverage": 0.9681
+     },
+     {
+      "threshold": 0.53,
+      "eligible": 470,
+      "accepted": 454,
+      "accepted_errors": 28,
+      "precision": 0.9383,
+      "coverage": 0.966
+     },
+     {
+      "threshold": 0.54,
+      "eligible": 470,
+      "accepted": 454,
+      "accepted_errors": 28,
+      "precision": 0.9383,
+      "coverage": 0.966
+     },
+     {
+      "threshold": 0.55,
+      "eligible": 470,
+      "accepted": 453,
+      "accepted_errors": 28,
+      "precision": 0.9382,
+      "coverage": 0.9638
+     },
+     {
+      "threshold": 0.56,
+      "eligible": 470,
+      "accepted": 453,
+      "accepted_errors": 28,
+      "precision": 0.9382,
+      "coverage": 0.9638
+     },
+     {
+      "threshold": 0.57,
+      "eligible": 470,
+      "accepted": 453,
+      "accepted_errors": 28,
+      "precision": 0.9382,
+      "coverage": 0.9638
+     },
+     {
+      "threshold": 0.58,
+      "eligible": 470,
+      "accepted": 453,
+      "accepted_errors": 28,
+      "precision": 0.9382,
+      "coverage": 0.9638
+     },
+     {
+      "threshold": 0.59,
+      "eligible": 470,
+      "accepted": 452,
+      "accepted_errors": 27,
+      "precision": 0.9403,
+      "coverage": 0.9617
+     },
+     {
+      "threshold": 0.6,
+      "eligible": 470,
+      "accepted": 449,
+      "accepted_errors": 25,
+      "precision": 0.9443,
+      "coverage": 0.9553
+     },
+     {
+      "threshold": 0.61,
+      "eligible": 470,
+      "accepted": 448,
+      "accepted_errors": 25,
+      "precision": 0.9442,
+      "coverage": 0.9532
+     },
+     {
+      "threshold": 0.62,
+      "eligible": 470,
+      "accepted": 446,
+      "accepted_errors": 24,
+      "precision": 0.9462,
+      "coverage": 0.9489
+     },
+     {
+      "threshold": 0.63,
+      "eligible": 470,
+      "accepted": 445,
+      "accepted_errors": 23,
+      "precision": 0.9483,
+      "coverage": 0.9468
+     },
+     {
+      "threshold": 0.64,
+      "eligible": 470,
+      "accepted": 441,
+      "accepted_errors": 22,
+      "precision": 0.9501,
+      "coverage": 0.9383
+     },
+     {
+      "threshold": 0.65,
+      "eligible": 470,
+      "accepted": 440,
+      "accepted_errors": 21,
+      "precision": 0.9523,
+      "coverage": 0.9362
+     },
+     {
+      "threshold": 0.66,
+      "eligible": 470,
+      "accepted": 438,
+      "accepted_errors": 20,
+      "precision": 0.9543,
+      "coverage": 0.9319
+     },
+     {
+      "threshold": 0.67,
+      "eligible": 470,
+      "accepted": 437,
+      "accepted_errors": 19,
+      "precision": 0.9565,
+      "coverage": 0.9298
+     },
+     {
+      "threshold": 0.68,
+      "eligible": 470,
+      "accepted": 435,
+      "accepted_errors": 17,
+      "precision": 0.9609,
+      "coverage": 0.9255
+     },
+     {
+      "threshold": 0.69,
+      "eligible": 470,
+      "accepted": 433,
+      "accepted_errors": 15,
+      "precision": 0.9654,
+      "coverage": 0.9213
+     },
+     {
+      "threshold": 0.7,
+      "eligible": 470,
+      "accepted": 430,
+      "accepted_errors": 14,
+      "precision": 0.9674,
+      "coverage": 0.9149
+     },
+     {
+      "threshold": 0.71,
+      "eligible": 470,
+      "accepted": 427,
+      "accepted_errors": 11,
+      "precision": 0.9742,
+      "coverage": 0.9085
+     },
+     {
+      "threshold": 0.72,
+      "eligible": 470,
+      "accepted": 425,
+      "accepted_errors": 10,
+      "precision": 0.9765,
+      "coverage": 0.9043
+     },
+     {
+      "threshold": 0.73,
+      "eligible": 470,
+      "accepted": 424,
+      "accepted_errors": 10,
+      "precision": 0.9764,
+      "coverage": 0.9021
+     },
+     {
+      "threshold": 0.74,
+      "eligible": 470,
+      "accepted": 422,
+      "accepted_errors": 9,
+      "precision": 0.9787,
+      "coverage": 0.8979
+     },
+     {
+      "threshold": 0.75,
+      "eligible": 470,
+      "accepted": 421,
+      "accepted_errors": 9,
+      "precision": 0.9786,
+      "coverage": 0.8957
+     },
+     {
+      "threshold": 0.76,
+      "eligible": 470,
+      "accepted": 418,
+      "accepted_errors": 9,
+      "precision": 0.9785,
+      "coverage": 0.8894
+     },
+     {
+      "threshold": 0.77,
+      "eligible": 470,
+      "accepted": 415,
+      "accepted_errors": 8,
+      "precision": 0.9807,
+      "coverage": 0.883
+     },
+     {
+      "threshold": 0.78,
+      "eligible": 470,
+      "accepted": 410,
+      "accepted_errors": 6,
+      "precision": 0.9854,
+      "coverage": 0.8723
+     },
+     {
+      "threshold": 0.79,
+      "eligible": 470,
+      "accepted": 410,
+      "accepted_errors": 6,
+      "precision": 0.9854,
+      "coverage": 0.8723
+     },
+     {
+      "threshold": 0.8,
+      "eligible": 470,
+      "accepted": 410,
+      "accepted_errors": 6,
+      "precision": 0.9854,
+      "coverage": 0.8723
+     },
+     {
+      "threshold": 0.81,
+      "eligible": 470,
+      "accepted": 409,
+      "accepted_errors": 6,
+      "precision": 0.9853,
+      "coverage": 0.8702
+     },
+     {
+      "threshold": 0.82,
+      "eligible": 470,
+      "accepted": 405,
+      "accepted_errors": 5,
+      "precision": 0.9877,
+      "coverage": 0.8617
+     },
+     {
+      "threshold": 0.83,
+      "eligible": 470,
+      "accepted": 404,
+      "accepted_errors": 5,
+      "precision": 0.9876,
+      "coverage": 0.8596
+     },
+     {
+      "threshold": 0.84,
+      "eligible": 470,
+      "accepted": 401,
+      "accepted_errors": 5,
+      "precision": 0.9875,
+      "coverage": 0.8532
+     },
+     {
+      "threshold": 0.85,
+      "eligible": 470,
+      "accepted": 397,
+      "accepted_errors": 4,
+      "precision": 0.9899,
+      "coverage": 0.8447
+     },
+     {
+      "threshold": 0.86,
+      "eligible": 470,
+      "accepted": 396,
+      "accepted_errors": 4,
+      "precision": 0.9899,
+      "coverage": 0.8426
+     },
+     {
+      "threshold": 0.87,
+      "eligible": 470,
+      "accepted": 395,
+      "accepted_errors": 4,
+      "precision": 0.9899,
+      "coverage": 0.8404
+     },
+     {
+      "threshold": 0.88,
+      "eligible": 470,
+      "accepted": 387,
+      "accepted_errors": 4,
+      "precision": 0.9897,
+      "coverage": 0.8234
+     },
+     {
+      "threshold": 0.89,
+      "eligible": 470,
+      "accepted": 384,
+      "accepted_errors": 4,
+      "precision": 0.9896,
+      "coverage": 0.817
+     },
+     {
+      "threshold": 0.9,
+      "eligible": 470,
+      "accepted": 382,
+      "accepted_errors": 4,
+      "precision": 0.9895,
+      "coverage": 0.8128
+     },
+     {
+      "threshold": 0.91,
+      "eligible": 470,
+      "accepted": 377,
+      "accepted_errors": 3,
+      "precision": 0.992,
+      "coverage": 0.8021
+     },
+     {
+      "threshold": 0.92,
+      "eligible": 470,
+      "accepted": 370,
+      "accepted_errors": 2,
+      "precision": 0.9946,
+      "coverage": 0.7872
+     },
+     {
+      "threshold": 0.93,
+      "eligible": 470,
+      "accepted": 362,
+      "accepted_errors": 2,
+      "precision": 0.9945,
+      "coverage": 0.7702
+     },
+     {
+      "threshold": 0.94,
+      "eligible": 470,
+      "accepted": 361,
+      "accepted_errors": 2,
+      "precision": 0.9945,
+      "coverage": 0.7681
+     },
+     {
+      "threshold": 0.95,
+      "eligible": 470,
+      "accepted": 359,
+      "accepted_errors": 2,
+      "precision": 0.9944,
+      "coverage": 0.7638
+     },
+     {
+      "threshold": 0.96,
+      "eligible": 470,
+      "accepted": 349,
+      "accepted_errors": 2,
+      "precision": 0.9943,
+      "coverage": 0.7426
+     },
+     {
+      "threshold": 0.97,
+      "eligible": 470,
+      "accepted": 337,
+      "accepted_errors": 2,
+      "precision": 0.9941,
+      "coverage": 0.717
+     },
+     {
+      "threshold": 0.98,
+      "eligible": 470,
+      "accepted": 316,
+      "accepted_errors": 2,
+      "precision": 0.9937,
+      "coverage": 0.6723
+     },
+     {
+      "threshold": 0.99,
+      "eligible": 470,
+      "accepted": 288,
+      "accepted_errors": 1,
+      "precision": 0.9965,
+      "coverage": 0.6128
+     }
+    ],
+    "by_field": {
+     "intent": {
+      "eligible": 94,
+      "accepted": 91,
+      "accepted_correct": 89,
+      "accepted_errors": 2,
+      "precision": 0.978,
+      "coverage": 0.9681,
+      "escalated": 3,
+      "escalation_rate": 0.0319,
+      "not_accepted_not_escalated": 0
+     },
+     "stat_scope": {
+      "eligible": 24,
+      "accepted": 24,
+      "accepted_correct": 24,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 1.0,
+      "escalated": 0,
+      "escalation_rate": 0.0,
+      "not_accepted_not_escalated": 0
+     },
+     "stat": {
+      "eligible": 24,
+      "accepted": 24,
+      "accepted_correct": 24,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 1.0,
+      "escalated": 0,
+      "escalation_rate": 0.0,
+      "not_accepted_not_escalated": 0
+     },
+     "aggregation": {
+      "eligible": 24,
+      "accepted": 23,
+      "accepted_correct": 23,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9583,
+      "escalated": 1,
+      "escalation_rate": 0.0417,
+      "not_accepted_not_escalated": 0
+     },
+     "player": {
+      "eligible": 24,
+      "accepted": 13,
+      "accepted_correct": 12,
+      "accepted_errors": 1,
+      "precision": 0.9231,
+      "coverage": 0.5417,
+      "escalated": 11,
+      "escalation_rate": 0.4583,
+      "not_accepted_not_escalated": 0
+     },
+     "teams": {
+      "eligible": 91,
+      "accepted": 63,
+      "accepted_correct": 63,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.6923,
+      "escalated": 28,
+      "escalation_rate": 0.3077,
+      "not_accepted_not_escalated": 0
+     },
+     "date": {
+      "eligible": 47,
+      "accepted": 36,
+      "accepted_correct": 36,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.766,
+      "escalated": 11,
+      "escalation_rate": 0.234,
+      "not_accepted_not_escalated": 0
+     },
+     "season": {
+      "eligible": 68,
+      "accepted": 52,
+      "accepted_correct": 51,
+      "accepted_errors": 1,
+      "precision": 0.9808,
+      "coverage": 0.7647,
+      "escalated": 16,
+      "escalation_rate": 0.2353,
+      "not_accepted_not_escalated": 0
+     },
+     "round": {
+      "eligible": 46,
+      "accepted": 44,
+      "accepted_correct": 44,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9565,
+      "escalated": 2,
+      "escalation_rate": 0.0435,
+      "not_accepted_not_escalated": 0
+     },
+     "game_number": {
+      "eligible": 24,
+      "accepted": 24,
+      "accepted_correct": 24,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 1.0,
+      "escalated": 0,
+      "escalation_rate": 0.0,
+      "not_accepted_not_escalated": 0
+     },
+     "location": {
+      "eligible": 4,
+      "accepted": 3,
+      "accepted_correct": 3,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.75,
+      "escalated": 1,
+      "escalation_rate": 0.25,
+      "not_accepted_not_escalated": 0
+     }
+    },
+    "by_family": {
+     "game_search": {
+      "eligible": 74,
+      "accepted": 62,
+      "accepted_correct": 62,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.8378,
+      "escalated": 12,
+      "escalation_rate": 0.1622,
+      "not_accepted_not_escalated": 0
+     },
+     "boxscore_stat": {
+      "eligible": 230,
+      "accepted": 183,
+      "accepted_correct": 181,
+      "accepted_errors": 2,
+      "precision": 0.9891,
+      "coverage": 0.7957,
+      "escalated": 47,
+      "escalation_rate": 0.2043,
+      "not_accepted_not_escalated": 0
+     },
+     "playoff_series": {
+      "eligible": 100,
+      "accepted": 90,
+      "accepted_correct": 88,
+      "accepted_errors": 2,
+      "precision": 0.9778,
+      "coverage": 0.9,
+      "escalated": 10,
+      "escalation_rate": 0.1,
+      "not_accepted_not_escalated": 0
+     },
+     "postseason_summary": {
+      "eligible": 66,
+      "accepted": 62,
+      "accepted_correct": 62,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9394,
+      "escalated": 4,
+      "escalation_rate": 0.0606,
+      "not_accepted_not_escalated": 0
+     }
+    },
+    "accepted_field_errors": [
+     {
+      "case_id": "unseen-two-boxscore_stat-08",
+      "field": "season",
+      "source": "mechanical",
+      "reading": {
+       "status": "no_matching_candidate",
+       "selected": [],
+       "alternatives": []
+      },
+      "confidence": 0.91,
+      "gold": [
+       {
+        "status": "absent"
+       }
+      ],
+      "error_kind": "no_match_vs_absent"
+     },
+     {
+      "case_id": "unseen-two-boxscore_stat-15",
+      "field": "player",
+      "source": "labeled",
+      "reading": {
+       "status": "selected",
+       "selected": [
+        "player:201939"
+       ],
+       "alternatives": []
+      },
+      "confidence": 1.0,
+      "gold": [
+       {
+        "status": "ambiguous",
+        "alternatives": [
+         201939,
+         203552
+        ]
+       }
+      ],
+      "error_kind": "value_vs_ambiguous"
+     },
+     {
+      "case_id": "unseen-two-playoff_series-24",
+      "field": "intent",
+      "source": "mechanical",
+      "reading": {
+       "status": "selected",
+       "selected": [
+        "playoff_series"
+       ],
+       "alternatives": []
+      },
+      "confidence": 0.98,
+      "gold": [
+       {
+        "status": "value",
+        "value": "unsupported:historical_comparison"
+       }
+      ],
+      "error_kind": "value_vs_value"
+     },
+     {
+      "case_id": "unseen-two-playoff_series-25",
+      "field": "intent",
+      "source": "labeled",
+      "reading": {
+       "status": "selected",
+       "selected": [
+        "playoff_series"
+       ],
+       "alternatives": []
+      },
+      "confidence": 0.9,
+      "gold": [
+       {
+        "status": "value",
+        "value": "boxscore_stat"
+       },
+       {
+        "status": "value",
+        "value": "unsupported:multi_game_average"
+       }
+      ],
+      "error_kind": "value_vs_value"
+     }
+    ]
+   },
+   "unseen_two_full_gold": {
+    "current": {
+     "eligible": 476,
+     "accepted": 403,
+     "accepted_correct": 393,
+     "accepted_errors": 10,
+     "precision": 0.9752,
+     "coverage": 0.8466,
+     "escalated": 73,
+     "escalation_rate": 0.1534,
+     "not_accepted_not_escalated": 0,
+     "precision_min": 0.98,
+     "coverage_min": 0.3,
+     "precision_passed": false,
+     "coverage_passed": true,
+     "passed": false,
+     "error_slack": -2,
+     "precision_wilson95_lower": 0.9549,
+     "provisional": false,
+     "provisional_rule": "pass with zero error slack or coverage below 0.35"
+    },
+    "recommended": null,
+    "curve": [
+     {
+      "threshold": 0.5,
+      "eligible": 476,
+      "accepted": 465,
+      "accepted_errors": 36,
+      "precision": 0.9226,
+      "coverage": 0.9769
+     },
+     {
+      "threshold": 0.51,
+      "eligible": 476,
+      "accepted": 464,
+      "accepted_errors": 35,
+      "precision": 0.9246,
+      "coverage": 0.9748
+     },
+     {
+      "threshold": 0.52,
+      "eligible": 476,
+      "accepted": 461,
+      "accepted_errors": 34,
+      "precision": 0.9262,
+      "coverage": 0.9685
+     },
+     {
+      "threshold": 0.53,
+      "eligible": 476,
+      "accepted": 460,
+      "accepted_errors": 34,
+      "precision": 0.9261,
+      "coverage": 0.9664
+     },
+     {
+      "threshold": 0.54,
+      "eligible": 476,
+      "accepted": 460,
+      "accepted_errors": 34,
+      "precision": 0.9261,
+      "coverage": 0.9664
+     },
+     {
+      "threshold": 0.55,
+      "eligible": 476,
+      "accepted": 459,
+      "accepted_errors": 34,
+      "precision": 0.9259,
+      "coverage": 0.9643
+     },
+     {
+      "threshold": 0.56,
+      "eligible": 476,
+      "accepted": 459,
+      "accepted_errors": 34,
+      "precision": 0.9259,
+      "coverage": 0.9643
+     },
+     {
+      "threshold": 0.57,
+      "eligible": 476,
+      "accepted": 459,
+      "accepted_errors": 34,
+      "precision": 0.9259,
+      "coverage": 0.9643
+     },
+     {
+      "threshold": 0.58,
+      "eligible": 476,
+      "accepted": 459,
+      "accepted_errors": 34,
+      "precision": 0.9259,
+      "coverage": 0.9643
+     },
+     {
+      "threshold": 0.59,
+      "eligible": 476,
+      "accepted": 458,
+      "accepted_errors": 33,
+      "precision": 0.9279,
+      "coverage": 0.9622
+     },
+     {
+      "threshold": 0.6,
+      "eligible": 476,
+      "accepted": 455,
+      "accepted_errors": 31,
+      "precision": 0.9319,
+      "coverage": 0.9559
+     },
+     {
+      "threshold": 0.61,
+      "eligible": 476,
+      "accepted": 454,
+      "accepted_errors": 31,
+      "precision": 0.9317,
+      "coverage": 0.9538
+     },
+     {
+      "threshold": 0.62,
+      "eligible": 476,
+      "accepted": 452,
+      "accepted_errors": 30,
+      "precision": 0.9336,
+      "coverage": 0.9496
+     },
+     {
+      "threshold": 0.63,
+      "eligible": 476,
+      "accepted": 451,
+      "accepted_errors": 29,
+      "precision": 0.9357,
+      "coverage": 0.9475
+     },
+     {
+      "threshold": 0.64,
+      "eligible": 476,
+      "accepted": 447,
+      "accepted_errors": 28,
+      "precision": 0.9374,
+      "coverage": 0.9391
+     },
+     {
+      "threshold": 0.65,
+      "eligible": 476,
+      "accepted": 446,
+      "accepted_errors": 27,
+      "precision": 0.9395,
+      "coverage": 0.937
+     },
+     {
+      "threshold": 0.66,
+      "eligible": 476,
+      "accepted": 444,
+      "accepted_errors": 26,
+      "precision": 0.9414,
+      "coverage": 0.9328
+     },
+     {
+      "threshold": 0.67,
+      "eligible": 476,
+      "accepted": 443,
+      "accepted_errors": 25,
+      "precision": 0.9436,
+      "coverage": 0.9307
+     },
+     {
+      "threshold": 0.68,
+      "eligible": 476,
+      "accepted": 441,
+      "accepted_errors": 23,
+      "precision": 0.9478,
+      "coverage": 0.9265
+     },
+     {
+      "threshold": 0.69,
+      "eligible": 476,
+      "accepted": 439,
+      "accepted_errors": 21,
+      "precision": 0.9522,
+      "coverage": 0.9223
+     },
+     {
+      "threshold": 0.7,
+      "eligible": 476,
+      "accepted": 436,
+      "accepted_errors": 20,
+      "precision": 0.9541,
+      "coverage": 0.916
+     },
+     {
+      "threshold": 0.71,
+      "eligible": 476,
+      "accepted": 433,
+      "accepted_errors": 17,
+      "precision": 0.9607,
+      "coverage": 0.9097
+     },
+     {
+      "threshold": 0.72,
+      "eligible": 476,
+      "accepted": 431,
+      "accepted_errors": 16,
+      "precision": 0.9629,
+      "coverage": 0.9055
+     },
+     {
+      "threshold": 0.73,
+      "eligible": 476,
+      "accepted": 430,
+      "accepted_errors": 16,
+      "precision": 0.9628,
+      "coverage": 0.9034
+     },
+     {
+      "threshold": 0.74,
+      "eligible": 476,
+      "accepted": 428,
+      "accepted_errors": 15,
+      "precision": 0.965,
+      "coverage": 0.8992
+     },
+     {
+      "threshold": 0.75,
+      "eligible": 476,
+      "accepted": 427,
+      "accepted_errors": 15,
+      "precision": 0.9649,
+      "coverage": 0.8971
+     },
+     {
+      "threshold": 0.76,
+      "eligible": 476,
+      "accepted": 424,
+      "accepted_errors": 15,
+      "precision": 0.9646,
+      "coverage": 0.8908
+     },
+     {
+      "threshold": 0.77,
+      "eligible": 476,
+      "accepted": 421,
+      "accepted_errors": 14,
+      "precision": 0.9667,
+      "coverage": 0.8845
+     },
+     {
+      "threshold": 0.78,
+      "eligible": 476,
+      "accepted": 416,
+      "accepted_errors": 12,
+      "precision": 0.9712,
+      "coverage": 0.8739
+     },
+     {
+      "threshold": 0.79,
+      "eligible": 476,
+      "accepted": 416,
+      "accepted_errors": 12,
+      "precision": 0.9712,
+      "coverage": 0.8739
+     },
+     {
+      "threshold": 0.8,
+      "eligible": 476,
+      "accepted": 416,
+      "accepted_errors": 12,
+      "precision": 0.9712,
+      "coverage": 0.8739
+     },
+     {
+      "threshold": 0.81,
+      "eligible": 476,
+      "accepted": 415,
+      "accepted_errors": 12,
+      "precision": 0.9711,
+      "coverage": 0.8718
+     },
+     {
+      "threshold": 0.82,
+      "eligible": 476,
+      "accepted": 411,
+      "accepted_errors": 11,
+      "precision": 0.9732,
+      "coverage": 0.8634
+     },
+     {
+      "threshold": 0.83,
+      "eligible": 476,
+      "accepted": 410,
+      "accepted_errors": 11,
+      "precision": 0.9732,
+      "coverage": 0.8613
+     },
+     {
+      "threshold": 0.84,
+      "eligible": 476,
+      "accepted": 407,
+      "accepted_errors": 11,
+      "precision": 0.973,
+      "coverage": 0.855
+     },
+     {
+      "threshold": 0.85,
+      "eligible": 476,
+      "accepted": 403,
+      "accepted_errors": 10,
+      "precision": 0.9752,
+      "coverage": 0.8466
+     },
+     {
+      "threshold": 0.86,
+      "eligible": 476,
+      "accepted": 402,
+      "accepted_errors": 10,
+      "precision": 0.9751,
+      "coverage": 0.8445
+     },
+     {
+      "threshold": 0.87,
+      "eligible": 476,
+      "accepted": 401,
+      "accepted_errors": 10,
+      "precision": 0.9751,
+      "coverage": 0.8424
+     },
+     {
+      "threshold": 0.88,
+      "eligible": 476,
+      "accepted": 393,
+      "accepted_errors": 10,
+      "precision": 0.9746,
+      "coverage": 0.8256
+     },
+     {
+      "threshold": 0.89,
+      "eligible": 476,
+      "accepted": 390,
+      "accepted_errors": 10,
+      "precision": 0.9744,
+      "coverage": 0.8193
+     },
+     {
+      "threshold": 0.9,
+      "eligible": 476,
+      "accepted": 388,
+      "accepted_errors": 10,
+      "precision": 0.9742,
+      "coverage": 0.8151
+     },
+     {
+      "threshold": 0.91,
+      "eligible": 476,
+      "accepted": 383,
+      "accepted_errors": 9,
+      "precision": 0.9765,
+      "coverage": 0.8046
+     },
+     {
+      "threshold": 0.92,
+      "eligible": 476,
+      "accepted": 376,
+      "accepted_errors": 8,
+      "precision": 0.9787,
+      "coverage": 0.7899
+     },
+     {
+      "threshold": 0.93,
+      "eligible": 476,
+      "accepted": 368,
+      "accepted_errors": 8,
+      "precision": 0.9783,
+      "coverage": 0.7731
+     },
+     {
+      "threshold": 0.94,
+      "eligible": 476,
+      "accepted": 367,
+      "accepted_errors": 8,
+      "precision": 0.9782,
+      "coverage": 0.771
+     },
+     {
+      "threshold": 0.95,
+      "eligible": 476,
+      "accepted": 365,
+      "accepted_errors": 8,
+      "precision": 0.9781,
+      "coverage": 0.7668
+     },
+     {
+      "threshold": 0.96,
+      "eligible": 476,
+      "accepted": 355,
+      "accepted_errors": 8,
+      "precision": 0.9775,
+      "coverage": 0.7458
+     },
+     {
+      "threshold": 0.97,
+      "eligible": 476,
+      "accepted": 343,
+      "accepted_errors": 8,
+      "precision": 0.9767,
+      "coverage": 0.7206
+     },
+     {
+      "threshold": 0.98,
+      "eligible": 476,
+      "accepted": 322,
+      "accepted_errors": 8,
+      "precision": 0.9752,
+      "coverage": 0.6765
+     },
+     {
+      "threshold": 0.99,
+      "eligible": 476,
+      "accepted": 294,
+      "accepted_errors": 7,
+      "precision": 0.9762,
+      "coverage": 0.6176
+     }
+    ],
+    "by_field": {
+     "intent": {
+      "eligible": 100,
+      "accepted": 97,
+      "accepted_correct": 89,
+      "accepted_errors": 8,
+      "precision": 0.9175,
+      "coverage": 0.97,
+      "escalated": 3,
+      "escalation_rate": 0.03,
+      "not_accepted_not_escalated": 0
+     },
+     "stat_scope": {
+      "eligible": 24,
+      "accepted": 24,
+      "accepted_correct": 24,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 1.0,
+      "escalated": 0,
+      "escalation_rate": 0.0,
+      "not_accepted_not_escalated": 0
+     },
+     "stat": {
+      "eligible": 24,
+      "accepted": 24,
+      "accepted_correct": 24,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 1.0,
+      "escalated": 0,
+      "escalation_rate": 0.0,
+      "not_accepted_not_escalated": 0
+     },
+     "aggregation": {
+      "eligible": 24,
+      "accepted": 23,
+      "accepted_correct": 23,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9583,
+      "escalated": 1,
+      "escalation_rate": 0.0417,
+      "not_accepted_not_escalated": 0
+     },
+     "player": {
+      "eligible": 24,
+      "accepted": 13,
+      "accepted_correct": 12,
+      "accepted_errors": 1,
+      "precision": 0.9231,
+      "coverage": 0.5417,
+      "escalated": 11,
+      "escalation_rate": 0.4583,
+      "not_accepted_not_escalated": 0
+     },
+     "teams": {
+      "eligible": 91,
+      "accepted": 63,
+      "accepted_correct": 63,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.6923,
+      "escalated": 28,
+      "escalation_rate": 0.3077,
+      "not_accepted_not_escalated": 0
+     },
+     "date": {
+      "eligible": 47,
+      "accepted": 36,
+      "accepted_correct": 36,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.766,
+      "escalated": 11,
+      "escalation_rate": 0.234,
+      "not_accepted_not_escalated": 0
+     },
+     "season": {
+      "eligible": 68,
+      "accepted": 52,
+      "accepted_correct": 51,
+      "accepted_errors": 1,
+      "precision": 0.9808,
+      "coverage": 0.7647,
+      "escalated": 16,
+      "escalation_rate": 0.2353,
+      "not_accepted_not_escalated": 0
+     },
+     "round": {
+      "eligible": 46,
+      "accepted": 44,
+      "accepted_correct": 44,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9565,
+      "escalated": 2,
+      "escalation_rate": 0.0435,
+      "not_accepted_not_escalated": 0
+     },
+     "game_number": {
+      "eligible": 24,
+      "accepted": 24,
+      "accepted_correct": 24,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 1.0,
+      "escalated": 0,
+      "escalation_rate": 0.0,
+      "not_accepted_not_escalated": 0
+     },
+     "location": {
+      "eligible": 4,
+      "accepted": 3,
+      "accepted_correct": 3,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.75,
+      "escalated": 1,
+      "escalation_rate": 0.25,
+      "not_accepted_not_escalated": 0
+     }
+    },
+    "by_family": {
+     "game_search": {
+      "eligible": 75,
+      "accepted": 63,
+      "accepted_correct": 62,
+      "accepted_errors": 1,
+      "precision": 0.9841,
+      "coverage": 0.84,
+      "escalated": 12,
+      "escalation_rate": 0.16,
+      "not_accepted_not_escalated": 0
+     },
+     "boxscore_stat": {
+      "eligible": 232,
+      "accepted": 185,
+      "accepted_correct": 181,
+      "accepted_errors": 4,
+      "precision": 0.9784,
+      "coverage": 0.7974,
+      "escalated": 47,
+      "escalation_rate": 0.2026,
+      "not_accepted_not_escalated": 0
+     },
+     "playoff_series": {
+      "eligible": 100,
+      "accepted": 90,
+      "accepted_correct": 88,
+      "accepted_errors": 2,
+      "precision": 0.9778,
+      "coverage": 0.9,
+      "escalated": 10,
+      "escalation_rate": 0.1,
+      "not_accepted_not_escalated": 0
+     },
+     "postseason_summary": {
+      "eligible": 69,
+      "accepted": 65,
+      "accepted_correct": 62,
+      "accepted_errors": 3,
+      "precision": 0.9538,
+      "coverage": 0.942,
+      "escalated": 4,
+      "escalation_rate": 0.058,
+      "not_accepted_not_escalated": 0
+     }
+    },
+    "accepted_field_errors": [
+     {
+      "case_id": "unseen-two-game_search-24",
+      "field": "intent",
+      "source": "mechanical",
+      "reading": {
+       "status": "selected",
+       "selected": [
+        "team_records"
+       ],
+       "alternatives": []
+      },
+      "confidence": 1.0,
+      "gold": [
+       {
+        "status": "value",
+        "value": "unsupported:standings"
+       }
+      ],
+      "error_kind": "value_vs_value"
+     },
+     {
+      "case_id": "unseen-two-boxscore_stat-08",
+      "field": "season",
+      "source": "mechanical",
+      "reading": {
+       "status": "no_matching_candidate",
+       "selected": [],
+       "alternatives": []
+      },
+      "confidence": 0.91,
+      "gold": [
+       {
+        "status": "absent"
+       }
+      ],
+      "error_kind": "no_match_vs_absent"
+     },
+     {
+      "case_id": "unseen-two-boxscore_stat-15",
+      "field": "player",
+      "source": "labeled",
+      "reading": {
+       "status": "selected",
+       "selected": [
+        "player:201939"
+       ],
+       "alternatives": []
+      },
+      "confidence": 1.0,
+      "gold": [
+       {
+        "status": "ambiguous",
+        "alternatives": [
+         201939,
+         203552
+        ]
+       }
+      ],
+      "error_kind": "value_vs_ambiguous"
+     },
+     {
+      "case_id": "unseen-two-boxscore_stat-24",
+      "field": "intent",
+      "source": "mechanical",
+      "reading": {
+       "status": "selected",
+       "selected": [
+        "career_stats"
+       ],
+       "alternatives": []
+      },
+      "confidence": 1.0,
+      "gold": [
+       {
+        "status": "value",
+        "value": "unsupported:career_stats"
+       }
+      ],
+      "error_kind": "value_vs_value"
+     },
+     {
+      "case_id": "unseen-two-boxscore_stat-25",
+      "field": "intent",
+      "source": "mechanical",
+      "reading": {
+       "status": "selected",
+       "selected": [
+        "player_season_stats"
+       ],
+       "alternatives": []
+      },
+      "confidence": 1.0,
+      "gold": [
+       {
+        "status": "value",
+        "value": "unsupported:season_stats"
+       }
+      ],
+      "error_kind": "value_vs_value"
+     },
+     {
+      "case_id": "unseen-two-playoff_series-24",
+      "field": "intent",
+      "source": "mechanical",
+      "reading": {
+       "status": "selected",
+       "selected": [
+        "playoff_series"
+       ],
+       "alternatives": []
+      },
+      "confidence": 0.98,
+      "gold": [
+       {
+        "status": "value",
+        "value": "unsupported:historical_comparison"
+       }
+      ],
+      "error_kind": "value_vs_value"
+     },
+     {
+      "case_id": "unseen-two-playoff_series-25",
+      "field": "intent",
+      "source": "labeled",
+      "reading": {
+       "status": "selected",
+       "selected": [
+        "playoff_series"
+       ],
+       "alternatives": []
+      },
+      "confidence": 0.9,
+      "gold": [
+       {
+        "status": "value",
+        "value": "boxscore_stat"
+       },
+       {
+        "status": "value",
+        "value": "unsupported:multi_game_average"
+       }
+      ],
+      "error_kind": "value_vs_value"
+     },
+     {
+      "case_id": "unseen-two-postseason_summary-23",
+      "field": "intent",
+      "source": "mechanical",
+      "reading": {
+       "status": "selected",
+       "selected": [
+        "career_stats"
+       ],
+       "alternatives": []
+      },
+      "confidence": 0.99,
+      "gold": [
+       {
+        "status": "value",
+        "value": "unsupported:career_stats"
+       }
+      ],
+      "error_kind": "value_vs_value"
+     },
+     {
+      "case_id": "unseen-two-postseason_summary-24",
+      "field": "intent",
+      "source": "mechanical",
+      "reading": {
+       "status": "selected",
+       "selected": [
+        "team_records"
+       ],
+       "alternatives": []
+      },
+      "confidence": 1.0,
+      "gold": [
+       {
+        "status": "value",
+        "value": "unsupported:regular_season_record"
+       }
+      ],
+      "error_kind": "value_vs_value"
+     },
+     {
+      "case_id": "unseen-two-postseason_summary-25",
+      "field": "intent",
+      "source": "mechanical",
+      "reading": {
+       "status": "selected",
+       "selected": [
+        "season_leaders"
+       ],
+       "alternatives": []
+      },
+      "confidence": 1.0,
+      "gold": [
+       {
+        "status": "value",
+        "value": "unsupported:season_leaders"
+       }
+      ],
+      "error_kind": "value_vs_value"
+     }
+    ]
+   },
+   "eight_tool_mechanical": {
+    "current": {
+     "eligible": 187,
+     "accepted": 159,
+     "accepted_correct": 159,
+     "accepted_errors": 0,
+     "precision": 1.0,
+     "coverage": 0.8503,
+     "escalated": 28,
+     "escalation_rate": 0.1497,
+     "not_accepted_not_escalated": 0,
+     "precision_min": 0.98,
+     "coverage_min": 0.3,
+     "precision_passed": true,
+     "coverage_passed": true,
+     "passed": true,
+     "error_slack": 3,
+     "precision_wilson95_lower": 0.9764,
+     "provisional": false,
+     "provisional_rule": "pass with zero error slack or coverage below 0.35"
+    },
+    "recommended": {
+     "threshold": 0.5,
+     "eligible": 187,
+     "accepted": 184,
+     "accepted_errors": 1,
+     "precision": 0.9946,
+     "coverage": 0.984
+    },
+    "curve": [
+     {
+      "threshold": 0.5,
+      "eligible": 187,
+      "accepted": 184,
+      "accepted_errors": 1,
+      "precision": 0.9946,
+      "coverage": 0.984
+     },
+     {
+      "threshold": 0.51,
+      "eligible": 187,
+      "accepted": 184,
+      "accepted_errors": 1,
+      "precision": 0.9946,
+      "coverage": 0.984
+     },
+     {
+      "threshold": 0.52,
+      "eligible": 187,
+      "accepted": 184,
+      "accepted_errors": 1,
+      "precision": 0.9946,
+      "coverage": 0.984
+     },
+     {
+      "threshold": 0.53,
+      "eligible": 187,
+      "accepted": 184,
+      "accepted_errors": 1,
+      "precision": 0.9946,
+      "coverage": 0.984
+     },
+     {
+      "threshold": 0.54,
+      "eligible": 187,
+      "accepted": 184,
+      "accepted_errors": 1,
+      "precision": 0.9946,
+      "coverage": 0.984
+     },
+     {
+      "threshold": 0.55,
+      "eligible": 187,
+      "accepted": 184,
+      "accepted_errors": 1,
+      "precision": 0.9946,
+      "coverage": 0.984
+     },
+     {
+      "threshold": 0.56,
+      "eligible": 187,
+      "accepted": 183,
+      "accepted_errors": 1,
+      "precision": 0.9945,
+      "coverage": 0.9786
+     },
+     {
+      "threshold": 0.57,
+      "eligible": 187,
+      "accepted": 183,
+      "accepted_errors": 1,
+      "precision": 0.9945,
+      "coverage": 0.9786
+     },
+     {
+      "threshold": 0.58,
+      "eligible": 187,
+      "accepted": 183,
+      "accepted_errors": 1,
+      "precision": 0.9945,
+      "coverage": 0.9786
+     },
+     {
+      "threshold": 0.59,
+      "eligible": 187,
+      "accepted": 183,
+      "accepted_errors": 1,
+      "precision": 0.9945,
+      "coverage": 0.9786
+     },
+     {
+      "threshold": 0.6,
+      "eligible": 187,
+      "accepted": 183,
+      "accepted_errors": 1,
+      "precision": 0.9945,
+      "coverage": 0.9786
+     },
+     {
+      "threshold": 0.61,
+      "eligible": 187,
+      "accepted": 183,
+      "accepted_errors": 1,
+      "precision": 0.9945,
+      "coverage": 0.9786
+     },
+     {
+      "threshold": 0.62,
+      "eligible": 187,
+      "accepted": 182,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9733
+     },
+     {
+      "threshold": 0.63,
+      "eligible": 187,
+      "accepted": 181,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9679
+     },
+     {
+      "threshold": 0.64,
+      "eligible": 187,
+      "accepted": 180,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9626
+     },
+     {
+      "threshold": 0.65,
+      "eligible": 187,
+      "accepted": 180,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9626
+     },
+     {
+      "threshold": 0.66,
+      "eligible": 187,
+      "accepted": 179,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9572
+     },
+     {
+      "threshold": 0.67,
+      "eligible": 187,
+      "accepted": 179,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9572
+     },
+     {
+      "threshold": 0.68,
+      "eligible": 187,
+      "accepted": 178,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9519
+     },
+     {
+      "threshold": 0.69,
+      "eligible": 187,
+      "accepted": 177,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9465
+     },
+     {
+      "threshold": 0.7,
+      "eligible": 187,
+      "accepted": 176,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9412
+     },
+     {
+      "threshold": 0.71,
+      "eligible": 187,
+      "accepted": 176,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9412
+     },
+     {
+      "threshold": 0.72,
+      "eligible": 187,
+      "accepted": 175,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9358
+     },
+     {
+      "threshold": 0.73,
+      "eligible": 187,
+      "accepted": 175,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9358
+     },
+     {
+      "threshold": 0.74,
+      "eligible": 187,
+      "accepted": 175,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9358
+     },
+     {
+      "threshold": 0.75,
+      "eligible": 187,
+      "accepted": 175,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9358
+     },
+     {
+      "threshold": 0.76,
+      "eligible": 187,
+      "accepted": 175,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9358
+     },
+     {
+      "threshold": 0.77,
+      "eligible": 187,
+      "accepted": 173,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9251
+     },
+     {
+      "threshold": 0.78,
+      "eligible": 187,
+      "accepted": 172,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9198
+     },
+     {
+      "threshold": 0.79,
+      "eligible": 187,
+      "accepted": 172,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9198
+     },
+     {
+      "threshold": 0.8,
+      "eligible": 187,
+      "accepted": 170,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9091
+     },
+     {
+      "threshold": 0.81,
+      "eligible": 187,
+      "accepted": 169,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9037
+     },
+     {
+      "threshold": 0.82,
+      "eligible": 187,
+      "accepted": 167,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.893
+     },
+     {
+      "threshold": 0.83,
+      "eligible": 187,
+      "accepted": 164,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.877
+     },
+     {
+      "threshold": 0.84,
+      "eligible": 187,
+      "accepted": 161,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.861
+     },
+     {
+      "threshold": 0.85,
+      "eligible": 187,
+      "accepted": 159,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.8503
+     },
+     {
+      "threshold": 0.86,
+      "eligible": 187,
+      "accepted": 157,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.8396
+     },
+     {
+      "threshold": 0.87,
+      "eligible": 187,
+      "accepted": 155,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.8289
+     },
+     {
+      "threshold": 0.88,
+      "eligible": 187,
+      "accepted": 150,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.8021
+     },
+     {
+      "threshold": 0.89,
+      "eligible": 187,
+      "accepted": 149,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.7968
+     },
+     {
+      "threshold": 0.9,
+      "eligible": 187,
+      "accepted": 147,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.7861
+     },
+     {
+      "threshold": 0.91,
+      "eligible": 187,
+      "accepted": 145,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.7754
+     },
+     {
+      "threshold": 0.92,
+      "eligible": 187,
+      "accepted": 141,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.754
+     },
+     {
+      "threshold": 0.93,
+      "eligible": 187,
+      "accepted": 140,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.7487
+     },
+     {
+      "threshold": 0.94,
+      "eligible": 187,
+      "accepted": 136,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.7273
+     },
+     {
+      "threshold": 0.95,
+      "eligible": 187,
+      "accepted": 132,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.7059
+     },
+     {
+      "threshold": 0.96,
+      "eligible": 187,
+      "accepted": 130,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.6952
+     },
+     {
+      "threshold": 0.97,
+      "eligible": 187,
+      "accepted": 126,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.6738
+     },
+     {
+      "threshold": 0.98,
+      "eligible": 187,
+      "accepted": 125,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.6684
+     },
+     {
+      "threshold": 0.99,
+      "eligible": 187,
+      "accepted": 125,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.6684
+     }
+    ],
+    "by_field": {
+     "intent": {
+      "eligible": 42,
+      "accepted": 41,
+      "accepted_correct": 41,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9762,
+      "escalated": 1,
+      "escalation_rate": 0.0238,
+      "not_accepted_not_escalated": 0
+     },
+     "stat": {
+      "eligible": 33,
+      "accepted": 33,
+      "accepted_correct": 33,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 1.0,
+      "escalated": 0,
+      "escalation_rate": 0.0,
+      "not_accepted_not_escalated": 0
+     },
+     "season_type": {
+      "eligible": 40,
+      "accepted": 23,
+      "accepted_correct": 23,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.575,
+      "escalated": 17,
+      "escalation_rate": 0.425,
+      "not_accepted_not_escalated": 0
+     },
+     "standings_scope": {
+      "eligible": 7,
+      "accepted": 4,
+      "accepted_correct": 4,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.5714,
+      "escalated": 3,
+      "escalation_rate": 0.4286,
+      "not_accepted_not_escalated": 0
+     },
+     "player": {
+      "eligible": 17,
+      "accepted": 16,
+      "accepted_correct": 16,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9412,
+      "escalated": 1,
+      "escalation_rate": 0.0588,
+      "not_accepted_not_escalated": 0
+     },
+     "teams": {
+      "eligible": 16,
+      "accepted": 11,
+      "accepted_correct": 11,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.6875,
+      "escalated": 5,
+      "escalation_rate": 0.3125,
+      "not_accepted_not_escalated": 0
+     },
+     "date": {
+      "eligible": 1,
+      "accepted": 1,
+      "accepted_correct": 1,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 1.0,
+      "escalated": 0,
+      "escalation_rate": 0.0,
+      "not_accepted_not_escalated": 0
+     },
+     "season": {
+      "eligible": 31,
+      "accepted": 30,
+      "accepted_correct": 30,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9677,
+      "escalated": 1,
+      "escalation_rate": 0.0323,
+      "not_accepted_not_escalated": 0
+     }
+    },
+    "by_family": {
+     "game_search": {
+      "eligible": 3,
+      "accepted": 3,
+      "accepted_correct": 3,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 1.0,
+      "escalated": 0,
+      "escalation_rate": 0.0,
+      "not_accepted_not_escalated": 0
+     },
+     "postseason_summary": {
+      "eligible": 3,
+      "accepted": 0,
+      "accepted_correct": 0,
+      "accepted_errors": 0,
+      "precision": null,
+      "coverage": 0.0,
+      "escalated": 3,
+      "escalation_rate": 1.0,
+      "not_accepted_not_escalated": 0
+     },
+     "player_season_stats": {
+      "eligible": 42,
+      "accepted": 38,
+      "accepted_correct": 38,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9048,
+      "escalated": 4,
+      "escalation_rate": 0.0952,
+      "not_accepted_not_escalated": 0
+     },
+     "team_records": {
+      "eligible": 35,
+      "accepted": 27,
+      "accepted_correct": 27,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.7714,
+      "escalated": 8,
+      "escalation_rate": 0.2286,
+      "not_accepted_not_escalated": 0
+     },
+     "season_leaders": {
+      "eligible": 64,
+      "accepted": 55,
+      "accepted_correct": 55,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.8594,
+      "escalated": 9,
+      "escalation_rate": 0.1406,
+      "not_accepted_not_escalated": 0
+     },
+     "career_stats": {
+      "eligible": 40,
+      "accepted": 36,
+      "accepted_correct": 36,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9,
+      "escalated": 4,
+      "escalation_rate": 0.1,
+      "not_accepted_not_escalated": 0
+     }
+    },
+    "accepted_field_errors": []
+   },
+   "unseen_one_mechanical": {
+    "current": {
+     "eligible": 233,
+     "accepted": 196,
+     "accepted_correct": 194,
+     "accepted_errors": 2,
+     "precision": 0.9898,
+     "coverage": 0.8412,
+     "escalated": 37,
+     "escalation_rate": 0.1588,
+     "not_accepted_not_escalated": 0,
+     "precision_min": 0.98,
+     "coverage_min": 0.3,
+     "precision_passed": true,
+     "coverage_passed": true,
+     "passed": true,
+     "error_slack": 1,
+     "precision_wilson95_lower": 0.9636,
+     "provisional": false,
+     "provisional_rule": "pass with zero error slack or coverage below 0.35"
+    },
+    "recommended": {
+     "threshold": 0.64,
+     "eligible": 233,
+     "accepted": 222,
+     "accepted_errors": 4,
+     "precision": 0.982,
+     "coverage": 0.9528
+    },
+    "curve": [
+     {
+      "threshold": 0.5,
+      "eligible": 233,
+      "accepted": 232,
+      "accepted_errors": 8,
+      "precision": 0.9655,
+      "coverage": 0.9957
+     },
+     {
+      "threshold": 0.51,
+      "eligible": 233,
+      "accepted": 232,
+      "accepted_errors": 8,
+      "precision": 0.9655,
+      "coverage": 0.9957
+     },
+     {
+      "threshold": 0.52,
+      "eligible": 233,
+      "accepted": 232,
+      "accepted_errors": 8,
+      "precision": 0.9655,
+      "coverage": 0.9957
+     },
+     {
+      "threshold": 0.53,
+      "eligible": 233,
+      "accepted": 232,
+      "accepted_errors": 8,
+      "precision": 0.9655,
+      "coverage": 0.9957
+     },
+     {
+      "threshold": 0.54,
+      "eligible": 233,
+      "accepted": 231,
+      "accepted_errors": 7,
+      "precision": 0.9697,
+      "coverage": 0.9914
+     },
+     {
+      "threshold": 0.55,
+      "eligible": 233,
+      "accepted": 230,
+      "accepted_errors": 6,
+      "precision": 0.9739,
+      "coverage": 0.9871
+     },
+     {
+      "threshold": 0.56,
+      "eligible": 233,
+      "accepted": 230,
+      "accepted_errors": 6,
+      "precision": 0.9739,
+      "coverage": 0.9871
+     },
+     {
+      "threshold": 0.57,
+      "eligible": 233,
+      "accepted": 229,
+      "accepted_errors": 5,
+      "precision": 0.9782,
+      "coverage": 0.9828
+     },
+     {
+      "threshold": 0.58,
+      "eligible": 233,
+      "accepted": 227,
+      "accepted_errors": 5,
+      "precision": 0.978,
+      "coverage": 0.9742
+     },
+     {
+      "threshold": 0.59,
+      "eligible": 233,
+      "accepted": 227,
+      "accepted_errors": 5,
+      "precision": 0.978,
+      "coverage": 0.9742
+     },
+     {
+      "threshold": 0.6,
+      "eligible": 233,
+      "accepted": 227,
+      "accepted_errors": 5,
+      "precision": 0.978,
+      "coverage": 0.9742
+     },
+     {
+      "threshold": 0.61,
+      "eligible": 233,
+      "accepted": 226,
+      "accepted_errors": 5,
+      "precision": 0.9779,
+      "coverage": 0.97
+     },
+     {
+      "threshold": 0.62,
+      "eligible": 233,
+      "accepted": 226,
+      "accepted_errors": 5,
+      "precision": 0.9779,
+      "coverage": 0.97
+     },
+     {
+      "threshold": 0.63,
+      "eligible": 233,
+      "accepted": 226,
+      "accepted_errors": 5,
+      "precision": 0.9779,
+      "coverage": 0.97
+     },
+     {
+      "threshold": 0.64,
+      "eligible": 233,
+      "accepted": 222,
+      "accepted_errors": 4,
+      "precision": 0.982,
+      "coverage": 0.9528
+     },
+     {
+      "threshold": 0.65,
+      "eligible": 233,
+      "accepted": 221,
+      "accepted_errors": 4,
+      "precision": 0.9819,
+      "coverage": 0.9485
+     },
+     {
+      "threshold": 0.66,
+      "eligible": 233,
+      "accepted": 221,
+      "accepted_errors": 4,
+      "precision": 0.9819,
+      "coverage": 0.9485
+     },
+     {
+      "threshold": 0.67,
+      "eligible": 233,
+      "accepted": 220,
+      "accepted_errors": 4,
+      "precision": 0.9818,
+      "coverage": 0.9442
+     },
+     {
+      "threshold": 0.68,
+      "eligible": 233,
+      "accepted": 216,
+      "accepted_errors": 4,
+      "precision": 0.9815,
+      "coverage": 0.927
+     },
+     {
+      "threshold": 0.69,
+      "eligible": 233,
+      "accepted": 215,
+      "accepted_errors": 4,
+      "precision": 0.9814,
+      "coverage": 0.9227
+     },
+     {
+      "threshold": 0.7,
+      "eligible": 233,
+      "accepted": 213,
+      "accepted_errors": 3,
+      "precision": 0.9859,
+      "coverage": 0.9142
+     },
+     {
+      "threshold": 0.71,
+      "eligible": 233,
+      "accepted": 212,
+      "accepted_errors": 3,
+      "precision": 0.9858,
+      "coverage": 0.9099
+     },
+     {
+      "threshold": 0.72,
+      "eligible": 233,
+      "accepted": 212,
+      "accepted_errors": 3,
+      "precision": 0.9858,
+      "coverage": 0.9099
+     },
+     {
+      "threshold": 0.73,
+      "eligible": 233,
+      "accepted": 210,
+      "accepted_errors": 3,
+      "precision": 0.9857,
+      "coverage": 0.9013
+     },
+     {
+      "threshold": 0.74,
+      "eligible": 233,
+      "accepted": 209,
+      "accepted_errors": 3,
+      "precision": 0.9856,
+      "coverage": 0.897
+     },
+     {
+      "threshold": 0.75,
+      "eligible": 233,
+      "accepted": 207,
+      "accepted_errors": 3,
+      "precision": 0.9855,
+      "coverage": 0.8884
+     },
+     {
+      "threshold": 0.76,
+      "eligible": 233,
+      "accepted": 206,
+      "accepted_errors": 3,
+      "precision": 0.9854,
+      "coverage": 0.8841
+     },
+     {
+      "threshold": 0.77,
+      "eligible": 233,
+      "accepted": 202,
+      "accepted_errors": 2,
+      "precision": 0.9901,
+      "coverage": 0.867
+     },
+     {
+      "threshold": 0.78,
+      "eligible": 233,
+      "accepted": 202,
+      "accepted_errors": 2,
+      "precision": 0.9901,
+      "coverage": 0.867
+     },
+     {
+      "threshold": 0.79,
+      "eligible": 233,
+      "accepted": 202,
+      "accepted_errors": 2,
+      "precision": 0.9901,
+      "coverage": 0.867
+     },
+     {
+      "threshold": 0.8,
+      "eligible": 233,
+      "accepted": 202,
+      "accepted_errors": 2,
+      "precision": 0.9901,
+      "coverage": 0.867
+     },
+     {
+      "threshold": 0.81,
+      "eligible": 233,
+      "accepted": 200,
+      "accepted_errors": 2,
+      "precision": 0.99,
+      "coverage": 0.8584
+     },
+     {
+      "threshold": 0.82,
+      "eligible": 233,
+      "accepted": 199,
+      "accepted_errors": 2,
+      "precision": 0.9899,
+      "coverage": 0.8541
+     },
+     {
+      "threshold": 0.83,
+      "eligible": 233,
+      "accepted": 199,
+      "accepted_errors": 2,
+      "precision": 0.9899,
+      "coverage": 0.8541
+     },
+     {
+      "threshold": 0.84,
+      "eligible": 233,
+      "accepted": 197,
+      "accepted_errors": 2,
+      "precision": 0.9898,
+      "coverage": 0.8455
+     },
+     {
+      "threshold": 0.85,
+      "eligible": 233,
+      "accepted": 196,
+      "accepted_errors": 2,
+      "precision": 0.9898,
+      "coverage": 0.8412
+     },
+     {
+      "threshold": 0.86,
+      "eligible": 233,
+      "accepted": 194,
+      "accepted_errors": 2,
+      "precision": 0.9897,
+      "coverage": 0.8326
+     },
+     {
+      "threshold": 0.87,
+      "eligible": 233,
+      "accepted": 194,
+      "accepted_errors": 2,
+      "precision": 0.9897,
+      "coverage": 0.8326
+     },
+     {
+      "threshold": 0.88,
+      "eligible": 233,
+      "accepted": 192,
+      "accepted_errors": 2,
+      "precision": 0.9896,
+      "coverage": 0.824
+     },
+     {
+      "threshold": 0.89,
+      "eligible": 233,
+      "accepted": 191,
+      "accepted_errors": 2,
+      "precision": 0.9895,
+      "coverage": 0.8197
+     },
+     {
+      "threshold": 0.9,
+      "eligible": 233,
+      "accepted": 190,
+      "accepted_errors": 2,
+      "precision": 0.9895,
+      "coverage": 0.8155
+     },
+     {
+      "threshold": 0.91,
+      "eligible": 233,
+      "accepted": 186,
+      "accepted_errors": 2,
+      "precision": 0.9892,
+      "coverage": 0.7983
+     },
+     {
+      "threshold": 0.92,
+      "eligible": 233,
+      "accepted": 183,
+      "accepted_errors": 2,
+      "precision": 0.9891,
+      "coverage": 0.7854
+     },
+     {
+      "threshold": 0.93,
+      "eligible": 233,
+      "accepted": 178,
+      "accepted_errors": 2,
+      "precision": 0.9888,
+      "coverage": 0.7639
+     },
+     {
+      "threshold": 0.94,
+      "eligible": 233,
+      "accepted": 176,
+      "accepted_errors": 2,
+      "precision": 0.9886,
+      "coverage": 0.7554
+     },
+     {
+      "threshold": 0.95,
+      "eligible": 233,
+      "accepted": 171,
+      "accepted_errors": 1,
+      "precision": 0.9942,
+      "coverage": 0.7339
+     },
+     {
+      "threshold": 0.96,
+      "eligible": 233,
+      "accepted": 170,
+      "accepted_errors": 1,
+      "precision": 0.9941,
+      "coverage": 0.7296
+     },
+     {
+      "threshold": 0.97,
+      "eligible": 233,
+      "accepted": 166,
+      "accepted_errors": 1,
+      "precision": 0.994,
+      "coverage": 0.7124
+     },
+     {
+      "threshold": 0.98,
+      "eligible": 233,
+      "accepted": 151,
+      "accepted_errors": 1,
+      "precision": 0.9934,
+      "coverage": 0.6481
+     },
+     {
+      "threshold": 0.99,
+      "eligible": 233,
+      "accepted": 141,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.6052
+     }
+    ],
+    "by_field": {
+     "intent": {
+      "eligible": 48,
+      "accepted": 46,
+      "accepted_correct": 44,
+      "accepted_errors": 2,
+      "precision": 0.9565,
+      "coverage": 0.9583,
+      "escalated": 2,
+      "escalation_rate": 0.0417,
+      "not_accepted_not_escalated": 0
+     },
+     "stat_scope": {
+      "eligible": 12,
+      "accepted": 10,
+      "accepted_correct": 10,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.8333,
+      "escalated": 2,
+      "escalation_rate": 0.1667,
+      "not_accepted_not_escalated": 0
+     },
+     "stat": {
+      "eligible": 12,
+      "accepted": 12,
+      "accepted_correct": 12,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 1.0,
+      "escalated": 0,
+      "escalation_rate": 0.0,
+      "not_accepted_not_escalated": 0
+     },
+     "aggregation": {
+      "eligible": 12,
+      "accepted": 11,
+      "accepted_correct": 11,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.9167,
+      "escalated": 1,
+      "escalation_rate": 0.0833,
+      "not_accepted_not_escalated": 0
+     },
+     "player": {
+      "eligible": 7,
+      "accepted": 7,
+      "accepted_correct": 7,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 1.0,
+      "escalated": 0,
+      "escalation_rate": 0.0,
+      "not_accepted_not_escalated": 0
+     },
+     "teams": {
+      "eligible": 45,
+      "accepted": 31,
+      "accepted_correct": 31,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.6889,
+      "escalated": 14,
+      "escalation_rate": 0.3111,
+      "not_accepted_not_escalated": 0
+     },
+     "target_team": {
+      "eligible": 3,
+      "accepted": 3,
+      "accepted_correct": 3,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 1.0,
+      "escalated": 0,
+      "escalation_rate": 0.0,
+      "not_accepted_not_escalated": 0
+     },
+     "date": {
+      "eligible": 24,
+      "accepted": 11,
+      "accepted_correct": 11,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.4583,
+      "escalated": 13,
+      "escalation_rate": 0.5417,
+      "not_accepted_not_escalated": 0
+     },
+     "season": {
+      "eligible": 33,
+      "accepted": 28,
+      "accepted_correct": 28,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.8485,
+      "escalated": 5,
+      "escalation_rate": 0.1515,
+      "not_accepted_not_escalated": 0
+     },
+     "round": {
+      "eligible": 23,
+      "accepted": 23,
+      "accepted_correct": 23,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 1.0,
+      "escalated": 0,
+      "escalation_rate": 0.0,
+      "not_accepted_not_escalated": 0
+     },
+     "game_number": {
+      "eligible": 12,
+      "accepted": 12,
+      "accepted_correct": 12,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 1.0,
+      "escalated": 0,
+      "escalation_rate": 0.0,
+      "not_accepted_not_escalated": 0
+     },
+     "location": {
+      "eligible": 2,
+      "accepted": 2,
+      "accepted_correct": 2,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 1.0,
+      "escalated": 0,
+      "escalation_rate": 0.0,
+      "not_accepted_not_escalated": 0
+     }
+    },
+    "by_family": {
+     "game_search": {
+      "eligible": 39,
+      "accepted": 33,
+      "accepted_correct": 32,
+      "accepted_errors": 1,
+      "precision": 0.9697,
+      "coverage": 0.8462,
+      "escalated": 6,
+      "escalation_rate": 0.1538,
+      "not_accepted_not_escalated": 0
+     },
+     "boxscore_stat": {
+      "eligible": 118,
+      "accepted": 96,
+      "accepted_correct": 96,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.8136,
+      "escalated": 22,
+      "escalation_rate": 0.1864,
+      "not_accepted_not_escalated": 0
+     },
+     "playoff_series": {
+      "eligible": 45,
+      "accepted": 39,
+      "accepted_correct": 39,
+      "accepted_errors": 0,
+      "precision": 1.0,
+      "coverage": 0.8667,
+      "escalated": 6,
+      "escalation_rate": 0.1333,
+      "not_accepted_not_escalated": 0
+     },
+     "postseason_summary": {
+      "eligible": 31,
+      "accepted": 28,
+      "accepted_correct": 27,
+      "accepted_errors": 1,
+      "precision": 0.9643,
+      "coverage": 0.9032,
+      "escalated": 3,
+      "escalation_rate": 0.0968,
+      "not_accepted_not_escalated": 0
+     }
+    },
+    "accepted_field_errors": [
+     {
+      "case_id": "unseen-2026-09-29-092",
+      "field": "intent",
+      "source": "mechanical",
+      "reading": {
+       "status": "selected",
+       "selected": [
+        "player_season_stats"
+       ],
+       "alternatives": []
+      },
+      "confidence": 0.94,
+      "gold": [
+       {
+        "status": "value",
+        "value": "unsupported:season_stats"
+       }
+      ],
+      "error_kind": "value_vs_value"
+     },
+     {
+      "case_id": "unseen-2026-09-29-097",
+      "field": "intent",
+      "source": "mechanical",
+      "reading": {
+       "status": "selected",
+       "selected": [
+        "team_records"
+       ],
+       "alternatives": []
+      },
+      "confidence": 0.98,
+      "gold": [
+       {
+        "status": "value",
+        "value": "unsupported:standings"
+       }
+      ],
+      "error_kind": "value_vs_value"
+     }
+    ]
+   }
+  }
+ },
+ "system": {
+  "overall": {
+   "cases": 229,
+   "correct": 212,
+   "share_correct": 0.9258,
+   "clarify_correct": "45/47",
+   "unsupported_correct": "18/30",
+   "guesses": 6,
+   "service_failures": 0,
+   "latency_p50_ms": 2602,
+   "latency_p95_ms": 4613,
+   "luna_called": 125,
+   "failures": {
+    "wrong_unsupported_reason": 5,
+    "wrong_clarify_field": 2,
+    "false_unsupported": 1,
+    "schema_valid_guess": 5,
+    "unneeded_clarification": 1,
+    "wrong_request": 1,
+    "expected_unsupported_got_clarify": 2
+   }
+  },
+  "stale_scope_label_cases": [
+   "unseen-2026-09-29-092",
+   "unseen-2026-09-29-097",
+   "unseen-two-boxscore_stat-24",
+   "unseen-two-boxscore_stat-25",
+   "unseen-two-game_search-24",
+   "unseen-two-postseason_summary-23",
+   "unseen-two-postseason_summary-24",
+   "unseen-two-postseason_summary-25"
+  ],
+  "overall_without_stale_scope_labels": {
+   "cases": 221,
+   "correct": 212,
+   "share_correct": 0.9593,
+   "clarify_correct": "45/47",
+   "unsupported_correct": "18/22",
+   "guesses": 1,
+   "service_failures": 0,
+   "latency_p50_ms": 2664,
+   "latency_p95_ms": 4613,
+   "luna_called": 122,
+   "failures": {
+    "wrong_unsupported_reason": 3,
+    "wrong_clarify_field": 2,
+    "false_unsupported": 1,
+    "unneeded_clarification": 1,
+    "wrong_request": 1,
+    "expected_unsupported_got_clarify": 1
+   }
+  },
+  "by_family_without_stale_scope_labels": {
+   "player_season_stats": {
+    "cases": 11,
+    "correct": 10,
+    "share_correct": 0.9091,
+    "clarify_correct": "2/2",
+    "unsupported_correct": "1/2",
+    "guesses": 0,
+    "service_failures": 0,
+    "latency_p50_ms": 3573,
+    "latency_p95_ms": 5146,
+    "luna_called": 9,
+    "failures": {
+     "wrong_unsupported_reason": 1
+    }
+   },
+   "team_records": {
+    "cases": 13,
+    "correct": 12,
+    "share_correct": 0.9231,
+    "clarify_correct": "2/2",
+    "unsupported_correct": "4/4",
+    "guesses": 0,
+    "service_failures": 0,
+    "latency_p50_ms": 2925,
+    "latency_p95_ms": 4216,
+    "luna_called": 9,
+    "failures": {
+     "false_unsupported": 1
+    }
+   },
+   "season_leaders": {
+    "cases": 30,
+    "correct": 28,
+    "share_correct": 0.9333,
+    "clarify_correct": "7/7",
+    "unsupported_correct": "5/7",
+    "guesses": 0,
+    "service_failures": 0,
+    "latency_p50_ms": 2786,
+    "latency_p95_ms": 4613,
+    "luna_called": 19,
+    "failures": {
+     "wrong_unsupported_reason": 2
+    }
+   },
+   "career_stats": {
+    "cases": 15,
+    "correct": 14,
+    "share_correct": 0.9333,
+    "clarify_correct": "1/2",
+    "unsupported_correct": "3/3",
+    "guesses": 0,
+    "service_failures": 0,
+    "latency_p50_ms": 200,
+    "latency_p95_ms": 5254,
+    "luna_called": 7,
+    "failures": {
+     "wrong_clarify_field": 1
+    }
+   },
+   "game_search": {
+    "cases": 39,
+    "correct": 38,
+    "share_correct": 0.9744,
+    "clarify_correct": "7/7",
+    "unsupported_correct": "1/1",
+    "guesses": 1,
+    "service_failures": 0,
+    "latency_p50_ms": 213,
+    "latency_p95_ms": 4019,
+    "luna_called": 15,
+    "failures": {
+     "wrong_request": 1
+    }
+   },
+   "postseason_summary": {
+    "cases": 36,
+    "correct": 36,
+    "share_correct": 1.0,
+    "clarify_correct": "7/7",
+    "unsupported_correct": "0/0",
+    "guesses": 0,
+    "service_failures": 0,
+    "latency_p50_ms": 191,
+    "latency_p95_ms": 3594,
+    "luna_called": 9,
+    "failures": {}
+   },
+   "boxscore_stat": {
+    "cases": 38,
+    "correct": 35,
+    "share_correct": 0.9211,
+    "clarify_correct": "13/14",
+    "unsupported_correct": "0/1",
+    "guesses": 0,
+    "service_failures": 0,
+    "latency_p50_ms": 3157,
+    "latency_p95_ms": 20006,
+    "luna_called": 37,
+    "failures": {
+     "unneeded_clarification": 1,
+     "wrong_clarify_field": 1,
+     "expected_unsupported_got_clarify": 1
+    }
+   },
+   "playoff_series": {
+    "cases": 39,
+    "correct": 39,
+    "share_correct": 1.0,
+    "clarify_correct": "6/6",
+    "unsupported_correct": "4/4",
+    "guesses": 0,
+    "service_failures": 0,
+    "latency_p50_ms": 309,
+    "latency_p95_ms": 4375,
+    "luna_called": 17,
+    "failures": {}
+   }
+  },
+  "by_family": {
+   "player_season_stats": {
+    "cases": 11,
+    "correct": 10,
+    "share_correct": 0.9091,
+    "clarify_correct": "2/2",
+    "unsupported_correct": "1/2",
+    "guesses": 0,
+    "service_failures": 0,
+    "latency_p50_ms": 3573,
+    "latency_p95_ms": 5146,
+    "luna_called": 9,
+    "failures": {
+     "wrong_unsupported_reason": 1
+    }
+   },
+   "team_records": {
+    "cases": 13,
+    "correct": 12,
+    "share_correct": 0.9231,
+    "clarify_correct": "2/2",
+    "unsupported_correct": "4/4",
+    "guesses": 0,
+    "service_failures": 0,
+    "latency_p50_ms": 2925,
+    "latency_p95_ms": 4216,
+    "luna_called": 9,
+    "failures": {
+     "false_unsupported": 1
+    }
+   },
+   "season_leaders": {
+    "cases": 30,
+    "correct": 28,
+    "share_correct": 0.9333,
+    "clarify_correct": "7/7",
+    "unsupported_correct": "5/7",
+    "guesses": 0,
+    "service_failures": 0,
+    "latency_p50_ms": 2786,
+    "latency_p95_ms": 4613,
+    "luna_called": 19,
+    "failures": {
+     "wrong_unsupported_reason": 2
+    }
+   },
+   "career_stats": {
+    "cases": 15,
+    "correct": 14,
+    "share_correct": 0.9333,
+    "clarify_correct": "1/2",
+    "unsupported_correct": "3/3",
+    "guesses": 0,
+    "service_failures": 0,
+    "latency_p50_ms": 200,
+    "latency_p95_ms": 5254,
+    "luna_called": 7,
+    "failures": {
+     "wrong_clarify_field": 1
+    }
+   },
+   "game_search": {
+    "cases": 41,
+    "correct": 38,
+    "share_correct": 0.9268,
+    "clarify_correct": "7/7",
+    "unsupported_correct": "1/3",
+    "guesses": 1,
+    "service_failures": 0,
+    "latency_p50_ms": 213,
+    "latency_p95_ms": 3261,
+    "luna_called": 16,
+    "failures": {
+     "wrong_unsupported_reason": 2,
+     "wrong_request": 1
+    }
+   },
+   "postseason_summary": {
+    "cases": 40,
+    "correct": 36,
+    "share_correct": 0.9,
+    "clarify_correct": "7/7",
+    "unsupported_correct": "0/4",
+    "guesses": 3,
+    "service_failures": 0,
+    "latency_p50_ms": 191,
+    "latency_p95_ms": 3474,
+    "luna_called": 10,
+    "failures": {
+     "schema_valid_guess": 3,
+     "expected_unsupported_got_clarify": 1
+    }
+   },
+   "boxscore_stat": {
+    "cases": 40,
+    "correct": 35,
+    "share_correct": 0.875,
+    "clarify_correct": "13/14",
+    "unsupported_correct": "0/3",
+    "guesses": 2,
+    "service_failures": 0,
+    "latency_p50_ms": 3139,
+    "latency_p95_ms": 5633,
+    "luna_called": 38,
+    "failures": {
+     "schema_valid_guess": 2,
+     "unneeded_clarification": 1,
+     "wrong_clarify_field": 1,
+     "expected_unsupported_got_clarify": 1
+    }
+   },
+   "playoff_series": {
+    "cases": 39,
+    "correct": 39,
+    "share_correct": 1.0,
+    "clarify_correct": "6/6",
+    "unsupported_correct": "4/4",
+    "guesses": 0,
+    "service_failures": 0,
+    "latency_p50_ms": 309,
+    "latency_p95_ms": 4375,
+    "luna_called": 17,
+    "failures": {}
+   }
+  },
+  "by_source": {
+   "stage2": {
+    "cases": 22,
+    "correct": 21,
+    "share_correct": 0.9545,
+    "clarify_correct": "4/4",
+    "unsupported_correct": "5/6",
+    "guesses": 0,
+    "service_failures": 0,
+    "latency_p50_ms": 3203,
+    "latency_p95_ms": 5068,
+    "luna_called": 17,
+    "failures": {
+     "wrong_unsupported_reason": 1
+    }
+   },
+   "stage3": {
+    "cases": 42,
+    "correct": 39,
+    "share_correct": 0.9286,
+    "clarify_correct": "8/9",
+    "unsupported_correct": "8/10",
+    "guesses": 0,
+    "service_failures": 0,
+    "latency_p50_ms": 2675,
+    "latency_p95_ms": 4613,
+    "luna_called": 23,
+    "failures": {
+     "wrong_unsupported_reason": 2,
+     "wrong_clarify_field": 1
+    }
+   },
+   "unseen-2026-09-29": {
+    "cases": 58,
+    "correct": 52,
+    "share_correct": 0.8966,
+    "clarify_correct": "8/9",
+    "unsupported_correct": "1/4",
+    "guesses": 1,
+    "service_failures": 0,
+    "latency_p50_ms": 2664,
+    "latency_p95_ms": 19040,
+    "luna_called": 34,
+    "failures": {
+     "unneeded_clarification": 1,
+     "wrong_request": 1,
+     "wrong_clarify_field": 1,
+     "expected_unsupported_got_clarify": 2,
+     "wrong_unsupported_reason": 1
+    }
+   },
+   "unseen-three": {
+    "cases": 7,
+    "correct": 6,
+    "share_correct": 0.8571,
+    "clarify_correct": "0/0",
+    "unsupported_correct": "0/0",
+    "guesses": 0,
+    "service_failures": 0,
+    "latency_p50_ms": 3334,
+    "latency_p95_ms": 3703,
+    "luna_called": 5,
+    "failures": {
+     "false_unsupported": 1
+    }
+   },
+   "unseen-two": {
+    "cases": 100,
+    "correct": 94,
+    "share_correct": 0.94,
+    "clarify_correct": "25/25",
+    "unsupported_correct": "4/10",
+    "guesses": 5,
+    "service_failures": 0,
+    "latency_p50_ms": 263,
+    "latency_p95_ms": 4226,
+    "luna_called": 46,
+    "failures": {
+     "wrong_unsupported_reason": 1,
+     "schema_valid_guess": 5
+    }
+   }
+  },
+  "provider_errors": {
+   "jev:inconsistent_team_count": 3,
+   "luna:deadline_exceeded": 2
+  },
+  "attempts_per_question": {
+   "1": 229
+  },
+  "usage": {
+   "jev": {
+    "calls": 229,
+    "input_tokens": 731117,
+    "output_tokens": 199223,
+    "cached_input_tokens": 0,
+    "cost_micro_usd": 30710
+   },
+   "luna": {
+    "calls": 125,
+    "input_tokens": 411853,
+    "output_tokens": 32251,
+    "cached_input_tokens": 97328,
+    "cost_micro_usd": 48543
+   }
+  },
+  "failing_cases": [
+   {
+    "case_id": "stage2-player_season_stats-20",
+    "family": "player_season_stats",
+    "question": "Jokic points per game in March 2024",
+    "failure": "wrong_unsupported_reason",
+    "guess": false,
+    "label": {
+     "action": "unsupported",
+     "clarify_field": null,
+     "clarify_reason": null,
+     "unsupported_reason": "other",
+     "request": null
+    },
+    "actual": {
+     "action": "unsupported",
+     "clarify_field": null,
+     "clarify_reason": "out of scope (multi_game_average)",
+     "unsupported_reason": "multi_game_average",
+     "request": null
+    },
+    "latency_ms": 3436,
+    "error_codes": [],
+    "field_tiers": {
+     "intent": "luna"
+    },
+    "reads": {
+     "intent": [
+      "jev:selected@0.53:escalated",
+      "luna:unsupported@None:accepted"
+     ]
+    },
+    "tier_outcomes": [
+     "jev:unreliable:None",
+     "luna:unsupported:multi_game_average"
+    ]
+   },
+   {
+    "case_id": "stage3-season_leaders-19",
+    "family": "season_leaders",
+    "question": "Who led the Lakers in points per game in 2023-24?",
+    "failure": "wrong_unsupported_reason",
+    "guess": false,
+    "label": {
+     "action": "unsupported",
+     "clarify_field": null,
+     "clarify_reason": null,
+     "unsupported_reason": "other",
+     "request": null
+    },
+    "actual": {
+     "action": "unsupported",
+     "clarify_field": null,
+     "clarify_reason": "out of scope (multi_game_average)",
+     "unsupported_reason": "multi_game_average",
+     "request": null
+    },
+    "latency_ms": 252,
+    "error_codes": [],
+    "field_tiers": {
+     "intent": "jev"
+    },
+    "reads": {
+     "intent": [
+      "jev:unsupported@0.87:accepted"
+     ]
+    },
+    "tier_outcomes": [
+     "jev:unsupported:multi_game_average"
+    ]
+   },
+   {
+    "case_id": "stage3-season_leaders-23",
+    "family": "season_leaders",
+    "question": "Who led the league in win shares in 2023-24?",
+    "failure": "wrong_unsupported_reason",
+    "guess": false,
+    "label": {
+     "action": "unsupported",
+     "clarify_field": null,
+     "clarify_reason": null,
+     "unsupported_reason": "other",
+     "request": null
+    },
+    "actual": {
+     "action": "unsupported",
+     "clarify_field": null,
+     "clarify_reason": "out of scope (unsupported_leader_stat)",
+     "unsupported_reason": "unsupported_leader_stat",
+     "request": null
+    },
+    "latency_ms": 3574,
+    "error_codes": [],
+    "field_tiers": {
+     "intent": "luna"
+    },
+    "reads": {
+     "intent": [
+      "jev:selected@0.91:accepted",
+      "luna:unsupported@None:accepted"
+     ]
+    },
+    "tier_outcomes": [
+     "jev:interpreted:None",
+     "luna:unsupported:unsupported_leader_stat"
+    ]
+   },
+   {
+    "case_id": "stage3-career_stats-34",
+    "family": "career_stats",
+    "question": "How many points does LeBron James have?",
+    "failure": "wrong_clarify_field",
+    "guess": false,
+    "label": {
+     "action": "clarify",
+     "clarify_field": "intent",
+     "clarify_reason": null,
+     "unsupported_reason": null,
+     "request": null
+    },
+    "actual": {
+     "action": "clarify",
+     "clarify_field": "date",
+     "clarify_reason": "missing date",
+     "unsupported_reason": null,
+     "request": null
+    },
+    "latency_ms": 2959,
+    "error_codes": [],
+    "field_tiers": {
+     "stat_scope": "jev",
+     "stat": "jev",
+     "aggregation": "jev",
+     "player": "jev",
+     "date": "jev",
+     "season": "jev",
+     "round": "jev",
+     "game_number": "jev",
+     "teams": "jev",
+     "intent": "luna"
+    },
+    "reads": {
+     "intent": [
+      "jev:selected@0.49:escalated",
+      "luna:selected@None:accepted"
+     ],
+     "stat_scope": [
+      "jev:selected@1.0:accepted",
+      "luna:selected@None:unused"
+     ],
+     "stat": [
+      "jev:selected@1.0:accepted",
+      "luna:selected@None:unused"
+     ],
+     "aggregation": [
+      "jev:selected@1.0:accepted",
+      "luna:absent@None:unused"
+     ],
+     "player": [
+      "jev:selected@1.0:accepted",
+      "luna:selected@None:unused"
+     ],
+     "teams": [
+      "jev:absent@0.9299999999999999:accepted",
+      "luna:absent@None:unused"
+     ],
+     "date": [
+      "jev:absent@1.0:accepted",
+      "luna:absent@None:unused"
+     ],
+     "season": [
+      "jev:absent@1.0:accepted",
+      "luna:absent@None:unused"
+     ],
+     "round": [
+      "jev:absent@1.0:accepted",
+      "luna:absent@None:unused"
+     ],
+     "game_number": [
+      "jev:absent@1.0:accepted",
+      "luna:absent@None:unused"
+     ]
+    },
+    "tier_outcomes": [
+     "jev:unreliable:None",
+     "luna:interpreted:None"
+    ]
+   },
+   {
+    "case_id": "unseen-three-team_records-20",
+    "family": "team_records",
+    "question": "Which team had the best record in 2015-16?",
+    "failure": "false_unsupported",
+    "guess": false,
+    "label": {
+     "action": "accept",
+     "clarify_field": null,
+     "clarify_reason": null,
+     "unsupported_reason": null,
+     "request": {
+      "intent": "team_records",
+      "season": "2015-16",
+      "team": null,
+      "standings_scope": "league"
+     }
+    },
+    "actual": {
+     "action": "unsupported",
+     "clarify_field": null,
+     "clarify_reason": "out of scope (other)",
+     "unsupported_reason": "other",
+     "request": null
+    },
+    "latency_ms": 3341,
+    "error_codes": [],
+    "field_tiers": {
+     "intent": "luna"
+    },
+    "reads": {
+     "intent": [
+      "jev:selected@0.87:accepted",
+      "luna:unsupported@None:accepted"
+     ]
+    },
+    "tier_outcomes": [
+     "jev:interpreted:None",
+     "luna:unsupported:other"
+    ]
+   },
+   {
+    "case_id": "unseen-two-game_search-24",
+    "family": "game_search",
+    "question": "Where did the Nuggets sit in the Western Conference standings on March 1, 2020?",
+    "failure": "wrong_unsupported_reason",
+    "guess": false,
+    "label": {
+     "action": "unsupported",
+     "clarify_field": null,
+     "clarify_reason": null,
+     "unsupported_reason": "standings",
+     "request": null
+    },
+    "actual": {
+     "action": "unsupported",
+     "clarify_field": null,
+     "clarify_reason": "out of scope (other)",
+     "unsupported_reason": "other",
+     "request": null
+    },
+    "latency_ms": 182,
+    "error_codes": [],
+    "field_tiers": {
+     "intent": "jev",
+     "season_type": "jev",
+     "standings_scope": "jev",
+     "season": "jev",
+     "teams": "jev"
+    },
+    "reads": {
+     "intent": [
+      "jev:selected@1.0:accepted"
+     ],
+     "season_type": [
+      "jev:selected@0.99:accepted"
+     ],
+     "standings_scope": [
+      "jev:selected@1.0:accepted"
+     ],
+     "teams": [
+      "jev:selected@0.97:accepted"
+     ],
+     "season": [
+      "jev:no_matching_candidate@0.85:accepted"
+     ]
+    },
+    "tier_outcomes": [
+     "jev:interpreted:None"
+    ]
+   },
+   {
+    "case_id": "unseen-two-boxscore_stat-24",
+    "family": "boxscore_stat",
+    "question": "I need Dennis Rodman's career total for offensive rebounds, across all his NBA seasons.",
+    "failure": "schema_valid_guess",
+    "guess": true,
+    "label": {
+     "action": "unsupported",
+     "clarify_field": null,
+     "clarify_reason": null,
+     "unsupported_reason": "career_stats",
+     "request": null
+    },
+    "actual": {
+     "action": "accept",
+     "clarify_field": null,
+     "clarify_reason": "complete request",
+     "unsupported_reason": null,
+     "request": {
+      "intent": "career_stats",
+      "view": "player_totals",
+      "player": {
+       "player_id": 23,
+       "name": "Dennis Rodman"
+      },
+      "season_type": "regular_season",
+      "stat": {
+       "stat": "offensive_rebounds",
+       "aggregation": "total"
+      },
+      "limit": 10,
+      "requested_limit": null
+     }
+    },
+    "latency_ms": 2564,
+    "error_codes": [],
+    "field_tiers": {
+     "intent": "jev",
+     "stat": "jev",
+     "aggregation": "question",
+     "player": "jev",
+     "season_type": "luna"
+    },
+    "reads": {
+     "intent": [
+      "jev:selected@1.0:accepted",
+      "luna:selected@None:unused"
+     ],
+     "stat": [
+      "jev:selected@1.0:accepted",
+      "luna:selected@None:unused"
+     ],
+     "aggregation": [
+      "jev:selected@1.0:accepted",
+      "luna:selected@None:unused"
+     ],
+     "season_type": [
+      "jev:absent@0.81:escalated",
+      "luna:absent@None:accepted"
+     ],
+     "player": [
+      "jev:selected@1.0:accepted",
+      "luna:selected@None:unused"
+     ]
+    },
+    "tier_outcomes": [
+     "jev:interpreted:None",
+     "luna:interpreted:None"
+    ]
+   },
+   {
+    "case_id": "unseen-two-boxscore_stat-25",
+    "family": "boxscore_stat",
+    "question": "What was Stephen Curry's total number of assists for the 2021-22 season?",
+    "failure": "schema_valid_guess",
+    "guess": true,
+    "label": {
+     "action": "unsupported",
+     "clarify_field": null,
+     "clarify_reason": null,
+     "unsupported_reason": "season_stats",
+     "request": null
+    },
+    "actual": {
+     "action": "accept",
+     "clarify_field": null,
+     "clarify_reason": "complete request",
+     "unsupported_reason": null,
+     "request": {
+      "intent": "player_season_stats",
+      "player": {
+       "player_id": 201939,
+       "name": "Stephen Curry"
+      },
+      "season": "2021-22",
+      "season_type": "regular_season",
+      "stat": {
+       "stat": "assists",
+       "aggregation": "total"
+      },
+      "team": null
+     }
+    },
+    "latency_ms": 365,
+    "error_codes": [],
+    "field_tiers": {
+     "intent": "jev",
+     "stat": "jev",
+     "aggregation": "question",
+     "season_type": "jev",
+     "player": "jev",
+     "season": "jev",
+     "teams": "jev"
+    },
+    "reads": {
+     "intent": [
+      "jev:selected@1.0:accepted"
+     ],
+     "stat": [
+      "jev:selected@1.0:accepted"
+     ],
+     "aggregation": [
+      "jev:selected@1.0:accepted"
+     ],
+     "season_type": [
+      "jev:absent@0.87:accepted"
+     ],
+     "player": [
+      "jev:selected@1.0:accepted"
+     ],
+     "teams": [
+      "jev:absent@0.87:accepted"
+     ],
+     "season": [
+      "jev:selected@1.0:accepted"
+     ]
+    },
+    "tier_outcomes": [
+     "jev:interpreted:None"
+    ]
+   },
+   {
+    "case_id": "unseen-two-postseason_summary-23",
+    "family": "postseason_summary",
+    "question": "How many career playoff points did Kareem Abdul-Jabbar score?",
+    "failure": "schema_valid_guess",
+    "guess": true,
+    "label": {
+     "action": "unsupported",
+     "clarify_field": null,
+     "clarify_reason": null,
+     "unsupported_reason": "career_stats",
+     "request": null
+    },
+    "actual": {
+     "action": "accept",
+     "clarify_field": null,
+     "clarify_reason": "complete request",
+     "unsupported_reason": null,
+     "request": {
+      "intent": "career_stats",
+      "view": "player_totals",
+      "player": {
+       "player_id": 76003,
+       "name": "Kareem Abdul-Jabbar"
+      },
+      "season_type": "playoffs",
+      "stat": {
+       "stat": "points",
+       "aggregation": "total"
+      },
+      "limit": 10,
+      "requested_limit": null
+     }
+    },
+    "latency_ms": 198,
+    "error_codes": [],
+    "field_tiers": {
+     "intent": "jev",
+     "stat": "jev",
+     "aggregation": "question",
+     "season_type": "jev",
+     "player": "jev"
+    },
+    "reads": {
+     "intent": [
+      "jev:selected@0.99:accepted"
+     ],
+     "stat": [
+      "jev:selected@1.0:accepted"
+     ],
+     "aggregation": [
+      "jev:selected@1.0:accepted"
+     ],
+     "season_type": [
+      "jev:selected@1.0:accepted"
+     ],
+     "player": [
+      "jev:selected@1.0:accepted"
+     ]
+    },
+    "tier_outcomes": [
+     "jev:interpreted:None"
+    ]
+   },
+   {
+    "case_id": "unseen-two-postseason_summary-24",
+    "family": "postseason_summary",
+    "question": "Give me the Kings' regular-season win-loss record for 2002-03.",
+    "failure": "schema_valid_guess",
+    "guess": true,
+    "label": {
+     "action": "unsupported",
+     "clarify_field": null,
+     "clarify_reason": null,
+     "unsupported_reason": "regular_season_record",
+     "request": null
+    },
+    "actual": {
+     "action": "accept",
+     "clarify_field": null,
+     "clarify_reason": "complete request",
+     "unsupported_reason": null,
+     "request": {
+      "intent": "team_records",
+      "season": "2002-03",
+      "team": {
+       "team_id": 1610612758,
+       "tricode": "SAC",
+       "name": "Sacramento Kings"
+      },
+      "standings_scope": "league"
+     }
+    },
+    "latency_ms": 162,
+    "error_codes": [],
+    "field_tiers": {
+     "intent": "jev",
+     "season_type": "jev",
+     "standings_scope": "jev",
+     "season": "jev",
+     "teams": "jev"
+    },
+    "reads": {
+     "intent": [
+      "jev:selected@1.0:accepted"
+     ],
+     "season_type": [
+      "jev:selected@1.0:accepted"
+     ],
+     "standings_scope": [
+      "jev:absent@0.93:accepted"
+     ],
+     "teams": [
+      "jev:selected@0.86:accepted"
+     ],
+     "season": [
+      "jev:selected@1.0:accepted"
+     ]
+    },
+    "tier_outcomes": [
+     "jev:interpreted:None"
+    ]
+   },
+   {
+    "case_id": "unseen-two-postseason_summary-25",
+    "family": "postseason_summary",
+    "question": "Who led the NBA in total rebounds during the 2018-19 regular season?",
+    "failure": "schema_valid_guess",
+    "guess": true,
+    "label": {
+     "action": "unsupported",
+     "clarify_field": null,
+     "clarify_reason": null,
+     "unsupported_reason": "season_leaders",
+     "request": null
+    },
+    "actual": {
+     "action": "accept",
+     "clarify_field": null,
+     "clarify_reason": "complete request",
+     "unsupported_reason": null,
+     "request": {
+      "intent": "season_leaders",
+      "season": "2018-19",
+      "season_type": "regular_season",
+      "stat": {
+       "stat": "rebounds",
+       "aggregation": "total"
+      },
+      "limit": 10,
+      "requested_limit": null
+     }
+    },
+    "latency_ms": 178,
+    "error_codes": [],
+    "field_tiers": {
+     "intent": "jev",
+     "stat": "jev",
+     "aggregation": "question",
+     "season_type": "jev",
+     "season": "jev"
+    },
+    "reads": {
+     "intent": [
+      "jev:selected@1.0:accepted"
+     ],
+     "stat": [
+      "jev:selected@1.0:accepted"
+     ],
+     "aggregation": [
+      "jev:selected@1.0:accepted"
+     ],
+     "season_type": [
+      "jev:selected@1.0:accepted"
+     ],
+     "season": [
+      "jev:selected@1.0:accepted"
+     ]
+    },
+    "tier_outcomes": [
+     "jev:interpreted:None"
+    ]
+   },
+   {
+    "case_id": "unseen-2026-09-29-002",
+    "family": "boxscore_stat",
+    "question": "How many points did MJ put up in Game 6 of the 1998 NBA Finals?",
+    "failure": "unneeded_clarification",
+    "guess": false,
+    "label": {
+     "action": "accept",
+     "clarify_field": null,
+     "clarify_reason": null,
+     "unsupported_reason": null,
+     "request": {
+      "intent": "boxscore_stat",
+      "scope": "player",
+      "stat": {
+       "stat": "points",
+       "aggregation": "total"
+      },
+      "game": {
+       "game_id": null,
+       "date": null,
+       "teams": [],
+       "season": "1997-98",
+       "round": "finals",
+       "conference": null,
+       "game_number": 6
+      },
+      "player": {
+       "player_id": 893,
+       "name": "Michael Jordan"
+      },
+      "team": null
+     }
+    },
+    "actual": {
+     "action": "clarify",
+     "clarify_field": "date",
+     "clarify_reason": "low confidence in date",
+     "unsupported_reason": null,
+     "request": null
+    },
+    "latency_ms": 20006,
+    "error_codes": [],
+    "field_tiers": {
+     "intent": "jev",
+     "stat_scope": "jev",
+     "stat": "jev",
+     "aggregation": "jev",
+     "player": "jev",
+     "season": "jev",
+     "round": "jev",
+     "game_number": "jev"
+    },
+    "reads": {
+     "intent": [
+      "jev:selected@1.0:accepted"
+     ],
+     "stat_scope": [
+      "jev:selected@1.0:accepted"
+     ],
+     "stat": [
+      "jev:selected@1.0:accepted"
+     ],
+     "aggregation": [
+      "jev:selected@1.0:accepted"
+     ],
+     "player": [
+      "jev:selected@1.0:accepted"
+     ],
+     "teams": [
+      "jev:absent@0.74:escalated"
+     ],
+     "date": [
+      "jev:absent@0.72:escalated"
+     ],
+     "season": [
+      "jev:selected@1.0:accepted"
+     ],
+     "round": [
+      "jev:selected@1.0:accepted"
+     ],
+     "game_number": [
+      "jev:selected@1.0:accepted"
+     ]
+    },
+    "tier_outcomes": [
+     "jev:interpreted:None",
+     "luna:unavailable:None"
+    ]
+   },
+   {
+    "case_id": "unseen-2026-09-29-009",
+    "family": "game_search",
+    "question": "I missed last night. Which games were on?",
+    "failure": "wrong_request",
+    "guess": true,
+    "label": {
+     "action": "accept",
+     "clarify_field": null,
+     "clarify_reason": null,
+     "unsupported_reason": null,
+     "request": {
+      "intent": "game_search",
+      "dates": {
+       "start": "2026-02-08",
+       "end": "2026-02-08"
+      },
+      "teams": [],
+      "location": null
+     }
+    },
+    "actual": {
+     "action": "accept",
+     "clarify_field": null,
+     "clarify_reason": "complete request",
+     "unsupported_reason": null,
+     "request": {
+      "intent": "game_search",
+      "dates": {
+       "start": "2026-02-07",
+       "end": "2026-02-07"
+      },
+      "teams": [],
+      "location": null
+     }
+    },
+    "latency_ms": 2795,
+    "error_codes": [],
+    "field_tiers": {
+     "location": "lookup",
+     "intent": "jev",
+     "teams": "jev",
+     "date": "luna"
+    },
+    "reads": {
+     "intent": [
+      "jev:selected@1.0:accepted",
+      "luna:selected@None:unused"
+     ],
+     "teams": [
+      "jev:absent@0.9299999999999999:accepted",
+      "luna:absent@None:unused"
+     ],
+     "date": [
+      "jev:selected@0.47:escalated",
+      "luna:selected@None:accepted"
+     ],
+     "location": [
+      "jev:absent@1.0:unused",
+      "luna:absent@None:unused"
+     ]
+    },
+    "tier_outcomes": [
+     "jev:interpreted:None",
+     "luna:interpreted:None"
+    ]
+   },
+   {
+    "case_id": "unseen-2026-09-29-090",
+    "family": "boxscore_stat",
+    "question": "How many assists did Michael Jordan have?",
+    "failure": "wrong_clarify_field",
+    "guess": false,
+    "label": {
+     "action": "clarify",
+     "clarify_field": "date",
+     "clarify_reason": "missing",
+     "unsupported_reason": null,
+     "request": null
+    },
+    "actual": {
+     "action": "clarify",
+     "clarify_field": "intent",
+     "clarify_reason": "ambiguous intent",
+     "unsupported_reason": null,
+     "request": null
+    },
+    "latency_ms": 2664,
+    "error_codes": [],
+    "field_tiers": {
+     "stat_scope": "jev",
+     "stat": "jev",
+     "aggregation": "jev",
+     "player": "jev",
+     "date": "jev",
+     "season": "jev",
+     "round": "jev",
+     "game_number": "jev",
+     "teams": "jev",
+     "intent": "veto"
+    },
+    "reads": {
+     "intent": [
+      "jev:selected@0.72:escalated",
+      "luna:selected@None:vetoed"
+     ],
+     "stat_scope": [
+      "jev:selected@1.0:accepted",
+      "luna:selected@None:unused"
+     ],
+     "stat": [
+      "jev:selected@1.0:accepted",
+      "luna:selected@None:unused"
+     ],
+     "aggregation": [
+      "jev:selected@1.0:accepted",
+      "luna:absent@None:unused"
+     ],
+     "player": [
+      "jev:selected@1.0:accepted",
+      "luna:selected@None:unused"
+     ],
+     "teams": [
+      "jev:absent@0.9:accepted",
+      "luna:absent@None:unused"
+     ],
+     "date": [
+      "jev:absent@1.0:accepted",
+      "luna:absent@None:unused"
+     ],
+     "season": [
+      "jev:absent@1.0:accepted",
+      "luna:absent@None:unused"
+     ],
+     "round": [
+      "jev:absent@1.0:accepted",
+      "luna:absent@None:unused"
+     ],
+     "game_number": [
+      "jev:absent@1.0:accepted",
+      "luna:absent@None:unused"
+     ]
+    },
+    "tier_outcomes": [
+     "jev:interpreted:None",
+     "luna:interpreted:None"
+    ]
+   },
+   {
+    "case_id": "unseen-2026-09-29-092",
+    "family": "postseason_summary",
+    "question": "What were Jayson Tatum's total points across the 2024 postseason?",
+    "failure": "expected_unsupported_got_clarify",
+    "guess": false,
+    "label": {
+     "action": "unsupported",
+     "clarify_field": null,
+     "clarify_reason": null,
+     "unsupported_reason": "season_stats",
+     "request": null
+    },
+    "actual": {
+     "action": "clarify",
+     "clarify_field": "intent",
+     "clarify_reason": "ambiguous intent",
+     "unsupported_reason": null,
+     "request": null
+    },
+    "latency_ms": 3274,
+    "error_codes": [],
+    "field_tiers": {
+     "intent": "veto",
+     "stat": "jev",
+     "aggregation": "jev",
+     "season_type": "jev",
+     "player": "jev",
+     "season": "jev",
+     "teams": "luna"
+    },
+    "reads": {
+     "intent": [
+      "jev:selected@0.94:accepted",
+      "luna:selected@None:vetoed"
+     ],
+     "stat": [
+      "jev:selected@1.0:accepted",
+      "luna:selected@None:unused"
+     ],
+     "aggregation": [
+      "jev:selected@1.0:accepted",
+      "luna:selected@None:unused"
+     ],
+     "season_type": [
+      "jev:selected@1.0:accepted",
+      "luna:selected@None:unused"
+     ],
+     "player": [
+      "jev:selected@1.0:accepted",
+      "luna:selected@None:unused"
+     ],
+     "teams": [
+      "jev:absent@0.8200000000000001:escalated",
+      "luna:absent@None:accepted"
+     ],
+     "season": [
+      "jev:selected@1.0:accepted",
+      "luna:selected@None:unused"
+     ]
+    },
+    "tier_outcomes": [
+     "jev:interpreted:None",
+     "luna:interpreted:None"
+    ]
+   },
+   {
+    "case_id": "unseen-2026-09-29-097",
+    "family": "game_search",
+    "question": "Where do the Kings sit in the Western Conference standings today?",
+    "failure": "wrong_unsupported_reason",
+    "guess": false,
+    "label": {
+     "action": "unsupported",
+     "clarify_field": null,
+     "clarify_reason": null,
+     "unsupported_reason": "standings",
+     "request": null
+    },
+    "actual": {
+     "action": "unsupported",
+     "clarify_field": null,
+     "clarify_reason": "out of scope (other)",
+     "unsupported_reason": "other",
+     "request": null
+    },
+    "latency_ms": 3095,
+    "error_codes": [],
+    "field_tiers": {
+     "intent": "jev",
+     "standings_scope": "jev",
+     "season": "jev",
+     "teams": "jev",
+     "season_type": "luna"
+    },
+    "reads": {
+     "intent": [
+      "jev:selected@0.98:accepted",
+      "luna:selected@None:unused"
+     ],
+     "season_type": [
+      "jev:selected@0.68:escalated",
+      "luna:absent@None:accepted"
+     ],
+     "standings_scope": [
+      "jev:selected@1.0:accepted",
+      "luna:selected@None:unused"
+     ],
+     "teams": [
+      "jev:selected@0.94:accepted",
+      "luna:selected@None:unused"
+     ],
+     "season": [
+      "jev:absent@0.95:accepted",
+      "luna:absent@None:unused"
+     ]
+    },
+    "tier_outcomes": [
+     "jev:interpreted:None",
+     "luna:interpreted:None"
+    ]
+   },
+   {
+    "case_id": "unseen-2026-09-29-098",
+    "family": "boxscore_stat",
+    "question": "What was Kobe's average points per game across the 2009 Finals?",
+    "failure": "expected_unsupported_got_clarify",
+    "guess": false,
+    "label": {
+     "action": "unsupported",
+     "clarify_field": null,
+     "clarify_reason": null,
+     "unsupported_reason": "multi_game_average",
+     "request": null
+    },
+    "actual": {
+     "action": "clarify",
+     "clarify_field": "teams",
+     "clarify_reason": "low confidence in teams",
+     "unsupported_reason": null,
+     "request": null
+    },
+    "latency_ms": 20009,
+    "error_codes": [],
+    "field_tiers": {
+     "intent": "jev",
+     "season": "jev",
+     "round": "jev"
+    },
+    "reads": {
+     "intent": [
+      "jev:selected@0.91:accepted"
+     ],
+     "teams": [
+      "jev:absent@0.71:escalated"
+     ],
+     "season": [
+      "jev:selected@1.0:accepted"
+     ],
+     "round": [
+      "jev:selected@1.0:accepted"
+     ]
+    },
+    "tier_outcomes": [
+     "jev:interpreted:None",
+     "luna:unavailable:None"
+    ]
+   }
+  ]
+ },
+ "no_matching_candidate_after_accept": {
+  "denominators": {
+   "questions": 229,
+   "questions_luna_called_after_jev_interpreted": 118,
+   "jev_accepted_fields_luna_also_read": 1144,
+   "jev_accepted_selected_luna_also_read": 568,
+   "jev_accepted_absent_luna_also_read": 570,
+   "jev_accepted_no_matching_candidate_luna_also_read": 6
+  },
+  "events": [],
+  "luna_no_match_reads_any_field": [],
+  "luna_unsupported_after_jev_accepted_intent": [
+   {
+    "case_id": "stage2-player_season_stats-16",
+    "question": "Jokic points per 36 in 2023-24",
+    "jev_intent": [
+     "player_season_stats"
+    ],
+    "jev_confidence": 0.94,
+    "luna_reason": "other",
+    "label_action": "unsupported",
+    "label_reason": "other",
+    "label_intent": null,
+    "case_correct": true,
+    "failure": null
+   },
+   {
+    "case_id": "stage2-team_records-17",
+    "question": "Celtics home record in 2023-24",
+    "jev_intent": [
+     "team_records"
+    ],
+    "jev_confidence": 0.88,
+    "luna_reason": "other",
+    "label_action": "unsupported",
+    "label_reason": "other",
+    "label_intent": null,
+    "case_correct": true,
+    "failure": null
+   },
+   {
+    "case_id": "stage2-team_records-18",
+    "question": "Atlantic division standings in 2023-24",
+    "jev_intent": [
+     "team_records"
+    ],
+    "jev_confidence": 0.97,
+    "luna_reason": "other",
+    "label_action": "unsupported",
+    "label_reason": "other",
+    "label_intent": null,
+    "case_correct": true,
+    "failure": null
+   },
+   {
+    "case_id": "stage2-team_records-21",
+    "question": "Celtics record before March 1, 2024",
+    "jev_intent": [
+     "team_records"
+    ],
+    "jev_confidence": 0.99,
+    "luna_reason": "other",
+    "label_action": "unsupported",
+    "label_reason": "other",
+    "label_intent": null,
+    "case_correct": true,
+    "failure": null
+   },
+   {
+    "case_id": "stage3-season_leaders-18",
+    "question": "Who led the league in points per game including the playoffs in 2023-24?",
+    "jev_intent": [
+     "season_leaders"
+    ],
+    "jev_confidence": 1.0,
+    "luna_reason": "other",
+    "label_action": "unsupported",
+    "label_reason": "other",
+    "label_intent": null,
+    "case_correct": true,
+    "failure": null
+   },
+   {
+    "case_id": "stage3-season_leaders-23",
+    "question": "Who led the league in win shares in 2023-24?",
+    "jev_intent": [
+     "season_leaders"
+    ],
+    "jev_confidence": 0.91,
+    "luna_reason": "unsupported_leader_stat",
+    "label_action": "unsupported",
+    "label_reason": "other",
+    "label_intent": null,
+    "case_correct": false,
+    "failure": "wrong_unsupported_reason"
+   },
+   {
+    "case_id": "unseen-three-team_records-20",
+    "question": "Which team had the best record in 2015-16?",
+    "jev_intent": [
+     "team_records"
+    ],
+    "jev_confidence": 0.87,
+    "luna_reason": "other",
+    "label_action": "accept",
+    "label_reason": null,
+    "label_intent": "team_records",
+    "case_correct": false,
+    "failure": "false_unsupported"
+   },
+   {
+    "case_id": "unseen-two-playoff_series-24",
+    "question": "Compare how dominant the 1996 Bulls Finals series was with the 2001 Lakers Finals series.",
+    "jev_intent": [
+     "playoff_series"
+    ],
+    "jev_confidence": 0.98,
+    "luna_reason": "historical_comparison",
+    "label_action": "unsupported",
+    "label_reason": "historical_comparison",
+    "label_intent": null,
+    "case_correct": true,
+    "failure": null
+   },
+   {
+    "case_id": "unseen-two-playoff_series-25",
+    "question": "What was LeBron James's per-game scoring average in the 2016 Finals series?",
+    "jev_intent": [
+     "playoff_series"
+    ],
+    "jev_confidence": 0.9,
+    "luna_reason": "multi_game_average",
+    "label_action": "unsupported",
+    "label_reason": "multi_game_average",
+    "label_intent": null,
+    "case_correct": true,
+    "failure": null
+   }
+  ],
+  "summary": {}
+ },
+ "replay": {
+  "accept_min_sweep": [
+   {
+    "thresholds": {
+     "jev": 0.5,
+     "luna": null
+    },
+    "veto_min": 0.5,
+    "cases": 229,
+    "correct": 190,
+    "complete_request_accuracy": 0.8297,
+    "schema_valid_guesses": 17,
+    "service_failures": 1,
+    "clarification": {
+     "expected": 47,
+     "correct": 36,
+     "issued": 54,
+     "unneeded": 12
+    },
+    "unsupported": {
+     "expected": 30,
+     "correct": 16,
+     "issued": 19,
+     "false": 0
+    },
+    "failures": {
+     "schema_valid_guess": 16,
+     "service_failure": 1,
+     "unneeded_clarification": 12,
+     "wrong_clarify_field": 6,
+     "wrong_request": 1,
+     "wrong_unsupported_reason": 3
+    },
+    "replay_misses": 0,
+    "tier_share": {
+     "jev": 216,
+     "luna": 13
+    }
+   },
+   {
+    "thresholds": {
+     "jev": 0.6,
+     "luna": null
+    },
+    "veto_min": 0.5,
+    "cases": 229,
+    "correct": 197,
+    "complete_request_accuracy": 0.8603,
+    "schema_valid_guesses": 14,
+    "service_failures": 1,
+    "clarification": {
+     "expected": 47,
+     "correct": 39,
+     "issued": 51,
+     "unneeded": 8
+    },
+    "unsupported": {
+     "expected": 30,
+     "correct": 16,
+     "issued": 21,
+     "false": 0
+    },
+    "failures": {
+     "schema_valid_guess": 13,
+     "service_failure": 1,
+     "unneeded_clarification": 8,
+     "wrong_clarify_field": 4,
+     "wrong_request": 1,
+     "wrong_unsupported_reason": 5
+    },
+    "replay_misses": 0,
+    "tier_share": {
+     "jev": 195,
+     "luna": 34
+    }
+   },
+   {
+    "thresholds": {
+     "jev": 0.7,
+     "luna": null
+    },
+    "veto_min": 0.5,
+    "cases": 229,
+    "correct": 206,
+    "complete_request_accuracy": 0.8996,
+    "schema_valid_guesses": 12,
+    "service_failures": 0,
+    "clarification": {
+     "expected": 47,
+     "correct": 42,
+     "issued": 47,
+     "unneeded": 3
+    },
+    "unsupported": {
+     "expected": 30,
+     "correct": 17,
+     "issued": 23,
+     "false": 1
+    },
+    "failures": {
+     "false_unsupported": 1,
+     "schema_valid_guess": 11,
+     "unneeded_clarification": 3,
+     "wrong_clarify_field": 2,
+     "wrong_request": 1,
+     "wrong_unsupported_reason": 5
+    },
+    "replay_misses": 0,
+    "tier_share": {
+     "jev": 160,
+     "luna": 69
+    }
+   },
+   {
+    "thresholds": {
+     "jev": 0.75,
+     "luna": null
+    },
+    "veto_min": 0.5,
+    "cases": 229,
+    "correct": 207,
+    "complete_request_accuracy": 0.9039,
+    "schema_valid_guesses": 10,
+    "service_failures": 0,
+    "clarification": {
+     "expected": 47,
+     "correct": 43,
+     "issued": 49,
+     "unneeded": 4
+    },
+    "unsupported": {
+     "expected": 30,
+     "correct": 17,
+     "issued": 23,
+     "false": 1
+    },
+    "failures": {
+     "expected_unsupported_got_clarify": 1,
+     "false_unsupported": 1,
+     "schema_valid_guess": 9,
+     "unneeded_clarification": 3,
+     "wrong_clarify_field": 2,
+     "wrong_request": 1,
+     "wrong_unsupported_reason": 5
+    },
+    "replay_misses": 0,
+    "tier_share": {
+     "jev": 147,
+     "luna": 82
+    }
+   },
+   {
+    "thresholds": {
+     "jev": 0.8,
+     "luna": null
+    },
+    "veto_min": 0.5,
+    "cases": 229,
+    "correct": 209,
+    "complete_request_accuracy": 0.9127,
+    "schema_valid_guesses": 10,
+    "service_failures": 0,
+    "clarification": {
+     "expected": 47,
+     "correct": 43,
+     "issued": 47,
+     "unneeded": 2
+    },
+    "unsupported": {
+     "expected": 30,
+     "correct": 17,
+     "issued": 23,
+     "false": 1
+    },
+    "failures": {
+     "expected_unsupported_got_clarify": 1,
+     "false_unsupported": 1,
+     "schema_valid_guess": 9,
+     "unneeded_clarification": 1,
+     "wrong_clarify_field": 2,
+     "wrong_request": 1,
+     "wrong_unsupported_reason": 5
+    },
+    "replay_misses": 0,
+    "tier_share": {
+     "luna": 95,
+     "jev": 134
+    }
+   },
+   {
+    "thresholds": {
+     "jev": 0.85,
+     "luna": null
+    },
+    "veto_min": 0.5,
+    "cases": 229,
+    "correct": 212,
+    "complete_request_accuracy": 0.9258,
+    "schema_valid_guesses": 6,
+    "service_failures": 0,
+    "clarification": {
+     "expected": 47,
+     "correct": 45,
+     "issued": 50,
+     "unneeded": 3
+    },
+    "unsupported": {
+     "expected": 30,
+     "correct": 18,
+     "issued": 24,
+     "false": 1
+    },
+    "failures": {
+     "expected_unsupported_got_clarify": 2,
+     "false_unsupported": 1,
+     "schema_valid_guess": 5,
+     "unneeded_clarification": 1,
+     "wrong_clarify_field": 2,
+     "wrong_request": 1,
+     "wrong_unsupported_reason": 5
+    },
+    "replay_misses": 0,
+    "tier_share": {
+     "luna": 118,
+     "jev": 111
+    }
+   },
+   {
+    "thresholds": {
+     "jev": 0.9,
+     "luna": null
+    },
+    "veto_min": 0.5,
+    "cases": 229,
+    "correct": 193,
+    "complete_request_accuracy": 0.8428,
+    "schema_valid_guesses": 4,
+    "service_failures": 0,
+    "clarification": {
+     "expected": 47,
+     "correct": 45,
+     "issued": 71,
+     "unneeded": 24
+    },
+    "unsupported": {
+     "expected": 30,
+     "correct": 18,
+     "issued": 24,
+     "false": 1
+    },
+    "failures": {
+     "expected_unsupported_got_clarify": 4,
+     "false_unsupported": 1,
+     "schema_valid_guess": 3,
+     "unneeded_clarification": 20,
+     "wrong_clarify_field": 2,
+     "wrong_request": 1,
+     "wrong_unsupported_reason": 5
+    },
+    "replay_misses": 23,
+    "tier_share": {
+     "luna": 118,
+     "jev": 111
+    }
+   },
+   {
+    "thresholds": {
+     "jev": 0.95,
+     "luna": null
+    },
+    "veto_min": 0.5,
+    "cases": 229,
+    "correct": 169,
+    "complete_request_accuracy": 0.738,
+    "schema_valid_guesses": 4,
+    "service_failures": 3,
+    "clarification": {
+     "expected": 47,
+     "correct": 44,
+     "issued": 91,
+     "unneeded": 45
+    },
+    "unsupported": {
+     "expected": 30,
+     "correct": 18,
+     "issued": 24,
+     "false": 1
+    },
+    "failures": {
+     "expected_unsupported_got_clarify": 3,
+     "false_unsupported": 1,
+     "schema_valid_guess": 3,
+     "service_failure": 3,
+     "unneeded_clarification": 42,
+     "wrong_clarify_field": 2,
+     "wrong_request": 1,
+     "wrong_unsupported_reason": 5
+    },
+    "replay_misses": 55,
+    "tier_share": {
+     "luna": 119,
+     "jev": 110
+    }
+   }
+  ],
+  "veto_min_sweep": [
+   {
+    "thresholds": {
+     "jev": 0.85,
+     "luna": null
+    },
+    "veto_min": 0.0,
+    "cases": 229,
+    "correct": 213,
+    "complete_request_accuracy": 0.9301,
+    "schema_valid_guesses": 6,
+    "service_failures": 0,
+    "clarification": {
+     "expected": 47,
+     "correct": 46,
+     "issued": 50,
+     "unneeded": 3
+    },
+    "unsupported": {
+     "expected": 30,
+     "correct": 18,
+     "issued": 24,
+     "false": 1
+    },
+    "failures": {
+     "expected_unsupported_got_clarify": 2,
+     "false_unsupported": 1,
+     "schema_valid_guess": 5,
+     "unneeded_clarification": 1,
+     "wrong_clarify_field": 1,
+     "wrong_request": 1,
+     "wrong_unsupported_reason": 5
+    },
+    "replay_misses": 0,
+    "tier_share": {
+     "luna": 117,
+     "jev": 112
+    }
+   },
+   {
+    "thresholds": {
+     "jev": 0.85,
+     "luna": null
+    },
+    "veto_min": 0.3,
+    "cases": 229,
+    "correct": 213,
+    "complete_request_accuracy": 0.9301,
+    "schema_valid_guesses": 6,
+    "service_failures": 0,
+    "clarification": {
+     "expected": 47,
+     "correct": 46,
+     "issued": 50,
+     "unneeded": 3
+    },
+    "unsupported": {
+     "expected": 30,
+     "correct": 18,
+     "issued": 24,
+     "false": 1
+    },
+    "failures": {
+     "expected_unsupported_got_clarify": 2,
+     "false_unsupported": 1,
+     "schema_valid_guess": 5,
+     "unneeded_clarification": 1,
+     "wrong_clarify_field": 1,
+     "wrong_request": 1,
+     "wrong_unsupported_reason": 5
+    },
+    "replay_misses": 0,
+    "tier_share": {
+     "luna": 117,
+     "jev": 112
+    }
+   },
+   {
+    "thresholds": {
+     "jev": 0.85,
+     "luna": null
+    },
+    "veto_min": 0.5,
+    "cases": 229,
+    "correct": 212,
+    "complete_request_accuracy": 0.9258,
+    "schema_valid_guesses": 6,
+    "service_failures": 0,
+    "clarification": {
+     "expected": 47,
+     "correct": 45,
+     "issued": 50,
+     "unneeded": 3
+    },
+    "unsupported": {
+     "expected": 30,
+     "correct": 18,
+     "issued": 24,
+     "false": 1
+    },
+    "failures": {
+     "expected_unsupported_got_clarify": 2,
+     "false_unsupported": 1,
+     "schema_valid_guess": 5,
+     "unneeded_clarification": 1,
+     "wrong_clarify_field": 2,
+     "wrong_request": 1,
+     "wrong_unsupported_reason": 5
+    },
+    "replay_misses": 0,
+    "tier_share": {
+     "luna": 118,
+     "jev": 111
+    }
+   },
+   {
+    "thresholds": {
+     "jev": 0.85,
+     "luna": null
+    },
+    "veto_min": 0.6,
+    "cases": 229,
+    "correct": 212,
+    "complete_request_accuracy": 0.9258,
+    "schema_valid_guesses": 6,
+    "service_failures": 0,
+    "clarification": {
+     "expected": 47,
+     "correct": 45,
+     "issued": 50,
+     "unneeded": 3
+    },
+    "unsupported": {
+     "expected": 30,
+     "correct": 18,
+     "issued": 24,
+     "false": 1
+    },
+    "failures": {
+     "expected_unsupported_got_clarify": 2,
+     "false_unsupported": 1,
+     "schema_valid_guess": 5,
+     "unneeded_clarification": 1,
+     "wrong_clarify_field": 2,
+     "wrong_request": 1,
+     "wrong_unsupported_reason": 5
+    },
+    "replay_misses": 0,
+    "tier_share": {
+     "luna": 119,
+     "jev": 110
+    }
+   },
+   {
+    "thresholds": {
+     "jev": 0.85,
+     "luna": null
+    },
+    "veto_min": 0.7,
+    "cases": 229,
+    "correct": 212,
+    "complete_request_accuracy": 0.9258,
+    "schema_valid_guesses": 6,
+    "service_failures": 0,
+    "clarification": {
+     "expected": 47,
+     "correct": 45,
+     "issued": 50,
+     "unneeded": 3
+    },
+    "unsupported": {
+     "expected": 30,
+     "correct": 18,
+     "issued": 24,
+     "false": 1
+    },
+    "failures": {
+     "expected_unsupported_got_clarify": 2,
+     "false_unsupported": 1,
+     "schema_valid_guess": 5,
+     "unneeded_clarification": 1,
+     "wrong_clarify_field": 2,
+     "wrong_request": 1,
+     "wrong_unsupported_reason": 5
+    },
+    "replay_misses": 0,
+    "tier_share": {
+     "luna": 120,
+     "jev": 109
+    }
+   },
+   {
+    "thresholds": {
+     "jev": 0.85,
+     "luna": null
+    },
+    "veto_min": 0.8,
+    "cases": 229,
+    "correct": 213,
+    "complete_request_accuracy": 0.9301,
+    "schema_valid_guesses": 6,
+    "service_failures": 0,
+    "clarification": {
+     "expected": 47,
+     "correct": 46,
+     "issued": 50,
+     "unneeded": 3
+    },
+    "unsupported": {
+     "expected": 30,
+     "correct": 18,
+     "issued": 24,
+     "false": 1
+    },
+    "failures": {
+     "expected_unsupported_got_clarify": 2,
+     "false_unsupported": 1,
+     "schema_valid_guess": 5,
+     "unneeded_clarification": 1,
+     "wrong_clarify_field": 1,
+     "wrong_request": 1,
+     "wrong_unsupported_reason": 5
+    },
+    "replay_misses": 0,
+    "tier_share": {
+     "luna": 122,
+     "jev": 107
+    }
+   },
+   {
+    "thresholds": {
+     "jev": 0.85,
+     "luna": null
+    },
+    "veto_min": 0.85,
+    "cases": 229,
+    "correct": 213,
+    "complete_request_accuracy": 0.9301,
+    "schema_valid_guesses": 6,
+    "service_failures": 0,
+    "clarification": {
+     "expected": 47,
+     "correct": 46,
+     "issued": 50,
+     "unneeded": 3
+    },
+    "unsupported": {
+     "expected": 30,
+     "correct": 18,
+     "issued": 24,
+     "false": 1
+    },
+    "failures": {
+     "expected_unsupported_got_clarify": 2,
+     "false_unsupported": 1,
+     "schema_valid_guess": 5,
+     "unneeded_clarification": 1,
+     "wrong_clarify_field": 1,
+     "wrong_request": 1,
+     "wrong_unsupported_reason": 5
+    },
+    "replay_misses": 0,
+    "tier_share": {
+     "luna": 123,
+     "jev": 106
+    }
+   }
+  ],
+  "replay_matches_live": {
+   "differing_cases": [],
+   "replay_misses": 0
+  }
+ }
+}

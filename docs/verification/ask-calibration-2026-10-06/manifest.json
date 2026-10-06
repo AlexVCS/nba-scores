@@ -1,0 +1,174 @@
+{
+  "purpose": "ADR 0009 unseen evaluation: one production cascade run for the system gate, with per-tier outputs recorded for the tier gates",
+  "prepared_at": "2026-10-06T20:52:15.084696+00:00",
+  "frozen_commit": "fbaeb7e76f8d08bf525d86e41ca33d06c6e04a2b",
+  "cases_file": "docs/verification/ask-calibration-2026-10-06/cases.json",
+  "cases_sha256": "aadd26d089190d1d89ed22775591e1e9a0484bf046f4c3a2bd523d1280beccda",
+  "files_sha256": {
+    "server/ask/__init__.py": "3409a852970e28b4b5f09fb1ebba3739977743d8ba61188a80b94efd5d8397d9",
+    "server/ask/budget.py": "6d6179ab324e97013b44ce7a2dc59aa206eb1fb94ada671a65a0cf922901f75f",
+    "server/ask/cache.py": "325bdbb12287bbc90940bad03159e381082bce703d54c5f9e5f91973231fda9e",
+    "server/ask/candidates/__init__.py": "0c44506350c8edee60b222c76e137ef8f3de589e07e293ade3619880ae6a3c6a",
+    "server/ask/candidates/aliases.py": "403719366581c2ee4b178cd23d068b2817f8d1d6d8b74403dce0952c7939ec07",
+    "server/ask/candidates/dates.py": "4f217df65968f499b523825f884ede84d106300aa9c70ef07829cadd68ab7c44",
+    "server/ask/candidates/evaluation.py": "dbdf8f762c349173e5e7adbe10cc6f6c8b5c8e6dbce9a2031f6dd89da1c8167f",
+    "server/ask/candidates/locations.py": "270a90693607f91f314494d2efb5dfd2ac805b87bec358c17dc7588081d6b493",
+    "server/ask/candidates/lookup.py": "d35df82d9fdc50040914651d5113f188a7413672401e0835ef3bd1af82b364ad",
+    "server/ask/candidates/patterns.py": "e142d14f1fccf459ecf3ee67bbdba94cdf87c70162df7dd56d27c5ddc604033f",
+    "server/ask/candidates/players.py": "947935ec4df969b3602950ec1a27d12d89f7e14c1cb0de07f83a794022a353a1",
+    "server/ask/candidates/teams.py": "c043785ef34ddc10be0407e1dc94e1431b345e5ebf8d330b27050c4bbc3cbe44",
+    "server/ask/candidates/text.py": "a96424975250f2830c1ff31bac755a8d422bfab20782dc66203ab24fa0fd0726",
+    "server/ask/candidates/types.py": "46011b1a46b69016a8112b128e25e69137079f7f218cafc643b228fb7c14c45e",
+    "server/ask/config.py": "c4e1c8a193b34ce66c59c2d3e7256e21ffcf3d0b6ead7dbe041be562b09b34f2",
+    "server/ask/data/aliases.json": "a62f92538c0f0b55c584b9c0ec0868ff87ac428091f5a6aac6d049e6d1aba96e",
+    "server/ask/data/franchise_history.json": "3f8b89d12f57b19c0ad9f89bcc90847116197e43fa77acf46b53de2564bbe1b7",
+    "server/ask/data/player_catalog.json": "52b7768dabf1e4fae815875b75b1743e0eda9b477461e5ce72eb5b4049e88dc8",
+    "server/ask/diagnostics.py": "f530fa3c19281e47f97769265d4a6efb938290c737ad6df2112deac866fcdec7",
+    "server/ask/eval/__init__.py": "37141b75826f91adbaabb39445dc74792499e16e3417d1a5f74b7aa5386085aa",
+    "server/ask/eval/builders.py": "d86cff433975ac02432cba8ca9a13abc61e714afa0e2c2628bf540e698b20051",
+    "server/ask/eval/runner.py": "6bef7b631947c41b87bd98dfdfaff11e37b5f181603e405440de90712d0c9864",
+    "server/ask/eval/trace.py": "4963bf523cd145e912cc25221a8fd550c475b111902777d2c75422b17a90b864",
+    "server/ask/interpreters/__init__.py": "e566301f44993689deb52c3b94b4c385eff2cebccb755aa284fda75c9494e1b5",
+    "server/ask/interpreters/cascade.py": "e8f4c557e49ea901cbbfec9f10c96f2e5ceb923f64c8fef4b1e0cc9ba298eba3",
+    "server/ask/interpreters/closed_sets.py": "429a94ba25d98c1d26824e009f801588a8bc069280e12c3003a5ff9734f7bab9",
+    "server/ask/interpreters/factory.py": "0df6fd45d921adb45db85a4ed74580b7c6023b79b7c198987a8a5dfacc15d909",
+    "server/ask/interpreters/http.py": "ce0c6100cab48e27f76f219c09427460de7edc498c1f7f1aeb1cd6249bcc7760",
+    "server/ask/interpreters/jev.py": "3db83be45a9304c8914e3dec83792d580cf09055d6fbac927abd9042a9b336be",
+    "server/ask/interpreters/laya.py": "cb74cd8c1512d091e33b31dc80f7a870bd17da1de7f894e33d03dc4918d70e6f",
+    "server/ask/interpreters/openai_responses.py": "d8c76fcd8891d11889990a48e6a63406e073badac4b1ff210618849530eb4841",
+    "server/ask/interpreters/pricing.py": "2185dd5d83d8fc82a19b57b9e7322e76bbcf0d65d419dcb3c39b3ac9d5626d91",
+    "server/ask/interpreters/tiered.py": "8064979e4211a215fb2d7af189944dde1469fa5e1c5a8d513a2dde9ec243173b",
+    "server/ask/limits.py": "564e522301a4875ab954080b2db8f31472b5cdc76cd74eb262462a8d73a5064d",
+    "server/ask/links.py": "766a9a0a1bfd8e41b7e55395eb341118b132027e72abf2aa29db99bfdb7316f3",
+    "server/ask/measure.py": "d3824200188af861f0d3015e36751da57d2baad01653ba65e1243a6486718175",
+    "server/ask/models/__init__.py": "74d31a2a38dc7341611524a5ad8d8c5a1cb19f12c8321ce9e00f00b7b91aa02d",
+    "server/ask/models/candidates.py": "d74a13bc914c7d67ec6a415411250001fbd1231bce798a6f0ced9ab217c14133",
+    "server/ask/models/common.py": "0d52f9785e8cffcfd1d0da88ba2432a4ab63656e312649f2253aee86fe92e0a8",
+    "server/ask/models/interpreter.py": "cbae7f51d110c32f5bc21e639650b8ec2cf07d279058b6e34d46f818297ffb47",
+    "server/ask/models/request.py": "0fd2dd5f9c2b7418ce6ab4ba5bf9fbd45a612ba9e01a7f497ab35fb46e73a682",
+    "server/ask/models/response.py": "2951796962fe2c230c78b1c6ab94925e1b8e32d43ebb62de73e2287eb6dab74c",
+    "server/ask/normalize.py": "e0d52dd4b27ebf4610d6712e2ddb1a304b5d2e46276b3639f2f82348d4494e24",
+    "server/ask/pipeline.py": "c88d43e6342d1a6ef189ab692be814b9a82c7cb7ff23ea7bcd66696015c2bf31",
+    "server/ask/present.py": "f67478100b2d9da0716ef9a77115c39c3ccd0b2ec1dc7fa16c57b65aa51ab743",
+    "server/ask/protocols.py": "41397e87860e39d12594dddddd62becb7b5516d9b29d1a8ca6ea3358ad5d46e8",
+    "server/ask/resolution.py": "91d8d9685e8f9f205ff2d781ea43300708522feefdc9f4b734b9fb2f69e0acd0",
+    "server/ask/resolvers/__init__.py": "9e1aa6a1f1baa30d9ed31fcbff2e545c5afdadacf095966fefabaf45f170a5b2",
+    "server/ask/resolvers/boxscore.py": "bc1f19a04bc17c148142bca8dec89d96184994d844d7c41dc75a4259bffe82d1",
+    "server/ask/resolvers/career.py": "82d0e9aa27d571d533e023f5ab0b69e7c82a6c5a91719acaff66c5edc9ad49fc",
+    "server/ask/resolvers/data.py": "79433354038c2307b6c519ea72aad2c83457bfdca7fcf30deb5e9d2da76c2a44",
+    "server/ask/resolvers/errors.py": "c708eacfb05b2008288df4b0de27c7ff1a7335b4c08ffef1071e289292eec09d",
+    "server/ask/resolvers/games.py": "1ec0a0cd244879185ed1bcd954e95d3d62bf3b66216c2682d04b18b6fdb62379",
+    "server/ask/resolvers/leaders.py": "99071a595492c2e476c49b61d84a0bed1ce0c8557daa2ee19ba4551a058b910a",
+    "server/ask/resolvers/output.py": "814436e96b64c4827020d3b766eee08bf6729cf3d0089c8ccbf187047e821ea6",
+    "server/ask/resolvers/playoffs.py": "c7d9e93be2678652fc8151fbf59693be1d5293e60e25c15fa54793f10e7adb80",
+    "server/ask/resolvers/seasons.py": "9ad16a1c005b6b215182ef58afd57a7e948d618835531d98d2d95207f4c508fb",
+    "server/ask/resolvers/spoiler_policy.py": "cbce150fb4ccc4a8d27039f796b36bd7d6707677dce9e40be63e17c32f588431",
+    "server/ask/resolvers/stats.py": "d9bacc3c7fce4d332aa1f68452d67df691e86b7f949c1320836a429e87cb5f83",
+    "server/ask/router.py": "6145bcc49bd5ca3749c5ce99e2d90c563985ec1887c841922cfc8ed7eb60a1d2",
+    "server/ask/season_scope.py": "ce9c13fb58ede80ab42e62c55c1b1a84f8704b123588ebb99e33288197fb15f4",
+    "server/ask/suggest.py": "46a01b91d767fe3244ffca86ed1699936978c91d7353bfeb2a6f5d8b7ca519bf",
+    "server/ask/tools.py": "82faa9d9c64a10dde2ed5c5285016310fd62213b59116c1a4d7d90858fbefc06",
+    "scripts/ask/release.py": "29163425d424af0449057c7db052d8143486be71c1bbd73f46e0ef6e091553b9",
+    "server/services/nba_stats_client.py": "685d56932edcb2616571979aa0bd9f478232c2d7a98327062d278c8d8a2c8abf"
+  },
+  "configuration": {
+    "jev_model": "jev-1.13.0",
+    "jev_accept_min": 0.85,
+    "primary_model": "gpt-6-luna",
+    "primary_reasoning_effort": "low",
+    "veto_min": 0.5,
+    "deadline_seconds": 20.0,
+    "laya_base_url": null,
+    "fallback_model": null
+  },
+  "gates": {
+    "complete_request_accuracy_min": 0.9,
+    "clarification_accuracy_min": 0.9,
+    "unsupported_accuracy_min": 0.9,
+    "schema_valid_guesses_max": 0,
+    "p95_latency_ms_max": 4000
+  },
+  "tier_gates": {
+    "accepted_field_precision_min": 0.98,
+    "coverage_min": 0.3,
+    "tiers": {
+      "laya": {
+        "disabled": "laya_base_url is unset in the frozen configuration"
+      },
+      "jev": {
+        "accept_min": 0.85
+      }
+    },
+    "provisional_rule": "a pass is provisional when one more accepted-field error would fail precision or coverage is below 0.35; rerun with a larger set"
+  },
+  "case_minimums": {
+    "cases": 1,
+    "per_family": 1,
+    "per_outcome": 1
+  },
+  "cases": 231,
+  "expected_actions": {
+    "accept": 152,
+    "clarify": 47,
+    "unsupported": 32
+  },
+  "family_counts": {
+    "game_search": {
+      "accept": 31,
+      "clarify": 7,
+      "unsupported": 3,
+      "total": 41
+    },
+    "boxscore_stat": {
+      "accept": 23,
+      "clarify": 14,
+      "unsupported": 3,
+      "total": 40
+    },
+    "playoff_series": {
+      "accept": 29,
+      "clarify": 6,
+      "unsupported": 5,
+      "total": 40
+    },
+    "postseason_summary": {
+      "accept": 29,
+      "clarify": 7,
+      "unsupported": 5,
+      "total": 41
+    },
+    "player_season_stats": {
+      "accept": 7,
+      "clarify": 2,
+      "unsupported": 2,
+      "total": 11
+    },
+    "team_records": {
+      "accept": 7,
+      "clarify": 2,
+      "unsupported": 4,
+      "total": 13
+    },
+    "season_leaders": {
+      "accept": 16,
+      "clarify": 7,
+      "unsupported": 7,
+      "total": 30
+    },
+    "career_stats": {
+      "accept": 10,
+      "clarify": 2,
+      "unsupported": 3,
+      "total": 15
+    }
+  },
+  "scope": "All 8 ADR 0004 tool families plus clarification and unsupported cases; system gate computed live; tier gates and rendered-answer accuracy scored offline",
+  "prior_spend_estimate_usd": 0.09,
+  "spend_cap_usd": 0.098,
+  "actual_billed_cost_usd": null,
+  "price_sources": [
+    "https://docs.typesafe.ai/models",
+    "https://developers.openai.com/api/docs/models/gpt-6-luna"
+  ],
+  "price_verified_at": "2026-09-29"
+}
