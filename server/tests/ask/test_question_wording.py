@@ -75,3 +75,35 @@ def test_best_record_with_no_team_is_the_standings():
     # A named team's best record is franchise history, which the standings cannot answer.
     assert normalized("What was the Lakers' best record in 2015-16?", "team_records").status == "unsupported"
     assert normalized("Which team had the best home record in 2015-16?", "team_records").status == "unsupported"
+
+
+def test_exposed_unseen_three_cases_keep_their_labels():
+    """The seven cases moved out of the draft unseen set on 2026-10-06 are regression material."""
+    import json
+    from pathlib import Path
+
+    from server.ask.eval.runner import LabeledCase, scored_request
+
+    eval_dir = Path(__file__).parent / "fixtures/eval"
+    doc = json.loads((eval_dir / "unseen-three-exposed-dev.json").read_text())
+    assert doc["comment"].startswith("EXPOSED") and "never reuse" in doc["comment"]
+    cases = [LabeledCase.from_json(c) for c in doc["cases"]]
+    assert sorted(c.id.removeprefix("unseen-three-") for c in cases) == [
+        "career_stats-18", "game_search-11", "postseason_summary-19", "season_leaders-19", "season_leaders-23",
+        "team_records-14", "team_records-20"]
+    unseen = {c["id"] for c in json.loads((eval_dir / "unseen-three-draft.json").read_text())["cases"]}
+    assert not unseen & {c.id for c in cases}
+    for case in cases:
+        assert case.action == "accept", case.id
+        r = case.request
+        fields = {}
+        if r.intent == "game_search":
+            (date,) = named(lookup(case.question), "date")
+            fields = {"date": date.id, "teams": f"team:{r.teams[0].team_id}"}
+        elif r.intent in ("season_leaders", "career_stats"):
+            fields = {"stat": r.stat.stat}
+            if r.intent == "career_stats":
+                fields["player"] = f"player:{r.player.player_id}"
+        n = normalized(case.question, r.intent, **fields)
+        assert n.status == "valid", case.id
+        assert scored_request(n.request) == scored_request(r), case.id

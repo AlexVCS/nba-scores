@@ -1,5 +1,5 @@
 {
-  "scope": "DRAFT unseen evaluation set three (ADR 0009), not frozen. Labels were authored from the production contract (docs/ask-contract.md, docs/ask-stage2.md, docs/ask-stage3.md, ADRs 0004, 0005, 0011-0014, server/ask/models) without running any interpreter, lookup or provider, and without reading evaluation results. It REQUIRES independent human label review before freezing; debatable labels are tagged 'debatable' and listed in docs/verification/ask-unseen-three-label-notes.md. Not yet exposed to any model run. 179 cases: accept 143, clarify 17, unsupported 19. Per family: game_search 22 (accept 17, clarify 3, unsupported 2); boxscore_stat 24 (accept 18, clarify 3, unsupported 3); playoff_series 19 (accept 16, clarify 2, unsupported 1); postseason_summary 20 (accept 19, clarify 0, unsupported 1); player_season_stats 25 (accept 18, clarify 4, unsupported 3); team_records 20 (accept 17, clarify 2, unsupported 1); season_leaders 23 (accept 19, clarify 2, unsupported 2); career_stats 26 (accept 19, clarify 1, unsupported 6).",
+  "scope": "DRAFT unseen evaluation set three (ADR 0009), not frozen. Labels were authored from the production contract (docs/ask-contract.md, docs/ask-stage2.md, docs/ask-stage3.md, ADRs 0004, 0005, 0011-0014, server/ask/models) without running any interpreter, lookup or provider, and without reading evaluation results. It REQUIRES independent human label review before freezing; debatable labels are tagged 'debatable' and listed in docs/verification/ask-unseen-three-label-notes.md. Not yet exposed to any model run. On 2026-10-06 seven cases that the app had been changed against (game_search-11, team_records-14, team_records-20, season_leaders-19, season_leaders-23, postseason_summary-19, career_stats-18) were moved to unseen-three-exposed-dev.json and replaced by fresh cases of the same kind with new ids (game_search-23, team_records-21, team_records-22, season_leaders-24, season_leaders-25, postseason_summary-21, career_stats-27); the removed ids are never reused, so ids are not contiguous. 179 cases: accept 143, clarify 17, unsupported 19. Per family: game_search 22 (accept 17, clarify 3, unsupported 2); boxscore_stat 24 (accept 18, clarify 3, unsupported 3); playoff_series 19 (accept 16, clarify 2, unsupported 1); postseason_summary 20 (accept 19, clarify 0, unsupported 1); player_season_stats 25 (accept 18, clarify 4, unsupported 3); team_records 20 (accept 17, clarify 2, unsupported 1); season_leaders 23 (accept 19, clarify 2, unsupported 2); career_stats 26 (accept 19, clarify 1, unsupported 6).",
   "cases": [
     {
       "id": "unseen-three-game_search-01",
@@ -341,8 +341,8 @@
       "label_rationale": "Reference date Wednesday 2025-01-08; last week is the preceding Monday-Sunday, 2024-12-30..2025-01-05. Reviewed 2026-10-01: reference date moved from 2025-01-15 so the week contains Thunder home games."
     },
     {
-      "id": "unseen-three-game_search-11",
-      "question": "Warriros games on March 7, 2016",
+      "id": "unseen-three-game_search-23",
+      "question": "Was there a Timberwoves game on April 11, 2018?",
       "reference_time": "2026-09-30T12:00:00-04:00",
       "context": {},
       "expected": {
@@ -350,14 +350,14 @@
         "request": {
           "intent": "game_search",
           "dates": {
-            "start": "2016-03-07",
-            "end": "2016-03-07"
+            "start": "2018-04-11",
+            "end": "2018-04-11"
           },
           "teams": [
             {
-              "team_id": 1610612744,
-              "tricode": "GSW",
-              "name": "Golden State Warriors"
+              "team_id": 1610612750,
+              "tricode": "MIN",
+              "name": "Minnesota Timberwolves"
             }
           ],
           "location": null
@@ -368,9 +368,10 @@
       },
       "tags": [
         "game_search",
-        "typo"
+        "typo",
+        "debatable"
       ],
-      "label_rationale": "Misspelled team name; the only plausible reading is the Warriors. Reviewed 2026-09-30: accept, and a clarification also counts as correct. Reviewed 2026-10-01: date moved from March 8 to March 7, 2016 (Warriors hosted Orlando)."
+      "label_rationale": "Misspelled team name (a dropped letter); the only plausible reading is the Timberwolves. Follows the 2026-09-30 ruling for typo cases: accept, and a clarification also counts as correct. DEBATABLE until the owner confirms that ruling extends to this case. Added 2026-10-06 to replace exposed case game_search-11; not run through any lookup, interpreter or provider."
     },
     {
       "id": "unseen-three-game_search-12",
@@ -2957,19 +2958,19 @@
       "label_rationale": "KC-Omaha Kings = Sacramento franchise."
     },
     {
-      "id": "unseen-three-team_records-14",
-      "question": "What was Milwaukee's regular-season mark in 1970-71?",
+      "id": "unseen-three-team_records-21",
+      "question": "Will you show me the Trail Blazers' record from 1990-91?",
       "reference_time": "2026-09-30T12:00:00-04:00",
       "context": {},
       "expected": {
         "action": "accept",
         "request": {
           "intent": "team_records",
-          "season": "1970-71",
+          "season": "1990-91",
           "team": {
-            "team_id": 1610612749,
-            "tricode": "MIL",
-            "name": "Milwaukee Bucks"
+            "team_id": 1610612757,
+            "tricode": "POR",
+            "name": "Portland Trail Blazers"
           },
           "standings_scope": "league"
         }
@@ -2977,9 +2978,9 @@
       "tags": [
         "team_records",
         "team_record",
-        "city_as_team"
+        "word_as_name"
       ],
-      "label_rationale": "'mark' = record; regular-season wording with no playoff wording."
+      "label_rationale": "'Will' is the ordinary verb, not a player's first name; one team, one season, no playoff wording. Added 2026-10-06 to replace exposed case team_records-14; not run through any lookup, interpreter or provider."
     },
     {
       "id": "unseen-three-team_records-15",
@@ -3937,8 +3938,8 @@
       "label_rationale": "Career percentage."
     },
     {
-      "id": "unseen-three-career_stats-18",
-      "question": "Kobe's all-time rank in points",
+      "id": "unseen-three-career_stats-27",
+      "question": "What is Hakeem Olajuwon's ranking on the career blocks list?",
       "reference_time": "2026-09-30T12:00:00-04:00",
       "context": {},
       "expected": {
@@ -3947,12 +3948,12 @@
           "intent": "career_stats",
           "view": "player_rank",
           "player": {
-            "player_id": 977,
-            "name": "Kobe Bryant"
+            "player_id": 165,
+            "name": "Hakeem Olajuwon"
           },
           "season_type": "regular_season",
           "stat": {
-            "stat": "points",
+            "stat": "blocks",
             "aggregation": "total"
           },
           "limit": 10
@@ -3960,10 +3961,9 @@
       },
       "tags": [
         "career_stats",
-        "player_rank",
-        "nickname"
+        "player_rank"
       ],
-      "label_rationale": "Kobe alias -> Bryant; rank wording."
+      "label_rationale": "A named player with rank wording ('ranking') on a career list: player_rank; all-time ranks are totals. Added 2026-10-06 to replace exposed case career_stats-18; not run through any lookup, interpreter or provider."
     },
     {
       "id": "unseen-three-boxscore_stat-19",
@@ -4017,27 +4017,30 @@
       "label_rationale": "Counting-stat leaders never default the measure (ADR 0012/0014)."
     },
     {
-      "id": "unseen-three-season_leaders-19",
-      "question": "Who won the scoring title in 2013-14?",
+      "id": "unseen-three-season_leaders-24",
+      "question": "Who took the rebounding crown in 2006-07?",
       "reference_time": "2026-09-30T12:00:00-04:00",
       "context": {},
       "expected": {
         "action": "accept",
         "request": {
           "intent": "season_leaders",
-          "season": "2013-14",
+          "season": "2006-07",
           "season_type": "regular_season",
           "stat": {
-            "stat": "points",
+            "stat": "rebounds",
             "aggregation": "per_game"
           },
           "limit": 10
         }
       },
       "tags": [
-        "season_leaders"
+        "season_leaders",
+        "per_game",
+        "title_idiom",
+        "debatable"
       ],
-      "label_rationale": "The NBA scoring title is decided by points per game. Reviewed 2026-09-30: accept per game."
+      "label_rationale": "The NBA rebounding title ('crown') is decided by rebounds per game, by analogy with the 2026-09-30 ruling that 'scoring title' is points per game. DEBATABLE: that ruling named only the scoring title; the alternative is the measure clarification (aggregation). Added 2026-10-06 to replace exposed case season_leaders-19; not run through any lookup, interpreter or provider."
     },
     {
       "id": "unseen-three-player_season_stats-20",
@@ -4314,19 +4317,19 @@
       "label_rationale": "Venue without a date."
     },
     {
-      "id": "unseen-three-postseason_summary-19",
-      "question": "Recap New York's 2021 postseason.",
+      "id": "unseen-three-postseason_summary-21",
+      "question": "Take me through Sacramento's 2002 playoffs.",
       "reference_time": "2026-09-30T12:00:00-04:00",
       "context": {},
       "expected": {
         "action": "accept",
         "request": {
           "intent": "postseason_summary",
-          "season": "2020-21",
+          "season": "2001-02",
           "team": {
-            "team_id": 1610612752,
-            "tricode": "NYK",
-            "name": "New York Knicks"
+            "team_id": 1610612758,
+            "tricode": "SAC",
+            "name": "Sacramento Kings"
           }
         }
       },
@@ -4335,7 +4338,7 @@
         "team_summary",
         "city_as_team"
       ],
-      "label_rationale": "Owner decision 2026-10-06: 'New York' is the Knicks. The Nets have been 'Brooklyn' since 2012-13."
+      "label_rationale": "A city used as a team: Sacramento's NBA team is the Kings. 2002 with playoff wording is 2001-02. Added 2026-10-06 to replace exposed case postseason_summary-19; not run through any lookup, interpreter or provider."
     },
     {
       "id": "unseen-three-season_leaders-21",
@@ -4370,18 +4373,18 @@
       "label_rationale": "Rookie leaderboards are out of scope."
     },
     {
-      "id": "unseen-three-season_leaders-23",
-      "question": "Who led the league in personal fouls in 2018-19?",
+      "id": "unseen-three-season_leaders-25",
+      "question": "Who sank the most field goals in total in 2002-03?",
       "reference_time": "2026-09-30T12:00:00-04:00",
       "context": {},
       "expected": {
         "action": "accept",
         "request": {
           "intent": "season_leaders",
-          "season": "2018-19",
+          "season": "2002-03",
           "season_type": "regular_season",
           "stat": {
-            "stat": "fouls",
+            "stat": "field_goals",
             "aggregation": "total"
           },
           "limit": 10
@@ -4390,9 +4393,9 @@
       "tags": [
         "season_leaders",
         "totals",
-        "fouls"
+        "field_goals"
       ],
-      "label_rationale": "Owner decision 2026-10-06: personal fouls leaders are supported, as season totals only (stats.nba has no per-game fouls board)."
+      "label_rationale": "Field goals made is a supported leaders statistic (docs/ask-stage3.md); 'in total' states the measure; 'who ... the most' keeps the default top 10. Added 2026-10-06 to replace exposed case season_leaders-23; not run through any lookup, interpreter or provider."
     },
     {
       "id": "unseen-three-career_stats-21",
@@ -4523,15 +4526,15 @@
       "label_rationale": "Overtime split record is not represented."
     },
     {
-      "id": "unseen-three-team_records-20",
-      "question": "Which team had the best record in 2015-16?",
+      "id": "unseen-three-team_records-22",
+      "question": "Who finished with the worst record in the NBA in 1992-93?",
       "reference_time": "2026-09-30T12:00:00-04:00",
       "context": {},
       "expected": {
         "action": "accept",
         "request": {
           "intent": "team_records",
-          "season": "2015-16",
+          "season": "1992-93",
           "team": null,
           "standings_scope": "league"
         }
@@ -4540,9 +4543,9 @@
         "team_records",
         "standings",
         "league",
-        "best_record"
+        "worst_record"
       ],
-      "label_rationale": "Owner decision 2026-10-06: with no team named, 'best record' is answered by the league standings."
+      "label_rationale": "Owner decision 2026-10-06 applied: with no team named, a 'best/worst record' question is answered by the league standings. Added 2026-10-06 to replace exposed case team_records-20; not run through any lookup, interpreter or provider."
     },
     {
       "id": "unseen-three-boxscore_stat-22",

@@ -10,7 +10,9 @@ basketball-reference.com and are marked ✅ verified, ❌ wrong, or ⚠️ could
 
 **Status:** the owner decided items 1 and 3 under "Needs your decision" on 2026-10-01.
 Item 2 (G-21) got no reply, so it is kept as recommended. The file, the tables and the
-counts below already include those decisions.
+counts below already include those decisions. On 2026-10-06 seven questions were
+replaced with new ones (see "Replaced on Oct 6" just below). **Those seven new rows still
+need your review.**
 
 **How to reply:** send case codes with a note, e.g. "B-15 swap date", "C-19 both OK",
 "Y-11 should be season total". Any row you don't mention counts as approved.
@@ -24,7 +26,31 @@ C = career stats.
 Sources: date pages, box scores, schedules, playoff pages, league pages and player pages
 on [basketball-reference.com](https://www.basketball-reference.com). Team nicknames
 come from Wikipedia, and one game ID from nba.com. Everything was checked on
-2026-10-01.
+2026-10-01, except the seven rows added on 2026-10-06, whose facts are marked ⚠️.
+
+---
+
+## Replaced on Oct 6: seven new questions to review
+
+Ask was changed on Oct 6 with seven of these questions in view, so they no longer count
+as "never seen". They were taken out of this set and kept as ordinary regression tests
+(`server/tests/ask/fixtures/eval/unseen-three-exposed-dev.json`). Each was replaced by a
+new question of the same kind. The new questions have new numbers, and the old numbers
+are not reused, so G-11, T-14, T-20, L-19, L-23, R-19 and C-18 no longer exist in the
+tables. Older notes on this page that mention those codes describe the removed questions.
+
+Nobody has tried the new questions on Ask. Their facts come from memory and were not
+checked online (⚠️).
+
+| New | Replaces | Question | What Ask should do | Please rule on |
+| --- | --- | --- | --- | --- |
+| G-23 | G-11 | Was there a Timberwoves game on April 11, 2018? | Timberwolves games on Apr 11, 2018, or ask which team (both OK) | Does the Sep 30 typo rule (answer, and asking also counts) apply here too? Is the date right? |
+| T-21 | T-14 | Will you show me the Trail Blazers' record from 1990-91? | Blazers' record, 1990-91 | — |
+| T-22 | T-20 | Who finished with the worst record in the NBA in 1992-93? | League standings, 1992-93 | Uses the Oct 6 "best record" rule for "worst record" |
+| L-24 | L-19 | Who took the rebounding crown in 2006-07? | Top 10 in rebounds per game, 2006-07 | The Sep 30 ruling named only the "scoring title". Is "rebounding crown" also per game, or should Ask ask "per game or total?" |
+| L-25 | L-23 | Who sank the most field goals in total in 2002-03? | Top 10 in total field goals made, 2002-03 | — |
+| R-21 | R-19 | Take me through Sacramento's 2002 playoffs. | Kings' 2002 playoff run | — |
+| C-27 | C-18 | What is Hakeem Olajuwon's ranking on the career blocks list? | Hakeem Olajuwon's rank on the all-time blocks list | — |
 
 ---
 
@@ -98,13 +124,18 @@ tables.
 
 ### Decided on Oct 6
 
+These three questions were later removed from the set (see "Replaced on Oct 6"). The
+rulings still stand as rules.
+
 - R-19 "New York's 2021 postseason" answers with the Knicks.
 - T-20 "best record in 2015-16" answers with the league standings.
 - L-23 "personal fouls in 2018-19" answers with the season-total fouls leaders.
 
-### No ⚠️ items
+### ⚠️ items: only the Oct 6 replacements
 
-Every fact below was confirmed or found wrong. None were left unverified.
+Every fact below was confirmed or found wrong, except in the seven rows added on Oct 6
+(G-23, T-21, T-22, L-24, L-25, R-21, C-27). Their facts were written from memory and
+were not checked online.
 
 ---
 
@@ -148,9 +179,10 @@ Every fact below was confirmed or found wrong. None were left unverified.
 | Career stats (C) | 19 | 1 | 6 | 26 |
 | **All** | **143** | **17** | **19** | **179** |
 
-These match the file and its header. R-19, T-20 and L-23 became answerable on Oct 6;
-their rows are still listed in the follow-up and can't-answer sections at the end, with
-the new response.
+These match the file and its header. The seven Oct 6 replacements are all answerable
+questions, like the seven they replaced, so the counts did not change. Their rows sit in
+the answerable sections below, at the place of the question they replaced where that
+question was listed there, otherwise at the end of the section.
 
 ---
 
@@ -168,7 +200,7 @@ the new response.
 | G-08 | Is there anything on tonight involving the Spurs? *(asked Jan 8, 2025, 3pm)* | Spurs games on Jan 8, 2025 | ✅ Spurs at Milwaukee ([date](https://www.basketball-reference.com/boxscores/?month=1&day=8&year=2025)) |
 | G-09 | Is the Heat playing this Saturday? *(asked Wed Mar 5, 2025)* | Heat games on Sat Mar 8, 2025 | ✅ Heat hosted Chicago ([date](https://www.basketball-reference.com/boxscores/?month=3&day=8&year=2025)) |
 | G-10 | Games in Oklahoma City last week *(asked Wed Jan 8, 2025)* | Games played in Oklahoma City, Mon Dec 30, 2024–Sun Jan 5, 2025 *(ask date swapped Oct 1)* | ✅ 4 Thunder home games that week ([Thunder schedule](https://www.basketball-reference.com/teams/OKC/2025_games.html)) |
-| G-11 | Warriros games on March 7, 2016 | Warriors games on Mar 7, 2016, or ask which team (both OK) *(decided Sep 30; date swapped Oct 1)* | ✅ Warriors hosted Orlando ([Warriors schedule](https://www.basketball-reference.com/teams/GSW/2016_games.html)) |
+| G-23 | Was there a Timberwoves game on April 11, 2018? | Timberwolves games on Apr 11, 2018, or ask which team (both OK) *(added Oct 6, replaces G-11; needs review)* | ⚠️ Not checked online. From memory, the Timberwolves hosted Denver that night |
 | G-12 | Pelicans games on 2/2/2019 | Pelicans games on Feb 2, 2019 *(date swapped Oct 1)* | ✅ Pelicans at San Antonio ([Pelicans schedule](https://www.basketball-reference.com/teams/NOP/2019_games.html)) |
 | G-13 | Were the Bullets in action on January 5, 1985? | Washington Bullets (today's Wizards) games on Jan 5, 1985 | ✅ Bullets hosted Detroit ([date](https://www.basketball-reference.com/boxscores/?month=1&day=5&year=1985)) |
 | G-14 | Philadelphia Warriors games on March 2, 1962 | Philadelphia Warriors (today's Golden State) games on Mar 2, 1962 | ✅ Wilt's 100-point game vs the Knicks (played in Hershey, PA) ([date](https://www.basketball-reference.com/boxscores/?month=3&day=2&year=1962)) |
@@ -242,6 +274,7 @@ the new response.
 | R-16 | Brooklyn's 2021 playoff showing | Nets' 2021 playoff run | ✅ Lost to the Bucks in round 2 ([playoffs](https://www.basketball-reference.com/playoffs/NBA_2021.html)) |
 | R-17 | Recap OKC's run in last season's playoffs. *(asked Jan 20, 2025)* | Thunder's 2024 playoff run | ✅ Lost to Dallas in round 2 ([playoffs](https://www.basketball-reference.com/playoffs/NBA_2024.html)) |
 | R-18 | What was the Bucks' playoff record in 2018-19? | Bucks' 2019 playoff run (it includes their playoff win-loss record) *(decided Sep 30)* | ✅ Went 10-5 and lost the East finals ([playoffs](https://www.basketball-reference.com/playoffs/NBA_2019.html)) |
+| R-21 | Take me through Sacramento's 2002 playoffs. | Kings' 2002 playoff run *(added Oct 6, replaces R-19; needs review)* | ⚠️ Not checked online. From memory, the Kings reached the West finals and lost to the Lakers in seven games |
 
 ## Player season stats
 
@@ -283,9 +316,10 @@ the new response.
 | T-11 | Vancouver Grizzlies' 1998-99 record | Vancouver Grizzlies' (today's Memphis) record, 1998-99 | ✅ ([season](https://www.basketball-reference.com/leagues/NBA_1999.html)) |
 | T-12 | What did the Hornets finish with in 2005-06? | New Orleans/Oklahoma City Hornets' (today's Pelicans) record, 2005-06 | ✅ The only "Hornets" that season. Charlotte were the Bobcats ([season](https://www.basketball-reference.com/leagues/NBA_2006.html)) |
 | T-13 | Record of the Kansas City-Omaha Kings in 1973-74 | KC-Omaha Kings' (today's Sacramento) record, 1973-74 | ✅ ([season](https://www.basketball-reference.com/leagues/NBA_1974.html)) |
-| T-14 | What was Milwaukee's regular-season mark in 1970-71? | Bucks' record, 1970-71 | — |
+| T-21 | Will you show me the Trail Blazers' record from 1990-91? | Blazers' record, 1990-91 *(added Oct 6, replaces T-14; needs review)* | — |
 | T-15 | Minneapolis Lakers record 1949-50 | Minneapolis Lakers' record, 1949-50 | ✅ ([season](https://www.basketball-reference.com/leagues/NBA_1950.html)) |
 | T-16 | Utah's record in 1997-98 | Jazz's record, 1997-98 | — |
+| T-22 | Who finished with the worst record in the NBA in 1992-93? | League standings, 1992-93 *(added Oct 6, replaces T-20; needs review)* | — |
 
 ## Season leaders
 
@@ -308,7 +342,8 @@ the new response.
 | L-15 | Top 7 offensive rebounders in total, 1996-97 | Top 7 in total offensive rebounds, 1996-97 | — |
 | L-16 | Who led in blocks per game this season? *(asked Mar 15, 2025)* | Top 10 in blocks per game, 2024-25 | — |
 | L-17 | Highest scoring average in 1974-75 | Top 10 in points per game, 1974-75 | — |
-| L-19 | Who won the scoring title in 2013-14? | Top 10 in points per game, 2013-14 *(decided Sep 30)* | ✅ The title goes to the points-per-game leader. Durant led at 32.0 ([player](https://www.basketball-reference.com/players/d/duranke01.html)) |
+| L-24 | Who took the rebounding crown in 2006-07? | Top 10 in rebounds per game, 2006-07 *(added Oct 6, replaces L-19; needs review)* | ⚠️ Not checked online. The rebounding title goes to the rebounds-per-game leader; from memory, Kevin Garnett led in 2006-07 |
+| L-25 | Who sank the most field goals in total in 2002-03? | Top 10 in total field goals made, 2002-03 *(added Oct 6, replaces L-23; needs review)* | — |
 
 ## Career stats
 
@@ -331,7 +366,7 @@ the new response.
 | C-15 | Top 40 all-time in career turnovers | All-time top 25 in turnovers, with a note that 25 is the max | — |
 | C-16 | Who is the NBA's all-time leader in free throws made? | All-time top 10 in free throws made (the leader is first) | — |
 | C-17 | Steve Nash career three point percentage | Nash's career 3-point % | — |
-| C-18 | Kobe's all-time rank in points | Kobe Bryant's rank on the all-time points list | — |
+| C-27 | What is Hakeem Olajuwon's ranking on the career blocks list? | Hakeem Olajuwon's rank on the all-time blocks list *(added Oct 6, replaces C-18; needs review)* | — |
 | C-19 | How many blocks has Victor Wembanyama recorded? | Wembanyama's career total blocks ("has recorded" means career) *(decided Oct 1)* | — |
 
 ---
@@ -348,7 +383,6 @@ the new response.
 | B-21 | What did Antetokounmpo score on December 13, 2023? | Ask: Giannis or Thanasis? *(decided Sep 30)* | ✅ Both played that night. Giannis scored 64, Thanasis played 1 minute ([box](https://www.basketball-reference.com/boxscores/202312130MIL.html)) |
 | S-17 | Bring up a Spurs playoff series from 2014. | Ask: which round? | ✅ The Spurs played 4 series in 2014 ([playoffs](https://www.basketball-reference.com/playoffs/NBA_2014.html)) |
 | S-18 | Open a 2015 conference semifinal. | Ask: which teams? | ✅ There were 4 conference semifinals ([playoffs](https://www.basketball-reference.com/playoffs/NBA_2015.html)) |
-| R-19 | Recap New York's 2021 postseason. | Knicks' 2021 playoff run *(decided Oct 6; was a follow-up)* | ✅ Both made the 2021 playoffs ([playoffs](https://www.basketball-reference.com/playoffs/NBA_2021.html)) |
 | Y-19 | Ball's assists per game in 2021-22 | Ask: Lonzo or LaMelo? | ✅ Both played that season. Lonzo played 35 games for Chicago ([player](https://www.basketball-reference.com/players/b/balllo01.html)) and LaMelo 75 for Charlotte ([player](https://www.basketball-reference.com/players/b/ballla01.html)) |
 | Y-20 | Karl-Anthony Towns rebounds per game in 2018 | Ask: 2017-18 or 2018-19? | ✅ KAT played both seasons ([player](https://www.basketball-reference.com/players/t/townska01.html)) |
 | Y-21 | Malone's rebounds per game in 1985-86 | Ask: which Malone? | ✅ Three Malones played that season: Karl with Utah ([player](https://www.basketball-reference.com/players/m/malonka01.html)), Moses with Philadelphia ([player](https://www.basketball-reference.com/players/m/malonmo01.html)) and Jeff with Washington ([player](https://www.basketball-reference.com/players/m/malonje01.html)) |
@@ -374,10 +408,8 @@ the new response.
 | Y-24 | Luka's true shooting percentage in 2022-23 | Can't answer: advanced stats | — |
 | Y-25 | LeBron's points per game in the regular season and playoffs combined, 2012-13 | Can't answer: regular season and playoffs combined | — |
 | T-19 | Pacers' record in overtime games 2019-20 | Can't answer: records in game subsets (overtime, home, etc.) | — |
-| T-20 | Which team had the best record in 2015-16? | League standings, 2015-16 *(decided Oct 6; was can't answer)* | — |
 | L-21 | Top Spurs scorer in 2013-14 | Can't answer: leaders within one team | — |
 | L-22 | Which rookie averaged the most points in 2022-23? | Can't answer: rookie-only leaders | — |
-| L-23 | Who led the league in personal fouls in 2018-19? | Top 10 in total personal fouls, 2018-19 *(decided Oct 6; was can't answer)* | — |
 | C-21 | Who has the most career triple-doubles? | Can't answer: triple-double counts | — |
 | C-22 | Top 10 in career rebounds per game, all-time | Can't answer: all-time lists are totals only | — |
 | C-23 | Where does Larry Bird rank all-time in career free throw percentage? | Can't answer: no rankings on percentage lists | — |

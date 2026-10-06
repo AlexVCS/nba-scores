@@ -3,7 +3,11 @@
 Fixture: `server/tests/ask/fixtures/eval/unseen-three-draft.json`, 179 cases. This is a
 **draft**. It needs an independent human label review before it is frozen as ADR 0009
 unseen evidence. No interpreter, candidate lookup, or provider was run to write it, and
-no evaluation results or journals were read.
+no evaluation results or journals were read. Seven cases were replaced on 2026-10-06
+(see "2026-10-06 replacements"); case numbers are therefore not contiguous, and older
+sections that mention game_search-11, team_records-14, team_records-20,
+season_leaders-19, season_leaders-23, postseason_summary-19 or career_stats-18 describe
+cases that have left the set.
 
 ## Coverage
 
@@ -20,9 +24,10 @@ no evaluation results or journals were read.
 | **All** | **143** | **17** | **19** | **179** |
 
 Each non-accept case names one family in its id and tags, as `scripts/ask/release.py`
-and `scripts/ask/tier_gate.py` expect. Unsupported reasons: `other` 12,
-`unsupported_leader_stat` 3, and one each of `multi_game_average`, `prediction`,
-`historical_comparison`, `follow_up`, `reference_question`, and `not_basketball`. The
+and `scripts/ask/tier_gate.py` expect. Unsupported reasons (19, recounted 2026-10-06):
+`other` 10, `unsupported_leader_stat` 3, and one each of `multi_game_average`,
+`prediction`, `historical_comparison`, `follow_up`, `reference_question`, and
+`not_basketball`. The
 deprecated reasons (`season_stats`, `career_stats`, `season_leaders`, and so on) are not
 used.
 
@@ -159,7 +164,109 @@ The owner answered the review sheet's "Needs your decision" items. The fixture, 
   team_records-14 ("mark" was read as a player), career_stats-18 ("rank" was read as a
   player) and season_leaders-19 ("title" was read as the Finals). The candidate lookup
   was run on them. They should be replaced or reported separately before the freeze.
-- The "Unsupported reasons" counts in the Coverage section predate these changes.
+- The "Unsupported reasons" counts in the Coverage section predated these changes. They
+  were recounted with the 2026-10-06 replacements.
+
+## 2026-10-06 replacements
+
+The seven cases above that are no longer unseen were taken out of the fixture and
+replaced, one for one, with fresh cases of the same kind.
+
+**Where the old seven went.** `server/tests/ask/fixtures/eval/unseen-three-exposed-dev.json`,
+with ids, questions and labels unchanged. It is exposed development data, like
+`stage2-dev.json` and `stage3-dev.json`, and may be used for tuning and calibration.
+`test_exposed_unseen_three_cases_keep_their_labels` in
+`server/tests/ask/test_question_wording.py` runs each one through the candidate lookup
+and the Python guard and requires the labeled request. It also fails if any of the seven
+ids reappears in the unseen fixture.
+
+**The new seven.** All are accept, with reference time 2026-09-30 and no page context.
+Removed ids are never reused; each new case takes the next free number in its family.
+
+| New case | Replaces | Question | Label |
+| --- | --- | --- | --- |
+| game_search-23 | game_search-11 | Was there a Timberwoves game on April 11, 2018? | accept: Timberwolves (1610612750) games on 2018-04-11; `also_accept` clarify; tagged `debatable` |
+| team_records-21 | team_records-14 | Will you show me the Trail Blazers' record from 1990-91? | accept: Trail Blazers (1610612757) record, 1990-91, league scope |
+| team_records-22 | team_records-20 | Who finished with the worst record in the NBA in 1992-93? | accept: league standings, 1992-93, no team |
+| season_leaders-24 | season_leaders-19 | Who took the rebounding crown in 2006-07? | accept: rebounds per game, 2006-07, regular season, top 10; tagged `debatable` |
+| season_leaders-25 | season_leaders-23 | Who sank the most field goals in total in 2002-03? | accept: field goals made, season totals, 2002-03, regular season, top 10 |
+| postseason_summary-21 | postseason_summary-19 | Take me through Sacramento's 2002 playoffs. | accept: Kings (1610612758) postseason summary, 2001-02 |
+| career_stats-27 | career_stats-18 | What is Hakeem Olajuwon's ranking on the career blocks list? | accept: `player_rank`, Hakeem Olajuwon (165), blocks, totals, regular season |
+
+How each matches the kind of the case it replaces:
+
+- **game_search-23**: a misspelled team name in a game search (a dropped letter instead
+  of two swapped letters).
+- **team_records-21**: a team-record question with an ordinary word that is also a first
+  name ("Will" instead of "mark").
+- **team_records-22**: a "best/worst record" question with no team named.
+- **season_leaders-24**: a title idiom for a statistical leader ("rebounding crown"
+  instead of "scoring title").
+- **season_leaders-25**: a leaders question on a less common counting statistic (field
+  goals made instead of personal fouls). Unlike fouls, field goals have a per-game
+  board, so the question states its measure ("in total"); with no measure the label
+  would be a clarification, not an accept.
+- **postseason_summary-21**: a city standing for a team in a postseason summary. Unlike
+  New York, Sacramento has one team, so the label does not rest on a ruling.
+- **career_stats-27**: a named player's rank on an all-time list, asked with the noun
+  "ranking" instead of "rank".
+
+**Still open for the owner (these labels have not been reviewed):**
+
+| Case | Label | Alternative | Why it is open |
+| --- | --- | --- | --- |
+| game_search-23 | accept (MIN), clarify also accepted | accept only, or `teams` clarification only | The 2026-09-30 ruling was made for three named typo cases. It is applied here by analogy. |
+| season_leaders-24 | accept per_game | clarify `aggregation` | The 2026-09-30 ruling named the scoring title. A rebounding title is also awarded per game, but `docs/ask-stage3.md` says a counting-stat leaders question with no stated measure is never defaulted. |
+
+Lower-risk points:
+
+- **team_records-22** applies the 2026-10-06 "best record" ruling to "worst record". The
+  ruling's note already says "best/worst".
+- **game_search-23**: the date was picked from memory (Timberwolves hosted Denver on the
+  last night of the 2017-18 regular season) and was not checked online. The label does
+  not depend on it, but the owner swapped earlier dates so that the games exist.
+- **Exposure by wording.** The app tests written on 2026-10-06
+  (`server/tests/ask/test_question_wording.py`) contain a "worst record" question for
+  another season and a second misspelled team name. The new cases share the phenomenon
+  with those tests, as intended, but no entity, season or sentence.
+
+**How they were written.** From `docs/ask-contract.md`, `docs/ask-stage2.md`,
+`docs/ask-stage3.md`, ADRs 0009 and 0014, the labeling rules above, the labels of the
+replaced cases, and `player_catalog.json`, `aliases.json` and `franchise_history.json`
+for ids. The candidate lookup and pattern code changed in `e9a9465b` was not read. No
+interpreter, candidate lookup, normalizer, pipeline, evaluation script or provider was
+run on the new questions or on any other case in the unseen fixture, and no evaluation
+report, journal or trace was read. The author did read the diff of `e9a9465b` for the
+fixture, docs and tests, which shows what the app now does with the seven old questions.
+
+**Checks repeated (throwaway script, not in the repo).**
+
+- All 179 cases load through `LabeledCase.from_json`. Every accept request validates
+  through `ASK_REQUEST_ADAPTER` and keeps every labeled value. Ids and questions are
+  unique. Family tags match ids and accept intents. Counts are unchanged: accept 143,
+  clarify 17, unsupported 19, and the per-family rows in Coverage.
+- Overlap was checked against all 820 questions in 14 other fixture files under
+  `server/tests/ask/fixtures/` (the count now includes the answer-key files and the
+  seven moved cases). No exact duplicates. None of the seven new cases is a near match
+  (character ratio at least 0.80, or word Jaccard at least 0.60) of any other question,
+  and none has the same scored request as a labeled accept in another file. The first
+  choice for postseason_summary-21 (Seattle, 1996) was dropped because an exposed
+  release-two case has the same request.
+- Among the 172 unchanged cases, the six template-level near matches listed under
+  "Automated checks" remain. This run reports two more at the thresholds:
+  season_leaders-04 against a `stage3-dev` case (Jaccard 0.60, different stat and
+  season), and postseason_summary-11 ("Recap the Hawks' 2021 postseason") against the
+  moved postseason_summary-19, which was a same-file neighbour until today (ratio 0.80,
+  different team).
+
+**Dependent files updated.** The fixture `scope`, the review sheet (new rows, marked as
+needing review), and `fixture_sha256` in the field-label template and labels file. The
+36 field-label cases did not change: all seven old and seven new cases are accepts whose
+request supplies their field gold. The template was not regenerated with
+`scripts/ask/tier_gate.py template`, because nothing may be run on this set; only the
+hash was replaced. Regenerate it at the freeze and confirm it is otherwise identical.
+The answer keys under `server/tests/ask/fixtures/answers/` still hold entries for four
+of the removed ids and none for the new ids.
 
 ## Before freezing
 

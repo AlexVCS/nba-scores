@@ -169,7 +169,7 @@ Further rules:
   used to describe a franchise (for example, "the team that left Seattle"),
   refers to a team. It is not a `location`. An arena name ("at the Barclays
   Center") is a `location`; label its city.
-- **Precedent.** The fixture's 140 accept labels show how the fixture author
+- **Precedent.** The fixture's 143 accept labels show how the fixture author
   mapped wording and page context to request fields. Follow the same
   conventions.
 

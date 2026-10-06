@@ -43,8 +43,9 @@ must match its source. Any wrong value counts as a guess.
    - Decide ADR 0015 (disabling a tool). If accepted, build it before step 4, so
      the frozen commit contains the switch.
 2. **Calibrate on exposed data only.** Use the development sets
-   (`server/tests/ask/fixtures/eval/`, including `stage2-dev.json` and
-   `stage3-dev.json`) and the two exposed release sets. Recompute Jev's
+   (`server/tests/ask/fixtures/eval/`, including `stage2-dev.json`,
+   `stage3-dev.json` and `unseen-three-exposed-dev.json`, the seven cases removed
+   from the draft third set on 2026-10-06) and the two exposed release sets. Recompute Jev's
    threshold (and Laya's, if it has an endpoint) for 98% precision with the most
    coverage. Offline calibration from saved traces costs nothing; a live rerun
    is needed only for the new stage 2 and 3 cases. Never calibrate on the unseen

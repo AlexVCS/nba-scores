@@ -1,0 +1,186 @@
+{
+ "scope": "Development cases only. The seven cases removed from the draft third unseen set (unseen-three-draft.json) on 2026-10-06, after the app was changed with these questions in view (commit e9a9465b) and the candidate lookup was run on them. Ids and labels are unchanged. Exposed development data, not unseen release evidence.",
+ "comment": "EXPOSED: former draft unseen-three cases, now seen by implementation; regression material only, never reuse as unseen release evidence. See docs/verification/ask-unseen-three-label-notes.md (2026-10-06).",
+ "cases": [
+  {
+   "id": "unseen-three-game_search-11",
+   "question": "Warriros games on March 7, 2016",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "game_search",
+     "dates": {
+      "start": "2016-03-07",
+      "end": "2016-03-07"
+     },
+     "teams": [
+      {
+       "team_id": 1610612744,
+       "tricode": "GSW",
+       "name": "Golden State Warriors"
+      }
+     ],
+     "location": null
+    },
+    "also_accept": [
+     "clarify"
+    ]
+   },
+   "tags": [
+    "game_search",
+    "typo"
+   ],
+   "label_rationale": "Misspelled team name; the only plausible reading is the Warriors. Reviewed 2026-09-30: accept, and a clarification also counts as correct. Reviewed 2026-10-01: date moved from March 8 to March 7, 2016 (Warriors hosted Orlando)."
+  },
+  {
+   "id": "unseen-three-team_records-14",
+   "question": "What was Milwaukee's regular-season mark in 1970-71?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "team_records",
+     "season": "1970-71",
+     "team": {
+      "team_id": 1610612749,
+      "tricode": "MIL",
+      "name": "Milwaukee Bucks"
+     },
+     "standings_scope": "league"
+    }
+   },
+   "tags": [
+    "team_records",
+    "team_record",
+    "city_as_team"
+   ],
+   "label_rationale": "'mark' = record; regular-season wording with no playoff wording."
+  },
+  {
+   "id": "unseen-three-career_stats-18",
+   "question": "Kobe's all-time rank in points",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "career_stats",
+     "view": "player_rank",
+     "player": {
+      "player_id": 977,
+      "name": "Kobe Bryant"
+     },
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "points",
+      "aggregation": "total"
+     },
+     "limit": 10
+    }
+   },
+   "tags": [
+    "career_stats",
+    "player_rank",
+    "nickname"
+   ],
+   "label_rationale": "Kobe alias -> Bryant; rank wording."
+  },
+  {
+   "id": "unseen-three-season_leaders-19",
+   "question": "Who won the scoring title in 2013-14?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "season_leaders",
+     "season": "2013-14",
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "points",
+      "aggregation": "per_game"
+     },
+     "limit": 10
+    }
+   },
+   "tags": [
+    "season_leaders"
+   ],
+   "label_rationale": "The NBA scoring title is decided by points per game. Reviewed 2026-09-30: accept per game."
+  },
+  {
+   "id": "unseen-three-postseason_summary-19",
+   "question": "Recap New York's 2021 postseason.",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "postseason_summary",
+     "season": "2020-21",
+     "team": {
+      "team_id": 1610612752,
+      "tricode": "NYK",
+      "name": "New York Knicks"
+     }
+    }
+   },
+   "tags": [
+    "postseason_summary",
+    "team_summary",
+    "city_as_team"
+   ],
+   "label_rationale": "Owner decision 2026-10-06: 'New York' is the Knicks. The Nets have been 'Brooklyn' since 2012-13."
+  },
+  {
+   "id": "unseen-three-season_leaders-23",
+   "question": "Who led the league in personal fouls in 2018-19?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "season_leaders",
+     "season": "2018-19",
+     "season_type": "regular_season",
+     "stat": {
+      "stat": "fouls",
+      "aggregation": "total"
+     },
+     "limit": 10
+    }
+   },
+   "tags": [
+    "season_leaders",
+    "totals",
+    "fouls"
+   ],
+   "label_rationale": "Owner decision 2026-10-06: personal fouls leaders are supported, as season totals only (stats.nba has no per-game fouls board)."
+  },
+  {
+   "id": "unseen-three-team_records-20",
+   "question": "Which team had the best record in 2015-16?",
+   "reference_time": "2026-09-30T12:00:00-04:00",
+   "context": {},
+   "expected": {
+    "action": "accept",
+    "request": {
+     "intent": "team_records",
+     "season": "2015-16",
+     "team": null,
+     "standings_scope": "league"
+    }
+   },
+   "tags": [
+    "team_records",
+    "standings",
+    "league",
+    "best_record"
+   ],
+   "label_rationale": "Owner decision 2026-10-06: with no team named, 'best record' is answered by the league standings."
+  }
+ ]
+}

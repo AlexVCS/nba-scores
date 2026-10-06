@@ -1,7 +1,7 @@
 {
  "schema": "ask-tier-gate-field-labels/2",
  "fixture": "server/tests/ask/fixtures/eval/unseen-three-draft.json",
- "fixture_sha256": "8ebec07928e04e4f24ca876e18638538ec89bacaeed45ef73034cd796f97cd64",
+ "fixture_sha256": "be7b9579eb0623250890ca4cc50a9fdeb014ac55fc3e80b3c76cf9bd11f02af7",
  "labeler": {
   "name": "",
   "labeled_at": "",
