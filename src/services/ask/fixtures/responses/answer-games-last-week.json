@@ -1,0 +1,298 @@
+{
+  "schema_version": "1",
+  "request_id": "fx-games-last-week",
+  "outcome": "answer",
+  "question": "knicks games last week",
+  "interpretation": {
+    "intent": "game_search",
+    "detected_type": "games",
+    "items": [
+      {
+        "field": "team",
+        "value": "New York Knicks",
+        "detail": null,
+        "expression": "knicks",
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": 1610612752,
+        "player_id": null,
+        "spoiler": false
+      },
+      {
+        "field": "dates",
+        "value": "Last week",
+        "detail": "Mon, Feb 2 – Sun, Feb 8, 2026 · ET",
+        "expression": "last week",
+        "origin": "question",
+        "status": "resolved",
+        "match_count": null,
+        "team_id": null,
+        "player_id": null,
+        "spoiler": false
+      }
+    ],
+    "reference_time": "2026-02-09T10:15:00-05:00",
+    "timezone": "America/New_York",
+    "dates": {
+      "start": "2026-02-02",
+      "end": "2026-02-08"
+    },
+    "season": "2025-26"
+  },
+  "result": {
+    "kind": "games",
+    "dates": {
+      "start": "2026-02-02",
+      "end": "2026-02-08"
+    },
+    "teams": [
+      {
+        "team_id": 1610612752,
+        "tricode": "NYK",
+        "name": "New York Knicks"
+      }
+    ],
+    "days": [
+      {
+        "date": "2026-02-03",
+        "games": [
+          {
+            "date": "2026-02-03",
+            "game": {
+              "gameId": "0022500761",
+              "gameCode": "20260203/NYKWAS",
+              "gameStatus": 3,
+              "gameLabel": "",
+              "gameSubLabel": "",
+              "gameTimeUTC": "2026-02-04T00:30:00Z",
+              "gameStatusText": "Final",
+              "ifNecessary": false,
+              "seriesGameNumber": "",
+              "seriesText": "",
+              "boxscoreAvailable": true,
+              "period": 4,
+              "homeTeam": {
+                "teamId": 1610612764,
+                "teamName": "Wizards",
+                "teamCity": "Washington",
+                "teamTricode": "WAS",
+                "score": 108
+              },
+              "awayTeam": {
+                "teamId": 1610612752,
+                "teamName": "Knicks",
+                "teamCity": "New York",
+                "teamTricode": "NYK",
+                "score": 121
+              }
+            },
+            "spoilers": {
+              "score": true,
+              "status_text": true,
+              "series_text": true,
+              "labels": true
+            },
+            "links": [
+              {
+                "kind": "boxscore",
+                "label": "Boxscore",
+                "href": "/games/0022500761/boxscore?date=2026-02-03",
+                "external": false,
+                "spoiler": false
+              }
+            ],
+            "spoiler": false
+          }
+        ]
+      },
+      {
+        "date": "2026-02-04",
+        "games": [
+          {
+            "date": "2026-02-04",
+            "game": {
+              "gameId": "0022500770",
+              "gameCode": "20260204/DENNYK",
+              "gameStatus": 3,
+              "gameLabel": "",
+              "gameSubLabel": "",
+              "gameTimeUTC": "2026-02-05T00:30:00Z",
+              "gameStatusText": "Final/OT",
+              "ifNecessary": false,
+              "seriesGameNumber": "",
+              "seriesText": "",
+              "boxscoreAvailable": true,
+              "period": 5,
+              "homeTeam": {
+                "teamId": 1610612752,
+                "teamName": "Knicks",
+                "teamCity": "New York",
+                "teamTricode": "NYK",
+                "score": 112
+              },
+              "awayTeam": {
+                "teamId": 1610612743,
+                "teamName": "Nuggets",
+                "teamCity": "Denver",
+                "teamTricode": "DEN",
+                "score": 117
+              }
+            },
+            "spoilers": {
+              "score": true,
+              "status_text": true,
+              "series_text": true,
+              "labels": true
+            },
+            "links": [
+              {
+                "kind": "boxscore",
+                "label": "Boxscore",
+                "href": "/games/0022500770/boxscore?date=2026-02-04",
+                "external": false,
+                "spoiler": false
+              }
+            ],
+            "spoiler": false
+          }
+        ]
+      },
+      {
+        "date": "2026-02-06",
+        "games": [
+          {
+            "date": "2026-02-06",
+            "game": {
+              "gameId": "0022500788",
+              "gameCode": "20260206/NYKDET",
+              "gameStatus": 3,
+              "gameLabel": "",
+              "gameSubLabel": "",
+              "gameTimeUTC": "2026-02-07T00:30:00Z",
+              "gameStatusText": "Final",
+              "ifNecessary": false,
+              "seriesGameNumber": "",
+              "seriesText": "",
+              "boxscoreAvailable": true,
+              "period": 4,
+              "homeTeam": {
+                "teamId": 1610612765,
+                "teamName": "Pistons",
+                "teamCity": "Detroit",
+                "teamTricode": "DET",
+                "score": 110
+              },
+              "awayTeam": {
+                "teamId": 1610612752,
+                "teamName": "Knicks",
+                "teamCity": "New York",
+                "teamTricode": "NYK",
+                "score": 104
+              }
+            },
+            "spoilers": {
+              "score": true,
+              "status_text": true,
+              "series_text": true,
+              "labels": true
+            },
+            "links": [
+              {
+                "kind": "boxscore",
+                "label": "Boxscore",
+                "href": "/games/0022500788/boxscore?date=2026-02-06",
+                "external": false,
+                "spoiler": false
+              }
+            ],
+            "spoiler": false
+          }
+        ]
+      },
+      {
+        "date": "2026-02-08",
+        "games": [
+          {
+            "date": "2026-02-08",
+            "game": {
+              "gameId": "0022500801",
+              "gameCode": "20260208/NYKBOS",
+              "gameStatus": 3,
+              "gameLabel": "",
+              "gameSubLabel": "",
+              "gameTimeUTC": "2026-02-08T20:30:00Z",
+              "gameStatusText": "Final",
+              "ifNecessary": false,
+              "seriesGameNumber": "",
+              "seriesText": "",
+              "boxscoreAvailable": true,
+              "period": 4,
+              "homeTeam": {
+                "teamId": 1610612738,
+                "teamName": "Celtics",
+                "teamCity": "Boston",
+                "teamTricode": "BOS",
+                "score": 96
+              },
+              "awayTeam": {
+                "teamId": 1610612752,
+                "teamName": "Knicks",
+                "teamCity": "New York",
+                "teamTricode": "NYK",
+                "score": 99
+              }
+            },
+            "spoilers": {
+              "score": true,
+              "status_text": true,
+              "series_text": true,
+              "labels": true
+            },
+            "links": [
+              {
+                "kind": "boxscore",
+                "label": "Boxscore",
+                "href": "/games/0022500801/boxscore?date=2026-02-08",
+                "external": false,
+                "spoiler": false
+              }
+            ],
+            "spoiler": false
+          }
+        ]
+      }
+    ],
+    "total_games": {
+      "value": 4,
+      "spoiler": false
+    },
+    "hidden_note": null
+  },
+  "clarification": null,
+  "notice": null,
+  "spoiler_gate": null,
+  "links": [],
+  "suggestions": [
+    {
+      "question": "Knicks games from February 9 to February 15, 2026",
+      "category": "games",
+      "spoiler": false
+    }
+  ],
+  "sources": [
+    {
+      "name": "nba_live",
+      "label": "NBA.com",
+      "fetched_at": "2026-09-29T16:00:00Z",
+      "complete": true
+    }
+  ],
+  "interpreter": {
+    "model_called": true,
+    "cache_hit": false,
+    "adapter": "jev",
+    "model": "jev-1.13.0",
+    "fallback_used": false
+  }
+}
