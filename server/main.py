@@ -1,4 +1,5 @@
 import logging
+import os
 import time
 from datetime import date as calendar_date, datetime, timezone
 
@@ -43,9 +44,22 @@ logger = logging.getLogger(__name__)
 app = FastAPI()
 app.include_router(ask_router)
 
+# Extra browser origins for preview deploys, comma-separated. Unset in production.
+EXTRA_CORS_ORIGINS = [
+    origin.strip().rstrip("/")
+    for origin in os.environ.get("CORS_EXTRA_ORIGINS", "").split(",")
+    if origin.strip()
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://nba-scorez.onrender.com", "https://nbascorez.com", "http://localhost:5173", "https://api.nbascorez.com"],
+    allow_origins=[
+        "https://nba-scorez.onrender.com",
+        "https://nbascorez.com",
+        "http://localhost:5173",
+        "https://api.nbascorez.com",
+        *EXTRA_CORS_ORIGINS,
+    ],
     allow_origin_regex=r"^http://(?:127\.0\.0\.1|localhost|10(?:\.\d{1,3}){3}|192\.168(?:\.\d{1,3}){2}|172\.(?:1[6-9]|2\d|3[01])(?:\.\d{1,3}){2}):5173$",
     allow_credentials=True,
     allow_methods=["*"],
