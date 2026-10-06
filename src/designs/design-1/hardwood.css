@@ -17,9 +17,6 @@
   --hw-shadow-card-hover: 0 18px 40px rgb(43 29 6 / 26%);
   --hw-page-texture: linear-gradient(90deg, transparent 49.7%, rgb(255 255 255 / 40%) 49.8% 50.2%, transparent 50.3%), radial-gradient(circle at 50% 50svh, transparent 0 110px, rgb(255 255 255 / 35%) 111px 114px, transparent 115px), repeating-linear-gradient(90deg, rgb(112 62 18 / 9%) 0 2px, transparent 2px 72px);
   --hw-page-ambient: none;
-  --switcher-bg: #101010;
-  --switcher-fg: #fff;
-  --switcher-accent: #ffd524;
   background: var(--hw-page);
 }
 

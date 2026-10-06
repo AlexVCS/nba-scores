@@ -3,8 +3,7 @@ import userEvent from "@testing-library/user-event";
 import {MemoryRouter, Route, Routes, useLocation} from "react-router";
 import {describe, expect, it, vi} from "vitest";
 import type {GameData} from "@/helpers/helpers";
-import HardwoodGameCard from "@/designs/design-1/components/HardwoodGameCard";
-import GameCard from "./GameCard";
+import HardwoodGameCard from "./HardwoodGameCard";
 
 vi.mock("@/components/TeamLogos", () => ({default: () => null}));
 
@@ -21,15 +20,14 @@ function Destination() {
   return <output>{location.pathname}{location.search} from {location.state?.from}</output>;
 }
 
-describe.each(["design-1", "original"])("%s game links", (design) => {
+describe("game links", () => {
   it.each([1, 3])("opens hidden status %s games without available stats", async (gameStatus) => {
     const user = userEvent.setup();
     const props = {game: {...game, gameStatus}, showScores: false, dateParam: "2026-06-03"};
-    render(<MemoryRouter initialEntries={[`/${design}?date=2026-06-03`]}>
+    render(<MemoryRouter initialEntries={["/?date=2026-06-03"]}>
       <Routes>
-        <Route path={`/${design}`} element={design === "design-1"
-          ? <HardwoodGameCard {...props} index={0} /> : <GameCard {...props} />} />
-        <Route path={`/${design}/games/:gameId/boxscore`} element={<Destination />} />
+        <Route path="/" element={<HardwoodGameCard {...props} index={0} />} />
+        <Route path="/games/:gameId/boxscore" element={<Destination />} />
       </Routes>
     </MemoryRouter>);
     expect(screen.queryByText("123")).not.toBeInTheDocument();
@@ -43,7 +41,7 @@ describe.each(["design-1", "original"])("%s game links", (design) => {
     expect(link).toHaveFocus();
     await user.keyboard("{Enter}");
     expect(screen.getByRole("status")).toHaveTextContent(
-      `/${design}/games/0042500401/boxscore?date=2026-06-03 from /${design}?date=2026-06-03`,
+      "/games/0042500401/boxscore?date=2026-06-03 from /?date=2026-06-03",
     );
   });
 });

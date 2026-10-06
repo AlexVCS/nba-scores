@@ -7,30 +7,6 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Shared mobile brackets use the public palette outside the Hardwood renderer. */
-.mobile-bracket:where(:not(.design-hardwood *)) {
-  --hw-page: var(--color-slate-50);
-  --hw-surface: var(--color-white);
-  --hw-surface-muted: var(--color-neutral-100);
-  --hw-ink: var(--color-neutral-900);
-  --hw-muted: var(--color-neutral-600);
-  --hw-line: var(--color-neutral-300);
-  --hw-accent: var(--color-amber-500);
-  --hw-accent-contrast: var(--color-neutral-950);
-  --hw-shadow-small: 0 1px 3px rgb(0 0 0 / 10%), 0 1px 2px rgb(0 0 0 / 10%);
-  color: var(--hw-ink);
-}
-
-.dark .mobile-bracket:where(:not(.design-hardwood *)) {
-  --hw-page: var(--color-neutral-950);
-  --hw-surface: var(--color-neutral-950);
-  --hw-surface-muted: var(--color-neutral-900);
-  --hw-ink: var(--color-neutral-100);
-  --hw-muted: var(--color-neutral-400);
-  --hw-line: var(--color-neutral-700);
-  --hw-shadow-small: 0 1px 3px rgb(0 0 0 / 30%), 0 1px 2px rgb(0 0 0 / 30%);
-}
-
 /* Subtle light halo so dark historical/fallback logos stay legible on dark backgrounds. */
 .dark .team-logo--halo {
   filter: drop-shadow(0 0 0.5px rgb(255 255 255 / 0.85)) drop-shadow(0 0 2px rgb(255 255 255 / 0.35));

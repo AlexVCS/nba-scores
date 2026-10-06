@@ -13,7 +13,7 @@ const today = format(new Date(), "yyyy-MM-dd");
 const futureDate = `${new Date().getFullYear() + 1}-01-02`;
 const scheduledGame = {gameId: "001", gameStatus: 1};
 
-function setup(entry = "/design-1") {
+function setup(entry = "/") {
   const client = new QueryClient({defaultOptions: {queries: {retry: false}}});
   function Wrapper({children}: {children: ReactNode}) {
     return <QueryClientProvider client={client}>
@@ -45,7 +45,7 @@ describe("default scores date", () => {
     vi.mocked(getScores).mockImplementation(async (date) => date
       ? {games: [scheduledGame]}
       : {games: [], nextGameDate: futureDate});
-    const {result} = setup("/design-1?source=bookmark");
+    const {result} = setup("/?source=bookmark");
     await waitFor(() => expect(result.current.games).toEqual([scheduledGame]));
     expect(getScores).toHaveBeenCalledTimes(2);
     expect(getScores).toHaveBeenLastCalledWith(futureDate);
@@ -55,7 +55,7 @@ describe("default scores date", () => {
   });
 
   it.each([today, "2025-07-01"])("respects an explicit empty date %s", async (date) => {
-    const {result} = setup(`/design-1?date=${date}`);
+    const {result} = setup(`/?date=${date}`);
     await waitFor(() => expect(result.current.isLoading).toBe(false));
     expect(result.current.dateParam).toBe(date);
     expect(getScores).toHaveBeenCalledExactlyOnceWith(date);

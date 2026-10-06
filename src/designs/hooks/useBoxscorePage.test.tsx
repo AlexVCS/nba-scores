@@ -185,14 +185,14 @@ describe("game visits", () => {
 
   it("keeps a reveal for layout changes but clears it when navigating to another game and back", async () => {
     showAllResults = false;
-    const {client, wrapper} = setup("/design-1/playoffs/2026/finals");
+    const {client, wrapper} = setup("/playoffs/2026/finals");
     const {result, unmount} = renderHook(() => ({page: useBoxscorePage(), navigate: useNavigate()}), {wrapper});
     await waitFor(() => expect(result.current.page.isHidden).toBe(true));
     act(() => result.current.page.reveal());
     await waitFor(() => expect(result.current.page.game).toMatchObject(game));
     act(() => result.current.navigate("?view=stacked", {replace: true}));
     expect(result.current.page.scoresVisible).toBe(true);
-    expect(result.current.page.backPath).toBe("/design-1/playoffs/2026/finals");
+    expect(result.current.page.backPath).toBe("/playoffs/2026/finals");
     act(() => result.current.navigate("/games/456/boxscore"));
     await waitFor(() => expect(result.current.page.isHidden).toBe(true));
     expect(result.current.page.game).toBeUndefined();
