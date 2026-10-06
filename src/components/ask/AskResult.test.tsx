@@ -152,7 +152,7 @@ describe("AskResult: the global preference still governs what wasn't asked for",
     const text = perceivableText(container);
     expect(text).not.toContain(SPOILER_SUGGESTION);
     expect(text).not.toContain("Next game recap");
-    expect(screen.getByRole("link", {name: /Open 2025 bracket/})).toHaveAttribute("href", "/design-1/playoffs?season=2024-25");
+    expect(screen.getByRole("link", {name: /Open 2025 bracket/})).toHaveAttribute("href", "/playoffs?season=2024-25");
   });
 
   it("shows spoiler suggestions and follow-up links when the preference shows results", () => {

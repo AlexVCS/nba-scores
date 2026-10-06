@@ -14,7 +14,7 @@ describe("HardwoodLastMatchups", () => {
   it("hides scores until revealed locally and links to the box score", async () => {
     render(<MemoryRouter><HardwoodLastMatchups games={games} isLoading={false} showScores={false} /></MemoryRouter>);
     expect(screen.queryByText("126")).toBeNull();
-    expect(screen.getByRole("link", {name: /CHI at ATL/})).toHaveAttribute("href", "/design-1/games/0022500411/boxscore?date=2025-12-23");
+    expect(screen.getByRole("link", {name: /CHI at ATL/})).toHaveAttribute("href", "/games/0022500411/boxscore?date=2025-12-23");
     await userEvent.click(screen.getByRole("button", {name: "Show results"}));
     expect(screen.getByText("126")).toBeInTheDocument();
     expect(screen.queryByRole("button", {name: "Show results"})).toBeNull();

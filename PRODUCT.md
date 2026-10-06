@@ -24,14 +24,14 @@ Two claims neighboring score sites don't truthfully make together:
 ## Operating Context
 
 - Live site: https://nbascorez.com (Playoffs page at /playoffs).
-- Frontend: React 18 + TypeScript + Vite + Tailwind CSS 4, TanStack Query, React Router 7, react-aria / React Aria Components, Framer Motion, React Flow (desktop playoff bracket). Dark mode toggle exists.
+- Frontend: React 18 + TypeScript + Vite + Tailwind CSS 4, TanStack Query, React Router 7, react-aria / React Aria Components, Framer Motion. Dark mode toggle exists.
 - Backend: FastAPI (Python) serving games, boxscore, and playoff data; dev server at http://127.0.0.1:8000 (`uvicorn server.main:app --reload`), frontend via `pnpm dev` at http://localhost:5173.
 - Date navigation via a date picker; during off-season a date with games (e.g. `?date=2026-02-05`) is needed to see populated game cards.
 - Watch links on playoff series exist for 2012/13 onward, depending on League Pass availability.
 
 ## Capabilities and Constraints
 
-- Core surfaces: daily scores (game cards), boxscores with player tables, playoff brackets (React Flow on desktop, mobile-specific bracket/series cards), series detail with game-by-game breakdown.
+- Core surfaces: daily scores (game cards), boxscores with player tables, playoff brackets (desktop bracket, mobile-specific bracket/series cards), series detail with game-by-game breakdown.
 - Season/year picker covers 1946/47 to present; playoff results toggle round by round.
 - A token-gated design preview system (`/preview/<token>/design-N/`) hosts four design variants, each a folder in `src/designs/` with page wrappers plus a `theme.css`.
 - **Undecided:** the final UI direction. The four previews are exploration — the owner intends to take pieces they like from several variants into one new overall redesign. No single variant is the chosen winner; future design work should help converge on that direction, not assume one.

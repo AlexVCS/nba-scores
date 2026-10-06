@@ -66,7 +66,6 @@ Navigate to the [Playoffs](https://nbascorez.com/playoffs) page to explore inter
 - Toggle results round by round to avoid spoilers
 - Click any series to see a game-by-game breakdown with scores, dates, and links to box scores
 - Watch links are available for seasons from 2012/13 onward, depending on League Pass availability
-- On desktop, the bracket is rendered with [React Flow](https://reactflow.dev/)
 
 <div align='right'>
 
@@ -130,7 +129,7 @@ Open `http://<your-computer-LAN-IP>:5173` on the phone. The empty command-line o
 
 For deployment, set `VITE_API_URL_PROD` in the frontend build environment to your public backend URL, such as `https://api.nbascorez.com`, before running `pnpm build`. Production builds use this value independently of `VITE_API_URL_DEV` and the phone fallback. Use a URL without a trailing slash and ensure the backend allows your deployed frontend origin through CORS. Restart the development server after changing environment variables; rebuild the frontend after changing the production URL.
 
-Open `/design-1` to view Gold on Hardwood, or `/original` to compare the original design with the design switcher. These routes require no token and work on the HTTP LAN address above. Deep links use the same prefix, for example `/design-1/playoffs`.
+Older `/design-1/...` and `/original/...` links redirect to the same page without the prefix.
 
 ## VS Code Tasks
 

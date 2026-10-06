@@ -1,6 +1,4 @@
-import {useLocation} from "react-router";
 import type {GameData} from "@/helpers/helpers";
-import GameCard from "@/routes/games/GameCard";
 import HardwoodGameCard from "@/designs/design-1/components/HardwoodGameCard";
 
 interface AskGameCardProps {
@@ -10,17 +8,9 @@ interface AskGameCardProps {
   index: number;
 }
 
-/** The scores page's own game card for the design being viewed, so links and logo fallbacks match. */
+/** The scores page's own game card, so links and logo fallbacks match. */
 function AskGameCard({game, showScores, date, index}: AskGameCardProps) {
-  const {pathname} = useLocation();
-  if (/^\/design-1(?=\/|$)/.test(pathname)) {
-    return <HardwoodGameCard game={game} showScores={showScores} index={index} dateParam={date} showTricodes={false} />;
-  }
-  return (
-    <div className="rounded-[12px] bg-slate-50 dark:bg-neutral-950">
-      <GameCard game={game} showScores={showScores} dateParam={date} />
-    </div>
-  );
+  return <HardwoodGameCard game={game} showScores={showScores} index={index} dateParam={date} showTricodes={false} />;
 }
 
 export default AskGameCard;

@@ -18,7 +18,7 @@ function setup(path?: string) {
 
 function NavigationButton() {
   const navigate = useNavigate();
-  return <button onClick={() => navigate("/design-1/playoffs?season=2024-25")}>Go to playoffs</button>;
+  return <button onClick={() => navigate("/playoffs?season=2024-25")}>Go to playoffs</button>;
 }
 
 function mockRequester(response: AskResponse | ((query: AskQuery) => AskResponse)) {
@@ -86,7 +86,7 @@ describe("Ask entry and search dialog", () => {
 
     await user.keyboard("{Enter}");
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
-    expect(screen.getByTestId("location")).toHaveTextContent("/design-1/games/0022500801/boxscore?date=2026-02-08");
+    expect(screen.getByTestId("location")).toHaveTextContent("/games/0022500801/boxscore?date=2026-02-08");
   });
 
   it("selects the Ask row first for question-shaped text; arrows move the selection and Enter runs it", async () => {
@@ -225,7 +225,7 @@ describe("Ask entry and search dialog", () => {
 
     await user.keyboard("{Escape}");
     await user.click(screen.getByRole("button", {name: "Go to playoffs"}));
-    expect(screen.getByTestId("location")).toHaveTextContent("/design-1/playoffs?season=2024-25");
+    expect(screen.getByTestId("location")).toHaveTextContent("/playoffs?season=2024-25");
     await user.keyboard("{Control>}k{/Control}");
     await user.click(screen.getByRole("button", {name: /Jalen Suggs/}));
 

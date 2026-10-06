@@ -1,8 +1,0 @@
-.design-route {
-  min-height: 100vh;
-  --switcher-bg: #111;
-  --switcher-fg: #fff;
-  --switcher-accent: #ff6b21;
-}
-
-.design-route__content { min-height: 100vh; }

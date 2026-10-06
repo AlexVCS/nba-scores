@@ -12,7 +12,7 @@ function LocationProbe() {
   return <output data-testid="location">{location.pathname}{location.search}</output>;
 }
 
-export function AskTestProviders({children, path = "/design-1?date=2026-02-05"}: {children: ReactNode; path?: string}) {
+export function AskTestProviders({children, path = "/?date=2026-02-05"}: {children: ReactNode; path?: string}) {
   const client = new QueryClient({defaultOptions: {queries: {retry: false}}});
   return (
     <QueryClientProvider client={client}>

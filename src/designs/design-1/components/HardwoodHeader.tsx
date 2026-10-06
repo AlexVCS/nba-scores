@@ -35,10 +35,13 @@ function HardwoodHeader({section, scoresPath = "/"}: HardwoodHeaderProps) {
   const navLink =
     "relative py-3 text-xs font-bold tracking-[.12em] text-hw-court uppercase no-underline after:absolute after:right-0 after:-bottom-px after:left-0 after:h-1";
 
+  // Without Ask the preferences group is the only item and stays on the right, as it was before Ask.
+  const askEnabled = import.meta.env.DEV || import.meta.env.VITE_ASK_ENABLED === "1";
+
   return (
     <header className={`${hwContainer} border-b border-hw-line pt-5`}>
-      <div className="flex min-h-14 items-center justify-between gap-3 border-b border-hw-line py-1.5">
-        {(import.meta.env.DEV || import.meta.env.VITE_ASK_ENABLED === "1") && <AskEntry />}
+      <div className={`flex min-h-14 items-center gap-3 border-b border-hw-line py-1.5 ${askEnabled ? "justify-between" : "justify-end"}`}>
+        {askEnabled && <AskEntry />}
         <div
           className="flex items-center gap-1 rounded-hw border border-hw-line bg-hw-surface p-1 shadow-hw-small"
           role="group"

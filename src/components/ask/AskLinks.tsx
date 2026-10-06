@@ -1,7 +1,6 @@
-import {Link, useLocation} from "react-router";
+import {Link} from "react-router";
 import {ArrowRight, ExternalLink} from "lucide-react";
 import type {AskVerifiedLink} from "@/services/ask/types";
-import {withDesignPrefix} from "./askRouting";
 import {withoutSpoilers} from "./askSpoilers";
 import {askButton, askPrimaryButton} from "./askStyles";
 
@@ -14,10 +13,9 @@ interface AskLinksProps {
 
 /**
  * Server-verified links. A link flagged as a spoiler would reveal a result the user did not ask for, so it is
- * left out entirely while results are hidden. Internal paths get the design prefix.
+ * left out entirely while results are hidden.
  */
 function AskLinks({links, resultsHidden, label = "Related pages", compact = false}: AskLinksProps) {
-  const {pathname} = useLocation();
   const visible = withoutSpoilers(links, !resultsHidden);
   if (visible.length === 0) return null;
 
@@ -33,7 +31,7 @@ function AskLinks({links, resultsHidden, label = "Related pages", compact = fals
             <span className="sr-only">(opens in a new tab)</span>
           </a>
         ) : (
-          <Link key={link.href} to={withDesignPrefix(link.href, pathname)} className={className}>
+          <Link key={link.href} to={link.href} className={className}>
             {link.label} {!compact && index === 0 && <ArrowRight className="size-[13px]" aria-hidden="true" />}
           </Link>
         );

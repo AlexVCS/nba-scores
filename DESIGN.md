@@ -148,7 +148,7 @@ Soft, offset, ambient. Cards float on the court with `0 10px 26px rgb(43 29 6 / 
 
 ## Shapes
 
-Rounded-rectangle scorecards: 10px radius on every card and control (`--radius`), 7px on nested chips (spoiler icon tile), full-round only for the day-cell circles in calendars and the floating design switcher. Borders are always 1px chalk line; emphasis comes from the 3–4px gold bottom rule under major section headers (player ledger, series games) — the one place a thick line is allowed. No accent side-borders on cards.
+Rounded-rectangle scorecards: 10px radius on every card and control (`--radius`), 7px on nested chips (spoiler icon tile), full-round only for the day-cell circles in calendars. Borders are always 1px chalk line; emphasis comes from the 3–4px gold bottom rule under major section headers (player ledger, series games) — the one place a thick line is allowed. No accent side-borders on cards.
 
 ## Components
 

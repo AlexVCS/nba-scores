@@ -2,7 +2,7 @@ import {useEffect, useRef, useState, useMemo} from "react";
 import {useQuery, useQueryClient} from "@tanstack/react-query";
 import {format} from "date-fns";
 import {useLocation, useParams, useSearchParams} from "react-router";
-import {designPath, detectDesignId} from "../designRoutes";
+import {designPath} from "../designRoutes";
 import {useResultsVisibility} from "@/hooks/useResultsVisibility";
 import {isValidDateParam} from "@/helpers/dateParam";
 import type {GameData, GameSummaryData, GameSummaryTeam, Player} from "@/helpers/helpers";
@@ -111,7 +111,7 @@ export function useBoxscorePage() {
   const scoreboardPath = isValidDateParam(dateParam) ? `/?date=${dateParam}` : "/";
   const from: unknown = location.state?.from;
   const origin = typeof from === "string" && /^\/(?![/\\])/.test(from)
-    ? from : designPath(detectDesignId(location.pathname), scoreboardPath);
+    ? from : designPath("design-1", scoreboardPath);
   const [visit, setVisit] = useState({gameId, showAllResults, revealed: false, backPath: origin});
   // A different game starts a fresh visit even when the router reuses this page.
   if (visit.gameId !== gameId || visit.showAllResults !== showAllResults) {

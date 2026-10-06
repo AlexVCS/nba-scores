@@ -1,18 +1,9 @@
-import {designPath} from "@/designs/designRoutes";
+import {stripDesignPrefix} from "@/designs/designRoutes";
 import type {AskAppRoute, AskClientContext} from "@/services/ask/types";
-
-const DESIGN_PREFIX = /^\/(original|design-1)(?=\/|$)/;
-
-/** Server links are design-agnostic app paths. Keep the user inside the design they are viewing. */
-export function withDesignPrefix(href: string, pathname: string): string {
-  if (!href.startsWith("/")) return href;
-  const match = pathname.match(DESIGN_PREFIX);
-  return match ? designPath(match[1] as "original" | "design-1", href) : href;
-}
 
 /** Page context sent with a question so "this game" or "these playoffs" can resolve. */
 export function askClientContext(pathname: string, search: string): AskClientContext {
-  const path = pathname.replace(DESIGN_PREFIX, "") || "/";
+  const path = stripDesignPrefix(pathname);
   const params = new URLSearchParams(search);
   const date = params.get("date");
   const viewDate = date && /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : null;

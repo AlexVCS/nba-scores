@@ -12,7 +12,7 @@ import AskFooter from "./AskFooter";
 import AskResultArea from "./AskResultArea";
 import AskSearchField from "./AskSearchField";
 import {ASK_DIAGNOSTICS_COPY, ASK_EXAMPLES, ASK_PROVIDER_COPY, ASK_RECENT_COPY, ASK_SCOPE_COPY} from "./askCopy";
-import {askClientContext, withDesignPrefix} from "./askRouting";
+import {askClientContext} from "./askRouting";
 import {askSession} from "./askSessionStore";
 import {askOptionId, type AskAction, type AskActionGroup} from "./askTypeahead";
 
@@ -109,7 +109,7 @@ function AskPanel({onClose}: AskPanelProps) {
 
   const run = (action: AskAction) => {
     if (action.href) {
-      navigate(withDesignPrefix(action.href, pathname));
+      navigate(action.href);
       onClose();
     } else if (action.question) {
       ask(action.question, {remember: !action.spoiler});
