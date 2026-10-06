@@ -30,9 +30,8 @@ pnpm preview          # Preview production build
 ```
 src/
 ├── main.tsx              # App entry point, React Router setup
-├── App.tsx               # Root component with QueryClientProvider
 ├── components/           # Reusable UI components
-├── routes/games/         # Games list and boxscore views
+├── designs/              # Page components (design-1/), page hooks, route helpers
 ├── context/              # React Context definitions
 ├── providers/            # Context provider components
 ├── hooks/                # Custom React hooks
@@ -152,7 +151,7 @@ Uses ESLint 9 flat config with TypeScript-ESLint, React Hooks, and React Refresh
 
 ## Key Dependencies
 
-- **UI**: @adobe/react-spectrum, react-aria, lucide-react
+- **UI**: react-aria-components, lucide-react
 - **Data**: @tanstack/react-query (v5), **Routing**: react-router (v7)
 - **Animation**: framer-motion, **Dates**: date-fns, react-day-picker
 - **NBA Logos**: react-nba-logos
