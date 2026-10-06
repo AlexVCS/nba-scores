@@ -408,6 +408,23 @@ def test_measured_aggregation_is_not_scored_and_season_defaults_apply():
     tg.check_cascade("jev", 0.85, {c.id: r}, scored)
 
 
+def test_an_unsure_measured_aggregation_needs_no_later_tier():
+    # TieredAdapter._complete: Jev was unsure of the measure, Luna was never called, Python decided it.
+    c = player_season()
+    r = row(c.id, candidates(player=[PLAYER_CURRY], season=[SEASON_15]),
+            output(read("intent", selected=["player_season_stats"]), read("player", selected=["player:201939"]),
+                   read("season", selected=["season:0"]), read("stat", selected=["three_pointers"]),
+                   read("aggregation", selected=["total"], confidence=0.6),
+                   read("season_type", status="absent"), read("teams", status="absent")),
+            field_tiers={"intent": "jev", "player": "jev", "season": "jev", "stat": "jev", "season_type": "jev",
+                         "teams": "jev", "aggregation": "question"})
+    assert [t["tier"] for t in r["tier_outputs"]] == ["jev"]
+    _, scored = run([c], [r])
+    assert "aggregation" not in {s.field for s in scored}
+    assert all(s.correct and s.disposition == "accepted" for s in scored)
+    tg.check_cascade("jev", 0.85, {c.id: r}, scored)
+
+
 def test_absent_reads_against_normalizer_defaults():
     cands = tg.CandidateLookupResult.model_validate(candidates())
     league, east = [tg.Gold("value", "league")], [tg.Gold("value", "east")]

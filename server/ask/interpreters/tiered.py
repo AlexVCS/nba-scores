@@ -7,7 +7,10 @@ question; the adapter keeps a field from the first tier that reads it confidentl
 * Laya and Jev accept a field when its confidence meets that tier's calibrated
   `accept_min`. Fields below it escalate to the next tier.
 * The final tier (Luna) reports no confidence, so its reads are accepted as-is.
-* Escalation stops as soon as every field the accepted intent needs is decided.
+* Escalation stops as soon as every field the accepted intent needs is decided. A field
+  Python reads from the question text does not count: the measure (`aggregation`) of the
+  season and career tools is replaced by `measure.with_stated_measure` whatever a tier
+  read (ADR 0014), so it is never the reason to call the next tier.
 
 Vetoes (ADR 0002 consequence, needed for the zero-guess gate): when a later confident
 read selects different values, reads the field as absent, or reads it as ambiguous,
@@ -41,6 +44,7 @@ from dataclasses import dataclass, field
 from typing import get_args
 
 from server.ask.interpreters.cascade import PolicyThresholds
+from server.ask.measure import MEASURED_INTENTS
 from server.ask.models.candidates import (
     CandidateLookupResult,
     DateCandidateValue,
@@ -267,7 +271,15 @@ class TieredAdapter:
         return relevant_fields(probe)
 
     def _complete(self, merge: _Merge) -> bool:
-        return "intent" in merge.decided and self._needed(merge) <= merge.decided.keys()
+        intent = merge.decided.get("intent")
+        if intent is None:
+            return False
+        awaited = self._needed(merge)
+        if intent.status == "selected" and intent.selected[0] in MEASURED_INTENTS:
+            # Python reads this tool's measure from the question (ADR 0014); no tier's
+            # read of it is used, so an undecided one must not cost a later-tier call.
+            awaited -= {"aggregation"}
+        return awaited <= merge.decided.keys()
 
     def _fields(self, merge: _Merge, candidates: CandidateLookupResult) -> list[FieldInterpretation]:
         years = _season_years(merge, candidates)

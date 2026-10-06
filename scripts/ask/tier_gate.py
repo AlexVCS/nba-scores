@@ -844,7 +844,9 @@ def check_cascade(tier: str, accept_min: float, rows: dict[str, dict[str, Any]],
                     raise IntegrityError(f"{cid}:{name} lookup-decided with candidates")
                 continue
             if decided_by == QUESTION_TIER:
-                continue  # Python read it from the question (measure.py); no tier decided it
+                # Python read it from the question (measure.py); no tier decided it, and a tier's
+                # undecided read of it never escalates (TieredAdapter._complete).
+                continue
             if output is None or output["outcome"] == "unavailable":
                 if decided_by == tier:
                     raise IntegrityError(f"{cid}:{name} credited to {tier} without an output")

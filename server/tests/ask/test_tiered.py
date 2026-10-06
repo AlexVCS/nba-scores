@@ -522,7 +522,8 @@ def test_explicit_total_and_absent_aggregation_agree_across_tiers(intent):
     q='Jokic points in 2023-24' if intent=='player_season_stats' else 'Jokic points on March 9, 2026'
     c=CandidateLookupService().lookup(q,CONTEXT)
     shared=[sel('intent',intent),sel('player','player:203999'),sel('stat','points'),absent('teams'),sel('stat_scope','player')]
-    if intent=='player_season_stats':shared.extend([sel('season','season:2023-24'),absent('season_type')])
+    # A season tool's measure alone no longer escalates, so an unsure phase forces the Luna call.
+    if intent=='player_season_stats':shared.extend([sel('season','season:2023-24'),absent('season_type',confidence=.6)])
     else:shared.extend([sel('date',c.sets['date'].candidates[0].id),absent('season'),absent('round'),absent('game_number')])
     jev=Fake('jev',*shared,sel('aggregation','total',confidence=.6))
     luna=Fake('luna',*(f.model_copy(update={'confidence':None}) for f in shared),absent('aggregation',confidence=None))
@@ -551,3 +552,47 @@ def test_low_confidence_single_game_measure_fails_without_season_choices():
     assert norm.status=='valid'
     decision=POLICY.decide(CascadeState(attempts=[CascadeAttempt(output=out,normalization=norm)],candidates=c,fallback_enabled=False,remaining_budget_usd=1,remaining_ms=20000))
     assert decision.action=='fail'
+
+
+@pytest.mark.parametrize("intent,question", [("player_season_stats", "Jokic field goal percentage in 2023-24"),
+                                             ("season_leaders", "Who led the league in assists per game in 2023-24?"),
+                                             ("career_stats", "Jokic career points")])
+def test_an_undecided_measure_alone_does_not_call_the_next_tier(intent, question):
+    # ADR 0014: Python reads these tools' measure from the question, so a tier's unsure
+    # aggregation read cannot change the request and must not cost a Luna call.
+    from server.ask.candidates.lookup import CandidateLookupService
+    from server.ask.measure import with_stated_measure
+    c = CandidateLookupService().lookup(question, CONTEXT)
+    fields = [sel("intent", intent), sel("stat", "points"), absent("season_type"), absent("teams"),
+              FieldInterpretation(field="aggregation", status="ambiguous", alternatives=["total", "per_game"],
+                                  confidence=0.59)]
+    if intent != "season_leaders":
+        fields.append(sel("player", "player:203999"))
+    if intent != "career_stats":
+        fields.append(sel("season", "season:2023-24"))
+    jev, luna = Fake("jev", *fields), Fake("luna")
+    out = cascade(jev, luna).interpret(REQUEST.model_copy(update={"question": question, "candidates": c}))
+    assert (jev.calls, luna.calls) == (1, 0)
+    assert "aggregation" not in out.metadata.field_tiers  # no tier decided it
+    measured = with_stated_measure(out, question)
+    assert measured.metadata.field_tiers["aggregation"] == "question"
+    assert measured.get_field("aggregation").confidence is None
+    assert all(f.confidence is None for f in measured.fields)  # nothing left for the policy to clarify
+
+
+def test_an_undecided_single_game_measure_still_escalates():
+    # Only the season and career tools' measure is read by Python; a box score's is a tier's.
+    jev = Fake("jev", sel("intent", "boxscore_stat"), sel("stat_scope", "player"), sel("stat", "points"),
+               sel("player", "player:203999"), absent("teams"), sel("date", "date:0"), absent("season"),
+               absent("round"), absent("game_number"), sel("aggregation", "total", confidence=0.6))
+    luna = Fake("luna", absent("aggregation", confidence=None))
+    out = cascade(jev, luna).interpret(REQUEST)
+    assert luna.calls == 1 and out.metadata.field_tiers["aggregation"] == "luna"
+
+
+def test_an_undecided_measure_does_not_hide_another_undecided_field():
+    jev = Fake("jev", sel("intent", "season_leaders"), sel("stat", "points"), sel("season", "season:2023-24"),
+               absent("season_type", confidence=0.6), sel("aggregation", "per_game", confidence=0.6))
+    luna = Fake("luna", absent("season_type", confidence=None), absent("aggregation", confidence=None))
+    out = cascade(jev, luna).interpret(REQUEST)
+    assert luna.calls == 1 and out.metadata.field_tiers["season_type"] == "luna"

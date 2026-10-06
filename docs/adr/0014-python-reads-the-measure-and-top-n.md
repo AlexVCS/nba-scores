@@ -56,3 +56,20 @@ Live testing on `ask/reviewed-components` (dev field decisions, ASK_DEV=1) found
   totals only (ADR 0013).
 - Interpreter prompts and router descriptions are unchanged. The model's aggregation read
   is still requested, but for these tools it is only diagnostics.
+
+## Amendment, 2026-10-06: an unsure measure no longer escalates
+
+The cascade still waited for a tier to decide `aggregation` on these three tools, so a
+Jev read below its accept threshold caused a Luna call whose only possible use was a
+value decision 1 then discards. `TieredAdapter._complete` now leaves `aggregation` out
+of the fields it waits for when the accepted intent is player season stats, season
+leaders or career stats. Box score questions are unchanged: their measure is still a
+tier's read. `tier_gate.py` already treats the field as Python-decided (field tier
+`question`), so no gate rule changes.
+
+Measured by replaying the 2026-10-06 calibration journal
+(`docs/verification/ask-calibration-2026-10-06/`, 229 exposed questions): the same 212
+correct, 6 flagged guesses (5 of them stale labels) and every clarify/unsupported
+outcome; Luna calls fall from 125 to 121 and replayed p95 from 4.61 s to 4.49 s. Luna
+no longer gets its incidental second look at those four questions; on this journal it
+changed none of them.
