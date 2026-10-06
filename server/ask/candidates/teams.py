@@ -20,6 +20,7 @@ from server.ask.models.candidates import TeamCandidateValue
 from server.ask.models.common import TeamRef
 
 FRANCHISE_PATH = DATA_DIR / "franchise_history.json"
+MIN_FUZZY_TEAM_LENGTH = 5
 
 
 def season_label(start_year: int) -> str:
@@ -60,6 +61,8 @@ class TeamIndex:
     caps_only: frozenset[str]
     """Keys that only count when written in capitals (tricodes, short aliases)."""
     max_phrase_tokens: int
+    fuzzy_keys: tuple[str, ...] = ()
+    """One-word names long enough to match a misspelling against."""
 
 
 def load_records(path=FRANCHISE_PATH) -> tuple[NameRecord, ...]:
@@ -117,6 +120,8 @@ def build_index(records: Iterable[NameRecord], aliases: AliasMapping) -> TeamInd
         phrases={k: tuple(v) for k, v in phrases.items()},
         caps_only=frozenset(caps_only),
         max_phrase_tokens=max(len(k.split()) for k in phrases),
+        fuzzy_keys=tuple(sorted(k for k in phrases if " " not in k and k not in caps_only
+                                and len(k) >= MIN_FUZZY_TEAM_LENGTH)),
     )
 
 

@@ -322,9 +322,17 @@ def test_missing_or_unrankable_statistic():
     assert guard("Who led the league in 2022-23?").clarify_field == "stat"
     n = guard("Who led the league in plus minus in 2022-23?", stat="plus_minus", aggregation="total")
     assert n.status == "unsupported"
-    n = Normalizer().normalize(interpreted({"season": "season:2022-23", "stat": "fouls", "aggregation": "total"}),
-                               CandidateLookupService().lookup("Who committed the most fouls in 2022-23", CONTEXT), CONTEXT)
+
+
+def test_personal_fouls_leaders_are_season_totals_only():
+    n = guard("Who led the league in personal fouls in 2018-19?", stat="fouls")
+    assert n.status == "valid" and n.request.stat.stat == "fouls" and n.request.stat.aggregation == "total"
+    assert leaders.CATEGORIES["fouls"] == "PF"
+    n = guard("Who led the league in fouls per game in 2018-19?", stat="fouls", aggregation="per_game")
     assert n.status == "unsupported" and n.unsupported_reason == "unsupported_leader_stat"
+    for question in ("Who led the league in technical fouls in 2018-19?", "Who led the league in fouls drawn in 2018-19?",
+                     "Who fouled out the most in 2018-19?"):
+        assert guard(question, stat="fouls").status == "unsupported"
 
 
 @pytest.mark.parametrize("question,limit", [

@@ -27,11 +27,15 @@ team, games played and value. The leader row(s) are emphasized.
 
 Supported (stats.nba `LeagueLeaders` category in brackets): points [PTS],
 rebounds [REB], offensive rebounds [OREB], defensive rebounds [DREB], assists
-[AST], steals [STL], blocks [BLK], turnovers [TOV], minutes [MIN], field goals
+[AST], steals [STL], blocks [BLK], turnovers [TOV], personal fouls [PF], minutes [MIN], field goals
 made [FGM], 3-pointers made [FG3M], free throws made [FTM], and field goal,
 3-point and free throw percentage [FG_PCT, FG3_PCT, FT_PCT].
 
-Not supported: fouls, plus/minus, "stat line" / "best player", efficiency or
+Personal fouls are season totals only: stats.nba serves no per-game fouls
+board, so a stated per-game measure is `unsupported_leader_stat`, and with no
+measure stated the totals list is shown without a clarification.
+
+Not supported: technical and flagrant fouls, fouls drawn, plus/minus, "stat line" / "best player", efficiency or
 any advanced metric, attempts-only leaderboards, double-doubles, and any
 derived rate (per 36, per 100 possessions, per minute). A leaders question with
 no statistic is clarified (`stat`, missing), per ADR 0011.
@@ -168,7 +172,8 @@ clarification continuations, as in Stage 2.
 - Splits: home/away, opponent, month/date, before/after, last N games, clutch,
   quarters/halves/overtime, starters/bench, wins/losses.
 - Advanced metrics and rates: PER, win shares, true shooting, usage, per 36/48,
-  per 100 possessions, per minute; fouls; plus/minus; double-doubles.
+  per 100 possessions, per minute; technical or flagrant fouls and fouls drawn;
+  plus/minus; double-doubles.
 - More than one statistic in one question ("points and assists leaders").
 - Combined regular season and playoffs; play-in; preseason; All-Star; NBA Cup.
 

@@ -127,8 +127,10 @@ LEADER_PERCENTAGES: frozenset[str] = frozenset(
 )
 SEASON_LEADER_STATS: frozenset[str] = frozenset(
     {"points", "rebounds", "offensive_rebounds", "defensive_rebounds", "assists", "steals", "blocks",
-     "turnovers", "minutes", "field_goals", "three_pointers", "free_throws"}
+     "turnovers", "fouls", "minutes", "field_goals", "three_pointers", "free_throws"}
 ) | LEADER_PERCENTAGES
+# stats.nba serves no per-game personal fouls board, so that list is season totals only.
+TOTALS_ONLY_LEADER_STATS: frozenset[str] = LEADER_PERCENTAGES | {"fouls"}
 # All-time lists are totals only (ADR 0013); stats.nba has no all-time minutes list.
 CAREER_LEADER_STATS: frozenset[str] = frozenset(
     {"points", "rebounds", "offensive_rebounds", "defensive_rebounds", "assists", "steals", "blocks",

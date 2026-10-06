@@ -32,6 +32,7 @@ from server.ask.models.common import (
     NEW_YORK_TZ,
     CAREER_LEADER_STATS,
     LEADER_PERCENTAGES,
+    TOTALS_ONLY_LEADER_STATS,
     NON_LEADER_STATS,
     SEASON_LEADER_STATS,
     Aggregation,
@@ -475,6 +476,10 @@ class Normalizer:
             return NormalizationResult(status="unsupported", unsupported_reason="unsupported_leader_stat")
         if stat in LEADER_PERCENTAGES:
             aggregation = ["total"]  # a percentage has no per-game measure
+        elif stat in TOTALS_ONLY_LEADER_STATS:
+            if self._optional(output, "aggregation") == ["per_game"]:
+                return NormalizationResult(status="unsupported", unsupported_reason="unsupported_leader_stat")
+            aggregation = ["total"]
         else:
             aggregation = self._optional(output, "aggregation")
             if not aggregation:

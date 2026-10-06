@@ -19,6 +19,7 @@ from .common import (
     DEFAULT_LEADER_LIMIT,
     CareerView,
     LEADER_PERCENTAGES,
+    TOTALS_ONLY_LEADER_STATS,
     MAX_LEADER_LIMIT,
     NON_LEADER_STATS,
     SEASON_LEADER_STATS,
@@ -193,8 +194,8 @@ class SeasonLeadersRequest(ContractModel):
     def _leader_stat(self):
         if self.stat.stat not in SEASON_LEADER_STATS:
             raise ValueError(f"no season leaderboard for {self.stat.stat} (unsupported_leader_stat)")
-        if self.stat.stat in LEADER_PERCENTAGES and self.stat.aggregation != "total":
-            raise ValueError("percentage leaders have no per-game measure")
+        if self.stat.stat in TOTALS_ONLY_LEADER_STATS and self.stat.aggregation != "total":
+            raise ValueError("percentage and personal foul leaders have no per-game measure")
         return self
 
 

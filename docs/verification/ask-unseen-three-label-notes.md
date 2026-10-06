@@ -12,12 +12,12 @@ no evaluation results or journals were read.
 | game_search | 17 | 3 | 2 | 22 |
 | boxscore_stat | 18 | 3 | 3 | 24 |
 | playoff_series | 16 | 2 | 1 | 19 |
-| postseason_summary | 18 | 1 | 1 | 20 |
+| postseason_summary | 19 | 0 | 1 | 20 |
 | player_season_stats | 18 | 4 | 3 | 25 |
-| team_records | 16 | 2 | 2 | 20 |
-| season_leaders | 18 | 2 | 3 | 23 |
+| team_records | 17 | 2 | 1 | 20 |
+| season_leaders | 19 | 2 | 2 | 23 |
 | career_stats | 19 | 1 | 6 | 26 |
-| **All** | **140** | **18** | **21** | **179** |
+| **All** | **143** | **17** | **19** | **179** |
 
 Each non-accept case names one family in its id and tags, as `scripts/ask/release.py`
 and `scripts/ask/tier_gate.py` expect. Unsupported reasons: `other` 12,
@@ -143,6 +143,23 @@ The owner answered the review sheet's "Needs your decision" items. The fixture, 
   that day" test.
 - No interpreter, lookup or provider was run on this set for these edits. The changed
   questions are still unique across the fixture files.
+
+## Owner decisions 2026-10-06
+
+- **"New York" is the Knicks.** postseason_summary-19 is now accept: the Knicks' 2020-21
+  postseason summary.
+- **"Best record" is the standings.** team_records-20 is now accept: league standings for
+  2015-16. The scope guard lets "best/worst record" through when no team is named.
+- **Personal fouls leaders are supported.** season_leaders-23 is now accept: fouls,
+  season totals, top 10. stats.nba has no per-game fouls board, so fouls are totals only.
+- Counts are now accept 143, clarify 17, unsupported 19. These three cases left the
+  field-label file (now 36 cases) because an accept label supplies their field gold.
+- **These seven cases are no longer unseen.** The app was changed with these questions
+  in view: the three above, plus game_search-11 ("Warriros" now matches the Warriors),
+  team_records-14 ("mark" was read as a player), career_stats-18 ("rank" was read as a
+  player) and season_leaders-19 ("title" was read as the Finals). The candidate lookup
+  was run on them. They should be replaced or reported separately before the freeze.
+- The "Unsupported reasons" counts in the Coverage section predate these changes.
 
 ## Before freezing
 

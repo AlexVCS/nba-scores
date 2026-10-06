@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import dataclasses
 import datetime as dt
+import difflib
 import re
 import time
 from dataclasses import dataclass
@@ -24,8 +25,8 @@ from zoneinfo import ZoneInfo
 from server.ask.candidates import dates, locations, patterns
 from server.ask.candidates.aliases import alias_version
 from server.ask.candidates.players import PlayerIndex, get_player_index, season_label
-from server.ask.candidates.teams import TeamIndex, get_team_index, resolve_phrase
-from server.ask.candidates.text import STOPWORDS, Token, fold, tokenize
+from server.ask.candidates.teams import MIN_FUZZY_TEAM_LENGTH, TeamIndex, get_team_index, resolve_phrase
+from server.ask.candidates.text import CAPITALIZED_ONLY, STOPWORDS, Token, fold, tokenize
 from server.ask.candidates.types import DEFAULT_LIMITS, EXPANDED_LIMITS, Hit, LookupLimits, Mention
 from server.ask.models.candidates import (
     CANDIDATE_FIELDS,
@@ -121,7 +122,7 @@ class _Scan:
         token = self.tokens[k]
         return (
             not self.consumed[k] and token.norm not in STOPWORDS and not token.norm.isdigit()
-            and (token.capitalized or not self.mixed_case())
+            and (token.capitalized or (token.norm not in CAPITALIZED_ONLY and not self.mixed_case()))
         )
 
     def mixed_case(self) -> bool:
@@ -237,7 +238,19 @@ def _entity_mentions(question: str, masked: str, seasons: frozenset[int], limits
         # in sentence case, common words ("time" ~ "Timme") would match surnames.
         if k in released and not matches:
             continue  # only exact player names reclaim an out-of-era team word
-        if not matches and len(norm) >= 4 and (scan.tokens[k].capitalized or not any(c.isupper() for c in question)):
+        name_like = scan.tokens[k].capitalized or not any(c.isupper() for c in question)
+        if not matches and name_like and len(norm) >= MIN_FUZZY_TEAM_LENGTH:
+            # A misspelled team name ("Warriros"). Short names are left out: one edit
+            # turns too many of them into another word.
+            close = difflib.get_close_matches(norm, teams.fuzzy_keys, n=1, cutoff=limits.fuzzy_team_cutoff)
+            hits, note = resolve_phrase(teams, close[0], seasons) if close else ([], None)
+            if hits:
+                ratio = difflib.SequenceMatcher(None, norm, close[0]).ratio()
+                hits = [dataclasses.replace(h, score=round(h.score * ratio, 3)) for h in hits[:limits.per_mention]]
+                add("team", k, k, hits, len(hits), note)
+                scan.team_tokens.add(k)
+                continue
+        if not matches and len(norm) >= 4 and name_like:
             matches = [(pid, "fuzzy", sim, None) for pid, sim in players.fuzzy(norm, full=False, cutoff=limits.fuzzy_last_cutoff)]
         if matches:
             hits, total = _player_hits(players, matches, seasons, limits.per_mention)

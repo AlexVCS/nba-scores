@@ -23,7 +23,7 @@ from server.services import nba_stats_client
 
 CATEGORIES = {
     "points": "PTS", "rebounds": "REB", "offensive_rebounds": "OREB", "defensive_rebounds": "DREB",
-    "assists": "AST", "steals": "STL", "blocks": "BLK", "turnovers": "TOV", "minutes": "MIN",
+    "assists": "AST", "steals": "STL", "blocks": "BLK", "turnovers": "TOV", "fouls": "PF", "minutes": "MIN",
     "field_goals": "FGM", "three_pointers": "FG3M", "free_throws": "FTM",
     "field_goal_percentage": "FG_PCT", "three_point_percentage": "FG3_PCT", "free_throw_percentage": "FT_PCT",
 }

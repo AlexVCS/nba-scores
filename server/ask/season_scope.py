@@ -21,6 +21,8 @@ _SPLIT = re.compile(
     r"without|when|per\s*(?:48|40|minute)|last\s+\w+\s+games?|"
     r"in\s+(?:their\s+)?(?:wins|losses)|conference\s+record)\b"
 )
+# "Which team had the best record?" is the standings, read from the top or the bottom.
+_STANDINGS_ORDER = re.compile(r"\b(?:best|worst|top)\s+(?:regular[ -]season\s+)?records?\b")
 _COMPARE = re.compile(r"\b(?:compare|compared|comparison|more\s+than|less\s+than|difference)\b")
 
 
@@ -70,6 +72,9 @@ def normalize_question(normalizer, output, candidates, context, question):
     players = [c for c in candidates.sets["player"].candidates if c.source != "app_context"]
     player_mentions = {(c.span, c.matched_text) for c in players}
     player_split = bool(players) if intent.selected == ["team_records"] else len(player_mentions) > 1
+    named_team = any(c.source != "app_context" for c in candidates.sets["team"].candidates)
+    if intent.selected == ["team_records"] and not named_team:
+        text = _STANDINGS_ORDER.sub(lambda m: " " * len(m.group()), text)
     if explicit_constraints or player_split or _SPLIT.search(text) or _COMPARE.search(text):
         return NormalizationResult(status="unsupported", unsupported_reason="other")
     if ambiguous_season_candidates(candidates, question):
@@ -102,7 +107,8 @@ _LEADER_SPLIT = re.compile(
     r"jan|feb|mar|apr|jun|jul|aug|sep|sept|oct|nov|dec|last\s+\w+\s+games?|"
     r"preseason|play[ -]?in|all[ -]?star|cup|tournament|summer\s+league|per\s*36|per\s*100|per\s*possessions?|"
     r"per\s*(?:48|40|minute)|true\s+shooting|effective\s+field|usage|efficiency|advanced|pace|fantasy|"
-    r"win\s+shares?|per(?!\s*game)|vorp|plus[ -]?minus|\+/-|fouls?|double[ -]doubles?|triple[ -]doubles?|"
+    r"win\s+shares?|per(?!\s*game)|vorp|plus[ -]?minus|\+/-|technicals?|techs?|flagrants?|fouls?\s+drawn|drawn|drew|"
+    r"foul(?:ed|ing)?\s+outs?|disqualifi(?:ed|cations?)|double[ -]doubles?|triple[ -]doubles?|"
     r"lowest|fewest|least|worst|bottom|streak|seed|seeds|seeded|career|all[ -]?time|ever|history|historic(?:al)?|"
     r"records?|finals|round|series|clutch|quarter|half|overtime|starters?|bench|back[ -]to[ -]back|"
     r"without|when|in\s+(?:their\s+|his\s+)?(?:wins|losses)|conference|eastern|western|east|west|"
@@ -121,6 +127,7 @@ _STAT_FAMILIES = (
     r"\bsteals?\b|\bspg\b",
     r"\bblock(?:s|ed|er|ers)?\b|\bbpg\b",
     r"\bturnovers?\b",
+    r"\b(?:personal\s+)?fouls?\b",
     r"\bminutes\b|\bmpg\b",
 )
 # Career questions (ADR 0013): "career", "all-time", "ever" and "history" are the question.

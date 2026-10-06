@@ -1,7 +1,7 @@
 {
  "schema": "ask-tier-gate-field-labels/2",
  "fixture": "server/tests/ask/fixtures/eval/unseen-three-draft.json",
- "fixture_sha256": "ca5f3730a6186cbf9356e4ca3dc87c1d6497e07a3c44a408f77fe6e56da7349b",
+ "fixture_sha256": "8ebec07928e04e4f24ca876e18638538ec89bacaeed45ef73034cd796f97cd64",
  "labeler": {
   "name": "claude-subagent-field-labeler",
   "labeled_at": "2026-10-05",
@@ -731,43 +731,6 @@
    "notes": "Arena name is a location; the Barclays Center is in Brooklyn. No date. Agrees with the fixture."
   },
   {
-   "case_id": "unseen-three-postseason_summary-19",
-   "question": "Recap New York's 2021 postseason.",
-   "reference_time": "2026-09-30T12:00:00-04:00",
-   "context": {},
-   "label_scope": "all",
-   "intent": {
-    "status": "value",
-    "value": "postseason_summary"
-   },
-   "scored_intent": "postseason_summary",
-   "fields": {
-    "teams": {
-     "any_of": [
-      {
-       "status": "ambiguous",
-       "alternatives": [
-        1610612752,
-        1610612751
-       ]
-      },
-      {
-       "status": "value",
-       "value": [
-        1610612752
-       ]
-      }
-     ],
-     "note": "The brief treats 'New York' as a two-franchise city and both the Knicks and Nets made the 2021 playoffs, so ambiguous is defensible. But franchise_history.json gives the Nets the city name 'Brooklyn' from 2012-13 (they were 'New York Nets' only in 1976-77), and the fixture's own postseason_summary-16 uses 'Brooklyn' for the Nets, so 'New York' in 2021 naming only the Knicks is also defensible."
-    },
-    "season": {
-     "status": "value",
-     "value": "2020-21"
-    }
-   },
-   "notes": "Partial disagreement with the fixture: I think the Knicks-only reading is at least as strong as the ambiguous one, because no franchise other than the Knicks was named 'New York' in 2020-21 in the reference data. The fixture tags this debatable."
-  },
-  {
    "case_id": "unseen-three-season_leaders-21",
    "question": "Top Spurs scorer in 2013-14",
    "reference_time": "2026-09-30T12:00:00-04:00",
@@ -836,41 +799,6 @@
     }
    },
    "notes": "'averaged the most points' is points. Agrees with the fixture's unsupported:other."
-  },
-  {
-   "case_id": "unseen-three-season_leaders-23",
-   "question": "Who led the league in personal fouls in 2018-19?",
-   "reference_time": "2026-09-30T12:00:00-04:00",
-   "context": {},
-   "label_scope": "all",
-   "intent": {
-    "any_of": [
-     {
-      "status": "value",
-      "value": "season_leaders"
-     },
-     {
-      "status": "value",
-      "value": "unsupported:unsupported_leader_stat"
-     }
-    ],
-    "note": "A league-leaders question for a statistic (fouls) that has no season leaderboard."
-   },
-   "scored_intent": "season_leaders",
-   "fields": {
-    "stat": {
-     "status": "value",
-     "value": "fouls"
-    },
-    "season_type": {
-     "status": "absent"
-    },
-    "season": {
-     "status": "value",
-     "value": "2018-19"
-    }
-   },
-   "notes": "Disagreement with the fixture's reason: it expects unsupported:other, I labeled unsupported:unsupported_leader_stat. 'fouls' is a Stat value outside SEASON_LEADER_STATS, and request.py's own validation error for that case is tagged unsupported_leader_stat. The interpreter.py comment limits that reason to percentages and stat lines, so 'other' remains defensible; the fixture tags this debatable."
   },
   {
    "case_id": "unseen-three-career_stats-21",
@@ -1098,44 +1026,6 @@
     }
    },
    "notes": "Agrees with the fixture's unsupported:other."
-  },
-  {
-   "case_id": "unseen-three-team_records-20",
-   "question": "Which team had the best record in 2015-16?",
-   "reference_time": "2026-09-30T12:00:00-04:00",
-   "context": {},
-   "label_scope": "all",
-   "intent": {
-    "any_of": [
-     {
-      "status": "value",
-      "value": "team_records"
-     },
-     {
-      "status": "value",
-      "value": "unsupported:other"
-     }
-    ],
-    "note": "League standings for 2015-16 answer 'which team had the best record'; the fixture instead treats 'best' as a ranking the request type rejects."
-   },
-   "scored_intent": "team_records",
-   "fields": {
-    "season_type": {
-     "status": "absent"
-    },
-    "standings_scope": {
-     "status": "value",
-     "value": "league"
-    },
-    "teams": {
-     "status": "absent"
-    },
-    "season": {
-     "status": "value",
-     "value": "2015-16"
-    }
-   },
-   "notes": "Disagreement with the fixture: I consider team_records with league-wide standings the primary reading, since the top row of the 2015-16 standings is the answer. The fixture expects unsupported:other and tags it debatable. standings_scope is 'league' because the question is league-wide with no conference and no team."
   },
   {
    "case_id": "unseen-three-boxscore_stat-22",

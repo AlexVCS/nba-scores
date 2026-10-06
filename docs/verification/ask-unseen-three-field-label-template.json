@@ -1,7 +1,7 @@
 {
  "schema": "ask-tier-gate-field-labels/2",
  "fixture": "server/tests/ask/fixtures/eval/unseen-three-draft.json",
- "fixture_sha256": "ca5f3730a6186cbf9356e4ca3dc87c1d6497e07a3c44a408f77fe6e56da7349b",
+ "fixture_sha256": "8ebec07928e04e4f24ca876e18638538ec89bacaeed45ef73034cd796f97cd64",
  "labeler": {
   "name": "",
   "labeled_at": "",
@@ -332,17 +332,6 @@
    "notes": ""
   },
   {
-   "case_id": "unseen-three-postseason_summary-19",
-   "question": "Recap New York's 2021 postseason.",
-   "reference_time": "2026-09-30T12:00:00-04:00",
-   "context": {},
-   "label_scope": "all",
-   "intent": null,
-   "scored_intent": null,
-   "fields": {},
-   "notes": ""
-  },
-  {
    "case_id": "unseen-three-season_leaders-21",
    "question": "Top Spurs scorer in 2013-14",
    "reference_time": "2026-09-30T12:00:00-04:00",
@@ -356,17 +345,6 @@
   {
    "case_id": "unseen-three-season_leaders-22",
    "question": "Which rookie averaged the most points in 2022-23?",
-   "reference_time": "2026-09-30T12:00:00-04:00",
-   "context": {},
-   "label_scope": "all",
-   "intent": null,
-   "scored_intent": null,
-   "fields": {},
-   "notes": ""
-  },
-  {
-   "case_id": "unseen-three-season_leaders-23",
-   "question": "Who led the league in personal fouls in 2018-19?",
    "reference_time": "2026-09-30T12:00:00-04:00",
    "context": {},
    "label_scope": "all",
@@ -455,17 +433,6 @@
   {
    "case_id": "unseen-three-team_records-19",
    "question": "Pacers' record in overtime games 2019-20",
-   "reference_time": "2026-09-30T12:00:00-04:00",
-   "context": {},
-   "label_scope": "all",
-   "intent": null,
-   "scored_intent": null,
-   "fields": {},
-   "notes": ""
-  },
-  {
-   "case_id": "unseen-three-team_records-20",
-   "question": "Which team had the best record in 2015-16?",
    "reference_time": "2026-09-30T12:00:00-04:00",
    "context": {},
    "label_scope": "all",

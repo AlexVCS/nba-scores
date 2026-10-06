@@ -44,6 +44,7 @@ class LookupLimits:
     """Largest candidate list kept for one phrase ("Jalen" has 18 catalog matches)."""
     fuzzy_full_cutoff: float = 0.88
     fuzzy_last_cutoff: float = 0.85
+    fuzzy_team_cutoff: float = 0.85
     partial_names_in_unknown_full_names: bool = False
     """``expand`` sets this: "Michael Scott" then also offers Michaels and Scotts."""
 

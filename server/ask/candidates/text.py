@@ -82,4 +82,8 @@ winners with won would year years yesterday you your will just only ever mvp tea
 january february march april may june july august september october november december
 jan feb mar apr jun jul aug sep sept oct nov dec
 monday tuesday wednesday thursday friday saturday sunday standings regular average averages losses loss wins percentage pct ppg rpg apg mpg
+rank ranks ranked ranking rankings
 """.split())
+# Everyday words that are also first names: a one-word mention only when capitalized
+# ("Mark's points", never "regular-season mark").
+CAPITALIZED_ONLY = frozenset({"mark"})

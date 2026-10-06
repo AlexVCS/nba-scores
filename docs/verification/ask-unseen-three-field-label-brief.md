@@ -1,6 +1,6 @@
 # Field-label brief for the third unseen Ask set
 
-You will write per-field truth for 39 questions in the third unseen set. Your
+You will write per-field truth for 36 questions in the third unseen set. Your
 labels become the reference for a field-level measurement. Treat this as an
 annotation task: record what each question means, field by field. Do not
 predict what any software would do.
@@ -55,7 +55,7 @@ lists what you read. Do not edit any other file.
 
 The template has two kinds of cases.
 
-- `"label_scope": "all"` (34 cases): fill `intent`, `scored_intent` and every
+- `"label_scope": "all"` (31 cases): fill `intent`, `scored_intent` and every
   field that `fields_by_intent` lists for your `scored_intent`, subject to
   `field_conditions` (see `target_team` below).
 - `"label_scope": "player"` (5 cases): the intent is fixed (`fixed_intent`,

@@ -94,7 +94,13 @@ tables.
 - The three typo questions (G-11, B-16, Y-18) answer with the obvious team or player,
   and asking which one also counts as correct.
 - L-19 "scoring title" now answers points per game.
-- These eight keep their labels: R-18, B-20, B-21, Y-22, R-19, L-23, T-20 and B-23.
+- These five keep their labels: R-18, B-20, B-21, Y-22 and B-23.
+
+### Decided on Oct 6
+
+- R-19 "New York's 2021 postseason" answers with the Knicks.
+- T-20 "best record in 2015-16" answers with the league standings.
+- L-23 "personal fouls in 2018-19" answers with the season-total fouls leaders.
 
 ### No ⚠️ items
 
@@ -135,16 +141,16 @@ Every fact below was confirmed or found wrong. None were left unverified.
 | Games on a date (G) | 17 | 3 | 2 | 22 |
 | Box score stats (B) | 18 | 3 | 3 | 24 |
 | Playoff series (S) | 16 | 2 | 1 | 19 |
-| Playoff summaries (R) | 18 | 1 | 1 | 20 |
+| Playoff summaries (R) | 19 | 0 | 1 | 20 |
 | Player season stats (Y) | 18 | 4 | 3 | 25 |
-| Team records & standings (T) | 16 | 2 | 2 | 20 |
-| Season leaders (L) | 18 | 2 | 3 | 23 |
+| Team records & standings (T) | 17 | 2 | 1 | 20 |
+| Season leaders (L) | 19 | 2 | 2 | 23 |
 | Career stats (C) | 19 | 1 | 6 | 26 |
-| **All** | **140** | **18** | **21** | **179** |
+| **All** | **143** | **17** | **19** | **179** |
 
-These match the file and its header. The 140 answerable questions appear in the eight
-sections below. The 18 follow-ups and 21 can't-answers are collected in their own
-sections at the end.
+These match the file and its header. R-19, T-20 and L-23 became answerable on Oct 6;
+their rows are still listed in the follow-up and can't-answer sections at the end, with
+the new response.
 
 ---
 
@@ -342,7 +348,7 @@ sections at the end.
 | B-21 | What did Antetokounmpo score on December 13, 2023? | Ask: Giannis or Thanasis? *(decided Sep 30)* | ✅ Both played that night. Giannis scored 64, Thanasis played 1 minute ([box](https://www.basketball-reference.com/boxscores/202312130MIL.html)) |
 | S-17 | Bring up a Spurs playoff series from 2014. | Ask: which round? | ✅ The Spurs played 4 series in 2014 ([playoffs](https://www.basketball-reference.com/playoffs/NBA_2014.html)) |
 | S-18 | Open a 2015 conference semifinal. | Ask: which teams? | ✅ There were 4 conference semifinals ([playoffs](https://www.basketball-reference.com/playoffs/NBA_2015.html)) |
-| R-19 | Recap New York's 2021 postseason. | Ask: Knicks or Nets? *(decided Sep 30)* | ✅ Both made the 2021 playoffs ([playoffs](https://www.basketball-reference.com/playoffs/NBA_2021.html)) |
+| R-19 | Recap New York's 2021 postseason. | Knicks' 2021 playoff run *(decided Oct 6; was a follow-up)* | ✅ Both made the 2021 playoffs ([playoffs](https://www.basketball-reference.com/playoffs/NBA_2021.html)) |
 | Y-19 | Ball's assists per game in 2021-22 | Ask: Lonzo or LaMelo? | ✅ Both played that season. Lonzo played 35 games for Chicago ([player](https://www.basketball-reference.com/players/b/balllo01.html)) and LaMelo 75 for Charlotte ([player](https://www.basketball-reference.com/players/b/ballla01.html)) |
 | Y-20 | Karl-Anthony Towns rebounds per game in 2018 | Ask: 2017-18 or 2018-19? | ✅ KAT played both seasons ([player](https://www.basketball-reference.com/players/t/townska01.html)) |
 | Y-21 | Malone's rebounds per game in 1985-86 | Ask: which Malone? | ✅ Three Malones played that season: Karl with Utah ([player](https://www.basketball-reference.com/players/m/malonka01.html)), Moses with Philadelphia ([player](https://www.basketball-reference.com/players/m/malonmo01.html)) and Jeff with Washington ([player](https://www.basketball-reference.com/players/m/malonje01.html)) |
@@ -368,10 +374,10 @@ sections at the end.
 | Y-24 | Luka's true shooting percentage in 2022-23 | Can't answer: advanced stats | — |
 | Y-25 | LeBron's points per game in the regular season and playoffs combined, 2012-13 | Can't answer: regular season and playoffs combined | — |
 | T-19 | Pacers' record in overtime games 2019-20 | Can't answer: records in game subsets (overtime, home, etc.) | — |
-| T-20 | Which team had the best record in 2015-16? | Can't answer: "best record" questions *(decided Sep 30)* | — |
+| T-20 | Which team had the best record in 2015-16? | League standings, 2015-16 *(decided Oct 6; was can't answer)* | — |
 | L-21 | Top Spurs scorer in 2013-14 | Can't answer: leaders within one team | — |
 | L-22 | Which rookie averaged the most points in 2022-23? | Can't answer: rookie-only leaders | — |
-| L-23 | Who led the league in personal fouls in 2018-19? | Can't answer: no fouls leaderboard *(decided Sep 30)* | — |
+| L-23 | Who led the league in personal fouls in 2018-19? | Top 10 in total personal fouls, 2018-19 *(decided Oct 6; was can't answer)* | — |
 | C-21 | Who has the most career triple-doubles? | Can't answer: triple-double counts | — |
 | C-22 | Top 10 in career rebounds per game, all-time | Can't answer: all-time lists are totals only | — |
 | C-23 | Where does Larry Bird rank all-time in career free throw percentage? | Can't answer: no rankings on percentage lists | — |

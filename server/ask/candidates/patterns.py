@@ -10,9 +10,13 @@ from server.utils.season import get_nba_season
 
 FIRST_SEASON = 1946  # 1946-47, the first BAA season
 
+# "Scoring title" and "division title" are season honors, not the championship.
+_NOT_STAT_TITLE = "".join(rf"(?<!{w} )" for w in (
+    "scoring", "rebounding", "assist", "assists", "steals", "blocks", "division", "divisional", "batting"))
+
 PLAYOFF_CONTEXT = re.compile(
     r"\b(finals|final(?!\s+(?:score|minute|seconds?|quarter|play|shot))|playoffs?|postseason|champions?"
-    r"|championship|champs|title|series|round|semi-?finals?|semis|ecf|wcf|seed|seeds"
+    rf"|championship|champs|{_NOT_STAT_TITLE}title|series|round|semi-?finals?|semis|ecf|wcf|seed|seeds"
     r"|game\s*(?:#\s*)?(?:\d|one|two|three|four|five|six|seven)(?!\s+(?:days?|weeks?|nights?)\s+ago\b))\b"
 )
 GAME_WORDS = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7}
@@ -275,7 +279,7 @@ _ROUNDS: tuple[tuple[re.Pattern, str, float, str | None], ...] = tuple(
         (r"\bquarter-?finals?\b", "first_round", 0.6, None),
         (rf"\b{_SEMIS}\b", "conference_semifinals", 0.8, None),
         (r"\b(?:nba|baa)\s+finals?\b|\bthe\s+final\b(?!\s+(?:score|minute|seconds?|quarter|play|shot))|\bfinals\b"
-         r"|\bchampionship(?:\s+series)?\b|\btitle(?:\s+series)?\b", "finals", 1.0, None),
+         rf"|\bchampionship(?:\s+series)?\b|\b{_NOT_STAT_TITLE}title(?:\s+series)?\b", "finals", 1.0, None),
         (r"\bchampions?\b|\bchamps\b|\bwon\s+it\s+all\b", "finals", 0.8, None),
     )
 )

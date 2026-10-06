@@ -1,5 +1,5 @@
 {
-  "scope": "DRAFT unseen evaluation set three (ADR 0009), not frozen. Labels were authored from the production contract (docs/ask-contract.md, docs/ask-stage2.md, docs/ask-stage3.md, ADRs 0004, 0005, 0011-0014, server/ask/models) without running any interpreter, lookup or provider, and without reading evaluation results. It REQUIRES independent human label review before freezing; debatable labels are tagged 'debatable' and listed in docs/verification/ask-unseen-three-label-notes.md. Not yet exposed to any model run. 179 cases: accept 140, clarify 18, unsupported 21. Per family: game_search 22 (accept 17, clarify 3, unsupported 2); boxscore_stat 24 (accept 18, clarify 3, unsupported 3); playoff_series 19 (accept 16, clarify 2, unsupported 1); postseason_summary 20 (accept 18, clarify 1, unsupported 1); player_season_stats 25 (accept 18, clarify 4, unsupported 3); team_records 20 (accept 16, clarify 2, unsupported 2); season_leaders 23 (accept 18, clarify 2, unsupported 3); career_stats 26 (accept 19, clarify 1, unsupported 6).",
+  "scope": "DRAFT unseen evaluation set three (ADR 0009), not frozen. Labels were authored from the production contract (docs/ask-contract.md, docs/ask-stage2.md, docs/ask-stage3.md, ADRs 0004, 0005, 0011-0014, server/ask/models) without running any interpreter, lookup or provider, and without reading evaluation results. It REQUIRES independent human label review before freezing; debatable labels are tagged 'debatable' and listed in docs/verification/ask-unseen-three-label-notes.md. Not yet exposed to any model run. 179 cases: accept 143, clarify 17, unsupported 19. Per family: game_search 22 (accept 17, clarify 3, unsupported 2); boxscore_stat 24 (accept 18, clarify 3, unsupported 3); playoff_series 19 (accept 16, clarify 2, unsupported 1); postseason_summary 20 (accept 19, clarify 0, unsupported 1); player_season_stats 25 (accept 18, clarify 4, unsupported 3); team_records 20 (accept 17, clarify 2, unsupported 1); season_leaders 23 (accept 19, clarify 2, unsupported 2); career_stats 26 (accept 19, clarify 1, unsupported 6).",
   "cases": [
     {
       "id": "unseen-three-game_search-01",
@@ -4319,17 +4319,23 @@
       "reference_time": "2026-09-30T12:00:00-04:00",
       "context": {},
       "expected": {
-        "action": "clarify",
-        "clarify_field": "teams",
-        "clarify_reason": "ambiguous"
+        "action": "accept",
+        "request": {
+          "intent": "postseason_summary",
+          "season": "2020-21",
+          "team": {
+            "team_id": 1610612752,
+            "tricode": "NYK",
+            "name": "New York Knicks"
+          }
+        }
       },
       "tags": [
         "postseason_summary",
-        "clarify",
-        "ambiguous_city",
-        "debatable"
+        "team_summary",
+        "city_as_team"
       ],
-      "label_rationale": "Knicks and Nets both made the 2021 playoffs. DEBATABLE: many readers take 'New York' to mean the Knicks."
+      "label_rationale": "Owner decision 2026-10-06: 'New York' is the Knicks. The Nets have been 'Brooklyn' since 2012-13."
     },
     {
       "id": "unseen-three-season_leaders-21",
@@ -4369,16 +4375,24 @@
       "reference_time": "2026-09-30T12:00:00-04:00",
       "context": {},
       "expected": {
-        "action": "unsupported",
-        "unsupported_reason": "other"
+        "action": "accept",
+        "request": {
+          "intent": "season_leaders",
+          "season": "2018-19",
+          "season_type": "regular_season",
+          "stat": {
+            "stat": "fouls",
+            "aggregation": "total"
+          },
+          "limit": 10
+        }
       },
       "tags": [
         "season_leaders",
-        "unsupported",
-        "unsupported_stat",
-        "debatable"
+        "totals",
+        "fouls"
       ],
-      "label_rationale": "Fouls have no season leaderboard; the stage 3 guard reports 'other'. DEBATABLE: unsupported_leader_stat is also defensible."
+      "label_rationale": "Owner decision 2026-10-06: personal fouls leaders are supported, as season totals only (stats.nba has no per-game fouls board)."
     },
     {
       "id": "unseen-three-career_stats-21",
@@ -4514,16 +4528,21 @@
       "reference_time": "2026-09-30T12:00:00-04:00",
       "context": {},
       "expected": {
-        "action": "unsupported",
-        "unsupported_reason": "other"
+        "action": "accept",
+        "request": {
+          "intent": "team_records",
+          "season": "2015-16",
+          "team": null,
+          "standings_scope": "league"
+        }
       },
       "tags": [
         "team_records",
-        "unsupported",
-        "best_record",
-        "debatable"
+        "standings",
+        "league",
+        "best_record"
       ],
-      "label_rationale": "Stage 2 guard rejects 'best'. DEBATABLE: league standings for 2015-16 would answer it."
+      "label_rationale": "Owner decision 2026-10-06: with no team named, 'best record' is answered by the league standings."
     },
     {
       "id": "unseen-three-boxscore_stat-22",
