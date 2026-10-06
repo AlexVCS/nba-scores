@@ -109,7 +109,9 @@ class AskConfig:
             enabled=enabled,
             dev=_flag("ASK_DEV"),
             primary_model=model,
-            primary_reasoning_effort=os.environ.get("ASK_REASONING_EFFORT", "low").strip() or None,
+            # gpt-4.1 models take no reasoning parameter (OpenAIConfig).
+            primary_reasoning_effort=None if model.startswith("gpt-4.1") else (
+                os.environ.get("ASK_REASONING_EFFORT", "low").strip() or None),
             fallback_model=fallback,
             deadline_seconds=_number("ASK_DEADLINE_SECONDS", 20, minimum=0.001),
             daily_budget_usd=_number("ASK_DAILY_BUDGET_USD", 1),

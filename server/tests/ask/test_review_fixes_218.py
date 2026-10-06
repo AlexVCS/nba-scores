@@ -46,6 +46,8 @@ def test_empty_reasoning_effort_is_omitted(monkeypatch):
     assert AskConfig.from_env().primary_reasoning_effort is None
     monkeypatch.setenv("ASK_REASONING_EFFORT", " medium ")
     assert AskConfig.from_env().primary_reasoning_effort == "medium"
+    monkeypatch.setenv("ASK_PARSER_MODEL", "gpt-4.1-mini-2025-04-14")  # takes no reasoning parameter
+    assert AskConfig.from_env().primary_reasoning_effort is None
 
 
 def test_budget_block_on_fallback_leaves_configs_on_the_same_cases():
