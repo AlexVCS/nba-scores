@@ -223,8 +223,8 @@ Lower-risk points:
 - **team_records-22** applies the 2026-10-06 "best record" ruling to "worst record". The
   ruling's note already says "best/worst".
 - **game_search-23**: the date was picked from memory (Timberwolves hosted Denver on the
-  last night of the 2017-18 regular season) and was not checked online. The label does
-  not depend on it, but the owner swapped earlier dates so that the games exist.
+  last night of the 2017-18 regular season) and confirmed on 2026-10-06: Minnesota won
+  112-106 in overtime.
 - **Exposure by wording.** The app tests written on 2026-10-06
   (`server/tests/ask/test_question_wording.py`) contain a "worst record" question for
   another season and a second misspelled team name. The new cases share the phenomenon

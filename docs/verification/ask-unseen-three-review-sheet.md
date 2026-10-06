@@ -26,7 +26,7 @@ C = career stats.
 Sources: date pages, box scores, schedules, playoff pages, league pages and player pages
 on [basketball-reference.com](https://www.basketball-reference.com). Team nicknames
 come from Wikipedia, and one game ID from nba.com. Everything was checked on
-2026-10-01, except the seven rows added on 2026-10-06, whose facts are marked ⚠️.
+2026-10-01; the facts in the seven rows added on 2026-10-06 were checked that day.
 
 ---
 
@@ -39,8 +39,8 @@ new question of the same kind. The new questions have new numbers, and the old n
 are not reused, so G-11, T-14, T-20, L-19, L-23, R-19 and C-18 no longer exist in the
 tables. Older notes on this page that mention those codes describe the removed questions.
 
-Nobody has tried the new questions on Ask. Their facts come from memory and were not
-checked online (⚠️).
+Nobody has tried the new questions on Ask. Their facts were checked against
+basketball-reference.com and stats.nba.com on 2026-10-06.
 
 | New | Replaces | Question | What Ask should do | Please rule on |
 | --- | --- | --- | --- | --- |
@@ -131,11 +131,10 @@ rulings still stand as rules.
 - T-20 "best record in 2015-16" answers with the league standings.
 - L-23 "personal fouls in 2018-19" answers with the season-total fouls leaders.
 
-### ⚠️ items: only the Oct 6 replacements
+### ⚠️ items: none
 
-Every fact below was confirmed or found wrong, except in the seven rows added on Oct 6
-(G-23, T-21, T-22, L-24, L-25, R-21, C-27). Their facts were written from memory and
-were not checked online.
+Every fact below was confirmed or found wrong, including the seven rows added on Oct 6
+(G-23, T-21, T-22, L-24, L-25, R-21, C-27).
 
 ---
 
